@@ -28,4 +28,4 @@ In its initial phase, Indicia’s development is being led by Biodiverse IT and 
 
 The initial development of the project is set to run from November 2008 to February 2009, by which time a working “core” should be available for testing and early adoption. 
 
-Get involved on the online development tool discussions on the NBN Forum.
+[http://forums.nbn.org.uk/ Get involved on the online development tool discussions on the NBN Forum.]
