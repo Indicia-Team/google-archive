@@ -4,7 +4,15 @@ $pagination - the pagination object
 $body - gridview_table object.
 -->
 <script type="text/javascript">
-
+$(document).ready(function(){
+	$('#pagination a').each(function (i){
+		this.click(function() {
+			('#pageGrid').load('index.php/' + jQuery.url.segment(2) + '/'
+				+ this.html() + '/' + jQuery.url.segment(4));
+			return false;
+		});
+	});
+});
 </script>
 <?php echo $pagination ?>
 <table class='pageGrid'>
