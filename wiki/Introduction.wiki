@@ -1,0 +1,9 @@
+#summary An introduction to the Indicia project.
+
+= Introduction =
+
+Welcome to the Indicia Wiki, where you will find information, documentation and tutorials on this project. Indicia is the Online Recording Toolkit developed as part of the OPAL project.
+
+= Online Recording =
+
+So, what do we mean by online recording? At least for our purposes, we are talking about a website that lets users contribute their wildlife observations, or _records_, to a database. The project is entirely focused on data capture rather than subsequent analysis. For example, the mapping and reporting facilities in OORT are targeted at making the websites more interesting for users, so they come back and contribute more records. 
