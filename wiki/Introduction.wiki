@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Welcome to the Indicia Wiki, where you will find information, documentation and tutorials on this project. Indicia is the online biological recording toolkit developed as part of the [www.OPALexplorenature.org OPAL] project.
+Welcome to the Indicia Wiki, where you will find information, documentation and tutorials on this project. Indicia is the online biological recording toolkit developed as part of the [http://www.OPALexplorenature.org OPAL] project.
 
 == Online Recording ==
 
@@ -22,7 +22,7 @@ Firstly, what it is not. Indicia is not an off the shelf solution for online rec
 
 == Who is developing Indicia? ==
 
-In its initial phase, Indicia’s development is being led by Biodiverse IT, is funded by the [www.OPALexplorenature.org OPAL] project and managed by the [http://www.ceh.ac.uk/ Centre for Ecology and Hydrology] (CEH). The project is Open Source, which means you can have the code for free, and has a high level of community involvement.
+In its initial phase, Indicia’s development is being led by Biodiverse IT, is funded by the [http://www.OPALexplorenature.org OPAL] project and managed by the [http://www.ceh.ac.uk/ Centre for Ecology and Hydrology] (CEH). The project is Open Source, which means you can have the code for free, and has a high level of community involvement.
 
 == When will it be ready? ==
 
