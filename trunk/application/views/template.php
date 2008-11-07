@@ -3,8 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<script type="text/javascript" src="jquery-1.2.6"></script>
-<script type="text/javascript" src="jquery.url"></script>
+<script type="text/javascript" src="/jquery-1.2.6.js"></script>
+<script type="text/javascript" src="/jquery.url.js"></script>
+</script>
 <title><?php echo html::specialchars($title) ?></title>
 </head>
 <body>
