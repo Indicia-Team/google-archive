@@ -5,17 +5,20 @@ $body - gridview_table object.
 -->
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#pagination a').each(function (i){
-		this.click(function() {
-			('#pageGrid').load('index.php/' + jQuery.url.segment(2) + '/'
-				+ this.html() + '/' + jQuery.url.segment(4));
-			return false;
+	$('.pagination a').each(function(i) {
+		$(this).click(function(){
+			var queryString = 'index.php/' 
+				+ jQuery.url.segment(1) + '/'
+				+ jQuery.url.segment(2)
+				+ '/' + $(this).html() + '/'
+				+ jQuery.url.segment(4);	
+			$('#pageGrid').load(queryString);
 		});
 	});
 });
 </script>
 <?php echo $pagination ?>
-<table class='pageGrid'>
+<table id='pageGrid'>
 <thead>
 <tr class='headingRow'>
 <?php 
