@@ -11,7 +11,7 @@ class Termlist_Controller extends Opal_Controller {
 		// Generate a new termlist object
 		$model = ORM::factory('termlist');
 		$this->template->title = "Pagination";
-		$this->template->message =  Kohana::debug($this->db->list_fields('termlists'));
+		$this->template->message = 'Termlists grid'; 
 		$termlist = new View('termlist');
 		$termlist->termtable = Gridview_Controller::factory($model,$page_no,$limit)->display();
 		$this->template->content = $termlist;
