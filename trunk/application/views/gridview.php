@@ -39,7 +39,6 @@ function refreshPager(){
 		url: pagerString,
 		cache: false,
 		success: function(a){
-			alert(a);
 			$('.pager').html(a);
 			pagerLinks();
 		}
@@ -93,11 +92,14 @@ function buildQueryString() {
 		+ $.url.segment(4) + '?'
 		+ ((sortCols != '') ? 'orderby=' + sortCols 
 			+ '&direction=' + sortDirs : '')
-		+ ((filterCols != '') ?	+ '&columns=' + filterCols 
+		+ ((filterCols != '') ?	'&columns=' + filterCols 
 			+ '&filters=' + filterStrings : '');
 };
 
 $(document).ready(function(){
+
+	//Set initial page
+	page = $.url.segment(3);
 
 	// Paging
 	pagerLinks();
@@ -125,6 +127,14 @@ $(document).ready(function(){
 			refresh();
 		});
 	});
+
+	// Filtration
+	$('#gvFilter form').submit(function(e){
+		e.preventDefault();
+		filter.clear();
+		filter.unshift($('select').val(), $('input:first').val());
+		refresh();
+	});
 });
 </script>
 <div class='pager'>
@@ -147,4 +157,16 @@ foreach ($columns as $name => $dbtype) {
 <div class='pager'>
 <?php echo $pagination ?>
 </div>
-<div id='gvFilter'></div>
+<div id='gvFilter'>
+<form name='Filter' action='' method='get'>
+<select name='columns'>
+<?php foreach ($columns as $name => $dbtype) {
+	echo "<option value='".$name."'>".$name."</option>";
+} 
+?>
+</select>
+<input type='text' name='filters'/>
+<input id='gvFilterButton' type='submit' value='Filter'/>
+</form>
+</div>
+
