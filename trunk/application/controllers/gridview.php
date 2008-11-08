@@ -60,8 +60,13 @@ class Gridview_Controller extends Controller {
 		$gridview->pagination = $pagination;
 
 		if(request::is_ajax()){
-			$this->auto_render=false;
-			$gridview->render(true);
+			if ($this->input->get('type',null) == 'pager'){
+				return $pagination;
+			} else {
+				$this->auto_render=false;
+				$gridview_body->render(true);
+			}
+			
 		} else {
 			return $gridview->render();
 		}

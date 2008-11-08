@@ -5,12 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <script type="text/javascript" src="/jquery-1.2.6.js"></script>
 <script type="text/javascript" src="/jquery.url.js"></script>
+<script type="text/javascript" src="/hasharray.js"></script>
 </script>
 <title><?php echo html::specialchars($title) ?></title>
 </head>
 <body>
-<p><?php echo $message ?></p>
-<hr/>
 <?php echo $content ?>
 </body>
 </html>
