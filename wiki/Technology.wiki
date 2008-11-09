@@ -1,0 +1,19 @@
+#summary A brief summary of the development technologies used in the Indicia Core Module.
+
+= Technology =
+
+== PostgreSQL and PostGIS ==
+
+[http://www.postgresql.org/ PostgreSQL] is a true Open Source database widely acknowledged as a rival to other well known commercial options, both in terms of speed and power. It is the ideal choice for Indicia because of the free [http://postgis.refractions.net/ PostGIS] extension which converts PostgreSQL into a powerful spatially enabled database. This optimises the data for storing spatial data such as location boundaries and species records and also provides in-built support for questions such as "tell me which records are within the boundary of this location".
+
+== PHP ==
+
+The language used for the Core Module development is PHP, selected mainly for its ubiquitous nature and therefore easy of finding developers, getting support and hosting.
+
+== Kohana ==
+
+[http://kohanaphp.com/home Kohana] is a framework which effectively provides a ready made layout for a PHP web application. It structures the application using a pattern known as [http://en.wikipedia.org/wiki/Model-view-controller Model View Controller] and also provides lots of built in libraries and extensions to make day to day development tasks easier. 
+
+== JQuery ==
+
+[http://jquery.com/ JQuery] is a powerful JavaScript library that simplifies the task of writing powerful client side code which runs within the web browser, for example to provide animations and facilitate [http://en.wikipedia.org/wiki/AJAX AJAX] interactions.
