@@ -4,11 +4,12 @@
  */
 
 class Gridview_Controller extends Controller {
-	public static function factory($model,$page,$limit){
+	public static function factory($model,$page,$limit,$uri_segment){
 		$gridview = new Gridview_Controller();
 		$gridview->model = $model;
 		$gridview->page = $page;
 		$gridview->limit = $limit;
+		$gridview->uri_segment = $uri_segment;
 		return $gridview;
 	}
 	function display() {
@@ -49,7 +50,7 @@ class Gridview_Controller extends Controller {
 			
 		$pagination = Pagination::factory(array(
 			'items_per_page' => $this->limit,
-			'uri_segment' => 'page',
+			'uri_segment' => $this->uri_segment,
 			'total_items' => $total_records
 		));
 

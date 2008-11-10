@@ -9,19 +9,27 @@ class Termlist_Controller extends Opal_Controller {
 	}
 	public function page($page_no,$limit) {
 		$model = ORM::factory('termlist');
-		if (!request::is_ajax()) {
-			// Generate a new termlist object
-			$this->template->title = "Pagination";
-			$this->template->message = 'Termlists grid'; 
-			$termlist = new View('termlist');
-			$termlist->termtable = 
-				Gridview_Controller::factory($model,$page_no,$limit)->display();
-			$this->template->content = $termlist;
-		} else {
-			$this->auto_render = false;
-			return $termlist->termtable = 
-				Gridview_Controller::factory($model,$page_no,$limit)->display();
-		}
+		// Generate a new termlist object
+		$this->template->title = "Pagination";
+		$this->template->message = 'Termlists grid'; 
+		$termlist = new View('termlist');
+		$termlist->termtable = 
+			Gridview_Controller::factory($model,$page_no,$limit,3)->display();
+		$this->template->content = $termlist;
 
+	}
+	// Auxilliary function for handling Ajax requests from the page method gridview component
+	public function page_gv($page_no,$limit) {
+		$model = ORM::factory('termlist');
+		$this->auto_render = false;
+		return Gridview_Controller::factory($model,$page_no,$limit,3)->display();
+	}
+	public function edit($id,$page_no,$limit) {
+		$model = ORM::factory('termlist');
+		$this->template->title = "Create New Termlist";
+
+	}
+	// Auxilliary function for handling Ajax requests from the edit method gridview component
+	public function edit_gv($id,$page_no,$limit) {
 	}
 }
