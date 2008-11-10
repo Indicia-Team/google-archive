@@ -44,7 +44,7 @@ class Gridview_Controller extends Controller {
 			if (count($arrcols)==count($arrfilters)){
 				$filter = array_combine($arrcols,$arrfilters);
 				$lists = $lists->like($filter);
-#				$total_records = $lists->find_all()->count();
+				$total_records = $lists->find_all()->count();
 			}
 		} 
 			
