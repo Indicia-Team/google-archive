@@ -8,12 +8,15 @@ var filter = new HashArray();
 var sort = new HashArray();
 var page;
 var queryString;
+var baseQueryString;
+var pageUrlSegmentNo;
 
 /**
 	* Refreshes everything - a shortcut
  */
 function refresh(){
 	buildQueryString();
+	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };
@@ -83,11 +86,7 @@ function buildQueryString() {
 		filterStrings = filterStrings.substring(0,filterStrings.length -1);
 	}
 
-	queryString = $.url.attr('protocol') + '://'
-		+ $.url.attr('host')
-		+ '/index.php/'
-		+ $.url.segment(1) + '/'
-		+ $.url.segment(2) + '/'
+	queryString = baseQueryString
 		+ page + '/'
 		+ $.url.segment(4) + '?'
 		+ ((sortCols != '') ? 'orderby=' + sortCols 
@@ -98,8 +97,24 @@ function buildQueryString() {
 
 $(document).ready(function(){
 
+	// Determine the segment number used for the page - the gridview control will
+	// always use the last two segments for the page and limit - number of items to
+	// show per page.
+	pageUrlSegmentNo = $.url.attr('path').split('/').length - 3;
+
+	// Set the base query string
+	baseQueryString = $.url.attr('protocol') + '://'
+		+ $.url.attr('host')
+		+ '/index.php/'
+		+ $.url.segment(1) + '/'
+		+ $.url.segment(2) + '_gv/'; 
+	for (var i = 3; i < pageUrlSegmentNo-1; i++) {
+		baseQueryString += $.url.segment(i) + '/'
+	}
+	
+
 	//Set initial page
-	page = $.url.segment(3);
+	page = $.url.segment(pageUrlSegmentNo);
 
 	// Paging
 	pagerLinks();
