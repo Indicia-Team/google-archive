@@ -16,7 +16,6 @@ var pageUrlSegmentNo;
  */
 function refresh(){
 	buildQueryString();
-	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };

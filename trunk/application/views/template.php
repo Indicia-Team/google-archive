@@ -6,6 +6,7 @@
 <script type="text/javascript" src="/jquery-1.2.6.js"></script>
 <script type="text/javascript" src="/jquery.url.js"></script>
 <script type="text/javascript" src="/hasharray.js"></script>
+<link rel="stylesheet" type="text/css" href="/forms.css" />
 </script>
 <title><?php echo html::specialchars($title) ?></title>
 </head>

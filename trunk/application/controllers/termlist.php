@@ -25,8 +25,13 @@ class Termlist_Controller extends Opal_Controller {
 		return Gridview_Controller::factory($model,$page_no,$limit,3)->display();
 	}
 	public function edit($id,$page_no,$limit) {
-		$model = ORM::factory('termlist');
+		$model = ORM::factory('termlist',$id);
 		$this->template->title = "Create New Termlist";
+		$view = new View('termlist_new');
+		$view->termtable =
+			Gridview_Controller::factory($model->children->current(),$page_no,$limit,4)->display();
+		$view->model = $model;
+		$this->template->content = $view;
 
 	}
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
