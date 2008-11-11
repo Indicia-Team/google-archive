@@ -65,6 +65,7 @@ class Gridview_Controller extends Controller {
 		$gridview->body = $gridview_body;
 		$gridview->pagination = $pagination;
 		$gridview->columns = $this->columns;
+		$gridview_body->columns = $this->columns;
 
 		if(request::is_ajax()){
 			if ($this->input->get('type',null) == 'pager'){
