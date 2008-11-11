@@ -1,6 +1,6 @@
 <?php
 
-class Termlist_Controller extends Opal_Controller {
+class Termlist_Controller extends Indicia_Controller {
 	public function __construct() {
 		parent::__construct();
 	}
