@@ -4,9 +4,6 @@ class Termlist_Controller extends Indicia_Controller {
 	public function __construct() {
 		parent::__construct();
 	}
-	public function index(){
-		url::redirect('termlist/page/1/5');
-	}
 	public function page($page_no,$limit) {
 		$model = ORM::factory('termlist');
 		// Generate a new termlist object
