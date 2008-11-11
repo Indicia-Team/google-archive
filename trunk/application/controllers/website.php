@@ -11,6 +11,7 @@ class Website_Controller extends Indicia_Controller {
 		$this->template->message = 'Websites grid';
 		$website = new View('website');
 		$grid = Gridview_Controller::factory($model,$page_no,$limit,3,null);
+		// Hide the first (id) column
 		array_splice($grid->columns,0,1);
         $website->table = $grid->display();
 		$this->template->content = $website;
@@ -25,8 +26,44 @@ class Website_Controller extends Indicia_Controller {
 
 	public function create() {
 		$this->template->title = "Create New Website";
-		$view = new View('website_new');
+		$view = new View('website_edit');
+		$view->form = array(
+			'id'=>'',
+			'title'=>'',
+			'description'=>''
+			);
+
 		$this->template->content = $view;
+	}
+
+	public function edit() {
+		if ($this->uri->total_arguments()==0)
+			print "cannot edit website without an ID";
+		else
+		{
+
+			$website = new Website_Model($this->uri->argument(1));
+			$this->template->title = "Edit ".$website->title;
+			$view = new View('website_edit');
+			$view->form = array(
+				'id'=>$website->id,
+				'title'=>$website->title,
+				'description'=>$website->description
+				);
+
+			$this->template->content = $view;
+		}
+	}
+
+	public function save() {
+		if (! empty($_POST['id']))
+			$website = new Website_Model($_POST['id']);
+		else
+			$website = new Website_Model();
+		$website->title = $_POST['title'];
+		$website->description = $_POST['description'];
+		$website->save();
+		url::redirect('website');
 	}
 
 }
