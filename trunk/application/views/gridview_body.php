@@ -6,7 +6,7 @@ foreach ($table as $item) {
 	echo "'>";
 	foreach (array_intersect_key($item->as_array(), $columns) as $field) {
 		echo "<td>".html::anchor($this->uri->segment(1)
-			."/edit/".$item->id."/1/5", $field)."</td>";
+			."/edit/".$item->id, $field)."</td>";
 	}
 	$i++;
 	echo "</tr>";
