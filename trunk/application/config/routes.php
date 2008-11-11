@@ -6,3 +6,4 @@
  */
 $config['_default'] = 'welcome';
 $config['termlist'] = 'termlist/page/1/5';
+$config['website'] = 'website/page/1/5';
