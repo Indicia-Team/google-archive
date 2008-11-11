@@ -7,6 +7,7 @@ class Gridview_Controller extends Controller {
 	public static function factory($model,$page,$limit,$uri_segment){
 		$gridview = new Gridview_Controller();
 		$gridview->model = $model;
+		$gridview->columns = $model->table_columns;
 		$gridview->page = $page;
 		$gridview->limit = $limit;
 		$gridview->uri_segment = $uri_segment;
@@ -17,9 +18,7 @@ class Gridview_Controller extends Controller {
 		 * Renders the grid with whatever parameters are supplied
 		 */
 		$gridview = new View('gridview');
-		$gridview->columns = $this->model->table_columns;
 		$gridview_body = new View('gridview_body');
-		$total_records = $this->model->count_all();
 
 		# 2 things we could be up to here - filtering or table sort.
 		// Get all the parameters
@@ -37,28 +36,34 @@ class Gridview_Controller extends Controller {
 		}
 		$lists = $this->model->orderby($orderclause);
 		
-		// Are we doing filtering?
+		// Are we doing server-side filtering?
+		if ($this->base_filter != null){
+			$filter = $this->base_filter;
+			$lists = $lists->where($filter);
+		}
+		// Are we doing client-side filtering?
 		if ($filtercol!=null){
 			$arrcols = explode(',',$filtercol);
 			$arrfilters = explode(',',$filters);
 			if (count($arrcols)==count($arrfilters)){
-				$filter = array_combine($arrcols,$arrfilters);
-				$lists = $lists->like($filter);
-				$total_records = $lists->find_all()->count();
+				$client_filter = array_combine($arrcols,$arrfilters);
+				$lists = $lists->like($client_filter);
 			}
 		} 
+		$offset = ($this->page -1) * $this->limit;
+		$table = $lists->find_all($this->limit, $offset);
 			
 		$pagination = Pagination::factory(array(
 			'items_per_page' => $this->limit,
 			'uri_segment' => $this->uri_segment,
-			'total_items' => $total_records
+			'total_items' => $lists->count_last_query(),
+			'auto_hide' => true
 		));
 
-		$offset = $pagination->sql_offset();
-		$lists = $lists->find_all($this->limit, $offset);
-		$gridview_body->table = $lists;
+		$gridview_body->table = $table;
 		$gridview->body = $gridview_body;
 		$gridview->pagination = $pagination;
+		$gridview->columns = $this->columns;
 
 		if(request::is_ajax()){
 			if ($this->input->get('type',null) == 'pager'){
