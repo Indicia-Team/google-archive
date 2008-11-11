@@ -29,7 +29,7 @@ class Termlist_Controller extends Indicia_Controller {
 	public function edit($id,$page_no,$limit) {
 		$model = ORM::factory('termlist',$id);
 		$this->template->title = "Create New Termlist";
-		$view = new View('termlist_new');
+		$view = new View('termlist_edit');
 		$grid =	Gridview_Controller::factory($model,
 				$page_no,
 				$limit,
@@ -57,5 +57,8 @@ class Termlist_Controller extends Indicia_Controller {
 	}
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
+		$this->template->title = "Create new termlist";
+		$view = new View('termlist_edit');
+
 	}
 }

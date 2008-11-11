@@ -11,7 +11,6 @@ var realUrl;
  */
 function refresh(){
 	buildQueryString();
-	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };

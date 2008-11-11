@@ -4,9 +4,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta id="routedURI" name="routedURI" content=<?php echo "'".router::$routed_uri."'" ?> />
-<script type="text/javascript" src="<?php echo url::site(); ?>jquery-1.2.6.js"></script>
-<script type="text/javascript" src="<?php echo url::site(); ?>jquery.url.js"></script>
-<script type="text/javascript" src="<?php echo url::site(); ?>hasharray.js"></script>
+<script type="text/javascript" src="<?php echo url::base(); ?>jquery-1.2.6.js"></script>
+<script type="text/javascript" src="<?php echo url::base(); ?>jquery.url.js"></script>
+<script type="text/javascript" src="<?php echo url::base(); ?>hasharray.js"></script>
 <?php echo html::stylesheet(array('media/css/site',),array('screen',)); ?>
 <?php echo html::stylesheet(array('media/css/forms',),array('screen',)); ?>
 </script>

@@ -3,7 +3,7 @@ $columns - array of column names
 $pagination - the pagination object
 $body - gridview_table object.
 -->
-<script type="text/javascript" src='/application/views/gridview.js' ></script>
+<script type="text/javascript" src='<?php echo url::base() ?>/application/views/gridview.js' ></script>
 <div id='gvFilter'>
 <form name='Filter' action='' method='get'>
 Search for
