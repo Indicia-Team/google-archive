@@ -118,7 +118,7 @@ class Pagination_Core {
 			$_GET[$this->query_string] = '{page}';
 
 			// Create full URL
-			$this->url = url::site(Router::$current_uri).'?'.str_replace('%7Bpage%7D', '{page}', http_build_query($_GET));
+			$this->url = url::site(Router::$routed_uri).'?'.str_replace('%7Bpage%7D', '{page}', http_build_query($_GET));
 
 			// Reset page number
 			$_GET[$this->query_string] = $this->current_page;
@@ -128,7 +128,7 @@ class Pagination_Core {
 		else
 		{
 			// Use current URI if no base_url set
-			$this->url = ($this->base_url === '') ? Router::$segments : explode('/', trim($this->base_url, '/'));
+			$this->url = ($this->base_url === '') ? Router::$rsegments : explode('/', trim($this->base_url, '/'));
 
 			// Convert uri 'label' to corresponding integer if needed
 			if (is_string($this->uri_segment))

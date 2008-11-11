@@ -4,12 +4,14 @@ var page;
 var queryString;
 var baseQueryString;
 var pageUrlSegmentNo;
+var realUrl;
 
 /**
 	* Refreshes everything - a shortcut
  */
 function refresh(){
 	buildQueryString();
+	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };
@@ -84,7 +86,7 @@ function buildQueryString() {
 
 	queryString = baseQueryString
 		+ page + '/'
-		+ $.url.segment(pageUrlSegmentNo + 1) + '?'
+		+ realUrl.segment(pageUrlSegmentNo + 1) + '?'
 		+ ((sortCols != '') ? 'orderby=' + sortCols 
 			+ '&direction=' + sortDirs + '&': '')
 		+ ((filterCols != '') ?	'columns=' + filterCols 
@@ -93,24 +95,32 @@ function buildQueryString() {
 
 $(document).ready(function(){
 
+	// Get the real URL (in case of routing)
+	realUrl = $.url.setUrl($.url.attr('protocol') 
+		+ '://'
+		+ $.url.attr('host')
+		+ '/index.php/'
+		+ $('meta[name=routedURI]').attr('content'));
+
 	// Determine the segment number used for the page - the gridview control will
 	// always use the last two segments for the page and limit - number of items to
 	// show per page.
-	pageUrlSegmentNo = $.url.attr('path').split('/').length - 3;
+	pageUrlSegmentNo = realUrl.attr('path').split('/').length - 3;
 
 	// Set the base query string
-	baseQueryString = $.url.attr('protocol') + '://'
-		+ $.url.attr('host')
+	baseQueryString = 
+		realUrl.attr('protocol') + '://'
+		+ realUrl.attr('host')
 		+ '/index.php/'
-		+ $.url.segment(1) + '/'
-		+ $.url.segment(2) + '_gv/'; 
+		+ realUrl.segment(1) + '/'
+		+ realUrl.segment(2) + '_gv/'; 
 	for (var i = 3; i < pageUrlSegmentNo; i++) {
-		baseQueryString += $.url.segment(i) + '/'
+		baseQueryString += realUrl.segment(i) + '/';
 	}
 	
 
 	//Set initial page
-	page = $.url.segment(pageUrlSegmentNo);
+	page = realUrl.segment(pageUrlSegmentNo);
 
 	// Paging
 	pagerLinks();
