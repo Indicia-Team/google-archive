@@ -23,6 +23,7 @@ class Termlist_Controller extends Indicia_Controller {
 		$this->auto_render = false;
 		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
 		$grid->base_filter = array('deleted' => 'f');
+		array_splice($grid->columns,0,1);
 		return $grid->display();
 	}
 	public function edit($id,$page_no,$limit) {
@@ -34,6 +35,7 @@ class Termlist_Controller extends Indicia_Controller {
 				$limit,
 				4);
 		$grid->base_filter = array('parent_id' => $id);
+		array_splice($grid->columns,0,1);
 		$view->termtable = $grid->display();
 		$view->model = $model->find($id);
 		$this->template->content = $view;
@@ -48,6 +50,7 @@ class Termlist_Controller extends Indicia_Controller {
 				$limit,
 				4);
 		$grid->base_filter = array('parent_id' => $id);
+		array_splice($grid->columns,0,1);
 		return $grid->display();
 	}
 	public function save() {

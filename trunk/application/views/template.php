@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta id="routedURI" name="routedURI" content=<?php echo "'".router::$routed_uri."'" ?> />
 <script type="text/javascript" src="/jquery-1.2.6.js"></script>
 <script type="text/javascript" src="/jquery.url.js"></script>
 <script type="text/javascript" src="/hasharray.js"></script>

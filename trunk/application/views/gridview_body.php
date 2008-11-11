@@ -5,7 +5,8 @@ foreach ($table as $item) {
 	echo ($i%2 == 0) ? "evenRow" : "oddRow";
 	echo "'>";
 	foreach (array_intersect_key($item->as_array(), $columns) as $field) {
-		echo "<td>".$field."</td>";
+		echo "<td>".html::anchor($this->uri->segment(1)
+			."/edit/".$item->id."/1/5", $field)."</td>";
 	}
 	$i++;
 	echo "</tr>";
