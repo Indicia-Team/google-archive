@@ -7,7 +7,7 @@
 <script type="text/javascript" src="/jquery.url.js"></script>
 <script type="text/javascript" src="/hasharray.js"></script>
 <?php echo html::stylesheet(array('media/css/site',),array('screen',)); ?>
-<link rel="stylesheet" type="text/css" href="/forms.css" />
+<?php echo html::stylesheet(array('media/css/forms',),array('screen',)); ?>
 </script>
 <title><?php echo html::specialchars($title) ?></title>
 </head>
