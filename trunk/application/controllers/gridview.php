@@ -11,6 +11,7 @@ class Gridview_Controller extends Controller {
 		$gridview->page = $page;
 		$gridview->limit = $limit;
 		$gridview->uri_segment = $uri_segment;
+		$gridview->base_filter = null;
 		return $gridview;
 	}
 	function display() {
