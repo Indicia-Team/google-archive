@@ -1,7 +1,7 @@
 <div class="termlist">
 <?php echo $termtable ?>
 <br/>
-<form action="/index.php/termlist/create">
+<form action=action="<?php echo url::site(); ?>termlist/create">>
 <input type="submit" value="New termlist" />
 </form>
 </div>
