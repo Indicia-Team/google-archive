@@ -10,8 +10,9 @@ class Termlist_Controller extends Indicia_Controller {
 		$this->template->title = "Pagination";
 		$this->template->message = 'Termlists grid'; 
 		$termlist = new View('termlist');
-		$termlist->termtable = 
-			Gridview_Controller::factory($model,$page_no,$limit,3,null)->display();
+		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
+		$grid->base_filter = array('deleted' => 'f');
+		$termlist->termtable = $grid->display();
 		$this->template->content = $termlist;
 
 	}
@@ -19,7 +20,9 @@ class Termlist_Controller extends Indicia_Controller {
 	public function page_gv($page_no,$limit) {
 		$model = ORM::factory('termlist');
 		$this->auto_render = false;
-		return Gridview_Controller::factory($model,$page_no,$limit,3,null)->display();
+		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
+		$grid->base_filter = array('deleted' => 'f');
+		return $grid->display();
 	}
 	public function edit($id,$page_no,$limit) {
 		$model = ORM::factory('termlist',$id);

@@ -12,7 +12,7 @@ $body - gridview_table object.
 <tr class='headingRow'>
 <?php 
 foreach ($columns as $name => $dbtype) {
-	echo "<th class='gvCol'>".$name."</th>";
+	echo "<th class='gvCol'>".ucwords($name)."</th>";
 } 
 ?>
 </tr>
