@@ -7,11 +7,12 @@ class Termlist_Controller extends Indicia_Controller {
 	public function page($page_no,$limit) {
 		$model = ORM::factory('termlist');
 		// Generate a new termlist object
-		$this->template->title = "Pagination";
+		$this->template->title = "Existing Termlists";
 		$this->template->message = 'Termlists grid'; 
 		$termlist = new View('termlist');
 		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
 		$grid->base_filter = array('deleted' => 'f');
+		array_splice($grid->columns,0,1);
 		$termlist->termtable = $grid->display();
 		$this->template->content = $termlist;
 
@@ -34,7 +35,7 @@ class Termlist_Controller extends Indicia_Controller {
 				4);
 		$grid->base_filter = array('parent_id' => $id);
 		$view->termtable = $grid->display();
-		$view->model = $model;
+		$view->model = $model->find($id);
 		$this->template->content = $view;
 
 	}
@@ -50,5 +51,8 @@ class Termlist_Controller extends Indicia_Controller {
 		return $grid->display();
 	}
 	public function save() {
+	}
+	public function create(){
+		$parent = $this->input->post('parent_id', null);
 	}
 }

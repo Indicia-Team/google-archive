@@ -41,6 +41,9 @@ function refreshPager(){
 	});
 };
 
+/**
+ * Adds new javascript links to the pager component
+ */
 function pagerLinks(){
 	$('.pagination a').each(function(i){
 		$(this).click(function(e){
@@ -116,19 +119,20 @@ $(document).ready(function(){
 	$('#pageGrid thead th').each(function(i){
 		$(this).click(function(e){
 			e.preventDefault();
-			var a = sort.get($(this).html());
+			var h = $(this).html().toLowerCase();
+			var a = sort.get(h);
 			if (a != undefined) {
 				if (a == 'asc') {
-					sort.unshift($(this).html(),'desc');
+					sort.unshift(h,'desc');
 					$(this).removeClass('gvColAsc');
 					$(this).addClass('gvColDesc');
 				} else {
-					sort.remove($(this).html());
+					sort.remove(h);
 					$(this).removeClass('gvColDesc');
 					$(this).addClass('gvCol');
 				}
 			} else {
-				sort.unshift($(this).html(), 'asc');
+				sort.unshift(h, 'asc');
 				$(this).removeClass('gvCol');
 				$(this).addClass('gvColAsc');
 			}
