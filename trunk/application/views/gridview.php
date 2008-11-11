@@ -51,7 +51,7 @@ function pagerLinks(){
 	$('.pagination a').each(function(i){
 		$(this).click(function(e){
 			e.preventDefault();
-			page = $.url.setUrl($(this).attr('href')).segment(3);
+			page = $.url.setUrl($(this).attr('href')).segment(pageUrlSegmentNo);
 			refresh();
 		});
 	});
@@ -87,10 +87,10 @@ function buildQueryString() {
 
 	queryString = baseQueryString
 		+ page + '/'
-		+ $.url.segment(4) + '?'
+		+ $.url.segment(pageUrlSegmentNo + 1) + '?'
 		+ ((sortCols != '') ? 'orderby=' + sortCols 
-			+ '&direction=' + sortDirs : '')
-		+ ((filterCols != '') ?	'&columns=' + filterCols 
+			+ '&direction=' + sortDirs + '&': '')
+		+ ((filterCols != '') ?	'columns=' + filterCols 
 			+ '&filters=' + filterStrings : '');
 };
 
@@ -107,7 +107,7 @@ $(document).ready(function(){
 		+ '/index.php/'
 		+ $.url.segment(1) + '/'
 		+ $.url.segment(2) + '_gv/'; 
-	for (var i = 3; i < pageUrlSegmentNo-1; i++) {
+	for (var i = 3; i < pageUrlSegmentNo; i++) {
 		baseQueryString += $.url.segment(i) + '/'
 	}
 	
@@ -146,7 +146,7 @@ $(document).ready(function(){
 	$('#gvFilter form').submit(function(e){
 		e.preventDefault();
 		filter.clear();
-		filter.unshift($('select').val(), $('input:first').val());
+		filter.unshift($('select').val(), $('div#gvFilter input:first').val());
 		refresh();
 	});
 });
