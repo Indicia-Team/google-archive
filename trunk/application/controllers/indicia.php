@@ -8,7 +8,9 @@ class Indicia_Controller extends Template_Controller {
 		$this->template->links = array
 		(
 			'Home' => 'home',
+			'Websites' => 'website',
 			'Term Lists' => 'termlist',
+			'Users' => 'user',
 		);
 	}
 }
