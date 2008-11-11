@@ -1,5 +1,5 @@
 <h1>Subset of: <?php echo $model->parent->title ?></h1>
-<form class="cmxform"  name='editList' action='' method=post>
+<form class="cmxform"  name='editList' action='save' method=post>
 <fieldset>
 <legend>List Details</legend>
 <ol>
@@ -42,3 +42,7 @@
 </fieldset>
 </form>
 <?php echo $termtable ?>
+<form class="cmxform" action="/index.php/termlist/new" method="post">
+<input type="hidden" name="parent_id" value=<?php echo "'".$model->id."'" ?> />
+<input type="submit" value="New Sublist" />
+</form>
