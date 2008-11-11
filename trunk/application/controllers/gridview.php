@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Generates a gridview control.
  */
@@ -36,7 +36,7 @@ class Gridview_Controller extends Controller {
 			$orderclause = array('id' => 'asc');
 		}
 		$lists = $this->model->orderby($orderclause);
-		
+
 		// Are we doing server-side filtering?
 		if ($this->base_filter != null){
 			$filter = $this->base_filter;
@@ -50,11 +50,12 @@ class Gridview_Controller extends Controller {
 				$client_filter = array_combine($arrcols,$arrfilters);
 				$lists = $lists->like($client_filter);
 			}
-		} 
+		}
 		$offset = ($this->page -1) * $this->limit;
 		$table = $lists->find_all($this->limit, $offset);
-			
+
 		$pagination = Pagination::factory(array(
+			'style' => 'extended',
 			'items_per_page' => $this->limit,
 			'uri_segment' => $this->uri_segment,
 			'total_items' => $lists->count_last_query(),
@@ -74,7 +75,7 @@ class Gridview_Controller extends Controller {
 				$this->auto_render=false;
 				$gridview_body->render(true);
 			}
-			
+
 		} else {
 			return $gridview->render();
 		}

@@ -74,11 +74,21 @@ th
 	border-bottom: 1px solid #C1DAD7;
 	border-top: 1px solid #C1DAD7;
 	text-align: left;
-	padding: 6px 6px 6px 12px;
+	padding: 3px 6px 3px 6px;
 	background: #CAE8EA;
+}
+
+td
+{
+	padding: 0 6px 0 6px;
 }
 
 tr.oddRow
 {
 	background: #F2F2F2;
+}
+
+#gvFilter
+{
+	margin-bottom: 1em;
 }

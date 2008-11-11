@@ -4,16 +4,26 @@ $pagination - the pagination object
 $body - gridview_table object.
 -->
 <script type="text/javascript" src='/application/views/gridview.js' ></script>
-<div class='pager'>
-<?php echo $pagination ?>
+<div id='gvFilter'>
+<form name='Filter' action='' method='get'>
+Search for
+<input type='text' name='filters'/>
+in <select name='columns'>
+<?php foreach ($columns as $name => $dbtype) {
+	echo "<option value='".$name."'>".$name."</option>";
+}
+?>
+</select>
+<input id='gvFilterButton' type='submit' value='Search'/>
+</form>
 </div>
 <table id='pageGrid'>
 <thead>
 <tr class='headingRow'>
-<?php 
+<?php
 foreach ($columns as $name => $dbtype) {
 	echo "<th class='gvCol'>".ucwords($name)."</th>";
-} 
+}
 ?>
 </tr>
 </thead>
@@ -24,16 +34,3 @@ foreach ($columns as $name => $dbtype) {
 <div class='pager'>
 <?php echo $pagination ?>
 </div>
-<div id='gvFilter'>
-<form name='Filter' action='' method='get'>
-<select name='columns'>
-<?php foreach ($columns as $name => $dbtype) {
-	echo "<option value='".$name."'>".$name."</option>";
-} 
-?>
-</select>
-<input type='text' name='filters'/>
-<input id='gvFilterButton' type='submit' value='Filter'/>
-</form>
-</div>
-
