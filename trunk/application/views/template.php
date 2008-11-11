@@ -6,11 +6,25 @@
 <script type="text/javascript" src="/jquery-1.2.6.js"></script>
 <script type="text/javascript" src="/jquery.url.js"></script>
 <script type="text/javascript" src="/hasharray.js"></script>
+<?php echo html::stylesheet(array('media/css/site',),array('screen',)); ?>
 <link rel="stylesheet" type="text/css" href="/forms.css" />
 </script>
 <title><?php echo html::specialchars($title) ?></title>
 </head>
 <body>
+<div id="wrapper">
+<div id="banner">
+<span>Indicia</span>
+</div>
+<div id="menu">
+<ul>
+<?php foreach ($links as $link => $url): ?>
+<li><?php echo html::anchor($url, $link) ?></li>
+<?php endforeach; ?>
+</ul>
+</div>
+<div id="content">
+<h1><?php echo $title ?></h1>
 <?php echo $content ?>
 </body>
 </html>
