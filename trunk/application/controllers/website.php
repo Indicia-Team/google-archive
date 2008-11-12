@@ -50,10 +50,8 @@ class Website_Controller extends Indicia_Controller {
 			$website = new Website_Model($_POST['id']);
 		else
 			$website = new Website_Model();
-		$website->title = $_POST['title'];
-		$website->description = $_POST['description'];
-		if ($website->validate()) {
-			$website->save();
+		$_POST = new Validation($_POST);
+		if ($website->validate($_POST, TRUE)) {
 			url::redirect('website');
 		} else {
 			// errors are now embedded in the model
