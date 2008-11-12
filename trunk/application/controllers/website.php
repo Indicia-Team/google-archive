@@ -52,8 +52,17 @@ class Website_Controller extends Indicia_Controller {
 			$website = new Website_Model();
 		$website->title = $_POST['title'];
 		$website->description = $_POST['description'];
-		$website->save();
-		url::redirect('website');
+		if ($website->validate()) {
+			$website->save();
+			url::redirect('website');
+		} else {
+			// errors are now embedded in the model
+		    $this->template->title = "Edit ".$website->title;
+			$view = new View('website_edit');
+			$view->website = $website;
+			$this->template->content = $view;
+		}
+
 	}
 
 }
