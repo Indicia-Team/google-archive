@@ -12,7 +12,9 @@ class Termlist_Controller extends Indicia_Controller {
 		$termlist = new View('termlist');
 		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
 		$grid->base_filter = array('deleted' => 'f');
-		array_splice($grid->columns,0,1);
+		$grid->columns = array_intersect_key($grid->columns, array(
+			'title'=>'',
+			'description'=>''));
 		$termlist->termtable = $grid->display();
 		$this->template->content = $termlist;
 
@@ -23,7 +25,9 @@ class Termlist_Controller extends Indicia_Controller {
 		$this->auto_render = false;
 		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
 		$grid->base_filter = array('deleted' => 'f');
-		array_splice($grid->columns,0,1);
+		$grid->columns = array_intersect_key($grid->columns, array(
+			'title'=>'',
+			'description'=>''));
 		return $grid->display();
 	}
 	public function edit($id,$page_no,$limit) {
@@ -35,7 +39,9 @@ class Termlist_Controller extends Indicia_Controller {
 				$limit,
 				4);
 		$grid->base_filter = array('parent_id' => $id);
-		array_splice($grid->columns,0,1);
+		$grid->columns = array_intersect_key($grid->columns, array(
+			'title'=>'',
+			'description'=>''));
 		$view->termtable = $grid->display();
 		$view->termlist = $model->find($id);
 		$this->template->content = $view;
@@ -50,7 +56,9 @@ class Termlist_Controller extends Indicia_Controller {
 				$limit,
 				4);
 		$grid->base_filter = array('parent_id' => $id);
-		array_splice($grid->columns,0,1);
+		$grid->columns = array_intersect_key($grid->columns, array(
+			'title'=>'',
+			'description'=>''));
 		return $grid->display();
 	}
 	public function save() {
@@ -58,6 +66,12 @@ class Termlist_Controller extends Indicia_Controller {
 			$termlist = ORM::factory('termlist',$_POST['id']);
 		} else {
 			$termlist = ORM::factory('termlist');
+		}
+		if ($_POST['parent_id'] == ''){
+			$_POST['parent_id'] = null;
+		}
+		if ($_POST['website_id'] == ''){
+			$_POST['website_id'] = null;
 		}
 		$_POST = new Validation($_POST);
 		if ($termlist->validate($_POST, true)) {
