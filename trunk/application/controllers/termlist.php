@@ -54,17 +54,17 @@ class Termlist_Controller extends Indicia_Controller {
 		return $grid->display();
 	}
 	public function save() {
-		if ($id = $this->input->post('id') != null){
-			$termlist = ORM::factory('termlist',$id);
+		if (! empty($_POST['id'])) {
+			$termlist = ORM::factory('termlist',$_POST['id']);
 		} else {
 			$termlist = ORM::factory('termlist');
 		}
 		$_POST = new Validation($_POST);
-		if ($termlist->validation($_POST, true)) {
+		if ($termlist->validate($_POST, true)) {
 			url::redirect('termlist');
 		} else {
 			$this->template->title = "Edit ".$termlist->title;
-			$view = new $view('termlist_edit');
+			$view = new View('termlist_edit');
 			$view->termlist = $termlist;
 			$this->template->content = $view;
 		}
