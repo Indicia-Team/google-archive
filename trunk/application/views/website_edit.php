@@ -7,10 +7,12 @@
 <li>
 <label for="title">Title</label>
 <input id="title" name="title" value="<?php echo html::specialchars($website->title); ?>" />
+<?php echo html::error_message($website->getError('title')); ?>
 </li>
 <li>
 <label for="description">Description</label>
 <textarea rows="7" id="description" name="description"><?php echo html::specialchars($website->description); ?></textarea>
+<?php echo html::error_message($website->getError('description')); ?>
 </li>
 </ol>
 </fieldset>

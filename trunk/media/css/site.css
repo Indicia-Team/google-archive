@@ -109,3 +109,9 @@ tr.oddRow
 {
 	margin-bottom: 1em;
 }
+
+.form_error
+{
+	color: #FF0000;
+	vertical-align: top;
+}
