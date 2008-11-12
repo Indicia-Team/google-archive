@@ -1,5 +1,5 @@
 <?php if ($termlist->parent_id != null) { ?>
-<h1>Subset of: <?php echo $termlist->parent->title ?></h1>
+<h1>Subset of: <?php echo ORM::factory("termlist",$termlist->parent_id)->title ?></h1>
 <?php } ?>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'termlist/save' ?>" method="POST">
 <fieldset>
@@ -20,7 +20,7 @@
 <li>
 <label for="website">Owned by</label>
 <input id="website" readonly='readonly' value="<?php echo (($termlist->website_id != null) ? (html::specialchars($termlist->website->title)) : ''); ?>"/>
-<input id="website_id" name="website_id" type="hidden" value="<?php echo (($termlist->website_id != null) ? (html::specialchars($termlist->website_id)) : ''); ?>" />
+<input id="website_id" name="website_id" type="hidden" value="<?php echo html::specialchars($termlist->website_id); ?>" />
 <?php echo html::error_message($termlist->getError('website_id')); ?>
 </li>
 </ol>
@@ -45,8 +45,8 @@
 </li>
 <li>
 <label for="updated_by">Updated by:</label>
-<input type="hidden" name="created_by_id" id="created_by_id" value="<?php echo html::specialchars($termlist->created_by_id); ?>" />
-<input name="updated_by_id" readonly='readonly' value="<?php echo (($termlist->updated_by_id != null) ? (html::specialchars($termlist->updated_by->person->first_name)) : ''); ?>" />
+<input type="hidden" name="updated_by_id" id="updated_by_id" value="<?php echo html::specialchars($termlist->updated_by_id); ?>" />
+<input readonly='readonly' value="<?php echo (($termlist->updated_by_id != null) ? (html::specialchars($termlist->updated_by->person->first_name)) : ''); ?>" />
 </li>
 </ol>
 </fieldset>
