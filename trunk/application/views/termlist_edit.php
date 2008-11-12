@@ -9,18 +9,18 @@
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($termlist->id); ?>" />
 <input type="hidden" name="parent_id" id="parent_id" value="<?php echo html::specialchars($termlist->parent_id); ?>" />
 <label for="title">Title</label>
-<input id="title" value="<?php echo html::specialchars($termlist->title); ?>"/>
+<input id="title" name="title" value="<?php echo html::specialchars($termlist->title); ?>"/>
 <?php echo html::error_message($termlist->getError('title')); ?>
 </li>
 <li>
 <label for="description">Description</label>
-<textarea rows=7 id="description"><?php echo html::specialchars($termlist->description); ?></textarea>
+<textarea rows=7 id="description" name="description"><?php echo html::specialchars($termlist->description); ?></textarea>
 <?php echo html::error_message($termlist->getError('description')); ?>
 </li>
 <li>
 <label for="website">Owned by</label>
 <input id="website" readonly='readonly' value="<?php echo (($termlist->website_id != null) ? (html::specialchars($termlist->website->title)) : ''); ?>"/>
-<input id="website_id" type="hidden" value="<?php echo html::specialchars($termlist->website_id); ?>" />
+<input id="website_id" name="website_id" type="hidden" value="<?php echo html::specialchars($termlist->website_id); ?>" />
 <?php echo html::error_message($termlist->getError('website_id')); ?>
 </li>
 </ol>
@@ -32,19 +32,19 @@
 <ol>
 <li>
 <label for="created">Created:</label>
-<input id="created" readonly='readonly' value=<?php echo "'Waiting for users module'" ?>/>
+<input id="created_on" name="created_on" readonly='readonly' value=<?php echo html::specialchars($termlist->created_on); ?>/>
 </li>
 <li>
 <label for="created_by">Created by:</label>
-<input id="created_by" readonly='readonly' value=<?php echo "'Waiting for users module'" ?>/>
+<input id="created_by_id" name="created_by_id" readonly='readonly' value=<?php echo (($termlist->created_by_id != null) ? (html::specialchars($termlist->created_by->person->first_name)) : ''); ?>/>
 </li>
 <li>
 <label for="last_update">Last Updated:</label>
-<input id="last_update" readonly='readonly' value=<?php echo "'Waiting for users module'" ?>/>
+<input id="last_update" name="created_on" readonly='readonly' value=<?php echo html::specialchars($termlist->updated_on); ?>/>
 </li>
 <li>
 <label for="updated_by">Updated by:</label>
-<input id="updated_by" readonly='readonly' value=<?php echo "'Waiting for users module'" ?>/>
+<input id="updated_by_id" name="updated_by_id" readonly='readonly' value=<?php echo (($termlist->updated_by_id != null) ? (html::specialchars($termlist->updated_by->person->first_name)) : ''); ?>/>
 </li>
 </ol>
 </fieldset>
