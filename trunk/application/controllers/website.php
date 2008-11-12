@@ -27,12 +27,8 @@ class Website_Controller extends Indicia_Controller {
 	public function create() {
 		$this->template->title = "Create New Website";
 		$view = new View('website_edit');
-		$view->form = array(
-			'id'=>'',
-			'title'=>'',
-			'description'=>''
-			);
-
+		// Create a new website model to pass to the view
+		$view->website = ORM::factory('website');
 		$this->template->content = $view;
 	}
 
@@ -41,16 +37,10 @@ class Website_Controller extends Indicia_Controller {
 			print "cannot edit website without an ID";
 		else
 		{
-
 			$website = new Website_Model($this->uri->argument(1));
 			$this->template->title = "Edit ".$website->title;
 			$view = new View('website_edit');
-			$view->form = array(
-				'id'=>$website->id,
-				'title'=>$website->title,
-				'description'=>$website->description
-				);
-
+			$view->website = $website;
 			$this->template->content = $view;
 		}
 	}

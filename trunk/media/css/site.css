@@ -68,6 +68,11 @@ body
 	border-right: none;
 }
 
+table
+{
+	margin-bottom: 6px;
+}
+
 th
 {
 	border-right: 1px solid #C1DAD7;
@@ -82,6 +87,18 @@ td
 {
 	padding: 0 6px 0 6px;
 }
+
+td a
+{
+	text-decoration: none;
+	color: #203080;
+}
+
+td a:hover
+{
+	text-decoration: underline;
+}
+
 
 tr.oddRow
 {
