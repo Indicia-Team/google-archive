@@ -18,6 +18,14 @@ abstract class ORM extends ORM_Core {
 	 * in an array, making them accessible to the views.
 	 */
 	public function validate(Validation $array, $save = FALSE) {
+		// Set up the created and updated metadata for the record
+		if (!$this->id) {
+			$this->created_on=date("Ymd H:i:s");
+			$this->created_by = 1; // dummy user
+		}
+		// TODO: Check if updated metadata present in this entity, and also use correct user.
+		$this->updated_on=date("Ymd H:i:s");
+		$this->updated_by = 1; // dummy user
 		if (parent::validate($array, $save)) {
 			return TRUE;
 		}
