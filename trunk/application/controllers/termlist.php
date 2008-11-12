@@ -28,7 +28,7 @@ class Termlist_Controller extends Indicia_Controller {
 	}
 	public function edit($id,$page_no,$limit) {
 		$model = ORM::factory('termlist',$id);
-		$this->template->title = "Create New Termlist";
+		$this->template->title = "Edit ".$model->title;
 		$view = new View('termlist_edit');
 		$grid =	Gridview_Controller::factory($model,
 				$page_no,
@@ -37,7 +37,7 @@ class Termlist_Controller extends Indicia_Controller {
 		$grid->base_filter = array('parent_id' => $id);
 		array_splice($grid->columns,0,1);
 		$view->termtable = $grid->display();
-		$view->model = $model->find($id);
+		$view->termlist = $model->find($id);
 		$this->template->content = $view;
 
 	}
@@ -54,11 +54,27 @@ class Termlist_Controller extends Indicia_Controller {
 		return $grid->display();
 	}
 	public function save() {
+		if ($id = $this->input->post('id') != null){
+			$termlist = ORM::factory('termlist',$id);
+		} else {
+			$termlist = ORM::factory('termlist');
+		}
+		$_POST = new Validation($_POST);
+		if ($termlist->validation($_POST, true)) {
+			url::redirect('termlist');
+		} else {
+			$this->template->title = "Edit ".$termlist->title;
+			$view = new $view('termlist_edit');
+			$view->termlist = $termlist;
+			$this->template->content = $view;
+		}
 	}
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
 		$this->template->title = "Create new termlist";
 		$view = new View('termlist_edit');
-
+		$view->termlist = ORM::factory('termlist');
+		$view->termlist->parent_id = $parent;
+		$this->template->content = $view;
 	}
 }
