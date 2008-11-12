@@ -52,7 +52,7 @@
 </fieldset>
 </form>
 <?php if ($termlist->id != '') { 
-	echo $termtable; ?>
+	echo $table; ?>
 	<form class="cmxform" action="/index.php/termlist/create" method="post">
 	<input type="hidden" name="parent_id" value=<?php echo $termlist->id ?> />
 	<input type="submit" value="New Sublist" />

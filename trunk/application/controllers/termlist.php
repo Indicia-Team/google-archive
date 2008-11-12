@@ -1,34 +1,13 @@
 <?php
 
-class Termlist_Controller extends Indicia_Controller {
+class Termlist_Controller extends Gridview_Base_Controller {
 	public function __construct() {
-		parent::__construct();
-	}
-	public function page($page_no,$limit) {
-		$model = ORM::factory('termlist');
-		// Generate a new termlist object
-		$this->template->title = "Existing Termlists";
-		$this->template->message = 'Termlists grid'; 
-		$termlist = new View('termlist');
-		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
-		$grid->base_filter = array('deleted' => 'f');
-		$grid->columns = array_intersect_key($grid->columns, array(
+		parent::__construct(ORM::factory('termlist'), new View('termlist'));
+		$this->base_filter = array('deleted' => 'f');
+		$this->columns = array(
 			'title'=>'',
-			'description'=>''));
-		$termlist->termtable = $grid->display();
-		$this->template->content = $termlist;
-
-	}
-	// Auxilliary function for handling Ajax requests from the page method gridview component
-	public function page_gv($page_no,$limit) {
-		$model = ORM::factory('termlist');
-		$this->auto_render = false;
-		$grid =	Gridview_Controller::factory($model,$page_no,$limit,3,null);
-		$grid->base_filter = array('deleted' => 'f');
-		$grid->columns = array_intersect_key($grid->columns, array(
-			'title'=>'',
-			'description'=>''));
-		return $grid->display();
+			'description'=>'');
+		$this->pagetitle = "Term lists";
 	}
 	public function edit($id,$page_no,$limit) {
 		$model = ORM::factory('termlist',$id);
@@ -42,7 +21,7 @@ class Termlist_Controller extends Indicia_Controller {
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));
-		$view->termtable = $grid->display();
+		$view->table = $grid->display();
 		$view->termlist = $model->find($id);
 		$this->template->content = $view;
 
@@ -92,3 +71,4 @@ class Termlist_Controller extends Indicia_Controller {
 		$this->template->content = $view;
 	}
 }
+?>
