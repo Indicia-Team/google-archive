@@ -2,7 +2,6 @@
 
 abstract class ORM extends ORM_Core {
 	protected $errors = array();
-	protected $wakeup_on_reload = FALSE;
 
 
 	/* Provide an accessor so that the view helper can retrieve the errors for the model

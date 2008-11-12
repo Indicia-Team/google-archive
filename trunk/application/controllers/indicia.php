@@ -11,6 +11,7 @@ class Indicia_Controller extends Template_Controller {
 			'Websites' => 'website',
 			'Term Lists' => 'termlist',
 			'Users' => 'user',
+			'Taxon Groups' => 'taxon_group',
 		);
 	}
 }
