@@ -58,7 +58,7 @@
 <?php if ($model->id != '') { ?>
 	<h2> Sublists </h2>
 	<?php echo $table; ?>
-	<form class="cmxform" action="/index.php/termlist/create" method="post">
+<form class="cmxform" action="<?php echo url::site(); ?>/termlist/create" method="post">
 	<input type="hidden" name="parent_id" value=<?php echo $model->id ?> />
 	<input type="submit" value="New Sublist" />
 	</form>
