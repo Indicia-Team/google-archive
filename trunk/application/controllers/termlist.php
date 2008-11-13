@@ -46,11 +46,20 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		} else {
 			$termlist = ORM::factory('termlist');
 		}
+		/**
+		 * We need to submit null for integer fields, because an empty string will fail.
+		 */
 		if ($_POST['parent_id'] == ''){
 			$_POST['parent_id'] = null;
 		}
 		if ($_POST['website_id'] == ''){
 			$_POST['website_id'] = null;
+		}
+		/**
+		 * Were we instructed to delete the post?
+		 */
+		if ($_POST['submit'] == 'Delete'){
+			$_POST['deleted'] = 'true';
 		}
 		$_POST = new Validation($_POST);
 		if ($termlist->validate($_POST, true)) {

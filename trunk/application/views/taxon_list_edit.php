@@ -28,8 +28,8 @@
 <?php echo html::error_message($model->getError('website_id')); ?>
 </li>
 </ol>
-<input type="submit" value="Submit" />
-<input type="button" value="Delete" />
+<input type="submit" name="submit" value="Submit" />
+<input type="submit" name="submit" value="Delete" />
 </fieldset>
 <fieldset>
 <legend>Metadata</legend>
