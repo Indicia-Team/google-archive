@@ -11,6 +11,7 @@ var realUrl;
  */
 function refresh(){
 	buildQueryString();
+	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };
@@ -95,11 +96,7 @@ function buildQueryString() {
 $(document).ready(function(){
 
 	// Get the real URL (in case of routing)
-	realUrl = $.url.setUrl($.url.attr('protocol') 
-		+ '://'
-		+ $.url.attr('host')
-		+ '/index.php/'
-		+ $('meta[name=routedURI]').attr('content'));
+	realUrl = $.url.setUrl($('meta[name=routedURI]').attr('content'));
 
 	// Determine the segment number used for the page - the gridview control will
 	// always use the last two segments for the page and limit - number of items to
