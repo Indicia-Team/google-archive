@@ -1,5 +1,9 @@
 <?php if ($termlist->parent_id != null) { ?>
-<h1>Subset of: <?php echo ORM::factory("termlist",$termlist->parent_id)->title ?></h1>
+<h1>Subset of: 
+<a href="<?php echo url::site() ?>termlist/edit/<?php echo $termlist->parent_id ?>" >
+<?php echo ORM::factory("termlist",$termlist->parent_id)->title ?>
+</a>
+</h1>
 <?php } ?>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'termlist/save' ?>" method="POST">
 <fieldset>
