@@ -30,6 +30,7 @@
 </ol>
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />
+<?php echo html::error_message($model->getError('deleted')); ?>
 </fieldset>
 <fieldset>
 <legend>Metadata</legend>
