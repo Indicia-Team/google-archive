@@ -97,17 +97,16 @@ $(document).ready(function(){
 
 	// Get the real URL (in case of routing)
 	realUrl = $.url.setUrl($('meta[name=routedURI]').attr('content'));
+	baseUri =$('meta[name=baseURI]').attr('content');
 
 	// Determine the segment number used for the page - the gridview control will
-	// always use the last two segments for the page and limit - number of items to
+	// always use the last two segments for the page, and limit - number of items to
 	// show per page.
 	pageUrlSegmentNo = realUrl.attr('path').split('/').length - 3;
 
 	// Set the base query string
 	baseQueryString = 
-		realUrl.attr('protocol') + '://'
-		+ realUrl.attr('host')
-		+ '/index.php/'
+		baseUri
 		+ realUrl.segment(1) + '/'
 		+ realUrl.segment(2) + '_gv/'; 
 	for (var i = 3; i < pageUrlSegmentNo; i++) {
