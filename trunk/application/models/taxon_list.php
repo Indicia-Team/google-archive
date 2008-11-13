@@ -14,6 +14,7 @@ class Taxon_list_Model extends ORM_Tree {
 		$this->description = $array['description'];
 		$this->website_id = $array['website_id'];
 		$this->parent_id = $array['parent_id'];
+		$this->deleted = $array['deleted'];
 		return parent::validate($array, $save);
 	}
 

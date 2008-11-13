@@ -3,7 +3,7 @@
 class Taxon_list_Controller extends Gridview_Base_Controller {
 	public function __construct() {
 		parent::__construct(ORM::factory('taxon_list'), new View('taxon_list'));
-#		$this->base_filter = array('deleted' => 'f');
+		$this->base_filter = array('deleted' => 'f');
 		$this->columns = array(
 			'title'=>'',
 			'description'=>'');
@@ -51,6 +51,9 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		}
 		if ($_POST['website_id'] == ''){
 			$_POST['website_id'] = null;
+		}
+		if ($_POST['submit'] == 'Delete'){
+			$_POST['deleted'] = 'true';
 		}
 		$_POST = new Validation($_POST);
 		if ($taxon_list->validate($_POST, true)) {
