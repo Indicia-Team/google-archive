@@ -17,7 +17,7 @@
 ?>
 <script type="text/javascript">
 	  $(document).ready(function() {
-        $('ul#menu').superfish();
+        $('ul.sf-menu').superfish();
     });
 </script>
 <title><?php echo html::specialchars($title) ?></title>
@@ -27,7 +27,7 @@
 <div id="banner">
 <span>Indicia</span>
 </div>
-<ul id="menu">
+<ul class="sf-menu">
 <?php
 	$temp=array_keys($menu);
 	$lastitem = $temp[count($menu)-1];
