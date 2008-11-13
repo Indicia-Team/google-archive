@@ -4,11 +4,21 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta id="routedURI" name="routedURI" content=<?php echo "'".router::$routed_uri."'" ?> />
-<script type="text/javascript" src="<?php echo url::base(); ?>jquery-1.2.6.js"></script>
-<script type="text/javascript" src="<?php echo url::base(); ?>jquery.url.js"></script>
-<script type="text/javascript" src="<?php echo url::base(); ?>hasharray.js"></script>
-<?php echo html::stylesheet(array('media/css/site',),array('screen',)); ?>
-<?php echo html::stylesheet(array('media/css/forms',),array('screen',)); ?>
+<?php
+	echo html::script(array(
+		    'media/js/jquery-1.2.6.js',
+		    'media/js/jquery.url.js',
+		    'media/js/hasharray.js',
+			'media/js/superfish',
+		), FALSE);
+	echo html::stylesheet(array('media/css/site',),array('screen',));
+	echo html::stylesheet(array('media/css/menus',),array('screen',));
+	echo html::stylesheet(array('media/css/forms',),array('screen',));
+?>
+<script type="text/javascript">
+	  $(document).ready(function() {
+        $('ul#menu').superfish();
+    });
 </script>
 <title><?php echo html::specialchars($title) ?></title>
 </head>
@@ -17,13 +27,28 @@
 <div id="banner">
 <span>Indicia</span>
 </div>
-<div id="menu">
-<ul>
-<?php foreach ($links as $link => $url): ?>
-<li><?php echo html::anchor($url, $link) ?></li>
-<?php endforeach; ?>
+<ul id="menu">
+<?php
+	$temp=array_keys($menu);
+	$lastitem = $temp[count($menu)-1];
+	foreach ($menu as $toplevel => $submenu):
+		if ($toplevel==$lastitem)
+			echo '<li class="last">'.$toplevel;
+		else
+			echo '<li>'.$toplevel;
+
+		if (count($submenu)>0)
+		{
+			echo '<ul>';
+			foreach ($submenu as $menuitem => $url):
+				echo '<li>'.html::anchor($url, $menuitem).'</li>';
+			endforeach;
+			echo '</ul>';
+		}
+		echo '</li>';
+	endforeach;
+	 ?>
 </ul>
-</div>
 <div id="content">
 <h1><?php echo $title ?></h1>
 <?php echo $content ?>
