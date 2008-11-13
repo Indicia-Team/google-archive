@@ -17,5 +17,19 @@ class Taxon_list_Model extends ORM_Tree {
 		$this->deleted = $array['deleted'];
 		return parent::validate($array, $save);
 	}
+	/**
+	 * If we want to delete the record, we need to check that no dependents exist.
+	 */
+	public function _dependents(Validation $array, $field){
+		if ($array['deleted'] == 'true'){
+			$record = ORM::factory('termlist', $array['id']);
+#			if ($record->children->count()!=0){
+#				$array->add_error($field, 'has_children');
+#			}
+			if ($record->terms->count()!=0){
+				$array->add_error($field, 'has_terms');
+			}
+		}
+	}
 
 }

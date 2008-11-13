@@ -96,7 +96,7 @@ $(document).ready(function(){
 
 	// Get the real URL (in case of routing)
 	realUrl = $.url.setUrl($('meta[name=routedURI]').attr('content'));
-	baseUri =$('meta[name=baseURI]').attr('content');
+	baseUri = $('meta[name=baseURI]').attr('content');
 
 	// Determine the segment number used for the page - the gridview control will
 	// always use the last two segments for the page, and limit - number of items to
