@@ -13,16 +13,17 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		$model = ORM::factory('taxon_list',$id);
 		$this->template->title = "Edit ".$model->title;
 		$view = new View('taxon_list_edit');
+		$metadata = new View('metadata');
 		$grid =	Gridview_Controller::factory($model,
 				$page_no,
 				$limit,
 				4);
-		$grid->base_filter = array('parent_id' => $id);
-		$grid->columns = array_intersect_key($grid->columns, array(
-			'title'=>'',
-			'description'=>''));
+		$grid->base_filter = $this->base_filter;
+		$grid->columns =  $this->columns;
 		$view->table = $grid->display();
+		$metadata->model = $model->find($id);
 		$view->model = $model->find($id);
+		$view->metadata = $metadata;
 		$this->template->content = $view;
 
 	}
@@ -54,6 +55,8 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		}
 		if ($_POST['submit'] == 'Delete'){
 			$_POST['deleted'] = 'true';
+		} else {
+			$_POST['deleted'] = 'false';
 		}
 		$_POST = new Validation($_POST);
 		if ($taxon_list->validate($_POST, true)) {
@@ -61,7 +64,10 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		} else {
 			$this->template->title = "Edit ".$taxon_list->title;
 			$view = new View('taxon_list_edit');
-			$view->taxon_list = $taxon_list;
+			$metadata = new View('metadata');
+			$metadata->model = $taxon_list;
+			$view->metadata = $metadata;
+			$view->model = $taxon_list;
 			$this->template->content = $view;
 		}
 	}
@@ -69,6 +75,9 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		$parent = $this->input->post('parent_id', null);
 		$this->template->title = "Create new taxon_list";
 		$view = new View('taxon_list_edit');
+		$metadata = new View('metadata');
+		$metadata->model = ORM::factory('taxon_list');
+		$view->metadata = $metadata;
 		$view->model = ORM::factory('taxon_list');
 		$view->model->parent_id = $parent;
 		$this->template->content = $view;
