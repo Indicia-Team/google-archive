@@ -1,0 +1,53 @@
+#menu
+{
+	width: 736px;
+	padding: 0.1em 0.2em 0.2em 0.2em;
+	float: left;
+	margin-bottom: 18px;
+	position: relative;
+}
+
+#menu > li
+{
+	list-style-type: none;
+	float: left;
+	margin-left: 6px;
+	padding-right: 6px;
+	border-right: solid #e7e7e7 1px;
+}
+
+#menu li.last
+{
+	border-right: none;
+}
+
+#menu li ul
+{
+  background: #FFFFFF;
+  border: 1px solid #000044;
+  position: absolute;
+  top: -999em;
+}
+
+#menu li:hover ul, .nav li.sfHover ul {
+	top: 1.5em;
+}
+
+
+#menu li ul li
+{
+	list-style-type: none;
+}
+
+#menu li ul li a
+{
+	text-decoration: none;
+	padding: 6px 20px 6px 6px;
+	color: #003377;
+	display: block;
+}
+
+#menu li ul li a:hover
+{
+	background-color: #eee7ff;
+}

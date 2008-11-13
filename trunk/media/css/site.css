@@ -40,34 +40,6 @@ body
 	font-size: 2em;
 }
 
-#menu
-{
-	width: 736px;
-	padding: 2px 6px 2px 6px;
-	float: left;
-	margin-bottom: 18px;
-}
-
-#menu ul
-{
-	float: left;
-	margin-bottom: 0;
-}
-
-#menu li
-{
-	list-style-type: none;
-	float: left;
-	margin-left: 6px;
-	padding-right: 6px;
-	border-right: solid #e7e7e7 1px;
-}
-
-#menu li.last
-{
-	border-right: none;
-}
-
 table
 {
 	margin-bottom: 6px;
