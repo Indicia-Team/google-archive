@@ -11,7 +11,6 @@ var realUrl;
  */
 function refresh(){
 	buildQueryString();
-	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };
@@ -87,9 +86,9 @@ function buildQueryString() {
 	queryString = baseQueryString
 		+ page + '/'
 		+ realUrl.segment(pageUrlSegmentNo + 1) + '?'
-		+ ((sortCols != '') ? 'orderby=' + sortCols 
+		+ ((sortCols != '') ? 'orderby=' + sortCols
 			+ '&direction=' + sortDirs + '&': '')
-		+ ((filterCols != '') ?	'columns=' + filterCols 
+		+ ((filterCols != '') ?	'columns=' + filterCols
 			+ '&filters=' + filterStrings : '');
 };
 
@@ -105,14 +104,18 @@ $(document).ready(function(){
 	pageUrlSegmentNo = realUrl.attr('path').split('/').length - 3;
 
 	// Set the base query string
-	baseQueryString = 
-		baseUri
-		+ realUrl.segment(1) + '/'
-		+ realUrl.segment(2) + '_gv/'; 
-	for (var i = 3; i < pageUrlSegmentNo; i++) {
-		baseQueryString += realUrl.segment(i) + '/';
+	baseQueryString = baseUri;
+	var afterIndex=false;
+	for (var i = 0; i < pageUrlSegmentNo; i++) {
+		if (afterIndex) {
+			if (realUrl.segment(i)=='page')
+				baseQueryString += 'page_gv/';
+			else
+				baseQueryString += realUrl.segment(i) + '/';
+		}
+		if (realUrl.segment(i)=='index.php')
+			afterIndex=true;
 	}
-	
 
 	//Set initial page
 	page = realUrl.segment(pageUrlSegmentNo);
