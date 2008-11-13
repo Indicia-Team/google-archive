@@ -40,6 +40,7 @@ body
 	font-size: 2em;
 }
 
+
 table
 {
 	margin-bottom: 6px;
@@ -86,4 +87,18 @@ tr.oddRow
 {
 	color: #FF0000;
 	vertical-align: top;
+}
+
+#content
+{
+	float: left;
+	clear: both;
+}
+
+h1
+{
+	color: #103A6A;
+	margin-bottom: 12px;
+	font-size: 1.4em;
+	letter-spacing:-1px;
 }
