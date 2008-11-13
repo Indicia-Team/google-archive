@@ -1,11 +1,11 @@
 <?php if ($model->parent_id != null) { ?>
 <h1>Subset of: 
-<a href="<?php echo url::site() ?>termlist/edit/<?php echo $model->parent_id ?>" >
-<?php echo ORM::factory("termlist",$model->parent_id)->title ?>
+<a href="<?php echo url::site() ?>taxon_list/edit/<?php echo $model->parent_id ?>" >
+<?php echo ORM::factory("taxon_list",$model->parent_id)->title ?>
 </a>
 </h1>
 <?php } ?>
-<form class="cmxform"  name='editList' action="<?php echo url::site().'termlist/save' ?>" method="POST">
+<form class="cmxform"  name='editList' action="<?php echo url::site().'taxon_list/save' ?>" method="POST">
 <fieldset>
 <legend>List Details</legend>
 <ol>
@@ -58,7 +58,7 @@
 <?php if ($model->id != '') { ?>
 	<h2> Sublists </h2>
 	<?php echo $table; ?>
-	<form class="cmxform" action="/index.php/termlist/create" method="post">
+	<form class="cmxform" action="/index.php/taxon_list/create" method="post">
 	<input type="hidden" name="parent_id" value=<?php echo $model->id ?> />
 	<input type="submit" value="New Sublist" />
 	</form>
