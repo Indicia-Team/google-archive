@@ -37,7 +37,7 @@
 <li>
 <label for="created_by">Created by:</label>
 <input type="hidden" id="created_by_id" name="created_by_id" value="<?php echo html::specialchars($termlist->created_by_id); ?>" />
-<input readonly='readonly' value="<?php echo (($termlist->created_by_id != null) ? (html::specialchars($termlist->created_by->person->first_name)) : ''); ?>" />
+<input readonly='readonly' value="<?php echo (($termlist->created_by_id != null) ? (html::specialchars($termlist->created_by->person->surname)) : ''); ?>" />
 </li>
 <li>
 <label for="last_update">Last Updated:</label>
@@ -46,7 +46,7 @@
 <li>
 <label for="updated_by">Updated by:</label>
 <input type="hidden" name="updated_by_id" id="updated_by_id" value="<?php echo html::specialchars($termlist->updated_by_id); ?>" />
-<input readonly='readonly' value="<?php echo (($termlist->updated_by_id != null) ? (html::specialchars($termlist->updated_by->person->first_name)) : ''); ?>" />
+<input readonly='readonly' value="<?php echo (($termlist->updated_by_id != null) ? (html::specialchars($termlist->updated_by->person->surname)) : ''); ?>" />
 </li>
 </ol>
 </fieldset>
