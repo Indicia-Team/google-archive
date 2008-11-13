@@ -9,7 +9,7 @@ class Indicia_Controller extends Template_Controller {
 		(
 			'Home' => array(),
 			'Lookup Lists' => array(
-				'Species Lists'=>'species_list',
+				'Species Lists'=>'taxon_list',
 				'Taxon Groups'=>'taxon_group',
 				'Term Lists'=>'termlist',
 				'Locations'=>'location',
