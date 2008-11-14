@@ -12,11 +12,11 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$this->pagetitle = "Term lists";
 	}
 	public function edit($id,$page_no,$limit) {
+		// Generate models
 		$model = ORM::factory('termlist',$id);
 		$gridmodel = ORM::factory('gv_termlist',$id);
-		$this->template->title = "Edit ".$model->title;
-		$view = new View('termlist_edit');
-		$metadata = new View('metadata');
+
+		// Add grid component
 		$grid =	Gridview_Controller::factory($gridmodel,
 				$page_no,
 				$limit,
@@ -25,18 +25,29 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));
+		
+		// Add metadata panel
+		$metadata = new View('metadata');
 		$metadata->model = $model->find($id);
-		$view->table = $grid->display();
+		
+		// Add items to view
+		$view = new View('termlist_edit');
 		$view->model = $model->find($id);
 		$view->metadata = $metadata;
+		$view->table = $grid->display();
+
+		// Add everything to the template
+		$this->template->title = "Edit ".$model->title;
 		$this->template->content = $view;
 
 	}
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
 	public function edit_gv($id,$page_no,$limit) {
+		$this->auto_render=false;
+
 		$model = ORM::factory('termlist',$id);
 		$gridmodel = ORM::factory('gv_termlist',$id);
-		$this->auto_render=false;
+
 		$grid =	Gridview_Controller::factory($gridmodel,
 				$page_no,
 				$limit,
@@ -75,9 +86,9 @@ class Termlist_Controller extends Gridview_Base_Controller {
 			url::redirect('termlist');
 		} else {
 			$this->template->title = "Edit ".$termlist->title;
-			$view = new View('termlist_edit');
 			$metadata = new View('metadata');
 			$metadata->model = $termlist;
+			$view = new View('termlist_edit');
 			$view->metadata = $metadata;
 			$view->model = $termlist;
 			$view->table = null;
@@ -86,13 +97,17 @@ class Termlist_Controller extends Gridview_Base_Controller {
 	}
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
-		$this->template->title = "Create new termlist";
-		$view = new View('termlist_edit');
 		$metadata = new View('metadata');
-		$view->model = ORM::factory('termlist');
 		$metadata->model = ORM::factory('termlist');
+
+		// Create and assign variables to the view
+		$view = new View('termlist_edit');
+		$view->model = ORM::factory('termlist');
 		$view->model->parent_id = $parent;
 		$view->metadata = $metadata;
+
+		// Templating
+		$this->template->title = "Create new termlist";
 		$this->template->content = $view;
 	}
 }

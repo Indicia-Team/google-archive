@@ -11,26 +11,34 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 	}
 	public function edit($id,$page_no,$limit) {
 		$model = ORM::factory('taxon_list',$id);
-		$this->template->title = "Edit ".$model->title;
-		$view = new View('taxon_list_edit');
-		$metadata = new View('metadata');
+
+		// Configure the grid
 		$grid =	Gridview_Controller::factory($model,
 				$page_no,
 				$limit,
 				4);
 		$grid->base_filter = array('deleted' => 'f', 'parent_id' => $id);
 		$grid->columns =  $this->columns;
-		$view->table = $grid->display();
+
+		// Configure the metadata panel
+		$metadata = new View('metadata');
 		$metadata->model = $model->find($id);
+
+		// Configure and assign variables to the view
+		$view = new View('taxon_list_edit');
+		$view->table = $grid->display();
 		$view->model = $model->find($id);
+
+		// Templating
 		$view->metadata = $metadata;
+		$this->template->title = "Edit ".$model->title;
 		$this->template->content = $view;
 
 	}
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
 	public function edit_gv($id,$page_no,$limit) {
-		$model = ORM::factory('taxon_list',$id);
 		$this->auto_render=false;
+		$model = ORM::factory('taxon_list',$id);
 		$grid =	Gridview_Controller::factory($model,
 				$page_no,
 				$limit,
@@ -62,24 +70,26 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		if ($taxon_list->validate($_POST, true)) {
 			url::redirect('taxon_list');
 		} else {
-			$this->template->title = "Edit ".$taxon_list->title;
-			$view = new View('taxon_list_edit');
 			$metadata = new View('metadata');
 			$metadata->model = $taxon_list;
+
+			$view = new View('taxon_list_edit');
 			$view->metadata = $metadata;
 			$view->model = $taxon_list;
+
+			$this->template->title = "Edit ".$taxon_list->title;
 			$this->template->content = $view;
 		}
 	}
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
-		$this->template->title = "Create new taxon_list";
-		$view = new View('taxon_list_edit');
 		$metadata = new View('metadata');
 		$metadata->model = ORM::factory('taxon_list');
+		$view = new View('taxon_list_edit');
 		$view->metadata = $metadata;
 		$view->model = ORM::factory('taxon_list');
 		$view->model->parent_id = $parent;
+		$this->template->title = "Create new taxon_list";
 		$this->template->content = $view;
 	}
 }
