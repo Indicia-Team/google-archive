@@ -4,7 +4,9 @@ class Indicia_Controller extends Template_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->db = Database::instance();
-
+		$this->auth = new Auth;
+		$this->session = new Session;
+		
 		$this->template->menu = array
 		(
 			'Home' => array(),
