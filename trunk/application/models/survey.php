@@ -1,0 +1,19 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+
+class Survey_Model extends ORM {
+
+	protected $belongs_to = array(
+			'people'=>'owner',
+			'website',
+			'created_by'=>'user',
+			'updated_by'=>'user');
+
+	public function validate(Validation $array, $save = FALSE) {
+		$array->pre_filter('trim');
+		$array->add_rules('title', 'required');
+		// Explicitly add those fields for which we don't do validation
+		$this->description = $array['description'];
+		return parent::validate($array, $save);
+	}
+
+}
