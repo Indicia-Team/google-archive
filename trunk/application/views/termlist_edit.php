@@ -34,11 +34,17 @@
 </fieldset>
 <?php echo $metadata ?>
 </form>
-<?php if ($model->id != '' && $table != null) { ?>
+
+<?php if ($model->id != '') { ?>
+<form class="cmxform" action="<?php echo url::site().'term/page/'.$model->id ?>" >
+<input type="submit" value="View Terms" />
+</form>
+<?php if ( $table != null) { ?>
+	<br />
 	<h2> Sublists </h2>
 	<?php echo $table; ?>
 <form class="cmxform" action="<?php echo url::site(); ?>/termlist/create" method="post">
 	<input type="hidden" name="parent_id" value=<?php echo $model->id ?> />
 	<input type="submit" value="New Sublist" />
 	</form>
-<?php } ?>
+<?php }} ?>
