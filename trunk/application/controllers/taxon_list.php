@@ -18,7 +18,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 				$page_no,
 				$limit,
 				4);
-		$grid->base_filter = $this->base_filter;
+		$grid->base_filter = array('deleted' => 'f', 'parent_id' => $id);
 		$grid->columns =  $this->columns;
 		$view->table = $grid->display();
 		$metadata->model = $model->find($id);
@@ -35,7 +35,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 				$page_no,
 				$limit,
 				4);
-		$grid->base_filter = array('parent_id' => $id);
+		$grid->base_filter = array('deleted' => 'f', 'parent_id' => $id);
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));

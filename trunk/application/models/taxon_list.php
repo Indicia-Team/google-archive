@@ -27,7 +27,7 @@ class Taxon_list_Model extends ORM_Tree {
 #				$array->add_error($field, 'has_children');
 #			}
 			if ($record->terms->count()!=0){
-				$array->add_error($field, 'has_terms');
+				$array->add_error($field, 'has_taxa');
 			}
 		}
 	}
