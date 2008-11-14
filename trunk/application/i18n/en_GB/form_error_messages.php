@@ -13,6 +13,7 @@ $lang = array (
 	),
 	'deleted' => Array (
 		'has_terms' => 'There are terms belonging to this list',
+		'has_taxa' => 'There are species belonging to this list',
 	),
 
 );
