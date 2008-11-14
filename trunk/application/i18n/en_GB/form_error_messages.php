@@ -12,8 +12,11 @@ $lang = array (
 		'default' => 'Invalid Input.',
 	),
 	'deleted' => Array (
-		'has_terms' => 'There are terms belonging to this list',
-		'has_taxa' => 'There are species belonging to this list',
+		'has_terms' => 'There are terms belonging to this list.',
+		'has_taxa' => 'There are species belonging to this list.',
+	),
+	'iso' => Array (
+		'default' => 'Invalid ISO 639-2 language code.',
 	),
 
 );
