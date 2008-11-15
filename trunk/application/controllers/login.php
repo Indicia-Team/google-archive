@@ -2,6 +2,16 @@
 
 class Login_Controller extends Indicia_Controller {
 
+// Asi it stands, login does not check passwords, roles, and remeber me doesn't work.
+// Things to do (in order):
+// 1 Put in an already Logged on check to login forms
+// 2 Create a Logout controller.
+// 3 Enable role checking
+// 4 Enable Login by email
+// 5 Create Lost Password functionality
+// 6 Enable password checking
+// 7 Enable remember me functionality
+	
 	public function index()
 	{
 		$login_config = Kohana::config('login');
@@ -13,7 +23,7 @@ class Login_Controller extends Indicia_Controller {
 		{
 			if (request::method() == 'post')
 			{
-				if ($this->auth->login($_POST['UserName'], $_POST['Password']))
+				if ($this->auth->login(array('username' => $_POST['UserName']), $_POST['Password']))
 				{
 					url::redirect();
 				}
