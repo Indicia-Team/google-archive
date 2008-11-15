@@ -60,8 +60,13 @@ class Auth_ORM_Driver implements Auth_Driver {
 		}
 
 //		// If the passwords match, perform a login
-//		if ($user->has(new Core_Role_Model(1)) AND $user->password === $password)
-//		{
+//		if ($user->has(new Core_Role_Model('Login)) AND $user->password === $password)
+// We assume that for this Indicia CORE module, that anyone who is given a role within 
+// the CORE website has to log on to do their duties: this implies a user must have a
+// CORE_ROLE, and can have any CORE_ROLE, in order to log on. Those without CORE roles
+// are restricted to non CORE module activities.
+		if (!is_null($user->core_role_id))
+		{
 //			if ($remember === TRUE)
 //			{
 //				// Create a new autologin token
@@ -80,10 +85,10 @@ class Auth_ORM_Driver implements Auth_Driver {
 			$this->complete_login($user);
 
 			return TRUE;
-//		}
-//
-//		// Login failed
-//		return FALSE;
+		}
+
+		// Login failed
+		return FALSE;
 	}
 
 	public function force_login($user)
