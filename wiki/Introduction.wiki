@@ -1,4 +1,5 @@
 #summary An introduction to the Indicia project.
+#labels Featured
 
 = Introduction =
 
