@@ -1,0 +1,11 @@
+#summary Lists development conventions for the Indicia project
+
+= Development Conventions =
+
+== Database Upgrade Scripts ==
+
+For each upgrade to the datamodel, a script is added to the trunk\application\db folder in SubVersion. The script makes the required alteration to the database and is saved as a file named using the following convention:
+
+*yyyymmddhhmm_description_of_change.sql*
+
+This way scripts can easily be sorted chronologically and applied in sequence.
