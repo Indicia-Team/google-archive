@@ -3,6 +3,10 @@
 class Taxon_Group_Model extends ORM {
 
 	protected $has_many = array('term');
+	protected $belongs_to = array(
+		'created_by'=>'user',
+		'updated_by'=>'user'
+	);
 
 	public function validate(Validation $array, $save = FALSE) {
 		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation

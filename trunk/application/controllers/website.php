@@ -3,7 +3,7 @@
 class Website_Controller extends Gridview_Base_Controller {
 
 	public function __construct() {
-		parent::__construct(ORM::factory('website'), new View('website'));
+		parent::__construct('website');
 		$this->columns = array(
 			'title'=>'',
 			'description'=>'');

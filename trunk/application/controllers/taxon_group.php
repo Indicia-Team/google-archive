@@ -1,28 +1,12 @@
 <?php
 
-class Taxon_Group_Controller extends Indicia_Controller {
+class Taxon_Group_Controller extends Gridview_Base_Controller {
 	public function __construct() {
-		parent::__construct();
-	}
-
-	public function page($page_no,$limit) {
-		$model = ORM::factory('taxon_group');
-		// Generate a new taxon_group object
-		$this->template->title = "Taxon groups";
-		$this->template->message = 'Taxon groups grid';
-		$taxon_group = new View('taxon_group');
-		$grid = Gridview_Controller::factory($model,$page_no,$limit,3,null);
-		// Hide the first (id) column
-		array_splice($grid->columns,0,1);
-        $taxon_group->table = $grid->display();
-		$this->template->content = $taxon_group;
-	}
-
-	// Auxilliary function for handling Ajax requests from the page method gridview component
-	public function page_gv($page_no,$limit) {
-		$model = ORM::factory('taxon_group');
-		$this->auto_render = false;
-		return Gridview_Controller::factory($model,$page_no,$limit,3,null)->display();
+		parent::__construct('taxon_group');
+		$this->columns = array(
+			'title'=>'');
+		$this->pagetitle = "Taxon Groups";
+		$this->session = Session::instance();
 	}
 
 	public function create() {
