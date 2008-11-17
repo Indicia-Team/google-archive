@@ -46,4 +46,4 @@ Next, rename the application/config/database.php.example file to application/con
 
 == Test it ==
 
-You should now be able to access the site, for example //localhost/indicia/website.
+You should now be able to access the site, for example //localhost/indicia/index.php/website.
