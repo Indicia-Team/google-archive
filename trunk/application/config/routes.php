@@ -23,3 +23,4 @@ $config['language'] = 'language/page/1/5';
 // Term
 $config['term'] = 'term/page/1/1/5';
 $config['term/page/([0-9]+)'] = 'term/page/$1/1/5';
+$config['term/edit/([0-9]+)'] = 'term/edit/$1/1/5';

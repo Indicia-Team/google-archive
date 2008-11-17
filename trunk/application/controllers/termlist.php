@@ -21,7 +21,8 @@ class Termlist_Controller extends Gridview_Base_Controller {
 				$page_no,
 				$limit,
 				4);
-		$grid->base_filter = array('parent_id' => $id);
+		$grid->base_filter = $this->base_filter;
+		$grid->base_filter['parent_id'] = $id;
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));
@@ -52,7 +53,8 @@ class Termlist_Controller extends Gridview_Base_Controller {
 				$page_no,
 				$limit,
 				4);
-		$grid->base_filter = array('parent_id' => $id);
+		$grid->base_filter = $this->base_filter;
+		$grid->base_filter['parent_id'] = $id;
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));
@@ -105,6 +107,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$view->model = ORM::factory('termlist');
 		$view->model->parent_id = $parent;
 		$view->metadata = $metadata;
+		$view->table = null;
 
 		// Templating
 		$this->template->title = "Create new termlist";
