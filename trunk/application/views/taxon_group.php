@@ -1,7 +1,9 @@
 <div class="taxon_group">
 <?php echo $table ?>
 <br />
-<form action="<?php echo url::site(); ?>taxon_group/create">
+<?php print form::open('taxon_group/create'); ?>
 <input type="submit" value="New taxon group" />
 </form>
+<br />
+<?php echo $upload_csv_form ?>
 </div>

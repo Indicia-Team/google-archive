@@ -3,7 +3,7 @@
 class Survey_Model extends ORM {
 
 	protected $belongs_to = array(
-			'people'=>'owner',
+			'owner'=>'person',
 			'website',
 			'created_by'=>'user',
 			'updated_by'=>'user');
