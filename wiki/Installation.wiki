@@ -1,0 +1,49 @@
+#summary Quick guide to installing the Indicia Core for developers
+#labels Phase-Deploy
+
+= Installation =
+
+This guide is a quick summary of the steps required to install the Indicia Core for developers.
+
+== Install PostgreSQL and PostGIS ==
+
+First, install the PostgreSQL database server and the PostGIS extension for your operating system. For downloads and more information see [http://www.postgresql.org/] and [http://postgis.refractions.net/]. Note that if you are installing on Windows, version 8.3 of PostgreSQL allows you to install PostGIS by using the Stack Builder tool included with PostgreSQL.
+
+Next, create a database on your server. You don't need to put any content in the database yet. You can do this using the pgAdmin tool supplied with PostgreSQL.
+
+== Install PHP and a web server ==
+
+There are many tutorials on the web on how to install PHP and a webserver such as Apache. PHP version 5 is required. For example, the following guide explains installation of PHP, Apache and MySQL on Windows: [http://www.php-mysql-tutorial.com/install-apache-php-mysql.php]. MySQL is not required by the Indicia Core.
+
+== Install subversion ==
+
+To access the source code, you need SubVersion installed. See [http://subversion.tigris.org/].
+
+== Grab the source code ==
+
+First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, run the following command line from this folder to grab the source code:
+`svn checkout http://indicia.googlecode.com/svn/trunk/ indicia-read-only`
+
+== Setup the database
+
+The source code includes database installation scripts in the folder application/db. 
+Use the following command prompt, changing the file path if necessary (run this from the PostgreSQL\8.3\bin directory if it is not on your path). Change the database name from indicia if your database is named differently. Also ensure the word after the -U parameter is the name of your postgres superuser, and ensure that the word path is replaced by the path to the dbcreate.sql file in your application/db folder:
+
+psql -f _path_\dbcreate.sql -d _indicia_ -U _postgres_
+
+Once this is run, you need to run the other scripts in the application/db folder which are named with 12 numbers at the start of the file name. To do this, load them one by one in order (so the lowest number comes first) into the PostgreSQL query tool and run them against your database.
+
+== Configuration ==
+
+First, rename the application/config/config.php.example file to application/config/config.php and edit it in a text editor. The change you need to make is to the following entry:
+# $config['site_domain'] = '/';
+You need to replace the / with the domain and path of your installation, in our example $config['site_domain'] = 'localhost/indicia/';
+
+Next, rename the application/config/database.php.example file to application/config/database/php and edit it in a text editor. The changes you need to make are:
+# Change the user to the name of the postgreSQL super user.
+# Change the password to the user's password.
+# Change the name of the database to the database you created earlier.
+
+== Test it ==
+
+You should now be able to access the site, for example //localhost/indicia/website.
