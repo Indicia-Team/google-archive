@@ -18,6 +18,7 @@ class term_Controller extends Gridview_Base_Controller {
 	public function page($termlist_id, $page_no, $limit){
 		$this->base_filter['termlist_id'] = $termlist_id;
 		$this->pagetitle = "Terms in ".ORM::factory('termlist',$termlist_id)->title;
+		$this->view->termlist_id = $termlist_id;
 		parent::page($page_no, $limit);
 	}
 
@@ -26,9 +27,9 @@ class term_Controller extends Gridview_Base_Controller {
 	}
 
 	public function edit($id,$page_no,$limit) {
-		// Generate models
+		// Generate model
 		$model = ORM::factory('term',$id);
-		$gridmodel = ORM::factory('gv_term',$id);
+		$gridmodel = ORM::factory('gv_term');
 
 		// Add grid component
 		$grid =	Gridview_Controller::factory($gridmodel,
@@ -36,6 +37,7 @@ class term_Controller extends Gridview_Base_Controller {
 				$limit,
 				4);
 		$grid->base_filter = $this->base_filter;
+		$grid->base_filter['parent_id'] = $id;
 		$grid->columns = $this->columns;
 		
 		// Add metadata panel
@@ -49,7 +51,7 @@ class term_Controller extends Gridview_Base_Controller {
 		$view->table = $grid->display();
 
 		// Add everything to the template
-		$this->template->title = "Edit ".$model->title;
+		$this->template->title = "Edit ".$model->term;
 		$this->template->content = $view;
 
 	}
@@ -58,16 +60,15 @@ class term_Controller extends Gridview_Base_Controller {
 		$this->auto_render=false;
 
 		$model = ORM::factory('term',$id);
-		$gridmodel = ORM::factory('gv_term',$id);
+		$gridmodel = ORM::factory('gv_term');
 
 		$grid =	Gridview_Controller::factory($gridmodel,
 				$page_no,
 				$limit,
 				4);
-		$grid->base_filter = array('parent_id' => $id);
-		$grid->columns = array_intersect_key($grid->columns, array(
-			'title'=>'',
-			'description'=>''));
+		$grid->base_filter = $this->base_filter;
+		$grid->base_filter['parent_id'] = $id;
+		$grid->columns =  $this->columns;
 		return $grid->display();
 	}
 	public function save() {
@@ -75,6 +76,7 @@ class term_Controller extends Gridview_Base_Controller {
 			$term = ORM::factory('term',$_POST['id']);
 		} else {
 			$term = ORM::factory('term');
+			$termlist_term = ORM::factory('termlist_term');
 		}
 		/**
 		 * We need to submit null for integer fields, because an empty string will fail.
@@ -82,11 +84,13 @@ class term_Controller extends Gridview_Base_Controller {
 		if ($_POST['parent_id'] == ''){
 			$_POST['parent_id'] = null;
 		}
-		if ($_POST['website_id'] == ''){
-			$_POST['website_id'] = null;
-		}
 		/**
-		 * Were we instructed to delete the post?
+		 * Work out what the language is - atm, just say English. We should deduce
+		 * this from a drop-down list or similar?
+		 */
+		$_POST['language_id']=4;
+		/**
+		 * Were we instructed to delete the term?
 		 */
 		if ($_POST['submit'] == 'Delete'){
 			$_POST['deleted'] = 'true';
@@ -97,7 +101,7 @@ class term_Controller extends Gridview_Base_Controller {
 		if ($term->validate($_POST, true)) {
 			url::redirect('term');
 		} else {
-			$this->template->title = "Edit ".$term->title;
+			$this->template->title = "Edit ".$term->term;
 			$metadata = new View('metadata');
 			$metadata->model = $term;
 			$view = new View('term_edit');
@@ -107,7 +111,7 @@ class term_Controller extends Gridview_Base_Controller {
 			$this->template->content = $view;
 		}
 	}
-	public function create(){
+	public function create($termlist_id){
 		$parent = $this->input->post('parent_id', null);
 		$metadata = new View('metadata');
 		$metadata->model = ORM::factory('term');
@@ -117,6 +121,8 @@ class term_Controller extends Gridview_Base_Controller {
 		$view->model = ORM::factory('term');
 		$view->model->parent_id = $parent;
 		$view->metadata = $metadata;
+		$view->table = null;
+		$view->termlist_id = $termlist_id;
 
 		// Templating
 		$this->template->title = "Create new term";
