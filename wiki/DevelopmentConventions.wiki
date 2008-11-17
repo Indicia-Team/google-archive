@@ -1,4 +1,5 @@
 #summary Lists development conventions for the Indicia project
+#labels Phase-QA
 
 = Development Conventions =
 
