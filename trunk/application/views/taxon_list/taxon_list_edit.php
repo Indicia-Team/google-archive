@@ -28,9 +28,9 @@
 <?php echo html::error_message($model->getError('website_id')); ?>
 </li>
 </ol>
+</fieldset>
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />
-</fieldset>
 <?php echo $metadata ?>
 </form>
 <?php if ($model->id != '' && $table != null) { ?>
