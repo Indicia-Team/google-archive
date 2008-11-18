@@ -34,4 +34,15 @@ class Indicia_Controller extends Template_Controller {
 				),
 		);
 	}
+
+	/* Retrieve a suitable title for the edit page, depending on whether it is a new record
+	 * or an existing one.
+	 */
+	protected function GetEditPageTitle($model, $name) {
+		if ($model->id)
+			return "Edit $name ".$model->caption();
+		else
+			return "New $name";
+
+	}
 }
