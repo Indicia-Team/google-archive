@@ -21,7 +21,7 @@
 	padding: 		0.6em 0.4em 0.6em 0.4em;
 	margin: 1px;
 }
-.sf-menu a {
+.sf-menu ul li a {
 	display:		block;
 	position:		relative;
 }
@@ -55,10 +55,12 @@ ul.sf-menu li li li.sfHover ul {
 	margin-bottom:	0.8em;
 }
 .sf-menu a {
+	text-decoration:none;
+}
+.sf-menu ul li a {
 	border-left:	1px solid #fff;
 	border-top:		1px solid #CFDEFF;
 	padding: 		.75em 1em;
-	text-decoration:none;
 }
 .sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
 	color:			#13a;
