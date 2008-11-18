@@ -4,7 +4,7 @@
  *
  * Sets the default route to "welcome"
  */
-$config['_default'] = 'welcome';
+$config['_default'] = 'home';
 
 // Termlist
 $config['termlist'] = 'termlist/page/1/5';
