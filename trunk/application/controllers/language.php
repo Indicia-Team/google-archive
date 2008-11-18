@@ -21,7 +21,7 @@ class Language_Controller extends Gridview_Base_Controller {
 
 		// Templating
 		$view->metadata = $metadata;
-		$this->template->title = "Edit ".$model->language;
+		$this->template->title = $this->GetEditPageTitle($model, 'Language');
 		$this->template->content = $view;
 
 	}
@@ -48,7 +48,7 @@ class Language_Controller extends Gridview_Base_Controller {
 			$view->metadata = $metadata;
 			$view->model = $language;
 
-			$this->template->title = "Edit ".$language->language;
+			$this->template->title = $this->GetEditPageTitle($language, 'Language');
 			$this->template->content = $view;
 		}
 	}

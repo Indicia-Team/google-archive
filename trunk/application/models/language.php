@@ -9,6 +9,8 @@ class Language_Model extends ORM {
 		'taxa'
 		);
 
+	protected $search_field='language';
+
 	public function validate(Validation $array, $save = FALSE) {
 		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
 		$array->pre_filter('trim');
