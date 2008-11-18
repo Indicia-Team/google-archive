@@ -2,7 +2,7 @@
 
 class Termlist_Controller extends Gridview_Base_Controller {
 	public function __construct() {
-		parent::__construct(ORM::factory('gv_termlist'), new View('termlist'));
+		parent::__construct('termlist','gv_termlist','termlist/index');
 		$this->base_filter = array('deleted' => 'f');
 		$this->columns = array(
 			'title'=>'',
@@ -28,11 +28,11 @@ class Termlist_Controller extends Gridview_Base_Controller {
 			'description'=>''));
 		
 		// Add metadata panel
-		$metadata = new View('metadata');
+		$metadata = new View('templates/metadata');
 		$metadata->model = $model->find($id);
 		
 		// Add items to view
-		$view = new View('termlist_edit');
+		$view = new View('termlist/termlist_edit');
 		$view->model = $model->find($id);
 		$view->metadata = $metadata;
 		$view->table = $grid->display();
@@ -88,9 +88,9 @@ class Termlist_Controller extends Gridview_Base_Controller {
 			url::redirect('termlist');
 		} else {
 			$this->template->title = "Edit ".$termlist->title;
-			$metadata = new View('metadata');
+			$metadata = new View('templates/metadata');
 			$metadata->model = $termlist;
-			$view = new View('termlist_edit');
+			$view = new View('termlist/termlist_edit');
 			$view->metadata = $metadata;
 			$view->model = $termlist;
 			$view->table = null;
@@ -103,8 +103,8 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$metadata->model = ORM::factory('termlist');
 
 		// Create and assign variables to the view
-		$view = new View('termlist_edit');
-		$view->model = ORM::factory('termlist');
+		$view = new View('termlist/termlist_edit');
+		$view->model = ORM::factory('templates/termlist');
 		$view->model->parent_id = $parent;
 		$view->metadata = $metadata;
 		$view->table = null;
