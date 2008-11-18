@@ -28,15 +28,15 @@
 <?php echo html::error_message($model->getError('website_id')); ?>
 </li>
 </ol>
+</fieldset>
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />
 <?php echo html::error_message($model->getError('deleted')); ?>
-</fieldset>
 <?php echo $metadata ?>
 </form>
 
 <?php if ($model->id != '') { ?>
-<form class="cmxform" action="<?php echo url::site().'term/page/'.$model->id ?>" >
+<form class="cmxform" action="<?php echo url::site().'termlists_term/page/'.$model->id ?>" >
 <input type="submit" value="View Terms" />
 </form>
 <?php if ( $table != null) { ?>

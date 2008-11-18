@@ -12,11 +12,11 @@ class Language_Controller extends Gridview_Base_Controller {
 		$model = ORM::factory('language',$id);
 
 		// Configure the metadata panel
-		$metadata = new View('metadata');
+		$metadata = new View('templates/metadata');
 		$metadata->model = $model->find($id);
 
 		// Configure and assign variables to the view
-		$view = new View('language\language_edit');
+		$view = new View('language/language_edit');
 		$view->model = $model->find($id);
 
 		// Templating
@@ -41,7 +41,7 @@ class Language_Controller extends Gridview_Base_Controller {
 		if ($language->validate($_POST, true)) {
 			url::redirect('language');
 		} else {
-			$metadata = new View('metadata');
+			$metadata = new View('templates/metadata');
 			$metadata->model = $language;
 
 			$view = new View('language/language_edit');
@@ -53,7 +53,7 @@ class Language_Controller extends Gridview_Base_Controller {
 		}
 	}
 	public function create(){
-		$metadata = new View('metadata');
+		$metadata = new View('templates/metadata');
 		$metadata->model = ORM::factory('language');
 		$view = new View('language/language_edit');
 		$view->metadata = $metadata;

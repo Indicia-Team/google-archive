@@ -2,7 +2,7 @@
 
 class Term_Controller extends Gridview_Base_Controller {
 	public function __construct() {
-		parent::__construct('term', 'gv_term_termlist', 'term/term');
+		parent::__construct('term', 'gv_term_termlist', 'term/index');
 		$this->base_filter = array(
 			'parent_id' => null,
 			'preferred' => 't');
