@@ -2,7 +2,7 @@
 
 class Taxon_list_Controller extends Gridview_Base_Controller {
 	public function __construct() {
-		parent::__construct(ORM::factory('taxon_list'), new View('taxon_list'));
+		parent::__construct('taxon_list','taxon_list','taxon_list/index');
 		$this->base_filter = array('deleted' => 'f');
 		$this->columns = array(
 			'title'=>'',
@@ -21,11 +21,11 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		$grid->columns =  $this->columns;
 
 		// Configure the metadata panel
-		$metadata = new View('metadata');
+		$metadata = new View('templates/metadata');
 		$metadata->model = $model->find($id);
 
 		// Configure and assign variables to the view
-		$view = new View('taxon_list_edit');
+		$view = new View('taxon_list/taxon_list_edit');
 		$view->table = $grid->display();
 		$view->model = $model->find($id);
 
@@ -70,10 +70,10 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		if ($taxon_list->validate($_POST, true)) {
 			url::redirect('taxon_list');
 		} else {
-			$metadata = new View('metadata');
+			$metadata = new View('templates/metadata');
 			$metadata->model = $taxon_list;
 
-			$view = new View('taxon_list_edit');
+			$view = new View('taxon_list/taxon_list_edit');
 			$view->metadata = $metadata;
 			$view->model = $taxon_list;
 
@@ -83,9 +83,9 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 	}
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
-		$metadata = new View('metadata');
+		$metadata = new View('templates/metadata');
 		$metadata->model = ORM::factory('taxon_list');
-		$view = new View('taxon_list_edit');
+		$view = new View('taxon_list/taxon_list_edit');
 		$view->metadata = $metadata;
 		$view->model = ORM::factory('taxon_list');
 		$view->model->parent_id = $parent;
