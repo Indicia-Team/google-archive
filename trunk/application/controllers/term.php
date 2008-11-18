@@ -2,9 +2,8 @@
 
 class Term_Controller extends Gridview_Base_Controller {
 	public function __construct() {
-		parent::__construct(ORM::factory('gv_term_termlists'), new View('term'));
+		parent::__construct('term', 'gv_term_termlist', 'term/term');
 		$this->base_filter = array(
-			'deleted' => 'f',
 			'parent_id' => null,
 			'preferred' => 't');
 		$this->columns = array(
@@ -29,7 +28,7 @@ class Term_Controller extends Gridview_Base_Controller {
 	public function edit($id,$page_no,$limit) {
 		// Generate model
 		$model = ORM::factory('term',$id);
-		$gridmodel = ORM::factory('gv_term');
+		$gridmodel = ORM::factory('gv_term_termlist');
 
 		// Add grid component
 		$grid =	Gridview_Controller::factory($gridmodel,
@@ -41,11 +40,11 @@ class Term_Controller extends Gridview_Base_Controller {
 		$grid->columns = $this->columns;
 		
 		// Add metadata panel
-		$metadata = new View('metadata');
+		$metadata = new View('templates/metadata');
 		$metadata->model = $model->find($id);
 		
 		// Add items to view
-		$view = new View('term_edit');
+		$view = new View('term/term_edit');
 		$view->model = $model->find($id);
 		$view->metadata = $metadata;
 		$view->table = $grid->display();
@@ -60,7 +59,7 @@ class Term_Controller extends Gridview_Base_Controller {
 		$this->auto_render=false;
 
 		$model = ORM::factory('term',$id);
-		$gridmodel = ORM::factory('gv_term');
+		$gridmodel = ORM::factory('gv_term_termlist');
 
 		$grid =	Gridview_Controller::factory($gridmodel,
 				$page_no,
