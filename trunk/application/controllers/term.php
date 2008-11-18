@@ -2,7 +2,7 @@
 
 class Term_Controller extends Gridview_Base_Controller {
 	public function __construct() {
-		parent::__construct(ORM::factory('gv_term'), new View('term'));
+		parent::__construct(ORM::factory('gv_term_termlists'), new View('term'));
 		$this->base_filter = array(
 			'deleted' => 'f',
 			'parent_id' => null,
