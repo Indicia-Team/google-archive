@@ -36,7 +36,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->view->table = $grid->display();
 
 		// Templating
-		$this->template->title = $this->pagetitle;
+		$this->template->title = $this->GetEditPageTitle($this->model, $this->pagetitle);
 		$this->template->content = $this->view;
 	}
 
