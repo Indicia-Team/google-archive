@@ -35,7 +35,8 @@ class Indicia_Controller extends Template_Controller {
 		);
 	}
 
-	/* Retrieve a suitable title for the edit page, depending on whether it is a new record
+	/**
+	 * Retrieve a suitable title for the edit page, depending on whether it is a new record
 	 * or an existing one.
 	 */
 	protected function GetEditPageTitle($model, $name) {
@@ -43,6 +44,14 @@ class Indicia_Controller extends Template_Controller {
 			return "Edit $name ".$model->caption();
 		else
 			return "New $name";
-
 	}
+
+	/**
+	 * Return the metadata sub-template for the edit page of any model.
+	 */
+	 protected function GetMetadataView($model) {
+	 	$metadata = new View('templates/metadata');
+		$metadata->model = $model;
+		return $metadata;
+	 }
 }

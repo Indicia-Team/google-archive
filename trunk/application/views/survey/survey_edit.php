@@ -21,5 +21,6 @@
 </li>
 </ol>
 </fieldset>
+<?php echo $metadata ?>
 <input type="submit" value="Save" />
 </form>

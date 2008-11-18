@@ -9,11 +9,16 @@ class Taxon_Group_Controller extends Gridview_Base_Controller {
 		$this->session = Session::instance();
 	}
 
+	/**
+	 * Action for taxon_group/create page/
+	 * Displays a page allowing entry of a new taxon group.
+	 */
 	public function create() {
-		$this->template->title = "Create New Taxon Group";
+		$model = ORM::factory('taxon_group');
 		$view = new View('taxon_group/taxon_group_edit');
-		// Create a new taxon_group model to pass to the view
-		$view->taxon_group = ORM::factory('taxon_group');
+		$view->model = $model;
+		$view->metadata = $this->GetMetadataView($model);
+		$this->template->title = $this->GetEditPageTitle($model, 'Taxon Group');
 		$this->template->content = $view;
 	}
 
@@ -23,9 +28,10 @@ class Taxon_Group_Controller extends Gridview_Base_Controller {
 		else
 		{
 			$taxon_group = new Taxon_Group_Model($this->uri->argument(1));
-			$this->template->title = "Edit ".$taxon_group->title;
+			$this->template->title = $this->GetEditPageTitle($taxon_group, 'Taxon Group');
 			$view = new View('taxon_group/taxon_group_edit');
-			$view->taxon_group = $taxon_group;
+			$view->model = $taxon_group;
+			$view->metadata = $this->GetMetadataView($taxon_group);
 			$this->template->content = $view;
 		}
 	}
@@ -42,7 +48,7 @@ class Taxon_Group_Controller extends Gridview_Base_Controller {
 			// errors are now embedded in the model
 		    $this->template->title = "Edit ".$taxon_group->title;
 			$view = new View('taxon_group/taxon_group_edit');
-			$view->taxon_group = $taxon_group;
+			$view->model = $taxon_group;
 			$this->template->content = $view;
 		}
 
