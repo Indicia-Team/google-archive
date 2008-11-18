@@ -1,12 +1,16 @@
 <?php
 
 class Indicia_Controller extends Template_Controller {
+	// Template view name
+	public $template = 'templates/template';
+
 	public function __construct() {
 		parent::__construct();
+
 		$this->db = Database::instance();
 		$this->auth = new Auth;
 		$this->session = new Session;
-		
+
 		$this->template->menu = array
 		(
 			'Home' => array(),

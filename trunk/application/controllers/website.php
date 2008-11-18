@@ -3,7 +3,7 @@
 class Website_Controller extends Gridview_Base_Controller {
 
 	public function __construct() {
-		parent::__construct('website');
+		parent::__construct('website', 'website', 'website/index');
 		$this->columns = array(
 			'title'=>'',
 			'description'=>'');
@@ -12,7 +12,7 @@ class Website_Controller extends Gridview_Base_Controller {
 
 	public function create() {
 		$this->template->title = "Create New Website";
-		$view = new View('website_edit');
+		$view = new View('website/website_edit');
 		// Create a new website model to pass to the view
 		$view->website = ORM::factory('website');
 		$this->template->content = $view;
@@ -25,7 +25,7 @@ class Website_Controller extends Gridview_Base_Controller {
 		{
 			$website = new Website_Model($this->uri->argument(1));
 			$this->template->title = "Edit ".$website->title;
-			$view = new View('website_edit');
+			$view = new View('website/website_edit');
 			$view->website = $website;
 			$this->template->content = $view;
 		}
@@ -42,7 +42,7 @@ class Website_Controller extends Gridview_Base_Controller {
 		} else {
 			// errors are now embedded in the model
 		    $this->template->title = "Edit ".$website->title;
-			$view = new View('website_edit');
+			$view = new View('website/website_edit');
 			$view->website = $website;
 			$this->template->content = $view;
 		}

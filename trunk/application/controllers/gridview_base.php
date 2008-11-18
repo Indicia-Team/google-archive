@@ -18,7 +18,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->columns = $this->model->table_columns;
 		$this->pagetitle = "Abstract gridview class - override this title!";
 		$this->view = new View($this->viewname);
-		$upload_csv_form = new View('template_upload_csv');
+		$upload_csv_form = new View('templates/upload_csv');
 		$upload_csv_form->controllerpath = $this->controllerpath;
 		$this->view->upload_csv_form = $upload_csv_form;
 		parent::__construct();
