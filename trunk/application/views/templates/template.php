@@ -33,6 +33,9 @@
 	$temp=array_keys($menu);
 	$lastitem = $temp[count($menu)-1];
 	foreach ($menu as $toplevel => $submenu):
+		if (count($submenu)==0)
+			// No submenu, so treat as link to the home page
+			$toplevel = html::anchor('home', $toplevel);
 		if ($toplevel==$lastitem)
 			echo '<li class="last">'.$toplevel;
 		else
