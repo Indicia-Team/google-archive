@@ -5,7 +5,7 @@ abstract class ORM extends ORM_Core {
 
 	// The default field that is searchable is called title. Override this when a different field name is used.
 	// Used to match against, for example when importing csv values.
-	public $search_field='title';
+	protected $search_field='title';
 
 
 	/**
@@ -20,7 +20,7 @@ abstract class ORM extends ORM_Core {
 	}
 
 	/**
-	 * Override the ORM validate method to store the validation errors in an array, making 
+	 * Override the ORM validate method to store the validation errors in an array, making
 	 * them accessible to the views.
 	 */
 	public function validate(Validation $array, $save = FALSE) {
@@ -52,16 +52,16 @@ abstract class ORM extends ORM_Core {
 
 	/**
 	 * Do a default search for an item using the search_field setup for this model.
-	 */ 
+	 */
 	public function lookup($search_text)
 	{
 		return $this->where($this->search_field, $search_text)->find();
 	}
 
 	/**
-	 * Return a displayable caption for the item, defined as the content of the field with the 
+	 * Return a displayable caption for the item, defined as the content of the field with the
 	 * same name as search_field.
-	 */ 
+	 */
 	public function caption()
 	{
 		return $this->__get($this->search_field);
