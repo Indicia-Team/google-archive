@@ -12,10 +12,11 @@ class Survey_Controller extends Gridview_Base_Controller {
 	}
 
 	public function create() {
-		$this->template->title = "Create New Survey";
-		$view = new View('survey/survey_edit');
 		// Create a new survey model to pass to the view
-		$view->model = ORM::factory('survey');
+		$survey=ORM::factory('survey');
+		$this->template->title = $this->GetEditPageTitle($survey, 'Survey');
+		$view = new View('survey/survey_edit');
+		$view->model = $survey;
 		$this->template->content = $view;
 	}
 
@@ -25,7 +26,7 @@ class Survey_Controller extends Gridview_Base_Controller {
 		else
 		{
 			$survey = new Survey_Model($this->uri->argument(1));
-			$this->template->title = "Edit ".$survey->title;
+			$this->template->title = $this->GetEditPageTitle($survey, 'Survey');
 			$view = new View('survey/survey_edit');
 			$view->model = $survey;
 			$this->template->content = $view;
@@ -42,7 +43,7 @@ class Survey_Controller extends Gridview_Base_Controller {
 			url::redirect('survey');
 		} else {
 			// errors are now embedded in the model
-		    $this->template->title = "Edit ".$survey->title;
+		    $this->template->title = $this->GetEditPageTitle($survey, 'Survey');
 			$view = new View('survey/survey_edit');
 			$view->model = $survey;
 			$this->template->content = $view;
