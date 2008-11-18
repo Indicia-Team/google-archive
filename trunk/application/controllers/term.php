@@ -1,6 +1,6 @@
 <?php
 
-class term_Controller extends Gridview_Base_Controller {
+class Term_Controller extends Gridview_Base_Controller {
 	public function __construct() {
 		parent::__construct(ORM::factory('gv_term'), new View('term'));
 		$this->base_filter = array(
