@@ -187,6 +187,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 		$_POST = new Validation($_POST);
 		if ($tt->validate($_POST, true)) {
+			// Okay, the thing saved correctly - we now need to add the synonomies
+			$enteredSyn = split("\n",$_POST['synomony']);
 			url::redirect('termlists_term');
 		} else {
 			$this->template->title = $this->GetEditPageTitle($tt, 'Term instance');
