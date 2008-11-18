@@ -10,11 +10,16 @@ class Website_Controller extends Gridview_Base_Controller {
 		$this->pagetitle = "Websites";
 	}
 
+	/**
+	 * Action for website/create page.
+	 * Displays a page allowing entry of a new website.
+	 */
 	public function create() {
-		$this->template->title = "Create New Website";
+		$model = ORM::factory('website');
 		$view = new View('website/website_edit');
-		// Create a new website model to pass to the view
-		$view->website = ORM::factory('website');
+		$view->model = $model;
+		$view->metadata = $this->GetMetadataView($model);
+		$this->template->title = $this->GetEditPageTitle($model, 'Website');
 		$this->template->content = $view;
 	}
 
@@ -24,9 +29,10 @@ class Website_Controller extends Gridview_Base_Controller {
 		else
 		{
 			$website = new Website_Model($this->uri->argument(1));
-			$this->template->title = "Edit ".$website->title;
 			$view = new View('website/website_edit');
-			$view->website = $website;
+			$view->metadata = $this->GetMetadataView($website);
+			$this->template->title = $this->GetEditPageTitle($website, 'Website');
+			$view->model = $website;
 			$this->template->content = $view;
 		}
 	}
@@ -41,9 +47,10 @@ class Website_Controller extends Gridview_Base_Controller {
 			url::redirect('website');
 		} else {
 			// errors are now embedded in the model
-		    $this->template->title = "Edit ".$website->title;
-			$view = new View('website/website_edit');
-			$view->website = $website;
+		    $view = new View('website/website_edit');
+			$view->metadata = $this->GetMetadataView($website);
+			$this->template->title = $this->GetEditPageTitle($website, 'Website');
+			$view->model = $website;
 			$this->template->content = $view;
 		}
 

@@ -8,19 +8,29 @@ class Language_Controller extends Gridview_Base_Controller {
 			'language'=>'');
 		$this->pagetitle = "Languages";
 	}
+
+	/**
+	 * Action for language/create page/
+	 * Displays a page allowing entry of a new language.
+	 */
+	public function create(){
+		$model = ORM::factory('language');
+		$view = new View('language/language_edit');
+		$view->model = $model;
+		$view->metadata = $this->GetMetadataView($model);
+		$this->template->title = $this->GetEditPageTitle($model, 'Language');
+		$this->template->content = $view;
+	}
+
 	public function edit($id) {
 		$model = ORM::factory('language',$id);
-
-		// Configure the metadata panel
-		$metadata = new View('templates/metadata');
-		$metadata->model = $model->find($id);
 
 		// Configure and assign variables to the view
 		$view = new View('language/language_edit');
 		$view->model = $model->find($id);
 
 		// Templating
-		$view->metadata = $metadata;
+		$view->metadata = $this->GetMetadataView($model);
 		$this->template->title = $this->GetEditPageTitle($model, 'Language');
 		$this->template->content = $view;
 
@@ -41,25 +51,12 @@ class Language_Controller extends Gridview_Base_Controller {
 		if ($language->validate($_POST, true)) {
 			url::redirect('language');
 		} else {
-			$metadata = new View('templates/metadata');
-			$metadata->model = $language;
-
 			$view = new View('language/language_edit');
-			$view->metadata = $metadata;
 			$view->model = $language;
-
+			$view->metadata = $this->GetMetadataView($language);
 			$this->template->title = $this->GetEditPageTitle($language, 'Language');
 			$this->template->content = $view;
 		}
-	}
-	public function create(){
-		$metadata = new View('templates/metadata');
-		$metadata->model = ORM::factory('language');
-		$view = new View('language/language_edit');
-		$view->metadata = $metadata;
-		$view->model = ORM::factory('language');
-		$this->template->title = "Create new language";
-		$this->template->content = $view;
 	}
 }
 ?>
