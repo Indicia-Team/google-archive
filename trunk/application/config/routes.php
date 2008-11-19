@@ -26,3 +26,5 @@ $config['termlists_term/page/([0-9]+)'] = 'termlists_term/page/$1/1/5';
 $config['termlists_term/edit/([0-9]+)'] = 'termlists_term/edit/$1/1/5';
 // Person
 $config['person'] = 'person/page/1/10';
+// User
+$config['user'] = 'user/page/1/10';
