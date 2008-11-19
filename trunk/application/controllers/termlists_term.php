@@ -186,7 +186,39 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$_POST = new Validation($_POST);
 		if ($tt->validate($_POST, true)) {
 			// Okay, the thing saved correctly - we now need to add the synonomies
-			$enteredSyn = split("\n",$_POST['synomony']);
+			$arrLine = split("\n",$_POST['synomony']);
+			$arrSyn = array_map(function($elt) {
+				 $b = preg_split("(?<!(\\\\)*\\),",$elt); 
+				 if (count($b) == 2) {
+					 return $b[0] => $b[1];
+				 } else {
+					 return $b[0] => 'eng';
+				 }
+			}, $arrLine);
+
+			$existingSyn = $this->__getSynonomy($_POST['meaning_id']);
+
+			// Iterate through existing synonomies, discarding those that have
+			// been deleted and removing existing ones from the list to add
+
+			foreach ($existingSyn as $syn){
+				// Is the term from the db in the list of synonyms?
+				if ($arrSyn[$syn->term] == $syn->language->iso) {
+					array_splice($arraySyn, array_search(
+						$syn->term, $arrSyn));
+				} else {
+					// Synonym has been deleted - remove it from the db
+					$syn->delete();
+				}
+			}
+
+			// $arraySyn should now be left only with those synonyms 
+			// we wish to add to the database
+
+			foreach ($arrSyn as $term => $lang){
+				// Save a new term
+				// Save a new termlists_term instance
+			}
 
 
 			url::redirect('termlists_term');
