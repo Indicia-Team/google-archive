@@ -8,4 +8,3 @@ CREATE OR REPLACE VIEW gv_terms AS
    LEFT JOIN languages l ON t.language_id = l.id
    JOIN termlists_terms tt ON t.id = tt.term_id;
 
-ALTER TABLE gv_terms OWNER TO opal;
