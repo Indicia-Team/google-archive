@@ -41,7 +41,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	private function __formatSynonomy(ORM_Iterator $res){
 		$syn = "";
 		foreach ($res as $synonym) {
-			$syn << $synonym->term-term.",".$synonym->term->language."\n";
+			$syn << $synonym->term->term.",".$synonym->term->language."\n";
 		}
 		return $syn;
 	}
@@ -64,8 +64,6 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$metadata = new View('templates/metadata');
 		$metadata->model = $model->find($id);
 
-		// Calculate and format the synonomy
-		$synonyms = $this->__getSynonomy($model->meaning_id);
 		// Add items to view
 		$view = new View('termlists_term/termlists_term_edit');
 		$view->model = $model->find($id);
@@ -189,6 +187,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		if ($tt->validate($_POST, true)) {
 			// Okay, the thing saved correctly - we now need to add the synonomies
 			$enteredSyn = split("\n",$_POST['synomony']);
+
+
 			url::redirect('termlists_term');
 		} else {
 			$this->template->title = $this->GetEditPageTitle($tt, 'Term instance');
