@@ -21,7 +21,17 @@ $lang = array (
 	'website_id' => Array (
 		'required' => 'The website cannot be blank.',
 	),
-
+	'surname' => Array (
+		'required' => 'The surname cannot be blank.',
+		'length' => 'The surname must be between 1 and 30 letters.',
+		'default' => 'Invalid Input.',
+	),
+	'email_address' => Array (
+		'required' => 'The email address cannot be blank.',
+		'email' => 'This must be a valid email address.',
+		'default' => 'Invalid Input.',
+	),
+	
 );
 
 ?>
