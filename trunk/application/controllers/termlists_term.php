@@ -41,7 +41,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	private function __formatSynonomy(ORM_Iterator $res){
 		$syn = "";
 		foreach ($res as $synonym) {
-			$syn << $synonym->term->term.",".$synonym->term->language."\n";
+			$syn << $synonym->term->term.",".$synonym->term->language->iso."\n";
 		}
 		return $syn;
 	}
@@ -67,6 +67,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		// Add items to view
 		$view = new View('termlists_term/termlists_term_edit');
 		$view->model = $model->find($id);
+		$view->termlist_id = $model->termlist_id;
 		$view->metadata = $metadata;
 		$view->table = $grid->display();
 		$view->synonomy = $this->__formatSynonomy($this->
@@ -113,22 +114,53 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$this->template->title = "Create new term";
 		$this->template->content = $view;
 	}
+
+	/**
+	 * Function that takes an array and creates a new term entry, passing relevant
+	 * values back to the return array.
+	 */
+	private function __saveTerm($array) {
+		if ($array['term_id'] == ''){
+			$term = ORM::factory('term');
+
+			// Look for an existing term matching attributes.
+			$a = $term->where(array(
+				'term' => $array['term'],
+				'language_id' => $array['language_id']
+			))->find()->id;
+			if ($a == null){
+				//No existing term
+				$term->term = $array['term'];
+				$term->language_id = $array['language_id'];
+				$term->validate(new Validation(array(
+					'term' => $array['term'],
+					'language_id' => $array['language_id']
+				)), true);
+			} else {
+				//Already a term we can link to
+				$term->find($a);
+			}
+			// Update with the new term
+			$array['term_id'] = $term->id;
+		}
+		return $array;
+	}
 	/**
 	 * Saves the termlist_term to the model. Will create a corresponding term if one
 	 * does not already exist. Will also create a new meaning.
 	 */
 	public function save() {
 		if (! empty($_POST['id'])) {
-			$tt = ORM::factory('termlists_term',$_POST['id']);
+			$model = ORM::factory('termlists_term',$_POST['id']);
 		} else {
-			$tt = ORM::factory('termlists_term');
+			$model = ORM::factory('termlists_term');
 		}
 		/**
 		 * We need to submit null for integer fields, 
 		 * because an empty string will fail.
 		 */
 		if ($_POST['parent_id'] == ''){
-			$_POST['parent_id'] = null;
+			$_POST['parent_xzd'] = null;
 		}
 		/**
 		 * We need to generate a new meaning if there isn't one already.
@@ -138,7 +170,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			$meaning = ORM::factory('meaning');
 			if ($meaning->save())
 			{
-				$_POST['meaning_id'] = $meaning->id;
+#				$_POST['meaning_id'] = $meaning->id;
+				$_POST['meaning_id'] = 1;
 			} else {
 				$_POST['meaning_id'] = null;
 			}
@@ -148,32 +181,18 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		 * this from a drop-down list or similar?
 		 */
 		$_POST['language_id']=4;
+
+		/**
+		 * This is the preferred term in this list
+		 */
+		$_POST['preferred']='t';
+
 		/**
 		 * We may need to generate a new term - but first check if we can
 		 * link an old one.
 		 */
-		if ($_POST['term_id'] == ''){
-			// Look for an existing term matching attributes.
-			$a = ORM::factory('term')->where(array(
-				'term' => $_POST['term'],
-				'language_id' => $_POST['language_id']
-			))->find()->id;
-			if ($a != null){
-				//No existing term
-				$term = ORM::factory('term');
-				$term->term = $_POST['term'];
-				$term->language_id = $_POST['language_id'];
-				$term->validate(new Validation(array(
-					'term' => $_POST['term'],
-					'language_id' => $_POST['language_id']
-				)), true);
-			} else {
-				//Already a term we can link to
-				$term = ORM::factory('term',$a);
-			}
-			// Update with the new term
-			$_POST['term_id'] = $term->id;
-		}
+		$_POST = $this->__saveTerm($_POST);
+
 		/**
 		 * Were we instructed to delete the term?
 		 */
@@ -184,17 +203,20 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		}
 
 		$_POST = new Validation($_POST);
-		if ($tt->validate($_POST, true)) {
+		if ($model->validate($_POST, true)) {
 			// Okay, the thing saved correctly - we now need to add the synonomies
-			$arrLine = split("\n",$_POST['synomony']);
-			$arrSyn = array_map(function($elt) {
-				 $b = preg_split("(?<!(\\\\)*\\),",$elt); 
+			$arrLine = split("\n",$_POST['synonomy']);
+			$arrSyn = array();
+
+			foreach ($arrLine as $line) {
+				 $b = preg_split("/(?<!\\\\ ),/",$line); 
 				 if (count($b) == 2) {
-					 return $b[0] => $b[1];
+					 $arrSyn[$b[0]] = trim($b[1]);
 				 } else {
-					 return $b[0] => 'eng';
+					 $arrSyn[$b[0]] = "eng";
 				 }
-			}, $arrLine);
+			}
+
 
 			$existingSyn = $this->__getSynonomy($_POST['meaning_id']);
 
@@ -203,12 +225,14 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 			foreach ($existingSyn as $syn){
 				// Is the term from the db in the list of synonyms?
-				if ($arrSyn[$syn->term] == $syn->language->iso) {
-					array_splice($arraySyn, array_search(
+				if (array_key_exists($syn->term->term, $arrSyn) && 
+					$arrSyn[$syn->term->term] == $syn->language->iso) {
+					array_splice($arrSyn, array_search(
 						$syn->term, $arrSyn));
 				} else {
 					// Synonym has been deleted - remove it from the db
-					$syn->delete();
+					$syn->deleted = 'f';
+					$syn->save();
 				}
 			}
 
@@ -217,21 +241,36 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 			foreach ($arrSyn as $term => $lang){
 				// Save a new term
-				// Save a new termlists_term instance
-			}
+				$arr = array(
+					'term_id' => null,
+					'term' => $term,
+					'language_id' => ORM::factory('language')->where(array(
+						'iso' => $lang))->find()->id);
+				$arr = $this->__saveTerm($arr);
 
+				// Save a new termlists_term instance - we just copy most of
+				// the properties but set preferred to false and update
+				// the term id.
+
+				$syn = $_POST;
+				$syn['id'] = null;
+				$syn['preferred'] = 'false';
+				$syn['term_id'] = $arr['term_id'];
+				ORM::factory('termlists_term')->validate($syn, true);
+			}
 
 			url::redirect('termlists_term');
 		} else {
-			$this->template->title = $this->GetEditPageTitle($tt, 'Term instance');
+			$this->template->title = $this->GetEditPageTitle($model, 'Term instance');
 			$metadata = new View('templates/metadata');
-			$metadata->model = $tt;
+			$metadata->model = $model;
 			$view = new View('termlists_term/termlists_term_edit');
 			$view->metadata = $metadata;
-			$view->model = $tt;
+			$view->model = $model;
 			$view->table = null;
 			$view->synonomy = $this->__formatSynonomy($this->
 				__getSynonomy($_POST['meaning_id']));
+			$view->termlist_id = $model->termlist_id;
 			$this->template->content = $view;
 		}
 	}
