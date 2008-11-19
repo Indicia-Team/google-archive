@@ -99,7 +99,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 	}
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
-		$metadata = new View('metadata');
+		$metadata = new View('templates/metadata');
 		$metadata->model = ORM::factory('termlist');
 
 		// Create and assign variables to the view
