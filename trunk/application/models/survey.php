@@ -11,6 +11,7 @@ class Survey_Model extends ORM {
 	public function validate(Validation $array, $save = FALSE) {
 		$array->pre_filter('trim');
 		$array->add_rules('title', 'required');
+		$array->add_rules('website_id', 'required');
 		// Explicitly add those fields for which we don't do validation
 		$this->description = $array['description'];
 		return parent::validate($array, $save);

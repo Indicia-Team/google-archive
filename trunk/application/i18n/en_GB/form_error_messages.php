@@ -18,6 +18,9 @@ $lang = array (
 	'iso' => Array (
 		'default' => 'Invalid ISO 639-2 language code.',
 	),
+	'website_id' => Array (
+		'required' => 'The website cannot be blank.',
+	),
 
 );
 
