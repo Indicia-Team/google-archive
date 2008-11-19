@@ -104,7 +104,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 
 		// Create and assign variables to the view
 		$view = new View('termlist/termlist_edit');
-		$view->model = ORM::factory('templates/termlist');
+		$view->model = ORM::factory('termlist');
 		$view->model->parent_id = $parent;
 		$view->metadata = $metadata;
 		$view->table = null;
