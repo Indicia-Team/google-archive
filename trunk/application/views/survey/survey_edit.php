@@ -15,8 +15,19 @@
 <?php echo html::error_message($model->getError('description')); ?>
 </li>
 <li>
-<label for="website">Website</label>
-<input id="website" name="website" value="<?php if ($model->website_id) echo html::specialchars($model->website->title); ?>" />
+<label for="website_id">Website</label>
+<select id="website_id" name="website_id">
+	<option>&lt;Please select&gt;</option>
+<?php
+	$websites = ORM::factory('website')->orderby('title','asc')->find_all();
+	foreach ($websites as $website) {
+		echo '	<option value="'.$website->id.'" ';
+		if ($website->id==$model->website_id)
+			echo 'selected="selected" ';
+		echo '>'.$website->title.'</option>';
+	}
+?>
+</select>
 <?php echo html::error_message($model->getError('website_id')); ?>
 </li>
 </ol>
