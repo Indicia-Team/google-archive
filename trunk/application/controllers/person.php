@@ -3,12 +3,15 @@
 class Person_Controller extends Gridview_Base_Controller {
 
 	public function __construct() {
-		parent::__construct('person', 'person', 'person/index');
+		parent::__construct('person', 'gv_person', 'person/index');
 		$this->columns = array(
-			'first_name'=>'',
-			'surname'=>'',
-			'initials'=>'',
-			'email_address'=>'');
+			'first_name'=>''
+			,'surname'=>''
+			,'initials'=>''
+			,'email_address'=>''
+			,'is_user'=>''
+			,'is_core_user'=>''
+		);
 		$this->pagetitle = "People";
 	}
 
