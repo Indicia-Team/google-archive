@@ -17,6 +17,9 @@ class User_Model extends ORM {
 		// Any fields that don't have a validation rule need to be copied into the model manually
 		$this->interests = $array['interests'];
 		$this->location_name = $array['location_name'];
+		// only copy person id if it is filled in. This is to allow for case when called via
+		// drill through from people.
+		if (!empty($array['person_id'])) $this->person_id = $array['person_id'];
 //		$this->email_visible = $array['email_visible'];
 //		$this->view_common_names = $array['view_common_names'];
 		    
@@ -25,7 +28,6 @@ class User_Model extends ORM {
 
 	/**
 	 * Return a displayable caption for the item.
-	 * For People, this should be a combination of the Firstname and Surname.
 	 */
 	public function caption()
 	{
