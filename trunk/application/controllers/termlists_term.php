@@ -169,10 +169,9 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		if ($_POST['meaning_id'] == ''){
 			//Make a new meaning
 			$meaning = ORM::factory('meaning');
-			if ($meaning->save())
+			if ($meaning->insert())
 			{
-#				$_POST['meaning_id'] = $meaning->id;
-				$_POST['meaning_id'] = 1;
+				$_POST['meaning_id'] = $meaning->id;
 			} else {
 				$_POST['meaning_id'] = null;
 			}
