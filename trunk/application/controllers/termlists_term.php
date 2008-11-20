@@ -41,7 +41,10 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	private function __formatSynonomy(ORM_Iterator $res){
 		$syn = "";
 		foreach ($res as $synonym) {
-			$syn << $synonym->term->term.",".$synonym->term->language->iso."\n";
+			$syn .= $synonym->term->term;
+			$syn .=	($synonym->term->language_id != null) ? 
+				",".$synonym->term->language->iso."\n" :
+				'';
 		}
 		return $syn;
 	}
@@ -130,8 +133,6 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			))->find()->id;
 			if ($a == null){
 				//No existing term
-				$term->term = $array['term'];
-				$term->language_id = $array['language_id'];
 				$term->validate(new Validation(array(
 					'term' => $array['term'],
 					'language_id' => $array['language_id']
@@ -160,7 +161,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		 * because an empty string will fail.
 		 */
 		if ($_POST['parent_id'] == ''){
-			$_POST['parent_xzd'] = null;
+			$_POST['parent_id'] = null;
 		}
 		/**
 		 * We need to generate a new meaning if there isn't one already.
@@ -191,6 +192,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		 * We may need to generate a new term - but first check if we can
 		 * link an old one.
 		 */
+		
 		$_POST = $this->__saveTerm($_POST);
 
 		/**
@@ -202,8 +204,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			$_POST['deleted'] = 'false';
 		}
 
-		$_POST = new Validation($_POST);
-		if ($model->validate($_POST, true)) {
+		$validation = new Validation($_POST);
+		if ($model->validate($validation, true)) {
 			// Okay, the thing saved correctly - we now need to add the synonomies
 			$arrLine = split("\n",$_POST['synonomy']);
 			$arrSyn = array();
@@ -226,13 +228,13 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			foreach ($existingSyn as $syn){
 				// Is the term from the db in the list of synonyms?
 				if (array_key_exists($syn->term->term, $arrSyn) && 
-					$arrSyn[$syn->term->term] == $syn->language->iso) {
+					$arrSyn[$syn->term->term] == $syn->term->language->iso) {
 					array_splice($arrSyn, array_search(
 						$syn->term, $arrSyn));
 				} else {
 					// Synonym has been deleted - remove it from the db
-					$syn->deleted = 'f';
-					$syn->save();
+#					$syn->term->deleted = 't';
+					$syn->delete();
 				}
 			}
 
@@ -253,10 +255,11 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 				// the term id.
 
 				$syn = $_POST;
-				$syn['id'] = null;
+				$syn['id'] = '';
 				$syn['preferred'] = 'false';
 				$syn['term_id'] = $arr['term_id'];
-				ORM::factory('termlists_term')->validate($syn, true);
+				ORM::factory('termlists_term')->
+					validate(new Validation($syn), true);
 			}
 
 			url::redirect('termlists_term');
