@@ -53,7 +53,33 @@ th
 	border-top: 1px solid #C1DAD7;
 	text-align: left;
 	padding: 3px 6px 3px 6px;
-	background: #CAE8EA;
+	background-color: #CAE8EA;
+}
+
+table#pageGrid thead tr th
+{
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+
+table#pageGrid thead tr th.gvCol
+{
+	background-image: url(../images/bg.gif);
+}
+
+table#pageGrid thead tr th.gvColAsc
+{
+	background-image: url(../images/asc.gif);
+}
+
+table#pageGrid thead tr th.gvColDesc
+{
+	background-image: url(../images/desc.gif);
+}
+
+table#pageGrid thead tr th.gvColAsc, table#pageGrid thead tr th.gvColDesc
+{
+	background-color: #CAEFAB;
 }
 
 td
