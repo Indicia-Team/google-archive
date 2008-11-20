@@ -11,6 +11,7 @@ var realUrl;
  */
 function refresh(){
 	buildQueryString();
+	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };
@@ -105,16 +106,18 @@ $(document).ready(function(){
 
 	// Set the base query string
 	baseQueryString = baseUri;
-	var afterIndex=false;
+	var afterIndex = 0;
 	for (var i = 0; i < pageUrlSegmentNo; i++) {
-		if (afterIndex) {
-			if (realUrl.segment(i)=='page')
-				baseQueryString += 'page_gv/';
-			else
+		if (afterIndex > 0) {
+			if (afterIndex == 2) {
+				baseQueryString += realUrl.segment(i) + '_gv/';
+			} else {
 				baseQueryString += realUrl.segment(i) + '/';
+			}
+			afterIndex++;
 		}
 		if (realUrl.segment(i)=='index.php')
-			afterIndex=true;
+			afterIndex=1;
 	}
 
 	//Set initial page
