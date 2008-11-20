@@ -16,6 +16,9 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->pageNoUriSegment = 3;
 		$this->base_filter = array();
 		$this->columns = $this->model->table_columns;
+		$this->actionColumns = array(
+			'edit' => $this->controllerpath."/edit/£id£"
+		);
 		$this->pagetitle = "Abstract gridview class - override this title!";
 		$this->view = new View($this->viewname);
 		$upload_csv_form = new View('templates/upload_csv');
@@ -31,6 +34,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$this->pageNoUriSegment);
 		$grid->base_filter = $this->base_filter;
 		$grid->columns = array_intersect_key($grid->columns, $this->columns);
+		$grid->actionColumns = $this->actionColumns;
 
 		// Add table to view
 		$this->view->table = $grid->display();
@@ -48,6 +52,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$this->pageNoUriSegment);
 		$grid->base_filter = $this->base_filter;
 		$grid->columns = array_intersect_key($grid->columns, $this->columns);
+		$grid->actionColumns = $this->actionColumns;
 		return $grid->display();
 	}
 
