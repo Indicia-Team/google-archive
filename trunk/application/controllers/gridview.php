@@ -12,6 +12,7 @@ class Gridview_Controller extends Controller {
 		$gridview->limit = $limit;
 		$gridview->uri_segment = $uri_segment;
 		$gridview->base_filter = null;
+		$gridview->actionColumns = array();
 		return $gridview;
 	}
 	function display() {
@@ -66,7 +67,9 @@ class Gridview_Controller extends Controller {
 		$gridview->body = $gridview_body;
 		$gridview->pagination = $pagination;
 		$gridview->columns = $this->columns;
+		$gridview->actionColumns = $this->actionColumns;
 		$gridview_body->columns = $this->columns;
+		$gridview_body->actionColumns = $this->actionColumns;
 
 		if(request::is_ajax()){
 			if ($this->input->get('type',null) == 'pager'){

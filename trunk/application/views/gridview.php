@@ -24,6 +24,9 @@ in <select name='columns'>
 foreach ($columns as $name => $dbtype) {
 	echo "<th class='gvCol'>".ucwords($name)."</th>";
 }
+foreach ($actionColumns as $name => $action) {
+	echo "<th class='gvAction'>".ucwords($name)."</th>";
+}
 ?>
 </tr>
 </thead>
