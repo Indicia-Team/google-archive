@@ -22,7 +22,7 @@ in <select name='columns'>
 <tr class='headingRow'>
 <?php
 foreach ($columns as $name => $dbtype) {
-	echo "<th class='gvCol'>".ucwords($name)."</th>";
+	echo "<th class='gvSortable gvCol'>".ucwords($name)."</th>";
 }
 foreach ($actionColumns as $name => $action) {
 	echo "<th class='gvAction'>".ucwords($name)."</th>";

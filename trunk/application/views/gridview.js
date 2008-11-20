@@ -11,7 +11,6 @@ var realUrl;
  */
 function refresh(){
 	buildQueryString();
-	alert(queryString);
 	refreshGrid();
 	refreshPager();
 };
@@ -127,7 +126,7 @@ $(document).ready(function(){
 	pagerLinks();
 
 	// Sorting
-	$('#pageGrid thead th').each(function(i){
+	$('#pageGrid thead th.gvSortable').each(function(i){
 		$(this).click(function(e){
 			e.preventDefault();
 			var h = $(this).html().toLowerCase();
