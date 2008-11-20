@@ -6,6 +6,13 @@ class Meaning_Model extends ORM {
 			'terms'
 		);
 
+	public function insert(){
+		$nextval = $this->db->query("SELECT nextval('meanings_id_seq'::regclass)")
+			->current()->nextval;
+		$this->id = $nextval;
+		 return $this->save();
+	}
+
 	public function validate(Validation $array, $save = FALSE){
 		return parent::validate($array, $save);
 	}
