@@ -26,6 +26,9 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));
+		$grid->actionColumns = array(
+			'edit' => 'termlist/edit/$id£'
+		);
 		
 		// Add metadata panel
 		$metadata = new View('templates/metadata');
@@ -58,6 +61,9 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));
+		$grid->actionColumns = array(
+			'edit' => 'termlist/edit/$id£'
+		);
 		return $grid->display();
 	}
 	public function save() {

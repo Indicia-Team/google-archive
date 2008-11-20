@@ -19,6 +19,9 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 				4);
 		$grid->base_filter = array('deleted' => 'f', 'parent_id' => $id);
 		$grid->columns =  $this->columns;
+		$grid->actionColumns = array(
+			'edit' => 'taxon_list/edit/£id£'
+		);
 
 		// Configure the metadata panel
 		$metadata = new View('templates/metadata');
@@ -47,6 +50,9 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		$grid->columns = array_intersect_key($grid->columns, array(
 			'title'=>'',
 			'description'=>''));
+		$grid->actionColumns = array(
+			'edit' => 'taxon_list/edit/£id£'
+		);
 		return $grid->display();
 	}
 	public function save() {

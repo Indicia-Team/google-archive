@@ -30,12 +30,11 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	}
 
 	private function __getSynonomy($meaning_id) {
-		$synonyms = ORM::factory('termlists_term')
+		return ORM::factory('termlists_term')
 			->where(array(
 				'preferred' => 'f',
 				'meaning_id' => $meaning_id
 			))->find_all();
-		return $synonyms;
 	}
 
 	private function __formatSynonomy(ORM_Iterator $res){
@@ -62,6 +61,9 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$grid->base_filter = $this->base_filter;
 		$grid->base_filter['parent_id'] = $id;
 		$grid->columns = $this->columns;
+		$grid->actionColumns = array(
+			'edit' => 'termlists_term/edit/£id£'
+		);
 		
 		// Add metadata panel
 		$metadata = new View('templates/metadata');
@@ -94,6 +96,9 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$grid->base_filter = $this->base_filter;
 		$grid->base_filter['parent_id'] = $id;
 		$grid->columns =  $this->columns;
+		$grid->actionColumns = array(
+			'edit' => 'termlists_term/edit/£id£'
+		);
 		return $grid->display();
 	}
 	/**
@@ -205,7 +210,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 		$validation = new Validation($_POST);
 		if ($model->validate($validation, true)) {
-			// Okay, the thing saved correctly - we now need to add the synonomies
+			// Okay, the thing saved correctly - we now need to add the synonoms
 			$arrLine = split("\n",$_POST['synonomy']);
 			$arrSyn = array();
 
@@ -217,7 +222,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 					 $arrSyn[$b[0]] = "eng";
 				 }
 			}
-
+			error_log("test");
+			error_log(print_r($arrSyn));
 
 			$existingSyn = $this->__getSynonomy($_POST['meaning_id']);
 
