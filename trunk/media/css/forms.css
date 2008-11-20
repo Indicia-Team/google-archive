@@ -1,5 +1,6 @@
 form.cmxform fieldset {
   margin-bottom: 10px;
+  width: 744px;
 }
 form.cmxform legend {
   padding: 0 2px;
@@ -41,4 +42,10 @@ form.cmxform label {
 }
 form.cmxform fieldset fieldset label {
   margin-left: 123px; /* Width plus 3 (html space) */
+}
+textarea {
+	width: 600px;
+}
+input[type="text"], select {
+	width: 300px;
 }
