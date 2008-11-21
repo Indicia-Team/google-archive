@@ -112,6 +112,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$view = new View('termlist/termlist_edit');
 		$view->model = ORM::factory('termlist');
 		$view->model->parent_id = $parent;
+		if ($parent != null) $view->model->website_id = $view->model->parent->website_id;
 		$view->metadata = $metadata;
 		$view->table = null;
 

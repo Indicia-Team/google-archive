@@ -95,6 +95,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		$view->metadata = $metadata;
 		$view->model = ORM::factory('taxon_list');
 		$view->model->parent_id = $parent;
+		if ($parent != null) $view->model->website_id = $view->model->parent->website_id;
 		$this->template->title = "Create new taxon_list";
 		$this->template->content = $view;
 	}

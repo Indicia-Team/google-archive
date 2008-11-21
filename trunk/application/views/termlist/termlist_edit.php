@@ -23,8 +23,11 @@
 </li>
 <li>
 <label for="website">Owned by</label>
-<select id="website_id" name="website_id">
-	<option>&lt;Core Module&gt;</option>
+<?php if ($model->parent_id != null && $model->parent->website_id != null) { ?>
+<input type="hidden" id="website_id" name="website_id" value="<?php echo $model->parent->website_id; ?>" />
+<?php } ?>
+<select id="website_id" name="website_id" <?php if ($model->parent_id != null && $model->parent->website_id != null) echo "disabled='disabled'"; ?>>
+	<option value=''>&lt;Core Module&gt;</option>
 <?php
 	$websites = ORM::factory('website')->orderby('title','asc')->find_all();
 	foreach ($websites as $website) {
