@@ -43,9 +43,17 @@ form.cmxform label {
 form.cmxform fieldset fieldset label {
   margin-left: 123px; /* Width plus 3 (html space) */
 }
-textarea {
+form.cmxform fieldset textarea {
 	width: 600px;
 }
-input[type="text"], select {
+form.cmxform fieldset input, form.cmxform select {
 	width: 300px;
+}
+
+form.cmxform fieldset input.narrow {
+	width: 150px;
+}
+
+input.wide {
+	width: 600px;
 }
