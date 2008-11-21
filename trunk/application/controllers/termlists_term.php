@@ -215,15 +215,14 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			$arrSyn = array();
 
 			foreach ($arrLine as $line) {
-				 $b = preg_split("/(?<!\\\\ ),/",$line); 
-				 if (count($b) == 2) {
-					 $arrSyn[$b[0]] = trim($b[1]);
-				 } else {
-					 $arrSyn[$b[0]] = "eng";
-				 }
+				$b = preg_split("/(?<!\\\\ ),/",$line); 
+				if (count($b) == 2) {
+					$arrSyn[$b[0]] = trim($b[1]);
+				} else {
+					$arrSyn[$b[0]] = "eng";
+				}
 			}
-			error_log("test");
-			error_log(print_r($arrSyn));
+			syslog(LOG_DEBUG, "Number of synonyms is: ".count($arrSyn));
 
 			$existingSyn = $this->__getSynonomy($_POST['meaning_id']);
 
@@ -235,10 +234,12 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 				if (array_key_exists($syn->term->term, $arrSyn) && 
 					$arrSyn[$syn->term->term] == $syn->term->language->iso) {
 					array_splice($arrSyn, array_search(
-						$syn->term, $arrSyn));
+						$syn->term, $arrSyn), 1);
+					syslog(LOG_DEBUG, "Term in both ".$syn->term->term);
 				} else {
 					// Synonym has been deleted - remove it from the db
 #					$syn->term->deleted = 't';
+					syslog(LOG_DEBUG, "Term not in list".$syn->term->term);
 					$syn->delete();
 				}
 			}
@@ -246,8 +247,10 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			// $arraySyn should now be left only with those synonyms 
 			// we wish to add to the database
 
+			syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
 			foreach ($arrSyn as $term => $lang){
 				// Save a new term
+				syslog(LOG_DEBUG, "Saving term ".$term);
 				$arr = array(
 					'term_id' => null,
 					'term' => $term,
