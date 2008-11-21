@@ -2,7 +2,7 @@
 /**
  * Kohana process control file, loaded by the front controller.
  * 
- * $Id: Bootstrap.php 3160 2008-07-20 16:03:48Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -14,7 +14,7 @@ define('KOHANA_VERSION',  '2.2');
 define('KOHANA_CODENAME', 'efímera');
 
 // Test of Kohana is running in Windows
-define('KOHANA_IS_WIN', PHP_SHLIB_SUFFIX === 'dll');
+define('KOHANA_IS_WIN', DIRECTORY_SEPARATOR === '\\');
 
 // Kohana benchmarks are prefixed to prevent collisions
 define('SYSTEM_BENCHMARK', 'system_benchmark');

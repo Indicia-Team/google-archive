@@ -2,7 +2,7 @@
 /**
  * Simple benchmarking.
  *
- * $Id: Benchmark.php 2897 2008-06-25 08:02:08Z armen $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team

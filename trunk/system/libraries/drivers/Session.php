@@ -2,7 +2,7 @@
 /**
  * Session driver interface
  *
- * $Id: Session.php 1928 2008-02-05 21:00:14Z PugFish $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team

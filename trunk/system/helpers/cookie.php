@@ -2,7 +2,7 @@
 /**
  * Cookie helper class.
  *
- * $Id: cookie.php 3221 2008-07-28 13:14:40Z Geert $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team

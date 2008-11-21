@@ -2,7 +2,7 @@
 /**
  * Eaccelerator-based Cache driver.
  *
- * $Id: Eaccelerator.php 3160 2008-07-20 16:03:48Z Shadowhand $
+ * $Id$
  *
  * @package    Cache
  * @author     Kohana Team

@@ -2,7 +2,7 @@
 /**
  * Image API driver.
  *
- * $Id: Image.php 3287 2008-08-07 11:28:44Z OscarB $
+ * $Id$
  *
  * @package    Image
  * @author     Kohana Team

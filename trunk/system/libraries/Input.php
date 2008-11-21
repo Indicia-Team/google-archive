@@ -2,7 +2,7 @@
 /**
  * Input library.
  *
- * $Id: Input.php 3250 2008-08-02 11:58:29Z armen $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
