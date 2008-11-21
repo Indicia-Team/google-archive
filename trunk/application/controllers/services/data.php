@@ -179,23 +179,12 @@ class Data_Controller extends Controller {
 	 */
 	public function handle_list_request()
 	{
+		// TODO: Review this code for SQL Injection attack!
 		$mode = $this->get_output_mode();
 		$db = new Database();
 		$db->from(inflector::plural($this->entity));
 		$this->model=ORM::factory($this->entity);
-		if (array_key_exists('filter_field', $_GET))
-			$filterfield = $_GET['filter_field'];
-		else
-			$filterfield = $this->model->get_search_field();
-		if (array_key_exists('filter', $_GET))
-        	$db->like($filterfield, $_GET['filter']);
-
-                        /*if (array_key_exists('filter_field', $_GET))
-                        if (array_key_exists('orderby', $_GET))
-                        if (array_key_exists('limit', $_GET))
-                        if (array_key_exists('offset', $_GET))*/
-
-
+		$this->apply_get_parameters_to_db($db);
 		$records=$db->get()->result_array(FALSE);
 
 		// TODO: need to disable the automatic fk handling in the xml encode and build joins into the query,
@@ -208,6 +197,45 @@ class Data_Controller extends Controller {
 				echo $this->xml_encode($records, TRUE);
 				break;
 			//default:
+		}
+	}
+
+	/**
+	 * Works out what filter and other options to set on the db object according to the
+	 * $_GET parameters currently available, when retrieving a list of items.
+	 */
+	protected function apply_get_parameters_to_db($db)
+	{
+		if (array_key_exists('filter_field', $_GET))
+			$filterfield = $_GET['filter_field'];
+		else
+			$filterfield = $this->model->get_search_field();
+
+		if (array_key_exists('filter', $_GET)) {
+			if ($this->model->table_columns[$filterfield]=='int') {
+				$db->where($filterfield, $_GET['filter']);
+			} else {
+        		$db->like($filterfield, $_GET['filter']);
+			}
+		}
+
+		$sortdir='';
+		if (array_key_exists('dir', $_GET)) {
+			$sortdir=strtoupper($_GET['dir']);
+		}
+		if ($sortdir != 'ASC' && $sortdir != 'DESC') {
+			$sortdir='ASC';
+		}
+		if (array_key_exists('orderby', $_GET)) {
+			$db->orderby($_GET['orderby'], $sortdir);
+		}
+
+		if (array_key_exists('limit', $_GET)) {
+			$db->limit($_GET['limit']);
+		}
+
+		if (array_key_exists('offset', $_GET)) {
+			$db->offset($_GET['offset']);
 		}
 	}
 
