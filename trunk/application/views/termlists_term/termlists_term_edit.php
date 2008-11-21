@@ -11,8 +11,19 @@
 <?php echo html::error_message($model->getError('term')); ?>
 </li>
 <li>
-<label for="language">Language</label>
-<input id="language" readonly='readonly' value="<?php echo (($model->term_id != null && $model->term->language_id != null) ? (html::specialchars($model->term->language->language)) : ''); ?>"/>
+<label for="language_id">Language</label>
+<select id="language_id" name="language_id">
+	<option>&lt;Please select&gt;</option>
+<?php
+	$languages = ORM::factory('language')->orderby('language','asc')->find_all();
+	foreach ($languages as $lang) {
+		echo '	<option value="'.$lang->id.'" ';
+		if ($model->term_id != null && $lang->id==$model->term->language_id) {
+			echo 'selected="selected" ';
+		}
+		echo '>'.$lang->language.'</option>';
+	}
+?>
 <?php echo html::error_message($model->getError('language_id')); ?>
 </li>
 </ol>
