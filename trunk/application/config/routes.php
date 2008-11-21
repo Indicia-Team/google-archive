@@ -22,6 +22,7 @@ $config['taxon_group'] = 'taxon_group/page/1/5';
 $config['language'] = 'language/page/1/5';
 // Termlists_term
 $config['termlists_term'] = 'termlists_term/page/1/1/5';
+$config['termlists_term/([0-9]+)'] = 'termlists_term/page/$1/1/5';
 $config['termlists_term/page/([0-9]+)'] = 'termlists_term/page/$1/1/5';
 $config['termlists_term/edit/([0-9]+)'] = 'termlists_term/edit/$1/1/5';
 // Person

@@ -23,8 +23,18 @@
 </li>
 <li>
 <label for="website">Owned by</label>
-<input id="website" readonly='readonly' value="<?php echo (($model->website_id != null) ? (html::specialchars($model->website->title)) : ''); ?>"/>
-<input id="website_id" name="website_id" type="hidden" value="<?php echo html::specialchars($model->website_id); ?>" />
+<select id="website_id" name="website_id">
+	<option>&lt;Core Module&gt;</option>
+<?php
+	$websites = ORM::factory('website')->orderby('title','asc')->find_all();
+	foreach ($websites as $website) {
+		echo '	<option value="'.$website->id.'" ';
+		if ($website->id==$model->website_id)
+			echo 'selected="selected" ';
+		echo '>'.$website->title.'</option>';
+	}
+?>
+</select>
 <?php echo html::error_message($model->getError('website_id')); ?>
 </li>
 </ol>

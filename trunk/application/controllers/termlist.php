@@ -7,8 +7,8 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$this->columns = array(
 			'title'=>'',
 			'description'=>'',
-			'website'=>'',
-			'creator'=>'');
+			'website'=>''
+			);
 		$this->pagetitle = "Term lists";
 	}
 	public function edit($id,$page_no,$limit) {

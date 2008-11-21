@@ -130,25 +130,27 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	private function __saveTerm($array) {
 		if ($array['term_id'] == ''){
 			$term = ORM::factory('term');
-
-			// Look for an existing term matching attributes.
-			$a = $term->where(array(
+		} else {
+			$term = ORM::factory('term', $array['term_id']);
+		}
+		// Look for an existing term matching attributes.
+		$a = $term->where(array(
+			'term' => $array['term'],
+			'language_id' => $array['language_id']
+		))->find()->id;
+		if ($a == null){
+			//No existing term
+			$term->validate(new Validation(array(
 				'term' => $array['term'],
 				'language_id' => $array['language_id']
-			))->find()->id;
-			if ($a == null){
-				//No existing term
-				$term->validate(new Validation(array(
-					'term' => $array['term'],
-					'language_id' => $array['language_id']
-				)), true);
-			} else {
-				//Already a term we can link to
-				$term->find($a);
-			}
-			// Update with the new term
-			$array['term_id'] = $term->id;
+			)), true);
+		} else {
+			//Already a term we can link to
+			$term->find($a);
 		}
+		// Update with the new term
+		$array['term_id'] = $term->id;
+	
 		return $array;
 	}
 	/**
@@ -185,7 +187,9 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		 * Work out what the language is - atm, just say English. We should deduce
 		 * this from a drop-down list or similar?
 		 */
-		$_POST['language_id']=4;
+		if ($_POST['language_id'] == ''){
+			$_POST['language_id']=1;
+		}
 
 		/**
 		 * This is the preferred term in this list
@@ -235,11 +239,11 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 					$arrSyn[$syn->term->term] == $syn->term->language->iso) {
 					array_splice($arrSyn, array_search(
 						$syn->term, $arrSyn), 1);
-					syslog(LOG_DEBUG, "Term in both ".$syn->term->term);
+					syslog(LOG_DEBUG, "Known synonym: ".$syn->term->term);
 				} else {
 					// Synonym has been deleted - remove it from the db
 #					$syn->term->deleted = 't';
-					syslog(LOG_DEBUG, "Term not in list".$syn->term->term);
+					syslog(LOG_DEBUG, "New synonym: ".$syn->term->term);
 					$syn->delete();
 				}
 			}
@@ -270,7 +274,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 					validate(new Validation($syn), true);
 			}
 
-			url::redirect('termlists_term');
+			url::redirect('termlists_term/'.$model->termlist_id);
 		} else {
 			$this->template->title = $this->GetEditPageTitle($model, 'Term instance');
 			$metadata = new View('templates/metadata');
