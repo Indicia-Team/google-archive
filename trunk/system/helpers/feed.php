@@ -2,7 +2,7 @@
 /**
  * Feed helper class.
  *
- * $Id: feed.php 2985 2008-07-07 19:13:27Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team

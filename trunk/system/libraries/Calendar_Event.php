@@ -2,7 +2,7 @@
 /**
  * Calendar event observer class.
  *
- * $Id: Calendar_Event.php 2899 2008-06-25 08:04:09Z armen $
+ * $Id$
  *
  * @package    Calendar
  * @author     Kohana Team

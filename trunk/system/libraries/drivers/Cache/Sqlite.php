@@ -2,7 +2,7 @@
 /**
  * SQLite-based Cache driver.
  *
- * $Id: Sqlite.php 3168 2008-07-21 01:34:36Z Shadowhand $
+ * $Id$
  *
  * @package    Cache
  * @author     Kohana Team

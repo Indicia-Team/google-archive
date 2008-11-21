@@ -2,7 +2,7 @@
 /**
  * PostgreSQL 8.1+ Database Driver
  *
- * $Id: Pgsql.php 3160 2008-07-20 16:03:48Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -175,7 +175,10 @@ class Database_Pgsql_Driver extends Database_Driver {
 
 		if (count($database['join']) > 0)
 		{
-			$sql .= ' '.$database['join']['type'].'JOIN '.implode(', ', $database['join']['tables']).' ON '.implode(' AND ', $database['join']['conditions']);
+			foreach($database['join'] AS $join)
+			{
+				$sql .= "\n".$join['type'].'JOIN '.implode(', ', $join['tables']).' ON '.$join['conditions'];
+			}
 		}
 
 		if (count($database['where']) > 0)
@@ -222,10 +225,10 @@ class Database_Pgsql_Driver extends Database_Driver {
 		return pg_escape_string($this->link, $str);
 	}
 
-	public function list_tables()
+	public function list_tables(Database $db)
 	{
 		$sql    = 'SELECT table_schema || \'.\' || table_name FROM information_schema.tables WHERE table_schema NOT IN (\'pg_catalog\', \'information_schema\')';
-		$result = $this->query($sql)->result(FALSE, PGSQL_ASSOC);
+		$result = $db->query($sql)->result(FALSE, PGSQL_ASSOC);
 
 		$retval = array();
 		foreach ($result as $row)
@@ -291,14 +294,17 @@ FROM pg_class
     ON (pg_class.oid=pg_attrdef.adrelid AND pg_attribute.attnum=pg_attrdef.adnum)
 WHERE pg_class.relname=\''.$this->escape_str($table).'\' AND pg_attribute.attnum>=1 AND NOT pg_attribute.attisdropped
 ORDER BY pg_attribute.attnum');
-                $fields = array();
-                foreach ($query as $row)
-                {
-                        $fields[$row->Field]=$row->Type;
-                }
 
-                return $fields;
+				// Load the result as objects
+				$query->result(TRUE);
 
+				$fields = array();
+				foreach ($query as $row)
+				{
+					$fields[$row->Field] = $row->Type;
+				}
+
+				return $fields;
 	}
 
 	public function field_data($table)
@@ -345,7 +351,7 @@ class Pgsql_Result extends Database_Result {
 		if (is_resource($result))
 		{
 			// Its an DELETE, INSERT, REPLACE, or UPDATE query
-			if (preg_match('/^(?:delete|insert|replace|update)\s+/i', trim($sql), $matches))
+			if (preg_match('/^(?:delete|insert|replace|update)\b/iD', trim($sql), $matches))
 			{
 				$this->insert_id  = (strtolower($matches[0]) == 'insert') ? $this->insert_id() : FALSE;
 				$this->total_rows = pg_affected_rows($this->result);
@@ -453,10 +459,17 @@ class Pgsql_Result extends Database_Result {
 		{
 			$query = 'SELECT LASTVAL() AS insert_id';
 
-			$result = pg_query($link, $query);
+			// Disable error reporting for this, just to silence errors on
+			// tables that have no serial column.
+			$ER = error_reporting(0);
+
+			$result = pg_query($query);
 			$insert_id = pg_fetch_array($result, NULL, PGSQL_ASSOC);
 
 			$this->insert_id = $insert_id['insert_id'];
+
+			// Reset error reporting
+			error_reporting($ER);
 		}
 
 		return $this->insert_id;
@@ -535,29 +548,5 @@ class Kohana_Pgsql_Statement {
 	public function execute()
 	{
 		return $this;
-	}
-	/**
-	 * Builds a LIKE portion of a query.
-	 *
-	 * @param   mixed    field name
-	 * @param   string   value to match with field
-	 * @param   boolean  add wildcards before and after the match
-	 * @param   string   clause type (AND or OR)
-	 * @param   int      number of likes
-	 * @return  string
-	 */
-	public function like($field, $match = '', $auto = TRUE, $type = 'AND ', $num_likes)
-	{
-		$prefix = ($num_likes == 0) ? '' : $type;
-
-		$match = $this->escape_str($match);
-
-		if ($auto === TRUE)
-		{
-			// Add the start and end quotes
-			$match = '%'.$match.'%';
-		}
-
-		return $prefix.' '.$this->escape_column($field).' ILIKE \''.$match . '\'';
 	}
 }

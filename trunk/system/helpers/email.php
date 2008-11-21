@@ -2,7 +2,7 @@
 /**
  * Email helper class.
  *
- * $Id: email.php 3213 2008-07-27 14:28:37Z Geert $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -95,7 +95,7 @@ class email_Core {
 			break;
 			default:
 				// Use the native connection
-				$connection = new Swift_Connection_NativeMail;
+				$connection = new Swift_Connection_NativeMail($config['options']);
 			break;
 		}
 

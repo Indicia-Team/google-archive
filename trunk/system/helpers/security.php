@@ -2,7 +2,7 @@
 /**
  * Security helper class.
  *
- * $Id: security.php 2239 2008-03-08 09:57:44Z Geert $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team

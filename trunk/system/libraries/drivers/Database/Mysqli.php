@@ -2,7 +2,7 @@
 /**
  * MySQLi Database Driver
  *
- * $Id: Mysqli.php 3160 2008-07-20 16:03:48Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -49,7 +49,7 @@ class Database_Mysqli_Driver extends Database_Mysql_Driver {
 		$host = isset($host) ? $host : $socket;
 
 		// Make the connection and select the database
-		if ($this->link = new mysqli($host, $user, $pass, $database))
+		if ($this->link = new mysqli($host, $user, $pass, $database, $port))
 		{
 			if ($charset = $this->db_config['character_set'])
 			{

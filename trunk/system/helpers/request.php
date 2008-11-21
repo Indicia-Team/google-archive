@@ -2,7 +2,7 @@
 /**
  * Request helper class.
  *
- * $Id: request.php 3160 2008-07-20 16:03:48Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -38,6 +38,28 @@ class request_Core {
 		}
 
 		return isset($ref) ? $ref : $default;
+	}
+
+	/**
+	 * Returns the current request protocol, based on $_SERVER['https']. In CLI
+	 * mode, NULL will be returned.
+	 *
+	 * @return  string
+	 */
+	public static function protocol()
+	{
+		if (PHP_SAPI === 'cli')
+		{
+			return NULL;
+		}
+		elseif ( ! empty($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] === 'on')
+		{
+			return 'https';
+		}
+		else
+		{
+			return 'http';
+		}
 	}
 
 	/**

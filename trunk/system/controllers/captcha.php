@@ -4,7 +4,7 @@
  * Usage: Call the Captcha controller from a view, e.g.
  *        <img src="<?php echo url::site('captcha') ?>" />
  *
- * $Id: captcha.php 3281 2008-08-06 16:13:58Z Shadowhand $
+ * $Id$
  *
  * @package    Captcha
  * @author     Kohana Team

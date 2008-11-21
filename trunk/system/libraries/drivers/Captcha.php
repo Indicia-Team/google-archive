@@ -2,7 +2,7 @@
 /**
  * Captcha driver class.
  *
- * $Id: Captcha.php 3237 2008-07-30 12:10:20Z Geert $
+ * $Id$
  *
  * @package    Captcha
  * @author     Kohana Team
@@ -117,7 +117,7 @@ abstract class Captcha_Driver {
 		if ( ! empty($background))
 		{
 			// Create the image using the right function for the filetype
-			$function = 'imagecreatefrom'.$this->image_type($filename);
+			$function = 'imagecreatefrom'.$this->image_type($background);
 			$this->background_image = $function($background);
 
 			// Resize the image if needed

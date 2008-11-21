@@ -3,7 +3,7 @@
  * Object Relational Mapping (ORM) "tree" extension. Allows ORM objects to act
  * as trees, with parents and children.
  *
- * $Id: ORM_Tree.php 3122 2008-07-16 14:19:34Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -36,7 +36,7 @@ class ORM_Tree_Core extends ORM {
 				if (isset($this->object[$this->parent_key]))
 				{
 					// Find children of this parent
-					$model->where($this->parent_key, $this->object[$this->parent_key])->find();
+					$model->where($model->primary_key, $this->object[$this->parent_key])->find();
 				}
 
 				$this->related[$column] = $model;

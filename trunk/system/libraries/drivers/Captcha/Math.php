@@ -2,7 +2,7 @@
 /**
  * Captcha driver for "math" style.
  *
- * $Id: Math.php 3024 2008-07-10 05:21:07Z Geert $
+ * $Id$
  *
  * @package    Captcha
  * @author     Kohana Team

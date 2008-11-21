@@ -2,7 +2,7 @@
 /**
  * Text helper class.
  *
- * $Id: text.php 3228 2008-07-28 20:47:04Z dlib $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -182,7 +182,7 @@ class text_Core {
 		if (utf8::strlen($replacement) == 1)
 		{
 			$regex .= 'e';
-			return preg_replace($regex, 'str_repeat($replacement, utf8::strlen(\'$1\')', $str);
+			return preg_replace($regex, 'str_repeat($replacement, utf8::strlen(\'$1\'))', $str);
 		}
 
 		return preg_replace($regex, $replacement, $str);

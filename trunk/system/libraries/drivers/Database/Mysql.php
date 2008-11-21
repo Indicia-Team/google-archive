@@ -2,7 +2,7 @@
 /**
  * MySQL Database Driver
  *
- * $Id: Mysql.php 3160 2008-07-20 16:03:48Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -201,14 +201,19 @@ class Database_Mysql_Driver extends Database_Driver {
 			// Escape the tables
 			$froms = array();
 			foreach ($database['from'] as $from)
+			{
 				$froms[] = $this->escape_column($from);
+			}
 			$sql .= "\nFROM ";
 			$sql .= implode(', ', $froms);
 		}
 
 		if (count($database['join']) > 0)
 		{
-			$sql .= ' '.$database['join']['type'].'JOIN ('.implode(', ', $database['join']['tables']).') ON '.implode(' AND ', $database['join']['conditions']);
+			foreach($database['join'] AS $join)
+			{
+				$sql .= "\n".$join['type'].'JOIN '.implode(', ', $join['tables']).' ON '.$join['conditions'];
+			}
 		}
 
 		if (count($database['where']) > 0)
@@ -255,18 +260,19 @@ class Database_Mysql_Driver extends Database_Driver {
 		return mysql_real_escape_string($str, $this->link);
 	}
 
-	public function list_tables()
+	public function list_tables(Database $db)
 	{
-		$sql    = 'SHOW TABLES FROM `'.$this->db_config['connection']['database'].'`';
-		$result = $this->query($sql)->result(FALSE, MYSQL_ASSOC);
+		static $tables;
 
-		$retval = array();
-		foreach ($result as $row)
+		if (empty($tables) AND $query = $db->query('SHOW TABLES FROM '.$this->escape_table($this->db_config['connection']['database'])))
 		{
-			$retval[] = current($row);
+			foreach ($query->result(FALSE) as $row)
+			{
+				$tables[] = current($row);
+			}
 		}
 
-		return $retval;
+		return $tables;
 	}
 
 	public function show_error()
@@ -470,10 +476,17 @@ class Mysql_Result extends Database_Result {
 
 	public function seek($offset)
 	{
-		if ( ! $this->offsetExists($offset))
-			return FALSE;
+		if ($this->offsetExists($offset) AND mysql_data_seek($this->result, $offset))
+		{
+			// Set the current row to the offset
+			$this->current_row = $offset;
 
-		return mysql_data_seek($this->result, $offset);
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 
 } // End Mysql_Result Class

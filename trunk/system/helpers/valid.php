@@ -2,7 +2,7 @@
 /**
  * Validation helper class.
  *
- * $Id: valid.php 3238 2008-07-30 15:42:28Z Shadowhand $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -265,12 +265,18 @@ class valid_Core {
 	 * Checks whether a string is a valid text. Letters, numbers, whitespace,
 	 * dashes, periods, and underscores are allowed.
 	 *
-	 * @param   string   $str
+	 * @param   string   text to check
 	 * @return  boolean
 	 */
 	public static function standard_text($str)
 	{
-		return (bool) preg_match('/^[-\pL\pN\pZ_.]++$/uD', (string) $str);
+		// pL matches letters
+		// pN matches numbers
+		// pZ matches whitespace
+		// pPc matches underscores
+		// pPd matches dashes
+		// pPo matches normal puncuation
+		return (bool) preg_match('/^[\pL\pN\pZ\p{Pc}\p{Pd}\p{Po}]++$/uD', (string) $str);
 	}
 
 	/**

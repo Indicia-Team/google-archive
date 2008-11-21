@@ -2,7 +2,7 @@
 /**
  * Session library.
  *
- * $Id: Session.php 3231 2008-07-29 07:30:50Z Geert $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -205,10 +205,10 @@ class Session_Core {
 					break;
 				}
 			}
-
-			// Expire flash keys
-			$this->expire_flash();
 		}
+
+		// Expire flash keys
+		$this->expire_flash();
 
 		// Update last activity
 		$_SESSION['last_activity'] = time();

@@ -2,7 +2,7 @@
 /**
  * Captcha driver for "alpha" style.
  *
- * $Id: Alpha.php 3103 2008-07-13 10:37:32Z Geert $
+ * $Id$
  *
  * @package    Captcha
  * @author     Kohana Team
