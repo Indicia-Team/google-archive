@@ -1,6 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Meaning_Model extends ORM {
+	protected $search_field='id';
 
 	protected $has_many = array(
 			'terms'
