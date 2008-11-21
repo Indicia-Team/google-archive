@@ -67,6 +67,14 @@ abstract class ORM extends ORM_Core {
 		return $this->__get($this->search_field);
 	}
 
+	/**
+	 * Property accessor for read only search_field.
+	 */
+	public function get_search_field()
+	{
+		return $this->search_field;
+	}
+
 }
 
 ?>

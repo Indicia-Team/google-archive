@@ -124,13 +124,13 @@ class Data_Controller extends Controller {
 	{
 		// Store the entity in class member, so less recursion overhead when building XML.
 		$this->entity = $entity;
-		switch (URI::total_arguments()) {}
+		switch (URI::total_arguments()) {
 			case 0:
-				handle_list_request();
+				$this->handle_list_request();
 				break;
 			case 1:
 				// primary key of an item passed
-				handle_item_request();
+				$this->handle_item_request();
 				break;
 			default:
 				$this->error("Only zero or one arguments (the ID) are allowed when requesting $this->entity data.");
@@ -179,7 +179,36 @@ class Data_Controller extends Controller {
 	 */
 	public function handle_list_request()
 	{
-		// TODO: handle requests for lists
+		$mode = $this->get_output_mode();
+		$db = new Database();
+		$db->from(inflector::plural($this->entity));
+		$this->model=ORM::factory($this->entity);
+		if (array_key_exists('filter_field', $_GET))
+			$filterfield = $_GET['filter_field'];
+		else
+			$filterfield = $this->model->get_search_field();
+		if (array_key_exists('filter', $_GET))
+        	$db->like($filterfield, $_GET['filter']);
+
+                        /*if (array_key_exists('filter_field', $_GET))
+                        if (array_key_exists('orderby', $_GET))
+                        if (array_key_exists('limit', $_GET))
+                        if (array_key_exists('offset', $_GET))*/
+
+
+		$records=$db->get()->result_array(FALSE);
+
+		// TODO: need to disable the automatic fk handling in the xml encode and build joins into the query,
+		// otherwise it will be too slow.
+		switch ($mode) {
+			case 'json':
+				echo json_encode(array('result' => $records));
+				break;
+			case 'xml':
+				echo $this->xml_encode($records, TRUE);
+				break;
+			//default:
+		}
 	}
 
 	/**
@@ -224,9 +253,14 @@ class Data_Controller extends Controller {
 	 * xlink paths to any foreign keys, and gets the caption of the foreign entity.
 	 */
 	protected function xml_encode($array, $indent=false, $recursion=0) {
+		// if we are outputting a specific record, root is singular
+		if ($this->model->id)
+			$root = $this->entity;
+		else
+			$root = inflector::plural($this->entity);
 		if (!$recursion) {
 			$data = '<?xml version="1.0"?>'.($indent?"\r\n":'').
-				"<$this->entity xmlns:xlink=\"http://www.w3.org/1999/xlink\">".
+				"<$root xmlns:xlink=\"http://www.w3.org/1999/xlink\">".
 				($indent?"\r\n":'');
 		} else {
 			$data = '';
@@ -235,7 +269,7 @@ class Data_Controller extends Controller {
 		foreach ($array as $element => $value) {
 			if ($value) {
 				if (is_numeric($element)) {
-					$element = 'item';
+					$element = $this->entity;
 				}
 				if (substr($element, -3)=='_id') {
 					// This is a foreign key to another entity, so include the xlink URL and remove _id from the name
@@ -243,6 +277,8 @@ class Data_Controller extends Controller {
 					if (array_key_exists($element, $this->model->belongs_to)) {
 						// Belongs_to specifies a fk table that does not match the attribute name
 						$fk_entity=$this->model->belongs_to[$element];
+					} elseif ($element=='parent') {
+						$fk_entity=$this->entity;
 					} else {
 						// Belongs_to specifies a fk table that matches the attribute name
 						$fk_entity=$element;
@@ -262,7 +298,7 @@ class Data_Controller extends Controller {
 			}
 		}
 		if (!$recursion) {
-			$data .= "</$this->entity>";
+			$data .= "</$root>";
 		}
 		return $data;
 	}

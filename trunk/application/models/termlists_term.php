@@ -1,6 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Termlists_term_Model extends ORM_Tree {
+	// TODO: this is a temporary placeholder. Need to think how we can get the term (from the terms table)
+	// in as the search field in termlists_terms. Perhaps a view?
+	protected $search_field='id';
 
 	protected $belongs_to = array(
 		'term', 'termlist',
