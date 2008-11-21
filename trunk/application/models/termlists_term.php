@@ -2,9 +2,11 @@
 
 class Termlists_term_Model extends ORM_Tree {
 
-	protected $belongs_to = array('term', 'termlist', 
-		'created_by' => 'user', 
-		'updated_by' => 'user');
+	protected $belongs_to = array(
+		'term', 'termlist',
+		'created_by' => 'user',
+		'updated_by' => 'user'
+	);
 
 	protected $children = 'termlists_terms';
 
