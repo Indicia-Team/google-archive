@@ -324,6 +324,31 @@ ORDER BY pg_attribute.attnum');
 		return $table;
 	}
 
+	/**
+	 * Builds a LIKE portion of a query.
+	 *
+	 * @param   mixed    field name
+	 * @param   string   value to match with field
+	 * @param   boolean  add wildcards before and after the match
+	 * @param   string   clause type (AND or OR)
+	 * @param   int      number of likes
+	 * @return  string
+	 */
+	public function like($field, $match = '', $auto = TRUE, $type = 'AND ', $num_likes)
+	{
+		$prefix = ($num_likes == 0) ? '' : $type;
+
+		$match = $this->escape_str($match);
+
+		if ($auto === TRUE)
+		{
+			// Add the start and end quotes
+			$match = '%'.str_replace('%', '\\%', $match).'%';
+		}
+
+		return $prefix.' '.$this->escape_column($field).' ILIKE \''.$match . '\'';
+	}
+
 } // End Database_Pgsql_Driver Class
 
 /**
