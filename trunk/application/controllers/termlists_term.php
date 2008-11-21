@@ -14,6 +14,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			'language'=>'',
 			);
 		$this->pagetitle = "Terms";
+		$this->pageNoUriSegment = 4;
 	}
 	/**
 	 * Override the default page functionality to filter by termlist.
@@ -27,6 +28,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 	public function page_gv($termlist_id, $page_no, $limit){
 		$this->base_filter['termlist_id'] = $termlist_id;
+		$this->view->termlist_id = $termlist_id;
+		parent::page_gv($page_no, $limit);
 	}
 
 	private function __getSynonomy($meaning_id) {
