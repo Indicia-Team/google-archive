@@ -24,6 +24,14 @@
 <textarea rows="2" id="location_name" name="location_name"><?php echo html::specialchars($model->location_name); ?></textarea>
 <?php echo html::error_message($model->getError('location_name')); ?>
 </li>
+<li>
+<label for="email_visible">Show Email Address</label>
+<?=form::checkbox('email_visible', TRUE, isset($model->email_visible) AND ($model->email_visible == 't') ) ?>
+</li>
+<li>
+<label for="view_common_names">Show Common Names</label>
+<?=form::checkbox('view_common_names', TRUE, isset($model->view_common_names) AND ($model->view_common_names == 't') ) ?>
+</li>
 </ol>
 </fieldset>
 <?php echo $metadata ?>
