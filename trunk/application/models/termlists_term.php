@@ -18,7 +18,7 @@ class Termlists_term_Model extends ORM_Tree {
 		$array->add_rules('term_id', 'required');
 		$array->add_rules('termlist_id', 'required');
 		$array->add_rules('meaning_id', 'required');
-#		$array->add_callbacks('deleted', array($this, '__dependents'));
+		$array->add_callbacks('deleted', array($this, '__dependents'));
 
 		// Explicitly add those fields for which we don't do validation
 		$this->parent_id = $array['parent_id'];
@@ -31,7 +31,7 @@ class Termlists_term_Model extends ORM_Tree {
 	public function __dependents(Validation $array, $field){
 		if ($array['deleted'] == 'true'){
 			$record = ORM::factory('termlists_term', $array['id']);
-			if ($record->children->count()!=0){
+			if (count($record->children)!=0){
 				$array->add_error($field, 'has_children');
 			}
 		}

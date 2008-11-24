@@ -53,4 +53,5 @@ $config['irregular'] = array
 	'ox' => 'oxen',
 	'leaf' => 'leaves',
 	'taxon' => 'taxa',
+	'gv_taxon_lists_taxon' => 'gv_taxon_lists_taxa',
 );
