@@ -8,9 +8,11 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		       	'taxa_taxon_list/index');
 		$this->base_filter = array(
 			'parent_id' => null,
+			'deleted' => 'f',
 			'preferred' => 't');
 		$this->columns = array(
 			'taxon'=>'',
+			'authority'=>'',
 			'language'=>'',
 			);
 		$this->pagetitle = "Taxons";
@@ -211,7 +213,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		 */
 		if ($_POST['taxon_meaning_id'] == ''){
 			//Make a new meaning
-			$meaning = ORM::factory('meaning');
+			$meaning = ORM::factory('taxon_meaning');
 			if ($meaning->insert())
 			{
 				$_POST['taxon_meaning_id'] = $meaning->id;
