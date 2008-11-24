@@ -17,11 +17,15 @@ class User_Model extends ORM {
 		$array->add_rules('username', 'required', 'length[5,30]');
 		
 		// Any fields that don't have a validation rule need to be copied into the model manually
+		
 		$this->interests = $array['interests'];
 		$this->location_name = $array['location_name'];
+		$this->core_role_id = (is_numeric ($array['core_role_id']) ? $array['core_role_id'] : NULL);
+		
 		// only copy person id if it is filled in. This is to allow for case when called via
 		// drill through from people.
-		if (!empty($array['person_id'])) $this->person_id = $array['person_id'];
+		if (isset($array['person_id'])) $this->person_id = $array['person_id'];
+
 		// Checkboxes only appear in the POST array if they are checked, ie TRUE. Have to convert to PgSQL boolean values, rather than PHP
 		$this->email_visible = (isset($array['email_visible']) ? 't' : 'f');
 		$this->view_common_names = (isset($array['view_common_names']) ? 't' : 'f');
