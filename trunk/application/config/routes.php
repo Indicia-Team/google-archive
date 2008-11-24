@@ -29,3 +29,9 @@ $config['termlists_term/edit/([0-9]+)'] = 'termlists_term/edit/$1/1/5';
 $config['person'] = 'person/page/1/10';
 // User
 $config['user'] = 'user/page/1/10';
+// Taxa_taxon_list
+$config['taxa_taxon_list'] = 'taxa_taxon_list/page/1/1/5';
+$config['taxa_taxon_list/([0-9]+)'] = 'taxa_taxon_list/page/$1/1/5';
+$config['taxa_taxon_list/page/([0-9]+)'] = 'taxa_taxon_list/page/$1/1/5';
+$config['taxa_taxon_list/edit/([0-9]+)'] = 'taxa_taxon_list/edit/$1/1/5';
+

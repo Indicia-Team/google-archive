@@ -46,6 +46,10 @@
 <input type="submit" name="submit" value="Delete" />
 <?php echo $metadata ?>
 </form>
+<?php if ($model->id != '') { ?>
+<form class="cmxform" action="<?php echo url::site().'taxa_taxon_list/page/'.$model->id ?>" >
+<input type="submit" value="View Taxa" />
+</form>
 <?php if ($model->id != '' && $table != null) { ?>
 	<h2> Sublists </h2>
 	<?php echo $table; ?>
@@ -53,4 +57,4 @@
 	<input type="hidden" name="parent_id" value=<?php echo $model->id ?> />
 	<input type="submit" value="New Sublist" />
 	</form>
-<?php } ?>
+<?php }} ?>

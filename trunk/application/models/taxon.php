@@ -10,10 +10,10 @@ class Taxon_Model extends ORM {
 		$array->pre_filter('trim');
 		$array->add_rules('taxon', 'required');
 		$array->add_rules('scientific', 'required');
+		$array->add_rules('taxon_group_id', 'required');
 
 		// Explicitly add those fields for which we don't do validation
 		$this->language_id = $array['language_id'];
-		$this->taxon_group_id = $array['taxon_group_id'];
 		$this->external_key = $array['external_key'];
 		$this->authority = $array['authority'];
 		$this->search_code = $array['search_code'];
