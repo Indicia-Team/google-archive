@@ -16,4 +16,4 @@
 { ?>
   <br />You may <a href="/login">click here to log in using your Username</a>.
 <?php } ?>
-<br />If you have forgotten your password, <a href="/forgotten_password.html">click here to request an email allowing you to reset your password</a>.
+<br />If you have forgotten your password, <a href="<?php echo url::site(); ?>forgotten_password">click here to request an email allowing you to reset your password</a>.

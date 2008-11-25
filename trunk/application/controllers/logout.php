@@ -4,7 +4,7 @@
 *  class:       Logout_Controller
 *  description: Provides application support for logging users out
 */
-class Logout_Controller extends Website_Controller {
+class Logout_Controller extends Indicia_Controller {
 
 	/*
 	*  description:  Logs the current user out of the application. Destroys the current session
