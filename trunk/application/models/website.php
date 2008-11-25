@@ -14,6 +14,14 @@ class Website_Model extends ORM {
 		$this->description = $array['description'];
 		return parent::validate($array, $save);
 	}
+	/**
+	 * Return a displayable caption for the item.
+	 * For People, this should be a combination of the Firstname and Surname.
+	 */
+	public function caption()
+	{
+		return ($this->title);
+	}
 }
 
 ?>

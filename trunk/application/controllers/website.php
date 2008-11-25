@@ -42,7 +42,7 @@ class Website_Controller extends Gridview_Base_Controller
     public function create()
     {
         $this->model = ORM::factory('website');
-        $this->set_view('website/website_edit', 'Website');
+        $this->setView('website/website_edit', 'Website');
     }
 
     /**
@@ -50,17 +50,17 @@ class Website_Controller extends Gridview_Base_Controller
      *
      * @todo auth and permission check
      */
-    public function edit()
+    public function edit($id = null)
     {
-        if ($this->uri->total_arguments()==0)
+        if ($id == null)
         {
             // we need a general error controller
             print "cannot edit website without an ID";
         }
         else
         {
-            $this->model = new Website_Model($this->uri->argument(1));
-            $this->set_view('website/website_edit', 'Website');
+            $this->model = new Website_Model($id);
+            $this->setView('website/website_edit', 'Website');
         }
     }
 
@@ -92,27 +92,9 @@ class Website_Controller extends Gridview_Base_Controller
         else
         {
             // if some thing is going wrong we set the view to the same page
-            $this->set_view('website/website_edit', 'Website');
+            $this->setView('website/website_edit', 'Website');
         }
     }
-
-    /**
-     * set view
-     *
-     * @param string $name View name
-     * @param string $pagetitle Page title
-     */
-    private function set_view( $name, $pagetitle = '' )
-    {
-        // on error rest on the website_edit page
-        // errors are now embedded in the model
-        $view                    = new View( $name );
-        $view->metadata          = $this->GetMetadataView(  $this->model );
-        $this->template->title   = $this->GetEditPageTitle( $this->model, $pagetitle );
-        $view->model             = $this->model;
-        $this->template->content = $view;
-    }
-
 }
 
 ?>

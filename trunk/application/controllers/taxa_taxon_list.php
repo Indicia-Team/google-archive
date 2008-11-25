@@ -1,4 +1,21 @@
 <?php
+/**
+ * INDICIA
+ * @link http://code.google.com/p/indicia/
+ * @package Indicia
+ */
+
+/**
+ * Taxa_taxon_list page controller
+ *
+ *
+ * @package Indicia
+ * @subpackage Controller
+ * @license http://www.gnu.org/licenses/gpl.html GPL
+ * @author xxxxxxx <xxx@xxx.net> / $Author$
+ * @copyright xxxx
+ * @version $Rev$ / $LastChangedDate$
+ */
 
 class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	public function __construct() {
@@ -17,21 +34,6 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			);
 		$this->pagetitle = "Taxons";
 		$this->pageNoUriSegment = 4;
-	}
-	/**
-	 * Override the default page functionality to filter by taxon_list.
-	 */
-	public function page($taxon_list_id, $page_no, $limit){
-		$this->base_filter['taxon_list_id'] = $taxon_list_id;
-		$this->pagetitle = "Taxons in ".ORM::factory('taxon_list',$taxon_list_id)->title;
-		$this->view->taxon_list_id = $taxon_list_id;
-		parent::page($page_no, $limit);
-	}
-
-	public function page_gv($taxon_list_id, $page_no, $limit){
-		$this->base_filter['taxon_list_id'] = $taxon_list_id;
-		$this->view->taxon_list_id = $taxon_list_id;
-		parent::page_gv($page_no, $limit);
 	}
 
 	private function __getSynonomy($taxon_meaning_id) {
@@ -65,10 +67,25 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		}
 		return $syn;
 	}
+	/**
+	 * Override the default page functionality to filter by taxon_list.
+	 */
+	public function page($taxon_list_id, $page_no, $limit){
+		$this->base_filter['taxon_list_id'] = $taxon_list_id;
+		$this->pagetitle = "Taxons in ".ORM::factory('taxon_list',$taxon_list_id)->title;
+		$this->view->taxon_list_id = $taxon_list_id;
+		parent::page($page_no, $limit);
+	}
+
+	public function page_gv($taxon_list_id, $page_no, $limit){
+		$this->base_filter['taxon_list_id'] = $taxon_list_id;
+		$this->view->taxon_list_id = $taxon_list_id;
+		parent::page_gv($page_no, $limit);
+	}
 
 	public function edit($id,$page_no,$limit) {
 		// Generate model
-		$model = ORM::factory('taxa_taxon_list',$id);
+		$this->model = ORM::factory('taxa_taxon_list',$id);
 		$gridmodel = ORM::factory('gv_taxon_lists_taxon');
 
 		// Add grid component
@@ -83,25 +100,18 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'edit' => 'taxa_taxon_list/edit/£id£'
 		);
 		
-		// Add metadata panel
-		$metadata = new View('templates/metadata');
-		$metadata->model = $model->find($id);
-
 		// Add items to view
-		$view = new View('taxa_taxon_list/taxa_taxon_list_edit');
-		$view->model = $model->find($id);
-		$view->taxon_list_id = $model->taxon_list_id;
-		$view->metadata = $metadata;
-		$view->table = $grid->display();
-		$view->synonomy = $this->__formatScientificSynonomy($this->
-			__getSynonomy($model->
-				taxon_meaning_id));
-		$view->commonNames = $this->__formatCommonSynonomy($this->
-			__getSynonomy($model->
-				taxon_meaning_id));
-		// Add everything to the template
-		$this->template->title = "Edit ".$model->taxon->taxon;
-		$this->template->content = $view;
+		$vArgs = array(
+			'taxon_list_id' => $this->model->taxon_list_id,
+			'table' => $grid->display(),
+			'synonomy' => $this->__formatScientificSynonomy($this->
+			__getSynonomy($this->model->
+				taxon_meaning_id)),
+			'commonNames' => $this->__formatCommonSynonomy($this->
+			__getSynonomy($this->model->
+				taxon_meaning_id))
+			);
+		$this->setView('taxa_taxon_list/taxa_taxon_list_edit', 'Taxon', $vArgs);
 
 	}
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
@@ -126,23 +136,18 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	 * Creates a new taxon given the id of the taxon_list to initially attach it to
 	 */
 	public function create($taxon_list_id){
+		$this->model = ORM::factory('taxa_taxon_list');
 		$parent = $this->input->post('parent_id', null);
-		$metadata = new View('templates/metadata');
-		$metadata->model = ORM::factory('taxa_taxon_list');
+		$this->model->parent_id = $parent;
 
-		// Create and assign variables to the view
-		$view = new View('taxa_taxon_list/taxa_taxon_list_edit');
-		$view->model = ORM::factory('taxa_taxon_list');
-		$view->model->parent_id = $parent;
-		$view->metadata = $metadata;
-		$view->table = null;
-		$view->taxon_list_id = $taxon_list_id;
-		$view->synonomy = null;
-		$view->commonNames = null;
+		$vArgs = array(
+			'table' => null,
+			'taxon_list_id' => $taxon_list_id,
+			'synonomy' => null,
+			'commonNames' => null);
 
-		// Templating
-		$this->template->title = "Create new taxon";
-		$this->template->content = $view;
+		$this->setView('taxa_taxon_list/taxa_taxon_list/edit', 'Taxon', $vArgs);
+			
 	}
 
 	/**
@@ -192,7 +197,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	 * Saves the taxon_list_taxon to the model. Will create a corresponding taxon if one
 	 * does not already exist. Will also create a new meaning.
 	 */
-	public function __save($array) {
+	private function __save($array) {
 		if (! empty($array['id'])) {
 			$model = ORM::factory('taxa_taxon_list',$array['id']);
 		} else {

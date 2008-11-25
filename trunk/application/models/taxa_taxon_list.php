@@ -32,5 +32,13 @@ class Taxa_taxon_list_Model extends ORM_Tree {
 			}
 		}
 	}
+	/**
+	 * Return a displayable caption for the item.
+	 * For People, this should be a combination of the Firstname and Surname.
+	 */
+	public function caption()
+	{
+		return ($this->taxon);
+	}
 
 }
