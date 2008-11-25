@@ -15,130 +15,139 @@ class Person_Controller extends Gridview_Base_Controller {
 		$this->pagetitle = "People";
 	}
 
+	protected function create_user_button($extras='')
+	{
+		return form::submit('submit', 'Create User Details', $extras);
+	}
+	
+	protected function edit_user_button($extras='')
+	{
+		return form::submit('submit', 'Edit User Details', $extras);
+	}
+	
+	protected function return_url($return_url)
+	{
+		return '<input type="hidden" name="return_url" id="return_url" value="'.html::specialchars($return_url).'" />';
+	}
+
+	protected function disable_button($disable_button)
+	{
+		return $disable_button ? '<input type="hidden" name="disable_button" id="disable_button" value="YES" />' : '';
+	}
+	
 	/**
-	 * Action for website/create page.
-	 * Displays a page allowing entry of a new website.
+	 * Action for person/create page.
+	 * Displays a page allowing entry of a new person.
 	 */
 	public function create() {
-		$model = ORM::factory('person');
+		$person = ORM::factory('person');
 		$view = new View('person/person_edit');
-		$view->model = $model;
-		$view->metadata = $this->GetMetadataView($model);
-		$view->return_url = '';
-		$view->enable_create_button = 'YES';
-		$this->template->title = $this->GetEditPageTitle_local($model, 'Person');
+		$view->model = $person;
+		$view->metadata = $this->GetMetadataView($person);
+		$this->template->title = $this->GetEditPageTitle($person, 'Person');
+		$view->return_url = ''; // will jump back to the gridview on submit
+		// There are issues with the ID not being backfilled into the model when a new record has been created.
+		// For this reason the Create User details is disabled.
+		$view->user_details_button = $this->create_user_button('disabled="disabled"');
+		$view->disable_button = $this->disable_button(TRUE);
 		$this->template->content = $view;
 	}
 
+	/**
+	 * Action for person/edit page.
+	 * Displays a page allowing modification of an existing person.
+	 * This functrion is envoked in 2 different ways:
+	 * 1) From the gridview
+	 * 2) Direct URL
+	 */
 	public function edit() {
 		if ($this->uri->total_arguments()==0)
-			print "cannot edit person without an ID";
+			print "cannot edit person without a Person ID";
 		else
 		{
 			$person = new Person_Model($this->uri->argument(1));
 			$view = new View('person/person_edit');
-			$view->metadata = $this->GetMetadataView($person);
-			$this->template->title = $this->GetEditPageTitle_local($person, 'Person');
 			$view->model = $person;
-			$view->return_url = '';
+			$view->metadata = $this->GetMetadataView($person);
+			$this->template->title = $this->GetEditPageTitle($person, 'Person');
+			$view->return_url = ''; // will jump back to the gridview on submit
 			$user = ORM::factory('user', array('person_id' => $person->id));
-			if ( $user->loaded )
-				$view->enable_edit_button = 'YES';
-			else
-				$view->enable_create_button = 'YES';
+			$view->user_details_button = $user->loaded ? $this->edit_user_button() : $this->create_user_button();
+			$view->disable_button = $this->disable_button(FALSE);
 			$this->template->content = $view;
 		}
 	}
 
-	public function uedit() {
+	/**
+	 * Subsiduary Action for person/edit page.
+	 * Displays a page allowing modification of an existing person.
+	 * This is called from a User Record.
+	 * When called from User we want:
+	 * A) To return back to the User form on submission for that person
+	 * B) We don't want to allow the drilling back to the user - ie we need to disable the relevant button.
+	 */
+	public function edit_from_user() {
 		if ($this->uri->total_arguments()==0)
-			print "cannot use uedit person without an ID";
+			print "cannot edit person through edit_from_user() without a Person ID";
 		else
 		{
 			$person = new Person_Model($this->uri->argument(1));
 			$view = new View('person/person_edit');
-			$view->metadata = $this->GetMetadataView($person);
-			$this->template->title = $this->GetEditPageTitle_local($person, 'Person');
 			$view->model = $person;
-			// when called from User need to embed the returning URL
-			// into the form so it is available when changes are submitted succesfully.
-			// When this is the case, the fields are hidden, and the buttons to edit or create
-			// the user details are disabled.
-			$view->return_url = 'user/edit/'.$this->uri->argument(1);
+			$view->metadata = $this->GetMetadataView($person);
+			$this->template->title = $this->GetEditPageTitle($person, 'Person');
+			$user = ORM::factory('user', array('person_id' => $person->id));
+			$view->return_url = $user->loaded ? $this->return_url('user/edit/'.$user->id): '';
+			$view->user_details_button = $this->edit_user_button('disabled="disabled"');				
+			$view->disable_button = $this->disable_button(TRUE);
 			$this->template->content = $view;
 		}
 	}
+
+	
 	public function save() {
 		if (! empty($_POST['id']))
 			$person = new Person_Model($_POST['id']);
 		else
 			$person = new Person_Model();
+			
 		$_POST = new Validation($_POST);
 		if ($person->validate($_POST, TRUE)) {
-			if(!empty($_POST['return_url'])) 
+			
+			if(isset($_POST['return_url'])) 
 				url::redirect($_POST['return_url']);
-			else if ($_POST['submit'] != 'Submit'){
-				// one of the other buttons has been pressed, either to create new or edit existing user details for this person.
-				if ( ! $person->id )
-				{
-				// if we've got here the process it insert a new person has not filled in the id into the model.
-				// in this case we assume that we loaded the last person, ie the one with the highest ID.
-					$result=$this->db->query('select max(id) from people');
-					$person->id = $result[0]->max;
-				}
-				url::redirect('user/pedit/'.$person->id);
+			else if ($_POST['submit'] == 'Edit User Details'){
+				url::redirect('user/edit_from_person/'.$person->id);
+			} else if ($_POST['submit'] == 'Create User Details'){
+				url::redirect('user/create/'.$person->id);
 			} else
 				// For a successful submission, just redisplay the gridview
 				url::redirect('person');
+				
 		} else {
 			// errors are now embedded in the model
-		    $view = new View('person/person_edit');
-			$view->metadata = $this->GetMetadataView($person);
-			$this->template->title = $this->GetEditPageTitle_local($person, 'Person');
+			$view = new View('person/person_edit');
 			$view->model = $person;
-			if(empty($_POST['return_url']))
-			{
-				$view->return_url = '';
-				if (! empty($_POST['id'])) {
-					$user = ORM::factory('user', array('person_id' => $_POST['id']));
-					if ( $user->loaded )
-						$view->enable_edit_button = 'YES';
-					else
-						$view->enable_create_button = 'YES';
-				} else {	
-					$view->enable_create_button = 'YES';
-				}
+			$view->metadata = $this->GetMetadataView($person);
+			$this->template->title = $this->GetEditPageTitle($person, 'Person');
+			$view->return_url = isset($_POST['return_url']) ? $this->return_url($_POST['return_url']) : '';
+			if ( isset($_POST['disable_button'] ) ) {
+				$extras='disabled="disabled"';
+				$view->disable_button = $this->disable_button(TRUE);
+			} else {
+				$extras='';
+				$view->disable_button = $this->disable_button(FALSE);
 			}
-			else
-			{
-			// when called from User need to embed the returning URL
-			// into the form so it is available when changes are submitted succesfully.
-			// When this is the case, the fields are hidden, and the buttons to edit or create
-			// the user details are disabled.
-				$view->return_url = $_POST['return_url'];
-			}		
+			$view->user_details_button = $this->create_user_button($extras);				
+			if ( isset($_POST['id'])) {
+				$user = ORM::factory('user', array('person_id' => $person->id));
+				if ( $user->loaded )
+					$view->edit_user_button = $this->edit_user_button($extras);
+			}
 			$this->template->content = $view;
 		}
 	}
 
-	/**
-	 * Retrieve a suitable title for the gridview page.
-	 * This overrides a function in indicia.php (name is misleading as its not used in the edit page...)
-	 */
-	protected function GetEditPageTitle($model, $name) {
-		return "View $name";
-	}
-
-	/**
-	 * Retrieve a suitable title for the edit page, depending on whether it is a new record
-	 * or an existing one.
-	 */
-	protected function GetEditPageTitle_local($model, $name) {
-		if ($model->id)
-			return "Edit $name ".$model->caption();
-		else
-			return "New $name";
-	}
 }
 
 ?>

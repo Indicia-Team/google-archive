@@ -1,10 +1,8 @@
 <p>This page allows you to specify a persons details.</p>
 <form class="cmxform" action="<?php echo url::site().'person/save'; ?>" method="post">
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
-<?php if (!empty($return_url)) {
-?>
-<input type="hidden" name="return_url" id="return_url" value="<?php echo html::specialchars($return_url); ?>" />
-<?php } ?>
+<?php echo $return_url ?>
+<?php echo $disable_button ?>
 <fieldset>
 <legend>Person's Details</legend>
 <ol>
@@ -37,16 +35,5 @@
 </fieldset>
 <?php echo $metadata ?>
 <input type="submit" name="submit" value="Submit" />
-<?php if ( ! empty($enable_create_button) )
-{ ?>
-<input type="submit" name="submit" value="Create User Details" />
-<?php } else { ?>
-<input type="submit" name="submit" value="Create User Details" disabled="disabled" />
-<?php } ?>
-<?php if ( ! empty($enable_edit_button) )
-{ ?>
-<input type="submit" name="submit" value="Edit User Details" />
-<?php } else { ?>
-<input type="submit" name="submit" value="Edit User Details" disabled="disabled" />
-<?php } ?>
+<?php echo $user_details_button ?>
 </form>

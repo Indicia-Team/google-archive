@@ -1,11 +1,11 @@
 <p>This page allows you to specify a users details.</p>
 <form class="cmxform" action="<?php echo url::site().'user/save'; ?>" method="post">
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
-<?php if (!empty($return_url)) {
-?>
+<?php if (isset($model->person_id)) { ?>
 <input type="hidden" name="person_id" id="person_id" value="<?php echo html::specialchars($model->person_id); ?>" />
-<input type="hidden" name="return_url" id="return_url" value="<?php echo html::specialchars($return_url); ?>" />
 <?php } ?>
+<?php echo $return_url ?>
+<?php echo $disable_button ?>
 <fieldset>
 <legend>User's Details</legend>
 <ol>
@@ -50,12 +50,16 @@
 </li>
 </ol>
 </fieldset>
+<fieldset>
+<legend>Password Control</legend>
+<ol>
+<li>
+<label for="send_password">Send Forgotten Password Email</label>
+<?=form::checkbox('send_password', TRUE, FALSE ) ?>
+</li>
+</ol>
+</fieldset>
 <?php echo $metadata ?>
 <input type="submit" name="submit" value="Submit" />
-<?php if ( empty($return_url)) {
-?>
-<input type="submit" name="submit" value="Edit Person Details" />
-<?php } else { ?>
-<input type="submit" name="submit" value="Edit Person Details" disabled="disabled" />
-<?php } ?>
+<?php echo $person_details_button ?>
 </form>
