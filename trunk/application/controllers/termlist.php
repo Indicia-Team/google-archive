@@ -27,7 +27,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 			'title'=>'',
 			'description'=>''));
 		$grid->actionColumns = array(
-			'edit' => 'termlist/edit/$id£'
+			'edit' => 'termlist/edit/£id£'
 		);
 		
 		// Add metadata panel

@@ -13,7 +13,7 @@ foreach ($table as $item) {
 	}
 	foreach ($actionColumns as $name => $action) {
 		echo "<td>";
-		$action = preg_replace("/£([a-zA-Z_\-]+)£/e", "\$item->__get('\\1')", $action);
+		$action = preg_replace("/£([a-zA-Z_\-]+)£/e", "\$item->__get('$1')", $action);
 		echo html::anchor($action, $name);
 		echo "</td>";
 	}
