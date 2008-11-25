@@ -32,6 +32,9 @@ class Indicia_Controller extends Template_Controller {
 				'Websites'=>'website',
 				'Languages'=>'language',
 				),
+			'Me' => array(
+				'Logout'=>'logout',
+				),
 		);
 	}
 

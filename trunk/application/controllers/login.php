@@ -7,7 +7,6 @@ class Login_Controller extends Indicia_Controller {
 // 1 Create Lost Password functionality
 // 2 Enable password checking
 // 3 Enable remember me functionality
-// 4 Put in hooks to auto redirect to login if not logged in
 	
 	public function index()
 	{
@@ -28,7 +27,7 @@ class Login_Controller extends Indicia_Controller {
 		}
 		$this->template->title = 'User Login';
 		$this->template->content = new View('login_by_username');	
-		$this->template->content->error_message = 'At this time validation only occurs on username and core_role: no checks done on Password. Remember me does not work, nor does forgotten password.';
+		$this->template->content->error_message = 'In order to gain access to this Indicia system you must log on. If you do not have an account please contact the administrator [TBC] who can create one for you.<br /><br />In order to disable the automatic log on, set the enable_hooks in config.php to FALSE.<br /><br />At this time validation only occurs on username and core_role: no checks done on Password. Remember me does not work, nor does forgotten password.<br /><br />';
 		if (request::method() == 'post')
 		{
 			if ($this->auth->login(array('username' => $_POST['UserName']), $_POST['Password']))
@@ -39,7 +38,7 @@ class Login_Controller extends Indicia_Controller {
 // THIS IS A DOUBLE CHECK. IF THE USERNAME DOESN'T MATCH, FORCE A LOG OFF.
 				if ($_POST['UserName'] == $_SESSION['auth_user']->username)
 				{
-					url::redirect();
+					url::redirect(arr::remove('requested_page', $_SESSION));
 					return;
 				}
 				$this->auth->logout(TRUE);
@@ -62,7 +61,7 @@ class Login_Controller extends Indicia_Controller {
 		}
 		$this->template->title = 'User Login';
 		$this->template->content = new View('login_by_email');	
-		$this->template->content->error_message = 'At this time validation only occurs on username and core_role: no checks done on Password. Remember me does not work, nor does forgotten password.';
+		$this->template->content->error_message = 'In order to gain access to this Indicia system you must log on. If you do not have an account please contact the administrator [TBC] who can create one for you.<br /><br />At this time validation only occurs on username and core_role: no checks done on Password. Remember me does not work, nor does forgotten password.';
 		if ( $login_config['login_by_email'] != 'YES')
 		{
 			$this->template->content->link_to_username = 'YES';
@@ -76,8 +75,8 @@ class Login_Controller extends Indicia_Controller {
 			
 			if ($this->auth->login(array('person_id' => $person->id), $_POST['Password']))
 			{
-				url::redirect();
-				return;
+					url::redirect(arr::remove('requested_page', $_SESSION));
+					return;
 			}
 			$this->template->content->error_message = 'Invalid Email address/Password Combination, or insufficient privileges';
 		}
