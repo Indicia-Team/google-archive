@@ -3,18 +3,7 @@
 class Data_Controller extends Controller {
 	protected $model;
 	protected $entity;
-
-		// validate segments and query string
-		// First argument is list ID.
-		// Is it a valid list id that the user has access to?
-		/* Query string options:
-		 * filter = filter text
-		 * filter_field = field name (defaults to lookup field)
-		 * offset = record offset
-		 * limit = record count
-		 * type = li|JSON
-		 * orderby = order field
-		 */
+	protected $foreign_keys;
 
 	/**
 	 * Provides the /services/data/language service.
@@ -124,71 +113,10 @@ class Data_Controller extends Controller {
 	{
 		// Store the entity in class member, so less recursion overhead when building XML.
 		$this->entity = $entity;
-		switch (URI::total_arguments()) {
-			case 0:
-				$this->handle_list_request();
-				break;
-			case 1:
-				// primary key of an item passed
-				$this->handle_item_request();
-				break;
-			default:
-				$this->error("Only zero or one arguments (the ID) are allowed when requesting $this->entity data.");
-		}
-	}
-
-	/**
-	 * Internal method to handle a generic request for a representation of a single object.
-	 * The $this->entity should match the model name.
-	 * An optional $_POST parameter called mode describes the output format mode. Defaults
-	 * to xml. Json and XML are supported for all objects by default, otherwise there must
-	 * be a view template in views/services/data/$this->entity/format.
-	 */
-	protected function handle_item_request()
-	{
-		$id=URI::argument(1);
-		$mode = $this->get_output_mode();
-		$this->model=ORM::factory($this->entity, $id);
-		if ($this->model->id) {
-			switch ($mode) {
-				case 'json':
-					$array = $this->insert_fk_values($this->model->as_array());
-					echo json_encode(array('result' => $array));
-					break;
-				case 'xml':
-					echo $this->xml_encode($this->model->as_array(), TRUE);
-					break;
-				default:
-					if (Kohana::find_file('views',"services/data/$this->entity/$mode")) {
-						$view = new View("services/data/$this->entity/$mode");
-						$view->model = $model;
-						$view->render(true);
-					} else {
-						$this->error("Type $mode not available for $this->entity data.");
-					}
-					break;
-			}
-		} else {
-			$this->warning(ucwords($this->entity)." $id not found.");
-		}
-	}
-
-	/**
-	 * Provides the /services/data/termlist_terms service.
-	 * Retrieves details of a list of terms from a termlist termlist.
-	 */
-	public function handle_list_request()
-	{
-		// TODO: Review this code for SQL Injection attack!
-		$mode = $this->get_output_mode();
-		$db = new Database();
-		$db->from(inflector::plural($this->entity));
 		$this->model=ORM::factory($this->entity);
-		$this->apply_get_parameters_to_db($db);
-		$records=$db->get()->result_array(FALSE);
+		$mode = $this->get_output_mode();
+		$records=$this->build_query_results();
 
-		// TODO: need to disable the automatic fk handling in the xml encode and build joins into the query,
-		// otherwise it will be too slow.
 		switch ($mode) {
 			case 'json':
 				echo json_encode(array('result' => $records));
@@ -196,9 +124,61 @@ class Data_Controller extends Controller {
 			case 'xml':
 				echo $this->xml_encode($records, TRUE);
 				break;
-			//default:
+			case 'csv':
+				echo $this->csv_encode($records);
+				header('Content-Type: text/comma-separated-values');
+				break;
+			default:
+				// Code to load from a view
+				if (kohana::file_exists('views',"services/data/$entity/$mode")) {
+					echo $this->view_encode($records, View::factory("services/data/$entity/$mode"));
+				} else {
+					$this->error("$entity data cannot be output using mode $mode.");
+				}
 		}
 	}
+
+	/**
+	 * Builds a query to extract data from the requested entity, and also
+	 * include relationships to foreign key tables and the caption fields from those tables.
+	 */
+	protected function build_query_results()
+	{
+		// TODO: Review this code for SQL Injection attack!
+		$this->foreign_keys = array();
+		$db = new Database();
+		$tablename = inflector::plural($this->entity);
+		$db->from($tablename);
+		$select = $tablename.'.'.implode(", $tablename.", array_keys($this->model->table_columns));
+		// Iterate each foreign key in the model, and add a join and the associated caption fields to the query.
+		foreach ($this->model->belongs_to as $fk=>$fk_entity) {
+			$fk_table = inflector::plural($fk_entity);
+			// if the foreign key itself is not specified in the belongs_to array, it must be a foreign key with the
+			// same name as the related table
+			if (is_numeric($fk)) {
+				$fk=$fk_entity;
+				$fk_alias=$fk_table;
+			} else {
+				$fk_alias=$fk;
+			}
+			// TODO: Is a LEFT JOIN going to cause a performance issue? Can we use INNER when key is mandatory?
+			// Add a join: LEFT JOIN fk_table (AS fk name - if specified which means it is ) ON fk_table.id = this_table.fk_name
+			$fk_table = $fk_table.($fk_table==$fk_alias? "": " AS $fk_alias");
+			$db->join($fk_table, "$fk_alias.id=$tablename.".$fk."_id", NULL, "LEFT");
+			// Add a field to the SELECT data
+			$fk_field = $fk_alias.'.'.ORM::factory($fk_entity)->get_search_field();
+			$select .= ", $fk_field AS $fk";
+			$this->foreign_keys[$fk]=$fk_field;
+		}
+		$db->select($select);
+		// if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
+		if (URI::total_arguments()==0)
+			$this->apply_get_parameters_to_db($db, $select);
+		else
+			$db->where($tablename.'.id', URI::argument(1));
+		return $db->get()->result_array(FALSE);
+	}
+
 
 	/**
 	 * Works out what filter and other options to set on the db object according to the
@@ -212,10 +192,18 @@ class Data_Controller extends Controller {
 			$filterfield = $this->model->get_search_field();
 
 		if (array_key_exists('filter', $_GET)) {
-			if ($this->model->table_columns[$filterfield]=='int') {
-				$db->where($filterfield, $_GET['filter']);
+			if (array_key_exists($filterfield, $this->model->table_columns)) {
+				if ($this->model->table_columns[$filterfield]=='int') {
+					$db->where(inflector::plural($this->entity).'.'.$filterfield, $_GET['filter']);
+				} else {
+        			$db->like(inflector::plural($this->entity).'.'.$filterfield, $_GET['filter']);
+				}
+			} elseif (array_key_exists($filterfield, $this->foreign_keys)) {
+				// filter is against a foreign key field and must be a string
+				$db->like($this->foreign_keys[$filterfield], $_GET['filter']);
 			} else {
-        		$db->like($filterfield, $_GET['filter']);
+				// Can't find filter field either in the entitiy's attributes or a foreign key field
+				$this->error("Invalid filter field $filterfield specified for $this->entity data.");
 			}
 		}
 
@@ -261,7 +249,7 @@ class Data_Controller extends Controller {
 
 	/**
 	 * Retrieve the output mode for a RESTful request from the GET or POST data.
-	 * Defaults to xml. Other options are json and li.
+	 * Defaults to xml. Other options are json and csv, or a view loaded from the views folder.
 	 */
 	protected function get_output_mode() {
 		if (array_key_exists('mode', $_GET))
@@ -270,8 +258,6 @@ class Data_Controller extends Controller {
 			$result = $_POST['mode'];
 		else
 			$result='xml';
-		if (!($result == 'xml' || $result == 'json' || $result == 'li' ))
-			$result = 'xml';
 		return $result;
 	}
 
@@ -313,7 +299,12 @@ class Data_Controller extends Controller {
 					}
 					$data .= ($indent?str_repeat("\t", $recursion):'');
 					$data .= "<$element id=\"$value\" xlink:href=\"".url::base(TRUE)."services/data/$fk_entity/$value\">";
-					$data .= ORM::factory($fk_entity, $value)->caption();
+					// If the input query includes the join to the related table, then use the input query to add the caption of
+					// the related item. Otherwise fetch via ORM which will be slower.
+					if (array_key_exists($element, $array))
+						$data .= $array[$element];
+					else
+						$data .= ORM::factory($fk_entity, $value)->caption();
 				} else {
 					$data .= ($indent?str_repeat("\t", $recursion):'').'<'.$element.'>';
 					if (is_array($value)) {
@@ -332,23 +323,54 @@ class Data_Controller extends Controller {
 	}
 
 	/**
-	 * Takes a model's array, and inserts new array elements to provide the captions for each entity
-	 * pointed to by a foreign key.
+	 * Encode the results of a query as a csv string
 	 */
-	 protected function insert_fk_values($array) {
-	 	$inserts = array();
-	 	foreach ($array as $item => $value) {
-			if ($value) {
-		 		if (substr($item, -3)=='_id') {
-					// This is a foreign key to another entity, so insert a new element for the fk item caption
-					$element = substr($item, 0, -3);
-					// dynamically call the related model to get it's caption
-					$inserts[$element] = $this->model->{$element}->caption();
-		 		}
-	 		}
-	 	}
-	 	return array_merge($array, $inserts);
-	 }
+	protected function csv_encode($array)
+	{
+		// Get the column titles in the first row
+		$result = $this->get_csv(array_keys($array[0]));
+		foreach ($array as $row) {
+			$result .= $this->get_csv(array_values($row));
+		}
+		return $result;
+	}
+
+	/**
+	 * Get the results of the query using the supplied view to render each row.
+	 */
+	protected function view_encode($array, $view) {
+		$output = '';
+		foreach ($array as $row) {
+			$view->row= $row;
+			$output .= $view->render();
+		}
+	}
+
+	/**
+	 * Return a line of CSV from an array. This is instead of PHP's fputcsv because that
+	 * function only writes straight to a file, whereas we need a string.
+	 */
+	function get_csv($data,$delimiter=',',$enclose='"') {
+		$newline="\n";
+		$output = '';
+		foreach ($data as $cell) {
+			//Test if numeric
+			if (!is_numeric($cell)) {
+				//Escape the enclose
+				$cell = str_replace($enclose,$enclose.$enclose,$cell);
+				//Not numeric enclose
+				$cell = $enclose . $cell . $enclose;
+			}
+			if ($output=='') {
+				$output = $cell;
+			} else {
+				$output.=  $delimiter . $cell;
+			}
+		}
+		$output.=$newline;
+		return $output;
+	}
+
 }
 
 ?>
