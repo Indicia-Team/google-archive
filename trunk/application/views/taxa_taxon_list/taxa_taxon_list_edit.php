@@ -2,7 +2,7 @@
 <fieldset>
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <input type="hidden" name="taxon_list_id" id="taxon_list_id" value="<?php echo html::specialchars($taxon_list_id); ?>" />
-<legend>Taxon Details</legend>
+<legend>Names</legend>
 <ol>
 <li>
 <input type="hidden" name="taxon_id" id="taxon_id" value="<?php echo html::specialchars($model->taxon_id); ?>" />
@@ -59,7 +59,7 @@
 </ol>
 </fieldset>
 <fieldset>
-<legend>Taxonlist Instance Details</legend>
+<legend>Other Details</legend>
 <ol>
 <li>
 <input type="hidden" name="parent_id" id="parent_id" value="<?php echo html::specialchars($model->parent_id); ?>" />

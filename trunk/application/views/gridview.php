@@ -6,7 +6,7 @@ $body - gridview_table object.
 <script type="text/javascript" src='<?php echo url::base() ?>application/views/gridview.js' ></script>
 <div id='gvFilter'>
 <form name='Filter' action='' method='get'>
-Search for
+Filter for
 <input type='text' name='filters'/>
 in <select name='columns'>
 <?php foreach ($columns as $name => $dbtype) {
@@ -14,7 +14,7 @@ in <select name='columns'>
 }
 ?>
 </select>
-<input id='gvFilterButton' type='submit' value='Search'/>
+<input id='gvFilterButton' type='submit' value='Filter'/>
 </form>
 </div>
 <table id='pageGrid'>
