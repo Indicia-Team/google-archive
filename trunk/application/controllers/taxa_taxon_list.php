@@ -192,9 +192,9 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	 * Saves the taxon_list_taxon to the model. Will create a corresponding taxon if one
 	 * does not already exist. Will also create a new meaning.
 	 */
-	public function save() {
-		if (! empty($_POST['id'])) {
-			$model = ORM::factory('taxa_taxon_list',$_POST['id']);
+	public function __save($array) {
+		if (! empty($array['id'])) {
+			$model = ORM::factory('taxa_taxon_list',$array['id']);
 		} else {
 			$model = ORM::factory('taxa_taxon_list');
 		}
@@ -202,58 +202,63 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		 * We need to submit null for integer fields, 
 		 * because an empty string will fail.
 		 */
-		if ($_POST['parent_id'] == ''){
-			$_POST['parent_id'] = null;
+		if ($array['parent_id'] == ''){
+			$array['parent_id'] = null;
 		}
-		if ($_POST['taxonomic_sort_order'] == ''){
-			$_POST['taxonomic_sort_order'] = null;
+		if ($array['taxonomic_sort_order'] == ''){
+			$array['taxonomic_sort_order'] = null;
 		}
 		/**
 		 * We need to generate a new meaning if there isn't one already.
 		 */
-		if ($_POST['taxon_meaning_id'] == ''){
+		if ($array['taxon_meaning_id'] == ''){
 			//Make a new meaning
 			$meaning = ORM::factory('taxon_meaning');
 			if ($meaning->insert())
 			{
-				$_POST['taxon_meaning_id'] = $meaning->id;
+				$array['taxon_meaning_id'] = $meaning->id;
 			} else {
-				$_POST['taxon_meaning_id'] = null;
+				$array['taxon_meaning_id'] = null;
 			}
 		}
 		/**
 		 * Work out what the language is - atm, just say English. We should deduce
 		 * this from a drop-down list or similar?
 		 */
-		if ($_POST['language_id'] == ''){
-			$_POST['language_id']=1;
+		if ($array['language_id'] == ''){
+			if (array_key_exists('iso',$array)){
+				$array['language_id'] = ORM::factory('language')
+					->where(array('iso' => $array['iso']))->find()->id;
+			} else {
+				$array['language_id'] = 1;
+			}
 		}
 
 		/**
 		 * This is the preferred taxon in this list
 		 */
-		$_POST['preferred']='t';
+		$array['preferred']='t';
 
 		/**
 		 * We may need to generate a new taxon - but first check if we can
 		 * link an old one.
 		 */
 		
-		$_POST = $this->__saveTaxon($_POST);
+		$array = $this->__saveTaxon($array);
 
 		/**
 		 * Were we instructed to delete the taxon?
 		 */
-		if ($_POST['submit'] == 'Delete'){
-			$_POST['deleted'] = 'true';
+		if ($array['submit'] == 'Delete'){
+			$array['deleted'] = 'true';
 		} else {
-			$_POST['deleted'] = 'false';
+			$array['deleted'] = 'false';
 		}
 
-		$validation = new Validation($_POST);
+		$validation = new Validation($array);
 		if ($model->validate($validation, true)) {
 			// Okay, the thing saved correctly - we now need to add the common names
-			$arrLine = split("\n",$_POST['commonNames']);
+			$arrLine = split("\n",$array['commonNames']);
 			$arrCommonNames = array();
 
 			foreach ($arrLine as $line) {
@@ -269,7 +274,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			syslog(LOG_DEBUG, "Number of common names is: ".count($arrCommonNames));
 
 			// Now do the same thing for synonomy
-			$arrLine = split("\n", $_POST['synonomy']);
+			$arrLine = split("\n", $array['synonomy']);
 			$arrSyn = array();
 
 			foreach ($arrLine as $line) {
@@ -285,7 +290,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 
 			$arrSyn = array_merge($arrSyn, $arrCommonNames);
 
-			$existingSyn = $this->__getSynonomy($_POST['taxon_meaning_id']);
+			$existingSyn = $this->__getSynonomy($array['taxon_meaning_id']);
 
 			// Iterate through existing synonomies, discarding those that have
 			// been deleted and removing existing ones from the list to add
@@ -324,9 +329,9 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 					'taxon_id' => null,
 					'taxon' => $taxon,
 					'authority' => $auth,
-					'search_code' => $_POST['search_code'],
-					'external_key' => $_POST['external_key'],
-					'taxon_group_id' => $_POST['taxon_group_id'],
+					'search_code' => $array['search_code'],
+					'external_key' => $array['external_key'],
+					'taxon_group_id' => $array['taxon_group_id'],
 					'language_id' => ORM::factory('language')->where(array(
 						'iso' => $lang))->find()->id);
 				$arr = $this->__saveTaxon($arr);
@@ -335,7 +340,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 				// the properties but set preferred to false and update
 				// the taxon id.
 
-				$syn = $_POST;
+				$syn = $array;
 				$syn['id'] = '';
 				$syn['preferred'] = 'false';
 				$syn['taxon_id'] = $arr['taxon_id'];
@@ -354,11 +359,97 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$view->model = $model;
 			$view->table = null;
 			$view->synonomy = $this->__formatScientificSynonomy($this->
-				__getSynonomy($_POST['taxon_meaning_id']));
+				__getSynonomy($array['taxon_meaning_id']));
 			$view->commonNames = $this->__formatCommonSynonomy($this->
-				__getSynonomy($_POST['taxon_meaning_id']));
+				__getSynonomy($array['taxon_meaning_id']));
 			$view->taxon_list_id = $model->taxon_list_id;
 			$this->template->content = $view;
+		}
+	}
+	public function save() {
+		$this->__save($_POST);
+	}
+
+	/**
+	 * We need to override this function because using the model won't work.
+	 */
+	public function upload_mappings() {
+		$_FILES = Validation::factory($_FILES)
+			->add_rules('csv_upload', 'upload::valid', 'upload::required', 'upload::type[csv]', 'upload::size[1M]');
+		if ($_FILES->validate()) {
+			// move the file to the upload directory
+			$csvTempFile = upload::save('csv_upload');
+			$_SESSION['uploaded_csv'] = $csvTempFile;
+
+			// Following helps for files from Macs
+			ini_set('auto_detect_line_endings',1);
+			$handle = fopen($csvTempFile, "r");
+			$this->template->title = "Map CSV File columns to ".$this->pagetitle;
+			$view = new View('taxa_taxon_list/upload_mappings');
+			$view->columns = fgetcsv($handle, 1000, ",");
+			$view->mappings = array(
+				'taxon' => 'Taxon name',
+				'language_id' => 'Language ISO code',
+				'taxon_group_id' => 'Taxon Group',
+				'authority' => 'Authority',
+				'search_code' => 'Search Code',
+				'external_key' => 'External Key',
+				'taxonomic_sort_order' => 'Taxonomic Sort Order'
+				);
+			fclose($handle);
+			$view->controllerpath = $this->controllerpath;
+			$this->template->content = $view;
+		} else {
+			// TODO: Display a validation error and remember current viewstate
+			url::redirect($this->controllerpath);
+		}
+	}
+	/* Upload action. Accepts a CSV file in the csv_upload FILE post
+	 */
+	public function upload() {
+		$csvTempFile = $_SESSION['uploaded_csv'];
+
+		// make sure the file still exists
+		if (file_exists($csvTempFile))
+		{
+			// Following helps for files from Macs
+			ini_set('auto_detect_line_endings',1);
+			// create the file pointer
+			$handle = fopen ($csvTempFile, "r");
+			// skip the title row
+			fgetcsv($handle, 1000, ",");
+			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+				$model = ORM::factory($this->modelname);
+				$arrSubmit = array();
+				$index = 0;
+				foreach ($_POST as $col=>$attr) {
+					if ($attr!='<please select>') {
+						if (substr($attr, -3)!='_id') {
+							$arrSubmit[$attr] = $data[$index];
+						} else {
+							// This is a foreign key, so need to lookup the id based on the string
+							if (array_key_exists(substr($attr,0,-3), $model->belongs_to)) {
+								// Belongs_to specifies a fk table that does not match the attribute name
+								$fk_model=ORM::factory($model->belongs_to[substr($attr,0,-3)]);
+							} else {
+								// Belongs_to specifies a fk table that matches the attribute name
+								$fk_model=ORM::factory(substr($attr,0,-3));
+							}
+							// TODO: Don't hard code the title as the search field
+							// TODO: Consider filtering so it only picks up sub-items relevant to this website.
+							$fk_record = $fk_model->lookup($data[$index]);
+							$arrSubmit[$attr] = $data[$index];
+						}
+					}
+					$index++;
+				}
+				$model->validate(new Validation($arrSubmit));
+			}
+			fclose($handle);
+	    	// need to flash a success message
+	    	// clean up the uploaded file
+	    	unlink($csvTempFile);
+	    	url::redirect($this->controllerpath);
 		}
 	}
 }

@@ -8,12 +8,12 @@
 <input type="hidden" name="taxon_id" id="taxon_id" value="<?php echo html::specialchars($model->taxon_id); ?>" />
 <label for="taxon">Taxon Name</label>
 <input id="taxon" name="taxon" value="<?php echo (($model->taxon_id != null) ? html::specialchars($model->taxon->taxon) : ''); ?>"/>
-<?php echo html::error_message($model->getError('taxon')); ?>
+<?php echo html::error_message($model->getError('taxon_id')); ?>
 </li>
 <li>
 <label for="language_id">Language</label>
 <select id="language_id" name="language_id">
-	<option>&lt;Please select&gt;</option>
+	<option value=''>&lt;Please select&gt;</option>
 <?php
 	$languages = ORM::factory('language')->orderby('language','asc')->find_all();
 	foreach ($languages as $lang) {
@@ -29,7 +29,7 @@
 <li>
 <label for="taxon_group_id">Taxon Group</label>
 <select id="taxon_group_id" name="taxon_group_id">
-	<option>&lt;Please select&gt;</option>
+	<option value=''>&lt;Please select&gt;</option>
 <?php
 	$taxon_groups = ORM::factory('taxon_group')->orderby('title','asc')->find_all();
 	foreach ($taxon_groups as $lang) {
