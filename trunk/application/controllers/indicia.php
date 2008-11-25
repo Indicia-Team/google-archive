@@ -54,4 +54,23 @@ class Indicia_Controller extends Template_Controller {
 		$metadata->model = $model;
 		return $metadata;
 	 }
+	/**
+	* set view
+	*
+	* @param string $name View name
+	* @param string $pagetitle Page title
+	*/	
+	protected function setView( $name, $pagetitle = '', $viewArgs = array() ) {
+		// on error rest on the website_edit page
+        	// errors are now embedded in the model
+	        $view                    = new View( $name );
+	        $view->metadata          = $this->GetMetadataView(  $this->model );
+	        $this->template->title   = $this->GetEditPageTitle( $this->model, $pagetitle );
+		$view->model             = $this->model;
+
+		foreach ($viewArgs as $arg => $val) {
+			$view->set($arg, $val);
+		}
+	        $this->template->content = $view;
+    }
 }
