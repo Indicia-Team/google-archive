@@ -5,6 +5,8 @@ class Person_Model extends ORM {
 	protected $has_one = array('user');
 	protected $belongs_to = array('created_by'=>'user', 'updated_by'=>'user');
 
+	protected $search_field='surname';
+
 	public function validate(Validation $array, $save = FALSE) {
 		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
 		$array->pre_filter('trim');
