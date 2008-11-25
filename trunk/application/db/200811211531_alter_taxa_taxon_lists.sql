@@ -12,7 +12,7 @@ ADD COLUMN taxon_meaning_id integer, -- Foreign key to the taxon_meanings table.
 ADD COLUMN taxonomic_sort_order integer, -- Provides a sort order which allows the taxon hierarchy to be displayed in taxonomic rather than alphabetical order.
 ADD COLUMN preferred boolean NOT NULL DEFAULT false, -- Flag set to true if the name constitutes the preferred name when selected amongst all taxa that have the same meaning.
 ADD CONSTRAINT fk_taxon_parent FOREIGN KEY (parent_id)
-      REFERENCES taxa (id) MATCH SIMPLE
+      REFERENCES taxa_taxon_lists (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
 ADD CONSTRAINT fk_taxon_taxon_meaning FOREIGN KEY (taxon_meaning_id)
       REFERENCES taxon_meanings (id) MATCH SIMPLE
