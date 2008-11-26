@@ -6,10 +6,11 @@ Indicia's Data Services provide a programmatic interface to information held in 
 
 == Constructing the service URL ==
 
-The Data Services are accessed via the URL of the site root + /index.php/services/data/, for example _http://www.mysite.com/index.php/services/data/_. After this, the name of the data entity is appended, which is the singular version of the required table name, for example _http://www.mysite.com/index.php/services/data/termlist_
+The Data Services are accessed via the URL of the site root + /index.php/services/data/ + the name of the required data entity, which is the singular version of the required table name, for example:
+`http://www.mysite.com/index.php/services/data/termlist`
 
 == Retrieving a single item of data ==
-To retrieve a single item of data with a known id, append /_id_ to the URL, for example _http://www.mysite.com/index.php/services/data/termlist/1_ will return an XML document describing termlist 1.
+To retrieve a single item of data with a known id, append a forward slash then the item's id to the URL, for example: {{{http://www.mysite.com/index.php/services/data/termlist}}}
 
 == Retrieving a list of data ==
 
