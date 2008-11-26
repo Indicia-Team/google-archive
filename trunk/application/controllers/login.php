@@ -27,9 +27,10 @@ class Login_Controller extends Indicia_Controller {
 		}
 		$this->template->title = 'User Login';
 		$this->template->content = new View('login_by_username');	
-		$this->template->content->error_message = 'In order to gain access to this Indicia system you must log on. If you do not have an account please contact the administrator [TBC] who can create one for you.<br /><br />In order to disable the automatic log on, set the enable_hooks in config.php to FALSE.<br /><br />At this time validation only occurs on username and core_role: no checks done on Password. Remember me does not work, nor does forgotten password.<br /><br />';
+		$this->template->content->error_message = '';
+		$this->template->content->admin_contact = $login_config['admin_contact'];
 		if (request::method() == 'post')
-		{
+		{			
 			if ($this->auth->login(array('username' => $_POST['UserName']), $_POST['Password']))
 			{
 // I don't trust the results!! There is something funny going on where the
@@ -43,7 +44,7 @@ class Login_Controller extends Indicia_Controller {
 				}
 				$this->auth->logout(TRUE);
 			}
-			$this->template->content->error_message = 'Invalid Email address/Password Combination, or insufficient privileges';
+			$this->template->content->error_message = 'Invalid Username/Password Combination, or insufficient privileges';
 		}
 	}
 
@@ -61,7 +62,8 @@ class Login_Controller extends Indicia_Controller {
 		}
 		$this->template->title = 'User Login';
 		$this->template->content = new View('login_by_email');	
-		$this->template->content->error_message = 'In order to gain access to this Indicia system you must log on. If you do not have an account please contact the administrator [TBC] who can create one for you.<br /><br />At this time validation only occurs on username and core_role: no checks done on Password. Remember me does not work, nor does forgotten password.';
+		$this->template->content->error_message = '';
+		$this->template->content->admin_contact = $login_config['admin_contact'];
 		if ( $login_config['login_by_email'] != 'YES')
 		{
 			$this->template->content->link_to_username = 'YES';
@@ -73,7 +75,7 @@ class Login_Controller extends Indicia_Controller {
 			# or to extend auth model
 			$person = ORM::factory('person', array('email_address' => $_POST['Email']));
 			
-			if ($this->auth->login(array('person_id' => $person->id), $_POST['Password']))
+			if ($this->auth->login(array('person_id' => $person->id), $this->auth->hash_password($_POST['Password'])))
 			{
 					url::redirect(arr::remove('requested_page', $_SESSION));
 					return;

@@ -10,7 +10,7 @@
 <legend>User's Details</legend>
 <ol>
 <li>
-<label for="username">User name</label>
+<label for="username">Username</label>
 <input id="username" name="username" value="<?php echo html::specialchars($model->username); ?>" />
 <?php echo html::error_message($model->getError('username')); ?>
 </li>
@@ -57,6 +57,7 @@
 <label for="send_password">Send Forgotten Password Email</label>
 <?=form::checkbox('send_password', TRUE, FALSE ) ?>
 </li>
+<?php if (isset($password_field)) { echo '<li>'.$password_field.html::error_message($model->getError('password')).'</li>'; } ?>
 </ol>
 </fieldset>
 <?php echo $metadata ?>

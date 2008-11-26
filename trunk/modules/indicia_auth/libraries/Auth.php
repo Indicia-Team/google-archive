@@ -97,18 +97,17 @@ class Auth_Core {
 	 */
 	public function login($username, $password, $remember = FALSE)
 	{
-// GVB MUST CHANGE TO ENABLE PASSWORD
 //		if (empty($password))
 //			return FALSE;
-//
-//		if (is_string($password))
-//		{
-//			// Get the salt from the stored password
-//			$salt = $this->find_salt($this->driver->password($username));
-//
-//			// Create a hashed password using the salt from the stored password
-//			$password = $this->hash_password($password, $salt);
-//		}
+
+		if (is_string($password))
+		{
+			// Get the salt from the stored password
+			$salt = $this->find_salt($this->driver->password($username));
+
+			// Create a hashed password using the salt from the stored password
+			$password = $this->hash_password($password, $salt);
+		}
 
 		return $this->driver->login($username, $password, $remember);
 	}
