@@ -96,8 +96,10 @@ $config['extension_prefix'] = 'MY_';
  */
 $config['modules'] = array
 (
-	 MODPATH.'indicia_auth',      // Authentication
-	 MODPATH.'indicia_svc_data',  // Authentication
+	 MODPATH.'indicia_auth',          // Authentication
+	 MODPATH.'indicia_svc_base',      // Services
+	 MODPATH.'indicia_svc_data',      // Data services
+	 MODPATH.'indicia_svc_validation',// Validation services
 	// MODPATH.'auto_modeler',      // Auto Modler Library
 	// MODPATH.'forge',     // Form generation
 	// MODPATH.'kodoc',     // Self-generating documentation
