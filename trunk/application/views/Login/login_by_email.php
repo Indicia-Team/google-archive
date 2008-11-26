@@ -1,20 +1,31 @@
 Indicia is a toolkit that simplifies the construction of new websites which allow data entry, mapping and reporting of wildlife records. Indicia is an Open Source project funded by the Open Air Laboratories Network and managed by the Centre for Ecology and Hydrology.<br /><br />
-In order to gain access to this Indicia system you must log on. If you do not have an account please contact the administrator <?php echo $admin_contact; ?> who can create one for you.<br /><br />
-In order to disable the automatic log on, set the enable_hooks in config.php to FALSE.<br /><br />
-Remember me does not work, nor does forgotten password.<br /><br />
+In order to gain access to this Indicia system you must log on. If you do not have an account and need one, please contact the administrator <?php echo $admin_contact; ?> who can create one for you.<br /><br />
+
+<form class="cmxform" name = "login" action="<?php echo url::site(); ?>login/login_by_email" method="post">
+<fieldset>
+<legend>Login details</legend>
 <?php if ( ! empty($error_message) )
 {
 	echo $error_message;
 }
 ?>
-<form name = "login" action="<?php echo url::site(); ?>login/login_by_email" method="post">
+<ol>
+<li>
   <label for="Email">Email</label>
   <input type = "text" name = "Email" id = "Email" value="" ><br />
+</li>
+<li>
   <label for="Password">Password</label>
   <input type = "password" name = "Password" id = "Password" value="" ><br />
+</li>
+<li>
   <label for="remember_me" >Remember me</label>
   <input type="checkbox" id="remember_me" name="remember_me"  /><br />
+</li>
+<li>
   <input type = "submit" value = "Login" >
+</li>
+</fieldset>
 </form>
 <?php if ( ! empty($link_to_username) )
 { ?>
