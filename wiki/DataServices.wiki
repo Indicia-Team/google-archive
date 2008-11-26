@@ -1,0 +1,18 @@
+#summary Information on calling the Data Services
+
+= Introduction =
+
+Indicia's Data Services provide a programmatic interface to information held in the Indicia core database. The Data Services are a RESTful web service, with each entity represented by a URL.
+
+== Constructing the service URL ==
+
+The Data Services are accessed via the URL of the site root + /index.php/services/data/, for example _http://www.mysite.com/index.php/services/data/_. After this, the name of the data entity is appended, which is the singular version of the required table name, for example _http://www.mysite.com/index.php/services/data/termlist_
+
+== Retrieving a single item of data ==
+To retrieve a single item of data with a known id, append /_id_ to the URL, for example _http://www.mysite.com/index.php/services/data/termlist/1_ will return an XML document describing termlist 1.
+
+== Retrieving a list of data ==
+
+== Output Mode ==
+
+Calls to the URLs normally return a formatted XML document describing the results. This can be overridden by providing a query string in the URL to request json or csv data. Other formats can be supported by adding views that generate the formatted output to the modules/indicia_svc_data/views/services/data/_entity name_ folder. 
