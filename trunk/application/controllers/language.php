@@ -7,6 +7,7 @@ class Language_Controller extends Gridview_Base_Controller {
 			'iso'=>'',
 			'language'=>'');
 		$this->pagetitle = "Languages";
+		$this->model = ORM::factory('language');
 	}
 
 	/**
@@ -34,29 +35,6 @@ class Language_Controller extends Gridview_Base_Controller {
 		$this->template->title = $this->GetEditPageTitle($model, 'Language');
 		$this->template->content = $view;
 
-	}
-
-	public function save() {
-		if (! empty($_POST['id'])) {
-			$language = ORM::factory('language',$_POST['id']);
-		} else {
-			$language = ORM::factory('language');
-		}
-		if ($_POST['submit'] == 'Delete'){
-			$_POST['deleted'] = 'true';
-		} else {
-			$_POST['deleted'] = 'false';
-		}
-		$_POST = new Validation($_POST);
-		if ($language->validate($_POST, true)) {
-			url::redirect('language');
-		} else {
-			$view = new View('language/language_edit');
-			$view->model = $language;
-			$view->metadata = $this->GetMetadataView($language);
-			$this->template->title = $this->GetEditPageTitle($language, 'Language');
-			$this->template->content = $view;
-		}
 	}
 }
 ?>

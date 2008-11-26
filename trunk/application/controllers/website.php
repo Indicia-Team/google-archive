@@ -30,6 +30,7 @@ class Website_Controller extends Gridview_Base_Controller
                                'url' =>'' );
 
         $this->pagetitle = "Websites";
+	$this->model = ORM::factory('website');
     }
 
     /**
@@ -70,7 +71,7 @@ class Website_Controller extends Gridview_Base_Controller
      *
      * @todo auth and permission check
      */
-    public function save()
+    public function save_old()
     {
         // only proceed if a website id exists
         if ( isset($_POST['id']) )
