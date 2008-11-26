@@ -19,14 +19,14 @@ class Login_Controller extends Indicia_Controller {
 		if ($this->auth->logged_in())
 		{
 			$this->template->title = 'Already Logged In';
-			$this->template->content = new View('login_message');	
+			$this->template->content = new View('login/login_message');	
 			$this->template->content->message = 'You are already logged in.<br />';
 			$this->template->content->link_to_home = 'YES';
 			$this->template->content->link_to_logout = 'YES';
 			return;
 		}
 		$this->template->title = 'User Login';
-		$this->template->content = new View('login_by_username');	
+		$this->template->content = new View('login/login_by_username');	
 		$this->template->content->error_message = '';
 		$this->template->content->admin_contact = $login_config['admin_contact'];
 		if (request::method() == 'post')
@@ -54,14 +54,14 @@ class Login_Controller extends Indicia_Controller {
 		if ($this->auth->logged_in())
 		{
 			$this->template->title = 'Already Logged In';
-			$this->template->content = new View('login_message');	
+			$this->template->content = new View('login/login_message');	
 			$this->template->content->message = 'You are already logged in.';
 			$this->template->content->link_to_home = 'YES';
 			$this->template->content->link_to_logout = 'YES';
 			return;
 		}
 		$this->template->title = 'User Login';
-		$this->template->content = new View('login_by_email');	
+		$this->template->content = new View('login/login_by_email');	
 		$this->template->content->error_message = '';
 		$this->template->content->admin_contact = $login_config['admin_contact'];
 		if ( $login_config['login_by_email'] != 'YES')
