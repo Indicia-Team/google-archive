@@ -26,6 +26,11 @@ class User_Controller extends Gridview_Base_Controller {
 		return $disable_button ? '<input type="hidden" name="disable_button" id="disable_button" value="YES" />' : '';
 	}
 	
+	protected function password_field($password = '')
+	{
+		return $password != '' ? '<label for="password">Password</label><input type="password" id="password" name="password" value="'.html::specialchars($password).'" />' : '';
+	}
+
 	/**
 	 * Action for user/create page.
 	 * Displays a page allowing entry of a new user.
@@ -36,13 +41,16 @@ class User_Controller extends Gridview_Base_Controller {
 			print "Cannot create user without an associated Person ID";
 		else
 		{
+			$login_config = Kohana::config('login');
+		
 			$user = ORM::factory('user');
 			$view = new View('user/user_edit');
 			$view->model = $user;
 			$view->metadata = $this->GetMetadataView($user);
 			$this->template->title = $this->GetEditPageTitle($user, 'User');
 			$view->model->person_id = $this->uri->argument(1);
-			$view->return_url = $this->return_url('user/edit/'.$this->uri->argument(1));
+			$view->return_url = $this->return_url('person/edit/'.$this->uri->argument(1));
+			$view->password_field = $this->password_field($login_config['default_password']);
 			$view->person_details_button = $this->edit_person_button('disabled="disabled"');
 			$view->disable_button = $this->disable_button(TRUE);
 			$this->template->content = $view;
@@ -67,6 +75,7 @@ class User_Controller extends Gridview_Base_Controller {
 			$view->metadata = $this->GetMetadataView($user);
 			$this->template->title = $this->GetEditPageTitle($user, 'User');
 			$view->return_url = '';
+			$view->password_field = '';
 			$view->person_details_button = $this->edit_person_button();
 			$view->disable_button = $this->disable_button(FALSE);
 			$this->template->content = $view;
@@ -92,6 +101,7 @@ class User_Controller extends Gridview_Base_Controller {
 			$view->metadata = $this->GetMetadataView($user);
 			$this->template->title = $this->GetEditPageTitle($user, 'User');
 			$view->return_url = $user->loaded ? $this->return_url('person/edit/'.$this->uri->argument(1)): '';
+			$view->password_field = '';
 			$view->person_details_button = $this->edit_person_button('disabled="disabled"');				
 			$view->disable_button = $this->disable_button(TRUE);
 			$this->template->content = $view;
@@ -105,7 +115,7 @@ class User_Controller extends Gridview_Base_Controller {
 			$user = new User_Model($_POST['id']);
 		else
 			$user = new User_Model();
-
+		
 		$_POST = new Validation($_POST);
 		if ($user->validate($_POST, TRUE)) {
 			
@@ -125,6 +135,7 @@ class User_Controller extends Gridview_Base_Controller {
 			$view->model = $user;
 		    $view->metadata = $this->GetMetadataView($user);
 			$this->template->title = $this->GetEditPageTitle_local($user, 'User');
+			$view->password_field = isset($_POST['password']) ? $this->password_field($_POST['password']) : '';
 			$view->return_url = isset($_POST['return_url']) ? $this->return_url($_POST['return_url']) : '';
 			if ( isset($_POST['disable_button'] ) ) {
 				$view->person_details_button = $this->edit_person_button('disabled="disabled"');				

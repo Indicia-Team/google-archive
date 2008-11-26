@@ -1,10 +1,14 @@
+Indicia is a toolkit that simplifies the construction of new websites which allow data entry, mapping and reporting of wildlife records. Indicia is an Open Source project funded by the Open Air Laboratories Network and managed by the Centre for Ecology and Hydrology.<br /><br />
+In order to gain access to this Indicia system you must log on. If you do not have an account please contact the administrator <?php echo $admin_contact; ?> who can create one for you.<br /><br />
+In order to disable the automatic log on, set the enable_hooks in config.php to FALSE.<br /><br />
+At this time validation only occurs on username and core_role: no checks done on Password. Remember me does not work, nor does forgotten password.<br /><br />
 <?php if ( ! empty($error_message) )
 {
 	echo $error_message;
 }
 ?>
 <form name = "login" action="<?php echo url::site(); ?>login" method="post">
-  <label for="UserName">User Name</label>
+  <label for="UserName">Username</label>
   <input type = "text" name = "UserName" id = "UserName" value="" ><br />
   <label for="Password">Password</label>
   <input type = "password" name = "Password" id = "Password" value="" ><br />

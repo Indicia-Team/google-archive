@@ -17,7 +17,8 @@ class User_Model extends ORM {
 		$array->pre_filter('trim');
 
 		$array->add_rules('username', 'required', 'length[5,30]');
-
+//		$array->add_rules('password', 'length[7,30]');
+		
 		// Any fields that don't have a validation rule need to be copied into the model manually
 
 		$this->interests = $array['interests'];
@@ -28,6 +29,9 @@ class User_Model extends ORM {
 		// drill through from people.
 		if (isset($array['person_id'])) $this->person_id = $array['person_id'];
 
+		// only copy password if it is filled in. This is to allow for case when called for new user.
+		if (isset($array['password'])) $this->password = $array['password'];
+
 		// Checkboxes only appear in the POST array if they are checked, ie TRUE. Have to convert to PgSQL boolean values, rather than PHP
 		$this->email_visible = (isset($array['email_visible']) ? 't' : 'f');
 		$this->view_common_names = (isset($array['view_common_names']) ? 't' : 'f');
@@ -35,4 +39,15 @@ class User_Model extends ORM {
 		return parent::validate($array, $save);
 	}
 
+	public function __set($key, $value)
+	{
+		if ($key === 'password')
+		{
+			// Use Auth to hash the password
+			$value = Auth::instance()->hash_password($value);			
+		}
+
+		parent::__set($key, $value);
+	}
+	
 }
