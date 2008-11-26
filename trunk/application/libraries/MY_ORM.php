@@ -1,6 +1,7 @@
 <?php
 
 abstract class ORM extends ORM_Core {
+	public $submission = array();
 	protected $errors = array();
 
 	// The default field that is searchable is called title. Override this when a different field name is used.
@@ -75,6 +76,114 @@ abstract class ORM extends ORM_Core {
 		return $this->search_field;
 	}
 
+	/**
+	 * Ensures that the save array is validated before submission. Classes overriding
+	 * this method should call this parent method after their changes to perform necessary
+	 * checks unless they really want to skip them.
+	 */
+	protected function preSubmit(){
+		//Overridden code happens here.
+
+		// Ensure that the only fields being submitted are those present in the model.
+		$this->submission['fields'] = array_intersect_key(
+			$this->submission['fields'], $this->table_columns);
+
+
+		// Where fields are numeric, ensure that we don't try to submit strings to
+		// them.
+		foreach ($this->submission['fields'] as $a => $b) {
+			if ($b['value'] == '') {
+				$type = $this->table_columns[$a];
+				syslog(LOG_DEBUG, "Column ".$a." has type ".$type);
+				switch ($type) {
+					case 'int':
+						$this->submission['fields'][$a]['value'] = null;
+						break;
+					}
+			}
+		}
+				
+
+	}
+	/**
+	 * Submits the data by:
+	 * - Calling the pre_submit function to clean data.
+	 * - Linking in any foreign fields specified in the "fk-fields" array.
+	 * - For each entry in the "submodels" array, calling the submit function 
+	 *   for that model and linking in the resultant object.
+	 * - Checking (by a where clause for all set fields) that an existing 
+	 *   record does not exist. If it does, return that.
+	 * - Calling the validate method for the "fields" array.
+	 * If successful, returns the id of the created/found record.
+	 * If not, returns null - errors are embedded in the model.
+	 */
+	public function submit(){
+
+		// Useful
+		$mn = $this->object_name;
+		$collapseVals = create_function('$arr', 'return $arr["value"];');
+
+		// Call pre-submit
+		$this->preSubmit();
+
+		// Link in foreign fields
+		foreach ($this->submission['fkFields'] as $a => $b) {
+			// Establish the correct model
+			$m = ORM::factory($b['fkTable']);
+
+			// Check that it has the required search field
+
+			if (array_key_exists($b['fkSearchField'], $m->table_columns)) {
+				$this->__set($b['fkIdField'],
+					$m->where(array(
+						$b['fkSearchField'] => $b['fkSearchValue']))
+						->find()->id);
+			}
+		}
+
+		// Iterate through submodels, calling their submit methods with subarrays
+		if (array_key_exists('subModels', $this->submission)) {
+			foreach ($this->submission['subModels'] as $a) {
+	
+				// Establish the right model
+				$m = ORM::factory($a['model']['id']);
+
+				// Call the submit method for that model and 
+				// check whether it returns correctly
+				$m->submission = $a['model'];
+
+				$this->__set($a['fkId'], $m->submit());
+			}
+		}
+		// Flatten the array to one that can be validated
+		$vArray = array_map($collapseVals, $this->submission['fields']);
+
+		// Check whether this object already exists in the database
+		$a = $this->where($vArray)->find()->id;
+		if ($a == null){
+			print_r($vArray);
+			// If we're editing an existing record.
+			if ($vArray['id'] != null) {
+				$this->find($vArray['id']);
+			}
+			// Create a new record by calling the validate method
+			if ($this->validate(new Validation($vArray), true)) {
+					// Record has successfully validated. Return the id.
+					syslog(LOG_DEBUG, "Record ".
+						$this->id.
+						" has validated successfully");
+					return $this->id;
+				} else {
+					// Errors. Return null.
+					return null;
+				}
+		} else {
+			// Set the model to point to the existing record.
+			$this->find($a);
+			syslog(LOG_DEBUG, "Existing record - linking to ".$a);
+			return $a;
+		}
+	}
 }
 
 ?>
