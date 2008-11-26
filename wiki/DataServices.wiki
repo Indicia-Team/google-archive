@@ -16,12 +16,14 @@ To retrieve a single item of data with a known id, append a forward slash then t
 
 Retrieving a list of data can be achieved by ommitting the id from the URL. In this case, a number of GET parameters are available to control the output as follows:
 
-||filter||||
-||filter_field||||
-||orderby||||
-||sortdir||||
-||limit||||
-||offset||||
+||filter||Allows a string to be specified to filter the returned items.||
+||filter_field||Allows the field to be filtered to be specified. Defaults to the search field for the object (e.g. the title of the website).||
+||orderby||Allows the field that the results are to be sorted by to be specified.||
+||sortdir||Specifies the sort direction. Options are ASC or DESC.||
+||limit||Limits the returned results to _n_ items.||
+||offset||Starts the returned results offsetted by _n_ records.||
+
+A full example illustrating this is `http://www.mysite.com/index.php/services/data/termlists_term?filter=sample methods&filter_field=termlist&orderby=term&sortdir=desc&limit=10&offset=10&xsl=default.xsl`.
 
 == Output Mode ==
 
