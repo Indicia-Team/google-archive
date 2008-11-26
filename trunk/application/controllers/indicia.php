@@ -76,4 +76,102 @@ class Indicia_Controller extends Template_Controller {
 		}
 	        $this->template->content = $view;
     }
+	/**
+	 * Wraps a standard $_POST type array into a save array suitable for use in saving
+	 * records.
+	 * 
+	 * @param array $array Array to wrap
+	 * @param bool $fkLink=false Link foreign keys?
+	 *
+	 * @return array Wrapped array
+	 */
+	protected function wrap( $array, $fkLink = false) {
+		// Initialise the wrapped array
+		$sa = array(
+			'id' => $this->model->object_name,
+			'fields' => array(),
+			'fkFields' => array(),
+			'subModels' => array()
+		);
+
+		// Iterate through the array
+		foreach ($array as $a => $b) {
+			// Check whether this is a fk placeholder
+			if (substr($a,0,3) == 'fk_'
+				&& $fkLink) {
+					// Generate a foreign key instance
+					$sa['fkFields'][$a] = array(
+						// Foreign key id field is table_id
+						'fkIdField' => substr($a,3)."_id",
+						'fkTable' => substr($a,3),
+						'fkSearchField' => 
+						ORM::factory(substr($a,3))->get_search_field(),
+						'fkSearchValue' => $b);
+				} else {
+					// This should be a field in the model.
+					// Add a new field to the save array
+					$sa['fields'][$a] = array(
+						// Set the value
+						'value' => $b);
+				}
+		}
+
+		return $sa;
+	}
+
+	/**
+	 * Sets the model submission, saves the submission array.
+	 */
+	protected function submit($submission){
+
+		$this->model->submission = $submission;
+
+		if (($id = $this->model->submit()) != null) {
+			// Record has saved correctly
+			$this->submit_succ($id);
+		} else {
+			// Record has errors - now embedded in model
+			$this->submit_fail();
+		}
+	}
+
+	/**
+	 * Returns to the index view for this controller.
+	 */
+	protected function submit_succ($id) {
+		syslog(LOG_DEBUG, "Submitted record ".$id." successfully.");
+		url::redirect($this->model->object_name);
+	}
+
+	/**
+	 * Returns to the edit page to correct errors - now embedded in the model
+	 */
+	protected function submit_fail() {
+		$mn = $this->model->object_name;
+		$this->setView($mn."/".$mn."_edit", ucfirst($mn));
+	}
+
+
+	/**
+	 * Saves the post array by wrapping it and then submitting it.
+	 */
+	public function save(){
+		if (! empty($_POST['id'])) {
+			$this->model = ORM::factory($this->model->object_name, $_POST['id']);
+		} 
+
+		/**
+		 * Were we instructed to delete the post?
+		 */
+		if ($_POST['submit'] == 'Delete'){
+			$_POST['deleted'] = 'true';
+		} else {
+			$_POST['deleted'] = 'false';
+		}
+
+		// Wrap the post object and then submit it
+		$this->submit($this->wrap($_POST));
+		
+	}
+
 }
