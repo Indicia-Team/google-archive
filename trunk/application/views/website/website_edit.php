@@ -10,7 +10,7 @@
 <?php echo html::error_message($model->getError('title')); ?>
 </li>
 <li>
-<label for="url">Title</label>
+<label for="url">URL</label>
 <input id="url" name="url" value="<?php echo html::specialchars($model->url); ?>" />
 <?php echo html::error_message($model->getError('url')); ?>
 </li>
@@ -22,5 +22,5 @@
 </ol>
 </fieldset>
 <?php echo $metadata ?>
-<input type="submit" value="Save" />
+<input type="submit" name="submit" value="Save" />
 </form>
