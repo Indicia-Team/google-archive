@@ -6,8 +6,16 @@ This ensures that only the person at the registered email account for a user wil
 }
 ?>
 <form name = "login" action="<?php echo url::site(); ?>forgotten_password" method="post">
+<fieldset>
+<legend>User ID</legend>
+<ol>
+<li>
   <label for="UserID">User Name or Email Address</label>
-  <input type = "text" name = "UserID" id = "UserID" value="" ><br />
+  <input type = "text" name = "UserID" id = "UserID" value="" >
+</li>
+<li>
   <input type = "submit" value = "Request Forgotten Password Email" >
+</li>
+</fieldset>
 </form>
 <br />If you have now remembered your password and would like to log on as normal, <a href="<?php echo url::site(); ?>login">click here to return to the log on page</a>.
