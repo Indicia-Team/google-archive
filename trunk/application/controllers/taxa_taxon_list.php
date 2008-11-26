@@ -34,6 +34,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			);
 		$this->pagetitle = "Taxons";
 		$this->pageNoUriSegment = 4;
+		$this->model = ORM::factory('taxa_taxon_list');
 	}
 
 	private function __getSynonomy($taxon_meaning_id) {
@@ -85,7 +86,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 
 	public function edit($id,$page_no,$limit) {
 		// Generate model
-		$this->model = ORM::factory('taxa_taxon_list',$id);
+		$this->model->find($id);
 		$gridmodel = ORM::factory('gv_taxon_lists_taxon');
 
 		// Add grid component
@@ -371,7 +372,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$this->template->content = $view;
 		}
 	}
-	public function save() {
+	public function save_old() {
 		$this->__save($_POST);
 	}
 
@@ -459,6 +460,10 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	}
 
 	protected function wrap($array) {
+
+		//This may not be the best place to put this?
+		$array['preferred'] = 't';
+
 		$sa = array(
 			'id' => 'taxa_taxon_list',
 			'fields' => array(),
@@ -467,26 +472,37 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		);
 
 		// Declare which fields we consider as native to this model
-		$nativeFields = array_intersect_keys($array, $this->model->table_columns);
+		$nativeFields = array_intersect_key($array, $this->model->table_columns);
 
 		// Use the parent method to wrap these
 		$sa = parent::wrap($nativeFields);
 
 		// Declare child models
 		$sa['subModels'][] = array(
-			'fkId' => 'meaning_id',
+			'fkId' => 'taxon_meaning_id',
 			'model' => parent::wrap(
-				array_intersect_keys($array, ORM::factory('meaning')
-				->table_columns), false, 'meaning'));
+				array_intersect_key($array, ORM::factory('taxon_meaning')
+				->table_columns), false, 'taxon_meaning'));
 
 		$sa['subModels'][] = array(
 			'fkId' => 'taxon_id',
 			'model' => parent::wrap(
-				array_intersect_keys($array, ORM::factory('taxon')
+				array_intersect_key($array, ORM::factory('taxon')
 				->table_columns), false, 'taxon'));
 
-		print_r($sa);
 		return $sa;
+	}
+	/**
+	 * Overrides the fail functionality to add args to the view.
+	 */
+	protected function submit_fail(){
+		$mn = $this->model->object_name;
+		$vArgs = array(
+			'taxon_list_id' => $this->model->taxon_list_id,
+			'synonomy' => null,
+			'commonNames' => null,
+		);
+		$this->setView($mn."/".$mn."_edit", ucfirst($mn), $vArgs);
 	}
 }
 ?>
