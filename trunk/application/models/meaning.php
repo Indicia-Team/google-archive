@@ -15,7 +15,8 @@ class Meaning_Model extends ORM {
 	}
 
 	public function validate(Validation $array, $save = FALSE){
-		return parent::validate($array, $save);
+		$this->insert();
+		return true;
 	}
 
 }

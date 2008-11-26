@@ -8,14 +8,14 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 	 * $viewname and $controllerpath can be ommitted if the names are all the same.
 	 */
 	public function __construct($modelname, $gridmodelname=NULL, $viewname=NULL, $controllerpath=NULL) {
-		$this->modelname=$modelname;
+		$this->gridmodelname=$modelname;
 		$this->gridmodelname=is_null($gridmodelname) ? $modelname : $gridmodelname;
 		$this->viewname=is_null($viewname) ? $modelname : $viewname;
 		$this->controllerpath=is_null($controllerpath) ? $modelname : $controllerpath;
-		$this->model = ORM::factory($this->gridmodelname);
+		$this->gridmodel = ORM::factory($this->gridmodelname);
 		$this->pageNoUriSegment = 3;
 		$this->base_filter = array();
-		$this->columns = $this->model->table_columns;
+		$this->columns = $this->gridmodel->table_columns;
 		$this->actionColumns = array(
 			'edit' => $this->controllerpath."/edit/£id£"
 		);
@@ -28,7 +28,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 	}
 
 	public function page($page_no, $limit) {
-		$grid =	Gridview_Controller::factory($this->model,
+		$grid =	Gridview_Controller::factory($this->gridmodel,
 			$page_no,
 			$limit,
 			$this->pageNoUriSegment);
@@ -40,13 +40,13 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->view->table = $grid->display();
 
 		// Templating
-		$this->template->title = $this->GetEditPageTitle($this->model, $this->pagetitle);
+		$this->template->title = $this->GetEditPageTitle($this->gridmodel, $this->pagetitle);
 		$this->template->content = $this->view;
 	}
 
 	public function page_gv($page_no, $limit) {
 		$this->auto_render = false;
-		$grid =	Gridview_Controller::factory($this->model,
+		$grid =	Gridview_Controller::factory($this->gridmodel,
 			$page_no,
 			$limit,
 			$this->pageNoUriSegment);
@@ -71,7 +71,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			// skip the title row
 			fgetcsv($handle, 1000, ",");
 			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-				$model = ORM::factory($this->modelname);
+				$model = ORM::factory($this->gridmodelname);
 				$index = 0;
 				foreach ($_POST as $col=>$attr) {
 					if ($attr!='<please select>') {
@@ -120,7 +120,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$view = new View('upload_mappings');
 			$view->columns = fgetcsv($handle, 1000, ",");
 			fclose($handle);
-			$view->model = ORM::factory($this->modelname);
+			$view->model = ORM::factory($this->gridmodelname);
 			$view->controllerpath = $this->controllerpath;
 			$this->template->content = $view;
 		} else {

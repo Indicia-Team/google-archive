@@ -144,6 +144,8 @@ abstract class ORM extends ORM_Core {
 		// Iterate through submodels, calling their submit methods with subarrays
 		if (array_key_exists('subModels', $this->submission)) {
 			foreach ($this->submission['subModels'] as $a) {
+
+				syslog(LOG_DEBUG, "Submitting submodel ".$a['model']['id'].".");
 	
 				// Establish the right model
 				$m = ORM::factory($a['model']['id']);
@@ -151,8 +153,10 @@ abstract class ORM extends ORM_Core {
 				// Call the submit method for that model and 
 				// check whether it returns correctly
 				$m->submission = $a['model'];
+				$result = $m->submit();
+				syslog(LOG_DEBUG, "Setting field ".$a['fkId']." to ".$result);
 
-				$this->__set($a['fkId'], $m->submit());
+				$this->submission['fields'][$a['fkId']]['value'] = $result;
 			}
 		}
 		// Flatten the array to one that can be validated
