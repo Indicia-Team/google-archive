@@ -146,7 +146,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'synonomy' => null,
 			'commonNames' => null);
 
-		$this->setView('taxa_taxon_list/taxa_taxon_list/edit', 'Taxon', $vArgs);
+		$this->setView('taxa_taxon_list/taxa_taxon_list_edit', 'Taxon', $vArgs);
 			
 	}
 
@@ -456,6 +456,37 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	    	unlink($csvTempFile);
 	    	url::redirect($this->controllerpath);
 		}
+	}
+
+	protected function wrap($array) {
+		$sa = array(
+			'id' => 'taxa_taxon_list',
+			'fields' => array(),
+			'fkFields' => array(),
+			'subModels' => array()
+		);
+
+		// Declare which fields we consider as native to this model
+		$nativeFields = array_intersect_keys($array, $this->model->table_columns);
+
+		// Use the parent method to wrap these
+		$sa = parent::wrap($nativeFields);
+
+		// Declare child models
+		$sa['subModels'][] = array(
+			'fkId' => 'meaning_id',
+			'model' => parent::wrap(
+				array_intersect_keys($array, ORM::factory('meaning')
+				->table_columns), false, 'meaning'));
+
+		$sa['subModels'][] = array(
+			'fkId' => 'taxon_id',
+			'model' => parent::wrap(
+				array_intersect_keys($array, ORM::factory('taxon')
+				->table_columns), false, 'taxon'));
+
+		print_r($sa);
+		return $sa;
 	}
 }
 ?>

@@ -85,10 +85,11 @@ class Indicia_Controller extends Template_Controller {
 	 *
 	 * @return array Wrapped array
 	 */
-	protected function wrap( $array, $fkLink = false) {
+	protected function wrap( $array, $fkLink = false, $id = null) {
+		if ($id == null) $id = $this->model->object_name;
 		// Initialise the wrapped array
 		$sa = array(
-			'id' => $this->model->object_name,
+			'id' => $id,
 			'fields' => array(),
 			'fkFields' => array(),
 			'subModels' => array()
