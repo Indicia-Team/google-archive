@@ -31,7 +31,12 @@ $lang = array (
 		'email' => 'This must be a valid email address.',
 		'default' => 'Invalid Input.',
 	),
-	
+	'url' => Array (
+		'required' => 'The website URL cannot be blank.',
+		'url' => 'This must be a valid URL including the http:// prefix.',
+		'default' => 'Invalid Input.',
+	),
+
 );
 
 ?>

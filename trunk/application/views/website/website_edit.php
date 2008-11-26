@@ -10,6 +10,11 @@
 <?php echo html::error_message($model->getError('title')); ?>
 </li>
 <li>
+<label for="url">Title</label>
+<input id="url" name="url" value="<?php echo html::specialchars($model->url); ?>" />
+<?php echo html::error_message($model->getError('url')); ?>
+</li>
+<li>
 <label for="description">Description</label>
 <textarea rows="7" id="description" name="description"><?php echo html::specialchars($model->description); ?></textarea>
 <?php echo html::error_message($model->getError('description')); ?>
