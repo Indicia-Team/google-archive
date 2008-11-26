@@ -124,12 +124,12 @@ class Data_Controller extends Service_Base_Controller {
 			case 'xml':
 				if (array_key_exists('xsl', $_GET)) {
 					$xsl = $_GET['xsl'];
+					if (!strpos($xsl, '/'))
+						// xsl is not a fully qualified path, so point it to the media folder.
+						$xsl = url::base().'media/services/stylesheets/'.$xsl;
 				} else {
 					$xsl = '';
 				}
-				if (!strpos($xsl, '/'))
-				  // xsl is not a fully qualified path, so point it to the media folder.
-				  $xsl = url::base().'media/services/stylesheets/'.$xsl;
 				echo $this->xml_encode($records, $xsl, TRUE);
 				header('Content-Type: text/xml');
 				break;
@@ -153,6 +153,10 @@ class Data_Controller extends Service_Base_Controller {
 	 * xlink paths to any foreign keys, and gets the caption of the foreign entity.
 	 */
 	protected function xml_encode($array, $xsl, $indent=false, $recursion=0) {
+		// Keep an array to track any elements that must be skipped. For example if an array contains
+		// {person_id=>1, person=>James Brown} then the xml output for the id is <person id="1">James Brown</person>.
+		// There is no need to output the person separately so it get's flagged in this array for skipping.
+		$to_skip=array();
 		// if we are outputting a specific record, root is singular
 		if ($this->model->id)
 			$root = $this->entity;
@@ -170,39 +174,45 @@ class Data_Controller extends Service_Base_Controller {
 		}
 
 		foreach ($array as $element => $value) {
-			if ($value) {
-				if (is_numeric($element)) {
-					$element = $this->entity;
-				}
-				if (substr($element, -3)=='_id') {
-					// This is a foreign key to another entity, so include the xlink URL and remove _id from the name
-					$element = substr($element, 0, -3);
-					if (array_key_exists($element, $this->model->belongs_to)) {
-						// Belongs_to specifies a fk table that does not match the attribute name
-						$fk_entity=$this->model->belongs_to[$element];
-					} elseif ($element=='parent') {
-						$fk_entity=$this->entity;
-					} else {
-						// Belongs_to specifies a fk table that matches the attribute name
-						$fk_entity=$element;
+			if (!in_array($element, $to_skip)) {
+				if ($value) {
+					if (is_numeric($element)) {
+						$element = $this->entity;
 					}
-					$data .= ($indent?str_repeat("\t", $recursion):'');
-					$data .= "<$element id=\"$value\" xlink:href=\"".url::base(TRUE)."services/data/$fk_entity/$value\">";
-					// If the input query includes the join to the related table, then use the input query to add the caption of
-					// the related item. Otherwise fetch via ORM which will be slower.
-					if (array_key_exists($element, $array))
-						$data .= $array[$element];
-					else
-						$data .= ORM::factory($fk_entity, $value)->caption();
-				} else {
-					$data .= ($indent?str_repeat("\t", $recursion):'').'<'.$element.'>';
-					if (is_array($value)) {
-						$data .= ($indent?"\r\n":'').$this->xml_encode($value, NULL, $indent, ($recursion + 1)).($indent?str_repeat("\t", $recursion):'');
+					if (substr($element, -3)=='_id') {
+						// This is a foreign key to another entity, so include the xlink URL and remove _id from the name
+						$element = substr($element, 0, -3);
+						if (array_key_exists($element, $this->model->belongs_to)) {
+							// Belongs_to specifies a fk table that does not match the attribute name
+							$fk_entity=$this->model->belongs_to[$element];
+						} elseif ($element=='parent') {
+							$fk_entity=$this->entity;
+						} else {
+							// Belongs_to specifies a fk table that matches the attribute name
+							$fk_entity=$element;
+						}
+						$data .= ($indent?str_repeat("\t", $recursion):'');
+						$data .= "<$element id=\"$value\" xlink:href=\"".url::base(TRUE)."services/data/$fk_entity/$value\">";
+						// If the input query includes the join to the related table, then use the input query to add the caption of
+						// the related item. Otherwise fetch via ORM which will be slower.
+						if (array_key_exists($element, $array)) {
+							$data .= $array[$element];
+							// Remember that ths related item's caption has been included in the xml, so can be skipped
+							// when the foreach loop gets round to it.
+							$to_skip[count($to_skip)-1]=$element;
+						} else {
+							$data .= ORM::factory($fk_entity, $value)->caption();
+						}
 					} else {
-						$data .= $value;
+						$data .= ($indent?str_repeat("\t", $recursion):'').'<'.$element.'>';
+						if (is_array($value)) {
+							$data .= ($indent?"\r\n":'').$this->xml_encode($value, NULL, $indent, ($recursion + 1)).($indent?str_repeat("\t", $recursion):'');
+						} else {
+							$data .= $value;
+						}
 					}
+					$data .= '</'.$element.'>'.($indent?"\r\n":'');
 				}
-				$data .= '</'.$element.'>'.($indent?"\r\n":'');
 			}
 		}
 		if (!$recursion) {
@@ -275,7 +285,7 @@ class Data_Controller extends Service_Base_Controller {
 				}
 			} elseif (array_key_exists($filterfield, $this->foreign_keys)) {
 				// filter is against a foreign key field and must be a string
-				$db->like($this->foreign_keys[$filterfield], $_GET['filter']);
+				$db->like($filterfield, $_GET['filter']);
 			} else {
 				// Can't find filter field either in the entitiy's attributes or a foreign key field
 				$this->error("Invalid filter field $filterfield specified for $this->entity data.");
