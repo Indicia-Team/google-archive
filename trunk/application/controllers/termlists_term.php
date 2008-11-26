@@ -16,6 +16,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			);
 		$this->pagetitle = "Terms";
 		$this->pageNoUriSegment = 4;
+		$this->model = ORM::factory('termlist');
 	}
 	/**
 	 * Override the default page functionality to filter by termlist.
@@ -54,7 +55,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 	public function edit($id,$page_no,$limit) {
 		// Generate model
-		$model = ORM::factory('termlists_term',$id);
+		$this->model->find($id);
 		$gridmodel = ORM::factory('gv_termlists_term');
 
 		// Add grid component
@@ -69,24 +70,16 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			'edit' => 'termlists_term/edit/£id£'
 		);
 		
-		// Add metadata panel
-		$metadata = new View('templates/metadata');
-		$metadata->model = $model->find($id);
+		$vArgs = array(
+			'termlist_id' => $this->model->termlist_id,
+			'table' => $grid->display(),
+			'synonomy' => $this->__formatSynonomy($this->
+				__getSynonomy($model->
+					meaning_id)));
 
-		// Add items to view
-		$view = new View('termlists_term/termlists_term_edit');
-		$view->model = $model->find($id);
-		$view->termlist_id = $model->termlist_id;
-		$view->metadata = $metadata;
-		$view->table = $grid->display();
-		$view->synonomy = $this->__formatSynonomy($this->
-			__getSynonomy($model->
-				meaning_id));
-		// Add everything to the template
-		$this->template->title = "Edit ".$model->term->term;
-		$this->template->content = $view;
-
+		$this->setView('termlist/termlist_edit', 'Termlist', $vArgs);
 	}
+
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
 	public function edit_gv($id,$page_no,$limit) {
 		$this->auto_render=false;
@@ -110,21 +103,16 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	 */
 	public function create($termlist_id){
 		$parent = $this->input->post('parent_id', null);
-		$metadata = new View('templates/metadata');
-		$metadata->model = ORM::factory('termlists_term');
+		$this->model->parent_id = $parent;
 
-		// Create and assign variables to the view
-		$view = new View('termlists_term/termlists_term_edit');
-		$view->model = ORM::factory('termlists_term');
-		$view->model->parent_id = $parent;
-		$view->metadata = $metadata;
-		$view->table = null;
-		$view->termlist_id = $termlist_id;
-		$view->synonomy = null;
+		$vArgs = array(
+			'table' => null,
+			'termlist_id' => $termlist_id,
+			'synonomy' => null,
+		)
 
-		// Templating
-		$this->template->title = "Create new term";
-		$this->template->content = $view;
+		$this->setView('termlist/termlist_edit', 'Termlist', $vArgs);
+
 	}
 
 	/**
