@@ -31,6 +31,7 @@ class Website_Model extends ORM
         // uses PHP trim() to remove whitespace from beginning and end of all fields before validation
         $array->pre_filter('trim');
         $array->add_rules('title', 'required', 'length[1,100]');
+        $array->add_rules('url', 'required', 'length[1,500]', 'url');
         // Any fields that don't have a validation rule need to be copied into the model manually
         $this->description = $array['description'];
         return parent::validate($array, $save);
@@ -94,6 +95,9 @@ class Website_Model extends ORM
 
         // title content is required, length must be between 1 and 100 chars
         $this->data_validation->add_rules('title', 'required', 'length[1,100]');
+
+        // Url is required, must be valid and between 1 and 500 chars.
+        $this->data_validation->add_rules('url', 'required', 'length[1,500]', 'url');
 
         // Any fields that don't have a validation rule need to be copied into the model manually
         //
