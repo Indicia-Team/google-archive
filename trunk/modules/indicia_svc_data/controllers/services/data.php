@@ -1,6 +1,6 @@
 <?php
 
-class Data_Controller extends Controller {
+class Data_Controller extends Service_Base_Controller {
 	protected $model;
 	protected $entity;
 	protected $foreign_keys;
@@ -119,10 +119,19 @@ class Data_Controller extends Controller {
 
 		switch ($mode) {
 			case 'json':
-				echo json_encode(array('result' => $records));
+				echo json_encode($records);
 				break;
 			case 'xml':
-				echo $this->xml_encode($records, TRUE);
+				if (array_key_exists('xsl', $_GET)) {
+					$xsl = $_GET['xsl'];
+				} else {
+					$xsl = '';
+				}
+				if (!strpos($xsl, '/'))
+				  // xsl is not a fully qualified path, so point it to the media folder.
+				  $xsl = url::base().'media/services/stylesheets/'.$xsl;
+				echo $this->xml_encode($records, $xsl, TRUE);
+				header('Content-Type: text/xml');
 				break;
 			case 'csv':
 				echo $this->csv_encode($records);
@@ -139,36 +148,102 @@ class Data_Controller extends Controller {
 	}
 
 	/**
+	 * Encodes an array as xml. Uses $this->entity to decide the name of the root element.
+	 * Recurses into the array where array values are themselves arrays. Also inserts
+	 * xlink paths to any foreign keys, and gets the caption of the foreign entity.
+	 */
+	protected function xml_encode($array, $xsl, $indent=false, $recursion=0) {
+		// if we are outputting a specific record, root is singular
+		if ($this->model->id)
+			$root = $this->entity;
+		else
+			$root = inflector::plural($this->entity);
+		if (!$recursion) {
+			$data = '<?xml version="1.0"?>';
+			if ($xsl)
+				$data .= '<?xml-stylesheet type="text/xsl" href="'.$xsl.'"?>';
+			$data .= ($indent?"\r\n":'').
+				"<$root xmlns:xlink=\"http://www.w3.org/1999/xlink\">".
+				($indent?"\r\n":'');
+		} else {
+			$data = '';
+		}
+
+		foreach ($array as $element => $value) {
+			if ($value) {
+				if (is_numeric($element)) {
+					$element = $this->entity;
+				}
+				if (substr($element, -3)=='_id') {
+					// This is a foreign key to another entity, so include the xlink URL and remove _id from the name
+					$element = substr($element, 0, -3);
+					if (array_key_exists($element, $this->model->belongs_to)) {
+						// Belongs_to specifies a fk table that does not match the attribute name
+						$fk_entity=$this->model->belongs_to[$element];
+					} elseif ($element=='parent') {
+						$fk_entity=$this->entity;
+					} else {
+						// Belongs_to specifies a fk table that matches the attribute name
+						$fk_entity=$element;
+					}
+					$data .= ($indent?str_repeat("\t", $recursion):'');
+					$data .= "<$element id=\"$value\" xlink:href=\"".url::base(TRUE)."services/data/$fk_entity/$value\">";
+					// If the input query includes the join to the related table, then use the input query to add the caption of
+					// the related item. Otherwise fetch via ORM which will be slower.
+					if (array_key_exists($element, $array))
+						$data .= $array[$element];
+					else
+						$data .= ORM::factory($fk_entity, $value)->caption();
+				} else {
+					$data .= ($indent?str_repeat("\t", $recursion):'').'<'.$element.'>';
+					if (is_array($value)) {
+						$data .= ($indent?"\r\n":'').$this->xml_encode($value, NULL, $indent, ($recursion + 1)).($indent?str_repeat("\t", $recursion):'');
+					} else {
+						$data .= $value;
+					}
+				}
+				$data .= '</'.$element.'>'.($indent?"\r\n":'');
+			}
+		}
+		if (!$recursion) {
+			$data .= "</$root>";
+		}
+		return $data;
+	}
+
+	/**
 	 * Builds a query to extract data from the requested entity, and also
 	 * include relationships to foreign key tables and the caption fields from those tables.
+	 *
+	 * @todo Is a LEFT JOIN going to cause a performance issue? Can we use INNER when key is mandatory?
+	 * Not sure if the PHP pg driver supports reading this information though.
+	 * @todo Review this code for SQL Injection attack!
 	 */
 	protected function build_query_results()
 	{
-		// TODO: Review this code for SQL Injection attack!
 		$this->foreign_keys = array();
 		$db = new Database();
 		$tablename = inflector::plural($this->entity);
 		$db->from($tablename);
+		// Select all the table columns from the main table
 		$select = $tablename.'.'.implode(", $tablename.", array_keys($this->model->table_columns));
 		// Iterate each foreign key in the model, and add a join and the associated caption fields to the query.
-		foreach ($this->model->belongs_to as $fk=>$fk_entity) {
+		foreach ($this->model->belongs_to as $fk_name => $fk_entity) {
 			$fk_table = inflector::plural($fk_entity);
-			// if the foreign key itself is not specified in the belongs_to array, it must be a foreign key with the
-			// same name as the related table
-			if (is_numeric($fk)) {
-				$fk=$fk_entity;
-				$fk_alias=$fk_table;
-			} else {
-				$fk_alias=$fk;
+			if (is_numeric($fk_name)) {
+				// if the foreign key is not specified in the belongs_to array, it must be a foreign key with the
+				// same name as the related table, e.g. location_id refers to location.id
+				$fk_name=$fk_entity;
 			}
-			// TODO: Is a LEFT JOIN going to cause a performance issue? Can we use INNER when key is mandatory?
-			// Add a join: LEFT JOIN fk_table (AS fk name - if specified which means it is ) ON fk_table.id = this_table.fk_name
-			$fk_table = $fk_table.($fk_table==$fk_alias? "": " AS $fk_alias");
-			$db->join($fk_table, "$fk_alias.id=$tablename.".$fk."_id", NULL, "LEFT");
+			$fk_field=$fk_name.'_id';
+			// Add a join: LEFT JOIN fk_table (AS fk name - if different) ON fk_table.id = table.fk_field
+			$fk_table = $fk_table.($fk_table==$fk_name? "": " AS $fk_name");
+			$join = "$fk_name.id = $tablename.".$fk_field;
+			$db->join($fk_table, $join, NULL, "LEFT");
 			// Add a field to the SELECT data
-			$fk_field = $fk_alias.'.'.ORM::factory($fk_entity)->get_search_field();
-			$select .= ", $fk_field AS $fk";
-			$this->foreign_keys[$fk]=$fk_field;
+			$fk_caption_field = $fk_name.'.'.ORM::factory($fk_entity)->get_search_field();
+			$select .= ", $fk_caption_field AS $fk_name";
+			$this->foreign_keys[$fk_name]=$fk_field;
 		}
 		$db->select($select);
 		// if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
@@ -225,105 +300,11 @@ class Data_Controller extends Controller {
 		if (array_key_exists('offset', $_GET)) {
 			$db->offset($_GET['offset']);
 		}
+
 	}
 
 	/**
-	 * Return an error XML document to the client
-	 */
-	protected function error($message)
-	{
-		$view = new View('services/data/error');
-		$view->message = $message;
-		$view->render(true);
-	}
-
-	/**
-	 * Return an warning XML document to the client
-	 */
-	protected function warning($message)
-	{
-		$view = new View('services/data/warning');
-		$view->message = $message;
-		$view->render(true);
-	}
-
-	/**
-	 * Retrieve the output mode for a RESTful request from the GET or POST data.
-	 * Defaults to xml. Other options are json and csv, or a view loaded from the views folder.
-	 */
-	protected function get_output_mode() {
-		if (array_key_exists('mode', $_GET))
-			$result = $_GET['mode'];
-		elseif (array_key_exists('mode', $_POST))
-			$result = $_POST['mode'];
-		else
-			$result='xml';
-		return $result;
-	}
-
-	/**
-	 * Encodes an array as xml. Uses $this->entity to decide the name of the root element.
-	 * Recurses into the array where array values are themselves arrays. Also inserts
-	 * xlink paths to any foreign keys, and gets the caption of the foreign entity.
-	 */
-	protected function xml_encode($array, $indent=false, $recursion=0) {
-		// if we are outputting a specific record, root is singular
-		if ($this->model->id)
-			$root = $this->entity;
-		else
-			$root = inflector::plural($this->entity);
-		if (!$recursion) {
-			$data = '<?xml version="1.0"?>'.($indent?"\r\n":'').
-				"<$root xmlns:xlink=\"http://www.w3.org/1999/xlink\">".
-				($indent?"\r\n":'');
-		} else {
-			$data = '';
-		}
-
-		foreach ($array as $element => $value) {
-			if ($value) {
-				if (is_numeric($element)) {
-					$element = $this->entity;
-				}
-				if (substr($element, -3)=='_id') {
-					// This is a foreign key to another entity, so include the xlink URL and remove _id from the name
-					$element = substr($element, 0, -3);
-					if (array_key_exists($element, $this->model->belongs_to)) {
-						// Belongs_to specifies a fk table that does not match the attribute name
-						$fk_entity=$this->model->belongs_to[$element];
-					} elseif ($element=='parent') {
-						$fk_entity=$this->entity;
-					} else {
-						// Belongs_to specifies a fk table that matches the attribute name
-						$fk_entity=$element;
-					}
-					$data .= ($indent?str_repeat("\t", $recursion):'');
-					$data .= "<$element id=\"$value\" xlink:href=\"".url::base(TRUE)."services/data/$fk_entity/$value\">";
-					// If the input query includes the join to the related table, then use the input query to add the caption of
-					// the related item. Otherwise fetch via ORM which will be slower.
-					if (array_key_exists($element, $array))
-						$data .= $array[$element];
-					else
-						$data .= ORM::factory($fk_entity, $value)->caption();
-				} else {
-					$data .= ($indent?str_repeat("\t", $recursion):'').'<'.$element.'>';
-					if (is_array($value)) {
-						$data .= ($indent?"\r\n":'').$this->xml_encode($value, $indent, ($recursion + 1)).($indent?str_repeat("\t", $recursion):'');
-					} else {
-						$data .= $value;
-					}
-				}
-				$data .= '</'.$element.'>'.($indent?"\r\n":'');
-			}
-		}
-		if (!$recursion) {
-			$data .= "</$root>";
-		}
-		return $data;
-	}
-
-	/**
-	 * Encode the results of a query as a csv string
+	 * Encode the results of a query array as a csv string
 	 */
 	protected function csv_encode($array)
 	{
@@ -333,17 +314,6 @@ class Data_Controller extends Controller {
 			$result .= $this->get_csv(array_values($row));
 		}
 		return $result;
-	}
-
-	/**
-	 * Get the results of the query using the supplied view to render each row.
-	 */
-	protected function view_encode($array, $view) {
-		$output = '';
-		foreach ($array as $row) {
-			$view->row= $row;
-			$output .= $view->render();
-		}
 	}
 
 	/**
@@ -369,6 +339,17 @@ class Data_Controller extends Controller {
 		}
 		$output.=$newline;
 		return $output;
+	}
+
+	/**
+	 * Get the results of the query using the supplied view to render each row.
+	 */
+	protected function view_encode($array, $view) {
+		$output = '';
+		foreach ($array as $row) {
+			$view->row= $row;
+			$output .= $view->render();
+		}
 	}
 
 }
