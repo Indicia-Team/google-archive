@@ -1,3 +1,17 @@
+<script type="text/javascript" src="<?php echo url::base(); ?>/media/js/autocomplete.jquery.js" />
+<script type="text/javascript" >
+$().ready(function() {
+	$("#parent").autocomplete("<?php echo url::base() ?>/index.php/services/data/taxa_taxon_list", {
+		minChars : 1,
+		query : 'taxon'
+		extraParams : {
+			taxon_list_id : "<?php echo $model->taxon_list_id; ?>",
+			orderby : "taxon",
+			mode : "json"
+		}
+	});
+});
+</script>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'taxa_taxon_list/save' ?>" method="POST">
 <fieldset>
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
@@ -64,7 +78,7 @@
 <li>
 <input type="hidden" name="parent_id" id="parent_id" value="<?php echo html::specialchars($model->parent_id); ?>" />
 <label for="parent">Parent Taxon</label>
-<input id="parent" name="parent" readonly="readonly" value="<?php echo (($model->parent_id != null) ? html::specialchars(ORM::factory('taxa_taxon_list', $model->parent_id)->taxon->taxon) : ''); ?>" />
+<input id="parent" name="parent" value="<?php echo (($model->parent_id != null) ? html::specialchars(ORM::factory('taxa_taxon_list', $model->parent_id)->taxon->taxon) : ''); ?>" />
 </li>
 <li>
 <label for="taxonomic_sort_order">Taxonomic Sort Order</label>
