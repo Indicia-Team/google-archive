@@ -20,5 +20,22 @@ class Taxon_Model extends ORM {
 
 		return parent::validate($array, $save);
 	}
+
+	protected function preSubmit(){
+
+		// Set scientific as necessary
+		$l = ORM::factory('language');
+		$sci = 'f';
+		if ($l->find(
+			$this->submission['fields']['language_id']['value'])->iso == "lat") {
+				$sci = 't';
+			}
+		$this->submission['fields']['scientific'] = array(
+			'value' =>  $sci
+		);
+
+		// Call the parent preSubmit function
+		parent::preSubmit();
+	}
 }
 

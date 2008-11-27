@@ -36,6 +36,9 @@ $lang = array (
 		'url' => 'This must be a valid URL including the http:// prefix.',
 		'default' => 'Invalid Input.',
 	),
+	'taxon_id' => array (
+		'default' => 'Unable to create a valid taxon entry',
+	),
 
 );
 

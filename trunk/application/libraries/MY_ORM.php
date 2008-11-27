@@ -176,9 +176,18 @@ abstract class ORM extends ORM_Core {
 				return $this->id;
 			} else {
 				// Errors. Return null.
+				syslog(LOG_DEBUG, "Record did not validate.");
 				return null;
 			}
-
+			// Record has successfully validated. Return the id.
+				syslog(LOG_DEBUG, "Record ".
+					$this->id.
+					" has validated successfully");
+				return $this->id;
+			} else {
+				// Errors. Return null.
+				return null;
+			}
 		} else {
 			// Set the model to point to the existing record.
 			$this->find($a);
