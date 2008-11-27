@@ -38,7 +38,8 @@ class Taxa_taxon_list_Model extends ORM_Tree {
 	 */
 	public function caption()
 	{
-		return ($this->taxon);
+
+		return ($this->taxon_id != null ? $this->taxon->taxon : '');
 	}
 
 }

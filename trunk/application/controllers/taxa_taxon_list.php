@@ -372,9 +372,6 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$this->template->content = $view;
 		}
 	}
-	public function save_old() {
-		$this->__save($_POST);
-	}
 
 	/**
 	 * We need to override this function because using the model won't work.
@@ -468,7 +465,8 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'id' => 'taxa_taxon_list',
 			'fields' => array(),
 			'fkFields' => array(),
-			'subModels' => array()
+			'subModels' => array(),
+			'metaFields' => array()
 		);
 
 		// Declare which fields we consider as native to this model
@@ -489,6 +487,14 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'model' => parent::wrap(
 				array_intersect_key($array, ORM::factory('taxon')
 				->table_columns), false, 'taxon'));
+
+		$sa['metaFields']['synonomy'] = array(
+			'value' => $array['synonomy']
+		);
+
+		$sa['metaFields']['commonNames'] = array(
+			'value' => $array['commonNames']
+		);
 
 		return $sa;
 	}
