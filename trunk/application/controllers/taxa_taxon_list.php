@@ -41,6 +41,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		return ORM::factory('taxa_taxon_list')
 			->where(array(
 				'preferred' => 'f',
+				'deleted' => 'f',
 				'taxon_meaning_id' => $taxon_meaning_id
 			))->find_all();
 	}
@@ -221,8 +222,8 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	 */
 	protected function submit_succ($id){
 		// Okay, the thing saved correctly - we now need to add the common names
-		$arrLine = split("\n",$this
-			->model->submission['metaFields']['commonNames']['value']);
+		$arrLine = split("\n",trim($this
+			->model->submission['metaFields']['commonNames']['value']));
 		$arrCommonNames = array();
 
 		foreach ($arrLine as $line) {
@@ -238,8 +239,8 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		syslog(LOG_DEBUG, "Number of common names is: ".count($arrCommonNames));
 
 		// Now do the same thing for synonomy
-		$arrLine = split("\n", $this
-			->model->submission['metaFields']['synonomy']['value']);
+		$arrLine = split("\n", trim($this
+			->model->submission['metaFields']['synonomy']['value']));
 		$arrSyn = array();
 
 		foreach ($arrLine as $line) {
@@ -264,18 +265,18 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 
 		foreach ($existingSyn as $syn){
 			// Is the taxon from the db in the list of synonyms?
-			if (array_key_exists($syn->taxon->taxon, $arrCommonNames) && 
+			if (array_key_exists($syn->taxon->taxon, $arrSyn) && 
 				$arrSyn[$syn->taxon->taxon]['lang'] == 
 				$syn->taxon->language->iso &&
 				$arrSyn[$syn->taxon->taxon]['auth'] ==
 				$syn->taxon->authority)
 			{
 				array_splice($arrSyn, array_search(
-					$syn->taxon, $arrSyn), 1);
+					$syn->taxon->taxon, $arrSyn), 1);
 				syslog(LOG_DEBUG, "Known synonym: ".$syn->taxon->taxon);
 			} else {
 				// Synonym has been deleted - remove it from the db
-				$syn->taxon->deleted = 't';
+				$syn->deleted = 't';
 				syslog(LOG_DEBUG, "New synonym: ".$syn->taxon->taxon);
 				$syn->save();
 			}
