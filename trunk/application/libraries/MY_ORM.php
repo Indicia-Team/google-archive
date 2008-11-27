@@ -167,7 +167,6 @@ abstract class ORM extends ORM_Core {
 		// Check whether this object already exists in the database
 		$a = $this->where($vArray)->find()->id;
 		if ($a == null){
-			print_r($vArray);
 			// If we're editing an existing record.
 			if ($vArray['id'] != null) {
 				$this->find($vArray['id']);
