@@ -1,12 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Login_Controller extends Indicia_Controller {
-
-// As it stands, login does not check passwords, roles, and remeber me doesn't work.
-// Things to do (in order):
-// 1 Create Lost Password functionality
-// 2 Enable password checking
-// 3 Enable remember me functionality
 	
 	public function index()
 	{
@@ -39,6 +33,9 @@ class Login_Controller extends Indicia_Controller {
 // THIS IS A DOUBLE CHECK. IF THE USERNAME DOESN'T MATCH, FORCE A LOG OFF.
 				if ($_POST['UserName'] == $_SESSION['auth_user']->username)
 				{
+					$user = new User_Model($_SESSION['auth_user']->id);
+					$user->__set('forgotten_password_key', NULL);
+					$user->save();
 					url::redirect(arr::remove('requested_page', $_SESSION));
 					return;
 				}
@@ -75,8 +72,11 @@ class Login_Controller extends Indicia_Controller {
 			# or to extend auth model
 			$person = ORM::factory('person', array('email_address' => $_POST['Email']));
 			
-			if ($this->auth->login(array('person_id' => $person->id), $this->auth->hash_password($_POST['Password'])))
+			if ($this->auth->login(array('person_id' => $person->id), $_POST['Password']))
 			{
+					$user = new User_Model($_SESSION['auth_user']->id);
+					$user->__set('forgotten_password_key', NULL);
+					$user->save();
 					url::redirect(arr::remove('requested_page', $_SESSION));
 					return;
 			}

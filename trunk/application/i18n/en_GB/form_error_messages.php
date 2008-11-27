@@ -39,7 +39,17 @@ $lang = array (
 	'taxon_id' => array (
 		'default' => 'Unable to create a valid taxon entry',
 	),
-
+	'username' => Array (
+		'required' => 'The username cannot be blank.',
+		'length' => 'The username must be between 7 and 30 letters in length.',
+		'default' => 'Invalid Input.',
+	),
+	'password' => Array (
+		'required' => 'The password cannot be blank.',
+		'length' => 'The password must be between 7 and 30 letters in length.',
+		'matches' => 'The password and repeat password fields must match.',
+		'default' => 'Invalid Input.',
+	),
 );
 
 ?>
