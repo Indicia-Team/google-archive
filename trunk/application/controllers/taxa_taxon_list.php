@@ -153,7 +153,6 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	}
 
 	public function save(){
-		//This may not be the best place to put this?
 		$_POST['preferred'] = 't';
 		parent::save();
 	}

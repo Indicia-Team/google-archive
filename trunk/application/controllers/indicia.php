@@ -170,9 +170,9 @@ class Indicia_Controller extends Template_Controller {
 		 * Were we instructed to delete the post?
 		 */
 		if ($_POST['submit'] == 'Delete'){
-			$_POST['deleted'] = 'true';
+			$_POST['deleted'] = 't';
 		} else {
-			$_POST['deleted'] = 'false';
+			$_POST['deleted'] = 'f';
 		}
 
 		// Wrap the post object and then submit it
