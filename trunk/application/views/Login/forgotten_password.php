@@ -5,17 +5,15 @@ This ensures that only the person at the registered email account for a user wil
 	echo $error_message;
 }
 ?>
-<form name = "login" action="<?php echo url::site(); ?>forgotten_password" method="post">
+<form class="cmxform"  name = "login" action="<?php echo url::site(); ?>forgotten_password" method="post">
 <fieldset>
 <legend>User ID</legend>
 <ol>
 <li>
   <label for="UserID">User Name or Email Address</label>
-  <input type = "text" name = "UserID" id = "UserID" value="" >
-</li>
-<li>
-  <input type = "submit" value = "Request Forgotten Password Email" >
+  <input type = "text" name = "UserID" id = "UserID" value="" class="narrow" >
 </li>
 </fieldset>
+  <input type = "submit" value = "Request Forgotten Password Email" >
 </form>
 <br />If you have now remembered your password and would like to log on as normal, <a href="<?php echo url::site(); ?>login">click here to return to the log on page</a>.
