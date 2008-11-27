@@ -1,0 +1,62 @@
+#summary Documentation of the data-submission format to Indicia
+
+= Introduction =
+
+The following example uses JSON notation. At some point perhaps I should turn this into an XML schema?
+
+= Details =
+
+An example submission to the Indicia web services will look as follows. Items prefixed with an underscore should be replaced with the implied value.
+
+{{{
+
+{ "submission" :
+	{ "entries" : [
+		{ "model" :
+			{
+				"id" : "_Model Name",
+				"fields" : 
+				{
+					"_field id" :
+					{ "value" : "_field value" },
+					"_field id 2" :
+					{ "value" : "_field value 2"}
+				},
+				"fkFields" :
+				{
+					"_field id (fk_modelname)" :
+					{
+						"fkTable" : "_name of model this is a fk to",
+						"fkSearchField" : "_field to search in",
+						"fkSearchValue" : "_value to search for",
+						"fkIdField" : "_field to return value from"
+					}
+					
+				},
+				"subModels" : [
+				{ 
+					"fkId" : "_foreign key field to insert submodel id",
+					"model" :
+					{
+						"id" : "_Model Name",
+						"fields" : 
+							....
+					}
+					....
+				}],
+				"metaFields" : 
+				{
+					"_field id" :
+					{ "value" : "_value" },
+					"_field id 2" :
+					{ "value" : "_value 2" }
+				}
+			}
+		},
+		{ "model" : 
+			....
+		}]
+	}
+}
+
+}}}
