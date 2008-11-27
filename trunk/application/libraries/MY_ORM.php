@@ -102,30 +102,27 @@ abstract class ORM extends ORM_Core {
 					}
 			}
 		}
-				
+
 
 	}
 	/**
 	 * Submits the data by:
 	 * - Calling the pre_submit function to clean data.
 	 * - Linking in any foreign fields specified in the "fk-fields" array.
-	 * - For each entry in the "submodels" array, calling the submit function 
+	 * - For each entry in the "submodels" array, calling the submit function
 	 *   for that model and linking in the resultant object.
-	 * - Checking (by a where clause for all set fields) that an existing 
+	 * - Checking (by a where clause for all set fields) that an existing
 	 *   record does not exist. If it does, return that.
 	 * - Calling the validate method for the "fields" array.
 	 * If successful, returns the id of the created/found record.
 	 * If not, returns null - errors are embedded in the model.
 	 */
 	public function submit(){
-
-		// Useful
+			// Useful
 		$mn = $this->object_name;
 		$collapseVals = create_function('$arr', 'return $arr["value"];');
-
 		// Call pre-submit
 		$this->preSubmit();
-
 		// Link in foreign fields
 		foreach ($this->submission['fkFields'] as $a => $b) {
 			// Establish the correct model
@@ -146,11 +143,11 @@ abstract class ORM extends ORM_Core {
 			foreach ($this->submission['subModels'] as $a) {
 
 				syslog(LOG_DEBUG, "Submitting submodel ".$a['model']['id'].".");
-	
+
 				// Establish the right model
 				$m = ORM::factory($a['model']['id']);
 
-				// Call the submit method for that model and 
+				// Call the submit method for that model and
 				// check whether it returns correctly
 				$m->submission = $a['model'];
 				$result = $m->submit();
@@ -159,9 +156,9 @@ abstract class ORM extends ORM_Core {
 				$this->submission['fields'][$a['fkId']]['value'] = $result;
 			}
 		}
+
 		// Flatten the array to one that can be validated
 		$vArray = array_map($collapseVals, $this->submission['fields']);
-
 		// Check whether this object already exists in the database
 		$a = $this->where($vArray)->find()->id;
 		if ($a == null){
@@ -172,15 +169,16 @@ abstract class ORM extends ORM_Core {
 			}
 			// Create a new record by calling the validate method
 			if ($this->validate(new Validation($vArray), true)) {
-					// Record has successfully validated. Return the id.
-					syslog(LOG_DEBUG, "Record ".
-						$this->id.
-						" has validated successfully");
-					return $this->id;
-				} else {
-					// Errors. Return null.
-					return null;
-				}
+				// Record has successfully validated. Return the id.
+				syslog(LOG_DEBUG, "Record ".
+					$this->id.
+					" has validated successfully");
+				return $this->id;
+			} else {
+				// Errors. Return null.
+				return null;
+			}
+
 		} else {
 			// Set the model to point to the existing record.
 			$this->find($a);

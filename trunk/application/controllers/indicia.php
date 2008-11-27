@@ -49,26 +49,32 @@ class Indicia_Controller extends Template_Controller {
 			return "New $name";
 	}
 
-	/**
-	 * Return the metadata sub-template for the edit page of any model.
-	 */
+	 /**
+	  * Return the metadata sub-template for the edit page of any model. Returns nothing
+	  * if there is no ID (so no metadata).
+	  */
 	 protected function GetMetadataView($model) {
-	 	$metadata = new View('templates/metadata');
-		$metadata->model = $model;
-		return $metadata;
+	 	if ($this->model->id) {
+		 	$metadata = new View('templates/metadata');
+			$metadata->model = $model;
+			return $metadata;
+	 	} else {
+	 		return '';
+	 	}
 	 }
+
 	/**
 	* set view
 	*
 	* @param string $name View name
 	* @param string $pagetitle Page title
-	*/	
+	*/
 	protected function setView( $name, $pagetitle = '', $viewArgs = array() ) {
 		// on error rest on the website_edit page
-        	// errors are now embedded in the model
-	        $view                    = new View( $name );
-	        $view->metadata          = $this->GetMetadataView(  $this->model );
-	        $this->template->title   = $this->GetEditPageTitle( $this->model, $pagetitle );
+		// errors are now embedded in the model
+		$view                    = new View( $name );
+		$view->metadata          = $this->GetMetadataView(  $this->model );
+		$this->template->title   = $this->GetEditPageTitle( $this->model, $pagetitle );
 		$view->model             = $this->model;
 
 		foreach ($viewArgs as $arg => $val) {
@@ -76,10 +82,11 @@ class Indicia_Controller extends Template_Controller {
 		}
 	        $this->template->content = $view;
     }
+
 	/**
 	 * Wraps a standard $_POST type array into a save array suitable for use in saving
 	 * records.
-	 * 
+	 *
 	 * @param array $array Array to wrap
 	 * @param bool $fkLink=false Link foreign keys?
 	 *
@@ -105,7 +112,7 @@ class Indicia_Controller extends Template_Controller {
 						// Foreign key id field is table_id
 						'fkIdField' => substr($a,3)."_id",
 						'fkTable' => substr($a,3),
-						'fkSearchField' => 
+						'fkSearchField' =>
 						ORM::factory(substr($a,3))->get_search_field(),
 						'fkSearchValue' => $b);
 				} else {
@@ -124,9 +131,7 @@ class Indicia_Controller extends Template_Controller {
 	 * Sets the model submission, saves the submission array.
 	 */
 	protected function submit($submission){
-
 		$this->model->submission = $submission;
-
 		if (($id = $this->model->submit()) != null) {
 			// Record has saved correctly
 			$this->submit_succ($id);
@@ -159,7 +164,7 @@ class Indicia_Controller extends Template_Controller {
 	public function save(){
 		if (! empty($_POST['id'])) {
 			$this->model = ORM::factory($this->model->object_name, $_POST['id']);
-		} 
+		}
 
 		/**
 		 * Were we instructed to delete the post?
@@ -172,7 +177,7 @@ class Indicia_Controller extends Template_Controller {
 
 		// Wrap the post object and then submit it
 		$this->submit($this->wrap($_POST));
-		
+
 	}
 
 }

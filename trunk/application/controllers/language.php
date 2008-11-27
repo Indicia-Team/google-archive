@@ -1,7 +1,28 @@
 <?php
+/**
+ * INDICIA
+ * @link http://code.google.com/p/indicia/
+ * @package Indicia
+ */
 
+/**
+ * Language page controller
+ *
+ *
+ * @package Indicia
+ * @subpackage Controller
+ * @license http://www.gnu.org/licenses/gpl.html GPL
+ * @author xxxxxxx <xxx@xxx.net> / $Author$
+ * @copyright xxxx
+ * @version $Rev$ / $LastChangedDate$
+ */
 class Language_Controller extends Gridview_Base_Controller {
-	public function __construct() {
+
+	/**
+     * Constructor
+     */
+	public function __construct()
+	{
 		parent::__construct('language', 'language', 'language/index');
 		$this->columns = array(
 			'iso'=>'',
@@ -14,27 +35,27 @@ class Language_Controller extends Gridview_Base_Controller {
 	 * Action for language/create page/
 	 * Displays a page allowing entry of a new language.
 	 */
-	public function create(){
-		$model = ORM::factory('language');
-		$view = new View('language/language_edit');
-		$view->model = $model;
-		$view->metadata = $this->GetMetadataView($model);
-		$this->template->title = $this->GetEditPageTitle($model, 'Language');
-		$this->template->content = $view;
+	public function create()
+	{
+		$this->model = ORM::factory('language');
+        $this->setView('language/language_edit', 'Website');
 	}
 
+    /**
+     * Action for language/edit page
+     * Edit website data
+     */
 	public function edit($id) {
-		$model = ORM::factory('language',$id);
-
-		// Configure and assign variables to the view
-		$view = new View('language/language_edit');
-		$view->model = $model->find($id);
-
-		// Templating
-		$view->metadata = $this->GetMetadataView($model);
-		$this->template->title = $this->GetEditPageTitle($model, 'Language');
-		$this->template->content = $view;
-
+		if ($id == null)
+        {
+            // we need a general error controller
+            print "cannot edit language without an ID";
+        }
+        else
+        {
+            $this->model = new Language_Model($id);
+            $this->setView('language/language_edit', 'Website');
+        }
 	}
 }
 ?>
