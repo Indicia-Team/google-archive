@@ -301,7 +301,7 @@ class Data_Controller extends Service_Base_Controller {
 					break;
 				case 'offset':
 					if (is_numeric($value))
-						$this->db->offset($_GET[$value]);
+						$this->db->offset($value);
 					break;
 				default:
 					if (array_key_exists(strtolower($param), $this->view_columns)) {
