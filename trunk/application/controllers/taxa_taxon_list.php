@@ -151,233 +151,11 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			
 	}
 
-	/**
-	 * Function that takes an array and creates a new taxon entry, passing relevant
-	 * values back to the return array.
-	 */
-	private function __saveTaxon($array) {
-		if ($array['taxon_id'] == ''){
-			$taxon = ORM::factory('taxon');
-		} else {
-			$taxon = ORM::factory('taxon', $array['taxon_id']);
-		}
-		// Look for an existing taxon matching attributes.
-		$a = $taxon->where(array(
-			'taxon' => $array['taxon'],
-			'language_id' => $array['language_id'],
-			'authority' => $array['authority']
-		))->find()->id;
-		if ($a == null){
-			// Set scientific
-			$scientific = 'f';
-			if (ORM::factory('language')->where(array(
-				'id' => $array['language_id']))->find()->iso == 'lat'){
-					$scientific = 't';
-				}				
-
-			//No existing taxon
-			$taxon->validate(new Validation(array(
-				'taxon' => $array['taxon'],
-				'language_id' => $array['language_id'],
-				'authority' => $array['authority'],
-				'scientific' => $scientific,
-				'external_key' => $array['external_key'],
-				'search_code' => $array['search_code'],
-				'taxon_group_id' => $array['taxon_group_id']
-			)), true);
-		} else {
-			//Already a taxon we can link to
-			$taxon->find($a);
-		}
-		// Update with the new taxon
-		$array['taxon_id'] = $taxon->id;
-	
-		return $array;
-	}
-	/**
-	 * Saves the taxon_list_taxon to the model. Will create a corresponding taxon if one
-	 * does not already exist. Will also create a new meaning.
-	 */
-	private function __save($array) {
-		if (! empty($array['id'])) {
-			$model = ORM::factory('taxa_taxon_list',$array['id']);
-		} else {
-			$model = ORM::factory('taxa_taxon_list');
-		}
-		/**
-		 * We need to submit null for integer fields, 
-		 * because an empty string will fail.
-		 */
-		if ($array['parent_id'] == ''){
-			$array['parent_id'] = null;
-		}
-		if ($array['taxonomic_sort_order'] == ''){
-			$array['taxonomic_sort_order'] = null;
-		}
-		/**
-		 * We need to generate a new meaning if there isn't one already.
-		 */
-		if ($array['taxon_meaning_id'] == ''){
-			//Make a new meaning
-			$meaning = ORM::factory('taxon_meaning');
-			if ($meaning->insert())
-			{
-				$array['taxon_meaning_id'] = $meaning->id;
-			} else {
-				$array['taxon_meaning_id'] = null;
-			}
-		}
-		/**
-		 * Work out what the language is - atm, just say English. We should deduce
-		 * this from a drop-down list or similar?
-		 */
-		if ($array['language_id'] == ''){
-			if (array_key_exists('iso',$array)){
-				$array['language_id'] = ORM::factory('language')
-					->where(array('iso' => $array['iso']))->find()->id;
-			} else {
-				$array['language_id'] = 1;
-			}
-		}
-
-		/**
-		 * This is the preferred taxon in this list
-		 */
-		$array['preferred']='t';
-
-		/**
-		 * We may need to generate a new taxon - but first check if we can
-		 * link an old one.
-		 */
-		
-		$array = $this->__saveTaxon($array);
-
-		/**
-		 * Were we instructed to delete the taxon?
-		 */
-		if ($array['submit'] == 'Delete'){
-			$array['deleted'] = 'true';
-		} else {
-			$array['deleted'] = 'false';
-		}
-
-		$validation = new Validation($array);
-		if ($model->validate($validation, true)) {
-			// Okay, the thing saved correctly - we now need to add the common names
-			$arrLine = split("\n",$array['commonNames']);
-			$arrCommonNames = array();
-
-			foreach ($arrLine as $line) {
-				$b = preg_split("/(?<!\\\\ ),/",$line); 
-				if (count($b) == 2) {
-					$arrCommonNames[$b[0]] = array('lang' => trim($b[1]),
-						'auth' => '');
-				} else {
-					$arrCommonNames[$b[0]] = array('lang' => 'eng',
-						'auth' => '');
-				}
-			}
-			syslog(LOG_DEBUG, "Number of common names is: ".count($arrCommonNames));
-
-			// Now do the same thing for synonomy
-			$arrLine = split("\n", $array['synonomy']);
-			$arrSyn = array();
-
-			foreach ($arrLine as $line) {
-				$b = preg_split("/(?<!\\\\ ),/",$line); 
-				if (count($b) == 2) {
-					$arrCommonNames[$b[0]] = array('auth' => trim($b[1]),
-						'lang' => 'lat');
-				} else {
-					$arrCommonNames[$b[0]] = array('auth' => '',
-						'lang' => 'lat');
-				}
-			}
-
-			$arrSyn = array_merge($arrSyn, $arrCommonNames);
-
-			$existingSyn = $this->getSynonomy($array['taxon_meaning_id']);
-
-			// Iterate through existing synonomies, discarding those that have
-			// been deleted and removing existing ones from the list to add
-
-			foreach ($existingSyn as $syn){
-				// Is the taxon from the db in the list of synonyms?
-				if (array_key_exists($syn->taxon->taxon, $arrCommonNames) && 
-					$arrSyn[$syn->taxon->taxon]['lang'] == 
-					$syn->taxon->language->iso &&
-					$arrSyn[$syn->taxon->taxon]['auth'] ==
-					$syn->taxon->authority)
-				{
-					array_splice($arrSyn, array_search(
-						$syn->taxon, $arrSyn), 1);
-					syslog(LOG_DEBUG, "Known synonym: ".$syn->taxon->taxon);
-				} else {
-					// Synonym has been deleted - remove it from the db
-					$syn->taxon->deleted = 't';
-					syslog(LOG_DEBUG, "New synonym: ".$syn->taxon->taxon);
-					$syn->save();
-				}
-			}
-
-			// $arraySyn should now be left only with those synonyms 
-			// we wish to add to the database
-
-			syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
-			foreach ($arrSyn as $taxon => $syn) {
-				
-				$lang = $syn['lang'];
-				$auth = $syn['auth'];
-
-				// Save a new taxon
-				syslog(LOG_DEBUG, "Saving taxon ".$taxon);
-				$arr = array(
-					'taxon_id' => null,
-					'taxon' => $taxon,
-					'authority' => $auth,
-					'search_code' => $array['search_code'],
-					'external_key' => $array['external_key'],
-					'taxon_group_id' => $array['taxon_group_id'],
-					'language_id' => ORM::factory('language')->where(array(
-						'iso' => $lang))->find()->id);
-				$arr = $this->__saveTaxon($arr);
-
-				// Save a new taxa_taxon_list instance - we just copy most of
-				// the properties but set preferred to false and update
-				// the taxon id.
-
-				$syn = $array;
-				$syn['id'] = '';
-				$syn['preferred'] = 'false';
-				$syn['taxon_id'] = $arr['taxon_id'];
-				ORM::factory('taxa_taxon_list')->
-					validate(new Validation($syn), true);
-			}
-
-			url::redirect('taxa_taxon_list/'.$model->taxon_list_id);
-		} else {
-			$this->template->title = 
-				$this->GetEditPageTitle($model, 'Taxon instance');
-			$metadata = new View('templates/metadata');
-			$metadata->model = $model;
-			$view = new View('taxa_taxon_list/taxa_taxon_list_edit');
-			$view->metadata = $metadata;
-			$view->model = $model;
-			$view->table = null;
-			$view->synonomy = $this->formatScientificSynonomy($this->
-				getSynonomy($array['taxon_meaning_id']));
-			$view->commonNames = $this->formatCommonSynonomy($this->
-				getSynonomy($array['taxon_meaning_id']));
-			$view->taxon_list_id = $model->taxon_list_id;
-			$this->template->content = $view;
-		}
-	}
 	public function save(){
 		//This may not be the best place to put this?
 		$_POST['preferred'] = 't';
-		parent::save()
+		parent::save();
 	}
-
 
 	protected function wrap($array) {
 
@@ -396,17 +174,23 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$sa = parent::wrap($nativeFields);
 
 		// Declare child models
-		$sa['subModels'][] = array(
-			'fkId' => 'taxon_meaning_id',
-			'model' => parent::wrap(
-				array_intersect_key($array, ORM::factory('taxon_meaning')
-				->table_columns), false, 'taxon_meaning'));
+		if (array_key_exists('taxon_meaning_id', $array) == false || 
+			$array['taxon_meaning_id'] == '') {
+				$sa['subModels'][] = array(
+					'fkId' => 'taxon_meaning_id',
+					'model' => parent::wrap(
+						array_intersect_key($array, ORM::factory('taxon_meaning')
+						->table_columns), false, 'taxon_meaning'));
+			}
 
-		$sa['subModels'][] = array(
-			'fkId' => 'taxon_id',
-			'model' => parent::wrap(
-				array_intersect_key($array, ORM::factory('taxon')
-				->table_columns), false, 'taxon'));
+		if (array_key_exists('taxon_id', $array) == false || 
+			$array['taxon_id'] == '') {
+				$sa['subModels'][] = array(
+					'fkId' => 'taxon_id',
+					'model' => parent::wrap(
+						array_intersect_key($array, ORM::factory('taxon')
+						->table_columns), false, 'taxon'));
+			}
 
 		$sa['metaFields']['synonomy'] = array(
 			'value' => $array['synonomy']
@@ -418,6 +202,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 
 		return $sa;
 	}
+
 	/**
 	 * Overrides the fail functionality to add args to the view.
 	 */
@@ -460,17 +245,19 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		foreach ($arrLine as $line) {
 			$b = preg_split("/(?<!\\\\ ),/",$line); 
 			if (count($b) == 2) {
-				$arrCommonNames[$b[0]] = array('auth' => trim($b[1]),
+				$arrSyn[$b[0]] = array('auth' => trim($b[1]),
 					'lang' => 'lat');
 			} else {
-				$arrCommonNames[$b[0]] = array('auth' => '',
+				$arrSyn[$b[0]] = array('auth' => '',
 					'lang' => 'lat');
 			}
 		}
+		syslog(LOG_DEBUG, "Number of synonyms is: ".count($arrSyn));
 
 		$arrSyn = array_merge($arrSyn, $arrCommonNames);
 
-		$existingSyn = $this->getSynonomy($array['taxon_meaning_id']);
+		syslog(LOG_DEBUG, "Looking for existing terms with meaning ".$this->model->taxon_meaning_id);
+		$existingSyn = $this->getSynonomy($this->model->taxon_meaning_id);
 
 		// Iterate through existing synonomies, discarding those that have
 		// been deleted and removing existing ones from the list to add
@@ -511,15 +298,17 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$syn['taxon'] = $taxon;
 			$syn['authority'] = $auth;
 			$syn['language_id'] = ORM::factory('language')->where(array(
-					'iso' = $lang))->find()->id);
+					'iso' => $lang))->find()->id;
 			$syn['id'] = '';
 			$syn['preferred'] = 'f';
+			$syn['taxon_meaning_id'] = $this->model->taxon_meaning_id;
 
 			$sub = $this->wrap($syn);
-			$this->submit($sub);
+			$this->model->submission = $sub;
+			$this->model->submit();
 		}
 
-		url::redirect('taxa_taxon_list/'.$model->taxon_list_id);
+		url::redirect('taxa_taxon_list/'.$this->model->taxon_list_id);
 	}
 }
 ?>
