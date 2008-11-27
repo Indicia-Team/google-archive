@@ -11,20 +11,18 @@ In order to gain access to this Indicia system you must log on. If you do not ha
 <ol>
 <li>
   <label for="UserName">Username</label>
-  <input type = "text" name = "UserName" id = "UserName" value="" >
+  <input type = "text" name = "UserName" id = "UserName" value="" class="narrow" />
 </li>
 <li>
   <label for="Password">Password</label>
-  <input type = "password" name = "Password" id = "Password" value="" >
+  <input type = "password" name = "Password" id = "Password" value="" class="narrow" />
 </li>
 <li>
   <label for="remember_me" >Remember me</label>
-  <input type="checkbox" id="remember_me" name="remember_me"  />
-</li>
-<li>
-  <input type = "submit" value = "Login" >
+  <input type="checkbox" id="remember_me" name="remember_me" class="default" />
 </li>
 </fieldset>
+<input type = "submit" value = "Login" >
 </form>
 
 <br />If you have forgotten your username, <a href="<?php echo url::site(); ?>login/login_by_email">click here to log in using your email address</a>.
