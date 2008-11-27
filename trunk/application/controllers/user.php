@@ -44,7 +44,9 @@ class User_Controller extends Gridview_Base_Controller {
 			$login_config = Kohana::config('login');
 		
 			$user = ORM::factory('user');
+			$person = ORM::factory('person', $this->uri->argument(1));
 			$view = new View('user/user_edit');
+			$user->username = $person->first_name.'.'.$person->surname;
 			$view->model = $user;
 			$view->metadata = $this->GetMetadataView($user);
 			$this->template->title = $this->GetEditPageTitle($user, 'User');

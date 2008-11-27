@@ -47,11 +47,12 @@ class Forgotten_Password_Controller extends Indicia_Controller {
 				$this->template->content->error_message = $_POST['UserID'].' does not have permission to log on to this website';
 				return;
 			}
-// Still to be done - save it to the user
-			$swift = email::connect();
 			$link_code = $this->auth->hash_password($user->username);
+			$user->__set('forgotten_password_key', $link_code);
+			$user->save();
+			$swift = email::connect();
 			$message = new Swift_Message($email_config['forgotten_passwd_title'],
-		                             View::factory('templates/forgotten_password_email')->set(array('server' => $email_config['server_name'], 'new_password_link' => '<a href="'.url::site().'new_password/'.$link_code.'">'.url::site().'new_password/'.$link_code.'</a>')),
+		                             View::factory('templates/forgotten_password_email')->set(array('server' => $email_config['server_name'], 'new_password_link' => '<a href="'.url::site().'new_password/email/'.$link_code.'">'.url::site().'new_password/email/'.$link_code.'</a>')),
 		                             'text/html');
 			$recipients = new Swift_RecipientList();
 			$recipients->addTo($person->email_address, $person->first_name.' '.$person->surname);

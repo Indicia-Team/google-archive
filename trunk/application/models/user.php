@@ -14,31 +14,32 @@ class User_Model extends ORM {
 
 	public function validate(Validation $array, $save = FALSE) {
 		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
+		// Any fields that don't have a validation rule need to be copied into the model manually
+		// note that some of the fields are optional.
+		// Checkboxes only appear in the POST array if they are checked, ie TRUE. Have to convert to PgSQL boolean values, rather than PHP
 		$array->pre_filter('trim');
 
-		$array->add_rules('username', 'required', 'length[5,30]');
-//		$array->add_rules('password', 'length[7,30]');
-		
-		// Any fields that don't have a validation rule need to be copied into the model manually
-
+		$array->add_rules('username', 'required', 'length[7,30]');
+		if (isset($array['password'])) $array->add_rules('password', 'length[7,30]');
 		$this->interests = $array['interests'];
 		$this->location_name = $array['location_name'];
-		$this->core_role_id = (is_numeric ($array['core_role_id']) ? $array['core_role_id'] : NULL);
-
-		// only copy person id if it is filled in. This is to allow for case when called via
-		// drill through from people.
-		if (isset($array['person_id'])) $this->person_id = $array['person_id'];
-
-		// only copy password if it is filled in. This is to allow for case when called for new user.
-		if (isset($array['password'])) $this->password = $array['password'];
-
-		// Checkboxes only appear in the POST array if they are checked, ie TRUE. Have to convert to PgSQL boolean values, rather than PHP
+		if (isset($array['core_role_id'])) $this->core_role_id = (is_numeric ($array['core_role_id']) ? $array['core_role_id'] : NULL);
 		$this->email_visible = (isset($array['email_visible']) ? 't' : 'f');
 		$this->view_common_names = (isset($array['view_common_names']) ? 't' : 'f');
+		if (isset($array['person_id'])) $this->person_id = $array['person_id'];
 
+		
 		return parent::validate($array, $save);
 	}
 
+	public function password_validate(Validation $array, $save = FALSE) {
+		$array->pre_filter('trim');
+		$array->add_rules('password', 'required', 'length[7,30]', 'matches[password2]');
+		$this->forgotten_password_key = NULL;
+		 
+		return parent::validate($array, $save);
+	}
+	
 	public function __set($key, $value)
 	{
 		if ($key === 'password')

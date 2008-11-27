@@ -33,6 +33,7 @@ class Indicia_Controller extends Template_Controller {
 				'Languages'=>'language',
 				),
 			'Me' => array(
+				'Set New Password' => 'new_password',
 				'Logout'=>'logout',
 				),
 		);
