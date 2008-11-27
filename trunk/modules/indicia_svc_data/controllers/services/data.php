@@ -3,7 +3,10 @@
 class Data_Controller extends Service_Base_Controller {
 	protected $model;
 	protected $entity;
+	protected $viewname;
 	protected $foreign_keys;
+	protected $view_columns;
+	protected $db;
 
 	/**
 	 * Provides the /services/data/language service.
@@ -60,6 +63,15 @@ class Data_Controller extends Service_Base_Controller {
 	}
 
 	/**
+	 * Provides the /services/data/taxa_taxon_list service.
+	 * Retrieves details of taxa on a taxon_list.
+	 */
+	public function taxa_taxon_list()
+	{
+		$this->handle_request('taxa_taxon_list');
+	}
+
+	/**
 	 * Provides the /services/data/term service.
 	 * Retrieves details of a single term.
 	 */
@@ -113,7 +125,10 @@ class Data_Controller extends Service_Base_Controller {
 	{
 		// Store the entity in class member, so less recursion overhead when building XML.
 		$this->entity = $entity;
+		$this->viewname = $this->get_view_name();
 		$this->model=ORM::factory($this->entity);
+		$this->db = new Database();
+		$this->view_columns = $this->db->list_fields($this->viewname);
 		$mode = $this->get_output_mode();
 		$records=$this->build_query_results();
 
@@ -157,12 +172,16 @@ class Data_Controller extends Service_Base_Controller {
 		// {person_id=>1, person=>James Brown} then the xml output for the id is <person id="1">James Brown</person>.
 		// There is no need to output the person separately so it get's flagged in this array for skipping.
 		$to_skip=array();
-		// if we are outputting a specific record, root is singular
-		if ($this->model->id)
-			$root = $this->entity;
-		else
-			$root = inflector::plural($this->entity);
+
 		if (!$recursion) {
+			// if we are outputting a specific record, root is singular
+			if (uri::total_arguments()) {
+				$root = $this->entity;
+				// We don't need to repeat the element for each record, as there is only 1.
+				$array = $array[0];
+			} else {
+				$root = inflector::plural($this->entity);
+			}
 			$data = '<?xml version="1.0"?>';
 			if ($xsl)
 				$data .= '<?xml-stylesheet type="text/xsl" href="'.$xsl.'"?>';
@@ -179,9 +198,9 @@ class Data_Controller extends Service_Base_Controller {
 					if (is_numeric($element)) {
 						$element = $this->entity;
 					}
-					if (substr($element, -3)=='_id') {
-						// This is a foreign key to another entity, so include the xlink URL and remove _id from the name
+					if ((substr($element, -3)=='_id') && (array_key_exists(substr($element, 0, -3), $array))) {
 						$element = substr($element, 0, -3);
+						// This is a foreign key described by another field, so create an xlink path
 						if (array_key_exists($element, $this->model->belongs_to)) {
 							// Belongs_to specifies a fk table that does not match the attribute name
 							$fk_entity=$this->model->belongs_to[$element];
@@ -193,16 +212,9 @@ class Data_Controller extends Service_Base_Controller {
 						}
 						$data .= ($indent?str_repeat("\t", $recursion):'');
 						$data .= "<$element id=\"$value\" xlink:href=\"".url::base(TRUE)."services/data/$fk_entity/$value\">";
-						// If the input query includes the join to the related table, then use the input query to add the caption of
-						// the related item. Otherwise fetch via ORM which will be slower.
-						if (array_key_exists($element, $array)) {
-							$data .= $array[$element];
-							// Remember that ths related item's caption has been included in the xml, so can be skipped
-							// when the foreach loop gets round to it.
-							$to_skip[count($to_skip)-1]=$element;
-						} else {
-							$data .= ORM::factory($fk_entity, $value)->caption();
-						}
+						$data .= $array[$element];
+						// We output the associated caption element already, so add it to the list to skip
+						$to_skip[count($to_skip)-1]=$element;
 					} else {
 						$data .= ($indent?str_repeat("\t", $recursion):'').'<'.$element.'>';
 						if (is_array($value)) {
@@ -225,43 +237,39 @@ class Data_Controller extends Service_Base_Controller {
 	 * Builds a query to extract data from the requested entity, and also
 	 * include relationships to foreign key tables and the caption fields from those tables.
 	 *
-	 * @todo Is a LEFT JOIN going to cause a performance issue? Can we use INNER when key is mandatory?
-	 * Not sure if the PHP pg driver supports reading this information though.
 	 * @todo Review this code for SQL Injection attack!
 	 */
 	protected function build_query_results()
 	{
 		$this->foreign_keys = array();
-		$db = new Database();
-		$tablename = inflector::plural($this->entity);
-		$db->from($tablename);
-		// Select all the table columns from the main table
-		$select = $tablename.'.'.implode(", $tablename.", array_keys($this->model->table_columns));
-		// Iterate each foreign key in the model, and add a join and the associated caption fields to the query.
-		foreach ($this->model->belongs_to as $fk_name => $fk_entity) {
-			$fk_table = inflector::plural($fk_entity);
-			if (is_numeric($fk_name)) {
-				// if the foreign key is not specified in the belongs_to array, it must be a foreign key with the
-				// same name as the related table, e.g. location_id refers to location.id
-				$fk_name=$fk_entity;
-			}
-			$fk_field=$fk_name.'_id';
-			// Add a join: LEFT JOIN fk_table (AS fk name - if different) ON fk_table.id = table.fk_field
-			$fk_table = $fk_table.($fk_table==$fk_name? "": " AS $fk_name");
-			$join = "$fk_name.id = $tablename.".$fk_field;
-			$db->join($fk_table, $join, NULL, "LEFT");
-			// Add a field to the SELECT data
-			$fk_caption_field = $fk_name.'.'.ORM::factory($fk_entity)->get_search_field();
-			$select .= ", $fk_caption_field AS $fk_name";
-			$this->foreign_keys[$fk_name]=$fk_field;
-		}
-		$db->select($select);
+		$this->db->from($this->viewname);
+		// Select all the table columns from the view
+		$select = '*';
+		$this->db->select($select);
 		// if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
 		if (URI::total_arguments()==0)
-			$this->apply_get_parameters_to_db($db, $select);
+			$this->apply_get_parameters_to_db();
 		else
-			$db->where($tablename.'.id', URI::argument(1));
-		return $db->get()->result_array(FALSE);
+			$this->db->where($this->viewname.'.id', URI::argument(1));
+		return $this->db->get()->result_array(FALSE);
+	}
+
+	/**
+	 * Returns the name of the view for the request. This is a view
+	 * associated with the entity, but prefixed by either list, gv or max depending
+	 * on the GET view parameter.
+	 */
+	protected function get_view_name()
+	{
+		$table = inflector::plural($this->entity);
+		$prefix='';
+		if (array_key_exists('view', $_GET)) {
+			$prefix = $_GET['view'];
+		}
+		// Check for allowed view prefixes, and use 'list' as the default
+		if ($prefix!='gv' && $prefix!='detail')
+			$prefix='list';
+		return $prefix.'_'.$table;
 	}
 
 
@@ -269,48 +277,48 @@ class Data_Controller extends Service_Base_Controller {
 	 * Works out what filter and other options to set on the db object according to the
 	 * $_GET parameters currently available, when retrieving a list of items.
 	 */
-	protected function apply_get_parameters_to_db($db)
+	protected function apply_get_parameters_to_db()
 	{
-		if (array_key_exists('filter_field', $_GET))
-			$filterfield = $_GET['filter_field'];
-		else
-			$filterfield = $this->model->get_search_field();
-
-		if (array_key_exists('filter', $_GET)) {
-			if (array_key_exists($filterfield, $this->model->table_columns)) {
-				if ($this->model->table_columns[$filterfield]=='int') {
-					$db->where(inflector::plural($this->entity).'.'.$filterfield, $_GET['filter']);
-				} else {
-        			$db->like(inflector::plural($this->entity).'.'.$filterfield, $_GET['filter']);
-				}
-			} elseif (array_key_exists($filterfield, $this->foreign_keys)) {
-				// filter is against a foreign key field and must be a string
-				$db->like($filterfield, $_GET['filter']);
-			} else {
-				// Can't find filter field either in the entitiy's attributes or a foreign key field
-				$this->error("Invalid filter field $filterfield specified for $this->entity data.");
+		$sortdir='ASC';
+		$orderby='';
+		$like=array();
+		$where=array();
+		foreach ($_GET as $param => $value) {
+			switch ($param) {
+				case 'sortdir':
+					$sortdir=strtoupper($value);
+					if ($sortdir != 'ASC' && $sortdir != 'DESC') {
+						$sortdir='ASC';
+					}
+					break;
+				case 'orderby':
+					if (array_key_exists(strtolower($value), $this->view_columns))
+						$orderby=strtolower($value);
+					break;
+				case 'limit':
+					if (is_numeric($value))
+						$this->db->limit($value);
+					break;
+				case 'offset':
+					if (is_numeric($value))
+						$this->db->offset($_GET[$value]);
+					break;
+				default:
+					if (array_key_exists(strtolower($param), $this->view_columns)) {
+						// A parameter has been supplied which specifies the field name of a filter field
+						if ($this->view_columns[$param]=='int')
+							$where[$param]=$value;
+						else
+							$like[$param]=$value;
+					}
 			}
 		}
-
-		$sortdir='';
-		if (array_key_exists('dir', $_GET)) {
-			$sortdir=strtoupper($_GET['dir']);
-		}
-		if ($sortdir != 'ASC' && $sortdir != 'DESC') {
-			$sortdir='ASC';
-		}
-		if (array_key_exists('orderby', $_GET)) {
-			$db->orderby($_GET['orderby'], $sortdir);
-		}
-
-		if (array_key_exists('limit', $_GET)) {
-			$db->limit($_GET['limit']);
-		}
-
-		if (array_key_exists('offset', $_GET)) {
-			$db->offset($_GET['offset']);
-		}
-
+		if ($orderby)
+			$this->db->orderby($orderby, $sortdir);
+		if (count($like))
+			$this->db->like($like);
+		if (count($where))
+			$this->db->where($where);
 	}
 
 	/**
