@@ -9,6 +9,7 @@ class Survey_Controller extends Gridview_Base_Controller {
 			'description'=>'',
 			'website'=>'');
 		$this->pagetitle = "Surveys";
+		$this->model = ORM::factory('survey');
 	}
 
 	/**
@@ -16,12 +17,7 @@ class Survey_Controller extends Gridview_Base_Controller {
 	 * Displays a page allowing entry of a new survey.
 	 */
 	public function create() {
-		$model = ORM::factory('survey');
-		$view = new View('survey/survey_edit');
-		$view->model = $model;
-		$view->metadata = $this->GetMetadataView($model);
-		$this->template->title = $this->GetEditPageTitle($model, 'Survey');
-		$this->template->content = $view;
+		$this->setView('survey/survey_edit', 'Survey');
 	}
 
 	public function edit() {
