@@ -1133,6 +1133,9 @@ class ORM_Core {
 			case 'string':
 				$value = (string) $value;
 			break;
+			case 'timestamp':
+				$value = (string) $value;
+				break;
 		}
 
 		return $value;
