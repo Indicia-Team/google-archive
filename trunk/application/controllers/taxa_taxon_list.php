@@ -37,7 +37,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$this->model = ORM::factory('taxa_taxon_list');
 	}
 
-	private function __getSynonomy($taxon_meaning_id) {
+	private function getSynonomy($taxon_meaning_id) {
 		return ORM::factory('taxa_taxon_list')
 			->where(array(
 				'preferred' => 'f',
@@ -45,7 +45,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			))->find_all();
 	}
 
-	private function __formatScientificSynonomy(ORM_Iterator $res){
+	private function formatScientificSynonomy(ORM_Iterator $res){
 		$syn = "";
 		foreach ($res as $synonym) {
 			if ($synonym->taxon->language->iso == "lat") {
@@ -56,7 +56,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		return $syn;
 	}
 	
-	private function __formatCommonSynonomy(ORM_Iterator $res){
+	private function formatCommonSynonomy(ORM_Iterator $res){
 		$syn = "";
 		foreach ($res as $synonym) {
 			if ($synonym->taxon->language->iso != "lat"){ 
@@ -105,11 +105,11 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$vArgs = array(
 			'taxon_list_id' => $this->model->taxon_list_id,
 			'table' => $grid->display(),
-			'synonomy' => $this->__formatScientificSynonomy($this->
-			__getSynonomy($this->model->
+			'synonomy' => $this->formatScientificSynonomy($this->
+			getSynonomy($this->model->
 				taxon_meaning_id)),
-			'commonNames' => $this->__formatCommonSynonomy($this->
-			__getSynonomy($this->model->
+			'commonNames' => $this->formatCommonSynonomy($this->
+			getSynonomy($this->model->
 				taxon_meaning_id))
 			);
 		$this->setView('taxa_taxon_list/taxa_taxon_list_edit', 'Taxon', $vArgs);
@@ -296,7 +296,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 
 			$arrSyn = array_merge($arrSyn, $arrCommonNames);
 
-			$existingSyn = $this->__getSynonomy($array['taxon_meaning_id']);
+			$existingSyn = $this->getSynonomy($array['taxon_meaning_id']);
 
 			// Iterate through existing synonomies, discarding those that have
 			// been deleted and removing existing ones from the list to add
@@ -364,102 +364,22 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$view->metadata = $metadata;
 			$view->model = $model;
 			$view->table = null;
-			$view->synonomy = $this->__formatScientificSynonomy($this->
-				__getSynonomy($array['taxon_meaning_id']));
-			$view->commonNames = $this->__formatCommonSynonomy($this->
-				__getSynonomy($array['taxon_meaning_id']));
+			$view->synonomy = $this->formatScientificSynonomy($this->
+				getSynonomy($array['taxon_meaning_id']));
+			$view->commonNames = $this->formatCommonSynonomy($this->
+				getSynonomy($array['taxon_meaning_id']));
 			$view->taxon_list_id = $model->taxon_list_id;
 			$this->template->content = $view;
 		}
 	}
-
-	/**
-	 * We need to override this function because using the model won't work.
-	 */
-	public function upload_mappings() {
-		$_FILES = Validation::factory($_FILES)
-			->add_rules('csv_upload', 'upload::valid', 'upload::required', 'upload::type[csv]', 'upload::size[1M]');
-		if ($_FILES->validate()) {
-			// move the file to the upload directory
-			$csvTempFile = upload::save('csv_upload');
-			$_SESSION['uploaded_csv'] = $csvTempFile;
-
-			// Following helps for files from Macs
-			ini_set('auto_detect_line_endings',1);
-			$handle = fopen($csvTempFile, "r");
-			$this->template->title = "Map CSV File columns to ".$this->pagetitle;
-			$view = new View('taxa_taxon_list/upload_mappings');
-			$view->columns = fgetcsv($handle, 1000, ",");
-			$view->mappings = array(
-				'taxon' => 'Taxon name',
-				'language_id' => 'Language ISO code',
-				'taxon_group_id' => 'Taxon Group',
-				'authority' => 'Authority',
-				'search_code' => 'Search Code',
-				'external_key' => 'External Key',
-				'taxonomic_sort_order' => 'Taxonomic Sort Order'
-				);
-			fclose($handle);
-			$view->controllerpath = $this->controllerpath;
-			$this->template->content = $view;
-		} else {
-			// TODO: Display a validation error and remember current viewstate
-			url::redirect($this->controllerpath);
-		}
+	public function save(){
+		//This may not be the best place to put this?
+		$_POST['preferred'] = 't';
+		parent::save()
 	}
-	/* Upload action. Accepts a CSV file in the csv_upload FILE post
-	 */
-	public function upload() {
-		$csvTempFile = $_SESSION['uploaded_csv'];
 
-		// make sure the file still exists
-		if (file_exists($csvTempFile))
-		{
-			// Following helps for files from Macs
-			ini_set('auto_detect_line_endings',1);
-			// create the file pointer
-			$handle = fopen ($csvTempFile, "r");
-			// skip the title row
-			fgetcsv($handle, 1000, ",");
-			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-				$model = ORM::factory($this->modelname);
-				$arrSubmit = array();
-				$index = 0;
-				foreach ($_POST as $col=>$attr) {
-					if ($attr!='<please select>') {
-						if (substr($attr, -3)!='_id') {
-							$arrSubmit[$attr] = $data[$index];
-						} else {
-							// This is a foreign key, so need to lookup the id based on the string
-							if (array_key_exists(substr($attr,0,-3), $model->belongs_to)) {
-								// Belongs_to specifies a fk table that does not match the attribute name
-								$fk_model=ORM::factory($model->belongs_to[substr($attr,0,-3)]);
-							} else {
-								// Belongs_to specifies a fk table that matches the attribute name
-								$fk_model=ORM::factory(substr($attr,0,-3));
-							}
-							// TODO: Don't hard code the title as the search field
-							// TODO: Consider filtering so it only picks up sub-items relevant to this website.
-							$fk_record = $fk_model->lookup($data[$index]);
-							$arrSubmit[$attr] = $data[$index];
-						}
-					}
-					$index++;
-				}
-				$model->validate(new Validation($arrSubmit));
-			}
-			fclose($handle);
-	    	// need to flash a success message
-	    	// clean up the uploaded file
-	    	unlink($csvTempFile);
-	    	url::redirect($this->controllerpath);
-		}
-	}
 
 	protected function wrap($array) {
-
-		//This may not be the best place to put this?
-		$array['preferred'] = 't';
 
 		$sa = array(
 			'id' => 'taxa_taxon_list',
@@ -509,6 +429,97 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'commonNames' => null,
 		);
 		$this->setView($mn."/".$mn."_edit", ucfirst($mn), $vArgs);
+	}
+
+	/**
+	 * Overrides the success function to add in synonomies
+	 */
+	protected function submit_succ($id){
+		// Okay, the thing saved correctly - we now need to add the common names
+		$arrLine = split("\n",$this
+			->model->submission['metaFields']['commonNames']['value']);
+		$arrCommonNames = array();
+
+		foreach ($arrLine as $line) {
+			$b = preg_split("/(?<!\\\\ ),/",$line); 
+			if (count($b) == 2) {
+				$arrCommonNames[$b[0]] = array('lang' => trim($b[1]),
+					'auth' => '');
+			} else {
+				$arrCommonNames[$b[0]] = array('lang' => 'eng',
+					'auth' => '');
+			}
+		}
+		syslog(LOG_DEBUG, "Number of common names is: ".count($arrCommonNames));
+
+		// Now do the same thing for synonomy
+		$arrLine = split("\n", $this
+			->model->submission['metaFields']['synonomy']['value']);
+		$arrSyn = array();
+
+		foreach ($arrLine as $line) {
+			$b = preg_split("/(?<!\\\\ ),/",$line); 
+			if (count($b) == 2) {
+				$arrCommonNames[$b[0]] = array('auth' => trim($b[1]),
+					'lang' => 'lat');
+			} else {
+				$arrCommonNames[$b[0]] = array('auth' => '',
+					'lang' => 'lat');
+			}
+		}
+
+		$arrSyn = array_merge($arrSyn, $arrCommonNames);
+
+		$existingSyn = $this->getSynonomy($array['taxon_meaning_id']);
+
+		// Iterate through existing synonomies, discarding those that have
+		// been deleted and removing existing ones from the list to add
+
+		foreach ($existingSyn as $syn){
+			// Is the taxon from the db in the list of synonyms?
+			if (array_key_exists($syn->taxon->taxon, $arrCommonNames) && 
+				$arrSyn[$syn->taxon->taxon]['lang'] == 
+				$syn->taxon->language->iso &&
+				$arrSyn[$syn->taxon->taxon]['auth'] ==
+				$syn->taxon->authority)
+			{
+				array_splice($arrSyn, array_search(
+					$syn->taxon, $arrSyn), 1);
+				syslog(LOG_DEBUG, "Known synonym: ".$syn->taxon->taxon);
+			} else {
+				// Synonym has been deleted - remove it from the db
+				$syn->taxon->deleted = 't';
+				syslog(LOG_DEBUG, "New synonym: ".$syn->taxon->taxon);
+				$syn->save();
+			}
+		}
+
+		// $arraySyn should now be left only with those synonyms 
+		// we wish to add to the database
+
+		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
+		foreach ($arrSyn as $taxon => $syn) {
+			
+			$lang = $syn['lang'];
+			$auth = $syn['auth'];
+
+			// Wrap a new submission
+			syslog(LOG_DEBUG, "Wrapping submission for synonym ".$taxon);
+
+			$syn = $_POST;
+			$syn['taxon_id'] = null;
+			$syn['taxon'] = $taxon;
+			$syn['authority'] = $auth;
+			$syn['language_id'] = ORM::factory('language')->where(array(
+					'iso' = $lang))->find()->id);
+			$syn['id'] = '';
+			$syn['preferred'] = 'f';
+
+			$sub = $this->wrap($syn);
+			$this->submit($sub);
+		}
+
+		url::redirect('taxa_taxon_list/'.$model->taxon_list_id);
 	}
 }
 ?>
