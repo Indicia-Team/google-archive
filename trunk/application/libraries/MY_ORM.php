@@ -31,23 +31,28 @@ abstract class ORM extends ORM_Core {
 		}
 		else {
 			// put the trimmed and processed data back into the model
-			$this->load_values($array->as_array());
+			$arr = $array->as_array();
+			$arr['created_on'] = $this->created_on;
+			$arr['updated_on'] = $this->updated_on;
+			$this->load_values($arr);
 			$this->errors = $array->errors('form_error_messages');
 			return FALSE;
 		}
 	}
 
 	/**
-	 * For a model that is about to be saved, sets the metadata created and updated field values.
+	 * For a model that is about to be saved, sets the metadata created and 
+	 * updated field values.
 	 */
 	public function set_metadata() {
 		// Set up the created and updated metadata for the record
 		if (!$this->id) {
-			$this->created_on=date("Ymd H:i:s");
+			$this->created_on = date("Ymd H:i:s");
 			$this->created_by_id = 1; // dummy user
 		}
-		// TODO: Check if updated metadata present in this entity, and also use correct user.
-		$this->updated_on=date("Ymd H:i:s");
+		// TODO: Check if updated metadata present in this entity, 
+		// and also use correct user.
+		$this->updated_on = date("Ymd H:i:s");
 		$this->updated_by_id = 1; // dummy user
 	}
 
