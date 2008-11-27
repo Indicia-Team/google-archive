@@ -16,14 +16,17 @@ To retrieve a single item of data with a known id, append a forward slash then t
 
 Retrieving a list of data can be achieved by ommitting the id from the URL. In this case, a number of GET parameters are available to control the output as follows:
 
-||filter||Allows a string to be specified to filter the returned items.||
-||filter_field||Allows the field to be filtered to be specified. Defaults to the search field for the object (e.g. the title of the website).||
+||_fieldname_||If a parameter is provided which matches a field in the output data, then the value provided is used to filter on that field. Text attributes are filtered using a "contains" search.||
 ||orderby||Allows the field that the results are to be sorted by to be specified.||
 ||sortdir||Specifies the sort direction. Options are ASC or DESC.||
 ||limit||Limits the returned results to _n_ items.||
 ||offset||Starts the returned results offsetted by _n_ records.||
 
-A full example illustrating this is `http://www.mysite.com/index.php/services/data/termlists_term?filter=sample methods&filter_field=termlist&orderby=term&sortdir=desc&limit=10&offset=10&xsl=default.xsl`.
+A full example illustrating this is `http://www.mysite.com/index.php/services/data/termlists_term?termlist=sample&term=quad&orderby=term&sortdir=desc&limit=10&offset=10&xsl=default.xsl`. This returns an XML document formatted using default.xsl, which lists all termlist terms from termlists that contain sample in their title, where the term contains quad. The results start at the 10th item in the list, are limited to a maximum of 10 entries, and are ordered by term descending.
+
+== Output Attributes ==
+
+Calls to the Data Services return a minimal amount of information for the entity by default, typically just the entity's id and caption field. The fields returned are those defined in the set of datasbase views called list_*** where *** is the table name. To return more details, specify a GET parameter "view=gv" or "view=detail", which returns either the columns in the main grid for the entity, or a detailed view of the entity respectively. Since additional query joins are required using these views will reduce performance.
 
 == Output Mode ==
 
