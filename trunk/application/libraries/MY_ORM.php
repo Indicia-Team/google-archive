@@ -129,6 +129,7 @@ abstract class ORM extends ORM_Core {
 		// Call pre-submit
 		$this->preSubmit();
 		// Link in foreign fields
+		if (array_key_exists('fkFields', $this->submission)) {
 		foreach ($this->submission['fkFields'] as $a => $b) {
 			// Establish the correct model
 			$m = ORM::factory($b['fkTable']);
@@ -141,6 +142,7 @@ abstract class ORM extends ORM_Core {
 						$b['fkSearchField'] => $b['fkSearchValue']))
 						->find()->id);
 			}
+		}
 		}
 
 		// Iterate through submodels, calling their submit methods with subarrays
@@ -168,7 +170,7 @@ abstract class ORM extends ORM_Core {
 		$a = $this->where($vArray)->find()->id;
 		if ($a == null){
 			// If we're editing an existing record.
-			if ($vArray['id'] != null) {
+			if (array_key_exists('id', $vArray) && $vArray['id'] != null) {
 				$this->find($vArray['id']);
 			}
 			// Create a new record by calling the validate method

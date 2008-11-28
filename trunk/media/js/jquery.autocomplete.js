@@ -346,7 +346,7 @@ $.Autocompleter = function(input, options) {
 				dataType: options.dataType,
 				url: options.url,
 				data: $.extend({
-					options.query: lastWord(term),
+					q: lastWord(term),
 					limit: options.max
 				}, extraParams),
 				success: function(data) {
@@ -410,7 +410,6 @@ $.Autocompleter.defaults = {
 	},
     scroll: true,
     scrollHeight: 180,
-    query: q
 };
 
 $.Autocompleter.Cache = function(options) {

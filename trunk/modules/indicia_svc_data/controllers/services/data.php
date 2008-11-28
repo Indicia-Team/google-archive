@@ -370,6 +370,30 @@ class Data_Controller extends Service_Base_Controller {
 		}
 	}
 
+	/**
+	 * Accepts a submission from POST data and attempts to save to the database.
+	 */
+	public function save(){
+
+		if (array_key_exists('submission', $_POST)){
+
+			$mode = $this->get_input_mode();
+			switch ($mode) {
+			case 'json':
+				$s = json_decode($_POST['submission'], true);
+			default:
+				break;
+			}
+
+			foreach ($s['submission']['entries'] as $m) {
+				$m = $m['model'];
+				$model = ORM::factory($m['id']);
+				$model->submission = $m;
+				$model->submit();
+			}
+
+		}
+	}
 }
 
 ?>

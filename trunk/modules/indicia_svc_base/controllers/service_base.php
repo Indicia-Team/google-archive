@@ -37,6 +37,19 @@ class Service_Base_Controller extends Controller {
 		return $result;
 	}
 
+	/**
+	 * Retrieve the input mode for a RESTful request from the POST data.
+	 * Defaults to json. Other options not yet implemented.
+	 */
+	protected function get_input_mode() {
+		if (array_key_exists('mode', $_POST)){
+			$result = $_POST['mode'];
+		} else {
+			$result = 'json';
+		}
+		return $result;
+	}
+
 }
 
 ?>
