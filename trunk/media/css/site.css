@@ -131,3 +131,13 @@ h1
 	font-size: 1.4em;
 	letter-spacing:-1px;
 }
+
+#footer
+{
+	clear:both;
+	margin-top:1em;
+	border-top: 2px solid #C1DAD7;
+	padding 1em;
+	color:#666666;
+	font-size:1em;
+}

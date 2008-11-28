@@ -4,8 +4,30 @@ class Indicia_Controller extends Template_Controller {
 	// Template view name
 	public $template = 'templates/template';
 
-	public function __construct() {
+	public function __construct()
+	{
+		// setup/upgrade check
+		//
+		// load indicia system information
+		//
+		$system = Kohana::config('indicia.system');
+
+		// check if the general system setup was done
+		//
+		if($system['setup'] === false)
+		{
+			url::redirect('setup');
+		}
+
 		parent::__construct();
+
+		// assign view array with system informations
+		//
+		$this->template->system = $system;
+
+		// upgrade check
+		//
+		//$this->check_for_upgrade( $system );
 
 		$this->db = Database::instance();
 		$this->auth = new Auth;
@@ -181,4 +203,31 @@ class Indicia_Controller extends Template_Controller {
 
 	}
 
+    /**
+     * Check version of the php scripts against the database version
+     *
+     * @param string current script version
+     */
+    private function check_for_upgrade( $system )
+    {
+    	// get system info with the version number of the database
+    	$db_system = new System_Model;
+
+        // compare the script version against the database version
+        // if both arent equal start the upgrade process
+        //
+        if(0 != version_compare($db_system->getVersion(), $system['version'] ))
+        {
+        	$upgrade = new Upgrade_Model;
+
+        	// upgrade to version $script_version
+        	//
+            if(false === $upgrade->run($db_system->getVersion(), $system['version']))
+            {
+            	// upgrade error
+            	//
+            	url::redirect('upgradeError');
+            }
+        }
+    }
 }

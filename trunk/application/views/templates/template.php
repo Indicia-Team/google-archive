@@ -85,6 +85,12 @@
     </div>
     <!-- END: page level content -->
 
+    <!-- BEGIN: footer -->
+    <div id="footer">
+        <p>Version <?php echo $system['version']; ?> - Release date <?php echo $system['release_date']; ?></p>
+    </div>
+    <!-- END: footer -->
+
 </div>
 
 </body>
