@@ -130,19 +130,19 @@ abstract class ORM extends ORM_Core {
 		$this->preSubmit();
 		// Link in foreign fields
 		if (array_key_exists('fkFields', $this->submission)) {
-		foreach ($this->submission['fkFields'] as $a => $b) {
-			// Establish the correct model
-			$m = ORM::factory($b['fkTable']);
-
-			// Check that it has the required search field
-
-			if (array_key_exists($b['fkSearchField'], $m->table_columns)) {
-				$this->__set($b['fkIdField'],
-					$m->where(array(
-						$b['fkSearchField'] => $b['fkSearchValue']))
-						->find()->id);
+			foreach ($this->submission['fkFields'] as $a => $b) {
+				// Establish the correct model
+				$m = ORM::factory($b['fkTable']);
+	
+				// Check that it has the required search field
+	
+				if (array_key_exists($b['fkSearchField'], $m->table_columns)) {
+					$this->__set($b['fkIdField'],
+						$m->where(array(
+							$b['fkSearchField'] => $b['fkSearchValue']))
+							->find()->id);
+				}
 			}
-		}
 		}
 
 		// Iterate through submodels, calling their submit methods with subarrays

@@ -1,4 +1,21 @@
 <?php
+/**
+ * INDICIA
+ * @link http://code.google.com/p/indicia/
+ * @package Indicia
+ */
+
+/**
+ * Taxa_termlist page controller
+ *
+ *
+ * @package Indicia
+ * @subpackage Controller
+ * @license http://www.gnu.org/licenses/gpl.html GPL
+ * @author xxxxxxx <xxx@xxx.net> / $Author$
+ * @copyright xxxx
+ * @version $Rev$ / $LastChangedDate$
+ */
 
 class Termlists_term_Controller extends Gridview_Base_Controller {
 	public function __construct() {
@@ -16,7 +33,29 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			);
 		$this->pagetitle = "Terms";
 		$this->pageNoUriSegment = 4;
-		$this->model = ORM::factory('termlist');
+		$this->model = ORM::factory('termlists_term');
+	}
+
+	private function getSynonomy($meaning_id) {
+		return ORM::factory('termlists_term')
+			->where(array(
+				'preferred' => 'f',
+				'deleted' => 'f',
+				'meaning_id' => $meaning_id
+			))->find_all();
+	}
+	
+	private function formatCommonSynonomy(ORM_Iterator $res){
+		$syn = "";
+		foreach ($res as $synonym) {
+			if ($synonym->term->language->iso != "lat"){ 
+				$syn .= $synonym->term->term;
+				$syn .=	($synonym->term->language_id != null) ? 
+					",".$synonym->term->language->iso."\n" :
+					'';
+			}
+		}
+		return $syn;
 	}
 	/**
 	 * Override the default page functionality to filter by termlist.
@@ -32,25 +71,6 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$this->base_filter['termlist_id'] = $termlist_id;
 		$this->view->termlist_id = $termlist_id;
 		parent::page_gv($page_no, $limit);
-	}
-
-	private function __getSynonomy($meaning_id) {
-		return ORM::factory('termlists_term')
-			->where(array(
-				'preferred' => 'f',
-				'meaning_id' => $meaning_id
-			))->find_all();
-	}
-
-	private function __formatSynonomy(ORM_Iterator $res){
-		$syn = "";
-		foreach ($res as $synonym) {
-			$syn .= $synonym->term->term;
-			$syn .=	($synonym->term->language_id != null) ? 
-				",".$synonym->term->language->iso."\n" :
-				'';
-		}
-		return $syn;
 	}
 
 	public function edit($id,$page_no,$limit) {
@@ -70,16 +90,17 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			'edit' => 'termlists_term/edit/£id£'
 		);
 		
+		// Add items to view
 		$vArgs = array(
 			'termlist_id' => $this->model->termlist_id,
 			'table' => $grid->display(),
-			'synonomy' => $this->__formatSynonomy($this->
-				__getSynonomy($model->
-					meaning_id)));
+			'synonomy' => $this->formatCommonSynonomy($this->
+			getSynonomy($this->model->
+				meaning_id)),
+			);
+		$this->setView('termlists_term/termlists_term_edit', 'Taxon', $vArgs);
 
-		$this->setView('termlist/termlist_edit', 'Termlist', $vArgs);
 	}
-
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
 	public function edit_gv($id,$page_no,$limit) {
 		$this->auto_render=false;
@@ -102,184 +123,147 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	 * Creates a new term given the id of the termlist to initially attach it to
 	 */
 	public function create($termlist_id){
+		$this->model = ORM::factory('termlists_term');
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
 
 		$vArgs = array(
 			'table' => null,
 			'termlist_id' => $termlist_id,
+			'synonomy' => null);
+
+		$this->setView('termlists_term/termlists_term_edit', 'Term', $vArgs);
+			
+	}
+
+	public function save(){
+		$_POST['preferred'] = 't';
+		parent::save();
+	}
+
+	protected function wrap($array) {
+
+		$sa = array(
+			'id' => 'termlists_term',
+			'fields' => array(),
+			'fkFields' => array(),
+			'subModels' => array(),
+			'metaFields' => array()
+		);
+
+		// Declare which fields we consider as native to this model
+		$nativeFields = array_intersect_key($array, $this->model->table_columns);
+
+		// Use the parent method to wrap these
+		$sa = parent::wrap($nativeFields);
+
+		// Declare child models
+		if (array_key_exists('meaning_id', $array) == false || 
+			$array['meaning_id'] == '') {
+				$sa['subModels'][] = array(
+					'fkId' => 'meaning_id',
+					'model' => parent::wrap(
+						array_intersect_key($array, ORM::factory('meaning')
+						->table_columns), false, 'meaning'));
+			}
+
+		if (array_key_exists('term_id', $array) == false || 
+			$array['term_id'] == '') {
+				$sa['subModels'][] = array(
+					'fkId' => 'term_id',
+					'model' => parent::wrap(
+						array_intersect_key($array, ORM::factory('term')
+						->table_columns), false, 'term'));
+			}
+
+		$sa['metaFields']['synonomy'] = array(
+			'value' => $array['synonomy']
+		);
+
+		return $sa;
+	}
+
+	/**
+	 * Overrides the fail functionality to add args to the view.
+	 */
+	protected function submit_fail(){
+		$mn = $this->model->object_name;
+		$vArgs = array(
+			'termlist_id' => $this->model->termlist_id,
 			'synonomy' => null,
-		)
-
-		$this->setView('termlist/termlist_edit', 'Termlist', $vArgs);
-
+		);
+		$this->setView($mn."/".$mn."_edit", ucfirst($mn), $vArgs);
 	}
 
 	/**
-	 * Function that takes an array and creates a new term entry, passing relevant
-	 * values back to the return array.
+	 * Overrides the success function to add in synonomies
 	 */
-	private function __saveTerm($array) {
-		if ($array['term_id'] == ''){
-			$term = ORM::factory('term');
-		} else {
-			$term = ORM::factory('term', $array['term_id']);
-		}
-		// Look for an existing term matching attributes.
-		$a = $term->where(array(
-			'term' => $array['term'],
-			'language_id' => $array['language_id']
-		))->find()->id;
-		if ($a == null){
-			//No existing term
-			$term->validate(new Validation(array(
-				'term' => $array['term'],
-				'language_id' => $array['language_id']
-			)), true);
-		} else {
-			//Already a term we can link to
-			$term->find($a);
-		}
-		// Update with the new term
-		$array['term_id'] = $term->id;
-	
-		return $array;
-	}
-	/**
-	 * Saves the termlist_term to the model. Will create a corresponding term if one
-	 * does not already exist. Will also create a new meaning.
-	 */
-	public function save() {
-		if (! empty($_POST['id'])) {
-			$model = ORM::factory('termlists_term',$_POST['id']);
-		} else {
-			$model = ORM::factory('termlists_term');
-		}
-		/**
-		 * We need to submit null for integer fields, 
-		 * because an empty string will fail.
-		 */
-		if ($_POST['parent_id'] == ''){
-			$_POST['parent_id'] = null;
-		}
-		/**
-		 * We need to generate a new meaning if there isn't one already.
-		 */
-		if ($_POST['meaning_id'] == ''){
-			//Make a new meaning
-			$meaning = ORM::factory('meaning');
-			if ($meaning->insert())
-			{
-				$_POST['meaning_id'] = $meaning->id;
+	protected function submit_succ($id){
+
+		// Now do the same thing for synonomy
+		$arrLine = split("\n", trim($this
+			->model->submission['metaFields']['synonomy']['value']));
+		$arrSyn = array();
+
+		foreach ($arrLine as $line) {
+			$b = preg_split("/(?<!\\\\ ),/",$line); 
+			if (count($b) >= 2) {
+				$arrSyn[$b[0]] = array('lang' => trim($b[1]));
 			} else {
-				$_POST['meaning_id'] = null;
+				$arrSyn[$b[0]] = array('lang' => 'eng');
 			}
 		}
-		/**
-		 * Work out what the language is - atm, just say English. We should deduce
-		 * this from a drop-down list or similar?
-		 */
-		if ($_POST['language_id'] == ''){
-			$_POST['language_id']=1;
+		syslog(LOG_DEBUG, "Number of synonyms is: ".count($arrSyn));
+
+		syslog(LOG_DEBUG, "Looking for existing terms with meaning ".$this->model->meaning_id);
+		$existingSyn = $this->getSynonomy($this->model->meaning_id);
+
+		// Iterate through existing synonomies, discarding those that have
+		// been deleted and removing existing ones from the list to add
+
+		foreach ($existingSyn as $syn){
+			// Is the term from the db in the list of synonyms?
+			if (array_key_exists($syn->term->term, $arrSyn) && 
+				$arrSyn[$syn->term->term]['lang'] == 
+				$syn->term->language->iso )
+			{
+				array_splice($arrSyn, array_search(
+					$syn->term->term, $arrSyn), 1);
+				syslog(LOG_DEBUG, "Known synonym: ".$syn->term->term);
+			} else {
+				// Synonym has been deleted - remove it from the db
+				$syn->deleted = 't';
+				syslog(LOG_DEBUG, "New synonym: ".$syn->term->term);
+				$syn->save();
+			}
 		}
 
-		/**
-		 * This is the preferred term in this list
-		 */
-		$_POST['preferred']='t';
+		// $arraySyn should now be left only with those synonyms 
+		// we wish to add to the database
 
-		/**
-		 * We may need to generate a new term - but first check if we can
-		 * link an old one.
-		 */
-		
-		$_POST = $this->__saveTerm($_POST);
+		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
+		foreach ($arrSyn as $term => $syn) {
+			
+			$lang = $syn['lang'];
 
-		/**
-		 * Were we instructed to delete the term?
-		 */
-		if ($_POST['submit'] == 'Delete'){
-			$_POST['deleted'] = 'true';
-		} else {
-			$_POST['deleted'] = 'false';
+			// Wrap a new submission
+			syslog(LOG_DEBUG, "Wrapping submission for synonym ".$term);
+
+			$syn = $_POST;
+			$syn['term_id'] = null;
+			$syn['term'] = $term;
+			$syn['language_id'] = ORM::factory('language')->where(array(
+					'iso' => $lang))->find()->id;
+			$syn['id'] = '';
+			$syn['preferred'] = 'f';
+			$syn['meaning_id'] = $this->model->meaning_id;
+
+			$sub = $this->wrap($syn);
+			$this->model->submission = $sub;
+			$this->model->submit();
 		}
 
-		$validation = new Validation($_POST);
-		if ($model->validate($validation, true)) {
-			// Okay, the thing saved correctly - we now need to add the synonoms
-			$arrLine = split("\n",$_POST['synonomy']);
-			$arrSyn = array();
-
-			foreach ($arrLine as $line) {
-				$b = preg_split("/(?<!\\\\ ),/",$line); 
-				if (count($b) == 2) {
-					$arrSyn[$b[0]] = trim($b[1]);
-				} else {
-					$arrSyn[$b[0]] = "eng";
-				}
-			}
-			syslog(LOG_DEBUG, "Number of synonyms is: ".count($arrSyn));
-
-			$existingSyn = $this->__getSynonomy($_POST['meaning_id']);
-
-			// Iterate through existing synonomies, discarding those that have
-			// been deleted and removing existing ones from the list to add
-
-			foreach ($existingSyn as $syn){
-				// Is the term from the db in the list of synonyms?
-				if (array_key_exists($syn->term->term, $arrSyn) && 
-					$arrSyn[$syn->term->term] == $syn->term->language->iso) {
-					array_splice($arrSyn, array_search(
-						$syn->term, $arrSyn), 1);
-					syslog(LOG_DEBUG, "Known synonym: ".$syn->term->term);
-				} else {
-					// Synonym has been deleted - remove it from the db
-#					$syn->term->deleted = 't';
-					syslog(LOG_DEBUG, "New synonym: ".$syn->term->term);
-					$syn->delete();
-				}
-			}
-
-			// $arraySyn should now be left only with those synonyms 
-			// we wish to add to the database
-
-			syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
-			foreach ($arrSyn as $term => $lang){
-				// Save a new term
-				syslog(LOG_DEBUG, "Saving term ".$term);
-				$arr = array(
-					'term_id' => null,
-					'term' => $term,
-					'language_id' => ORM::factory('language')->where(array(
-						'iso' => $lang))->find()->id);
-				$arr = $this->__saveTerm($arr);
-
-				// Save a new termlists_term instance - we just copy most of
-				// the properties but set preferred to false and update
-				// the term id.
-
-				$syn = $_POST;
-				$syn['id'] = '';
-				$syn['preferred'] = 'false';
-				$syn['term_id'] = $arr['term_id'];
-				ORM::factory('termlists_term')->
-					validate(new Validation($syn), true);
-			}
-
-			url::redirect('termlists_term/'.$model->termlist_id);
-		} else {
-			$this->template->title = $this->GetEditPageTitle($model, 'Term instance');
-			$metadata = new View('templates/metadata');
-			$metadata->model = $model;
-			$view = new View('termlists_term/termlists_term_edit');
-			$view->metadata = $metadata;
-			$view->model = $model;
-			$view->table = null;
-			$view->synonomy = $this->__formatSynonomy($this->
-				__getSynonomy($_POST['meaning_id']));
-			$view->termlist_id = $model->termlist_id;
-			$this->template->content = $view;
-		}
+		url::redirect('termlists_term/'.$this->model->termlist_id);
 	}
 }
 ?>
