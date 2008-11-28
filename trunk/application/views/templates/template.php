@@ -6,15 +6,18 @@
 <!-- Main template -->
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta id="baseURL" name="baseURI" content="<?php echo url::site() ?>" />
+<meta id="baseURI" name="baseURI" content="<?php echo url::site() ?>" />
 <meta id="routedURI" name="routedURI" content="<?php echo url::site().router::$routed_uri; ?>" />
 
 <?php echo html::stylesheet(array('media/css/site',),array('screen',)); ?>
 <?php echo html::stylesheet(array('media/css/forms',),array('screen',)); ?>
+<?php echo html::stylesheet(array('media/css/thickbox',),array('screen',)); ?>
+<?php echo html::stylesheet(array('media/css/jquery.autocomplete',),array('screen',)); ?>
 
 <!-- BEGIN: jquery/superfish init -->
 <?php
     echo html::script(array(
+	    'media/js/json2.js',
             'media/js/jquery-1.2.6.js',
             'media/js/jquery.url.js',
             'media/js/hasharray.js',
