@@ -1,9 +1,8 @@
-<script type="text/javascript" src="<?php echo url::base(); ?>/media/js/autocomplete.jquery.js" />
+<script type="text/javascript" src="<?php echo url::base(); ?>media/js/jquery.autocomplete.js" />
 <script type="text/javascript" >
 $().ready(function() {
-	$("#parent").autocomplete("<?php echo url::base() ?>/index.php/services/data/taxa_taxon_list", {
+	$("input#parent").autocomplete("<?php echo url::base() ?>index.php/services/data/taxa_taxon_list", {
 		minChars : 1,
-		query : 'taxon'
 		extraParams : {
 			taxon_list_id : "<?php echo $model->taxon_list_id; ?>",
 			orderby : "taxon",
