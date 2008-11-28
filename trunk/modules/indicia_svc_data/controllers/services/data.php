@@ -14,7 +14,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function language()
 	{
-		$this->handle_request('language');
+		$this->handle_call('language');
 	}
 
 	/**
@@ -23,7 +23,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function location()
 	{
-		$this->handle_request('location');
+		$this->handle_call('location');
 	}
 
 	/**
@@ -32,7 +32,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function person()
 	{
-		$this->handle_request('person');
+		$this->handle_call('person');
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function survey()
 	{
-		$this->handle_request('survey');
+		$this->handle_call('survey');
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function taxon_group()
 	{
-		$this->handle_request('taxon_group');
+		$this->handle_call('taxon_group');
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function taxon_list()
 	{
-		$this->handle_request('taxon_list');
+		$this->handle_call('taxon_list');
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function taxa_taxon_list()
 	{
-		$this->handle_request('taxa_taxon_list');
+		$this->handle_call('taxa_taxon_list');
 	}
 
 	/**
@@ -77,7 +77,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function term()
 	{
-		$this->handle_request('term');
+		$this->handle_call('term');
 	}
 
 	/**
@@ -86,7 +86,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function termlist()
 	{
-		$this->handle_request('termlist');
+		$this->handle_call('termlist');
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function termlists_term()
 	{
-		$this->handle_request('termlists_term');
+		$this->handle_call('termlists_term');
 	}
 
 	/**
@@ -104,7 +104,7 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function user()
 	{
-		$this->handle_request('user');
+		$this->handle_call('user');
 	}
 
 	/**
@@ -113,7 +113,39 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function website()
 	{
-		$this->handle_request('website');
+		$this->handle_call('website');
+	}
+
+	/**
+	 * Internal method to handle calls - decides if it's a request for data or a submission.
+	 */
+	protected function handle_call($entity) {
+		$this->entity = $entity;
+
+		if (array_key_exists('submission', $_POST)) {
+			$this->handle_submit();
+		} else {
+			$this->handle_request();
+		}
+	}
+
+	/**
+	 * Internal method for handling a generic submission to a particular model.
+	 */
+	protected function handle_submit() {
+		$mode = $this->get_input_mode();
+		switch ($mode) {
+		case 'json':
+			$s = json_decode($_POST['submission'], true);
+		}
+
+		if (array_key_exists('submission', $s)) {
+			$this->submit($s);
+		} else {
+			$model = ORM::factory($this->entity);
+			$model->submission = $s;
+			$model->submit();
+		}
 	}
 
 	/**
@@ -121,10 +153,9 @@ class Data_Controller extends Service_Base_Controller {
 	 * (when an argument representing the primary key is present in the URL), or a list
 	 * of items (if no argunment is present in the URL).
 	 */
-	protected function handle_request($entity)
+	protected function handle_request()
 	{
 		// Store the entity in class member, so less recursion overhead when building XML.
-		$this->entity = $entity;
 		$this->viewname = $this->get_view_name();
 		$this->model=ORM::factory($this->entity);
 		$this->db = new Database();
@@ -381,17 +412,21 @@ class Data_Controller extends Service_Base_Controller {
 			switch ($mode) {
 			case 'json':
 				$s = json_decode($_POST['submission'], true);
-			default:
-				break;
 			}
 
-			foreach ($s['submission']['entries'] as $m) {
-				$m = $m['model'];
-				$model = ORM::factory($m['id']);
-				$model->submission = $m;
-				$model->submit();
-			}
+			$this->submit($s);
+		}
+	}
 
+	/**
+	 * Takes a submission array and attempts to save to the database.
+	 */
+	protected function submit($s){
+		foreach ($s['submission']['entries'] as $m) {
+			$m = $m['model'];
+			$model = ORM::factory($m['id']);
+			$model->submission = $m;
+			$model->submit();
 		}
 	}
 }
