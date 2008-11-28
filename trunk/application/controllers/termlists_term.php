@@ -123,7 +123,6 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	 * Creates a new term given the id of the termlist to initially attach it to
 	 */
 	public function create($termlist_id){
-		$this->model = ORM::factory('termlists_term');
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
 

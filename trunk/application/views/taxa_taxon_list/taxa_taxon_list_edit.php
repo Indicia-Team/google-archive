@@ -1,13 +1,38 @@
-<script type="text/javascript" src="<?php echo url::base(); ?>media/js/jquery.autocomplete.js" />
+<?php echo html::script(array(
+	'media/js/jquery.ajaxQueue.js',
+	'media/js/jquery.bgiframe.min.js',
+	'media/js/thickbox-compressd.js',
+	'media/js/jquery.autocomplete.js'
+), FALSE); ?>
 <script type="text/javascript" >
-$().ready(function() {
-	$("input#parent").autocomplete("<?php echo url::base() ?>index.php/services/data/taxa_taxon_list", {
+$(document).ready(function() {
+	$("input#parent").autocomplete("<?php echo url::site() ?>index.php/services/data/taxa_taxon_list", {
 		minChars : 1,
 		extraParams : {
-			taxon_list_id : "<?php echo $model->taxon_list_id; ?>",
+			taxon_list_id : "<?php echo $taxon_list_id; ?>",
 			orderby : "taxon",
 			mode : "json"
+		},
+		parse: function(data) {
+			var results = [];
+			var obj = JSON.parse(data);
+			$.each(obj, function(i, item) {
+				results[results.length] = { 
+					'data' : item,
+					'value' : item.id,
+					'result' : item.taxon };
+			});
+			return results;
+		},
+		formatItem: function(item) {
+			return item.taxon;
+		},
+		formatResult: function(item) {
+			return item.id;
 		}
+	});
+	$("input#parent").result(function(event, data){
+		$("input#parent_id").attr('value', data.id);
 	});
 });
 </script>

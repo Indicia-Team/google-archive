@@ -201,7 +201,7 @@ class Data_Controller extends Service_Base_Controller {
 	protected function xml_encode($array, $xsl, $indent=false, $recursion=0) {
 		// Keep an array to track any elements that must be skipped. For example if an array contains
 		// {person_id=>1, person=>James Brown} then the xml output for the id is <person id="1">James Brown</person>.
-		// There is no need to output the person separately so it get's flagged in this array for skipping.
+		// There is no need to output the person separately so it gets flagged in this array for skipping.
 		$to_skip=array();
 
 		if (!$recursion) {
