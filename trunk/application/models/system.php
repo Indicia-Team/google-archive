@@ -19,25 +19,25 @@ class System_Model extends Model
     /**
      * @var object $system_data
      */
-	private $system_data;
+    private $system_data;
 
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-		$result = $this->db->query("SELECT * FROM system");
+        $result = $this->db->query('SELECT * FROM "system" ORDER BY id_system DESC LIMIT 1');
 
-		$this->system_data = $result[0];
-	}
+        $this->system_data = $result[0];
+    }
 
     /**
      * get indicia version
      *
      * @return string
      */
-    public getVersion()
+    public function getVersion()
     {
-		return $this->system_data->indicia_version;
+        return $this->system_data->version;
     }
 }
 
