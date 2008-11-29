@@ -30,12 +30,20 @@ class Upgrade_Model extends Model
      */
     public function run( $current_version, $new_system )
     {
+        // Upgrade not possible if the new version is lower than the database version
+        //
+        if(1 == version_compare($current_version, $new_system['version']) )
+        {
+            Kohana::log('error', 'Current script version is lower than the database version. Upgrade not possible.');
+            return false;
+        }
+
         // start transaction
         $this->db->query("BEGIN");
 
         try
         {
-        /*
+            /*
             if(0 == version_compare('0.1', $current_version) )
             {
                 // upgrade from version 0.1 to 0.2
@@ -61,13 +69,12 @@ class Upgrade_Model extends Model
             $this->set_new_version( $new_system );
 
             // update indicia.php config file
-            $this->update_config_file( $new_system ));
+            $this->update_config_file( $new_system );
 
             // commit transaction
             $this->db->query("COMMIT");
-
+            */
             return true;
-        */
         }
         catch(Kohana_Database_Exception $e)
         {
@@ -118,13 +125,14 @@ class Upgrade_Model extends Model
      */
     private function set_new_version( $new_system )
     {
-        $this->db->query("UPDATE
-                            system
-                          SET
-                            indicia_version      ='{$new_system['version']}',
-                            indicia_name         ='{$new_system['name']}',
-                            indicia_repository   ='{$new_system['repository']}',
-                            indicia_release_date ='{$new_system['release_date']}'");
+        $this->db->query('INSERT INTO
+                            "system"
+                          ("version","name","repository","release_date")
+                          VALUES
+                          (\''.$new_system['version'].'\',
+                           \''.$new_system['name'].'\',
+                           \''.$new_system['repository'].'\',
+                           \''.$new_system['release_date'].'\')');
     }
 
     /**
@@ -141,7 +149,7 @@ class Upgrade_Model extends Model
      *
      * @param object $e
      */
-    private function $log($e)
+    private function log($e)
     {
         $message  = "________________________________________________\n";
         $message .= "Upgrade Error - Time: " . date() . "\n";
@@ -158,14 +166,14 @@ class Upgrade_Model extends Model
      *
      * @param array $new_system
      */
-    private function buildConfigFileContent( & $new_system)
+    private function buildConfigFileContent( & $new_system )
     {
         $str = "<?php \n\n";
 
-        $str .= '$config['system']["version"]'      ." = '{$new_system['version']}';\n";
-        $str .= '$config['system']["name"]'         ." = '{$new_system['name']}';\n";
-        $str .= '$config['system']["repository"]'   ." = '{$new_system['repository']}';\n";
-        $str .= '$config['system']["release_date"]' ." = '{$new_system['release_date']}';\n\n";
+        $str .= '$config["system"]["version"]'      . " = '{$new_system['version']}';\n";
+        $str .= '$config["system"]["name"]'         . " = '{$new_system['name']}';\n";
+        $str .= '$config["system"]["repository"]'   . " = '{$new_system['repository']}';\n";
+        $str .= '$config["system"]["release_date"]' . " = '{$new_system['release_date']}';\n\n";
 
         $str .= "?>";
 
@@ -179,21 +187,21 @@ class Upgrade_Model extends Model
      */
     private function write_config( $config_content )
     {
-        $config_file = basedir(basedir(__file__)) . "/config/indicia.php";
+        $config_file = dirname(dirname(__file__)) . "/config/indicia.php";
 
         if( !@is_writeable($config_file) )
         {
-            throw new Indicia_File_Exception("Config file indicia.php isnt writeable. Check permission on: ". $config_path);
+            throw new Indicia_File_Exception("Config file indicia.php isnt writeable. Check permission on: ". $config_file);
         }
 
         if(!$fp = @fopen($config_file, 'w'))
         {
-           throw new Indicia_File_Exception("Cant open file to write: ". $config_file");
+           throw new Indicia_File_Exception("Cant open file to write: ". $config_file);
         }
 
         if( !@fwrite($fp, $config_content) )
         {
-            throw new Indicia_File_Exception("Cant write file: ". $config_file");
+            throw new Indicia_File_Exception("Cant write file: ". $config_file);
         }
 
         @fclose($fp);
