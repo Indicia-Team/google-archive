@@ -28,7 +28,7 @@ class Indicia_Controller extends Template_Controller {
 
         // upgrade check
         //
-        //$this->check_for_upgrade();
+        // $this->check_for_upgrade();
 
         $this->db = Database::instance();
         $this->auth = new Auth;
