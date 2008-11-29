@@ -8,27 +8,28 @@
 <ol>
 <li>
   <label for="username">Username</label>
-  <input type = "text" name = "username" id = "username" value="<?php echo $username; ?>" disabled="disabled"  class="narrow" >
+  <input tabindex="1" type = "text" name = "username" id = "username" value="<?php echo $username; ?>" disabled="disabled"  class="narrow" >
   <?php echo html::error_message($model->getError('username')); ?>
 </li>
 <li>
   <label for="email_address">Email</label>
-  <input type = "text" name = "email_address" id = "email_address" value="<?php echo $email_address; ?>" disabled="disabled" class="narrow" >
+  <input tabindex="2" type = "text" name = "email_address" id = "email_address" value="<?php echo $email_address; ?>" disabled="disabled" class="narrow" >
   <?php echo html::error_message($model->getError('email_address')); ?>
 </li>
 <li>
   <label for="password">Password</label>
-  <input type = "password" name = "password" id = "password" value="" class="narrow" >
+  <input tabindex="3" type = "password" name = "password" id = "password" value="" class="narrow" >
   <?php echo html::error_message($model->getError('password')); ?>
 </li>
 <li>
   <label for="password2">Repeat Password</label>
-  <input type = "password" name = "password2" id = "password2" value="" class="narrow" >
+  <input tabindex="4" type = "password" name = "password2" id = "password2" value="" class="narrow" >
 </li>
 <li>
   <label for="remember_me" >Remember me</label>
-  <input type="checkbox" id="remember_me" name="remember_me" class="default" />
+  <input tabindex="5" type="checkbox" id="remember_me" name="remember_me" class="default" />
 </li>
+</ol>
 </fieldset>
-  <input type = "submit" value = "Submit New Password" >
+  <input tabindex="6" type = "submit" value = "Submit New Password" />
 </form>
