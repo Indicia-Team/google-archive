@@ -43,7 +43,7 @@ class Upgrade_Model extends Model
 
         try
         {
-            /*
+/*
             if(0 == version_compare('0.1', $current_version) )
             {
                 // upgrade from version 0.1 to 0.2
@@ -64,7 +64,7 @@ class Upgrade_Model extends Model
                 $this->upgrade_0_3_to_0_4();
                 $current_version = '0.4';
             }
-
+ */
             // update system table entry to new version
             $this->set_new_version( $new_system );
 
@@ -73,7 +73,7 @@ class Upgrade_Model extends Model
 
             // commit transaction
             $this->db->query("COMMIT");
-            */
+
             return true;
         }
         catch(Kohana_Database_Exception $e)
@@ -125,14 +125,11 @@ class Upgrade_Model extends Model
      */
     private function set_new_version( $new_system )
     {
-        $this->db->query('INSERT INTO
-                            "system"
-                          ("version","name","repository","release_date")
-                          VALUES
-                          (\''.$new_system['version'].'\',
-                           \''.$new_system['name'].'\',
-                           \''.$new_system['repository'].'\',
-                           \''.$new_system['release_date'].'\')');
+        $this->db->insert('system',
+                          array('version'      => $new_system['version'],
+                                'name'         => $new_system['name'],
+                                'repository'   => $new_system['repository'],
+                                'release_date' => $new_system['release_date']));
     }
 
     /**
