@@ -18,14 +18,14 @@ class html extends html_Core {
 	 	if ($default) {
 	 		echo '<option>'.html::specialchars($default).'</option>';
 	 	}
-		foreach ($model->table_columns as $name => $dbtype) {
+		foreach ($model->getSubmittableFields(true) as $name => $dbtype) {
 			if (!in_array($name, $skipped)) {
 				echo '<option value="'.$name.'">';
-				if (substr($name, -3)=='_id') {
-					echo substr($name,0,-3);
-					// if the foreign key name does not match it's table, also output the table name
-					if (array_key_exists(substr($name,0,-3), $model->belongs_to)) {
-						echo ' ('.$model->belongs_to[substr($name,0,-3)].')';
+				if (substr($name, 0, 3)=='fk_') {
+					echo substr($name,3);
+					// if the foreign key name does not match its table, also output the table name
+					if (array_key_exists(substr($name,3), $model->belongs_to)) {
+						echo ' ('.$model->belongs_to[substr($name,3)].')';
 					}
 				} else {
 					echo $name;
