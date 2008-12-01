@@ -27,12 +27,30 @@ class Data_Controller extends Service_Base_Controller {
 	}
 
 	/**
+	 * Provides the /services/data/occurrence service.
+	 * Retrieves details of occurrences.
+	 */
+	public function occurrence()
+	{
+		$this->handle_call('occurrence');
+	}
+	
+	/**
 	 * Provides the /services/data/person service.
 	 * Retrieves details of a single person.
 	 */
 	public function person()
 	{
 		$this->handle_call('person');
+	}
+	
+	/**
+	 * Provides the /services/data/sample service.
+	 * Retrieves details of a sample.
+	 */
+	public function sample()
+	{
+		$this->handle_call('sample');
 	}
 
 	/**
