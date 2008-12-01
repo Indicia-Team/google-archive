@@ -139,6 +139,11 @@ class Indicia_Controller extends Template_Controller {
                         'fkSearchField' =>
                         ORM::factory(substr($a,3))->get_search_field(),
                         'fkSearchValue' => $b);
+		    // Determine the foreign table name
+		    $m = ORM::factory($id);
+		    if (array_key_exists(substr($a,3), $m->belongs_to)) {
+			    $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
+		    }
                 } else {
                     // This should be a field in the model.
                     // Add a new field to the save array

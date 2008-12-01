@@ -137,10 +137,10 @@ abstract class ORM extends ORM_Core {
 				// Check that it has the required search field
 	
 				if (array_key_exists($b['fkSearchField'], $m->table_columns)) {
-					$this->__set($b['fkIdField'],
+					$this->submission['fields'][$b['fkIdField']] =
 						$m->where(array(
 							$b['fkSearchField'] => $b['fkSearchValue']))
-							->find()->id);
+							->find()->id;
 				}
 			}
 		}
@@ -191,6 +191,28 @@ abstract class ORM extends ORM_Core {
 			syslog(LOG_DEBUG, "Existing record - linking to ".$a);
 			return $a;
 		}
+	}
+
+	/**
+	 * Returns an array of fields that this model will take when submitting. By default, this
+	 * will return the fields of the underlying table, but where submodels are involved this
+	 * may be overridden to include those also.
+	 *
+	 * When called with true, this will also add fk_ columns for any _id columns in the model.
+	 */
+	public function getSubmittableFields($fk = false) {
+		$a = $this->table_columns;
+
+		if ($fk == true) {
+			foreach ($this->table_columns as $name => $type) {
+				if (substr($name, -3) == "_id") {
+					syslog(LOG_DEBUG, $name." added as fk field.");
+					$a["fk_".substr($name, 0, -3)] = $type;
+				}
+			}
+		}
+
+		return $a;
 	}
 }
 
