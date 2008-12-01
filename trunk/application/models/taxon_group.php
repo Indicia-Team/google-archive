@@ -2,7 +2,8 @@
 
 class Taxon_Group_Model extends ORM {
 
-	protected $has_many = array('term');
+	protected $has_many = array('taxa');
+
 	protected $belongs_to = array(
 		'created_by'=>'user',
 		'updated_by'=>'user'

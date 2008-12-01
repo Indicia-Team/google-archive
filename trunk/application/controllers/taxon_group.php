@@ -7,6 +7,7 @@ class Taxon_Group_Controller extends Gridview_Base_Controller {
 			'title'=>'');
 		$this->pagetitle = "Taxon Groups";
 		$this->session = Session::instance();
+		$this->model = ORM::factory('taxon_group');
 	}
 
 	/**
@@ -34,24 +35,6 @@ class Taxon_Group_Controller extends Gridview_Base_Controller {
 			$view->metadata = $this->GetMetadataView($taxon_group);
 			$this->template->content = $view;
 		}
-	}
-
-	public function save() {
-		if (! empty($_POST['id']))
-			$taxon_group = new Taxon_Group_Model($_POST['id']);
-		else
-			$taxon_group = new Taxon_Group_Model();
-		$_POST = new Validation($_POST);
-		if ($taxon_group->validate($_POST, TRUE)) {
-			url::redirect('taxon_group');
-		} else {
-			// errors are now embedded in the model
-		    $this->template->title = "Edit ".$taxon_group->title;
-			$view = new View('taxon_group/taxon_group_edit');
-			$view->model = $taxon_group;
-			$this->template->content = $view;
-		}
-
 	}
 
 }

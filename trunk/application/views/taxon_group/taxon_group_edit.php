@@ -12,5 +12,5 @@
 </ol>
 </fieldset>
 <?php echo $metadata ?>
-<input type="submit" value="Save" />
+<input type="submit" value="Save" name="submit" />
 </form>
