@@ -28,6 +28,6 @@ In order to gain access to this Indicia system you must log on. If you do not ha
 </form>
 <?php if ( ! empty($link_to_username) )
 { ?>
-  <br />You may <a href="/login">click here to log in using your Username</a>.
+  <br />You may <a href="<?php echo url::site(); ?>login">click here to log in using your Username</a>.
 <?php } ?>
 <br />If you have forgotten your password, <a href="<?php echo url::site(); ?>forgotten_password">click here to request an email allowing you to reset your password</a>.
