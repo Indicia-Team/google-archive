@@ -26,13 +26,13 @@ class Indicia_Controller extends Template_Controller {
         //
         $this->template->system = $system;
 
-        // upgrade check
-        //
-        // $this->check_for_upgrade();
-
         $this->db = Database::instance();
         $this->auth = new Auth;
         $this->session = new Session;
+
+        // upgrade check
+        //
+        // $this->check_for_upgrade();
 
         $this->template->menu = array
         (
@@ -233,9 +233,7 @@ class Indicia_Controller extends Template_Controller {
             //
             if(false === $upgrade->run($db_system->getVersion(), $new_system))
             {
-                // upgrade error
-                //
-                url::redirect('upgradeError');
+				throw new Kohana_User_Exception('Upgrade Error', Kohana::lang('general_errors.upgrade.failure'));
             }
         }
     }

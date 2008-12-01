@@ -84,6 +84,10 @@ class Upgrade_Model extends Model
         {
             $this->log($e);
         }
+        catch(Exception $e)
+        {
+            $this->log($e);
+        }
 
         // rollback transaction
         $this->db->query("ROLLBACK");
