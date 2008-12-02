@@ -42,4 +42,17 @@ class Taxa_taxon_list_Model extends ORM_Tree {
 		return ($this->taxon_id != null ? $this->taxon->taxon : '');
 	}
 
+	public function getSubmittableFields() {
+		return array(
+			'taxon' => '',
+			'fk_language' => '',
+			'fk_taxon_group' => '',
+			'authority' => '',
+			'search_code' => '',
+			'external_key' => '',
+			'fk_parent' => '',
+			'taxonomic_sort_order' => '',
+		);
+	}
+
 }

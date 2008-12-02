@@ -126,8 +126,6 @@ abstract class ORM extends ORM_Core {
 			// Useful
 		$mn = $this->object_name;
 		$collapseVals = create_function('$arr', 'return $arr["value"];');
-		// Call pre-submit
-		$this->preSubmit();
 		// Link in foreign fields
 		if (array_key_exists('fkFields', $this->submission)) {
 			foreach ($this->submission['fkFields'] as $a => $b) {
@@ -163,6 +161,10 @@ abstract class ORM extends ORM_Core {
 				$this->submission['fields'][$a['fkId']]['value'] = $result;
 			}
 		}
+
+		// Call pre-submit
+		print_r($this->submission);
+		$this->preSubmit();
 
 		// Flatten the array to one that can be validated
 		$vArray = array_map($collapseVals, $this->submission['fields']);
