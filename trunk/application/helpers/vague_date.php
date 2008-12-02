@@ -201,19 +201,20 @@ class vague_date {
 
 		if ($endDate['tm_mday'] != 0) {
 			// Yay! We have day precision
+			$eyear = 1900 + $endDate['tm_year'];
+			$emonth = 1 + $endDate['tm_month'];
+			$eday = $endDate['tm_mday'];
+			$edate = $eyear."-".$emonth."-".$eday;
 			if (!$range) {
-				$year = 1900 + $endDate['tm_year'];
-				$month = 1 + $endDate['tm_month'];
-				$day = $endDate['tm_mday'];
-				$date = $year."-".$month."-".$day;
 
 				$vagueDate = array(
-					'start' => $date,
-					'end' => $end,
+					'start' => $edate,
+					'end' => $edate,
 					'type' => 'D'
 				);
 			} else {
 				// Do we have the precision in the start date?
+
 			}			
 
 		}
