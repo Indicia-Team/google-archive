@@ -3,6 +3,96 @@
 class vague_date {
 
 	/**
+	 * List of regex strings used to try to capture date ranges. The regex key should, naturally,
+	 * point to the regular expression. Start should point to the backreference for the string to
+	 * be parsed for the 'start' date, 'end' to the backreference of the string to be parsed
+	 * for the 'end' date. Types are not determined here. Should either 'start' or 'end' contain
+	 * the string '...', this will be interpreted as one-ended range.
+	 */
+	private $dateRangeStrings = Array(
+		array(
+			'regex' => '/([\d\w\s]*)(\sto\s|\s-\s)([\d\w\s]*)/', // date to date
+			'start' => '1',
+			'end' => '3'
+		),
+		array(
+			'regex' => '/([Pp]re|[Bb]efore[\.]?)([\d\w\s]*)/',
+			'start' => '...',
+			'end' => '2'
+		),
+		array(
+			'regex' => '/([Ff]rom|[Aa]fter)([\d\w\s]*)/',
+			'start' => '2',
+			'end' => '...'
+		),
+		array(
+			'regex' => '/([\d\w\s]*)\s-/',
+			'start' => '1',
+			'end' => '...'
+		),
+	);
+
+	private static $parseFormats = array_merge(
+		self::singleDayFormats,
+		self::singleMonthInYearFormats,
+		self::singleMonthFormats,
+		self::singleYearFormats,
+	);
+
+	/**
+	 * Array of formats used to parse a string looking for a single day with the strptime()
+	 * function - see http://uk2.php.net/manual/en/function.strptime.php
+	 */
+	private static $singleDayFormats = Array(
+		'%Y-%m-%d', // ISO 8601 date format
+		'%d/%m/%y', // UK style date format
+		'%d/%m/%Y', // UK style date format (full year)
+		'%A %e %B %Y', // Monday 12 October 1997
+		'%a %e %B %Y', // Mon 12 October 1997
+		'%A %e %b %Y', // Monday 12 Oct 1997
+		'%a %e %b %Y', // Mon 12 Oct 1997
+		'%A %e %B %y', // Monday 12 October 97
+		'%a %e %B %y', // Mon 12 October 97
+		'%A %e %b %y', // Monday 12 Oct 97
+		'%a %e %b %y', // Mon 12 Oct 97
+		'%A %e %B', // Monday 12 October
+		'%a %e %B', // Mon 12 October 
+		'%A %e %b', // Monday 12 Oct 
+		'%a %e %b', // Mon 12 Oct 
+		'%e %B %Y', // 12 October 1997
+		'%e %b %Y', // 12 Oct 1997
+		'%e %B %y', // 12 October 97
+		'%e %b %y', // 12 Oct 97
+		'%D', // American date format
+		);
+
+	/**
+	 * Array of formats used to parse a string looking for a single month in a year
+	 * with the strptime() function - see http://uk2.php.net/manual/en/function.strptime.php
+	 */
+	private $singleMonthInYearFormats = Array(
+		'%Y-%m', // ISO 8601 format - truncated to month
+		'%m/%y', // British style truncated
+		'%m/%Y', // British style truncated - 4 digit year
+		'%B %Y', // June 1998
+		'%b %Y', // Jun 1998
+		'%B %y', // June 98
+		'%b %y', // Jun 98
+	);
+
+	private $singleMonthFormats = Array(
+		'%B', // October
+		'%b', // Oct
+	);
+
+	private $singleYearFormats = Array(
+		'%Y', // 1998
+		'%y', // 98
+	);
+
+
+
+	/**
 	 * Convert a vague date in the form of array(start, end, type) to a string
 	 */
 	public static function vague_date_to_string($date)
@@ -37,7 +127,114 @@ class vague_date {
 
 	public static function string_to_vague_date($string)
 	{
+		// Our approach shall be to gradually pare down from the most complex possible
+		// dates to the simplest, and match as fast as possible to try to grab the most
+		// information. First we consider the potential ways that a range may be
+		// represented.
 
+		$range = false;
+		$startDate = false;
+		$endDate = false;
+		$matched = false;
+		$vagueDate = array(
+			'start' => '',
+			'end' => '',
+			'type' => ''
+		);
+
+		foreach ($this->dateRangeStrings as $a) {
+			if (ereg($a['regex'], $string, $regs) != false) {
+				if ($a['start'] == '...'){
+					$start = false;
+				} else {
+					$start = $regs[$a['start']];
+				}
+				if ($a['end'] == '...'){
+					$end = false;
+				} else {
+					$end = $regs[$a['end']];
+				}
+				$range = true;
+				break;
+			}			
+		}
+
+		if (!range) {
+			$a = parseSingleDate($string);
+			if ($a != null) {
+				$startDate = $endDate = $a;
+				$matched = true;
+			}
+		} else {
+			if ($start) {
+				$a = parseSingleDate($start);
+				if ($a != null) {
+					$startDate = $a;
+					$matched = true;
+				}
+			} 
+			if ($end) {
+				$a = parseSingleDate($end);
+				if ($a != null) {
+					$endDate = $a;
+					$matched = true;
+				}
+			}
+			if ($matched) {
+				if ($start && !$end) {
+					$endDate = $startDate;
+				} else if ($end && !$start) {
+					$startDate = $endDate;
+				}
+			}
+								
+		}
+
+		if (!$matched) {
+			return null;
+		}
+
+		// Okay, now we try to determine the type - we look mostly at $endDate because
+		// this is more likely to contain more info e.g. 15 - 18 August 2008
+
+		// Do we have day precision?
+
+		if ($endDate['tm_mday'] != 0) {
+			// Yay! We have day precision
+			if (!$range) {
+				$year = 1900 + $endDate['tm_year'];
+				$month = 1 + $endDate['tm_month'];
+				$day = $endDate['tm_mday'];
+				$date = $year."-".$month."-".$day;
+
+				$vagueDate = array(
+					'start' => $date,
+					'end' => $end,
+					'type' => 'D'
+				);
+			} else {
+				// Do we have the precision in the start date?
+			}			
+
+		}
+	
+
+	}
+
+	/**
+	 * Parses a single date from a string.
+	 */
+	protected static function parseSingleDate($string){
+		$parsedDate = null;
+
+		foreach (self::parseFormats as $a){
+			if ($b = strptime($string, $a) != false){
+				$parsedDate = $b;
+				break;
+			}
+		}
+
+		return $parsedDate;
 	}
 
 	/**
