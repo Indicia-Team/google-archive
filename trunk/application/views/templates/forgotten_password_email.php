@@ -3,5 +3,5 @@
 <p>To reset your password click on the link below,  enter your new password (twice) and click Submit. You will then be able to access the system.
 <p><?=$new_password_link?></p>
 <p>If nothing happens when you click on the link, copy and paste the link into the address bar of your web browser.</p>
-<p>PROTECT YOUR PASSWORD: NEVER give your password to anyone.</p>
+<p>Please protect your password and never give your password to anyone.</p>
 <p>Please do not reply to this email. This mailbox is not monitored and you will not receive a response.</p>
