@@ -1,3 +1,5 @@
+#summary Structure and explanation of a Model entity within Indicia Core
+
 This page describes and outlines the structure of an indicial Model, representing a database entity.
 
 =Model Structure=
