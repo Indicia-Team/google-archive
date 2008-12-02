@@ -34,13 +34,13 @@ The parameters given are the model name, the name for the model used by the grid
 
 Optional things which may be set in the constructor:
 
-* `$this->base_filter` Array of columns to filter the gridview on, in the form `'column_name' => 'filter_value'`. Filtering done through the base_filter property is done using the WHERE SQL clause, and so requires an exact match. This filter will never be affected by the gridview filter controls.
+  * `$this->base_filter` Array of columns to filter the gridview on, in the form `'column_name' => 'filter_value'`. Filtering done through the base_filter property is done using the WHERE SQL clause, and so requires an exact match. This filter will never be affected by the gridview filter controls.
 
-* `$this->columns` Array of columns to display in the gridview. List the columns as keys to null values: `'column_name' => ''`.
+  * `$this->columns` Array of columns to display in the gridview. List the columns as keys to null values: `'column_name' => ''`.
 
-* `$this->pagetitle` Page title to use with the `getEditPageTitle()` method.
+  * `$this->pagetitle` Page title to use with the `getEditPageTitle()` method.
 
-* `$this->pageNoUriSegment` Segment of the URI to use for the page number of the gridview control. Defaults to 3 (e.g. /controller/method/page).
+  * `$this->pageNoUriSegment` Segment of the URI to use for the page number of the gridview control. Defaults to 3 (e.g. /controller/method/page).
 
 {{{
 	public function __construct() {
