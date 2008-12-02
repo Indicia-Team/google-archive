@@ -1,7 +1,7 @@
 #summary Extensions to Kohana's validation library for Indicia
 #labels Phase-Implementation
 
-= Introduction =
+= Extensions to Kohana's Validation Library =
 
 The following extensions are added to the Kohana Validation library through subclassing the valid_core helper class (application/helpers/MY_valid.php).
 
