@@ -41,7 +41,7 @@ abstract class ORM extends ORM_Core {
 	}
 
 	/**
-	 * For a model that is about to be saved, sets the metadata created and 
+	 * For a model that is about to be saved, sets the metadata created and
 	 * updated field values.
 	 */
 	public function set_metadata() {
@@ -50,7 +50,7 @@ abstract class ORM extends ORM_Core {
 			$this->created_on = date("Ymd H:i:s");
 			$this->created_by_id = 1; // dummy user
 		}
-		// TODO: Check if updated metadata present in this entity, 
+		// TODO: Check if updated metadata present in this entity,
 		// and also use correct user.
 		$this->updated_on = date("Ymd H:i:s");
 		$this->updated_by_id = 1; // dummy user
@@ -133,9 +133,9 @@ abstract class ORM extends ORM_Core {
 			foreach ($this->submission['fkFields'] as $a => $b) {
 				// Establish the correct model
 				$m = ORM::factory($b['fkTable']);
-	
+
 				// Check that it has the required search field
-	
+
 				if (array_key_exists($b['fkSearchField'], $m->table_columns)) {
 					$this->submission['fields'][$b['fkIdField']] =
 						$m->where(array(
@@ -166,8 +166,9 @@ abstract class ORM extends ORM_Core {
 
 		// Flatten the array to one that can be validated
 		$vArray = array_map($collapseVals, $this->submission['fields']);
-		// Check whether this object already exists in the database
-		$a = $this->where($vArray)->find()->id;
+		// Check whether this object already exists in the database with an exact match
+		$a = (array_key_exists('id', $vArray) && $vArray['id'] != null) ?
+				$this->where($vArray)->find()->id : null;
 		if ($a == null){
 			// If we're editing an existing record.
 			if (array_key_exists('id', $vArray) && $vArray['id'] != null) {
