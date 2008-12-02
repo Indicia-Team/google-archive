@@ -1,0 +1,119 @@
+This page describes and outlines the structure of an indicial Model, representing a database entity.
+
+=Model Structure=
+
+Model name: for table _items_, the model should have name _Item_Model_. Unusual pluralisations should be configured in config/inflector.php
+
+{{{
+
+class Sample_Model extends ORM {
+
+}
+
+}}}
+
+Where parent/child relationships exist, the model should extend ORM_Tree in place of ORM.
+
+==Class variables==
+
+_search_field_ should define the default field to search when querying this model.
+
+{{{
+
+	protected $search_field='title';
+
+}}}
+
+===Relationships===
+
+Relationships should be defined as outlined [http://docs.kohanaphp.com/libraries/orm#defining_relationships_in_orm here].
+
+==Class Methods==
+
+===Mandatory methods===
+
+_validate_ should take a Validation array, add required rules and then call the parent method.
+
+{{{
+
+public function validate(Validation $array, $save = false) {
+return parent::validate($array, $save);
+}
+
+}}}
+
+===Optional Methods===
+
+_caption_ should return a 'caption' for this model - for example, a caption for a person might be a combination of first name and surname. Defaults to:
+
+{{{
+
+	/**
+	 * Return a displayable caption for the item, defined as the content of the field with the
+	 * same name as search_field.
+	 */
+	public function caption()
+	{
+		return $this->__get($this->search_field);
+	}
+
+}}}
+
+_getSubmittableFields_ should return a list of fields that this model will accept and save into the database. Keys that should be used to link to foreign models should be prefixed with fk_. This method will default to:
+
+{{{
+/**
+	 * Returns an array of fields that this model will take when submitting. By default, this
+	 * will return the fields of the underlying table, but where submodels are involved this
+	 * may be overridden to include those also.
+	 *
+	 * When called with true, this will also add fk_ columns for any _id columns in the model.
+	 */
+	public function getSubmittableFields($fk = false) {
+		$a = $this->table_columns;
+
+		if ($fk == true) {
+			foreach ($this->table_columns as $name => $type) {
+				if (substr($name, -3) == "_id") {
+					syslog(LOG_DEBUG, $name." added as fk field.");
+					$a["fk_".substr($name, 0, -3)] = $type;
+				}
+			}
+		}
+
+		return $a;
+	}
+
+}}}
+
+_preSubmit_ is called before any data is saved to the database and should tidy up data to be submitted to this model (submodels will call their own _preSubmit_ methods). Will default to:
+
+{{{
+
+/**
+	 * Ensures that the save array is validated before submission. Classes overriding
+	 * this method should call this parent method after their changes to perform necessary
+	 * checks unless they really want to skip them.
+	 */
+	protected function preSubmit(){
+		//Overridden code happens here.
+
+		// Ensure that the only fields being submitted are those present in the model.
+		$this->submission['fields'] = array_intersect_key(
+			$this->submission['fields'], $this->table_columns);
+
+
+		// Where fields are numeric, ensure that we don't try to submit strings to
+		// them.
+		foreach ($this->submission['fields'] as $a => $b) {
+			if ($b['value'] == '') {
+				$type = $this->table_columns[$a];
+				syslog(LOG_DEBUG, "Column ".$a." has type ".$type);
+				switch ($type) {
+					case 'int':
+						$this->submission['fields'][$a]['value'] = null;
+						break;
+					}
+			}
+		}
+}}}
