@@ -12,10 +12,10 @@ class Person_Model extends ORM {
 		$array->pre_filter('trim');
 		$array->add_rules('surname', 'required', 'length[1,30]');
 		$array->add_rules('email_address', 'email', 'length[1,50]');
+        $array->add_rules('website_url', 'length[1,500]', 'url');
 		// Any fields that don't have a validation rule need to be copied into the model manually
 		$this->first_name = $array['first_name'];
 		$this->initials = $array['initials'];
-		$this->website_url = $array['website_url'];
 		return parent::validate($array, $save);
 	}
 

@@ -2,7 +2,6 @@
 <form class="cmxform" action="<?php echo url::site().'person/save'; ?>" method="post">
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <?php echo $return_url ?>
-<?php echo $disable_button ?>
 <fieldset>
 <legend>Person's Details</legend>
 <ol>
@@ -35,5 +34,4 @@
 </fieldset>
 <?php echo $metadata ?>
 <input type="submit" name="submit" value="Submit" />
-<?php echo $user_details_button ?>
 </form>

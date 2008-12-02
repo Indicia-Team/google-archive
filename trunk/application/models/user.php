@@ -20,7 +20,7 @@ class User_Model extends ORM {
 		$array->pre_filter('trim');
 
 		$array->add_rules('username', 'required', 'length[7,30]');
-		if (isset($array['password'])) $array->add_rules('password', 'length[7,30]');
+		if (isset($array['password'])) $array->add_rules('password', 'required', 'length[7,30]');
 		$this->interests = $array['interests'];
 		$this->location_name = $array['location_name'];
 		if (isset($array['core_role_id'])) $this->core_role_id = (is_numeric ($array['core_role_id']) ? $array['core_role_id'] : NULL);
@@ -28,10 +28,15 @@ class User_Model extends ORM {
 		$this->view_common_names = (isset($array['view_common_names']) ? 't' : 'f');
 		if (isset($array['person_id'])) $this->person_id = $array['person_id'];
 
-		
 		return parent::validate($array, $save);
 	}
 
+	public function presubmit() {
+		if (!is_numeric($this->submission['fields']['core_role_id']['value']))
+			$this->submission['fields']['core_role_id']['value'] = NULL;
+		return parent::presubmit();
+	}
+	
 	public function password_validate(Validation $array, $save = FALSE) {
 		$array->pre_filter('trim');
 		$array->add_rules('password', 'required', 'length[7,30]', 'matches[password2]');

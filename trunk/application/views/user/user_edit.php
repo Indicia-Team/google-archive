@@ -4,8 +4,6 @@
 <?php if (isset($model->person_id)) { ?>
 <input type="hidden" name="person_id" id="person_id" value="<?php echo html::specialchars($model->person_id); ?>" />
 <?php } ?>
-<?php echo $return_url ?>
-<?php echo $disable_button ?>
 <fieldset>
 <legend>User's Details</legend>
 <ol>
@@ -50,17 +48,7 @@
 </li>
 </ol>
 </fieldset>
-<fieldset>
-<legend>Password Control</legend>
-<ol>
-<li>
-<label for="send_password">Send Forgotten Password Email</label>
-<?=form::checkbox('send_password', TRUE, FALSE ) ?>
-</li>
-<?php if (isset($password_field)) { echo '<li>'.$password_field.html::error_message($model->getError('password')).'</li>'; } ?>
-</ol>
-</fieldset>
+<?php if (isset($password_field) and $password_field != '') { echo '<fieldset><legend>Password Control</legend><ol><li>'.$password_field.html::error_message($model->getError('password')).'</li></ol></fieldset>'; } ?>
 <?php echo $metadata ?>
 <input type="submit" name="submit" value="Submit" />
-<?php echo $person_details_button ?>
 </form>
