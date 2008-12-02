@@ -66,37 +66,7 @@ class Website_Controller extends Gridview_Base_Controller
         }
     }
 
-    /**
-     * Save website form data
-     *
-     * @todo auth and permission check
-     */
-    public function save_old()
-    {
-        // only proceed if a website id exists
-        if ( isset($_POST['id']) )
-        {
-            $this->model = new Website_Model( $_POST['id'] );
-        }
-        else
-        {
-            // undefined website id
-            // usually this should never be the case
-            // we need a general error controller for such cases (exception handling?)
-            url::redirect('website');
-        }
 
-        if ($this->model->saveData( $_POST ))
-        {
-            // on success reload the 'website' controller
-            url::redirect('website');
-        }
-        else
-        {
-            // if some thing is going wrong we set the view to the same page
-            $this->setView('website/website_edit', 'Website');
-        }
-    }
 }
 
 ?>
