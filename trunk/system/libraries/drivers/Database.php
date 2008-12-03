@@ -304,7 +304,13 @@ abstract class Database_Driver {
 		if ( ! $this->db_config['escape'])
 			return $value;
 
-		switch (gettype($value))
+		// Indicia change to support direct entry of PostGIS functions into fields
+		if (substr($value,0,3)=='ST_')
+			$type='postgis'; // forces default behaviour
+		else
+			$type=gettype($value);
+		// End change
+		switch ($type)
 		{
 			case 'string':
 				$value = '\''.$this->escape_str($value).'\'';

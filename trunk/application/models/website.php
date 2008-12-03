@@ -19,9 +19,16 @@
 class Website_Model extends ORM
 {
 
-    protected $has_many = array('termlist');
-    protected $belongs_to = array('created_by'=>'user', 'updated_by'=>'user');
-    protected $has_and_belongs_to_many = array('locations');
+    protected $has_many = array('termlists');
+    protected $has_many = array('taxon_lists');
+    protected $belongs_to = array(
+			'created_by'=>'user',
+			'updated_by'=>'user'
+	);
+    protected $has_and_belongs_to_many = array(
+			'locations',
+			'users'
+	);
 
     /**
      * Validate and save the data.
