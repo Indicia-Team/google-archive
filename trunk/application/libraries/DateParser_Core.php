@@ -19,6 +19,7 @@ public class DateParser_Core {
             'tm_wday'  => null,
             'tm_yday'  => null,
 			'tm_season' => null,
+			'tm_century' => null,
             'unparsed' => null
         );
 	
@@ -216,6 +217,16 @@ public class DateParser_Core {
                 	break;
                 case '%k': // Season (short form) in year
                 	break;
+                case '%C': // Century
+                	//Use a regex for this
+                	$a = eregi("/c?(\d{1,2})(th|st|nd)?(.*)/", $sDate, $refs);
+                	if ($a) {
+                		$nValue = $refs[1];
+                		$this->aResult['tm_century'] = $nValue;
+                		$dateAfter = $refs[3];
+                	} else {
+                		return false;
+                	}
                 default: break 2; // Break Switch and while
             }
             
