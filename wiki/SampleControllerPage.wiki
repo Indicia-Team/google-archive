@@ -50,7 +50,6 @@ Optional things which may be set in the constructor:
 			'description'=>'',
 			'website'=>'');
 		$this->pagetitle = "Surveys";
-		$this->model = ORM::factory('survey');
 	}
 }}}
 
