@@ -44,13 +44,13 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 				'meaning_id' => $meaning_id
 			))->find_all();
 	}
-	
+
 	private function formatCommonSynonomy(ORM_Iterator $res){
 		$syn = "";
 		foreach ($res as $synonym) {
-			if ($synonym->term->language->iso != "lat"){ 
+			if ($synonym->term->language->iso != "lat"){
 				$syn .= $synonym->term->term;
-				$syn .=	($synonym->term->language_id != null) ? 
+				$syn .=	($synonym->term->language_id != null) ?
 					",".$synonym->term->language->iso."\n" :
 					'';
 			}
@@ -89,14 +89,13 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$grid->actionColumns = array(
 			'edit' => 'termlists_term/edit/£id£'
 		);
-		
+
 		// Add items to view
 		$vArgs = array(
 			'termlist_id' => $this->model->termlist_id,
 			'table' => $grid->display(),
 			'synonomy' => $this->formatCommonSynonomy($this->
-			getSynonomy($this->model->
-				meaning_id)),
+					getSynonomy($this->model->meaning_id)),
 			);
 		$this->setView('termlists_term/termlists_term_edit', 'Taxon', $vArgs);
 
@@ -132,7 +131,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			'synonomy' => null);
 
 		$this->setView('termlists_term/termlists_term_edit', 'Term', $vArgs);
-			
+
 	}
 
 	public function save(){
@@ -157,7 +156,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$sa = parent::wrap($nativeFields);
 
 		// Declare child models
-		if (array_key_exists('meaning_id', $array) == false || 
+		if (array_key_exists('meaning_id', $array) == false ||
 			$array['meaning_id'] == '') {
 				$sa['subModels'][] = array(
 					'fkId' => 'meaning_id',
@@ -166,7 +165,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 						->table_columns), false, 'meaning'));
 			}
 
-		if (array_key_exists('term_id', $array) == false || 
+		if (array_key_exists('term_id', $array) == false ||
 			$array['term_id'] == '') {
 				$sa['subModels'][] = array(
 					'fkId' => 'term_id',
@@ -205,7 +204,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$arrSyn = array();
 
 		foreach ($arrLine as $line) {
-			$b = preg_split("/(?<!\\\\ ),/",$line); 
+			$b = preg_split("/(?<!\\\\ ),/",$line);
 			if (count($b) >= 2) {
 				$arrSyn[$b[0]] = array('lang' => trim($b[1]));
 			} else {
@@ -222,8 +221,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 		foreach ($existingSyn as $syn){
 			// Is the term from the db in the list of synonyms?
-			if (array_key_exists($syn->term->term, $arrSyn) && 
-				$arrSyn[$syn->term->term]['lang'] == 
+			if (array_key_exists($syn->term->term, $arrSyn) &&
+				$arrSyn[$syn->term->term]['lang'] ==
 				$syn->term->language->iso )
 			{
 				array_splice($arrSyn, array_search(
@@ -237,12 +236,12 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			}
 		}
 
-		// $arraySyn should now be left only with those synonyms 
+		// $arraySyn should now be left only with those synonyms
 		// we wish to add to the database
 
 		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
 		foreach ($arrSyn as $term => $syn) {
-			
+
 			$lang = $syn['lang'];
 
 			// Wrap a new submission
