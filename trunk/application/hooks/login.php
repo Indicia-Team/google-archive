@@ -21,6 +21,7 @@ class login {
 		$uri = new URI();
 
 		if (	! $auth->logged_in() AND
+				! $auth->auto_login() AND
 				$uri->segment(1) != 'login' AND
 				$uri->segment(1) != 'logout' AND
 				$uri->segment(1) != 'new_password' AND
