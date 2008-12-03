@@ -56,13 +56,13 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		}
 		return $syn;
 	}
-	
+
 	private function formatCommonSynonomy(ORM_Iterator $res){
 		$syn = "";
 		foreach ($res as $synonym) {
-			if ($synonym->taxon->language->iso != "lat"){ 
+			if ($synonym->taxon->language->iso != "lat"){
 				$syn .= $synonym->taxon->taxon;
-				$syn .=	($synonym->taxon->language_id != null) ? 
+				$syn .=	($synonym->taxon->language_id != null) ?
 					",".$synonym->taxon->language->iso."\n" :
 					'';
 			}
@@ -101,7 +101,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$grid->actionColumns = array(
 			'edit' => 'taxa_taxon_list/edit/£id£'
 		);
-		
+
 		// Add items to view
 		$vArgs = array(
 			'taxon_list_id' => $this->model->taxon_list_id,
@@ -149,7 +149,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'commonNames' => null);
 
 		$this->setView('taxa_taxon_list/taxa_taxon_list_edit', 'Taxon', $vArgs);
-			
+
 	}
 
 	public function save(){
@@ -174,7 +174,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$sa = parent::wrap($nativeFields, $linkFk);
 
 		// Declare child models
-		if (array_key_exists('taxon_meaning_id', $array) == false || 
+		if (array_key_exists('taxon_meaning_id', $array) == false ||
 			$array['taxon_meaning_id'] == '') {
 				$sa['subModels'][] = array(
 					'fkId' => 'taxon_meaning_id',
@@ -183,12 +183,12 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 						->table_columns), $linkFk, 'taxon_meaning'));
 			}
 
-		if (array_key_exists('taxon_id', $array) == false || 
+		if (array_key_exists('taxon_id', $array) == false ||
 			$array['taxon_id'] == '') {
 				$taxonFields = array_intersect_key($array, ORM::factory('taxon')
 					->table_columns);
-				$taxonFields['fk_language'] = $array['fk_language'];
-				$taxonFields['fk_taxon_group'] = $array['fk_taxon_group'];
+				$taxonFields['fk_language'] = $array['language_id'];
+				$taxonFields['fk_taxon_group'] = $array['taxon_group_id'];
 				$sa['subModels'][] = array(
 					'fkId' => 'taxon_id',
 					'model' => parent::wrap($taxonFields, $linkFk, 'taxon')
@@ -233,7 +233,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$arrCommonNames = array();
 
 		foreach ($arrLine as $line) {
-			$b = preg_split("/(?<!\\\\ ),/",$line); 
+			$b = preg_split("/(?<!\\\\ ),/",$line);
 			if (count($b) == 2) {
 				$arrCommonNames[$b[0]] = array('lang' => trim($b[1]),
 					'auth' => '');
@@ -250,7 +250,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$arrSyn = array();
 
 		foreach ($arrLine as $line) {
-			$b = preg_split("/(?<!\\\\ ),/",$line); 
+			$b = preg_split("/(?<!\\\\ ),/",$line);
 			if (count($b) == 2) {
 				$arrSyn[$b[0]] = array('auth' => trim($b[1]),
 					'lang' => 'lat');
@@ -271,8 +271,8 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 
 		foreach ($existingSyn as $syn){
 			// Is the taxon from the db in the list of synonyms?
-			if (array_key_exists($syn->taxon->taxon, $arrSyn) && 
-				$arrSyn[$syn->taxon->taxon]['lang'] == 
+			if (array_key_exists($syn->taxon->taxon, $arrSyn) &&
+				$arrSyn[$syn->taxon->taxon]['lang'] ==
 				$syn->taxon->language->iso &&
 				$arrSyn[$syn->taxon->taxon]['auth'] ==
 				$syn->taxon->authority)
@@ -288,12 +288,12 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			}
 		}
 
-		// $arraySyn should now be left only with those synonyms 
+		// $arraySyn should now be left only with those synonyms
 		// we wish to add to the database
 
 		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
 		foreach ($arrSyn as $taxon => $syn) {
-			
+
 			$lang = $syn['lang'];
 			$auth = $syn['auth'];
 
