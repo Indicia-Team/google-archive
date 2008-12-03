@@ -202,10 +202,10 @@ class vague_date {
 					//We're a season. That means we could be P (if we have a year) or S (if we don't).
 					if ($endDate['tm_year'] != null){
 						// We're a P
-
+						return true;
 					} else {
 						// No year, so we're an S
-
+						return true;
 					}
 				}
 
@@ -292,6 +292,24 @@ class vague_date {
 				 * No day, no month. We're some kind of year representation - Y,YY,Y- or -Y, C, CC, C- or -C.
 				 */
 				
+				// Are we a century?
+				if ($endDate['tm_century'] != null){
+					// CC, C, C- or -C 
+					if (!$range){
+						// Type C						
+					} else {
+						if ($start && $end) {
+							// We're CC
+							return true;
+						} else if ($start && !$end) {
+							// We're C-
+							return true;
+						} else if ($end && !$start) {
+							// We're -C
+							return true;
+						}
+					}
+				}
 			}
 
 			/**
