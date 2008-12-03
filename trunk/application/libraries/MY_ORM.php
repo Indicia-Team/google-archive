@@ -178,14 +178,12 @@ abstract class ORM extends ORM_Core {
 			// Create a new record by calling the validate method
 			if ($this->validate(new Validation($vArray), true)) {
 				// Record has successfully validated. Return the id.
-				echo "passed";
 				syslog(LOG_DEBUG, "Record ".
 					$this->id.
 					" has validated successfully");
 				return $this->id;
 			} else {
 				// Errors. Return null.
-				echo kohana::debug($this);
 				syslog(LOG_DEBUG, "Record did not validate.");
 				return null;
 			}

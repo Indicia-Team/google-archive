@@ -32,7 +32,7 @@ class spatial_ref {
 		if (is_numeric($system)) {
 			$found = $db->count_records('spatial_ref_sys', array('auth_srid' => $system));
 		} else {
-			$found = in_array(strtolower($system), kohana::config('sref_notations.sref_notations'));
+			$found = array_key_exists(strtolower($system), kohana::config('sref_notations.sref_notations'));
 		}
 		return $found>0;
 	}
