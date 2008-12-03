@@ -4,7 +4,8 @@
  // of the same name.
 $config['sref_notations'] = array
 (
-	'osgb',
+	'osgb'=>'British National Grid',
+	'4326'=>'Latitude and Longitude (WGS84)',
 );
 
 ?>

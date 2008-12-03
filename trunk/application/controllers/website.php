@@ -30,7 +30,6 @@ class Website_Controller extends Gridview_Base_Controller
                                'url' =>'' );
 
         $this->pagetitle = "Websites";
-		$this->model = ORM::factory('website');
     }
 
     /**
@@ -43,7 +42,6 @@ class Website_Controller extends Gridview_Base_Controller
      */
     public function create()
     {
-        $this->model = ORM::factory('website');
         $this->setView('website/website_edit', 'Website');
     }
 

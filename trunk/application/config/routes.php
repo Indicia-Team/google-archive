@@ -20,6 +20,8 @@ $config['survey'] = 'survey/page/1/10';
 $config['taxon_group'] = 'taxon_group/page/1/10';
 // Language
 $config['language'] = 'language/page/1/10';
+// Location
+$config['location'] = 'location/page/1/10';
 // Termlists_term
 $config['termlists_term'] = 'termlists_term/page/1/1/10';
 $config['termlists_term/([0-9]+)'] = 'termlists_term/page/$1/1/10';
