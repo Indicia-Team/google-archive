@@ -59,9 +59,6 @@ class Auth_ORM_Driver implements Auth_Driver {
 			$user = ORM::factory('user', $user);
 		}
 
-//		// If the passwords match, perform a login
-//		if ($user->has(new Core_Role_Model('Login)) AND $user->password === $password)
-
 // We assume that for this Indicia CORE module, that anyone who is given a role within 
 // the CORE website has to log on to do their duties: this implies a user must have a
 // CORE_ROLE, and can have any CORE_ROLE, in order to log on. Those without CORE roles
@@ -70,20 +67,20 @@ class Auth_ORM_Driver implements Auth_Driver {
 		
 		if (!is_null($user->core_role_id) AND (is_null($user->password) OR ($user->password === $password)))
 		{
-//			if ($remember === TRUE)
-//			{
-//				// Create a new autologin token
-//				$token = ORM::factory('user_token');
-//
-//				// Set token data
-//				$token->user_id = $user->id;
-//				$token->expires = time() + $this->config['lifetime'];
-//				$token->save();
-//
-//				// Set the autologin cookie
-//				cookie::set('authautologin', $token->token, $this->config['lifetime']);
-//			}
-//
+			if ($remember === TRUE)
+			{
+				// Create a new autologin token
+				$token = ORM::factory('user_token');
+
+				// Set token data
+				$token->user_id = $user->id;
+				$token->expires = date("Ymd H:i:s", time() + $this->config['lifetime']);
+				$token->save();
+
+				// Set the autologin cookie
+				cookie::set('authautologin', $token->token, $this->config['lifetime']);
+			}
+
 			// Finish the login
 			$this->complete_login($user);
 
@@ -111,32 +108,33 @@ class Auth_ORM_Driver implements Auth_Driver {
 
 	public function auto_login()
 	{
-//		if ($token = cookie::get('authautologin'))
-//		{
-//			// Load the token and user
-//			$token = ORM::factory('user_token', $token);
-//
-//			if ($token->loaded AND $token->user->loaded)
-//			{
-//				if ($token->user_agent === sha1(Kohana::$user_agent))
-//				{
-//					// Save the token to create a new unique token
-//					$token->save();
-//
-//					// Set the new token
-//					cookie::set('authautologin', $token->token, $token->expires - time());
-//
-//					// Complete the login with the found data
-//					$this->complete_login($token->user);
-//
-//					// Automatic login was successful
-//					return TRUE;
-//				}
-//
-//				// Token is invalid
-//				$token->delete();
-//			}
-//		}
+		if ($token = cookie::get('authautologin'))
+		{
+			throw('rubbish');
+			// Load the token and user
+			$token = ORM::factory('user_token', $token);
+
+			if ($token->loaded AND $token->user->loaded)
+			{
+				if ($token->user_agent === sha1(Kohana::$user_agent))
+				{
+					// Save the token to create a new unique token
+					$token->save();
+
+					// Set the new token
+					cookie::set('authautologin', $token->token, $token->expires - time());
+
+					// Complete the login with the found data
+					$this->complete_login($token->user);
+
+					// Automatic login was successful
+					return TRUE;
+				}
+
+				// Token is invalid
+				$token->delete();
+			}
+		}
 
 		return FALSE;
 	}
@@ -144,7 +142,7 @@ class Auth_ORM_Driver implements Auth_Driver {
 	public function logout($destroy)
 	{
 		// Delete the autologin cookie if it exists
-//		cookie::get('authautologin') and cookie::delete('authautologin');
+		cookie::get('authautologin') and cookie::delete('authautologin');
 
 		if ($destroy === TRUE)
 		{

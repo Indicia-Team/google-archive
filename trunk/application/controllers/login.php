@@ -25,7 +25,7 @@ class Login_Controller extends Indicia_Controller {
 		$this->template->content->admin_contact = $login_config['admin_contact'];
 		if (request::method() == 'post')
 		{			
-			if ($this->auth->login(array('username' => $_POST['UserName']), $_POST['Password']))
+			if ($this->auth->login(array('username' => $_POST['UserName']), $_POST['Password'], isset($_POST['remember_me'])))
 			{
 // I don't trust the results!! There is something funny going on where the
 // number of rows in a query is not being reported correctly - an invalid username returns
@@ -72,7 +72,7 @@ class Login_Controller extends Indicia_Controller {
 			# or to extend auth model
 			$person = ORM::factory('person', array('email_address' => $_POST['Email']));
 			
-			if ($this->auth->login(array('person_id' => $person->id), $_POST['Password']))
+			if ($this->auth->login(array('person_id' => $person->id), $_POST['Password'], isset($_POST['remember_me'])))
 			{
 					$user = new User_Model($_SESSION['auth_user']->id);
 					$user->__set('forgotten_password_key', NULL);

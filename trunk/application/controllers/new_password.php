@@ -2,12 +2,6 @@
 
 class New_Password_Controller extends Indicia_Controller {
 
-// As it stands, login does not check passwords, roles, and remeber me doesn't work.
-// Things to do (in order):
-// 1 Create Lost Password functionality
-// 3 Enable remember me functionality
-// 4 Put in hooks to auto redirect to login if not logged in
-	
 	public function index()
 	{
 		if ( ! empty($_SESSION['auth_user']) AND is_object($_SESSION['auth_user'])
