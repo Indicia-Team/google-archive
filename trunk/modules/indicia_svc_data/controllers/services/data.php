@@ -34,7 +34,7 @@ class Data_Controller extends Service_Base_Controller {
 	{
 		$this->handle_call('occurrence');
 	}
-	
+
 	/**
 	 * Provides the /services/data/person service.
 	 * Retrieves details of a single person.
@@ -43,7 +43,7 @@ class Data_Controller extends Service_Base_Controller {
 	{
 		$this->handle_call('person');
 	}
-	
+
 	/**
 	 * Provides the /services/data/sample service.
 	 * Retrieves details of a sample.
@@ -153,16 +153,16 @@ class Data_Controller extends Service_Base_Controller {
 	protected function handle_submit() {
 		$mode = $this->get_input_mode();
 		switch ($mode) {
-		case 'json':
-			$s = json_decode($_POST['submission'], true);
+			case 'json':
+				$s = json_decode($_POST['submission'], true);
 		}
 
 		if (array_key_exists('submission', $s)) {
-			$this->submit($s);
+			$result = $this->submit($s);
 		} else {
 			$model = ORM::factory($this->entity);
 			$model->submission = $s;
-			$model->submit();
+			$result = $model->submit();
 		}
 	}
 
@@ -425,13 +425,11 @@ class Data_Controller extends Service_Base_Controller {
 	public function save(){
 
 		if (array_key_exists('submission', $_POST)){
-
 			$mode = $this->get_input_mode();
 			switch ($mode) {
 			case 'json':
 				$s = json_decode($_POST['submission'], true);
 			}
-
 			$this->submit($s);
 		}
 	}

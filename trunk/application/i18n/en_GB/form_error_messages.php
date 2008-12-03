@@ -50,6 +50,12 @@ $lang = array (
 		'matches' => 'The password and repeat password fields must match.',
 		'default' => 'Invalid Input.',
 	),
+	'entered_sref_system' => Array (
+		'sref_system' => 'The spatial reference system is not a valid EPSG or notation code.',
+	),
+	'entered_sref' => Array (
+		'sref' => 'The spatial reference is not recognised.',
+	),
 );
 
 ?>
