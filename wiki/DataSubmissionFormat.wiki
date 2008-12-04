@@ -2,11 +2,30 @@
 
 = Introduction =
 
-The following example uses JSON notation. At some point perhaps I should turn this into an XML schema?
+The following example uses JSON notation. Support for XML schemas is not yet supported.
 
 = Details =
 
-An example submission to the Indicia web services will look as follows. Items prefixed with an underscore should be replaced with the implied value.
+== Posting to the entity web services ==
+
+Each entity that is supported by the webservices is represented by a single URL at .../index.php/services/data/_entity_name_, for example .../index.php/services/data/sample. An http POST sent to this URL with a parameter called submission containing a JSON representation of the object you wish to post will add that object to the database. The structure of the json parameter is:
+
+{{{
+{ "id" : "_Model Name",
+	"fields" : 
+	{
+		"_field id" :
+		{ "value" : "_field value" },
+		"_field id 2" :
+		{ "value" : "_field value 2"}
+	}
+}
+}}}
+
+== Posting to the save service ==
+
+In addition to the URLs representing each entity, there is a service that allows more complex data to be posted, for example a sample containing several occurrences. An example submission to the Indicia save web service follows. The json string representing the data you want to post should be sent to the 
+URL at .../index.php/services/data/save as a POST parameter called submission. Items prefixed with an underscore should be replaced with the implied value.
 
 {{{
 
