@@ -2,7 +2,7 @@
 /**
  * Class to parse a string containing a single date and extract the date.
  */
-public class DateParser_Core {
+class DateParser_Core {
 	
 	private $timeStamp;
 	private $format;
