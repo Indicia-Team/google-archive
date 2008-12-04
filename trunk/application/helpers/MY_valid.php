@@ -27,7 +27,18 @@ class valid extends valid_Core {
 		$system = $system[0];
 		return spatial_ref::is_valid($sref, $system);
 	}
-
+	
+	/**
+	 * Validates that a specific date string can be correctly parsed into a vague date.
+	 * 
+	 * @param	string	SDate
+	 */
+	public static function vague_date($sDate){
+		if (vague_date::string_to_vague_date != false){
+			return true;
+		}
+		return false;
+	}
 }
 
 ?>
