@@ -176,6 +176,7 @@ class Data_Controller extends Service_Base_Controller {
 			$model->submission = $s;
 			$result = $model->submit();
 		}
+		$this->response=json_encode(array('success', $result->id));
 	}
 
 	/**
