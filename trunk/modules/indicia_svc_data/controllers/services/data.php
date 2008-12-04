@@ -7,6 +7,10 @@ class Data_Controller extends Service_Base_Controller {
 	protected $foreign_keys;
 	protected $view_columns;
 	protected $db;
+	// following are used to store the response till all finished, so we don't output anything
+	// if there is an error
+	protected $response;
+	protected $content_type;
 
 	/**
 	 * Provides the /services/data/language service.
@@ -138,12 +142,20 @@ class Data_Controller extends Service_Base_Controller {
 	 * Internal method to handle calls - decides if it's a request for data or a submission.
 	 */
 	protected function handle_call($entity) {
-		$this->entity = $entity;
+		try {
+			$this->entity = $entity;
 
-		if (array_key_exists('submission', $_POST)) {
-			$this->handle_submit();
-		} else {
-			$this->handle_request();
+			if (array_key_exists('submission', $_POST)) {
+				$this->handle_submit();
+			} else {
+				$this->handle_request();
+			}
+			// last thing we do is set the output
+			if ($this->content_type)
+				$this->header($this->content_type);
+			echo $this->response;
+		} catch (Exception $e) {
+			$this->error($e->getMessage());
 		}
 	}
 
@@ -194,17 +206,17 @@ class Data_Controller extends Service_Base_Controller {
 				} else {
 					$xsl = '';
 				}
-				echo $this->xml_encode($records, $xsl, TRUE);
-				header('Content-Type: text/xml');
+				$this->response = $this->xml_encode($records, $xsl, TRUE);
+				$this->content_type = 'Content-Type: text/xml';
 				break;
 			case 'csv':
-				echo $this->csv_encode($records);
-				header('Content-Type: text/comma-separated-values');
+				$this->response =  $this->csv_encode($records);
+				$this->content_type = 'Content-Type: text/comma-separated-values';
 				break;
 			default:
 				// Code to load from a view
 				if (kohana::file_exists('views',"services/data/$entity/$mode")) {
-					echo $this->view_encode($records, View::factory("services/data/$entity/$mode"));
+					$this->response = $this->view_encode($records, View::factory("services/data/$entity/$mode"));
 				} else {
 					$this->error("$entity data cannot be output using mode $mode.");
 				}
@@ -423,7 +435,6 @@ class Data_Controller extends Service_Base_Controller {
 	 * Accepts a submission from POST data and attempts to save to the database.
 	 */
 	public function save(){
-
 		if (array_key_exists('submission', $_POST)){
 			$mode = $this->get_input_mode();
 			switch ($mode) {
