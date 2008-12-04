@@ -44,7 +44,8 @@ class login {
 				$uri->segment(1) != 'login' AND
 				$uri->segment(1) != 'logout' AND
 				$uri->segment(1) != 'new_password' AND
-				$uri->segment(1) != 'forgotten_password')
+				$uri->segment(1) != 'forgotten_password' AND
+				substr(url::current(), 0, 9) != 'services/')
 		{
 			$_SESSION['requested_page'] = $uri->string();
 			url::redirect('login');
