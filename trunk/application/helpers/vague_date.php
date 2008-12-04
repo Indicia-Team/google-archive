@@ -310,6 +310,8 @@ class vague_date {
 						}
 					}
 				}
+				
+				//Okay, we're one of the year representations, or else unknown.
 			}
 
 			/**

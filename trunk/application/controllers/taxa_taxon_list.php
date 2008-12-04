@@ -187,8 +187,12 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$array['taxon_id'] == '') {
 				$taxonFields = array_intersect_key($array, ORM::factory('taxon')
 					->table_columns);
-				$taxonFields['fk_language'] = $array['language_id'];
-				$taxonFields['fk_taxon_group'] = $array['taxon_group_id'];
+				if (array_key_exists('fk_language', $array)) {
+					$taxonFields['fk_language'] = $array['fk_language'];
+				}
+				if (array_key_exists('fk_taxon_group', $array)) {
+					$taxonFields['fk_taxon_group'] = $array['fk_language'];
+				}
 				$sa['subModels'][] = array(
 					'fkId' => 'taxon_id',
 					'model' => parent::wrap($taxonFields, $linkFk, 'taxon')
@@ -292,7 +296,10 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		// we wish to add to the database
 
 		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
+		$sm = ORM::factory('taxa_taxon_list');
 		foreach ($arrSyn as $taxon => $syn) {
+
+			$sm->clear();
 
 			$lang = $syn['lang'];
 			$auth = $syn['auth'];
@@ -311,8 +318,9 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$syn['taxon_meaning_id'] = $this->model->taxon_meaning_id;
 
 			$sub = $this->wrap($syn);
-			$this->model->submission = $sub;
-			$this->model->submit();
+
+			$sm->submission = $sub;
+			$sm->submit();
 		}
 
 		url::redirect('taxa_taxon_list/'.$this->model->taxon_list_id);
