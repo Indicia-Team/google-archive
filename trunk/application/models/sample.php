@@ -40,9 +40,12 @@ class Sample_Model extends ORM
 		$system 	 = $orig_values['entered_sref_system'];
 		$array->add_rules('entered_sref', "sref[$system]");
 		// Any fields that don't have a validation rule need to be copied into the model manually
-		$this->date_start 	= $array['date_start'];
-		$this->date_end 	= $array['date_end'];
-		$this->geom 		= $array['geom'];
+		if (array_key_exists('date_start', $array))
+			$this->date_start 	= $array['date_start'];
+		if (array_key_exists('date_end', $array))
+			$this->date_end 	= $array['date_end'];
+		if (array_key_exists('geom', $array))
+			$this->geom 		= $array['geom'];
 		return parent::validate($array, $save);
 	}
 
@@ -57,9 +60,16 @@ class Sample_Model extends ORM
 		if (array_key_exists('entered_sref', $this->submission['fields'])) {
 			$sref = $this->submission['fields']['entered_sref']['value'];
 			$sref_system = $this->submission['fields']['entered_sref_system']['value'];
-			$geom = spatial_ref::sref_to_wgs84($sref, $sref_system);
-			$this->submission['fields']['geom']['value']="ST_GeomFromText('$geom')";
+			if (!empty($sref)) {
+				$geom = spatial_ref::sref_to_wgs84($sref, $sref_system);
+				$this->submission['fields']['geom']['value']="ST_GeomFromText('$geom')";
+			}
 		}
+		$vague_date=vague_date::string_to_vague_date($this->submission['fields']['date']['value']);
+		$this->submission['fields']['date_start']['value']	= $vague_date['date_start'];
+		$this->submission['fields']['date_end']['value']	= $vague_date['date_end'];
+		$this->submission['fields']['date_type']['value']	= $vague_date['date_type'];
+		echo kohana::debug($vague_date);
 		return parent::presubmit();
 	}
 

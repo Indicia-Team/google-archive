@@ -1,0 +1,11 @@
+form {
+	background: #eee;
+	width: 600px;
+}
+
+label {
+	width: 200px;
+	display: inline-block;
+	line-height: 1.7em;
+	vertical-align: middle;
+}

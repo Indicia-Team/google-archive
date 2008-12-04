@@ -50,9 +50,9 @@ class vague_date {
 		'%A %e %b %y', // Monday 12 Oct 97
 		'%a %e %b %y', // Mon 12 Oct 97
 		'%A %e %B', // Monday 12 October
-		'%a %e %B', // Mon 12 October 
-		'%A %e %b', // Monday 12 Oct 
-		'%a %e %b', // Mon 12 Oct 
+		'%a %e %B', // Mon 12 October
+		'%A %e %b', // Monday 12 Oct
+		'%a %e %b', // Mon 12 Oct
 		'%e %B %Y', // 12 October 1997
 		'%e %b %Y', // 12 Oct 1997
 		'%e %B %y', // 12 October 97
@@ -134,7 +134,7 @@ class vague_date {
 		}
 	}
 
-	public function string_to_vague_date($string) {
+	public static function string_to_vague_date($string) {
 
 		$parseFormats = array_merge(
 		self::singleDayFormats(),

@@ -1,5 +1,22 @@
 <?php
 
+class ArrayException extends Kohana_Exception {
+	private $errors = array();
+
+	/**
+	 * Override constructor to accept an errors array
+	 */
+	public function __construct($errors) {
+    	$this->errors = $errors;
+        // make sure everything is assigned properly
+        parent::__construct('Error array.');
+    }
+
+    public function errors() {
+    	return $this->errors;
+    }
+}
+
 class Data_Controller extends Service_Base_Controller {
 	protected $model;
 	protected $entity;
@@ -140,6 +157,7 @@ class Data_Controller extends Service_Base_Controller {
 
 	/**
 	 * Internal method to handle calls - decides if it's a request for data or a submission.
+	 * @todo include exception getTrace() in the error response?
 	 */
 	protected function handle_call($entity) {
 		try {
@@ -154,6 +172,8 @@ class Data_Controller extends Service_Base_Controller {
 			if ($this->content_type)
 				$this->header($this->content_type);
 			echo $this->response;
+		} catch (ArrayException $e) {
+			echo json_encode(array('error'=>$e->errors()));
 		} catch (Exception $e) {
 			$this->error($e->getMessage());
 		}
@@ -176,7 +196,13 @@ class Data_Controller extends Service_Base_Controller {
 			$model->submission = $s;
 			$result = $model->submit();
 		}
-		$this->response=json_encode(array('success', $result->id));
+		if ($result)
+			$this->response=json_encode(array('success', $result->id));
+		else
+			if (isset($model))
+				Throw new ArrayException($model->getAllErrors());
+			else
+				Throw new Exception('Unknown error on submission (to do - get correct error info)');
 	}
 
 	/**

@@ -56,6 +56,9 @@ $lang = array (
 	'entered_sref' => Array (
 		'sref' => 'The spatial reference is not recognised.',
 	),
+	'date_type' => Array (
+		'default' => 'Unrecognised vague date type',
+	)
 );
 
 ?>
