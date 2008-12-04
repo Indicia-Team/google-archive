@@ -60,5 +60,39 @@ class data_entry_helper {
         return $sa;
     }
 
+    /**
+     * Takes a response, and outputs any errors from it onto the screen.
+     *
+     * @todo method of placing the errors alongside the controls.
+     */
+    public static function dump_errors($response)
+    {
+    	if (is_array($response)) {
+	    	if (array_key_exists('error',$response)) {
+				echo 'An error occurred when the data was submitted.';
+				if (is_array($response['error'])) {
+					echo '<ul>';
+					foreach ($response['error'] as $field=>$message)
+						echo "<li>$field: $message</li>";
+					echo '</ul>';
+				} else {
+					echo '<p class="error">'.$response['error'].'</p>';
+				}
+			} elseif (array_key_exists('warning',$response)) {
+				echo 'A warning occurred when the data was submitted.';
+				echo '<p class="error">'.$response['error'].'</p>';
+			} elseif (array_key_exists('success',$response)) {
+				echo 'Data was successfully inserted. The record\'s ID is'.
+							$response['error'].'</p>';
+			}
+    	} else {
+    		print_r($response);
+    	}
+
+
+    }
+
+
+
 }
 ?>

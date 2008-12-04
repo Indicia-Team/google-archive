@@ -21,6 +21,14 @@ abstract class ORM extends ORM_Core {
 	}
 
 	/**
+	 * Retrieve an array containing all errors
+	 */
+	public function getAllErrors()
+	{
+		return $this->errors;
+	}
+
+	/**
 	 * Override the ORM validate method to store the validation errors in an array, making
 	 * them accessible to the views.
 	 */
@@ -196,11 +204,11 @@ abstract class ORM extends ORM_Core {
 	}
 
 	/**
-	 * Returns an array of fields that this model will take when submitting. 
+	 * Returns an array of fields that this model will take when submitting.
 	 * By default, this will return the fields of the underlying table, but where
 	 * submodels are involved this may be overridden to include those also.
 	 *
-	 * When called with true, this will also add fk_ columns for any _id columns 
+	 * When called with true, this will also add fk_ columns for any _id columns
 	 * in the model.
 	 */
 	public function getSubmittableFields($fk = false) {
