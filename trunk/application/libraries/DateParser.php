@@ -43,6 +43,9 @@ class DateParser_Core {
 		$sFormat = $this->format;
 		$sDate = $string;
 		while($sFormat != "") {
+			// If we run out of date before we run out of format, DON'T match
+			if ($sDate == '') return false;
+			
 			// ===== Search a %x element, Check the static string before the %x =====
 			$nIdxFound = strpos($sFormat, '%');
 			if($nIdxFound === false)
@@ -56,7 +59,7 @@ class DateParser_Core {
 			$sFormatBefore = substr($sFormat, 0, $nIdxFound);
 			$sDateBefore   = substr($sDate,   0, $nIdxFound);
 
-			if($sFormatBefore != $sDateBefore) break;
+			if($sFormatBefore != $sDateBefore) return false;
 
 			// ===== Read the value of the %x found =====
 			$sFormat = substr($sFormat, $nIdxFound);
@@ -75,7 +78,7 @@ class DateParser_Core {
 
 					sscanf($sDate, "%2d%[^\\n]", $nValue, $sDateAfter);
 
-					if(($nValue < 0) || ($nValue > 59)) return false;
+					if(($nValue < 0) || ($nValue > 59) || ($nValue == null)) return false;
 
 					$this->aResult['tm_sec']  = $nValue;
 					break;
@@ -84,7 +87,7 @@ class DateParser_Core {
 				case '%M': // Minutes after the hour (0-59)
 					sscanf($sDate, "%2d%[^\\n]", $nValue, $sDateAfter);
 
-					if(($nValue < 0) || ($nValue > 59)) return false;
+					if(($nValue < 0) || ($nValue > 59) || ($nValue == null)) return false;
 
 					$this->aResult['tm_min']  = $nValue;
 					break;
@@ -93,7 +96,7 @@ class DateParser_Core {
 				case '%H': // Hour since midnight (0-23)
 					sscanf($sDate, "%2d%[^\\n]", $nValue, $sDateAfter);
 
-					if(($nValue < 0) || ($nValue > 23)) return false;
+					if(($nValue < 0) || ($nValue > 23) || ($nValue == null)) return false;
 
 					$this->aResult['tm_hour']  = $nValue;
 					break;
@@ -102,7 +105,7 @@ class DateParser_Core {
 				case '%d': // Day of the month (1-31)
 					sscanf($sDate, "%2d%[^\\n]", $nValue, $sDateAfter);
 
-					if(($nValue < 1) || ($nValue > 31)) return false;
+					if(($nValue < 1) || ($nValue > 31) || ($nValue == null)) return false;
 
 					$this->aResult['tm_mday']  = $nValue;
 					break;
@@ -111,7 +114,7 @@ class DateParser_Core {
 				case '%m': // Months since January (0-11)
 					sscanf($sDate, "%2d%[^\\n]", $nValue, $sDateAfter);
 
-					if(($nValue < 1) || ($nValue > 12)) return false;
+					if(($nValue < 1) || ($nValue > 12) || ($nValue == null)) return false;
 
 					$this->aResult['tm_mon']  = ($nValue - 1);
 					break;
@@ -119,6 +122,8 @@ class DateParser_Core {
 					// ----------
 				case '%Y': // Year
 					sscanf($sDate, "%4d%[^\\n]", $nValue, $sDateAfter);
+					
+					if (strlen($nValue) != 4) return false;
 
 					$this->aResult['tm_year']  = ($nValue);
 					break;
@@ -147,7 +152,7 @@ class DateParser_Core {
 						$weekdays[$a] = $i;
 						$dayStr .= ($i == 0) ? Kohana::lang('dates.days.'.$i) : "|".Kohana::lang('dates.days.'.$i);
 					}
-					$a = eregi("/(".$dayStr.")(.*)/",$sDate,$refs);
+					$a = eregi("(".$dayStr.")(.*)",$sDate,$refs);
 					if ($a){
 						$nValue = $weekdays[strtolower($refs[1])];
 						$this->aResult['tm_wday'] = $nValue;
@@ -173,10 +178,10 @@ class DateParser_Core {
 						return false;
 					}
 					break;
-				case '$e': // Day of the month as decimal number, single digit preceeded by a space.
-					sscanf($sDate, "%d%[^\\n]", $nValue, $dateAfter);
+				case '%e': // Day of the month as decimal number, single digit preceeded by a space.
+					sscanf($sDate, "%2d%[^\\n]", $nValue, $dateAfter);
 
-					if(($nValue < 1) || ($nValue > 31)) return false;
+					if(($nValue < 1) || ($nValue > 31) || ($nValue == null)) return false;
 					$this->aResult['tm_mday']  = $nValue;
 					break;
 				case '%B': // Full month according to current locale.
@@ -187,10 +192,10 @@ class DateParser_Core {
 						$weekdays[strtolower(Kohana::lang('dates.months.'.$i))] = $i;
 						$dayStr .= ($i == 0) ? Kohana::lang('dates.months.'.$i) : "|".Kohana::lang('dates.months.'.$i);
 					}
-					$a = eregi("/(".$dayStr.")(.*)/",$sDate,$refs);
+					$a = eregi("(".$dayStr.")(.*)",$sDate,$refs);
 					if ($a){
 						$nValue = $weekdays[strtolower($refs[1])];
-						$this->aResult['tm_month'] = $nValue;
+						$this->aResult['tm_mon'] = $nValue;
 						$dateAfter = $refs[2];
 					} else {
 						return false;
@@ -204,10 +209,10 @@ class DateParser_Core {
 						$weekdays[strtolower(Kohana::lang('dates.abbrMonths.'.$i))] = $i;
 						$dayStr .= ($i == 0) ? Kohana::lang('dates.abbrMonths.'.$i) : "|".Kohana::lang('dates.abbrMonths.'.$i);
 					}
-					$a = eregi("/(".$dayStr.")(.*)/",$sDate,$refs);
+					$a = eregi("(".$dayStr.")(.*)",$sDate,$refs);
 					if ($a){
 						$nValue = $weekdays[strtolower($refs[1])];
-						$this->aResult['tm_month'] = $nValue;
+						$this->aResult['tm_mon'] = $nValue;
 						$dateAfter = $refs[2];
 					} else {
 						return false;
@@ -221,7 +226,7 @@ class DateParser_Core {
 						$sRegex .= ($first) ? $season : "|".$season;
 						$first = false;
 					}
-					$a = eregi("/(".$sRegex.")(.*)/", $sDate, $refs);
+					$a = eregi("(".$sRegex.")(.*)", $sDate, $refs);
 					if ($a){
 						$nValue = strtolower($refs[1]);
 						$this->aResult['tm_season'] = $seasons[strtolower($nValue)];
@@ -234,7 +239,7 @@ class DateParser_Core {
 					break;
 				case '%C': // Century
 					//Use a regex for this
-					$a = eregi("/c?(\d{1,2})(c|(th|st|nd))?(.*)/", $sDate, $refs);
+					$a = eregi("c?(\d{1,2})(c|(th|st|nd))?(.*)", $sDate, $refs);
 					if ($a) {
 						$nValue = $refs[1];
 						$this->aResult['tm_century'] = $nValue;
@@ -242,7 +247,7 @@ class DateParser_Core {
 					} else {
 						return false;
 					}
-				default: break 2; // Break Switch and while
+				default: return false; // Bad pattern
 			}
 
 			// ===== Next please =====
@@ -264,9 +269,9 @@ class DateParser_Core {
 		// Copy the date array
 		$aStart = $this->aResult;
 		// If we're a century
-		if ($a = $aStart['tm_century'] != null){
+		if (($a = $aStart['tm_century']) != null){
 			$aStart['tm_year'] = 100*($a-1);
-			$aStart['tm_month'] = 0;
+			$aStart['tm_mon'] = 0;
 			$aStart['tm_day'] = 1;
 			return date("Y-m-d", mktime(0,0,0,$aStart['tm_mon'] + 1, $aStart['tm_mday'], $aStart['tm_year']));
 		}
@@ -275,7 +280,7 @@ class DateParser_Core {
 		if ($aStart['tm_year'] == null) $aStart['tm_year'] = date("Y");
 			
 		// Is this a season?
-		if ($a = $aStart['tm_season'] != null){
+		if (($a = $aStart['tm_season']) != null){
 			switch ($a) {
 				case 'spring':
 					return date("Y-m-d", mktime(0,0,0,3,1,$aStart['tm_year']));
@@ -293,7 +298,7 @@ class DateParser_Core {
 		}
 			
 		// If no month is given, set it to January
-		if ($aStart['tm_mon'] == null) $aStart['tm_year'] = 0;
+		if ($aStart['tm_mon'] == null) $aStart['tm_mon'] = 0;
 			
 		// If no day is given, set it to the first
 		if ($aStart['tm_mday'] == null) $aStart['tm_mday'] = 1;
@@ -336,7 +341,7 @@ class DateParser_Core {
 		}
 			
 		// If no month is given, set it to December
-		if ($aStart['tm_mon'] == null) $aStart['tm_year'] = 11;
+		if ($aStart['tm_mon'] == null) $aStart['tm_mon'] = 11;
 			
 		// If no day is given, set month to month +1 and day to 0
 		if ($aStart['tm_mday'] == null) {
