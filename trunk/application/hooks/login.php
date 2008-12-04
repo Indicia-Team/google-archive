@@ -20,7 +20,26 @@ class login {
 		$auth = new Auth();
 		$uri = new URI();
 
-		if (	! $auth->logged_in() AND
+		// check for setup request
+		//
+		if($uri->segment(1) == 'setup')
+		{
+			// get kohana paths
+			//
+			$ipaths = Kohana::include_paths();
+
+			// check if indicia_setup module folder exists
+			//
+			clearstatcache();
+			foreach($ipaths as $path)
+			{
+				if((preg_match("/indicia_setup/",$path)) && file_exists($path))
+				{
+					return;
+				}
+			}
+		}
+		elseif (! $auth->logged_in() AND
 				! $auth->auto_login() AND
 				$uri->segment(1) != 'login' AND
 				$uri->segment(1) != 'logout' AND
