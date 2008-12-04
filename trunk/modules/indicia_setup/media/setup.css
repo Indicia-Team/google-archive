@@ -1,0 +1,88 @@
+*
+{
+	margin: 0;
+	padding: 0;
+}
+
+html * { font-size: 100.01%; color:#000000; }
+
+body
+{
+	position: relative;
+	margin: auto;
+	width: 760px;
+	font-size: 80%;
+	background: #E5E0C3 url(../images/gradient.png) repeat-x top left;
+	text-align: center;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+
+#wrapper
+{
+	text-align: left;
+	background-color: #FFFFFF;
+	padding: 6px;
+	float: left;
+	border: solid #CCCCCC 1px;
+}
+
+#content
+{
+	float: left;
+	clear: both;
+	margin: 20px;
+}
+
+h1
+{
+	color: #103A6A;
+	margin-bottom: 1.0em;
+	font-size: 1.8em;
+	letter-spacing:0.2px;
+}
+
+fieldset {
+	margin-bottom:2em;
+	width:700px;
+}
+
+fieldset legend{
+	font-size:1.4em;
+	margin-bottom:1em;
+	margin-left:1em;
+}
+
+ul {
+	list-style:none;
+	margin-left:3em;
+	margin-bottom:1em;
+}
+
+ul h3{
+	font-size:1.0em;
+	letter-spacing:0.2px;
+}
+
+ul li.item_content{
+	margin-bottom:1.0em;
+}
+
+input.text_field {
+	font-size:1.1em;
+	padding:0.2em;
+	width:25em;
+}
+
+input#start_setup_button{
+	font-size:1.3em;
+	padding:0.4em;
+}
+
+hr {
+	margin-bottom:2.0em;
+}
+
+p {
+	font-size:1.2em;
+	padding:1.0em;
+}
