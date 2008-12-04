@@ -219,11 +219,11 @@ public class DateParser_Core {
                 	break;
                 case '%C': // Century
                 	//Use a regex for this
-                	$a = eregi("/c?(\d{1,2})(th|st|nd)?(.*)/", $sDate, $refs);
+                	$a = eregi("/c?(\d{1,2})(c|(th|st|nd))?(.*)/", $sDate, $refs);
                 	if ($a) {
                 		$nValue = $refs[1];
                 		$this->aResult['tm_century'] = $nValue;
-                		$dateAfter = $refs[3];
+                		$dateAfter = $refs[4];
                 	} else {
                 		return false;
                 	}

@@ -196,11 +196,12 @@ abstract class ORM extends ORM_Core {
 	}
 
 	/**
-	 * Returns an array of fields that this model will take when submitting. By default, this
-	 * will return the fields of the underlying table, but where submodels are involved this
-	 * may be overridden to include those also.
+	 * Returns an array of fields that this model will take when submitting. 
+	 * By default, this will return the fields of the underlying table, but where
+	 * submodels are involved this may be overridden to include those also.
 	 *
-	 * When called with true, this will also add fk_ columns for any _id columns in the model.
+	 * When called with true, this will also add fk_ columns for any _id columns 
+	 * in the model.
 	 */
 	public function getSubmittableFields($fk = false) {
 		$a = $this->table_columns;
