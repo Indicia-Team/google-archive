@@ -87,7 +87,18 @@ class vague_date {
 		'%y', // 98
 	);
 	}
-
+	
+	private static function seasonFormats() {
+		return array(
+		'%K', //August
+		);
+	}
+	
+	private static function centuryFormats() {
+		return array(
+		'%C', //August
+		);
+	}
 
 
 	/**
@@ -226,12 +237,12 @@ class vague_date {
 
 				// Do we have day precision?
 
-				if ($endDate['tm_mday'] != null) {
+				if ($endDate->tm_mday != null) {
 					if (!$range) {
 						// We're a D
 						$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
+						'start' => $endDate->getIsoDate(),
+						'end' => $endDate->getIsoDate(),
 						'type' => 'D'
 						);
 						return $vagueDate;
@@ -260,10 +271,10 @@ class vague_date {
 				 *
 				 */
 
-				if ($endDate['tm_month'] != null) {
+				if ($endDate->tm_month != null) {
 					if (!range) {
 						// Either a month in a year or just a month
-						if ($endDate['tm_year'] != null) {
+						if ($endDate->tm_year != null) {
 							// Then we have a month in a year- type O
 							$vagueDate = array(
 							'start' => $endDate->getImpreciseDateStart(),
@@ -282,7 +293,7 @@ class vague_date {
 						}
 					} else {
 						// We do have a range, OO
-						if ($endDate['tm_year'] != null){
+						if ($endDate->tm_year != null){
 							// We have a year - so this is OO
 							$vagueDate = array(
 						'start' => $startDate->getImpreciseDateStart(),
@@ -304,7 +315,7 @@ class vague_date {
 				 */
 
 				// Are we a century?
-				if ($endDate['tm_century'] != null){
+				if ($endDate->tm_century != null){
 					// CC, C, C- or -C
 					if (!$range){
 						// Type C
