@@ -54,10 +54,12 @@ class Sample_Model extends ORM
 	 */
 	protected function preSubmit()
 	{
-		$sref = $this->submission['fields']['entered_sref']['value'];
-		$sref_system = $this->submission['fields']['entered_sref_system']['value'];
-		$geom = spatial_ref::sref_to_wgs84($sref, $sref_system);
-		$this->submission['fields']['geom']['value']="ST_GeomFromText('$geom')";
+		if (array_key_exists('entered_sref', $this->submission['fields'])) {
+			$sref = $this->submission['fields']['entered_sref']['value'];
+			$sref_system = $this->submission['fields']['entered_sref_system']['value'];
+			$geom = spatial_ref::sref_to_wgs84($sref, $sref_system);
+			$this->submission['fields']['geom']['value']="ST_GeomFromText('$geom')";
+		}
 		return parent::presubmit();
 	}
 
