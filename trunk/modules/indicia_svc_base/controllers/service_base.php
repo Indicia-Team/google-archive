@@ -4,24 +4,36 @@ class Service_Base_Controller extends Controller {
 
 
 	/**
-	 * Return an error XML document to the client
+	 * Return an error XML or json document to the client
 	 */
 	protected function error($message)
 	{
-		$view = new View('services/error');
-		$view->message = $message;
-		$view->render(true);
+		$this->problem($message, 'error');
 	}
 
 	/**
-	 * Return an warning XML document to the client
+	 * Return an warning XML or json document to the client
 	 */
 	protected function warning($message)
 	{
-		$view = new View('services/warning');
-		$view->message = $message;
-		$view->render(true);
+		$this->problem($message, 'warning');
 	}
+
+	/**
+	 * Return an error or warning XML or json document to the client
+	 */
+	private function problem($message, $type)
+	{
+		$mode = $this->get_input_mode();
+		if ($mode=='xml') {
+			$view = new View("services/$type");
+			$view->message = $message;
+			$view->render(true);
+		} else {
+			echo json_encode(array($type=>$message));
+		}
+	}
+
 
 	/**
 	 * Retrieve the output mode for a RESTful request from the GET or POST data.
