@@ -86,3 +86,23 @@ p {
 	font-size:1.2em;
 	padding:1.0em;
 }
+
+fieldset#global_error {
+	border:0px;
+}
+fieldset#global_error legend{
+	color:#cc2222;
+}
+fieldset#global_error ul {
+	list-style:circle;
+	font-size:1.2em;
+	font-weight:bold;
+	color:#cc2222;
+	border: solid #cc2222 6px;
+	padding:2em;
+	margin:0;
+	margin-bottom:2em;
+}
+fieldset#global_error ul li {
+	margin-bottom:1em;
+}

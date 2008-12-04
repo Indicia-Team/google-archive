@@ -29,31 +29,111 @@ class Setup_Controller extends Template_Controller
 
 		// init and default values of view vars
 		//
+
+		$this->view_var = array();
+
 		$this->template->title       = Kohana::lang('setup.title');
 		$this->template->description = Kohana::lang('setup.description');
 
-		$this->template->url              = url::site() . 'setup';
-		$this->template->dbhost           = '';
-		$this->template->error_dbhost     = false;
-		$this->template->dbport           = '5432';
-		$this->template->error_dbport     = false;
-		$this->template->dbuser           = '';
-		$this->template->error_dbuser     = false;
-		$this->template->dbpassword       = '';
-		$this->template->error_dbpassword = false;
-		$this->template->dbschema         = '';
-		$this->template->error_dbschema   = false;
-		$this->template->dbname           = '';
-		$this->template->error_dbname     = false;
-		$this->template->indicia_login          = '';
-		$this->template->error_indicia_login    = false;
-		$this->template->indicia_password       = '';
-		$this->template->error_indicia_password = false;
+		$this->view_var['url']              = url::site() . 'setup/run';
+		$this->view_var['dbhost']           = '';
+		$this->view_var['error_dbhost']     = false;
+		$this->view_var['dbport']           = '5432';
+		$this->view_var['error_dbport']       = false;
+		$this->view_var['dbuser']           = '';
+		$this->view_var['error_dbuser']     = false;
+		$this->view_var['dbpassword']       = '';
+		$this->view_var['error_dbpassword'] = false;
+		$this->view_var['dbschema']         = '';
+		$this->view_var['error_dbschema']   = false;
+		$this->view_var['dbname']           = '';
+		$this->view_var['page_title_error'] = '';
+		$this->view_var['error_dbname']     = false;
+		$this->view_var['indicia_login']          = '';
+		$this->view_var['error_indicia_login']    = false;
+		$this->view_var['indicia_password']       = '';
+		$this->view_var['error_indicia_password'] = false;
+		$this->view_var['error_general']          = array();
+
+		// run system pre check
+		$this->base_check();
 	}
 
 	public function index()
 	{
+		$this->assign_view_vars();
+	}
 
+	/**
+	 * run setup
+	 *
+	 */
+	public function run()
+	{
+
+
+		$this->assign_view_vars();
+	}
+
+	/**
+	 * base pre check
+	 *
+	 */
+	private function base_check()
+	{
+		// /upload directory must be writeable by php scripts
+		//
+		$upload_dir = dirname(dirname(dirname(dirname(__file__ )))) . '/upload';
+
+		if(!is_writeable($upload_dir))
+		{
+			$this->view_var['page_title_error'] = ' - Warning';
+			$this->view_var['error_general'][] = Kohana::lang('setup.error_upload_folder') . "<br /> {$upload_dir}";
+			Kohana::log("error", "The following folder isnt writeable by php scripts: {$upload_dir}");
+		}
+
+		// /application/config directory must be writeable by php scripts
+		//
+		$config_dir = dirname(dirname(dirname(dirname(__file__ )))) . '/application/config';
+
+		if(!is_writeable($config_dir))
+		{
+			$this->view_var['page_title_error'] = ' - Warning';
+			$this->view_var['error_general'][] = Kohana::lang('setup.error_config_folder') . "<br /> {$config_dir}";
+			Kohana::log("error", "The following folder isnt writeable by php scripts: {$config_dir}");
+		}
+
+		// /application/db/indicia_setup.sql file must be readable by php scripts
+		//
+		$db_file = dirname(dirname(dirname(dirname(__file__ )))) . '/application/db/indicia_setup.sql';
+
+		if(!is_readable($db_file))
+		{
+			$this->view_var['page_title_error'] = ' - Warning';
+			$this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$db_file}";
+			Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$db_file}");
+		}
+
+		// check if postgresql php extension is installed
+		//
+		if(!function_exists('pg_version'))
+		{
+			$this->view_var['page_title_error'] = ' - Warning';
+			$this->view_var['error_general'][] = Kohana::lang('setup.error_no_postgres_client_extension');
+			Kohana::log("error", "The postgresql php extension isnt installed");
+		}
+	}
+
+	/**
+	 * assign view vars
+	 *
+	 */
+	private function assign_view_vars()
+	{
+		foreach($this->view_var as $key => $val)
+		{
+			$this->template->$key = $val;
+		}
 	}
 
 }
