@@ -11,22 +11,22 @@ class vague_date {
 	 */
 	private static function dateRangeStrings() { return Array(
 	array(
-			'regex' => '/([\d\w\s]*)(\sto\s|\s-\s)([\d\w\s]*)/', // date to date
+			'regex' => '([\d\w\s]*)(\s to \s|\s - \s)([\d\w\s]*)', // date to date
 			'start' => '1',
 			'end' => '3'
 			),
 			array(
-			'regex' => '/([Pp]re|[Bb]efore[\.]?)([\d\w\s]*)/',
+			'regex' => '(pre|before[\.]?)([\d\w\s]*)',
 			'start' => '...',
 			'end' => '2'
 			),
 			array(
-			'regex' => '/([Ff]rom|[Aa]fter)([\d\w\s]*)/',
+			'regex' => '(from|after)([\d\w\s]*)',
 			'start' => '2',
 			'end' => '...'
 			),
 			array(
-			'regex' => '/([\d\w\s]*)\s-/',
+			'regex' => '([\d\w\s]*)\s-',
 			'start' => '1',
 			'end' => '...'
 			),
@@ -39,8 +39,8 @@ class vague_date {
 	 */
 	private static function singleDayFormats() { return Array(
 		'%Y-%m-%d', // ISO 8601 date format
-		'%d/%m/%y', // UK style date format
 		'%d/%m/%Y', // UK style date format (full year)
+		'%d/%m/%y', // UK style date format
 		'%A %e %B %Y', // Monday 12 October 1997
 		'%a %e %B %Y', // Mon 12 October 1997
 		'%A %e %b %Y', // Monday 12 Oct 1997
@@ -67,8 +67,8 @@ class vague_date {
 	 */
 	private static function singleMonthInYearFormats() { return Array(
 		'%Y-%m', // ISO 8601 format - truncated to month
-		'%m/%y', // British style truncated
-		'%m/%Y', // British style truncated - 4 digit year
+		'%m/%Y', // British style truncated
+		'%m/%y', // British style truncated - 4 digit year
 		'%B %Y', // June 1998
 		'%b %Y', // Jun 1998
 		'%B %y', // June 98
@@ -87,13 +87,13 @@ class vague_date {
 		'%y', // 98
 	);
 	}
-	
+
 	private static function seasonFormats() {
 		return array(
 		'%K', //August
 		);
 	}
-	
+
 	private static function centuryFormats() {
 		return array(
 		'%C', //August
@@ -140,7 +140,9 @@ class vague_date {
 		self::singleDayFormats(),
 		self::singleMonthInYearFormats(),
 		self::singleMonthFormats(),
-		self::singleYearFormats()
+		self::singleYearFormats(),
+		self::seasonFormats(),
+		self::centuryFormats()
 		);
 		// Our approach shall be to gradually pare down from the most complex possible
 		// dates to the simplest, and match as fast as possible to try to grab the most
@@ -158,7 +160,7 @@ class vague_date {
 				);
 
 				foreach (self::dateRangeStrings() as $a) {
-					if (ereg($a['regex'], $string, $regs) != false) {
+					if (eregi($a['regex'], $string, $regs) != false) {
 						if ($a['start'] == '...'){
 							$start = false;
 						} else {
@@ -271,8 +273,8 @@ class vague_date {
 				 *
 				 */
 
-				if ($endDate->tm_month != null) {
-					if (!range) {
+				if ($endDate->tm_mon != null) {
+					if (!$range) {
 						// Either a month in a year or just a month
 						if ($endDate->tm_year != null) {
 							// Then we have a month in a year- type O
@@ -354,6 +356,27 @@ class vague_date {
 				}
 
 				//Okay, we're one of the year representations, or else unknown.
+				if ($endDate->tm_year != null){
+					if (!$range){
+						// We're Y
+													$vagueDate = array(
+						'start' => $endDate->getImpreciseDateStart(),
+						'end' => $endDate->getImpreciseDateEnd(),
+						'type' => 'Y'
+						);
+						return $vagueDate;
+					} else {
+						// We're YY
+						$vagueDate = array(
+						'start' => $startDate->getImpreciseDateStart(),
+						'end' => $endDate->getImpreciseDateEnd(),
+						'type' => 'Y'
+						);
+						return $vagueDate;
+					}
+				} else {
+					return false;
+				}
 	}
 
 	/**
