@@ -31,6 +31,15 @@ public class DateParser_Core {
     	parent::__construct();    	
     }
     
+    /**
+     * Convenience methods to access the array.
+     */
+    public function __get($data){
+    	if (array_has_key($this->aResult, $data)){
+    		return $this->aResult[$data];
+    	}
+    }
+    
     public function strptime($string){
     	$sFormat = $this->format;
     	  while($sFormat != "") {
@@ -202,14 +211,15 @@ public class DateParser_Core {
                 case '%K': // Season
                 	// Get locale specific season names
                 	$first = true;
-                	foreach (Kohana::lang('dates.seasons') as $season) {
+                	foreach (Kohana::lang('dates.seasons') as $key => $season) {
+                		$seasons[strtolower($season)] = $key;
                 		$sRegex .= ($first) ? $season : "|".$season;
                 		$first = false; 
                 	}
                 	$a = eregi("/(".$sRegex.")(.*)/", $sDate, $refs);
                 	if ($a){
                 		$nValue = strtolower($refs[1]);
-                		$this->aResult['tm_season'] = $nValue;
+                		$this->aResult['tm_season'] = $seasons[strtolower($nValue)];
                 		$dateAfter = $refs[2];
                 	} else {
                 		return false;
@@ -251,6 +261,106 @@ public class DateParser_Core {
    				}
    		}
 		return $ret;
+    }
+    
+    public function getImpreciseDateStart(){
+    	// Copy the date array
+    	$aStart = $this->aResult;
+    	// If we're a century
+    	if ($a = $aStart['tm_century'] != null){
+    		$aStart['tm_year'] = 100*($a-1);
+    		$aStart['tm_month'] = 1;
+    		$aStart['tm_day'] = 1;
+    		return mktime(0,0,0,$aStart['tm_month'], $aStart['tm_mday'], $aStart['tm_year'])->format("Y-m-d");
+    	}
+    	
+    	// Do we have a year, else set it to this year
+    	if ($aStart['tm_year'] == null) $aStart['tm_year'] = date("Y");
+    	
+    	// Is this a season?
+    	if ($a = $aStart['tm_season'] != null){
+    		switch ($a) {
+    			case 'spring':
+    				return mktime(0,0,0,2,1,$aStart['tm_year'])->format("Y-m-d");
+    				break;
+    			case 'summer':
+    				return mktime(0,0,0,5,1,$aStart['tm_year'])->format("Y-m-d");
+    				break;
+    			case 'autumn':
+    				return mktime(0,0,0,8,1,$aStart['tm_year'])->format("Y-m-d");
+    				break;
+    			case 'winter':
+    				return mktime(0,0,0,11,1,$aStart['tm_year']-1)->format("Y-m-d");
+    				break;
+    		}
+    	}
+    	
+    	// If no month is given, set it to January
+    	if ($aStart['tm_month'] == null) $aStart['tm_year'] = 0;
+    	
+    	// If no day is given, set it to the first
+    	if ($aStart['tm_mday'] == null) $aStart['tm_mday'] = 1;
+    	
+    	return mktime(0,0,0,$aStart['tm_month'], $aStart['tm_mday'], $aStart['tm_year'])->format("Y-m-d");
+    	
+    	
+    }
+    
+    public function getImpreciseDateEnd(){
+    	// Copy the date array
+    	$aStart = $this->aResult;
+    	// If we're a century
+    	if ($a = $aStart['tm_century'] != null){
+    		$aStart['tm_year'] = 100*($a)-1;
+    		$aStart['tm_month'] = 11;
+    		$aStart['tm_day'] = 31;
+    		return mktime(0,0,0,$aStart['tm_month'], $aStart['tm_mday'], $aStart['tm_year'])->format("Y-m-d");
+    	}
+    	
+    	// Do we have a year, else set it to this year
+    	if ($aStart['tm_year'] == null) $aStart['tm_year'] = date("Y");
+    	
+    	// Is this a season?
+    	if ($a = $aStart['tm_season'] != null){
+    		switch ($a) {
+    			case 'spring':
+    				return mktime(0,0,0,5,0,$aStart['tm_year'])->format("Y-m-d");
+    				break;
+    			case 'summer':
+    				return mktime(0,0,0,8,0,$aStart['tm_year'])->format("Y-m-d");
+    				break;
+    			case 'autumn':
+    				return mktime(0,0,0,11,0,$aStart['tm_year'])->format("Y-m-d");
+    				break;
+    			case 'winter':
+    				return mktime(0,0,0,2,0,$aStart['tm_year'])->format("Y-m-d");
+    				break;
+    		}
+    	}
+    	
+    	// If no month is given, set it to December
+    	if ($aStart['tm_month'] == null) $aStart['tm_year'] = 11;
+    	
+    	// If no day is given, set month to month +1 and day to 0
+    	if ($aStart['tm_mday'] == null) {
+    		$aStart['tm_mday'] = 0;
+    		$aStart['tm_month'] += 1;
+    	}
+    	
+    	return mktime(0,0,0,$aStart['tm_month'], $aStart['tm_mday'], $aStart['tm_year'])->format("Y-m-d");
+    	
+    	
+    }
+    
+    /**
+     * Gets the precision of this date - that is, the lowest element (from 'tm_sec' up to 'tm_year') which is
+     * not reported as null.
+     */
+    public function getPrecision(){
+    	foreach ($this->aRresult as $key=>$res){
+    		if ($res != null) return $key;
+    	}
+    	return null;
     }
 	
 	
