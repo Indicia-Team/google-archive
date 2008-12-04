@@ -9,7 +9,7 @@
 
 <?php echo html::stylesheet(array('modules/indicia_setup/media/setup',),array('screen',)); ?>
 
-<title><?php echo Kohana::lang('setup.title'); ?></title>
+<title><?php echo Kohana::lang('setup.title'); ?><?php echo $page_title_error; ?></title>
 
 </head>
 <body>
@@ -24,6 +24,17 @@
 		<p><?php echo Kohana::lang('setup.description'); ?></p>
 
 		<hr />
+
+		<?php if(count($error_general) > 0): ?>
+			<fieldset id="global_error" role="alert">
+				<h2><legend><?php echo Kohana::lang('setup.warning'); ?></legend></h2>
+				<ul>
+				<?php foreach($error_general as $error): ?>
+					<li><?php echo $error; ?></li>
+				<?php endforeach; ?>
+				</ul>
+			</fieldset>
+		<?php endif; ?>
 
 		<form name="setup" action="<?php echo $url; ?>" method="post">
 
