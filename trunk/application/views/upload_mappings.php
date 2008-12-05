@@ -12,5 +12,11 @@
 </tbody>
 </table>
 <input type="Submit" value="Upload Data" />
+<?php 
+// We stick these at the bottom so that all the other things will be parsed first
+foreach ($this->input->post() as $a => $b) {
+	print form::hidden($a, $b);
+}
+?>
 </form>
 
