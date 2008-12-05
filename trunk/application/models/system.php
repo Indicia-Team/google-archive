@@ -25,7 +25,7 @@ class System_Model extends Model
     {
         parent::__construct();
 
-        $result = $this->db->query('SELECT * FROM "system" ORDER BY id DESC LIMIT 1');
+        $result = $this->db->query('SELECT * FROM "' . Kohana::config('database.default.table_prefix') . 'system" ORDER BY id DESC LIMIT 1');
 
         $this->system_data = $result[0];
     }
