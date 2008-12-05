@@ -6,7 +6,7 @@
  */
 
 /**
- * Taxa_taxon_list page controller
+ * Taxa_taxon_list controller
  *
  *
  * @package Indicia
@@ -76,6 +76,10 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$this->base_filter['taxon_list_id'] = $taxon_list_id;
 		$this->pagetitle = "Taxons in ".ORM::factory('taxon_list',$taxon_list_id)->title;
 		$this->view->taxon_list_id = $taxon_list_id;
+		$this->upload_csv_form->staticFields = array(
+			'taxon_list_id' => $taxon_list_id,
+			'preferred' => 't'
+		);
 		parent::page($page_no, $limit);
 	}
 
@@ -191,7 +195,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 					$taxonFields['fk_language'] = $array['fk_language'];
 				}
 				if (array_key_exists('fk_taxon_group', $array)) {
-					$taxonFields['fk_taxon_group'] = $array['fk_language'];
+					$taxonFields['fk_taxon_group'] = $array['fk_taxon_group'];
 				}
 				$sa['subModels'][] = array(
 					'fkId' => 'taxon_id',
@@ -325,5 +329,6 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 
 		url::redirect('taxa_taxon_list/'.$this->model->taxon_list_id);
 	}
+
 }
 ?>

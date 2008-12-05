@@ -21,9 +21,10 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		);
 		$this->pagetitle = "Abstract gridview class - override this title!";
 		$this->view = new View($this->viewname);
-		$upload_csv_form = new View('templates/upload_csv');
-		$upload_csv_form->controllerpath = $this->controllerpath;
-		$this->view->upload_csv_form = $upload_csv_form;
+		$this->upload_csv_form = new View('templates/upload_csv');
+		$this->upload_csv_form->staticFields = null;
+		$this->upload_csv_form->controllerpath = $this->controllerpath;
+		$this->view->upload_csv_form = $this->upload_csv_form;
 		parent::__construct();
 	}
 
@@ -99,13 +100,21 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 				$index = 0;
 				$saveArray = array();
 				foreach ($_POST as $col=>$attr) {
-					if ($attr!='<please select>') {
-						// Add the data to the save array
-						$saveArray[$attr] = $data[$index];
+					if (isset($data[$index])) {
+						if ($attr!='<please select>') {
+							// Add the data to the save array
+							$saveArray[$attr] = $data[$index];
+							syslog(LOG_DEBUG, "Upload ".$attr.": ".$data[$index]);
+						}
+					} else {
+						// This is one of our static fields at the end
+						$saveArray[$col] = $attr;
+							syslog(LOG_DEBUG, "Upload ".$col.": ".$attr);
 					}
 					$index++;
 				}
 				// Save the record
+				$this->model->clear();
 				$this->model->submission = $this->wrap($saveArray, true);
 				$this->model->submit();
 			}

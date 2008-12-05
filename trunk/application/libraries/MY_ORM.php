@@ -107,7 +107,6 @@ abstract class ORM extends ORM_Core {
 		foreach ($this->submission['fields'] as $a => $b) {
 			if ($b['value'] == '') {
 				$type = $this->table_columns[$a];
-				syslog(LOG_DEBUG, "Column ".$a." has type ".$type);
 				switch ($type) {
 					case 'int':
 						$this->submission['fields'][$a]['value'] = null;
@@ -175,6 +174,10 @@ abstract class ORM extends ORM_Core {
 
 		// Flatten the array to one that can be validated
 		$vArray = array_map($collapseVals, $this->submission['fields']);
+		syslog(LOG_DEBUG, "About to validate the following array in model ".$this->object_name);
+		foreach ($vArray as $a => $b){
+			syslog(LOG_DEBUG, $a.": ".$b);
+		}
 		// Check whether this object already exists in the database with an exact match
 		$a = (array_key_exists('id', $vArray) && $vArray['id'] != null) ?
 				$this->where($vArray)->find()->id : null;

@@ -16,9 +16,16 @@ class Taxa_taxon_list_Model extends ORM_Tree {
 #		$array->add_callbacks('deleted', array($this, '__dependents'));
 
 		// Explicitly add those fields for which we don't do validation
-		$this->parent_id = $array['parent_id'];
-		$this->preferred = $array['preferred'];
-		$this->taxonomic_sort_order = $array['taxonomic_sort_order'];
+		$extraFields = array(
+			'taxonomic_sort_order',
+			'parent_id',
+			'preferred'
+		);
+		foreach ($extraFields as $a) {
+			if (array_key_exists($a, $array->as_array())){
+				$this->__set($a, $array[$a]);
+			}
+		}
 		return parent::validate($array, $save);
 	}
 	/**
