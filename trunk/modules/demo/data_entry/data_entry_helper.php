@@ -92,7 +92,34 @@ class data_entry_helper {
 
     }
 
+    /**
+     * Helper function to generate a drop-down list box from a Indicia core service query.
+     */
+	public static function select($id, $url, $entity, $nameField, $valueField = null) {
+		// If valueField is null, set it to $nameField
+	   	if ($valueField == null) $valueField = $nameField;
+		// Execute a request to the service
+	    	$request = "$url/$entity?mode=json";
+	    	// Get the curl session object	
+	    	$session = curl_init($request);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		$response = json_decode(curl_exec($session), true);
+		$r = "";
+		if (!array_key_exists('error', $response)){
+			$r .= "<select id='$id' >";
+			foreach ($response as $item){
+				if (array_key_exists($nameField, $item) &&
+					array_key_exists($valueField, $item)) {
+						$r .= "<option value='$item[$valueField]' >";
+						$r .= $item[$nameField];
+						$r .= "</option>";
+				}
+			}
+		$r .= "</select>";
+		}
 
+		return $r;
+    }
 
 }
 ?>
