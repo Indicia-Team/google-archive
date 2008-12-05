@@ -6,13 +6,15 @@
 ), FALSE); ?>
 <script type="text/javascript" >
 $(document).ready(function() {
-	$("input#parent").autocomplete("<?php echo url::site() ?>index.php/services/data/taxa_taxon_list", {
+	$("input#parent").autocomplete("<?php echo url::site() ?>services/data/taxa_taxon_list", {
 		minChars : 1,
 		mustMatch : true,
 		extraParams : {
 			taxon_list_id : "<?php echo $taxon_list_id; ?>",
 			orderby : "taxon",
-			mode : "json"
+			mode : "json",
+			qfield : "taxon",
+			preferred : 'true'
 		},
 		parse: function(data) {
 			var results = [];
