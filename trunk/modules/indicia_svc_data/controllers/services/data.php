@@ -7,14 +7,14 @@ class ArrayException extends Kohana_Exception {
 	 * Override constructor to accept an errors array
 	 */
 	public function __construct($errors) {
-    	$this->errors = $errors;
-        // make sure everything is assigned properly
-        parent::__construct('Error array.');
-    }
+		$this->errors = $errors;
+		// make sure everything is assigned properly
+		parent::__construct('Error array.');
+	}
 
-    public function errors() {
-    	return $this->errors;
-    }
+	public function errors() {
+		return $this->errors;
+	}
 }
 
 class Data_Controller extends Service_Base_Controller {
@@ -170,7 +170,7 @@ class Data_Controller extends Service_Base_Controller {
 			}
 			// last thing we do is set the output
 			if ($this->content_type)
-				$this->header($this->content_type);
+			$this->header($this->content_type);
 			echo $this->response;
 		} catch (ArrayException $e) {
 			echo json_encode(array('error'=>$e->errors()));
@@ -197,12 +197,12 @@ class Data_Controller extends Service_Base_Controller {
 			$result = $model->submit();
 		}
 		if ($result)
-			$this->response=json_encode(array('success', $result->id));
+		$this->response=json_encode(array('success', $result->id));
 		else
-			if (isset($model))
-				Throw new ArrayException($model->getAllErrors());
-			else
-				Throw new Exception('Unknown error on submission (to do - get correct error info)');
+		if (isset($model))
+		Throw new ArrayException($model->getAllErrors());
+		else
+		Throw new Exception('Unknown error on submission (to do - get correct error info)');
 	}
 
 	/**
@@ -228,8 +228,8 @@ class Data_Controller extends Service_Base_Controller {
 				if (array_key_exists('xsl', $_GET)) {
 					$xsl = $_GET['xsl'];
 					if (!strpos($xsl, '/'))
-						// xsl is not a fully qualified path, so point it to the media folder.
-						$xsl = url::base().'media/services/stylesheets/'.$xsl;
+					// xsl is not a fully qualified path, so point it to the media folder.
+					$xsl = url::base().'media/services/stylesheets/'.$xsl;
 				} else {
 					$xsl = '';
 				}
@@ -272,10 +272,10 @@ class Data_Controller extends Service_Base_Controller {
 			}
 			$data = '<?xml version="1.0"?>';
 			if ($xsl)
-				$data .= '<?xml-stylesheet type="text/xsl" href="'.$xsl.'"?>';
+			$data .= '<?xml-stylesheet type="text/xsl" href="'.$xsl.'"?>';
 			$data .= ($indent?"\r\n":'').
 				"<$root xmlns:xlink=\"http://www.w3.org/1999/xlink\">".
-				($indent?"\r\n":'');
+			($indent?"\r\n":'');
 		} else {
 			$data = '';
 		}
@@ -336,9 +336,9 @@ class Data_Controller extends Service_Base_Controller {
 		$this->db->select($select);
 		// if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
 		if (URI::total_arguments()==0)
-			$this->apply_get_parameters_to_db();
+		$this->apply_get_parameters_to_db();
 		else
-			$this->db->where($this->viewname.'.id', URI::argument(1));
+		$this->db->where($this->viewname.'.id', URI::argument(1));
 		return $this->db->get()->result_array(FALSE);
 	}
 
@@ -356,7 +356,7 @@ class Data_Controller extends Service_Base_Controller {
 		}
 		// Check for allowed view prefixes, and use 'list' as the default
 		if ($prefix!='gv' && $prefix!='detail')
-			$prefix='list';
+		$prefix='list';
 		return $prefix.'_'.$table;
 	}
 
@@ -381,32 +381,47 @@ class Data_Controller extends Service_Base_Controller {
 					break;
 				case 'orderby':
 					if (array_key_exists(strtolower($value), $this->view_columns))
-						$orderby=strtolower($value);
+					$orderby=strtolower($value);
 					break;
 				case 'limit':
 					if (is_numeric($value))
-						$this->db->limit($value);
+					$this->db->limit($value);
 					break;
 				case 'offset':
 					if (is_numeric($value))
-						$this->db->offset($value);
+					$this->db->offset($value);
+					break;
+				case 'qfield':
+					if (array_key_exists(strtolower($value), $this->view_columns)) {
+						$qfield = strtolower($value);
+					}
+					break;
+				case 'q':
+					$q = strtolower($value);
 					break;
 				default:
 					if (array_key_exists(strtolower($param), $this->view_columns)) {
 						// A parameter has been supplied which specifies the field name of a filter field
-						if ($this->view_columns[$param]=='int')
-							$where[$param]=$value;
+						if ($this->view_columns[$param]=='int' || $this->view_columns[$param]=='bool')
+						$where[$param]=$value;
 						else
-							$like[$param]=$value;
+						$like[$param]=$value;
 					}
 			}
 		}
+		if ($qfield && $q){
+			if ($this->view_columns[$qfield]=='int' || $this->view_columns[$qfield]=='bool'){
+				$where[$qfield]=$q;
+			} else {
+				$like[$qfield]=$q;
+			}
+		}
 		if ($orderby)
-			$this->db->orderby($orderby, $sortdir);
+		$this->db->orderby($orderby, $sortdir);
 		if (count($like))
-			$this->db->like($like);
+		$this->db->like($like);
 		if (count($where))
-			$this->db->where($where);
+		$this->db->where($where);
 	}
 
 	/**
@@ -465,8 +480,8 @@ class Data_Controller extends Service_Base_Controller {
 		if (array_key_exists('submission', $_POST)){
 			$mode = $this->get_input_mode();
 			switch ($mode) {
-			case 'json':
-				$s = json_decode($_POST['submission'], true);
+				case 'json':
+					$s = json_decode($_POST['submission'], true);
 			}
 			$this->submit($s);
 		}
