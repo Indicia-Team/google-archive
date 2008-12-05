@@ -19,10 +19,10 @@ $(document).ready(function() {
 <h1>Indicia Data entry test</h1>
 <p>Note that this page requires the PHP curl extension to send requests to the Indicia server.</p>
 <?php
+		include 'data_entry_helper.php';
 	// PHP to catch and submit the POST data from the form
 	if ($_POST) {
 
-		include 'data_entry_helper.php';
 		$response = data_entry_helper::forward_post_to(
 				'http://localhost/indicia/index.php/services/data', 'sample'
 		);
@@ -40,6 +40,8 @@ $(document).ready(function() {
 <input type="hidden" value="osgb" name="entered_sref_system">
 <label for="location_name">Locality Description:</label>
 <input name="location_name" size="50" /><br />
+<label for="survey_id">Survey</label>
+<?php echo data_entry_helper::select('survey_id', 'http://localhost/indicia/index.php/services/data', 'survey', 'title', 'id'); ?>
 <br />
 <input type="submit" value="Save" />
 </form>

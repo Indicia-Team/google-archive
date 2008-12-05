@@ -409,7 +409,7 @@ class Data_Controller extends Service_Base_Controller {
 					}
 			}
 		}
-		if ($qfield && $q){
+		if (isset($qfield) && isset($q)){
 			if ($this->view_columns[$qfield]=='int' || $this->view_columns[$qfield]=='bool'){
 				$where[$qfield]=$q;
 			} else {
