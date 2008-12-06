@@ -175,7 +175,7 @@ class Data_Controller extends Service_Base_Controller {
 		} catch (ArrayException $e) {
 			echo json_encode(array('error'=>$e->errors()));
 		} catch (Exception $e) {
-			$this->error($e->getMessage());
+			$this->error($e->getMessage(),$e);
 		}
 	}
 
@@ -190,19 +190,22 @@ class Data_Controller extends Service_Base_Controller {
 		}
 
 		if (array_key_exists('submission', $s)) {
-			$result = $this->submit($s);
+			$id = $this->submit($s);
+			// TODO: proper handling of result checking
+			$result = TRUE;
 		} else {
 			$model = ORM::factory($this->entity);
 			$model->submission = $s;
 			$result = $model->submit();
+			$id = $model->id;
 		}
 		if ($result)
-		$this->response=json_encode(array('success', $result->id));
+			$this->response=json_encode(array('success'=>$id));
 		else
-		if (isset($model))
-		Throw new ArrayException($model->getAllErrors());
-		else
-		Throw new Exception('Unknown error on submission (to do - get correct error info)');
+			if (isset($model))
+				Throw new ArrayException($model->getAllErrors());
+			else
+				Throw new Exception('Unknown error on submission (to do - get correct error info)');
 	}
 
 	/**
@@ -496,7 +499,11 @@ class Data_Controller extends Service_Base_Controller {
 			$model = ORM::factory($m['id']);
 			$model->submission = $m;
 			$model->submit();
+			// return the first model
+			if (!isset($this->model))
+				$id=$model->$id;
 		}
+		return $id;
 	}
 }
 

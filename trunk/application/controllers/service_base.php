@@ -6,9 +6,9 @@ class Service_Base_Controller extends Controller {
 	/**
 	 * Return an error XML or json document to the client
 	 */
-	protected function error($message)
+	protected function error($message, $e=NULL)
 	{
-		$this->problem($message, 'error');
+		$this->problem($message, 'error', $e);
 	}
 
 	/**
@@ -22,7 +22,7 @@ class Service_Base_Controller extends Controller {
 	/**
 	 * Return an error or warning XML or json document to the client
 	 */
-	private function problem($message, $type)
+	private function problem($message, $type, $e=NULL)
 	{
 		$mode = $this->get_input_mode();
 		if ($mode=='xml') {
@@ -30,7 +30,11 @@ class Service_Base_Controller extends Controller {
 			$view->message = $message;
 			$view->render(true);
 		} else {
-			echo json_encode(array($type=>$message));
+			$response = array($type=>$message);
+			if ($e) {
+				$response['trace'] = $e->getTrace();
+			}
+			echo json_encode($response);
 		}
 	}
 
