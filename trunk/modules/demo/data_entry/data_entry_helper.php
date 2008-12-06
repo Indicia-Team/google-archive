@@ -83,7 +83,10 @@ class data_entry_helper {
 				echo '<p class="error">'.$response['error'].'</p>';
 			} elseif (array_key_exists('success',$response)) {
 				echo 'Data was successfully inserted. The record\'s ID is'.
-							$response['error'].'</p>';
+							$response['success'].'</p>';
+			}
+			if (array_key_exists('trace', $response)) {
+				print_r($response['trace']);
 			}
     	} else {
     		print_r($response);
@@ -100,7 +103,7 @@ class data_entry_helper {
 	   	if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service
 	    	$request = "$url/$entity?mode=json";
-	    	// Get the curl session object	
+	    	// Get the curl session object
 	    	$session = curl_init($request);
 		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 		$response = json_decode(curl_exec($session), true);
