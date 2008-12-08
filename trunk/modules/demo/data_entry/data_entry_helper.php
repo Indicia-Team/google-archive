@@ -123,6 +123,52 @@ class data_entry_helper {
 
 		return $r;
     }
-
+    /**
+     * Helper function to generate an autocomplete box from an Indicia core service query.
+     */
+    public static function autocomplete($id, $url, $entity, $nameField, $valueField = null) {
+		// If valueField is null, set it to $nameField
+	   	if ($valueField == null) $valueField = $nameField;
+		// Reference the necessary libraries
+		$r = "<script type='text/javascript' src='jquery-1.2.6.js'></script>".
+			"<script type='text/javascript' src = 'jquery.autocomplete.js'></script>".
+			"<script type='text/javascript' src='json2.js'></script>".
+			"<script type='text/javascript' >
+			$(document).ready(function() {
+				$('input#ac$id').autocomplete('$url/$entity', {
+					minChars : 1,
+					mustMatch : true,
+					extraParams : {
+						orderby : '$nameField',
+						mode : 'json',
+						qfield : '$nameField',
+					},
+					parse: function(data) {
+						var results = [];
+						var obj = JSON.parse(data);
+						$.each(obj, function(i, item) {
+							results[results.length] = { 
+								'data' : item,
+								'value' : item.$nameField,
+								'result' : item.$valueField };
+						});
+    					return results;
+					},
+					formatItem: function(item) {
+						return item.$nameField;
+					},
+					formatResult: function(item) {
+						return item.$valueField;
+					}
+				});
+				$('input#ac$id').result(function(event, data){
+					$('input#$id').attr('value', data.id);
+				});
+			});
+			</script>";
+			$r .= "<input type='hidden' id='$id' name='$id' />".
+				"<input id='ac$id' name='ac$id' value='' />";
+			return $r;
+    }
 }
 ?>
