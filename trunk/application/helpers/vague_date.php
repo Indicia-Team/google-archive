@@ -87,6 +87,13 @@ class vague_date {
 		'%y', // 98
 	);
 	}
+	
+	private static function seasonInYearFormats() {
+		return array(
+		'%K %Y', // Autumn 2008
+		'%K %y', // Autumn 08
+		);
+	}
 
 	private static function seasonFormats() {
 		return array(
@@ -140,8 +147,9 @@ class vague_date {
 		self::singleDayFormats(),
 		self::singleMonthInYearFormats(),
 		self::singleMonthFormats(),
-		self::singleYearFormats(),
+		self::seasonInYearFormats(),
 		self::seasonFormats(),
+		self::singleYearFormats(),
 		self::centuryFormats()
 		);
 		// Our approach shall be to gradually pare down from the most complex possible
