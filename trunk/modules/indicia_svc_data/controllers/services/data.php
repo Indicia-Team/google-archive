@@ -501,7 +501,7 @@ class Data_Controller extends Service_Base_Controller {
 			$model->submit();
 			// return the first model
 			if (!isset($this->model))
-				$id=$model->$id;
+				$id=$model->id;
 		}
 		return $id;
 	}

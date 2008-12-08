@@ -3,6 +3,7 @@
 <title>Indicia external site data entry test page</title>
 <link rel="stylesheet" href="../../../media/css/ui.datepicker.css" type="text/css" media="screen">
 <link rel="stylesheet" href="demo.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../media/css/jquery.autocomplete.css" />
 
 <script type="text/javascript" src="../../../media/js/jquery-1.2.6.js"></script>
 <script type="text/javascript" src="../../../media/js/ui.core.js"></script>
@@ -20,11 +21,23 @@ $(document).ready(function() {
 <p>Note that this page requires the PHP curl extension to send requests to the Indicia server.</p>
 <?php
 		include 'data_entry_helper.php';
-	// PHP to catch and submit the POST data from the form
-	if ($_POST) {
+		// PHP to catch and submit the POST data from the form - we need to wrap
+		// some things manually in order to get the submodel in.
+		if ($_POST) {
+			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
+			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
+			$occurrenceMod['subModels'][] = array(
+				'fkId' => 'sample_id',
+				'model' => $sampleMod
+			);
+			$submission = array('submission' => array('entries' => array(
+				array ( 'model' => $occurrenceMod )
+			)));
 
-		$response = data_entry_helper::forward_post_to(
-				'http://localhost/indicia/index.php/services/data', 'sample'
+			$response = data_entry_helper::forward_post_to(
+				'http://localhost/indicia/index.php/services/data',
+				'save',
+			        $submission
 		);
 		data_entry_helper::dump_errors($response);
 	}
@@ -45,7 +58,7 @@ $(document).ready(function() {
 <br />
 <fieldset>
 <legend>Occurrence Data</legend>
-<input type='hidden' id='website_id' value='1' />
+<input type='hidden' id='website_id' name='website_id' value='1' />
 <label for='acdeterminer_id'>Determiner</label>
 <?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'surname', 'id'); ?>
 <label for='actaxa_taxon_list_id'>Taxon</label>
