@@ -11,26 +11,26 @@ class vague_date {
 	 */
 	private static function dateRangeStrings() { return Array(
 	array(
-			'regex' => '([\d\w\s]*)(\s to \s|\s - \s)([\d\w\s]*)', // date to date
-			'start' => '1',
-			'end' => '3'
+			'regex' => '/( to | - )/i', // date to date
+			'start' => true,
+			'end' => true
 			),
 			array(
-			'regex' => '(pre|before[\.]?)([\d\w\s]*)',
-			'start' => '...',
-			'end' => '2'
+			'regex' => '/(pre|before[\.]?)/i',
+			'start' => false,
+			'end' => true
 			),
 			array(
-			'regex' => '(from|after)([\d\w\s]*)',
-			'start' => '2',
-			'end' => '...'
+			'regex' => '/(from|after)/i',
+			'start' => true,
+			'end' => false
 			),
 			array(
-			'regex' => '([\d\w\s]*)\s-',
-			'start' => '1',
-			'end' => '...'
+			'regex' => '/-$/',
+			'start' => true,
+			'end' => false
 			),
-			);
+		);
 	}
 
 	/**
@@ -159,224 +159,222 @@ class vague_date {
 				'type' => ''
 				);
 
-				foreach (self::dateRangeStrings() as $a) {
-					if (eregi($a['regex'], $string, $regs) != false) {
-						if ($a['start'] == '...'){
-							$start = false;
-						} else {
-							$start = $regs[$a['start']];
-						}
-						if ($a['end'] == '...'){
-							$end = false;
-						} else {
-							$end = $regs[$a['end']];
-						}
-						$range = true;
-						break;
-					}
-				}
-
-				if (!$range) {
-					$a = self::parseSingleDate($string, $parseFormats);
-					if ($a != null) {
-						$startDate = $endDate = $a;
-						$matched = true;
-					}
+		foreach (self::dateRangeStrings() as $a) {
+			if (preg_match($a['regex'], $string, $regs) != false) {
+				if (!$a['start']){
+					$start = false;
 				} else {
-					if ($start) {
-						$a = self::parseSingleDate($start);
-						if ($a != null) {
-							$startDate = $a;
-							$matched = true;
-						}
-					}
-					if ($end) {
-						$a = self::parseSingleDate($end);
-						if ($a != null) {
-							$endDate = $a;
-							$matched = true;
-						}
-					}
-					if ($matched) {
-						if ($start && !$end) {
-							$endDate = $startDate;
-						} else if ($end && !$start) {
-							$startDate = $endDate;
-						}
-					}
-
+					$start = substr($string,0,strpos($string, $regs[0]));
 				}
-
-				if (!$matched) {
-					return null;
-				}
-
-				// Okay, now we try to determine the type - we look mostly at $endDate because
-				// this is more likely to contain more info e.g. 15 - 18 August 2008
-
-				// Seasons are parsed specially - i.e. we'll have seen the word 'Summer' or the like.
-
-				if ($endDate->tm_season != null){
-					//We're a season. That means we could be P (if we have a year) or S (if we don't).
-					if ($endDate->tm_year != null){
-						// We're a P
-						$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => 'P'
-						);
-						return $vagueDate;
-					} else {
-						// No year, so we're an S
-						$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => 'S'
-						);
-						return $vagueDate;
-					}
-				}
-
-				// Do we have day precision?
-
-				if ($endDate->tm_mday != null) {
-					if (!$range) {
-						// We're a D
-						$vagueDate = array(
-						'start' => $endDate->getIsoDate(),
-						'end' => $endDate->getIsoDate(),
-						'type' => 'D'
-						);
-						return $vagueDate;
-					} else {
-						// Type is DD. We copy across any data not set in the start date.
-						if ($startDate->getPrecision() == $endDate->getPrecision()){
-							$vagueDate = array(
-							'start' => $startDate->getImpreciseDateStart(),
-							'end' => $endDate->getImpreciseDateEnd(),
-							'type' => 'D'
-							);
-						} else {
-							// Less precision in the start date - try and massage them together
-							return false;
-						}
-						return $vagueDate;
-
-					}
-				}
-
-				/* Right, scratch the possibility of days. Months are next - there are various possibilities with months,
-				 * because months don't necessarily have years. Months can be:
-				 * Type 'O' - month, year, !range
-				 * Type 'OO' - month, year, range
-				 * Type 'M' - month, !range
-				 *
-				 */
-
-				if ($endDate->tm_mon != null) {
-					if (!$range) {
-						// Either a month in a year or just a month
-						if ($endDate->tm_year != null) {
-							// Then we have a month in a year- type O
-							$vagueDate = array(
-							'start' => $endDate->getImpreciseDateStart(),
-							'end' => $endDate->getImpreciseDateEnd(),
-							'type' => 'O'
-							);
-							return $vagueDate;
-						} else {
-							// Month without a year - type M
-							$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => 'M'
-						);
-						return $vagueDate;
-						}
-					} else {
-						// We do have a range, OO
-						if ($endDate->tm_year != null){
-							// We have a year - so this is OO
-							$vagueDate = array(
-						'start' => $startDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => 'OO'
-						);
-						return $vagueDate;
-						} else {
-							// MM is not an allowed type
-							// TODO think about this
-							return false;
-						}
-
-					}
-				}
-
-				/*
-				 * No day, no month. We're some kind of year representation - Y,YY,Y- or -Y, C, CC, C- or -C.
-				 */
-
-				// Are we a century?
-				if ($endDate->tm_century != null){
-					// CC, C, C- or -C
-					if (!$range){
-						// Type C
-						$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => 'C'
-						);
-					} else {
-						if ($start && $end) {
-							// We're CC
-							$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => $startDate->getImpreciseDateEnd(),
-						'type' => 'CC'
-						);
-						return $vagueDate;
-						} else if ($start && !$end) {
-							// We're C-
-							$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => null,
-						'type' => 'C-'
-						);
-						return $vagueDate;
-						} else if ($end && !$start) {
-							// We're -C
-							$vagueDate = array(
-						'start' => null,
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => '-C'
-						);
-						return $vagueDate;
-						}
-					}
-				}
-
-				//Okay, we're one of the year representations, or else unknown.
-				if ($endDate->tm_year != null){
-					if (!$range){
-						// We're Y
-													$vagueDate = array(
-						'start' => $endDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => 'Y'
-						);
-						return $vagueDate;
-					} else {
-						// We're YY
-						$vagueDate = array(
-						'start' => $startDate->getImpreciseDateStart(),
-						'end' => $endDate->getImpreciseDateEnd(),
-						'type' => 'Y'
-						);
-						return $vagueDate;
-					}
+				if (!$a['end']){
+					$end = false;
 				} else {
+					$end = substr($string, strpos($string, $regs[0]) + strlen($regs[0]));
+				}
+				$range = true;
+				break;
+			}
+		}
+
+		if (!$range) {
+			$a = self::parseSingleDate($string, $parseFormats);
+			if ($a != null) {
+				$startDate = $endDate = $a;
+				$matched = true;
+			}
+		} else {
+			if ($start) {
+				$a = self::parseSingleDate($start, $parseFormats);
+				if ($a != null) {
+					$startDate = $a;
+					$matched = true;
+				}
+			}
+			if ($end) {
+				$a = self::parseSingleDate($end, $parseFormats);
+				if ($a != null) {
+					$endDate = $a;
+					$matched = true;
+				}
+			}
+			if ($matched) {
+				if ($start && !$end) {
+					$endDate = $startDate;
+				} else if ($end && !$start) {
+					$startDate = $endDate;
+				}
+			}
+		}
+		if (!$matched) {
+			return null;
+		}
+		// Okay, now we try to determine the type - we look mostly at $endDate because
+		// this is more likely to contain more info e.g. 15 - 18 August 2008
+		// Seasons are parsed specially - i.e. we'll have seen the word 'Summer' 
+		// or the like.
+
+		if ($endDate->tm_season != null){
+			//We're a season. That means we could be P (if we have a year) or 
+			//S (if we don't).
+			if ($endDate->tm_year != null){
+				// We're a P
+				$vagueDate = array(
+				'start' => $endDate->getImpreciseDateStart(),
+				'end' => $endDate->getImpreciseDateEnd(),
+				'type' => 'P'
+				);
+				return $vagueDate;
+			} else {
+				// No year, so we're an S
+				$vagueDate = array(
+				'start' => $endDate->getImpreciseDateStart(),
+				'end' => $endDate->getImpreciseDateEnd(),
+				'type' => 'S'
+				);
+				return $vagueDate;
+			}
+		}
+		// Do we have day precision?
+
+		if ($endDate->tm_mday != null) {
+			if (!$range) {
+				// We're a D
+				$vagueDate = array(
+				'start' => $endDate->getIsoDate(),
+				'end' => $endDate->getIsoDate(),
+				'type' => 'D'
+				);
+				return $vagueDate;
+			} else {
+				// Type is DD. We copy across any data not set in the 
+				// start date.
+				if ($startDate->getPrecision() == $endDate->getPrecision()){
+					$vagueDate = array(
+					'start' => $startDate->getImpreciseDateStart(),
+					'end' => $endDate->getImpreciseDateEnd(),
+					'type' => 'DD'
+					);
+				} else {
+					// Less precision in the start date - 
+					// try and massage them together
 					return false;
 				}
+				return $vagueDate;
+
+			}
+		}
+		/* Right, scratch the possibility of days. Months are next - there are 
+		 * various possibilities with months,
+		 * because months don't necessarily have years. Months can be:
+		 * Type 'O' - month, year, !range
+		 * Type 'OO' - month, year, range
+		 * Type 'M' - month, !range
+		 *
+		 */
+
+		if ($endDate->tm_mon != null) {
+			if (!$range) {
+				// Either a month in a year or just a month
+				if ($endDate->tm_year != null) {
+					// Then we have a month in a year- type O
+					$vagueDate = array(
+					'start' => $endDate->getImpreciseDateStart(),
+					'end' => $endDate->getImpreciseDateEnd(),
+					'type' => 'O'
+					);
+					return $vagueDate;
+				} else {
+					// Month without a year - type M
+					$vagueDate = array(
+					'start' => $endDate->getImpreciseDateStart(),
+					'end' => $endDate->getImpreciseDateEnd(),
+					'type' => 'M'
+					);
+					return $vagueDate;
+				}
+			} else {
+			// We do have a range, OO
+				if ($endDate->tm_year != null){
+					// We have a year - so this is OO
+					$vagueDate = array(
+					'start' => $startDate->getImpreciseDateStart(),
+					'end' => $endDate->getImpreciseDateEnd(),
+					'type' => 'OO'
+					);
+					return $vagueDate;
+				} else {
+					// MM is not an allowed type
+					// TODO think about this
+					return false;
+				}
+			}
+		}
+		/*
+		 * No day, no month. We're some kind of year representation - Y,YY,Y- or 
+		 * -Y, C, CC, C- or -C.
+		 */
+
+		// Are we a century?
+		if ($endDate->tm_century != null){
+			// CC, C, C- or -C
+			if (!$range){
+				// Type C
+				$vagueDate = array(
+				'start' => $endDate->getImpreciseDateStart(),
+				'end' => $endDate->getImpreciseDateEnd(),
+				'type' => 'C'
+				);
+			} else {
+				if ($start && $end) {
+					// We're CC
+					$vagueDate = array(
+					'start' => $endDate->getImpreciseDateStart(),
+					'end' => $startDate->getImpreciseDateEnd(),
+					'type' => 'CC'
+					);
+				return $vagueDate;
+				} else if ($start && !$end) {
+					// We're C-
+					$vagueDate = array(
+					'start' => $endDate->getImpreciseDateStart(),
+					'end' => null,
+					'type' => 'C-'
+					);
+					return $vagueDate;
+				} else if ($end && !$start) {
+					// We're -C
+					$vagueDate = array(
+					'start' => null,
+					'end' => $endDate->getImpreciseDateEnd(),
+					'type' => '-C'
+					);
+					return $vagueDate;
+				}
+			}
+		}
+
+		//Okay, we're one of the year representations, or else unknown.
+		if ($endDate->tm_year != null){
+			if (!$range){
+				// We're Y
+				$vagueDate = array(
+				'start' => $endDate->getImpreciseDateStart(),
+				'end' => $endDate->getImpreciseDateEnd(),
+				'type' => 'Y'
+				);
+				return $vagueDate;
+			} else {
+				// We're YY
+				$vagueDate = array(
+				'start' => $startDate->getImpreciseDateStart(),
+				'end' => $endDate->getImpreciseDateEnd(),
+				'type' => 'Y'
+				);
+				return $vagueDate;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**

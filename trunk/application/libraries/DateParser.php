@@ -10,17 +10,17 @@ class DateParser_Core {
 
 	// Set everything to null so we know what has actually been parsed.
 	private $aResult = Array(
-	        'tm_sec'   => null,
-            'tm_min'   => null,
-            'tm_hour'  => null,
-            'tm_mday'  => null,
-            'tm_mon'   => null,
-            'tm_year'  => null,
-            'tm_wday'  => null,
-            'tm_yday'  => null,
-			'tm_season' => null,
-			'tm_century' => null,
-            'unparsed' => null
+		'tm_sec'   => null,
+		'tm_min'   => null,
+		'tm_hour'  => null,
+		'tm_mday'  => null,
+		'tm_mon'   => null,
+		'tm_year'  => null,
+		'tm_wday'  => null,
+		'tm_yday'  => null,
+		'tm_season' => null,
+		'tm_century' => null,
+		'unparsed' => null
 	);
 
 	/**
@@ -156,7 +156,7 @@ class DateParser_Core {
 					if ($a){
 						$nValue = $weekdays[strtolower($refs[1])];
 						$this->aResult['tm_wday'] = $nValue;
-						$dateAfter = $refs[2];
+						$sDateAfter = $refs[2];
 					} else {
 						return false;
 					}
@@ -173,7 +173,7 @@ class DateParser_Core {
 					if ($a){
 						$nValue = $weekdays[strtolower($refs[1])];
 						$this->aResult['tm_wday'] = $nValue;
-						$dateAfter = $refs[2];
+						$sDateAfter = $refs[2];
 					} else {
 						return false;
 					}
@@ -196,7 +196,7 @@ class DateParser_Core {
 					if ($a){
 						$nValue = $weekdays[strtolower($refs[1])];
 						$this->aResult['tm_mon'] = $nValue;
-						$dateAfter = $refs[2];
+						$sDateAfter = $refs[2];
 					} else {
 						return false;
 					}
@@ -213,7 +213,7 @@ class DateParser_Core {
 					if ($a){
 						$nValue = $weekdays[strtolower($refs[1])];
 						$this->aResult['tm_mon'] = $nValue;
-						$dateAfter = $refs[2];
+						$sDateAfter = $refs[2];
 					} else {
 						return false;
 					}
@@ -230,7 +230,7 @@ class DateParser_Core {
 					if ($a){
 						$nValue = strtolower($refs[1]);
 						$this->aResult['tm_season'] = $seasons[strtolower($nValue)];
-						$dateAfter = $refs[2];
+						$sDateAfter = $refs[2];
 					} else {
 						return false;
 					}
@@ -243,7 +243,7 @@ class DateParser_Core {
 					if ($a) {
 						$nValue = $refs[1];
 						$this->aResult['tm_century'] = $nValue;
-						$dateAfter = $refs[4];
+						$sDateAfter = $refs[4];
 					} else {
 						return false;
 					}
@@ -359,7 +359,7 @@ class DateParser_Core {
 	 * not reported as null.
 	 */
 	public function getPrecision(){
-		foreach ($this->aRresult as $key=>$res){
+		foreach ($this->aResult as $key=>$res){
 			if ($res != null) return $key;
 		}
 		return null;
