@@ -170,7 +170,7 @@ class Data_Controller extends Service_Base_Controller {
 			}
 			// last thing we do is set the output
 			if ($this->content_type)
-			$this->header($this->content_type);
+				$this->header($this->content_type);
 			echo $this->response;
 		} catch (ArrayException $e) {
 			echo json_encode(array('error'=>$e->errors()));
@@ -184,7 +184,6 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	protected function handle_submit() {
 		if ($this->authenticate()) {
-			echo "hello";
 			$mode = $this->get_input_mode();
 			switch ($mode) {
 				case 'json':
@@ -270,7 +269,7 @@ class Data_Controller extends Service_Base_Controller {
 
 		if (!$recursion) {
 			// if we are outputting a specific record, root is singular
-			if (uri::total_arguments()) {
+			if ($this->uri->total_arguments()) {
 				$root = $this->entity;
 				// We don't need to repeat the element for each record, as there is only 1.
 				$array = $array[0];
@@ -342,10 +341,10 @@ class Data_Controller extends Service_Base_Controller {
 		$select = '*';
 		$this->db->select($select);
 		// if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
-		if (URI::total_arguments()==0)
-		$this->apply_get_parameters_to_db();
+		if ($this->uri->total_arguments()==0)
+			$this->apply_get_parameters_to_db();
 		else
-		$this->db->where($this->viewname.'.id', URI::argument(1));
+			$this->db->where($this->viewname.'.id', URI::argument(1));
 		return $this->db->get()->result_array(FALSE);
 	}
 
