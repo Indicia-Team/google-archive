@@ -1,4 +1,4 @@
-#Summary Entity relationship diagrams and a list of database tables used by the Core Module of Indicia
+#summary Entity relationship diagrams and a list of database tables used by the Core Module of Indicia
 
 == List of Tables ==
 The following tables are used by the Indicia Core Module:
