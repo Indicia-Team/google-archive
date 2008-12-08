@@ -8,6 +8,8 @@
 <script type="text/javascript" src="../../../media/js/jquery-1.2.6.js"></script>
 <script type="text/javascript" src="../../../media/js/ui.core.js"></script>
 <script type="text/javascript" src="../../../media/js/ui.datepicker.js"></script>
+<script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#date').datepicker({constrainInput: false});

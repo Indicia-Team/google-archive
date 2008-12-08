@@ -139,9 +139,7 @@ class data_entry_helper {
 		// If valueField is null, set it to $nameField
 	   	if ($valueField == null) $valueField = $nameField;
 		// Reference the necessary libraries
-		$r ="<script type='text/javascript' src = 'jquery.autocomplete.js'></script>".
-			"<script type='text/javascript' src='json2.js'></script>".
-			"<script type='text/javascript' >
+		$r = "<script type='text/javascript' >
 			$(document).ready(function() {
 				$('input#ac$id').autocomplete('$url/$entity', {
 					minChars : 1,
