@@ -12,23 +12,23 @@ class vague_date {
 	private static function dateRangeStrings() { return Array(
 	array(
 			'regex' => '/( to | - )/i', // date to date
-			'start' => true,
-			'end' => true
+			'start' => -1,
+			'end' => 1
 			),
 			array(
 			'regex' => '/(pre|before[\.]?)/i',
-			'start' => false,
-			'end' => true
+			'start' => 0,
+			'end' => 1
 			),
 			array(
 			'regex' => '/(from|after)/i',
-			'start' => true,
-			'end' => false
+			'start' => 1,
+			'end' => 0
 			),
 			array(
 			'regex' => '/-$/',
-			'start' => true,
-			'end' => false
+			'start' => -1,
+			'end' => 0
 			),
 		);
 	}
@@ -149,8 +149,8 @@ class vague_date {
 		self::singleMonthFormats(),
 		self::seasonInYearFormats(),
 		self::seasonFormats(),
-		self::singleYearFormats(),
-		self::centuryFormats()
+		self::centuryFormats(),
+		self::singleYearFormats()
 		);
 		// Our approach shall be to gradually pare down from the most complex possible
 		// dates to the simplest, and match as fast as possible to try to grab the most
@@ -169,15 +169,25 @@ class vague_date {
 
 		foreach (self::dateRangeStrings() as $a) {
 			if (preg_match($a['regex'], $string, $regs) != false) {
-				if (!$a['start']){
-					$start = false;
-				} else {
+				switch ($a['start']) {
+				case -1:
 					$start = substr($string,0,strpos($string, $regs[0]));
+					break;
+				case 1:
+					$start = substr($string, strpos($string, $regs[0]) + strlen($regs[0]));
+					break;
+				default:
+					$start = false;
 				}
-				if (!$a['end']){
-					$end = false;
-				} else {
+				switch ($a['end']){
+				case -1:
+					$end = substr($string,0,strpos($string, $regs[0]));
+					break;
+				case 1:
 					$end = substr($string, strpos($string, $regs[0]) + strlen($regs[0]));
+					break;
+				default:
+					$end = false;
 				}
 				$range = true;
 				break;
@@ -336,8 +346,8 @@ class vague_date {
 				if ($start && $end) {
 					// We're CC
 					$vagueDate = array(
-					'start' => $endDate->getImpreciseDateStart(),
-					'end' => $startDate->getImpreciseDateEnd(),
+					'start' => $startDate->getImpreciseDateStart(),
+					'end' => $endDate->getImpreciseDateEnd(),
 					'type' => 'CC'
 					);
 				return $vagueDate;
@@ -372,13 +382,31 @@ class vague_date {
 				);
 				return $vagueDate;
 			} else {
-				// We're YY
-				$vagueDate = array(
-				'start' => $startDate->getImpreciseDateStart(),
-				'end' => $endDate->getImpreciseDateEnd(),
-				'type' => 'Y'
-				);
-				return $vagueDate;
+				if ($start && $end){
+					// We're YY
+					$vagueDate = array(
+					'start' => $startDate->getImpreciseDateStart(),
+					'end' => $endDate->getImpreciseDateEnd(),
+					'type' => 'YY'
+					);
+					return $vagueDate;
+				} else if ($start && !$end){
+					// We're Y-
+					$vagueDate = array(
+					'start' => $startDate->getImpreciseDateStart(),
+					'end' => null, 
+					'type' => 'Y-'
+					);
+					return $vagueDate;
+				} else if ($end && !$start){
+					// We're -Y
+					$vagueDate = array(
+					'start' => null,
+					'end' => $endDate->getImpreciseDateEnd(), 
+					'type' => '-Y'
+					);
+					return $vagueDate;
+				}
 			}
 		} else {
 			return false;
