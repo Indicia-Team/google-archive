@@ -100,7 +100,9 @@ $config['modules'] = array
 	 MODPATH.'indicia_svc_base',      // Services
 	 MODPATH.'indicia_svc_data',      // Data services
 	 MODPATH.'indicia_svc_validation',// Validation services
-	 MODPATH.'indicia_setup',         // indicia setup
+	 MODPATH.'indicia_svc_security',  // Security services
+	 MODPATH.'sref_osgb',			  // OSGB grid notation
+	 MODPATH.'demo',				  // Demo and test pages
 	// MODPATH.'auto_modeler',      // Auto Modler Library
 	// MODPATH.'forge',     // Form generation
 	// MODPATH.'kodoc',     // Self-generating documentation
