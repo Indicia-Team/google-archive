@@ -2,8 +2,8 @@
 
 class data_entry_helper {
 
-	public static function forward_post_to($url, $entity) {
-		$array = self::wrap($_POST, $entity);
+	public static function forward_post_to($url, $entity, $array = null) {
+		if ($array == null) $array = self::wrap($_POST, $entity);
 		$request = "$url/$entity";
 		$postargs = 'submission='.json_encode($array);
 		// Get the curl session object
@@ -130,8 +130,7 @@ class data_entry_helper {
 		// If valueField is null, set it to $nameField
 	   	if ($valueField == null) $valueField = $nameField;
 		// Reference the necessary libraries
-		$r = "<script type='text/javascript' src='jquery-1.2.6.js'></script>".
-			"<script type='text/javascript' src = 'jquery.autocomplete.js'></script>".
+		$r ="<script type='text/javascript' src = 'jquery.autocomplete.js'></script>".
 			"<script type='text/javascript' src='json2.js'></script>".
 			"<script type='text/javascript' >
 			$(document).ready(function() {
