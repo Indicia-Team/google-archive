@@ -1,10 +1,10 @@
 #summary A summary of security requirements of Indicia
 
 Security provided by Indicia is for several reasons:
-# To authenticate Indicia administrators when they access the Core Module's GUI.
-# To authenticate online recording website administrators when they access the Core Module's GUI (e.g. to define your controlled vocabularies).
-# To authenticate website users who are logged into an online recording website so that their records may be linked to their user entry.
-# Most importantly, to authenticate the websites themselves which are able to use the services provided by the core module, to prevent malicious use of the services. 
+  # To authenticate Indicia administrators when they access the Core Module's GUI.
+  # To authenticate online recording website administrators when they access the Core Module's GUI (e.g. to define your controlled vocabularies).
+  # To authenticate website users who are logged into an online recording website so that their records may be linked to their user entry.
+  # Most importantly, to authenticate the websites themselves which are able to use the services provided by the core module, to prevent malicious use of the services. 
 
 So, if the online recording website allows members of the public to access a data entry form without first creating a registration, then the website code will still be expected to prove that it is from the website before it can access the services to post a record. We will be using a form of digest authentication to do this and will provide guidance and sample PHP code.
 
