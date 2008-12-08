@@ -1,0 +1,181 @@
+# Summary Entity relationship diagrams and a list of database tables used by the Core Module of Indicia
+
+== List of Tables ==
+The following tables are used by the Indicia Core Module:
+<table border="1">
+        <tr>
+          <th class="ReportTableHeaderCell">Table</th>
+          <th class="ReportTableHeaderCell">Comment</th>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">core_roles</td>
+          <td class="ReportTableValueCell">List of user roles for the core site, including no access, site admin, core admin.</td>
+
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">geometry_columns</td>
+          <td class="ReportTableValueCell">PostGIS table for tracking columns containing geometry data.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">languages</td>
+
+          <td class="ReportTableValueCell">List of languages known to the system.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">location_attribute_values</td>
+          <td class="ReportTableValueCell">Contains values that have been stored for locations against custom attributes.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+
+          <td class="ReportTableValueCell">location_attributes</td>
+          <td class="ReportTableValueCell">List of additional attributes that are defined for the location data.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">location_attributes_websites</td>
+          <td class="ReportTableValueCell">Join table which identifies the websites that each location attribute is available for.</td>
+        </tr>
+
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">locations</td>
+          <td class="ReportTableValueCell">List of locations, including wildlife sites and other locations, known to the system.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">locations_websites</td>
+          <td class="ReportTableValueCell">Join table which identifies the locations that are available for data entry on each website.</td>
+
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">meanings</td>
+          <td class="ReportTableValueCell">List of unique term meanings. All terms that refer to a single meaning are considered synonymous.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">occurrence_attribute_values</td>
+
+          <td class="ReportTableValueCell">Contains values that have been stored for occurrences against custom attributes.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">occurrence_attributes</td>
+          <td class="ReportTableValueCell">List of additional attributes that are defined for the occurrences data.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+
+          <td class="ReportTableValueCell">occurrence_attributes_websites</td>
+          <td class="ReportTableValueCell">Join table which identifies the occurrence attributes that are available when entering occurrence data on each website.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">occurrence_comments</td>
+          <td class="ReportTableValueCell">List of comments regarding the occurrence posted by users viewing the occurrence subsequent to initial data entry.</td>
+        </tr>
+
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">occurrence_images</td>
+          <td class="ReportTableValueCell">Lists images that are attached to occurrence records.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">occurrences</td>
+          <td class="ReportTableValueCell">List of occurrences of a taxon.</td>
+
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">people</td>
+          <td class="ReportTableValueCell">List of all people known to the system.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">sample_attribute_values</td>
+
+          <td class="ReportTableValueCell">Contains values that have been stored for samples against custom attributes.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">sample_attributes</td>
+          <td class="ReportTableValueCell">List of additional attributes that are defined for the sample data.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+
+          <td class="ReportTableValueCell">sample_attributes_websites</td>
+          <td class="ReportTableValueCell">Join table that identifies which websites a sample attribute is defined for.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">samples</td>
+          <td class="ReportTableValueCell">List of samples known to the system.</td>
+        </tr>
+
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">site_roles</td>
+          <td class="ReportTableValueCell">List of roles that exist at the online recording website level.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">spatial_ref_sys</td>
+          <td class="ReportTableValueCell">PostGIS table for the list of spatial reference systems that can be transformed.</td>
+
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">surveys</td>
+          <td class="ReportTableValueCell">List of surveys known to the system.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">system</td>
+
+          <td class="ReportTableValueCell">Contains system versioning information.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">taxa</td>
+          <td class="ReportTableValueCell">List of taxa known to the system.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+
+          <td class="ReportTableValueCell">taxa_taxon_lists</td>
+          <td class="ReportTableValueCell">Join table that defines which taxa belong to which taxon lists.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">taxon_groups</td>
+          <td class="ReportTableValueCell">List of higher level taxonomic groups, used to give a label that can quickly confirm that a selected name is in the right taxonomic area.</td>
+        </tr>
+
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">taxon_lists</td>
+          <td class="ReportTableValueCell">List of taxon lists known to the system, including the main species list and all subsets.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">taxon_meanings</td>
+          <td class="ReportTableValueCell">List of distinct taxonomic meanings. Each meaning is associated with several taxa records, each of which are therefore considered to be synonymous with the same species or other taxon.</td>
+
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">termlists</td>
+          <td class="ReportTableValueCell">List of all controlled terminology lists known to the system. Each termlist is used to store a list of known terms, which can provide a lookup for populating a field, or the values which may be selected when entering data into an auto-complete text box for example.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">termlists_terms</td>
+
+          <td class="ReportTableValueCell">Join table that identifies the terms that belong to each termlist.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">terms</td>
+          <td class="ReportTableValueCell">Distinct list of all terms which are included in termlists.</td>
+        </tr>
+        <tr class="ReportDetailsEvenDataRow">
+
+          <td class="ReportTableValueCell">user_tokens</td>
+          <td class="ReportTableValueCell">Contains tokens stored in cookies used to authenticate users on the core module.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">users</td>
+          <td class="ReportTableValueCell">List of all users of the system. Contains login specific information only as each user is also identified as a record in the people table.</td>
+        </tr>
+
+        <tr class="ReportDetailsEvenDataRow">
+          <td class="ReportTableValueCell">users_websites</td>
+          <td class="ReportTableValueCell">Join table that identifies the websites that a user has access to.</td>
+        </tr>
+        <tr class="ReportDetailsOddDataRow">
+          <td class="ReportTableValueCell">websites</td>
+          <td class="ReportTableValueCell">List of data entry websites using this instance of the core module.</td>
+
+        </tr>
+      </table>
+
+== Main Entity Relationship Diagram ==
+[http://indicia.googlecode.com/files/main%20erd%20v0.2.png]
+
+== Website related tables Entity Relationship Diagram ==
+[http://indicia.googlecode.com/files/website%20related%20erd%20v0.2.png]
