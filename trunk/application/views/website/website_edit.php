@@ -19,6 +19,16 @@
 <textarea rows="7" id="description" name="description"><?php echo html::specialchars($model->description); ?></textarea>
 <?php echo html::error_message($model->getError('description')); ?>
 </li>
+<li>
+<label for="password">Password</label>
+<input type="password" id="password" name="password" value="<?php echo html::specialchars($model->password); ?>" />
+<?php echo html::error_message($model->getError('password')); ?>
+</li>
+<li>
+<label for="password2">Retype Password</label>
+<input type="password" id="password2" name="password2" value="<?php echo html::specialchars($model->password); ?>" />
+<?php echo html::error_message($model->getError('password2')); ?>
+</li>
 </ol>
 </fieldset>
 <?php echo $metadata ?>
