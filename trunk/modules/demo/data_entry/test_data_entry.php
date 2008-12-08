@@ -43,5 +43,15 @@ $(document).ready(function() {
 <label for="survey_id">Survey</label>
 <?php echo data_entry_helper::select('survey_id', 'http://localhost/indicia/index.php/services/data', 'survey', 'title', 'id'); ?>
 <br />
+<fieldset>
+<legend>Occurrence Data</legend>
+<input type='hidden' id='website_id' value='1' />
+<label for='acdeterminer_id'>Determiner</label>
+<?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'surname', 'id'); ?>
+<label for='actaxa_taxon_list_id'>Taxon</label>
+<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id'); ?>
+<label for='comment'>Comment</label>
+<textarea id='comment' name='comment'></textarea>
+</fieldset>
 <input type="submit" value="Save" />
 </form>
