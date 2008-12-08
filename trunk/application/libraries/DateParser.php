@@ -220,6 +220,7 @@ class DateParser_Core {
 					break;
 				case '%K': // Season
 					// Get locale specific season names
+					$sRegex = '';
 					$first = true;
 					foreach (Kohana::lang('dates.seasons') as $key => $season) {
 						$seasons[strtolower($season)] = $key;

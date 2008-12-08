@@ -155,8 +155,8 @@ class data_entry_helper {
 						$.each(obj, function(i, item) {
 							results[results.length] = {
 								'data' : item,
-								'value' : item.$nameField,
-								'result' : item.$valueField };
+								'result' : item.$nameField,
+								'value' : item.$valueField };
 						});
     					return results;
 					},
