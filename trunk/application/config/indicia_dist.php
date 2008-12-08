@@ -17,4 +17,6 @@ $config['system'] = array
     'release_date' => '2009-01-15'
 );
 
+$config['private_key'] = 'Indicia'; // Change this to a unique value for each Indicia install
+$config['nonce_life'] = 1200;		// life span of an authentication token for services, in seconds
 ?>

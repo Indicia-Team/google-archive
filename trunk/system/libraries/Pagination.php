@@ -40,7 +40,7 @@ class Pagination_Core {
 	 * @param   array   configuration settings
 	 * @return  object
 	 */
-	public function factory($config = array())
+	public static function factory($config = array())
 	{
 		return new Pagination($config);
 	}

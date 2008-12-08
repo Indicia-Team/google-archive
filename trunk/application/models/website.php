@@ -36,10 +36,12 @@ class Website_Model extends ORM
      * Validate and save the data.
      */
     public function validate(Validation $array, $save = FALSE) {
+    	echo kohana::debug($array->as_array());
         // uses PHP trim() to remove whitespace from beginning and end of all fields before validation
         $array->pre_filter('trim');
         $array->add_rules('title', 'required', 'length[1,100]');
         $array->add_rules('url', 'required', 'length[1,500]', 'url');
+       	if (isset($array['password'])) $array->add_rules('password', 'required', 'length[7,30]');
         // Any fields that don't have a validation rule need to be copied into the model manually
         $this->description = $array['description'];
         return parent::validate($array, $save);

@@ -6,6 +6,11 @@ class data_entry_helper {
 		if ($array == null) $array = self::wrap($_POST, $entity);
 		$request = "$url/$entity";
 		$postargs = 'submission='.json_encode($array);
+		// passthrough the authentication tokens as POST data
+		if (array_key_exists('auth_token', $_POST))
+			$postargs .= '&auth_token='.$_POST['auth_token'];
+		if (array_key_exists('nonce', $_POST))
+			$postargs .= '&nonce='.$_POST['nonce'];
 		// Get the curl session object
 		$session = curl_init($request);
 		// Set the POST options.
@@ -42,21 +47,25 @@ class data_entry_helper {
                         'fkSearchField' =>
                         ORM::factory(substr($a,3))->get_search_field(),
                         'fkSearchValue' => $b);
-		    // Determine the foreign table name
-		    $m = ORM::factory($id);
-		    if (array_key_exists(substr($a,3), $m->belongs_to)) {
-			    $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
-		    } else if (array_key_exists(substr($a,3), $m->parent)) {
-			    $sa['fkFields'][$a]['fkTable'] = $id;
-		    }
-		} else {
-			 // This should be a field in the model.
-	                 // Add a new field to the save array
-			 $sa['fields'][$a] = array(
-				 // Set the value
-				 'value' => $b);
-                	}
-	}
+			    // Determine the foreign table name
+			    $m = ORM::factory($id);
+			    if (array_key_exists(substr($a,3), $m->belongs_to)) {
+				    $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
+			    } else if (array_key_exists(substr($a,3), $m->parent)) {
+				    $sa['fkFields'][$a]['fkTable'] = $id;
+			    }
+			} else {
+				// Don't wrap the authentication tokens
+				if ($a!='auth_token' && $a!='nonce') {
+					// This should be a field in the model.
+					// Add a new field to the save array
+					$sa['fields'][$a] = array(
+						// Set the value
+						'value' => $b);
+				}
+
+			}
+		}
         return $sa;
     }
 
@@ -146,7 +155,7 @@ class data_entry_helper {
 						var results = [];
 						var obj = JSON.parse(data);
 						$.each(obj, function(i, item) {
-							results[results.length] = { 
+							results[results.length] = {
 								'data' : item,
 								'value' : item.$nameField,
 								'result' : item.$valueField };
@@ -168,6 +177,30 @@ class data_entry_helper {
 			$r .= "<input type='hidden' id='$id' name='$id' />".
 				"<input id='ac$id' name='ac$id' value='' />";
 			return $r;
+    }
+
+    /**
+     * Retrieves a token and inserts it into a data entry form which authenticates that the
+     * form was submitted by this website.
+     */
+    public static function get_auth($website_id, $password) {
+		$postargs = "website_id=$website_id";
+		// Get the curl session object
+		$session = curl_init('http://localhost/indicia/index.php/services/security/get_nonce');
+		// Set the POST options.
+		curl_setopt ($session, CURLOPT_POST, true);
+		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
+		curl_setopt($session, CURLOPT_HEADER, true);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		// Do the POST and then close the session
+		$response = curl_exec($session);
+		list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
+		curl_close($session);
+    	$result = '<input id="auth_token" name="auth_token" type="hidden"' .
+    			'value="'.sha1("$nonce:$password").'">';
+    	$result .= '<input id="nonce" name="nonce" type="hidden"' .
+    			'value="'.$nonce.'">';
+    	return $result;
     }
 }
 ?>

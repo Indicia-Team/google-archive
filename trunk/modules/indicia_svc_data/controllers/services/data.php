@@ -183,29 +183,33 @@ class Data_Controller extends Service_Base_Controller {
 	 * Internal method for handling a generic submission to a particular model.
 	 */
 	protected function handle_submit() {
-		$mode = $this->get_input_mode();
-		switch ($mode) {
-			case 'json':
-				$s = json_decode($_POST['submission'], true);
-		}
+		if ($this->authenticate()) {
+			echo "hello";
+			$mode = $this->get_input_mode();
+			switch ($mode) {
+				case 'json':
+					$s = json_decode($_POST['submission'], true);
+			}
 
-		if (array_key_exists('submission', $s)) {
-			$id = $this->submit($s);
-			// TODO: proper handling of result checking
-			$result = TRUE;
-		} else {
-			$model = ORM::factory($this->entity);
-			$model->submission = $s;
-			$result = $model->submit();
-			$id = $model->id;
-		}
-		if ($result)
-			$this->response=json_encode(array('success'=>$id));
-		else
-			if (isset($model))
-				Throw new ArrayException($model->getAllErrors());
+			if (array_key_exists('submission', $s)) {
+				$id = $this->submit($s);
+				// TODO: proper handling of result checking
+				$result = TRUE;
+			} else {
+				$model = ORM::factory($this->entity);
+				$model->submission = $s;
+				$result = $model->submit();
+				$id = $model->id;
+			}
+			if ($result)
+				$this->response=json_encode(array('success'=>$id));
 			else
-				Throw new Exception('Unknown error on submission (to do - get correct error info)');
+				if (isset($model))
+					Throw new ArrayException($model->getAllErrors());
+				else
+					Throw new Exception('Unknown error on submission (to do - get correct error info)');
+
+		}
 	}
 
 	/**
@@ -480,7 +484,7 @@ class Data_Controller extends Service_Base_Controller {
 	 * Accepts a submission from POST data and attempts to save to the database.
 	 */
 	public function save(){
-		if (array_key_exists('submission', $_POST)){
+		if ($this->authenticate() &&array_key_exists('submission', $_POST)){
 			$mode = $this->get_input_mode();
 			switch ($mode) {
 				case 'json':
@@ -504,6 +508,29 @@ class Data_Controller extends Service_Base_Controller {
 				$id=$model->id;
 		}
 		return $id;
+	}
+
+	/**
+	 * Before a submission is accepted, this method ensures that the POST data contains the
+	 * correct digest token so we know the request was from the website.
+	 */
+	protected function authenticate()
+	{
+		$authentic = FALSE; // default
+		if (array_key_exists('nonce', $_POST) && array_key_exists('auth_token',$_POST)) {
+			$nonce = $_POST['nonce'];
+			$this->cache = new Cache;
+			$website_id = $this->cache->get($nonce);
+			if ($website_id) {
+				$password = ORM::factory('website', $website_id)->password;
+				if (sha1("$nonce:$password")==$_POST['auth_token'])
+					$authentic=TRUE;
+			}
+		}
+
+		if (!$authentic) {
+			$this->error("unauthorised");
+		};
 	}
 }
 

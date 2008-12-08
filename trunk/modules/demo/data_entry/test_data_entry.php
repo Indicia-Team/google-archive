@@ -36,14 +36,18 @@ $(document).ready(function() {
 
 			$response = data_entry_helper::forward_post_to(
 				'http://localhost/indicia/index.php/services/data',
-				'save',
-			        $submission
+				'save', $submission
 		);
 		data_entry_helper::dump_errors($response);
 	}
 
 ?>
 <form method="post">
+<?php
+	// This PHP call demonstrates inserting authorisation into the form, for website ID
+	// 1 and password 'password'
+	echo data_entry_helper::get_auth(1,'password');
+?>
 <label for="date">Date:</label>
 <input type="text" size="30" value="click here" id="date" name="date"/>
 <style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
@@ -61,10 +65,13 @@ $(document).ready(function() {
 <input type='hidden' id='website_id' name='website_id' value='1' />
 <label for='acdeterminer_id'>Determiner</label>
 <?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'surname', 'id'); ?>
+<br />
 <label for='actaxa_taxon_list_id'>Taxon</label>
 <?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id'); ?>
+<br/>
 <label for='comment'>Comment</label>
 <textarea id='comment' name='comment'></textarea>
+<br />
 </fieldset>
 <input type="submit" value="Save" />
 </form>
