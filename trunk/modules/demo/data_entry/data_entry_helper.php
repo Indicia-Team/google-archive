@@ -107,11 +107,14 @@ class data_entry_helper {
     /**
      * Helper function to generate a drop-down list box from a Indicia core service query.
      */
-	public static function select($id, $url, $entity, $nameField, $valueField = null) {
+	public static function select($id, $url, $entity, $nameField, $valueField = null, $extraParams = null) {
 		// If valueField is null, set it to $nameField
 	   	if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service
 	    	$request = "$url/$entity?mode=json";
+		foreach ($extraParams as $a => $b){
+			$request .= "&$a=$b";
+		}
 	    	// Get the curl session object
 	    	$session = curl_init($request);
 		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
@@ -135,9 +138,15 @@ class data_entry_helper {
     /**
      * Helper function to generate an autocomplete box from an Indicia core service query.
      */
-    public static function autocomplete($id, $url, $entity, $nameField, $valueField = null) {
-		// If valueField is null, set it to $nameField
-	   	if ($valueField == null) $valueField = $nameField;
+    public static function autocomplete($id, $url, $entity, $nameField, $valueField = null, $extraParams = null) {
+	    // If valueField is null, set it to $nameField
+	    if ($valueField == null) $valueField = $nameField;
+	    // Do stuff with extraParams
+	    $sParams = '';
+	    foreach ($extraParams as $a => $b){
+		    $sParams .= "$a : '$b',";
+	    }
+
 		// Reference the necessary libraries
 		$r = "<script type='text/javascript' >
 			$(document).ready(function() {
@@ -148,6 +157,7 @@ class data_entry_helper {
 						orderby : '$nameField',
 						mode : 'json',
 						qfield : '$nameField',
+						$sParams
 					},
 					parse: function(data) {
 						var results = [];
@@ -199,6 +209,35 @@ class data_entry_helper {
     	$result .= '<input id="nonce" name="nonce" type="hidden"' .
     			'value="'.$nonce.'">';
     	return $result;
+    }
+	/**
+	 * Helper function to generate a drop-down list box from a Indicia core service query.
+	 */
+	public static function radio_group($id, $url, $entity, $nameField, $valueField = null, $extraParams = null) {
+		// If valueField is null, set it to $nameField
+	   	if ($valueField == null) $valueField = $nameField;
+		// Execute a request to the service
+	    	$request = "$url/$entity?mode=json";
+		foreach ($extraParams as $a => $b){
+			$request .= "&$a=$b";
+		}
+	    	// Get the curl session object
+	    	$session = curl_init($request);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		$response = json_decode(curl_exec($session), true);
+		$r = "";
+		if (!array_key_exists('error', $response)){
+			foreach ($response as $item){
+				if (array_key_exists($nameField, $item) &&
+					array_key_exists($valueField, $item)) {
+						$r .= "<input type='radio' name='$id' value='$item[$valueField]' >";
+						$r .= $item[$nameField];
+						$r .= "</input>";
+				}
+			}
+		}
+
+		return $r;
     }
 }
 ?>
