@@ -7,8 +7,12 @@ foreach ($table as $item) {
 	$fields = array_intersect_key($item->as_array(), $columns); 
 	foreach ($fields as $field) {
 		echo "<td>";
-		if ($field!==NULL)
-			echo $field;
+		if ($field!==NULL) {
+			if (preg_match('/^http/', $field))
+				echo html::anchor($field, $field);
+			else
+				echo $field;
+		}
 		echo "</td>";
 	}
 	foreach ($actionColumns as $name => $action) {
