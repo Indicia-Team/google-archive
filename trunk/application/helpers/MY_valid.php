@@ -39,6 +39,26 @@ class valid extends valid_Core {
 		}
 		return false;
 	}
+
+	/**
+	 * Validates that a value is unique across a table column, NULLs are ignored.
+	 * When checking a new record, just count all records in DB. When Updating, count all
+	 * records excluding the one we are updating.
+	 * 
+	 * @param	string	column Value
+	 * @param   array   table name, table column, id of current record
+	 * @return  boolean
+	 */
+	public static function unique($column_value, $args){
+		$db = new Database();
+		if ($args[2] == ''){
+			$number_of_records = $db->count_records($args[0], array($args[1] => $column_value));
+		} else {
+			$number_of_records = $db->count_records($args[0], array($args[1] => $column_value, 'id !=' => $args[2]));
+		}
+
+		return ($number_of_records == 0);
+	}
 }
 
 ?>
