@@ -45,14 +45,22 @@ class User_Controller extends Gridview_Base_Controller {
 			if ( $this->model->loaded )
 				$this->setView('user/user_edit', 'User', array('password_field' => ''));
 			else {
+				// new user
 				$login_config = Kohana::config('login');
 				$person = ORM::factory('person', $id);
-				$this->setView('user/user_edit', 'User',
-					array('password_field' => $this->password_field($login_config['default_password'])));
-				$this->template->content->model->person_id = $id;
-				$this->template->content->model->username = $person->first_name.'.'.$person->surname;
-			}
-				
+ 				if ($person->email_address == null)
+		        {
+        		    // we need a general error controller
+					print "Cannot create user details for a person who has no email_address";
+		        }
+				else
+				{
+					$this->setView('user/user_edit', 'User',
+						array('password_field' => $this->password_field($login_config['default_password'])));
+					$this->template->content->model->person_id = $id;
+					$this->template->content->model->username = $person->first_name.'.'.$person->surname;
+				}
+			}	
 		}
 	}
 
