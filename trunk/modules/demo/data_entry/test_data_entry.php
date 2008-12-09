@@ -35,7 +35,6 @@ $(document).ready(function() {
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
 			)));
-
 			$response = data_entry_helper::forward_post_to(
 				'http://localhost/indicia/index.php/services/data',
 				'save', $submission
