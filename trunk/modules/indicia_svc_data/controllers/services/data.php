@@ -183,32 +183,30 @@ class Data_Controller extends Service_Base_Controller {
 	 * Internal method for handling a generic submission to a particular model.
 	 */
 	protected function handle_submit() {
-		if ($this->authenticate()) {
-			$mode = $this->get_input_mode();
-			switch ($mode) {
-				case 'json':
-					$s = json_decode($_POST['submission'], true);
-			}
-
-			if (array_key_exists('submission', $s)) {
-				$id = $this->submit($s);
-				// TODO: proper handling of result checking
-				$result = TRUE;
-			} else {
-				$model = ORM::factory($this->entity);
-				$model->submission = $s;
-				$result = $model->submit();
-				$id = $model->id;
-			}
-			if ($result)
-				$this->response=json_encode(array('success'=>$id));
-			else
-				if (isset($model))
-					Throw new ArrayException($model->getAllErrors());
-				else
-					Throw new Exception('Unknown error on submission (to do - get correct error info)');
-
+		$this->authenticate();
+		$mode = $this->get_input_mode();
+		switch ($mode) {
+			case 'json':
+				$s = json_decode($_POST['submission'], true);
 		}
+
+		if (array_key_exists('submission', $s)) {
+			$id = $this->submit($s);
+			// TODO: proper handling of result checking
+			$result = TRUE;
+		} else {
+			$model = ORM::factory($this->entity);
+			$model->submission = $s;
+			$result = $model->submit();
+			$id = $model->id;
+		}
+		if ($result)
+			$this->response=json_encode(array('success'=>$id));
+		else
+			if (isset($model))
+				Throw new ArrayException($model->getAllErrors());
+			else
+				Throw new Exception('Unknown error on submission (to do - get correct error info)');
 	}
 
 	/**
@@ -484,7 +482,8 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	public function save(){
 		try {
-			if ($this->authenticate() &&array_key_exists('submission', $_POST)){
+			$this->authenticate();
+			if (array_key_exists('submission', $_POST)) {
 				$mode = $this->get_input_mode();
 				switch ($mode) {
 					case 'json':
@@ -492,6 +491,8 @@ class Data_Controller extends Service_Base_Controller {
 				}
 				$this->submit($s);
 			}
+			// return a success message
+			echo json_encode(array('success'=>'multiple records'));
 		} catch (ArrayException $e) {
 			echo json_encode(array('error'=>$e->errors()));
 		} catch (Exception $e) {
