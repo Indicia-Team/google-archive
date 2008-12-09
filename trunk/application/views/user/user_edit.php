@@ -24,11 +24,11 @@
 </li>
 <li>
 <label for="email_visible">Show Email Address</label>
-<?=form::checkbox('email_visible', TRUE, isset($model->email_visible) AND ($model->email_visible == 't') ) ?>
+<?php echo form::checkbox('email_visible', TRUE, isset($model->email_visible) AND ($model->email_visible == 't') ) ?>
 </li>
 <li>
 <label for="view_common_names">Show Common Names</label>
-<?=form::checkbox('view_common_names', TRUE, isset($model->view_common_names) AND ($model->view_common_names == 't') ) ?>
+<?php echo form::checkbox('view_common_names', TRUE, isset($model->view_common_names) AND ($model->view_common_names == 't') ) ?>
 </li>
 <li>
 <label for="core_role_id">Role within CORE Module</label>
