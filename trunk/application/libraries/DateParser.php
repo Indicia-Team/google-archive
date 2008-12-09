@@ -240,14 +240,15 @@ class DateParser_Core {
 					break;
 				case '%C': // Century
 					//Use a regex for this
-					$a = eregi("(\d{1,2})c(.*)", $sDate, $refs);
+					$a = preg_match("/(\d{1,2})c(.*)/i", $sDate, $refs);
 					if ($a) {
 						$nValue = $refs[1];
 						$this->aResult['tm_century'] = $nValue;
-						$sDateAfter = $refs[4];
+						$sDateAfter = $refs[2];
 					} else {
 						return false;
 					}
+					break;
 				default: return false; // Bad pattern
 			}
 
@@ -273,7 +274,7 @@ class DateParser_Core {
 		if (($a = $aStart['tm_century']) != null){
 			$aStart['tm_year'] = 100*($a-1);
 			$aStart['tm_mon'] = 0;
-			$aStart['tm_day'] = 1;
+			$aStart['tm_mday'] = 1;
 			return date("Y-m-d", mktime(0,0,0,$aStart['tm_mon'] + 1, $aStart['tm_mday'], $aStart['tm_year']));
 		}
 			
@@ -313,10 +314,10 @@ class DateParser_Core {
 		// Copy the date array
 		$aStart = $this->aResult;
 		// If we're a century
-		if ($a = $aStart['tm_century'] != null){
+		if (($a = $aStart['tm_century']) != null){
 			$aStart['tm_year'] = 100*($a)-1;
 			$aStart['tm_mon'] = 11;
-			$aStart['tm_day'] = 31;
+			$aStart['tm_mday'] = 31;
 			return date("Y-m-d", mktime(0,0,0,$aStart['tm_mon'] + 1, $aStart['tm_mday'], $aStart['tm_year']));
 		}
 			
@@ -324,7 +325,7 @@ class DateParser_Core {
 		if ($aStart['tm_year'] == null) $aStart['tm_year'] = date("Y");
 			
 		// Is this a season?
-		if ($a = $aStart['tm_season'] != null){
+		if (($a = $aStart['tm_season']) != null){
 			switch ($a) {
 				case 'spring':
 					return date("Y-m-d", mktime(0,0,0,6,0, $aStart['tm_year']));
