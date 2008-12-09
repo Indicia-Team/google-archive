@@ -483,13 +483,19 @@ class Data_Controller extends Service_Base_Controller {
 	 * Accepts a submission from POST data and attempts to save to the database.
 	 */
 	public function save(){
-		if ($this->authenticate() &&array_key_exists('submission', $_POST)){
-			$mode = $this->get_input_mode();
-			switch ($mode) {
-				case 'json':
-					$s = json_decode($_POST['submission'], true);
+		try {
+			if ($this->authenticate() &&array_key_exists('submission', $_POST)){
+				$mode = $this->get_input_mode();
+				switch ($mode) {
+					case 'json':
+						$s = json_decode($_POST['submission'], true);
+				}
+				$this->submit($s);
 			}
-			$this->submit($s);
+		} catch (ArrayException $e) {
+			echo json_encode(array('error'=>$e->errors()));
+		} catch (Exception $e) {
+			$this->error($e->getMessage(),$e);
 		}
 	}
 
