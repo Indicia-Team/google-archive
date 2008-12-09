@@ -211,7 +211,7 @@ class data_entry_helper {
     	return $result;
     }
 	/**
-	 * Helper function to generate a drop-down list box from a Indicia core service query.
+	 * Helper function to generate a radio group from a Indicia core service query.
 	 */
 	public static function radio_group($id, $url, $entity, $nameField, $valueField = null, $extraParams = null) {
 		// If valueField is null, set it to $nameField
