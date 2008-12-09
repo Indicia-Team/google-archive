@@ -29,6 +29,7 @@ $lang = array (
 	'email_address' => Array (
 		'required' => 'The email address cannot be blank.',
 		'email' => 'This must be a valid email address.',
+		'unique' => 'This email address must be unique, i.e. not shared with another person.',
 		'default' => 'Invalid Input.',
 	),
 	'url' => Array (
@@ -42,6 +43,7 @@ $lang = array (
 	'username' => Array (
 		'required' => 'The username cannot be blank.',
 		'length' => 'The username must be between 7 and 30 letters in length.',
+		'unique' => 'This username must be unique, i.e. not shared with another user.',
 		'default' => 'Invalid Input.',
 	),
 	'password' => Array (
@@ -58,6 +60,11 @@ $lang = array (
 	),
 	'date_type' => Array (
 		'default' => 'Unrecognised vague date type',
+	),
+	'first_name' => Array (
+		'required' => 'The first name cannot be blank.',
+		'length' => 'The first name must be between 1 and 30 letters.',
+		'default' => 'Invalid Input.',
 	)
 );
 

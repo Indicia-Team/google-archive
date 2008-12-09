@@ -18,8 +18,7 @@ class User_Model extends ORM {
 		// note that some of the fields are optional.
 		// Checkboxes only appear in the POST array if they are checked, ie TRUE. Have to convert to PgSQL boolean values, rather than PHP
 		$array->pre_filter('trim');
-
-		$array->add_rules('username', 'required', 'length[7,30]');
+		$array->add_rules('username', 'required', 'length[7,30]', 'unique[users,username,'.$array->id.']');
 		if (isset($array['password'])) $array->add_rules('password', 'required', 'length[7,30]');
 		$this->interests = $array['interests'];
 		$this->location_name = $array['location_name'];
