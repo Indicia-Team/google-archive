@@ -507,7 +507,15 @@ class Data_Controller extends Service_Base_Controller {
 			$m = $m['model'];
 			$model = ORM::factory($m['id']);
 			$model->submission = $m;
-			$model->submit();
+			$result = $model->submit();
+			if ($result)
+				$this->response=json_encode(array('success'=>$id));
+			else
+				if (isset($model))
+					Throw new ArrayException($model->getAllErrors());
+				else
+					Throw new Exception('Unknown error on submission (to do - get correct error info)');
+
 			// return the first model
 			if (!isset($this->model))
 				$id=$model->id;

@@ -65,7 +65,7 @@ $(document).ready(function() {
 <legend>Occurrence Data</legend>
 <input type='hidden' id='website_id' name='website_id' value='1' />
 <label for='acdeterminer_id'>Determiner</label>
-<?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'surname', 'id'); ?>
+<?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'caption', 'id'); ?>
 <br />
 <label for='actaxa_taxon_list_id'>Taxon</label>
 <?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id'); ?>
