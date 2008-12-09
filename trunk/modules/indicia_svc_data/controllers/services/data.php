@@ -170,7 +170,7 @@ class Data_Controller extends Service_Base_Controller {
 			}
 			// last thing we do is set the output
 			if ($this->content_type)
-				$this->header($this->content_type);
+				header($this->content_type);
 			echo $this->response;
 		} catch (ArrayException $e) {
 			echo json_encode(array('error'=>$e->errors()));
@@ -342,7 +342,7 @@ class Data_Controller extends Service_Base_Controller {
 		if ($this->uri->total_arguments()==0)
 			$this->apply_get_parameters_to_db();
 		else
-			$this->db->where($this->viewname.'.id', URI::argument(1));
+			$this->db->where($this->viewname.'.id', $this->uri->argument(1));
 		return $this->db->get()->result_array(FALSE);
 	}
 
