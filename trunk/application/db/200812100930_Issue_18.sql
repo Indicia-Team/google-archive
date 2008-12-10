@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS titles;
 CREATE TABLE titles (
     id integer NOT NULL,
-    title character varying(10) NOT NULL.
+    title character varying(10) NOT NULL,
 	created_on timestamp NOT NULL, --Date this core_role was created
 	created_by_id integer NOT NULL, --Foreign key to the users table (creator)
 	updated_on timestamp NOT NULL, --Date this core_role was last updated
