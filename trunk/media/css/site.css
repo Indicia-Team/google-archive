@@ -140,3 +140,9 @@ h1
 	color:#666666;
 	font-size:1em;
 }
+
+p#metadata_toggle
+{
+	text-align: right;
+	color: #103A6A;
+}

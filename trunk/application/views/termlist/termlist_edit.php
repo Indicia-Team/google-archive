@@ -6,6 +6,7 @@
 </h1>
 <?php } ?>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'termlist/save' ?>" method="POST">
+<?php echo $metadata ?>
 <fieldset>
 <legend>List Details</legend>
 <ol>
@@ -45,10 +46,9 @@
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />
 <?php echo html::error_message($model->getError('deleted')); ?>
-<?php echo $metadata ?>
 </form>
-
 <?php if ($model->id != '') { ?>
+<br/>
 <form class="cmxform" action="<?php echo url::site().'termlists_term/page/'.$model->id ?>" >
 <input type="submit" value="View Terms" />
 </form>

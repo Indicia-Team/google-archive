@@ -40,6 +40,7 @@ $(document).ready(function() {
 });
 </script>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'taxa_taxon_list/save' ?>" method="POST">
+<?php echo $metadata ?>
 <fieldset>
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <input type="hidden" name="taxon_list_id" id="taxon_list_id" value="<?php echo html::specialchars($taxon_list_id); ?>" />
@@ -127,7 +128,6 @@ $(document).ready(function() {
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />
 <?php echo html::error_message($model->getError('deleted')); ?>
-<?php echo $metadata ?>
 </form>
 
 <?php if ($model->id != '' && $table != null) { ?>

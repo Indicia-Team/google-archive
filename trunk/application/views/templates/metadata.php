@@ -1,3 +1,13 @@
+<script type='text/javascript'>
+$(document).ready(function(){
+	$('div#metadata').hide();
+	$('p#metadata_toggle').click(function(){
+		$('div#metadata').toggle();
+	});
+});
+</script>
+<p id='metadata_toggle'>Show/Hide Metadata</p>
+<div id='metadata'>
 <fieldset>
 <legend>Metadata</legend>
 <input type="hidden" id="created_by_id" name="created_by_id" value="<?php echo html::specialchars($model->created_by_id); ?>" />
@@ -11,3 +21,4 @@ Updated on <?php echo html::specialchars($model->updated_on); ?> by <?php echo (
 </li>
 </ol>
 </fieldset>
+</div>
