@@ -6,6 +6,7 @@
 </h1>
 <?php } ?>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'taxon_list/save' ?>" method="POST">
+<?php echo $metadata ?>
 <fieldset>
 <legend>List Details</legend>
 <ol>
@@ -44,9 +45,9 @@
 </fieldset>
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />
-<?php echo $metadata ?>
 </form>
 <?php if ($model->id != '') { ?>
+<br/>
 <form class="cmxform" action="<?php echo url::site().'taxa_taxon_list/page/'.$model->id ?>" >
 <input type="submit" value="View Taxa" />
 </form>

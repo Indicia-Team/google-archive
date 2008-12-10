@@ -1,4 +1,5 @@
 <form class="cmxform"  name='editList' action="<?php echo url::site().'termlists_term/save' ?>" method="POST">
+<?php echo $metadata ?>
 <fieldset>
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <input type="hidden" name="termlist_id" id="termlist_id" value="<?php echo html::specialchars($termlist_id); ?>" />
@@ -44,7 +45,6 @@
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />
 <?php echo html::error_message($model->getError('deleted')); ?>
-<?php echo $metadata ?>
 </form>
 
 <?php if ($model->id != '' && $table != null) { ?>
