@@ -41,6 +41,7 @@
 <input type="hidden" name="meaning_id" id="meaning_id" value="<?php echo html::specialchars($model->meaning_id); ?>" />
 <label for="synonomy">Synonomy</label>
 <textarea rows=7 id="synonomy" name="synonomy"><?php echo html::specialchars($synonomy); ?></textarea>
+</li>
 </fieldset>
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />

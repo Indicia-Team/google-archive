@@ -1,4 +1,5 @@
 <form class="cmxform"  name='editList' action="<?php echo url::site().'term/save' ?>" method="POST">
+<?php echo $metadata ?>
 <fieldset>
 <legend>List Details</legend>
 <ol>
@@ -18,7 +19,6 @@
 <input type="submit" name="submit" value="Delete" />
 <?php echo html::error_message($model->getError('deleted')); ?>
 </fieldset>
-<?php echo $metadata ?>
 </form>
 
 <?php if ($model->id != '') { ?>
