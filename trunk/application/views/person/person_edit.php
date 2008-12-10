@@ -6,6 +6,22 @@
 <legend>Person's Details</legend>
 <ol>
 <li>
+<label for="title_id">Title</label>
+<select id="title_id" name="title_id">
+	<option>&lt;Please select&gt;</option>
+<?php
+	$titles = ORM::factory('title')->orderby('id','asc')->find_all();
+	foreach ($titles as $title) {
+		echo '	<option value="'.$title->id.'" ';
+		if ($title->id==$model->title_id)
+			echo 'selected="selected" ';
+		echo '>'.$title->title.'</option>';
+	}
+?>
+</select>
+<?php echo html::error_message($model->getError('title_id')); ?>
+</li>
+<li>
 <label for="first_name">First name</label>
 <input id="first_name" name="first_name" value="<?php echo html::specialchars($model->first_name); ?>" />
 <?php echo html::error_message($model->getError('first_name')); ?>
@@ -19,6 +35,11 @@
 <label for="initials">Initials</label>
 <input id="initials" name="initials" value="<?php echo html::specialchars($model->initials); ?>" />
 <?php echo html::error_message($model->getError('initials')); ?>
+</li>
+<li>
+<label for="address">Address</label>
+<textarea rows="4" id="address" name="address"><?php echo html::specialchars($model->address); ?></textarea>
+<?php echo html::error_message($model->getError('address')); ?>
 </li>
 <li>
 <label for="email_address">Email Address</label>

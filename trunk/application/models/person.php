@@ -3,7 +3,7 @@
 class Person_Model extends ORM {
 
 	protected $has_one = array('user');
-	protected $belongs_to = array('created_by'=>'user', 'updated_by'=>'user');
+	protected $belongs_to = array('created_by'=>'user', 'updated_by'=>'user', 'title');
 
 	protected $search_field='surname';
 
@@ -17,7 +17,9 @@ class Person_Model extends ORM {
 		else
 			$array->add_rules('email_address', 'email', 'length[1,50]', 'unique[people,email_address,'.$array->id.']');
         $array->add_rules('website_url', 'length[1,500]', 'url');
-		// Any fields that don't have a validation rule need to be copied into the model manually
+        // Any fields that don't have a validation rule need to be copied into the model manually
+		if (isset($array['title_id'])) $this->title_id = (is_numeric ($array['title_id']) ? $array['title_id'] : NULL);
+		$this->address = $array['address'];
 		$this->initials = $array['initials'];
 
 		return parent::validate($array, $save);
@@ -26,6 +28,8 @@ class Person_Model extends ORM {
 	public function preSubmit() {
 		if ($this->submission['fields']['email_address']['value'] == '')
 			$this->submission['fields']['email_address']['value'] = NULL;
+		if (!is_numeric($this->submission['fields']['title_id']['value']))
+			$this->submission['fields']['title_id']['value'] = NULL;
 		return parent::presubmit();
 	}
 	
