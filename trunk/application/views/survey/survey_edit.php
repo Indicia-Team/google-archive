@@ -1,5 +1,6 @@
 <p>This page allows you to specify the details of a survey in which samples and records can be organised.</p>
 <form class="cmxform" action="<?php echo url::site().'survey/save'; ?>" method="post">
+<?php echo $metadata ?>
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <fieldset>
 <legend>Survey details</legend>
@@ -32,6 +33,5 @@
 </li>
 </ol>
 </fieldset>
-<?php echo $metadata ?>
 <input type="submit" value="Save" />
 </form>
