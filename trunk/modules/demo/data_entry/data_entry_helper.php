@@ -188,6 +188,29 @@ class data_entry_helper {
     }
 
     /**
+     * Retrieves a read token and passes it back as an array suitable to drop into the 
+     * 'extraParams' options for an Ajax call.
+     */
+    public static function get_read_auth($website_id, $password) {
+		$postargs = "website_id=$website_id";
+		// Get the curl session object
+		$session = curl_init('http://localhost/indicia/index.php/services/security/get_read_nonce');
+		// Set the POST options.
+		curl_setopt ($session, CURLOPT_POST, true);
+		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
+		curl_setopt($session, CURLOPT_HEADER, true);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		// Do the POST and then close the session
+		$response = curl_exec($session);
+		list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
+		return array(
+			'auth_token' => sha1("$nonce:$password"),
+			'nonce' => $nonce
+		);
+    }
+
+
+    /**
      * Retrieves a token and inserts it into a data entry form which authenticates that the
      * form was submitted by this website.
      */

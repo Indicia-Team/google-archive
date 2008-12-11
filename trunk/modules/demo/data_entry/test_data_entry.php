@@ -48,6 +48,7 @@ $(document).ready(function() {
 	// This PHP call demonstrates inserting authorisation into the form, for website ID
 	// 1 and password 'password'
 	echo data_entry_helper::get_auth(1,'password');
+	$readAuth = data_entry_helper::get_read_auth(1, 'password');
 ?>
 <label for="date">Date:</label>
 <input type="text" size="30" value="click here" id="date" name="date"/>
@@ -59,13 +60,13 @@ $(document).ready(function() {
 <label for="location_name">Locality Description:</label>
 <input name="location_name" size="50" /><br />
 <label for="survey_id">Survey</label>
-<?php echo data_entry_helper::select('survey_id', 'http://localhost/indicia/index.php/services/data', 'survey', 'title', 'id'); ?>
+<?php echo data_entry_helper::select('survey_id', 'http://localhost/indicia/index.php/services/data', 'survey', 'title', 'id', $readAuth); ?>
 <br />
 <fieldset>
 <legend>Occurrence Data</legend>
 <input type='hidden' id='website_id' name='website_id' value='1' />
 <label for='acdeterminer_id'>Determiner</label>
-<?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'caption', 'id'); ?>
+<?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'caption', 'id', $readAuth); ?>
 <br />
 <label for='actaxa_taxon_list_id'>Taxon</label>
 <?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id'); ?>

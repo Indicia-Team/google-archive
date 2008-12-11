@@ -14,10 +14,11 @@ class Security_Controller extends Service_Base_Controller {
 
 	public function get_read_nonce() {
 		$website_id = $_POST['website_id'];
-		$nonce = sha1(time().':'.rand().$_SERVER['REMOTE_ADDR'].':'.Kohana::config('indicia.private_key'));
+		$nonce = sha1(time().':'.rand().$_SERVER['REMOTE_ADDR'].':'.kohana::config('indicia.private_key'));
 		$this->cache = new Cache();
-		$this->cache->set($nonce, $website_idi, 'read');
+		$this->cache->set($nonce, $website_id, 'read');
 		echo $nonce;
+	}
 
 
 }
