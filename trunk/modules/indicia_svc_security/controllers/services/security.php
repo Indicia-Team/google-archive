@@ -17,6 +17,7 @@ class Security_Controller extends Service_Base_Controller {
 		$nonce = sha1(time().':'.rand().$_SERVER['REMOTE_ADDR'].':'.Kohana::config('indicia.private_key'));
 		$this->cache = new Cache();
 		$this->cache->set($nonce, $website_idi, 'read');
+		echo $nonce;
 
 
 }

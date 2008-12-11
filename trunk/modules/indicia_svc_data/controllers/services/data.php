@@ -542,8 +542,17 @@ class Data_Controller extends Service_Base_Controller {
 				if (sha1("$nonce:$password")==$_POST['auth_token']) {
 					$authentic=TRUE;
 				}
-				// Remove the nonce from the cache
-				$this->cache->delete($nonce);
+				// Either update or remove the nonce from the cache depending on
+				// whether it is a read or write nonce.
+				switch ($mode){
+				case 'write':
+					$this->cache->delete($nonce);
+					break;
+				case 'read':
+					$this->cache->delete($nonce);
+					$this->cache->set($nonce, $website_id, 'read');
+				}
+
 			}
 		}
 
