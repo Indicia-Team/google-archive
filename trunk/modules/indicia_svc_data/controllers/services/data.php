@@ -28,6 +28,7 @@ class Data_Controller extends Service_Base_Controller {
 	// if there is an error
 	protected $response;
 	protected $content_type;
+	protected $website_id = null;
 
 	/**
 	 * Provides the /services/data/language service.
@@ -340,6 +341,11 @@ class Data_Controller extends Service_Base_Controller {
 		// Select all the table columns from the view
 		$select = '*';
 		$this->db->select($select);
+		// Make sure that we're only showing items appropriate to the logged-in website
+		if ($this->website_id != null && 
+			array_key_exists('website_id', $this->view_columns)) {
+				$this->db->where('website_id',$this->website_id);
+			}
 		// if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
 		if ($this->uri->total_arguments()==0)
 			$this->apply_get_parameters_to_db();
@@ -540,6 +546,7 @@ class Data_Controller extends Service_Base_Controller {
 			$this->cache = new Cache;
 			$nonces = $this->cache->find($mode);
 			$website_id = $nonces[$nonce];
+			$this->website_id = $website_id;
 			if ($website_id) {
 				$password = ORM::factory('website', $website_id)->password;
 				if (sha1("$nonce:$password")==$array['auth_token']) {

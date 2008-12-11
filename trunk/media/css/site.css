@@ -146,4 +146,5 @@ p#metadata_toggle
 	text-align: right;
 	color: #103A6A;
 	display: none;
+	cursor: pointer;
 }
