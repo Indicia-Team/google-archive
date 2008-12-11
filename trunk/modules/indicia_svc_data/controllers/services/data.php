@@ -216,6 +216,8 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	protected function handle_request()
 	{
+		// Authenticate for a 'read' parameter
+		$this->authenticate('read');
 		// Store the entity in class member, so less recursion overhead when building XML.
 		$this->viewname = $this->get_view_name();
 		$this->model=ORM::factory($this->entity);
@@ -528,17 +530,20 @@ class Data_Controller extends Service_Base_Controller {
 	 * Before a submission is accepted, this method ensures that the POST data contains the
 	 * correct digest token so we know the request was from the website.
 	 */
-	protected function authenticate()
+	protected function authenticate($mode = 'write')
 	{
 		$authentic = FALSE; // default
 		if (array_key_exists('nonce', $_POST) && array_key_exists('auth_token',$_POST)) {
 			$nonce = $_POST['nonce'];
 			$this->cache = new Cache;
-			$website_id = $this->cache->get($nonce);
+			$website_id = $this->cache->find($mode)->get($nonce);
 			if ($website_id) {
 				$password = ORM::factory('website', $website_id)->password;
-				if (sha1("$nonce:$password")==$_POST['auth_token'])
+				if (sha1("$nonce:$password")==$_POST['auth_token']) {
 					$authentic=TRUE;
+				}
+				// Remove the nonce from the cache
+				$this->cache->delete($nonce);
 			}
 		}
 
