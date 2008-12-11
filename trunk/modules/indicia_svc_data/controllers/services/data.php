@@ -532,14 +532,17 @@ class Data_Controller extends Service_Base_Controller {
 	 */
 	protected function authenticate($mode = 'write')
 	{
+		// Read calls are done using get values, so we merge the two arrays
+		$array = array_merge($_POST, $_GET);
 		$authentic = FALSE; // default
-		if (array_key_exists('nonce', $_POST) && array_key_exists('auth_token',$_POST)) {
-			$nonce = $_POST['nonce'];
+		if (array_key_exists('nonce', $array) && array_key_exists('auth_token',$array)) {
+			$nonce = $array['nonce'];
 			$this->cache = new Cache;
-			$website_id = $this->cache->find($mode)->get($nonce);
+			$nonces = $this->cache->find($mode);
+			$website_id = $nonces[$nonce];
 			if ($website_id) {
 				$password = ORM::factory('website', $website_id)->password;
-				if (sha1("$nonce:$password")==$_POST['auth_token']) {
+				if (sha1("$nonce:$password")==$array['auth_token']) {
 					$authentic=TRUE;
 				}
 				// Either update or remove the nonce from the cache depending on
