@@ -58,6 +58,15 @@ class Data_Controller extends Service_Base_Controller {
 	}
 
 	/**
+	 * Provides the /service/data/occurrence_attribute service.
+	 * Retrieves details of occurrence attributes.
+	 */
+	public function occurrence_attribute()
+       	{
+		$this->handle_call('occurrence_attribute');
+	}
+
+	/**
 	 * Provides the /services/data/person service.
 	 * Retrieves details of a single person.
 	 */
@@ -343,8 +352,10 @@ class Data_Controller extends Service_Base_Controller {
 		$this->db->select($select);
 		// Make sure that we're only showing items appropriate to the logged-in website
 		if ($this->website_id != null && 
-			array_key_exists('website_id', $this->view_columns)) {
-				$this->db->where('website_id',$this->website_id);
+			array_key_exists ('website_id', $this->view_columns)) {
+				$this->db->in('website_id', array(
+					null, $this->website_id
+				));
 			}
 		// if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
 		if ($this->uri->total_arguments()==0)
