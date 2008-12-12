@@ -6,6 +6,11 @@
 <fieldset>
 <legend>Set Password</legend>
 <ol>
+<?php if ( ! empty($message) )
+{
+    echo "<li>".$message."</li>";
+}
+?>
 <li>
   <label for="username">Username</label>
   <input tabindex="1" type = "text" name = "username" id = "username" value="<?php echo $username; ?>" disabled="disabled"  class="narrow" >

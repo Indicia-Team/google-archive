@@ -14,6 +14,8 @@ class New_Password_Controller extends Indicia_Controller {
 			$view->model = $user;
 			$view->username = $user->username; // as is disabled doesn't make it through to post, so unavailable in model post validation failure.
 			$view->email_address = $person->email_address;
+			if(is_null($user->password))
+				$view->message = "This is the first login with this user, which has been initialised with an empty password.<br />You must change your password now before you may access the system.";
 			$this->template->title = 'Enter New Password';
 			$this->template->content = $view;
 		} else {
@@ -26,9 +28,9 @@ class New_Password_Controller extends Indicia_Controller {
 	/*
 	 * The email function is called from the link sent out on the forgotten password
 	 */
-	public function email()
+	public function email($key = NULL)
 	{
-		if ($this->uri->total_arguments()==0)
+		if ($key == null)
 		{
 			$this->template->title = 'New Password Invocation Error';
 			$this->template->content = new View('login/login_message');	
@@ -36,7 +38,7 @@ class New_Password_Controller extends Indicia_Controller {
 			return;
 		}
 
-		$user = new User_Model(array('forgotten_password_key' => $this->uri->argument(1)));
+		$user = new User_Model(array('forgotten_password_key' => $key));
 		if ( ! $user->loaded )
 		{
 			$this->template->title = 'New Password Invocation Error';
@@ -45,13 +47,12 @@ class New_Password_Controller extends Indicia_Controller {
 			return;
 		}
 
-		
 		$person = ORM::factory('person', $user->person_id);	
 		$view = new View('login/new_password');
 		$view->model = $user;
 		$view->username = $user->username; // as is disabled doesn't make it through to post, so unavailable in model post validation failure.
 		$view->email_address = $person->email_address;
-		$view->key = $this->uri->argument(1);
+		$view->key = $key;
 		$this->template->title = 'Enter New Password';
 		$this->template->content = $view;
 		
@@ -68,8 +69,8 @@ class New_Password_Controller extends Indicia_Controller {
 			
 			// with the password updated, login and jump to the home page
 			$this->auth->login($user->id, $password);
-			url::redirect('');
-			
+			url::redirect(arr::remove('requested_page', $_SESSION));
+						
 		} else {
 	 		// errors are now embedded in the model
 			$view = new View('login/new_password');
