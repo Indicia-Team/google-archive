@@ -50,6 +50,12 @@ class login {
 			$_SESSION['requested_page'] = $uri->string();
 			url::redirect('login');
 		}
+		// If we are logged in, but the password was blank, force a change of password. (allow logging out only)
+		else if ($auth->logged_in() AND is_null($_SESSION['auth_user']->password) AND $uri->segment(1) != 'new_password' AND $uri->segment(1) != 'logout')
+		{
+			$_SESSION['requested_page'] = $uri->string();
+			url::redirect('new_password');
+		}
 		else if ($uri->segment(1) == 'login')
 		{
 			// Make sure they can read cookies.
