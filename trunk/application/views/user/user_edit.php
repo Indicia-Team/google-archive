@@ -48,6 +48,26 @@
 </li>
 </ol>
 </fieldset>
+<fieldset>
+<legend>Website Roles</legend>
+<ol>
+<?php
+	foreach ($model->users_websites as $website) {
+		echo '<li><label for="'.$website['name'].'">'.$website['title'].'</label>';
+		echo '  <select id="'.$website['name'].'" name="'.$website['name'].'">';
+		echo '	<option>None</option>';
+		$site_roles = ORM::factory('site_role')->orderby('title','asc')->find_all();
+		foreach ($site_roles as $site_role) {
+			echo '	<option value="'.$site_role->id.'" ';
+			if ($site_role->id==$website['value'])
+				echo 'selected="selected" ';
+			echo '>'.$site_role->title.'</option>';
+		}
+		echo '</select></li>';
+	}
+?>
+</ol>
+</fieldset>
 <?php if (isset($password_field) and $password_field != '') { echo '<fieldset><legend>Password Control</legend><ol><li>'.$password_field.html::error_message($model->getError('password')).'</li></ol></fieldset>'; } ?>
 <?php echo $metadata ?>
 <input type="submit" name="submit" value="Submit" />
