@@ -13,7 +13,23 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#date').datepicker({constrainInput: false});
-})
+
+	// We need to do stuff to occurrence attributes
+	$('div.occAttr select').change(function(){
+		// Get the attribute index
+		var index = this.id.charAt(this.id.indexOf("!") - 1);
+		// Get the signature string
+		var sSig = this.value;
+		// Split the signature
+		var aSig = sSig.split("|");
+		// Update the value to be the first part of the signature (the record id)
+		var idField = 'input#occAttr' + index.toString() + '!occurrence_attribute_id';
+		alert(idField);
+		alert(aSig[0]);
+		$('#occAttr1!occurrence_attribute_id').val(aSig[0]);
+		alert($(idField).val());
+	});
+});
 </script>
 
 
@@ -69,11 +85,20 @@ $(document).ready(function() {
 <?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'caption', 'id', $readAuth); ?>
 <br />
 <label for='actaxa_taxon_list_id'>Taxon</label>
-<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id'); ?>
+<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
 <br/>
 <label for='comment'>Comment</label>
 <textarea id='comment' name='comment'></textarea>
 <br />
+</fieldset>
+<fieldset>
+<legend>Occurrence attributes</legend>
+<div class='occAttr' id='occAttr1'>
+<label for="occAttr1!occurrence_attribute_sig">Attribute</label>
+<?php echo data_entry_helper::select('occAttr1!occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
+<input type='hidden' value='test' id='occAttr1!occurrence_attribute_id' name='occAttr1!occurrence_attribute_id'/>
+<input type='text' value='' class='occAttr!value' id='occAttr1!text_value' name='occAttr1!text_value' />
+</div>
 </fieldset>
 <input type="submit" value="Save" />
 </form>
