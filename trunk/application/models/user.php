@@ -11,6 +11,8 @@ class User_Model extends ORM {
 		);
 
 	protected $search_field='username';
+	
+	public $users_websites = array();
 
 	public function validate(Validation $array, $save = FALSE) {
 		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
@@ -35,7 +37,7 @@ class User_Model extends ORM {
 			$this->submission['fields']['core_role_id']['value'] = NULL;
 		return parent::presubmit();
 	}
-	
+
 	public function password_validate(Validation $array, $save = FALSE) {
 		$array->pre_filter('trim');
 		$array->add_rules('password', 'required', 'length[7,30]', 'matches[password2]');

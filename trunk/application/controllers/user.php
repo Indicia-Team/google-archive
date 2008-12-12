@@ -42,9 +42,20 @@ class User_Controller extends Gridview_Base_Controller {
 		else
 		{
 			$this->model = new User_Model(array('person_id' => $id));
-			if ( $this->model->loaded )
+	    	$websites = ORM::factory('website')->find_all();
+			if ( $this->model->loaded ) {
 				$this->setView('user/user_edit', 'User', array('password_field' => ''));
-			else {
+				foreach ($websites as $website) {
+					$users_website = ORM::factory('users_website', array('user_id' => $this->model->id, 'website_id' => $website->id));
+					$this->model->users_websites[$website->id]=
+							array(
+								'id' => $website->id
+								,'name' => 'website_'.$website->id
+								,'title' => $website->title
+								,'value' => ($users_website->loaded ? $users_website->site_role_id : null)
+								);	
+				}
+			} else {
 				// new user
 				$login_config = Kohana::config('login');
 				$person = ORM::factory('person', $id);
@@ -59,16 +70,65 @@ class User_Controller extends Gridview_Base_Controller {
 						array('password_field' => $this->password_field($login_config['default_password'])));
 					$this->template->content->model->person_id = $id;
 					$this->template->content->model->username = $person->first_name.'.'.$person->surname;
+					foreach ($websites as $website)
+						$this->model->users_websites[$website->id]=
+								array(
+									'id' => $website->id
+									,'name' => 'website_'.$website->id
+									,'title' => $website->title
+									,'value' => null
+									);
 				}
-			}	
+			}
 		}
 	}
 
+	protected function submit($submission){
+        $this->model->submission = $submission;
+        if (($id = $this->model->submit()) != null) {
+            // Record has saved correctly
+            // now save the users_websites records.
+	    	$websites = ORM::factory('website')->find_all();
+			foreach ($websites as $website) {
+				$users_websites = ORM::factory('users_website',
+						array('user_id' => $id, 'website_id' => $website->id));
+        		$save_array = array(
+	        			'id' => $users_websites->object_name
+        				,'fields' => array('user_id' => array('value' => $id)
+        									,'website_id' => array('value' => $website->id)
+        									)
+        				,'fkFields' => array()
+        				,'subModels' => array());
+				if ($users_websites->loaded || is_numeric($submission['fields']['website_'.$website->id]['value'])) {
+					if ($users_websites->loaded)
+							$save_array['fields']['id'] = array('value' => $users_websites->id);
+					$save_array['fields']['site_role_id'] = array('value' => (is_numeric($submission['fields']['website_'.$website->id]['value']) ? $submission['fields']['website_'.$website->id]['value'] : null));
+					$users_websites->submission = $save_array;
+					$users_websites->submit();
+				}
+			}
+            $this->submit_succ($id);
+        } else {
+            // Record has errors - now embedded in model
+            $this->submit_fail();
+        }
+    }
+	
 	protected function submit_fail() {
 		$this->setView('user/user_edit', 'User',
 			array('password_field' => isset($_POST['password']) ? $this->password_field($_POST['password']) : ''));
+
+		// copy the values of the websites into the users_websites array
+	    $websites = ORM::factory('website')->find_all();
+		foreach ($websites as $website) {
+			$this->model->users_websites[$website->id]=
+				array('id' => $website->id
+					,'name' => 'website_'.$website->id
+					,'title' => $website->title
+					,'value' => (is_numeric($_POST['website_'.$website->id]) ? $_POST['website_'.$website->id] : NULL)
+				);
+		}
 	}
-	
 }
 
 ?>
