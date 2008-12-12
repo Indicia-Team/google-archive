@@ -13,6 +13,7 @@ class Database extends Database_Core {
 		if (is_array($values))
 		{
 			$escaped_values = array();
+			$null_value = false;
 			foreach ($values as $v)
 			{
 				if (is_numeric($v))
@@ -20,7 +21,7 @@ class Database extends Database_Core {
 					$escaped_values[] = $v;
 				}
 				else if ($v == null) {
-					$escaped_values[] = 'null';
+					$null_value = true;
 				}
 				else
 				{
@@ -29,7 +30,7 @@ class Database extends Database_Core {
 			}
 			$values = implode(",", $escaped_values);
 		}
-		$this->where($this->driver->escape_column($field).' '.($not === TRUE ? 'NOT ' : '').'IN ('.$values.')');
+		$this->where($this->driver->escape_column($field).' '.($not === TRUE ? 'NOT ' : '').'IN ('.$values.')'.($null_value ? 'OR '.$this->driver->escape_column($field).' IS NULL' : ''));
 
 		return $this;
 	}
