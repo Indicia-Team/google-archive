@@ -33,33 +33,38 @@ class Indicia_Controller extends Template_Controller {
         // upgrade check
         //
         // $this->check_for_upgrade();
-
-        $this->template->menu = array
-        (
-            'Home' => array(),
-            'Lookup Lists' => array(
-                'Species Lists'=>'taxon_list',
-                'Taxon Groups'=>'taxon_group',
-                'Term Lists'=>'termlist',
-                'Locations'=>'location',
-                'Surveys'=>'survey',
-                'People'=>'person',
-                ),
-            'Custom Attributes' => array(
-                'Occurrence Attributes'=>'occurrence_attribute',
-                'Sample Attributes'=>'sample_attribute',
-                'Location Attributes'=>'location_attribute',
-                ),
-            'Admin' => array(
-                'Users'=>'user',
-                'Websites'=>'website',
-                'Languages'=>'language',
-                ),
-            'Me' => array(
-                'Set New Password' => 'new_password',
-                'Logout'=>'logout',
-                ),
-        );
+		if($this->auth->logged_in()) {
+	        $menu = array
+    	    (
+        	    'Home' => array(),
+            	'Lookup Lists' => array(
+                	'Species Lists'=>'taxon_list',
+	                'Taxon Groups'=>'taxon_group',
+    	            'Term Lists'=>'termlist',
+        	        'Locations'=>'location',
+            	    'Surveys'=>'survey',
+                	'People'=>'person',
+	                ),
+    	        'Custom Attributes' => array(
+        	        'Occurrence Attributes'=>'occurrence_attribute',
+            	    'Sample Attributes'=>'sample_attribute',
+                	'Location Attributes'=>'location_attribute',
+	                ),
+    	        'Admin' => array(
+        	        'Users'=>'user',
+            	    'Websites'=>'website',
+                	'Languages'=>'language',
+	                ),
+    	        'Me' => array(
+        	        'Set New Password' => 'new_password',
+            	    'Logout'=>'logout',
+	                ),
+	        );
+	        if(!$this->auth->logged_in('CoreAdmin'))
+	        	unset($menu['Admin']);
+	        $this->template->menu = $menu;
+		} else
+	        $this->template->menu = array();
     }
 
     /**

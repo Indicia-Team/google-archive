@@ -41,11 +41,12 @@ class Auth_ORM_Driver implements Auth_Driver {
 			// Everything is okay so far
 			$status = TRUE;
 
-//			if ( ! empty($role))
-//			{
-//				// Check that the user has the given role
-//				$status = $_SESSION['auth_user']->has(new Role_Model($role));
-//			}
+			if ( ! empty($role))
+			{
+				// Check that the user has the given role
+				$core_role = (new Core_role_Model($role));
+				$status = ($_SESSION['auth_user']->core_role_id == $core_role->id);
+			}
 		}
 
 		return $status;
