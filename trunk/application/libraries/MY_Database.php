@@ -30,7 +30,7 @@ class Database extends Database_Core {
 			}
 			$values = implode(",", $escaped_values);
 		}
-		$this->where($this->driver->escape_column($field).' '.($not === TRUE ? 'NOT ' : '').'IN ('.$values.')'.($null_value ? 'OR '.$this->driver->escape_column($field).' IS NULL' : ''));
+		$this->where('('.$this->driver->escape_column($field).' '.($not === TRUE ? 'NOT ' : '').'IN ('.$values.')'.($null_value ? 'OR '.$this->driver->escape_column($field).' IS NULL)' : ')'));
 
 		return $this;
 	}
