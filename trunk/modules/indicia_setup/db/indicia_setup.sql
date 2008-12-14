@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Started on 2008-12-05 12:41:36
+-- Started on 2008-12-11 13:55:58
 
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = off;
@@ -19,7 +19,7 @@ CREATE TYPE box2d;
 
 
 --
--- TOC entry 20 (class 1255 OID 49744)
+-- TOC entry 20 (class 1255 OID 64884)
 -- Dependencies: 6 920
 -- Name: st_box2d_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -30,7 +30,7 @@ CREATE FUNCTION st_box2d_in(cstring) RETURNS box2d
 
 
 --
--- TOC entry 21 (class 1255 OID 49745)
+-- TOC entry 21 (class 1255 OID 64885)
 -- Dependencies: 6 920
 -- Name: st_box2d_out(box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -41,8 +41,8 @@ CREATE FUNCTION st_box2d_out(box2d) RETURNS cstring
 
 
 --
--- TOC entry 919 (class 1247 OID 49743)
--- Dependencies: 20 21 6
+-- TOC entry 919 (class 1247 OID 64883)
+-- Dependencies: 20 6 21
 -- Name: box2d; Type: TYPE; Schema: indicia; Owner: -
 --
 
@@ -64,7 +64,7 @@ CREATE TYPE box3d;
 
 
 --
--- TOC entry 22 (class 1255 OID 49748)
+-- TOC entry 22 (class 1255 OID 64888)
 -- Dependencies: 6 959
 -- Name: st_box3d_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -75,7 +75,7 @@ CREATE FUNCTION st_box3d_in(cstring) RETURNS box3d
 
 
 --
--- TOC entry 23 (class 1255 OID 49749)
+-- TOC entry 23 (class 1255 OID 64889)
 -- Dependencies: 6 959
 -- Name: st_box3d_out(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -86,8 +86,8 @@ CREATE FUNCTION st_box3d_out(box3d) RETURNS cstring
 
 
 --
--- TOC entry 958 (class 1247 OID 49747)
--- Dependencies: 23 6 22
+-- TOC entry 958 (class 1247 OID 64887)
+-- Dependencies: 6 22 23
 -- Name: box3d; Type: TYPE; Schema: indicia; Owner: -
 --
 
@@ -109,7 +109,7 @@ CREATE TYPE chip;
 
 
 --
--- TOC entry 24 (class 1255 OID 49752)
+-- TOC entry 24 (class 1255 OID 64892)
 -- Dependencies: 6 962
 -- Name: st_chip_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -120,7 +120,7 @@ CREATE FUNCTION st_chip_in(cstring) RETURNS chip
 
 
 --
--- TOC entry 25 (class 1255 OID 49753)
+-- TOC entry 25 (class 1255 OID 64893)
 -- Dependencies: 6 962
 -- Name: st_chip_out(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -131,8 +131,8 @@ CREATE FUNCTION st_chip_out(chip) RETURNS cstring
 
 
 --
--- TOC entry 961 (class 1247 OID 49751)
--- Dependencies: 24 25 6
+-- TOC entry 961 (class 1247 OID 64891)
+-- Dependencies: 25 6 24
 -- Name: chip; Type: TYPE; Schema: indicia; Owner: -
 --
 
@@ -150,24 +150,20 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 2363 (class 1259 OID 49755)
+-- TOC entry 2296 (class 1259 OID 64895)
 -- Dependencies: 6
 -- Name: core_roles; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
 CREATE TABLE core_roles (
     id integer NOT NULL,
-    title character varying(50),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    title character varying(50)
 );
 
 
 --
--- TOC entry 3067 (class 0 OID 0)
--- Dependencies: 2363
+-- TOC entry 2867 (class 0 OID 0)
+-- Dependencies: 2296
 -- Name: TABLE core_roles; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -175,48 +171,12 @@ COMMENT ON TABLE core_roles IS 'List of user roles for the core site, including 
 
 
 --
--- TOC entry 3068 (class 0 OID 0)
--- Dependencies: 2363
+-- TOC entry 2868 (class 0 OID 0)
+-- Dependencies: 2296
 -- Name: COLUMN core_roles.title; Type: COMMENT; Schema: indicia; Owner: -
 --
 
 COMMENT ON COLUMN core_roles.title IS 'Title of the role.';
-
-
---
--- TOC entry 3069 (class 0 OID 0)
--- Dependencies: 2363
--- Name: COLUMN core_roles.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN core_roles.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3070 (class 0 OID 0)
--- Dependencies: 2363
--- Name: COLUMN core_roles.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN core_roles.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3071 (class 0 OID 0)
--- Dependencies: 2363
--- Name: COLUMN core_roles.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN core_roles.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3072 (class 0 OID 0)
--- Dependencies: 2363
--- Name: COLUMN core_roles.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN core_roles.updated_by_id IS 'Foreign key to the users table (last updater).';
 
 
 --
@@ -228,7 +188,7 @@ CREATE TYPE geometry;
 
 
 --
--- TOC entry 26 (class 1255 OID 49759)
+-- TOC entry 26 (class 1255 OID 64899)
 -- Dependencies: 6
 -- Name: st_geometry_analyze(internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -239,7 +199,7 @@ CREATE FUNCTION st_geometry_analyze(internal) RETURNS boolean
 
 
 --
--- TOC entry 27 (class 1255 OID 49760)
+-- TOC entry 27 (class 1255 OID 64900)
 -- Dependencies: 6 967
 -- Name: st_geometry_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -250,7 +210,7 @@ CREATE FUNCTION st_geometry_in(cstring) RETURNS geometry
 
 
 --
--- TOC entry 28 (class 1255 OID 49761)
+-- TOC entry 28 (class 1255 OID 64901)
 -- Dependencies: 6 967
 -- Name: st_geometry_out(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -261,7 +221,7 @@ CREATE FUNCTION st_geometry_out(geometry) RETURNS cstring
 
 
 --
--- TOC entry 29 (class 1255 OID 49762)
+-- TOC entry 29 (class 1255 OID 64902)
 -- Dependencies: 6 967
 -- Name: st_geometry_recv(internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -272,7 +232,7 @@ CREATE FUNCTION st_geometry_recv(internal) RETURNS geometry
 
 
 --
--- TOC entry 30 (class 1255 OID 49763)
+-- TOC entry 30 (class 1255 OID 64903)
 -- Dependencies: 6 967
 -- Name: st_geometry_send(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -283,8 +243,8 @@ CREATE FUNCTION st_geometry_send(geometry) RETURNS bytea
 
 
 --
--- TOC entry 966 (class 1247 OID 49758)
--- Dependencies: 29 28 27 6 30 26
+-- TOC entry 966 (class 1247 OID 64898)
+-- Dependencies: 30 6 28 27 29 26
 -- Name: geometry; Type: TYPE; Schema: indicia; Owner: -
 --
 
@@ -301,1747 +261,10 @@ CREATE TYPE geometry (
 );
 
 
---
--- TOC entry 31 (class 1255 OID 49765)
--- Dependencies: 966 6
--- Name: geometrytype(geometry); Type: FUNCTION; Schema: indicia; Owner: -
---
-
-CREATE FUNCTION geometrytype(geometry) RETURNS text
-    AS '$libdir/liblwgeom', 'LWGEOM_getTYPE'
-    LANGUAGE c IMMUTABLE STRICT;
-
-
---
--- TOC entry 32 (class 1255 OID 49766)
--- Dependencies: 966 6
--- Name: ndims(geometry); Type: FUNCTION; Schema: indicia; Owner: -
---
-
-CREATE FUNCTION ndims(geometry) RETURNS smallint
-    AS '$libdir/liblwgeom', 'LWGEOM_ndims'
-    LANGUAGE c IMMUTABLE STRICT;
-
-
---
--- TOC entry 33 (class 1255 OID 49767)
--- Dependencies: 966 6
--- Name: srid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
---
-
-CREATE FUNCTION srid(geometry) RETURNS integer
-    AS '$libdir/liblwgeom', 'LWGEOM_getSRID'
-    LANGUAGE c IMMUTABLE STRICT;
-
-
---
--- TOC entry 2364 (class 1259 OID 49768)
--- Dependencies: 6
--- Name: languages_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE languages_id_seq
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3073 (class 0 OID 0)
--- Dependencies: 2364
--- Name: languages_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('languages_id_seq', 5, true);
-
-
---
--- TOC entry 2365 (class 1259 OID 49770)
--- Dependencies: 2770 6
--- Name: languages; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE languages (
-    id integer DEFAULT nextval('languages_id_seq'::regclass) NOT NULL,
-    iso character(3),
-    language character varying(50),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
-);
-
-
---
--- TOC entry 3074 (class 0 OID 0)
--- Dependencies: 2365
--- Name: TABLE languages; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE languages IS 'List of languages known to the system.';
-
-
---
--- TOC entry 3075 (class 0 OID 0)
--- Dependencies: 2365
--- Name: COLUMN languages.iso; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN languages.iso IS 'ISO 639-2 code for the language.';
-
-
---
--- TOC entry 3076 (class 0 OID 0)
--- Dependencies: 2365
--- Name: COLUMN languages.language; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN languages.language IS 'Term used to describe the language in the system.';
-
-
---
--- TOC entry 3077 (class 0 OID 0)
--- Dependencies: 2365
--- Name: COLUMN languages.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN languages.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3078 (class 0 OID 0)
--- Dependencies: 2365
--- Name: COLUMN languages.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN languages.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3079 (class 0 OID 0)
--- Dependencies: 2365
--- Name: COLUMN languages.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN languages.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3080 (class 0 OID 0)
--- Dependencies: 2365
--- Name: COLUMN languages.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN languages.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2366 (class 1259 OID 49774)
--- Dependencies: 2771 2772 2774 2775 2776 966 6
--- Name: users; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE users (
-    id integer NOT NULL,
-    openid_url character varying(1000),
-    home_entered_sref character varying(30),
-    home_entered_sref_system character varying(10),
-    home_geom geometry,
-    interests character varying,
-    location_name character varying(200),
-    person_id integer,
-    email_visible boolean DEFAULT false NOT NULL,
-    view_common_names boolean DEFAULT true NOT NULL,
-    core_role_id integer,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    username character varying(30) NOT NULL,
-    password character varying,
-    forgotten_password_key character varying,
-    CONSTRAINT enforce_dims_home_geom CHECK ((ndims(home_geom) = 2)),
-    CONSTRAINT enforce_geotype_home_geom CHECK (((geometrytype(home_geom) = 'LINESTRING'::text) OR (home_geom IS NULL))),
-    CONSTRAINT enforce_srid_home_geom CHECK ((srid(home_geom) = (-1)))
-);
-
-
---
--- TOC entry 3081 (class 0 OID 0)
--- Dependencies: 2366
--- Name: TABLE users; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE users IS 'List of all users of the system. Contains login specific information only as each user is also identified as a record in the people table.';
-
-
---
--- TOC entry 3082 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.openid_url; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.openid_url IS 'For users with an OpenID login, identifies their OpenID URL.';
-
-
---
--- TOC entry 3083 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.home_entered_sref; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.home_entered_sref IS 'Spatial reference of the user''s home, if specified. This can be used to provide shortcuts when entering records, for example an "At my home" checkbox.';
-
-
---
--- TOC entry 3084 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.home_entered_sref_system; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.home_entered_sref_system IS 'Spatial reference system used for the home_entered_sref value.';
-
-
---
--- TOC entry 3085 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.home_geom; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.home_geom IS 'Geometry of the home spatial reference. This is a polygon representing the grid square, or a point for other spatial references. Uses Latitude and Longitude in the WGS84 datum.';
-
-
---
--- TOC entry 3086 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.interests; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.interests IS 'The user''s interests specified in their profile.';
-
-
---
--- TOC entry 3087 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.location_name; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.location_name IS 'Free text description of the user''s location, from their profile.';
-
-
---
--- TOC entry 3088 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.person_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.person_id IS 'Foreign key to the people table. Identifies the person record that this user is associated with.';
-
-
---
--- TOC entry 3089 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.email_visible; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.email_visible IS 'Flag set to true if the user allows their email to be visible to other users.';
-
-
---
--- TOC entry 3090 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.view_common_names; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.view_common_names IS 'Flag set to true if the user prefers common names for taxa over scientific names.';
-
-
---
--- TOC entry 3091 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.core_role_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.core_role_id IS 'Foreign key to the core_roles table. Identifies the user''s role within the core module.';
-
-
---
--- TOC entry 3092 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3093 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3094 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3095 (class 0 OID 0)
--- Dependencies: 2366
--- Name: COLUMN users.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2367 (class 1259 OID 49785)
--- Dependencies: 2537 6
--- Name: detail_languages; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_languages AS
-    SELECT l.id, l.language, l.iso, l.created_by_id, c.username AS created_by, l.updated_by_id, u.username AS updated_by FROM ((languages l JOIN users c ON ((c.id = l.created_by_id))) JOIN users u ON ((u.id = l.updated_by_id)));
-
-
---
--- TOC entry 2368 (class 1259 OID 49790)
--- Dependencies: 2778 2779 2780 2781 2782 2783 6 966 966
--- Name: locations; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE locations (
-    id integer NOT NULL,
-    name character varying(100) NOT NULL,
-    code character varying(20),
-    parent_id integer,
-    centroid_sref character varying(20) NOT NULL,
-    centroid_sref_system character varying(10) NOT NULL,
-    centroid_geom geometry,
-    boundary_geom geometry,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    CONSTRAINT enforce_dims_boundary_geom CHECK ((ndims(boundary_geom) = 2)),
-    CONSTRAINT enforce_dims_centroid_geom CHECK ((ndims(centroid_geom) = 2)),
-    CONSTRAINT enforce_geotype_boundary_geom CHECK (((geometrytype(boundary_geom) = 'LINESTRING'::text) OR (boundary_geom IS NULL))),
-    CONSTRAINT enforce_geotype_centroid_geom CHECK (((geometrytype(centroid_geom) = ANY (ARRAY['POINT'::text, 'POLYGON'::text, 'LINESTRING'::text])) OR (centroid_geom IS NULL))),
-    CONSTRAINT enforce_srid_boundary_geom CHECK ((srid(boundary_geom) = (-1))),
-    CONSTRAINT enforce_srid_centroid_geom CHECK ((srid(centroid_geom) = (-1)))
-);
-
-
---
--- TOC entry 3096 (class 0 OID 0)
--- Dependencies: 2368
--- Name: TABLE locations; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE locations IS 'List of locations, including wildlife sites and other locations, known to the system.';
-
-
---
--- TOC entry 3097 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.name; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.name IS 'Name of the location.';
-
-
---
--- TOC entry 3098 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.code; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.code IS 'Location reference code.';
-
-
---
--- TOC entry 3099 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.parent_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.parent_id IS 'Identifies the location''s parent location, if there is one.';
-
-
---
--- TOC entry 3100 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.centroid_sref; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.centroid_sref IS 'Spatial reference at the centre of the location.';
-
-
---
--- TOC entry 3101 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.centroid_sref_system; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.centroid_sref_system IS 'System used for the centroid_sref field.';
-
-
---
--- TOC entry 3102 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.centroid_geom; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.centroid_geom IS 'Geometry of the spatial reference at the centre of the location. This is a point, or a polygon for grid references. Uses Latitude and Longitude on the WGS84 datum.';
-
-
---
--- TOC entry 3103 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.boundary_geom; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.boundary_geom IS 'Polygon for the location''s boundary. Uses Latitude and Longitude on the WGS84 datum.';
-
-
---
--- TOC entry 3104 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3105 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3106 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3107 (class 0 OID 0)
--- Dependencies: 2368
--- Name: COLUMN locations.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2369 (class 1259 OID 49802)
--- Dependencies: 2538 6
--- Name: detail_locations; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_locations AS
-    SELECT l.id, l.name, l.code, l.parent_id, p.name AS parent, l.centroid_sref, l.centroid_sref_system, l.created_by_id, c.username AS created_by, l.updated_by_id, u.username AS updated_by FROM (((locations l JOIN users c ON ((c.id = l.created_by_id))) JOIN users u ON ((u.id = l.updated_by_id))) LEFT JOIN locations p ON ((p.id = l.parent_id)));
-
-
---
--- TOC entry 2370 (class 1259 OID 49807)
--- Dependencies: 6
--- Name: people; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE people (
-    id integer NOT NULL,
-    first_name character varying(30),
-    surname character varying(30) NOT NULL,
-    initials character varying(6),
-    email_address character varying(50),
-    website_url character varying(1000),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
-);
-
-
---
--- TOC entry 3108 (class 0 OID 0)
--- Dependencies: 2370
--- Name: TABLE people; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE people IS 'List of all people known to the system.';
-
-
---
--- TOC entry 3109 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.first_name; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.first_name IS 'First name of the person.';
-
-
---
--- TOC entry 3110 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.surname; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.surname IS 'Surname of the person.';
-
-
---
--- TOC entry 3111 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.initials; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.initials IS 'Initials of the person.';
-
-
---
--- TOC entry 3112 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.email_address; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.email_address IS 'Email address of the person.';
-
-
---
--- TOC entry 3113 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.website_url; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.website_url IS 'Website URL for the person.';
-
-
---
--- TOC entry 3114 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3115 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3116 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3117 (class 0 OID 0)
--- Dependencies: 2370
--- Name: COLUMN people.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN people.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2371 (class 1259 OID 49813)
--- Dependencies: 2539 6
--- Name: detail_people; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_people AS
-    SELECT p.id, p.first_name, p.surname, p.initials, p.email_address, p.website_url, p.created_by_id, c.username AS created_by, p.updated_by_id, u.username AS updated_by FROM ((people p JOIN users c ON ((c.id = p.created_by_id))) JOIN users u ON ((u.id = p.updated_by_id)));
-
-
---
--- TOC entry 2372 (class 1259 OID 49818)
--- Dependencies: 6
--- Name: surveys; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE surveys (
-    id integer NOT NULL,
-    title character varying(100) NOT NULL,
-    owner_id integer,
-    description text,
-    website_id integer NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
-);
-
-
---
--- TOC entry 3118 (class 0 OID 0)
--- Dependencies: 2372
--- Name: TABLE surveys; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE surveys IS 'List of surveys known to the system.';
-
-
---
--- TOC entry 3119 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.title; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.title IS 'Title of the survey.';
-
-
---
--- TOC entry 3120 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.owner_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.owner_id IS 'Foreign key to the people table. Identifies the person responsible for the survey.';
-
-
---
--- TOC entry 3121 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.description; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.description IS 'Description of the survey.';
-
-
---
--- TOC entry 3122 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.website_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.website_id IS 'Foreign key to the websites table. Identifies the website that the survey is available for.';
-
-
---
--- TOC entry 3123 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3124 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3125 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3126 (class 0 OID 0)
--- Dependencies: 2372
--- Name: COLUMN surveys.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN surveys.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2373 (class 1259 OID 49824)
--- Dependencies: 6
--- Name: websites_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE websites_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3127 (class 0 OID 0)
--- Dependencies: 2373
--- Name: websites_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('websites_id_seq', 1, false);
-
-
---
--- TOC entry 2374 (class 1259 OID 49826)
--- Dependencies: 2786 6
--- Name: websites; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE websites (
-    id integer DEFAULT nextval('websites_id_seq'::regclass) NOT NULL,
-    title character varying(100) NOT NULL,
-    description text,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    url character varying(500) NOT NULL
-);
-
-
---
--- TOC entry 3128 (class 0 OID 0)
--- Dependencies: 2374
--- Name: TABLE websites; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE websites IS 'List of data entry websites using this instance of the core module.';
-
-
---
--- TOC entry 3129 (class 0 OID 0)
--- Dependencies: 2374
--- Name: COLUMN websites.title; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN websites.title IS 'Website title.';
-
-
---
--- TOC entry 3130 (class 0 OID 0)
--- Dependencies: 2374
--- Name: COLUMN websites.description; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN websites.description IS 'Website description.';
-
-
---
--- TOC entry 3131 (class 0 OID 0)
--- Dependencies: 2374
--- Name: COLUMN websites.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN websites.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3132 (class 0 OID 0)
--- Dependencies: 2374
--- Name: COLUMN websites.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN websites.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3133 (class 0 OID 0)
--- Dependencies: 2374
--- Name: COLUMN websites.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN websites.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3134 (class 0 OID 0)
--- Dependencies: 2374
--- Name: COLUMN websites.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN websites.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 3135 (class 0 OID 0)
--- Dependencies: 2374
--- Name: COLUMN websites.url; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN websites.url IS 'URL of the website root.';
-
-
---
--- TOC entry 2375 (class 1259 OID 49833)
--- Dependencies: 2540 6
--- Name: detail_surveys; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_surveys AS
-    SELECT s.id, s.title, s.owner_id, p.surname AS owner, s.description, s.website_id, w.title AS website, s.created_by_id, c.username AS created_by, s.updated_by_id, u.username AS updated_by FROM ((((surveys s JOIN users c ON ((c.id = s.created_by_id))) JOIN users u ON ((u.id = s.updated_by_id))) JOIN people p ON ((p.id = s.owner_id))) JOIN websites w ON ((w.id = s.website_id)));
-
-
---
--- TOC entry 2376 (class 1259 OID 49838)
--- Dependencies: 6
--- Name: taxa_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE taxa_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3136 (class 0 OID 0)
--- Dependencies: 2376
--- Name: taxa_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('taxa_id_seq', 1, false);
-
-
---
--- TOC entry 2377 (class 1259 OID 49840)
--- Dependencies: 2787 6
--- Name: taxa; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE taxa (
-    id integer DEFAULT nextval('taxa_id_seq'::regclass) NOT NULL,
-    taxon character varying(100),
-    taxon_group_id integer NOT NULL,
-    language_id integer,
-    external_key character varying(50),
-    authority character varying(50),
-    search_code character varying(20),
-    scientific boolean,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
-);
-
-
---
--- TOC entry 3137 (class 0 OID 0)
--- Dependencies: 2377
--- Name: TABLE taxa; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE taxa IS 'List of taxa known to the system.';
-
-
---
--- TOC entry 3138 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.taxon; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.taxon IS 'Term used for the taxon, excluding the authority.';
-
-
---
--- TOC entry 3139 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.taxon_group_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.taxon_group_id IS 'Foreign key to the taxon_groups table. Identifies a label that describes the taxon''s higher level grouping.';
-
-
---
--- TOC entry 3140 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.language_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.language_id IS 'Foreign key to the languages table. Identifies the language used for this taxon name.';
-
-
---
--- TOC entry 3141 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.external_key; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.external_key IS 'For taxa which are directly mappable onto taxon records in an external system, identifies the external record''s key. For example, this is used to store the taxon version key from the NBN Gateway.';
-
-
---
--- TOC entry 3142 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.authority; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.authority IS 'Authority label for the taxon name.';
-
-
---
--- TOC entry 3143 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.search_code; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.search_code IS 'A search code that may be used for rapid lookup of the taxon name.';
-
-
---
--- TOC entry 3144 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.scientific; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.scientific IS 'Flag set to true if the name is a scientific name rather than vernacular.';
-
-
---
--- TOC entry 3145 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3146 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3147 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3148 (class 0 OID 0)
--- Dependencies: 2377
--- Name: COLUMN taxa.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2378 (class 1259 OID 49844)
--- Dependencies: 2788 2789 6
--- Name: taxa_taxon_lists; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE taxa_taxon_lists (
-    id integer NOT NULL,
-    taxon_list_id integer,
-    taxon_id integer NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    parent_id integer,
-    taxon_meaning_id integer,
-    taxonomic_sort_order integer,
-    preferred boolean DEFAULT false NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- TOC entry 3149 (class 0 OID 0)
--- Dependencies: 2378
--- Name: TABLE taxa_taxon_lists; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE taxa_taxon_lists IS 'Join table that defines which taxa belong to which taxon lists.';
-
-
---
--- TOC entry 3150 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3151 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3152 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.parent_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.parent_id IS 'Foreign key to the taxa table. Identifies the taxonomic parent, for example the genus of a species.';
-
-
---
--- TOC entry 3153 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.taxon_meaning_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.taxon_meaning_id IS 'Foreign key to the taxon_meanings table. Identifies the meaning of this taxon record. Eacg group of taxa with the same meaning are considered synonymous.';
-
-
---
--- TOC entry 3154 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.taxonomic_sort_order; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.taxonomic_sort_order IS 'Provides a sort order which allows the taxon hierarchy to be displayed in taxonomic rather than alphabetical order.';
-
-
---
--- TOC entry 3155 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.preferred; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.preferred IS 'Flag set to true if the name constitutes the preferred name when selected amongst all taxa that have the same meaning.';
-
-
---
--- TOC entry 3156 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.updated_on IS 'Date this record was updated.';
-
-
---
--- TOC entry 3157 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.updated_by_id IS 'Foreign key to the users table (updater).';
-
-
---
--- TOC entry 3158 (class 0 OID 0)
--- Dependencies: 2378
--- Name: COLUMN taxa_taxon_lists.deleted; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxa_taxon_lists.deleted IS 'Has this record been deleted?';
-
-
---
--- TOC entry 2379 (class 1259 OID 49849)
--- Dependencies: 6 2377
--- Name: taxon_lists_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE taxon_lists_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3159 (class 0 OID 0)
--- Dependencies: 2379
--- Name: taxon_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
---
-
-ALTER SEQUENCE taxon_lists_id_seq OWNED BY taxa.id;
-
-
---
--- TOC entry 3160 (class 0 OID 0)
--- Dependencies: 2379
--- Name: taxon_lists_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('taxon_lists_id_seq', 1, false);
-
-
---
--- TOC entry 2380 (class 1259 OID 49851)
--- Dependencies: 2791 2792 6
--- Name: taxon_lists; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE taxon_lists (
-    id integer DEFAULT nextval('taxon_lists_id_seq'::regclass) NOT NULL,
-    title character varying(100),
-    description text,
-    website_id integer,
-    parent_id integer,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- TOC entry 3161 (class 0 OID 0)
--- Dependencies: 2380
--- Name: TABLE taxon_lists; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE taxon_lists IS 'List of taxon lists known to the system, including the main species list and all subsets.';
-
-
---
--- TOC entry 3162 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.title; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.title IS 'Title of the taxon list.';
-
-
---
--- TOC entry 3163 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.description; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.description IS 'Description of the taxon list.';
-
-
---
--- TOC entry 3164 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.website_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.website_id IS 'Foreign key to the websites table. Identifies the website that this list is available for, or null for lists available across all websites.';
-
-
---
--- TOC entry 3165 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.parent_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.parent_id IS 'Foreign key to the taxon_lists table. For lists that are subsets of other taxon lists, identifies the parent list.';
-
-
---
--- TOC entry 3166 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3167 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3168 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3169 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 3170 (class 0 OID 0)
--- Dependencies: 2380
--- Name: COLUMN taxon_lists.deleted; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_lists.deleted IS 'Has this list been deleted?';
-
-
---
--- TOC entry 2381 (class 1259 OID 49859)
--- Dependencies: 2541 6
--- Name: detail_taxa_taxon_lists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_taxa_taxon_lists AS
-    SELECT ttl.id, ttl.taxon_id, t.taxon, t.authority, ttl.taxon_list_id, tl.title AS taxon_list, ttl.taxon_meaning_id, ttl.preferred, ttl.parent_id, tp.taxon AS parent, ttl.created_by_id, c.username AS created_by, ttl.updated_by_id, u.username AS updated_by FROM ((((((taxa_taxon_lists ttl JOIN taxon_lists tl ON ((tl.id = ttl.taxon_list_id))) JOIN taxa t ON ((t.id = ttl.taxon_id))) JOIN users c ON ((c.id = ttl.created_by_id))) JOIN users u ON ((u.id = ttl.updated_by_id))) LEFT JOIN taxa_taxon_lists ttlp ON ((ttlp.id = ttl.parent_id))) LEFT JOIN taxa tp ON ((tp.id = ttlp.taxon_id))) WHERE (ttl.deleted = false);
-
-
---
--- TOC entry 2382 (class 1259 OID 49864)
--- Dependencies: 6
--- Name: taxon_groups; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE taxon_groups (
-    id integer NOT NULL,
-    title character varying(100),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
-);
-
-
---
--- TOC entry 3171 (class 0 OID 0)
--- Dependencies: 2382
--- Name: TABLE taxon_groups; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE taxon_groups IS 'List of higher level taxonomic groups, used to give a label that can quickly confirm that a selected name is in the right taxonomic area.';
-
-
---
--- TOC entry 3172 (class 0 OID 0)
--- Dependencies: 2382
--- Name: COLUMN taxon_groups.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_groups.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3173 (class 0 OID 0)
--- Dependencies: 2382
--- Name: COLUMN taxon_groups.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_groups.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3174 (class 0 OID 0)
--- Dependencies: 2382
--- Name: COLUMN taxon_groups.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_groups.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3175 (class 0 OID 0)
--- Dependencies: 2382
--- Name: COLUMN taxon_groups.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN taxon_groups.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2383 (class 1259 OID 49867)
--- Dependencies: 2542 6
--- Name: detail_taxon_groups; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_taxon_groups AS
-    SELECT t.id, t.title, t.created_by_id, c.username AS created_by, t.updated_by_id, u.username AS updated_by FROM ((taxon_groups t JOIN users c ON ((c.id = t.created_by_id))) JOIN users u ON ((u.id = t.updated_by_id)));
-
-
---
--- TOC entry 2384 (class 1259 OID 49872)
--- Dependencies: 2543 6
--- Name: detail_taxon_lists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_taxon_lists AS
-    SELECT t.id, t.title, t.description, t.website_id, w.title AS website, t.parent_id, p.title AS parent, t.created_by_id, c.username AS created_by, t.updated_by_id, u.username AS updated_by FROM ((((taxon_lists t LEFT JOIN websites w ON ((w.id = t.website_id))) LEFT JOIN taxon_lists p ON ((p.id = t.parent_id))) JOIN users c ON ((c.id = t.created_by_id))) JOIN users u ON ((u.id = t.updated_by_id)));
-
-
---
--- TOC entry 2385 (class 1259 OID 49877)
--- Dependencies: 6
--- Name: termlists_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE termlists_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3176 (class 0 OID 0)
--- Dependencies: 2385
--- Name: termlists_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('termlists_id_seq', 1, false);
-
-
---
--- TOC entry 2386 (class 1259 OID 49879)
--- Dependencies: 2794 2795 6
--- Name: termlists; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE termlists (
-    id integer DEFAULT nextval('termlists_id_seq'::regclass) NOT NULL,
-    title character varying(100) NOT NULL,
-    description text,
-    website_id integer,
-    parent_id integer,
-    deleted boolean DEFAULT false NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
-);
-
-
---
--- TOC entry 3177 (class 0 OID 0)
--- Dependencies: 2386
--- Name: TABLE termlists; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE termlists IS 'List of all controlled terminology lists known to the system. Each termlist is used to store a list of known terms, which can provide a lookup for populating a field, or the values which may be selected when entering data into an auto-complete text box for example.';
-
-
---
--- TOC entry 3178 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.title; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.title IS 'Title of the termlist.';
-
-
---
--- TOC entry 3179 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.description; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.description IS 'Description of the termlist.';
-
-
---
--- TOC entry 3180 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.website_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.website_id IS 'Foreign key to the websites table. Identifies the website that this termlist is owned by, or null if indicialy owned.';
-
-
---
--- TOC entry 3181 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.parent_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.parent_id IS 'Foreign key to the termlists table. Identifies the parent list when a list is a subset of another.';
-
-
---
--- TOC entry 3182 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.deleted; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.deleted IS 'Identifies if the termlist has been marked as deleted.';
-
-
---
--- TOC entry 3183 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3184 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3185 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3186 (class 0 OID 0)
--- Dependencies: 2386
--- Name: COLUMN termlists.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2387 (class 1259 OID 49887)
--- Dependencies: 2544 6
--- Name: detail_termlists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_termlists AS
-    SELECT t.id, t.title, t.description, t.website_id, w.title AS website, t.parent_id, p.title AS parent, t.created_by_id, c.username AS created_by, t.updated_by_id, u.username AS updated_by FROM ((((termlists t LEFT JOIN websites w ON ((w.id = t.website_id))) LEFT JOIN termlists p ON ((p.id = t.parent_id))) JOIN users c ON ((c.id = t.created_by_id))) JOIN users u ON ((u.id = t.updated_by_id))) WHERE (t.deleted = false);
-
-
---
--- TOC entry 2388 (class 1259 OID 49892)
--- Dependencies: 6
--- Name: termlists_terms_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE termlists_terms_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3187 (class 0 OID 0)
--- Dependencies: 2388
--- Name: termlists_terms_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('termlists_terms_id_seq', 1, false);
-
-
---
--- TOC entry 2389 (class 1259 OID 49894)
--- Dependencies: 2796 2797 2798 6
--- Name: termlists_terms; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE termlists_terms (
-    id integer DEFAULT nextval('termlists_terms_id_seq'::regclass) NOT NULL,
-    termlist_id integer,
-    term_id integer,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    parent_id integer,
-    meaning_id integer,
-    preferred boolean DEFAULT false NOT NULL,
-    sort_order integer,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- TOC entry 3188 (class 0 OID 0)
--- Dependencies: 2389
--- Name: TABLE termlists_terms; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE termlists_terms IS 'Join table that identifies the terms that belong to each termlist.';
-
-
---
--- TOC entry 3189 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.termlist_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.termlist_id IS 'Foreign key to the termlists table. Identifies the termlist that the term is listed within.';
-
-
---
--- TOC entry 3190 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.term_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.term_id IS 'Foreign key to the terms table. Identifies the term that is listed within the termlist.';
-
-
---
--- TOC entry 3191 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3192 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3193 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3194 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 3195 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.parent_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.parent_id IS 'Foreign key to the termlist_terms table. For heirarchical data, identifies the parent term.';
-
-
---
--- TOC entry 3196 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.meaning_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.meaning_id IS 'Foreign key to the meaning table - identifies synonymous terms within this list.';
-
-
---
--- TOC entry 3197 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.preferred; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.preferred IS 'Flag set to true if the term is the preferred term amongst the group of terms with the same meaning.';
-
-
---
--- TOC entry 3198 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.sort_order; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.sort_order IS 'Used to control sort ordering';
-
-
---
--- TOC entry 3199 (class 0 OID 0)
--- Dependencies: 2389
--- Name: COLUMN termlists_terms.deleted; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN termlists_terms.deleted IS 'Has this record been deleted?';
-
-
---
--- TOC entry 2390 (class 1259 OID 49900)
--- Dependencies: 6
--- Name: terms_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE terms_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3200 (class 0 OID 0)
--- Dependencies: 2390
--- Name: terms_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('terms_id_seq', 1, false);
-
-
---
--- TOC entry 2391 (class 1259 OID 49902)
--- Dependencies: 2799 2800 6
--- Name: terms; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE terms (
-    id integer DEFAULT nextval('terms_id_seq'::regclass) NOT NULL,
-    term character varying(100),
-    language_id integer,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- TOC entry 3201 (class 0 OID 0)
--- Dependencies: 2391
--- Name: TABLE terms; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON TABLE terms IS 'Distinct list of all terms which are included in termlists.';
-
-
---
--- TOC entry 3202 (class 0 OID 0)
--- Dependencies: 2391
--- Name: COLUMN terms.term; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN terms.term IS 'Term text.';
-
-
---
--- TOC entry 3203 (class 0 OID 0)
--- Dependencies: 2391
--- Name: COLUMN terms.language_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN terms.language_id IS 'Foreign key to the languages table. Identifies the language used for the term.';
-
-
---
--- TOC entry 3204 (class 0 OID 0)
--- Dependencies: 2391
--- Name: COLUMN terms.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN terms.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3205 (class 0 OID 0)
--- Dependencies: 2391
--- Name: COLUMN terms.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN terms.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3206 (class 0 OID 0)
--- Dependencies: 2391
--- Name: COLUMN terms.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN terms.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3207 (class 0 OID 0)
--- Dependencies: 2391
--- Name: COLUMN terms.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN terms.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 3208 (class 0 OID 0)
--- Dependencies: 2391
--- Name: COLUMN terms.deleted; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN terms.deleted IS 'Has this term been deleted?';
-
-
---
--- TOC entry 2392 (class 1259 OID 49907)
--- Dependencies: 2545 6
--- Name: detail_termlists_terms; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_termlists_terms AS
-    SELECT tlt.id, tlt.term_id, t.term, tlt.termlist_id, tl.title AS termlist, tlt.meaning_id, tlt.preferred, tlt.parent_id, tp.term AS parent, tlt.created_by_id, c.username AS created_by, tlt.updated_by_id, u.username AS updated_by FROM ((((((termlists_terms tlt JOIN termlists tl ON ((tl.id = tlt.termlist_id))) JOIN terms t ON ((t.id = tlt.term_id))) JOIN users c ON ((c.id = tlt.created_by_id))) JOIN users u ON ((u.id = tlt.updated_by_id))) LEFT JOIN termlists_terms tltp ON ((tltp.id = tlt.parent_id))) LEFT JOIN terms tp ON ((tp.id = tltp.term_id))) WHERE (tlt.deleted = false);
-
-
---
--- TOC entry 2393 (class 1259 OID 49912)
--- Dependencies: 2546 6
--- Name: detail_terms; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_terms AS
-    SELECT t.id, t.term, t.language_id, l.language, l.iso, t.created_by_id, c.username AS created_by, t.updated_by_id, u.username AS updated_by FROM (((terms t JOIN languages l ON ((l.id = t.language_id))) JOIN users c ON ((c.id = t.created_by_id))) JOIN users u ON ((u.id = t.updated_by_id)));
-
-
---
--- TOC entry 2394 (class 1259 OID 49917)
--- Dependencies: 2547 6
--- Name: detail_websites; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW detail_websites AS
-    SELECT w.id, w.title, w.url, w.description, w.created_by_id, c.username AS created_by, w.updated_by_id, u.username AS updated_by FROM ((websites w JOIN users c ON ((c.id = w.created_by_id))) JOIN users u ON ((u.id = w.updated_by_id)));
-
-
 SET default_with_oids = true;
 
 --
--- TOC entry 2395 (class 1259 OID 49922)
+-- TOC entry 2297 (class 1259 OID 64905)
 -- Dependencies: 6
 -- Name: geometry_columns; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2058,8 +281,8 @@ CREATE TABLE geometry_columns (
 
 
 --
--- TOC entry 3209 (class 0 OID 0)
--- Dependencies: 2395
+-- TOC entry 2869 (class 0 OID 0)
+-- Dependencies: 2297
 -- Name: TABLE geometry_columns; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2067,8 +290,8 @@ COMMENT ON TABLE geometry_columns IS 'PostGIS table for tracking columns contain
 
 
 --
--- TOC entry 1034 (class 1247 OID 49930)
--- Dependencies: 6 2396
+-- TOC entry 972 (class 1247 OID 64913)
+-- Dependencies: 6 2298
 -- Name: geometry_dump; Type: TYPE; Schema: indicia; Owner: -
 --
 
@@ -2079,76 +302,7 @@ CREATE TYPE geometry_dump AS (
 
 
 --
--- TOC entry 2397 (class 1259 OID 49931)
--- Dependencies: 2548 6
--- Name: gv_surveys; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW gv_surveys AS
-    SELECT s.id, s.title, s.description, w.title AS website FROM (surveys s LEFT JOIN websites w ON ((s.website_id = w.id)));
-
-
---
--- TOC entry 2398 (class 1259 OID 49935)
--- Dependencies: 2549 6
--- Name: gv_taxon_lists_taxa; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW gv_taxon_lists_taxa AS
-    SELECT tt.id, tt.taxon_list_id, tt.taxon_id, tt.created_on, tt.created_by_id, tt.parent_id, tt.taxon_meaning_id, tt.taxonomic_sort_order, tt.preferred, tt.deleted, t.taxon, t.taxon_group_id, t.language_id, t.authority, t.search_code, t.scientific, l.language FROM ((taxa_taxon_lists tt JOIN taxa t ON ((tt.taxon_id = t.id))) JOIN languages l ON ((t.language_id = l.id)));
-
-
---
--- TOC entry 2399 (class 1259 OID 49940)
--- Dependencies: 2550 6
--- Name: gv_term_termlists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW gv_term_termlists AS
-    SELECT tt.id, tt.termlist_id, tt.term_id, tt.created_on, tt.created_by_id, tt.updated_on, tt.updated_by_id, tt.parent_id, tt.meaning_id, tt.preferred, tt.sort_order, t.title, t.description FROM (termlists_terms tt JOIN termlists t ON ((tt.termlist_id = t.id)));
-
-
---
--- TOC entry 3210 (class 0 OID 0)
--- Dependencies: 2399
--- Name: VIEW gv_term_termlists; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON VIEW gv_term_termlists IS 'View for the terms page - shows the list of termlists that a term belongs to.';
-
-
---
--- TOC entry 2400 (class 1259 OID 49944)
--- Dependencies: 2551 6
--- Name: gv_termlists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW gv_termlists AS
-    SELECT t.id, t.title, t.description, t.website_id, t.parent_id, t.deleted, t.created_on, t.created_by_id, t.updated_on, t.updated_by_id, w.title AS website, p.surname AS creator FROM (((termlists t LEFT JOIN websites w ON ((t.website_id = w.id))) JOIN users u ON ((t.created_by_id = u.id))) JOIN people p ON ((u.person_id = p.id)));
-
-
---
--- TOC entry 2401 (class 1259 OID 49949)
--- Dependencies: 2552 6
--- Name: gv_termlists_terms; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW gv_termlists_terms AS
-    SELECT tt.id, tt.termlist_id, tt.term_id, tt.created_on, tt.created_by_id, tt.updated_on, tt.updated_by_id, tt.parent_id, tt.meaning_id, tt.preferred, tt.sort_order, tt.deleted, t.term, l.language FROM ((termlists_terms tt JOIN terms t ON ((tt.term_id = t.id))) JOIN languages l ON ((t.language_id = l.id)));
-
-
---
--- TOC entry 2402 (class 1259 OID 49953)
--- Dependencies: 2553 6
--- Name: gv_users; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW gv_users AS
-    SELECT p.id AS person_id, (COALESCE(((p.first_name)::text || ' '::text), ''::text) || (p.surname)::text) AS name, u.id, u.username, cr.title AS core_role FROM ((people p LEFT JOIN users u ON ((p.id = u.person_id))) LEFT JOIN core_roles cr ON ((u.core_role_id = cr.id)));
-
-
---
--- TOC entry 1049 (class 0 OID 0)
+-- TOC entry 975 (class 0 OID 0)
 -- Name: histogram2d; Type: SHELL TYPE; Schema: indicia; Owner: -
 --
 
@@ -2156,8 +310,8 @@ CREATE TYPE histogram2d;
 
 
 --
--- TOC entry 34 (class 1255 OID 49959)
--- Dependencies: 6 1049
+-- TOC entry 31 (class 1255 OID 64915)
+-- Dependencies: 6 975
 -- Name: st_histogram2d_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -2167,8 +321,8 @@ CREATE FUNCTION st_histogram2d_in(cstring) RETURNS histogram2d
 
 
 --
--- TOC entry 35 (class 1255 OID 49960)
--- Dependencies: 6 1049
+-- TOC entry 32 (class 1255 OID 64916)
+-- Dependencies: 6 975
 -- Name: st_histogram2d_out(histogram2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -2178,8 +332,8 @@ CREATE FUNCTION st_histogram2d_out(histogram2d) RETURNS cstring
 
 
 --
--- TOC entry 1048 (class 1247 OID 49958)
--- Dependencies: 6 35 34
+-- TOC entry 974 (class 1247 OID 64914)
+-- Dependencies: 32 6 31
 -- Name: histogram2d; Type: TYPE; Schema: indicia; Owner: -
 --
 
@@ -2193,119 +347,72 @@ CREATE TYPE histogram2d (
 
 
 --
--- TOC entry 2403 (class 1259 OID 49962)
--- Dependencies: 2554 6
--- Name: list_languages; Type: VIEW; Schema: indicia; Owner: -
+-- TOC entry 2299 (class 1259 OID 64918)
+-- Dependencies: 6
+-- Name: languages_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
-CREATE VIEW list_languages AS
-    SELECT l.id, l.language, l.iso FROM languages l;
-
-
---
--- TOC entry 2404 (class 1259 OID 49966)
--- Dependencies: 2555 6
--- Name: list_locations; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_locations AS
-    SELECT l.id, l.name, l.code, l.centroid_sref FROM locations l;
+CREATE SEQUENCE languages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 
 --
--- TOC entry 2405 (class 1259 OID 49970)
--- Dependencies: 2556 6
--- Name: list_people; Type: VIEW; Schema: indicia; Owner: -
+-- TOC entry 2870 (class 0 OID 0)
+-- Dependencies: 2299
+-- Name: languages_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
-CREATE VIEW list_people AS
-    SELECT p.id, p.first_name, p.surname, p.initials FROM people p;
-
-
---
--- TOC entry 2406 (class 1259 OID 49974)
--- Dependencies: 2557 6
--- Name: list_surveys; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_surveys AS
-    SELECT s.id, s.title FROM surveys s;
-
-
---
--- TOC entry 2407 (class 1259 OID 49978)
--- Dependencies: 2558 6
--- Name: list_taxa_taxon_lists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_taxa_taxon_lists AS
-    SELECT ttl.id, ttl.taxon_id, t.taxon, t.authority, ttl.taxon_list_id, tl.title AS taxon_list FROM ((taxa_taxon_lists ttl JOIN taxon_lists tl ON ((tl.id = ttl.taxon_list_id))) JOIN taxa t ON ((t.id = ttl.taxon_id))) WHERE (ttl.deleted = false);
-
-
---
--- TOC entry 2408 (class 1259 OID 49982)
--- Dependencies: 2559 6
--- Name: list_taxon_groups; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_taxon_groups AS
-    SELECT t.id, t.title FROM taxon_groups t;
-
-
---
--- TOC entry 2409 (class 1259 OID 49986)
--- Dependencies: 2560 6
--- Name: list_taxon_lists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_taxon_lists AS
-    SELECT t.id, t.title FROM taxon_lists t;
-
-
---
--- TOC entry 2410 (class 1259 OID 49990)
--- Dependencies: 2561 6
--- Name: list_termlists; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_termlists AS
-    SELECT t.id, t.title, t.website_id FROM termlists t WHERE (t.deleted = false);
-
-
---
--- TOC entry 2411 (class 1259 OID 49994)
--- Dependencies: 2562 6
--- Name: list_termlists_terms; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_termlists_terms AS
-    SELECT tlt.id, tlt.term_id, t.term, tlt.termlist_id, tl.title AS termlist FROM ((termlists_terms tlt JOIN termlists tl ON ((tl.id = tlt.termlist_id))) JOIN terms t ON ((t.id = tlt.term_id))) WHERE (tlt.deleted = false);
-
-
---
--- TOC entry 2412 (class 1259 OID 49998)
--- Dependencies: 2563 6
--- Name: list_terms; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_terms AS
-    SELECT t.id, t.term, t.language_id, l.language, l.iso FROM (terms t JOIN languages l ON ((l.id = t.language_id)));
-
-
---
--- TOC entry 2413 (class 1259 OID 50002)
--- Dependencies: 2564 6
--- Name: list_websites; Type: VIEW; Schema: indicia; Owner: -
---
-
-CREATE VIEW list_websites AS
-    SELECT w.id, w.title FROM websites w;
+SELECT pg_catalog.setval('languages_id_seq', 1, false);
 
 
 SET default_with_oids = false;
 
 --
--- TOC entry 2414 (class 1259 OID 50006)
+-- TOC entry 2300 (class 1259 OID 64920)
+-- Dependencies: 2641 6
+-- Name: languages; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE languages (
+    id integer DEFAULT nextval('languages_id_seq'::regclass) NOT NULL,
+    iso character(3),
+    language character varying(50)
+);
+
+
+--
+-- TOC entry 2871 (class 0 OID 0)
+-- Dependencies: 2300
+-- Name: TABLE languages; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE languages IS 'List of languages known to the system.';
+
+
+--
+-- TOC entry 2872 (class 0 OID 0)
+-- Dependencies: 2300
+-- Name: COLUMN languages.iso; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN languages.iso IS 'ISO 639-2 code for the language.';
+
+
+--
+-- TOC entry 2873 (class 0 OID 0)
+-- Dependencies: 2300
+-- Name: COLUMN languages.language; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN languages.language IS 'Term used to describe the language in the system.';
+
+
+--
+-- TOC entry 2301 (class 1259 OID 64924)
 -- Dependencies: 6
 -- Name: location_attribute_values; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2319,17 +426,13 @@ CREATE TABLE location_attribute_values (
     int_value integer,
     date_start_value date,
     date_end_value date,
-    date_type_value character varying(2),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    date_type_value character varying(2)
 );
 
 
 --
--- TOC entry 3211 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2874 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: TABLE location_attribute_values; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2337,8 +440,8 @@ COMMENT ON TABLE location_attribute_values IS 'Contains values that have been st
 
 
 --
--- TOC entry 3212 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2875 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.location_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2346,8 +449,8 @@ COMMENT ON COLUMN location_attribute_values.location_id IS 'Foreign key to the l
 
 
 --
--- TOC entry 3213 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2876 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.location_attribute_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2355,8 +458,8 @@ COMMENT ON COLUMN location_attribute_values.location_attribute_id IS 'Foreign ke
 
 
 --
--- TOC entry 3214 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2877 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.text_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2364,8 +467,8 @@ COMMENT ON COLUMN location_attribute_values.text_value IS 'For text values, prov
 
 
 --
--- TOC entry 3215 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2878 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.float_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2373,8 +476,8 @@ COMMENT ON COLUMN location_attribute_values.float_value IS 'For float values, pr
 
 
 --
--- TOC entry 3216 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2879 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.int_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2382,8 +485,8 @@ COMMENT ON COLUMN location_attribute_values.int_value IS 'For integer values, pr
 
 
 --
--- TOC entry 3217 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2880 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.date_start_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2391,8 +494,8 @@ COMMENT ON COLUMN location_attribute_values.date_start_value IS 'For vague date 
 
 
 --
--- TOC entry 3218 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2881 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.date_end_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2400,8 +503,8 @@ COMMENT ON COLUMN location_attribute_values.date_end_value IS 'For vague date an
 
 
 --
--- TOC entry 3219 (class 0 OID 0)
--- Dependencies: 2414
+-- TOC entry 2882 (class 0 OID 0)
+-- Dependencies: 2301
 -- Name: COLUMN location_attribute_values.date_type_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2409,43 +512,7 @@ COMMENT ON COLUMN location_attribute_values.date_type_value IS 'For vague date v
 
 
 --
--- TOC entry 3220 (class 0 OID 0)
--- Dependencies: 2414
--- Name: COLUMN location_attribute_values.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attribute_values.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3221 (class 0 OID 0)
--- Dependencies: 2414
--- Name: COLUMN location_attribute_values.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attribute_values.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3222 (class 0 OID 0)
--- Dependencies: 2414
--- Name: COLUMN location_attribute_values.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attribute_values.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3223 (class 0 OID 0)
--- Dependencies: 2414
--- Name: COLUMN location_attribute_values.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attribute_values.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2415 (class 1259 OID 50012)
+-- TOC entry 2302 (class 1259 OID 64930)
 -- Dependencies: 6
 -- Name: location_attributes; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2453,17 +520,13 @@ COMMENT ON COLUMN location_attribute_values.updated_by_id IS 'Foreign key to the
 CREATE TABLE location_attributes (
     id integer NOT NULL,
     caption character varying(50),
-    data_type character(1),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    data_type character(1)
 );
 
 
 --
--- TOC entry 3224 (class 0 OID 0)
--- Dependencies: 2415
+-- TOC entry 2883 (class 0 OID 0)
+-- Dependencies: 2302
 -- Name: TABLE location_attributes; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2471,8 +534,8 @@ COMMENT ON TABLE location_attributes IS 'List of additional attributes that are 
 
 
 --
--- TOC entry 3225 (class 0 OID 0)
--- Dependencies: 2415
+-- TOC entry 2884 (class 0 OID 0)
+-- Dependencies: 2302
 -- Name: COLUMN location_attributes.caption; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2480,8 +543,8 @@ COMMENT ON COLUMN location_attributes.caption IS 'Display caption for the attrib
 
 
 --
--- TOC entry 3226 (class 0 OID 0)
--- Dependencies: 2415
+-- TOC entry 2885 (class 0 OID 0)
+-- Dependencies: 2302
 -- Name: COLUMN location_attributes.data_type; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2489,43 +552,7 @@ COMMENT ON COLUMN location_attributes.data_type IS 'Data type for the attribute.
 
 
 --
--- TOC entry 3227 (class 0 OID 0)
--- Dependencies: 2415
--- Name: COLUMN location_attributes.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attributes.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3228 (class 0 OID 0)
--- Dependencies: 2415
--- Name: COLUMN location_attributes.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attributes.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3229 (class 0 OID 0)
--- Dependencies: 2415
--- Name: COLUMN location_attributes.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attributes.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3230 (class 0 OID 0)
--- Dependencies: 2415
--- Name: COLUMN location_attributes.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attributes.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2416 (class 1259 OID 50015)
+-- TOC entry 2303 (class 1259 OID 64933)
 -- Dependencies: 6
 -- Name: location_attributes_websites; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2533,15 +560,13 @@ COMMENT ON COLUMN location_attributes.updated_by_id IS 'Foreign key to the users
 CREATE TABLE location_attributes_websites (
     id integer NOT NULL,
     website_id integer NOT NULL,
-    location_attribute_id integer NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL
+    location_attribute_id integer NOT NULL
 );
 
 
 --
--- TOC entry 3231 (class 0 OID 0)
--- Dependencies: 2416
+-- TOC entry 2886 (class 0 OID 0)
+-- Dependencies: 2303
 -- Name: TABLE location_attributes_websites; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2549,8 +574,8 @@ COMMENT ON TABLE location_attributes_websites IS 'Join table which identifies th
 
 
 --
--- TOC entry 3232 (class 0 OID 0)
--- Dependencies: 2416
+-- TOC entry 2887 (class 0 OID 0)
+-- Dependencies: 2303
 -- Name: COLUMN location_attributes_websites.website_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2558,8 +583,8 @@ COMMENT ON COLUMN location_attributes_websites.website_id IS 'Foreign key to the
 
 
 --
--- TOC entry 3233 (class 0 OID 0)
--- Dependencies: 2416
+-- TOC entry 2888 (class 0 OID 0)
+-- Dependencies: 2303
 -- Name: COLUMN location_attributes_websites.location_attribute_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2567,25 +592,136 @@ COMMENT ON COLUMN location_attributes_websites.location_attribute_id IS 'Foreign
 
 
 --
--- TOC entry 3234 (class 0 OID 0)
--- Dependencies: 2416
--- Name: COLUMN location_attributes_websites.created_on; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 33 (class 1255 OID 64936)
+-- Dependencies: 966 6
+-- Name: geometrytype(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN location_attributes_websites.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3235 (class 0 OID 0)
--- Dependencies: 2416
--- Name: COLUMN location_attributes_websites.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN location_attributes_websites.created_by_id IS 'Foreign key to the users table (creator).';
+CREATE FUNCTION geometrytype(geometry) RETURNS text
+    AS '$libdir/liblwgeom', 'LWGEOM_getTYPE'
+    LANGUAGE c IMMUTABLE STRICT;
 
 
 --
--- TOC entry 2417 (class 1259 OID 50018)
+-- TOC entry 34 (class 1255 OID 64937)
+-- Dependencies: 966 6
+-- Name: ndims(geometry); Type: FUNCTION; Schema: indicia; Owner: -
+--
+
+CREATE FUNCTION ndims(geometry) RETURNS smallint
+    AS '$libdir/liblwgeom', 'LWGEOM_ndims'
+    LANGUAGE c IMMUTABLE STRICT;
+
+
+--
+-- TOC entry 35 (class 1255 OID 64938)
+-- Dependencies: 966 6
+-- Name: srid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
+--
+
+CREATE FUNCTION srid(geometry) RETURNS integer
+    AS '$libdir/liblwgeom', 'LWGEOM_getSRID'
+    LANGUAGE c IMMUTABLE STRICT;
+
+
+--
+-- TOC entry 2304 (class 1259 OID 64939)
+-- Dependencies: 2646 2647 2648 2649 2650 2651 6 966 966
+-- Name: locations; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE locations (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    code character varying(20),
+    parent_id integer,
+    centroid_sref character varying(20) NOT NULL,
+    centroid_sref_system character varying(10) NOT NULL,
+    centroid_geom geometry,
+    boundary_geom geometry,
+    CONSTRAINT enforce_dims_boundary_geom CHECK ((ndims(boundary_geom) = 2)),
+    CONSTRAINT enforce_dims_centroid_geom CHECK ((ndims(centroid_geom) = 2)),
+    CONSTRAINT enforce_geotype_boundary_geom CHECK (((geometrytype(boundary_geom) = 'LINESTRING'::text) OR (boundary_geom IS NULL))),
+    CONSTRAINT enforce_geotype_centroid_geom CHECK (((geometrytype(centroid_geom) = 'LINESTRING'::text) OR (centroid_geom IS NULL))),
+    CONSTRAINT enforce_srid_boundary_geom CHECK ((srid(boundary_geom) = (-1))),
+    CONSTRAINT enforce_srid_centroid_geom CHECK ((srid(centroid_geom) = (-1)))
+);
+
+
+--
+-- TOC entry 2889 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: TABLE locations; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE locations IS 'List of locations, including wildlife sites and other locations, known to the system.';
+
+
+--
+-- TOC entry 2890 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: COLUMN locations.name; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN locations.name IS 'Name of the location.';
+
+
+--
+-- TOC entry 2891 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: COLUMN locations.code; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN locations.code IS 'Location reference code.';
+
+
+--
+-- TOC entry 2892 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: COLUMN locations.parent_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN locations.parent_id IS 'Identifies the location''s parent location, if there is one.';
+
+
+--
+-- TOC entry 2893 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: COLUMN locations.centroid_sref; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN locations.centroid_sref IS 'Spatial reference at the centre of the location.';
+
+
+--
+-- TOC entry 2894 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: COLUMN locations.centroid_sref_system; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN locations.centroid_sref_system IS 'System used for the centroid_sref field.';
+
+
+--
+-- TOC entry 2895 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: COLUMN locations.centroid_geom; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN locations.centroid_geom IS 'Geometry of the spatial reference at the centre of the location. This is a point, or a polygon for grid references. Uses Latitude and Longitude on the WGS84 datum.';
+
+
+--
+-- TOC entry 2896 (class 0 OID 0)
+-- Dependencies: 2304
+-- Name: COLUMN locations.boundary_geom; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN locations.boundary_geom IS 'Polygon for the location''s boundary. Uses Latitude and Longitude on the WGS84 datum.';
+
+
+--
+-- TOC entry 2305 (class 1259 OID 64951)
 -- Dependencies: 6
 -- Name: locations_websites; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2593,15 +729,13 @@ COMMENT ON COLUMN location_attributes_websites.created_by_id IS 'Foreign key to 
 CREATE TABLE locations_websites (
     id integer NOT NULL,
     location_id integer NOT NULL,
-    website_id integer NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL
+    website_id integer NOT NULL
 );
 
 
 --
--- TOC entry 3236 (class 0 OID 0)
--- Dependencies: 2417
+-- TOC entry 2897 (class 0 OID 0)
+-- Dependencies: 2305
 -- Name: TABLE locations_websites; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2609,8 +743,8 @@ COMMENT ON TABLE locations_websites IS 'Join table which identifies the location
 
 
 --
--- TOC entry 3237 (class 0 OID 0)
--- Dependencies: 2417
+-- TOC entry 2898 (class 0 OID 0)
+-- Dependencies: 2305
 -- Name: COLUMN locations_websites.location_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2618,8 +752,8 @@ COMMENT ON COLUMN locations_websites.location_id IS 'Foreign key to the location
 
 
 --
--- TOC entry 3238 (class 0 OID 0)
--- Dependencies: 2417
+-- TOC entry 2899 (class 0 OID 0)
+-- Dependencies: 2305
 -- Name: COLUMN locations_websites.website_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2627,25 +761,7 @@ COMMENT ON COLUMN locations_websites.website_id IS 'Foreign key to the websites 
 
 
 --
--- TOC entry 3239 (class 0 OID 0)
--- Dependencies: 2417
--- Name: COLUMN locations_websites.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations_websites.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3240 (class 0 OID 0)
--- Dependencies: 2417
--- Name: COLUMN locations_websites.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN locations_websites.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 2418 (class 1259 OID 50021)
+-- TOC entry 2306 (class 1259 OID 64954)
 -- Dependencies: 6
 -- Name: meanings_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
@@ -2659,8 +775,8 @@ CREATE SEQUENCE meanings_id_seq
 
 
 --
--- TOC entry 3241 (class 0 OID 0)
--- Dependencies: 2418
+-- TOC entry 2900 (class 0 OID 0)
+-- Dependencies: 2306
 -- Name: meanings_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -2668,8 +784,8 @@ SELECT pg_catalog.setval('meanings_id_seq', 1, false);
 
 
 --
--- TOC entry 2419 (class 1259 OID 50023)
--- Dependencies: 2805 6
+-- TOC entry 2307 (class 1259 OID 64956)
+-- Dependencies: 2653 6
 -- Name: meanings; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -2679,8 +795,8 @@ CREATE TABLE meanings (
 
 
 --
--- TOC entry 3242 (class 0 OID 0)
--- Dependencies: 2419
+-- TOC entry 2901 (class 0 OID 0)
+-- Dependencies: 2307
 -- Name: TABLE meanings; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2688,7 +804,7 @@ COMMENT ON TABLE meanings IS 'List of unique term meanings. All terms that refer
 
 
 --
--- TOC entry 2420 (class 1259 OID 50027)
+-- TOC entry 2308 (class 1259 OID 64960)
 -- Dependencies: 6
 -- Name: occurrence_attribute_values; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2702,17 +818,13 @@ CREATE TABLE occurrence_attribute_values (
     int_value integer,
     date_start_value date,
     date_end_value date,
-    date_type_value character varying(2),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    date_type_value character varying(2)
 );
 
 
 --
--- TOC entry 3243 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2902 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: TABLE occurrence_attribute_values; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2720,8 +832,8 @@ COMMENT ON TABLE occurrence_attribute_values IS 'Contains values that have been 
 
 
 --
--- TOC entry 3244 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2903 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.occurrence_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2729,8 +841,8 @@ COMMENT ON COLUMN occurrence_attribute_values.occurrence_id IS 'Foreign key to t
 
 
 --
--- TOC entry 3245 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2904 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.occurrence_attribute_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2738,8 +850,8 @@ COMMENT ON COLUMN occurrence_attribute_values.occurrence_attribute_id IS 'Foreig
 
 
 --
--- TOC entry 3246 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2905 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.text_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2747,8 +859,8 @@ COMMENT ON COLUMN occurrence_attribute_values.text_value IS 'For text values, pr
 
 
 --
--- TOC entry 3247 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2906 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.float_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2756,8 +868,8 @@ COMMENT ON COLUMN occurrence_attribute_values.float_value IS 'For float values, 
 
 
 --
--- TOC entry 3248 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2907 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.int_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2765,8 +877,8 @@ COMMENT ON COLUMN occurrence_attribute_values.int_value IS 'For integer values, 
 
 
 --
--- TOC entry 3249 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2908 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.date_start_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2774,8 +886,8 @@ COMMENT ON COLUMN occurrence_attribute_values.date_start_value IS 'For vague dat
 
 
 --
--- TOC entry 3250 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2909 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.date_end_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2783,8 +895,8 @@ COMMENT ON COLUMN occurrence_attribute_values.date_end_value IS 'For vague date 
 
 
 --
--- TOC entry 3251 (class 0 OID 0)
--- Dependencies: 2420
+-- TOC entry 2910 (class 0 OID 0)
+-- Dependencies: 2308
 -- Name: COLUMN occurrence_attribute_values.date_type_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2792,43 +904,7 @@ COMMENT ON COLUMN occurrence_attribute_values.date_type_value IS 'For vague date
 
 
 --
--- TOC entry 3252 (class 0 OID 0)
--- Dependencies: 2420
--- Name: COLUMN occurrence_attribute_values.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attribute_values.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3253 (class 0 OID 0)
--- Dependencies: 2420
--- Name: COLUMN occurrence_attribute_values.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attribute_values.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3254 (class 0 OID 0)
--- Dependencies: 2420
--- Name: COLUMN occurrence_attribute_values.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attribute_values.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3255 (class 0 OID 0)
--- Dependencies: 2420
--- Name: COLUMN occurrence_attribute_values.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attribute_values.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2421 (class 1259 OID 50033)
+-- TOC entry 2309 (class 1259 OID 64966)
 -- Dependencies: 6
 -- Name: occurrence_attributes; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2836,17 +912,13 @@ COMMENT ON COLUMN occurrence_attribute_values.updated_by_id IS 'Foreign key to t
 CREATE TABLE occurrence_attributes (
     id integer NOT NULL,
     caption character varying(50),
-    data_type character(1),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    data_type character(1)
 );
 
 
 --
--- TOC entry 3256 (class 0 OID 0)
--- Dependencies: 2421
+-- TOC entry 2911 (class 0 OID 0)
+-- Dependencies: 2309
 -- Name: TABLE occurrence_attributes; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2854,8 +926,8 @@ COMMENT ON TABLE occurrence_attributes IS 'List of additional attributes that ar
 
 
 --
--- TOC entry 3257 (class 0 OID 0)
--- Dependencies: 2421
+-- TOC entry 2912 (class 0 OID 0)
+-- Dependencies: 2309
 -- Name: COLUMN occurrence_attributes.caption; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2863,8 +935,8 @@ COMMENT ON COLUMN occurrence_attributes.caption IS 'Display caption for the attr
 
 
 --
--- TOC entry 3258 (class 0 OID 0)
--- Dependencies: 2421
+-- TOC entry 2913 (class 0 OID 0)
+-- Dependencies: 2309
 -- Name: COLUMN occurrence_attributes.data_type; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2872,43 +944,7 @@ COMMENT ON COLUMN occurrence_attributes.data_type IS 'Data type for the attribut
 
 
 --
--- TOC entry 3259 (class 0 OID 0)
--- Dependencies: 2421
--- Name: COLUMN occurrence_attributes.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attributes.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3260 (class 0 OID 0)
--- Dependencies: 2421
--- Name: COLUMN occurrence_attributes.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attributes.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3261 (class 0 OID 0)
--- Dependencies: 2421
--- Name: COLUMN occurrence_attributes.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attributes.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3262 (class 0 OID 0)
--- Dependencies: 2421
--- Name: COLUMN occurrence_attributes.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attributes.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2422 (class 1259 OID 50036)
+-- TOC entry 2310 (class 1259 OID 64969)
 -- Dependencies: 6
 -- Name: occurrence_attributes_websites; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -2916,15 +952,13 @@ COMMENT ON COLUMN occurrence_attributes.updated_by_id IS 'Foreign key to the use
 CREATE TABLE occurrence_attributes_websites (
     id integer NOT NULL,
     website_id integer NOT NULL,
-    occurrence_attribute_id integer NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL
+    occurrence_attribute_id integer NOT NULL
 );
 
 
 --
--- TOC entry 3263 (class 0 OID 0)
--- Dependencies: 2422
+-- TOC entry 2914 (class 0 OID 0)
+-- Dependencies: 2310
 -- Name: TABLE occurrence_attributes_websites; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2932,8 +966,8 @@ COMMENT ON TABLE occurrence_attributes_websites IS 'Join table which identifies 
 
 
 --
--- TOC entry 3264 (class 0 OID 0)
--- Dependencies: 2422
+-- TOC entry 2915 (class 0 OID 0)
+-- Dependencies: 2310
 -- Name: COLUMN occurrence_attributes_websites.website_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2941,8 +975,8 @@ COMMENT ON COLUMN occurrence_attributes_websites.website_id IS 'Foreign key to t
 
 
 --
--- TOC entry 3265 (class 0 OID 0)
--- Dependencies: 2422
+-- TOC entry 2916 (class 0 OID 0)
+-- Dependencies: 2310
 -- Name: COLUMN occurrence_attributes_websites.occurrence_attribute_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -2950,87 +984,7 @@ COMMENT ON COLUMN occurrence_attributes_websites.occurrence_attribute_id IS 'For
 
 
 --
--- TOC entry 3266 (class 0 OID 0)
--- Dependencies: 2422
--- Name: COLUMN occurrence_attributes_websites.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attributes_websites.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3267 (class 0 OID 0)
--- Dependencies: 2422
--- Name: COLUMN occurrence_attributes_websites.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_attributes_websites.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 2423 (class 1259 OID 50039)
--- Dependencies: 6
--- Name: occurrence_comments; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
---
-
-CREATE TABLE occurrence_comments (
-    id integer NOT NULL,
-    comment text NOT NULL,
-    created_by_id integer NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    occurrence_id integer
-);
-
-
---
--- TOC entry 3268 (class 0 OID 0)
--- Dependencies: 2423
--- Name: COLUMN occurrence_comments.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_comments.created_by_id IS 'User who entered the comment. Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3269 (class 0 OID 0)
--- Dependencies: 2423
--- Name: COLUMN occurrence_comments.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_comments.created_on IS 'Date and time this comment was created.';
-
-
---
--- TOC entry 3270 (class 0 OID 0)
--- Dependencies: 2423
--- Name: COLUMN occurrence_comments.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_comments.updated_by_id IS 'Foreign key to the users table (updater).';
-
-
---
--- TOC entry 3271 (class 0 OID 0)
--- Dependencies: 2423
--- Name: COLUMN occurrence_comments.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_comments.updated_on IS 'Date and time this comment was updated.';
-
-
---
--- TOC entry 3272 (class 0 OID 0)
--- Dependencies: 2423
--- Name: COLUMN occurrence_comments.occurrence_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_comments.occurrence_id IS 'Foreign key to the occurrences table. Identifies the commented occurrence.';
-
-
---
--- TOC entry 2424 (class 1259 OID 50045)
+-- TOC entry 2311 (class 1259 OID 64972)
 -- Dependencies: 6
 -- Name: occurrence_images; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -3039,17 +993,13 @@ CREATE TABLE occurrence_images (
     id integer NOT NULL,
     occurrence_id integer NOT NULL,
     path character varying(200) NOT NULL,
-    caption character varying(100),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    caption character varying(100)
 );
 
 
 --
--- TOC entry 3273 (class 0 OID 0)
--- Dependencies: 2424
+-- TOC entry 2917 (class 0 OID 0)
+-- Dependencies: 2311
 -- Name: TABLE occurrence_images; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3057,8 +1007,8 @@ COMMENT ON TABLE occurrence_images IS 'Lists images that are attached to occurre
 
 
 --
--- TOC entry 3274 (class 0 OID 0)
--- Dependencies: 2424
+-- TOC entry 2918 (class 0 OID 0)
+-- Dependencies: 2311
 -- Name: COLUMN occurrence_images.occurrence_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3066,8 +1016,8 @@ COMMENT ON COLUMN occurrence_images.occurrence_id IS 'Foreign key to the occurre
 
 
 --
--- TOC entry 3275 (class 0 OID 0)
--- Dependencies: 2424
+-- TOC entry 2919 (class 0 OID 0)
+-- Dependencies: 2311
 -- Name: COLUMN occurrence_images.path; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3075,8 +1025,8 @@ COMMENT ON COLUMN occurrence_images.path IS 'Path to the image file, relative to
 
 
 --
--- TOC entry 3276 (class 0 OID 0)
--- Dependencies: 2424
+-- TOC entry 2920 (class 0 OID 0)
+-- Dependencies: 2311
 -- Name: COLUMN occurrence_images.caption; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3084,44 +1034,8 @@ COMMENT ON COLUMN occurrence_images.caption IS 'Caption for the image.';
 
 
 --
--- TOC entry 3277 (class 0 OID 0)
--- Dependencies: 2424
--- Name: COLUMN occurrence_images.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_images.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3278 (class 0 OID 0)
--- Dependencies: 2424
--- Name: COLUMN occurrence_images.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_images.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3279 (class 0 OID 0)
--- Dependencies: 2424
--- Name: COLUMN occurrence_images.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_images.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3280 (class 0 OID 0)
--- Dependencies: 2424
--- Name: COLUMN occurrence_images.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrence_images.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2425 (class 1259 OID 50048)
--- Dependencies: 2811 6
+-- TOC entry 2312 (class 1259 OID 64975)
+-- Dependencies: 2658 6
 -- Name: occurrences; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -3130,17 +1044,13 @@ CREATE TABLE occurrences (
     sample_id integer NOT NULL,
     determiner_id integer,
     taxon_id integer NOT NULL,
-    confidential boolean DEFAULT false NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    confidential boolean DEFAULT false NOT NULL
 );
 
 
 --
--- TOC entry 3281 (class 0 OID 0)
--- Dependencies: 2425
+-- TOC entry 2921 (class 0 OID 0)
+-- Dependencies: 2312
 -- Name: TABLE occurrences; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3148,8 +1058,8 @@ COMMENT ON TABLE occurrences IS 'List of occurrences of a taxon.';
 
 
 --
--- TOC entry 3282 (class 0 OID 0)
--- Dependencies: 2425
+-- TOC entry 2922 (class 0 OID 0)
+-- Dependencies: 2312
 -- Name: COLUMN occurrences.sample_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3157,8 +1067,8 @@ COMMENT ON COLUMN occurrences.sample_id IS 'Foreign key to the samples table. Id
 
 
 --
--- TOC entry 3283 (class 0 OID 0)
--- Dependencies: 2425
+-- TOC entry 2923 (class 0 OID 0)
+-- Dependencies: 2312
 -- Name: COLUMN occurrences.determiner_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3166,8 +1076,8 @@ COMMENT ON COLUMN occurrences.determiner_id IS 'Foreign key to the people table.
 
 
 --
--- TOC entry 3284 (class 0 OID 0)
--- Dependencies: 2425
+-- TOC entry 2924 (class 0 OID 0)
+-- Dependencies: 2312
 -- Name: COLUMN occurrences.taxon_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3175,8 +1085,8 @@ COMMENT ON COLUMN occurrences.taxon_id IS 'Foreign key to the taxa table. Identi
 
 
 --
--- TOC entry 3285 (class 0 OID 0)
--- Dependencies: 2425
+-- TOC entry 2925 (class 0 OID 0)
+-- Dependencies: 2312
 -- Name: COLUMN occurrences.confidential; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3184,43 +1094,77 @@ COMMENT ON COLUMN occurrences.confidential IS 'Flag set to true if this record i
 
 
 --
--- TOC entry 3286 (class 0 OID 0)
--- Dependencies: 2425
--- Name: COLUMN occurrences.created_on; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2313 (class 1259 OID 64979)
+-- Dependencies: 6
+-- Name: people; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
-COMMENT ON COLUMN occurrences.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3287 (class 0 OID 0)
--- Dependencies: 2425
--- Name: COLUMN occurrences.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrences.created_by_id IS 'Foreign key to the users table (creator).';
+CREATE TABLE people (
+    id integer NOT NULL,
+    first_name character varying(30),
+    surname character varying(30) NOT NULL,
+    initials character varying(6),
+    email_address character varying(50),
+    website_url character varying(1000)
+);
 
 
 --
--- TOC entry 3288 (class 0 OID 0)
--- Dependencies: 2425
--- Name: COLUMN occurrences.updated_on; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2926 (class 0 OID 0)
+-- Dependencies: 2313
+-- Name: TABLE people; Type: COMMENT; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN occurrences.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3289 (class 0 OID 0)
--- Dependencies: 2425
--- Name: COLUMN occurrences.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN occurrences.updated_by_id IS 'Foreign key to the users table (last updater).';
+COMMENT ON TABLE people IS 'List of all people known to the system.';
 
 
 --
--- TOC entry 2426 (class 1259 OID 50052)
+-- TOC entry 2927 (class 0 OID 0)
+-- Dependencies: 2313
+-- Name: COLUMN people.first_name; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN people.first_name IS 'First name of the person.';
+
+
+--
+-- TOC entry 2928 (class 0 OID 0)
+-- Dependencies: 2313
+-- Name: COLUMN people.surname; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN people.surname IS 'Surname of the person.';
+
+
+--
+-- TOC entry 2929 (class 0 OID 0)
+-- Dependencies: 2313
+-- Name: COLUMN people.initials; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN people.initials IS 'Initials of the person.';
+
+
+--
+-- TOC entry 2930 (class 0 OID 0)
+-- Dependencies: 2313
+-- Name: COLUMN people.email_address; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN people.email_address IS 'Email address of the person.';
+
+
+--
+-- TOC entry 2931 (class 0 OID 0)
+-- Dependencies: 2313
+-- Name: COLUMN people.website_url; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN people.website_url IS 'Website URL for the person.';
+
+
+--
+-- TOC entry 2314 (class 1259 OID 64985)
 -- Dependencies: 6
 -- Name: sample_attribute_values; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -3234,17 +1178,13 @@ CREATE TABLE sample_attribute_values (
     int_value integer,
     date_start_value date,
     date_end_value date,
-    date_type_value character varying(2),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    date_type_value character varying(2)
 );
 
 
 --
--- TOC entry 3290 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2932 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: TABLE sample_attribute_values; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3252,8 +1192,8 @@ COMMENT ON TABLE sample_attribute_values IS 'Contains values that have been stor
 
 
 --
--- TOC entry 3291 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2933 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.sample_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3261,8 +1201,8 @@ COMMENT ON COLUMN sample_attribute_values.sample_id IS 'Foreign key to the sampl
 
 
 --
--- TOC entry 3292 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2934 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.sample_attribute_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3270,8 +1210,8 @@ COMMENT ON COLUMN sample_attribute_values.sample_attribute_id IS 'Foreign key to
 
 
 --
--- TOC entry 3293 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2935 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.text_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3279,8 +1219,8 @@ COMMENT ON COLUMN sample_attribute_values.text_value IS 'For text values, provid
 
 
 --
--- TOC entry 3294 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2936 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.float_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3288,8 +1228,8 @@ COMMENT ON COLUMN sample_attribute_values.float_value IS 'For float values, prov
 
 
 --
--- TOC entry 3295 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2937 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.int_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3297,8 +1237,8 @@ COMMENT ON COLUMN sample_attribute_values.int_value IS 'For integer values, prov
 
 
 --
--- TOC entry 3296 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2938 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.date_start_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3306,8 +1246,8 @@ COMMENT ON COLUMN sample_attribute_values.date_start_value IS 'For vague date an
 
 
 --
--- TOC entry 3297 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2939 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.date_end_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3315,8 +1255,8 @@ COMMENT ON COLUMN sample_attribute_values.date_end_value IS 'For vague date and 
 
 
 --
--- TOC entry 3298 (class 0 OID 0)
--- Dependencies: 2426
+-- TOC entry 2940 (class 0 OID 0)
+-- Dependencies: 2314
 -- Name: COLUMN sample_attribute_values.date_type_value; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3324,43 +1264,7 @@ COMMENT ON COLUMN sample_attribute_values.date_type_value IS 'For vague date val
 
 
 --
--- TOC entry 3299 (class 0 OID 0)
--- Dependencies: 2426
--- Name: COLUMN sample_attribute_values.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attribute_values.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3300 (class 0 OID 0)
--- Dependencies: 2426
--- Name: COLUMN sample_attribute_values.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attribute_values.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3301 (class 0 OID 0)
--- Dependencies: 2426
--- Name: COLUMN sample_attribute_values.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attribute_values.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3302 (class 0 OID 0)
--- Dependencies: 2426
--- Name: COLUMN sample_attribute_values.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attribute_values.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2427 (class 1259 OID 50058)
+-- TOC entry 2315 (class 1259 OID 64991)
 -- Dependencies: 6
 -- Name: sample_attributes; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -3368,17 +1272,13 @@ COMMENT ON COLUMN sample_attribute_values.updated_by_id IS 'Foreign key to the u
 CREATE TABLE sample_attributes (
     id integer NOT NULL,
     caption character varying(50),
-    data_type character(1),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    data_type character(1)
 );
 
 
 --
--- TOC entry 3303 (class 0 OID 0)
--- Dependencies: 2427
+-- TOC entry 2941 (class 0 OID 0)
+-- Dependencies: 2315
 -- Name: TABLE sample_attributes; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3386,8 +1286,8 @@ COMMENT ON TABLE sample_attributes IS 'List of additional attributes that are de
 
 
 --
--- TOC entry 3304 (class 0 OID 0)
--- Dependencies: 2427
+-- TOC entry 2942 (class 0 OID 0)
+-- Dependencies: 2315
 -- Name: COLUMN sample_attributes.caption; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3395,8 +1295,8 @@ COMMENT ON COLUMN sample_attributes.caption IS 'Display caption for the attribut
 
 
 --
--- TOC entry 3305 (class 0 OID 0)
--- Dependencies: 2427
+-- TOC entry 2943 (class 0 OID 0)
+-- Dependencies: 2315
 -- Name: COLUMN sample_attributes.data_type; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3404,43 +1304,7 @@ COMMENT ON COLUMN sample_attributes.data_type IS 'Data type for the attribute. P
 
 
 --
--- TOC entry 3306 (class 0 OID 0)
--- Dependencies: 2427
--- Name: COLUMN sample_attributes.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attributes.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3307 (class 0 OID 0)
--- Dependencies: 2427
--- Name: COLUMN sample_attributes.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attributes.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3308 (class 0 OID 0)
--- Dependencies: 2427
--- Name: COLUMN sample_attributes.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attributes.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3309 (class 0 OID 0)
--- Dependencies: 2427
--- Name: COLUMN sample_attributes.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attributes.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2428 (class 1259 OID 50061)
+-- TOC entry 2316 (class 1259 OID 64994)
 -- Dependencies: 6
 -- Name: sample_attributes_websites; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -3448,15 +1312,13 @@ COMMENT ON COLUMN sample_attributes.updated_by_id IS 'Foreign key to the users t
 CREATE TABLE sample_attributes_websites (
     id integer NOT NULL,
     website_id integer NOT NULL,
-    sample_attribute_id integer NOT NULL,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL
+    sample_attribute_id integer NOT NULL
 );
 
 
 --
--- TOC entry 3310 (class 0 OID 0)
--- Dependencies: 2428
+-- TOC entry 2944 (class 0 OID 0)
+-- Dependencies: 2316
 -- Name: TABLE sample_attributes_websites; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3464,8 +1326,8 @@ COMMENT ON TABLE sample_attributes_websites IS 'Join table that identifies which
 
 
 --
--- TOC entry 3311 (class 0 OID 0)
--- Dependencies: 2428
+-- TOC entry 2945 (class 0 OID 0)
+-- Dependencies: 2316
 -- Name: COLUMN sample_attributes_websites.website_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3473,8 +1335,8 @@ COMMENT ON COLUMN sample_attributes_websites.website_id IS 'Foreign key to the w
 
 
 --
--- TOC entry 3312 (class 0 OID 0)
--- Dependencies: 2428
+-- TOC entry 2946 (class 0 OID 0)
+-- Dependencies: 2316
 -- Name: COLUMN sample_attributes_websites.sample_attribute_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3482,26 +1344,8 @@ COMMENT ON COLUMN sample_attributes_websites.sample_attribute_id IS 'Foreign key
 
 
 --
--- TOC entry 3313 (class 0 OID 0)
--- Dependencies: 2428
--- Name: COLUMN sample_attributes_websites.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attributes_websites.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3314 (class 0 OID 0)
--- Dependencies: 2428
--- Name: COLUMN sample_attributes_websites.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN sample_attributes_websites.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 2429 (class 1259 OID 50064)
--- Dependencies: 2817 2818 2819 6 966
+-- TOC entry 2317 (class 1259 OID 64997)
+-- Dependencies: 2665 2666 2667 6 966
 -- Name: samples; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -3516,19 +1360,15 @@ CREATE TABLE samples (
     entered_sref_system character varying(10),
     geom geometry,
     location_name character varying(200),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL,
     CONSTRAINT enforce_dims_geom CHECK ((ndims(geom) = 2)),
-    CONSTRAINT enforce_geotype_geom CHECK (((geometrytype(geom) = ANY (ARRAY['POINT'::text, 'POLYGON'::text, 'LINESTRING'::text])) OR (geom IS NULL))),
+    CONSTRAINT enforce_geotype_geom CHECK (((geometrytype(geom) = 'LINESTRING'::text) OR (geom IS NULL))),
     CONSTRAINT enforce_srid_geom CHECK ((srid(geom) = (-1)))
 );
 
 
 --
--- TOC entry 3315 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2947 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: TABLE samples; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3536,8 +1376,8 @@ COMMENT ON TABLE samples IS 'List of samples known to the system. ';
 
 
 --
--- TOC entry 3316 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2948 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.survey_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3545,8 +1385,8 @@ COMMENT ON COLUMN samples.survey_id IS 'Foreign key to the surveys table. Identi
 
 
 --
--- TOC entry 3317 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2949 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.location_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3554,8 +1394,8 @@ COMMENT ON COLUMN samples.location_id IS 'Foreign key to the locations table. Id
 
 
 --
--- TOC entry 3318 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2950 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.date_start; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3563,8 +1403,8 @@ COMMENT ON COLUMN samples.date_start IS 'Start of the range of dates that this s
 
 
 --
--- TOC entry 3319 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2951 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.date_end; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3572,8 +1412,8 @@ COMMENT ON COLUMN samples.date_end IS 'End of the range of dates that this sampl
 
 
 --
--- TOC entry 3320 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2952 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.date_type; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3581,8 +1421,8 @@ COMMENT ON COLUMN samples.date_type IS 'Vague date type code. ';
 
 
 --
--- TOC entry 3321 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2953 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.entered_sref; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3590,8 +1430,8 @@ COMMENT ON COLUMN samples.entered_sref IS 'Spatial reference that was entered fo
 
 
 --
--- TOC entry 3322 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2954 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.entered_sref_system; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3599,8 +1439,8 @@ COMMENT ON COLUMN samples.entered_sref_system IS 'System that was used for the s
 
 
 --
--- TOC entry 3323 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2955 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.geom; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3608,8 +1448,8 @@ COMMENT ON COLUMN samples.geom IS 'WGS84 geometry describing the spatial referen
 
 
 --
--- TOC entry 3324 (class 0 OID 0)
--- Dependencies: 2429
+-- TOC entry 2956 (class 0 OID 0)
+-- Dependencies: 2317
 -- Name: COLUMN samples.location_name; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3617,95 +1457,19 @@ COMMENT ON COLUMN samples.location_name IS 'Free text name of the location or ot
 
 
 --
--- TOC entry 3325 (class 0 OID 0)
--- Dependencies: 2429
--- Name: COLUMN samples.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN samples.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3326 (class 0 OID 0)
--- Dependencies: 2429
--- Name: COLUMN samples.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN samples.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3327 (class 0 OID 0)
--- Dependencies: 2429
--- Name: COLUMN samples.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN samples.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3328 (class 0 OID 0)
--- Dependencies: 2429
--- Name: COLUMN samples.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN samples.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2430 (class 1259 OID 50073)
+-- TOC entry 2318 (class 1259 OID 65006)
 -- Dependencies: 6
 -- Name: site_roles; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
 CREATE TABLE site_roles (
     id integer NOT NULL,
-    title character varying(50),
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    title character varying(50)
 );
 
 
 --
--- TOC entry 3329 (class 0 OID 0)
--- Dependencies: 2430
--- Name: COLUMN site_roles.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN site_roles.created_on IS 'Date this record was created.';
-
-
---
--- TOC entry 3330 (class 0 OID 0)
--- Dependencies: 2430
--- Name: COLUMN site_roles.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN site_roles.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3331 (class 0 OID 0)
--- Dependencies: 2430
--- Name: COLUMN site_roles.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN site_roles.updated_on IS 'Date this record was last updated.';
-
-
---
--- TOC entry 3332 (class 0 OID 0)
--- Dependencies: 2430
--- Name: COLUMN site_roles.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN site_roles.updated_by_id IS 'Foreign key to the users table (last updater).';
-
-
---
--- TOC entry 2431 (class 1259 OID 50076)
+-- TOC entry 2319 (class 1259 OID 65009)
 -- Dependencies: 6
 -- Name: spatial_ref_sys; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -3720,8 +1484,8 @@ CREATE TABLE spatial_ref_sys (
 
 
 --
--- TOC entry 3333 (class 0 OID 0)
--- Dependencies: 2431
+-- TOC entry 2957 (class 0 OID 0)
+-- Dependencies: 2319
 -- Name: TABLE spatial_ref_sys; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3729,7 +1493,7 @@ COMMENT ON TABLE spatial_ref_sys IS 'PostGIS table for the list of spatial refer
 
 
 --
--- TOC entry 1115 (class 0 OID 0)
+-- TOC entry 1025 (class 0 OID 0)
 -- Name: spheroid; Type: SHELL TYPE; Schema: indicia; Owner: -
 --
 
@@ -3737,8 +1501,8 @@ CREATE TYPE spheroid;
 
 
 --
--- TOC entry 36 (class 1255 OID 50083)
--- Dependencies: 6 1115
+-- TOC entry 36 (class 1255 OID 65016)
+-- Dependencies: 6 1025
 -- Name: st_spheroid_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -3748,8 +1512,8 @@ CREATE FUNCTION st_spheroid_in(cstring) RETURNS spheroid
 
 
 --
--- TOC entry 37 (class 1255 OID 50084)
--- Dependencies: 6 1115
+-- TOC entry 37 (class 1255 OID 65017)
+-- Dependencies: 6 1025
 -- Name: st_spheroid_out(spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -3759,8 +1523,8 @@ CREATE FUNCTION st_spheroid_out(spheroid) RETURNS cstring
 
 
 --
--- TOC entry 1114 (class 1247 OID 50082)
--- Dependencies: 6 37 36
+-- TOC entry 1024 (class 1247 OID 65015)
+-- Dependencies: 36 37 6
 -- Name: spheroid; Type: TYPE; Schema: indicia; Owner: -
 --
 
@@ -3774,58 +1538,355 @@ CREATE TYPE spheroid (
 
 
 --
--- TOC entry 2432 (class 1259 OID 50086)
--- Dependencies: 2821 2822 2823 6
--- Name: system; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+-- TOC entry 2320 (class 1259 OID 65019)
+-- Dependencies: 6
+-- Name: surveys; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
-CREATE TABLE system (
+CREATE TABLE surveys (
     id integer NOT NULL,
-    version character varying(10) DEFAULT ''::character varying NOT NULL,
-    name character varying(30) DEFAULT ''::character varying NOT NULL,
-    repository character varying(150) DEFAULT ''::character varying NOT NULL,
-    release_date date
+    title character varying(100) NOT NULL,
+    owner_id integer,
+    description text,
+    website_id integer NOT NULL
 );
 
 
 --
--- TOC entry 3334 (class 0 OID 0)
--- Dependencies: 2432
--- Name: COLUMN system.version; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2958 (class 0 OID 0)
+-- Dependencies: 2320
+-- Name: TABLE surveys; Type: COMMENT; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN system.version IS 'Version number.';
-
-
---
--- TOC entry 3335 (class 0 OID 0)
--- Dependencies: 2432
--- Name: COLUMN system.name; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN system.name IS 'Version name.';
+COMMENT ON TABLE surveys IS 'List of surveys known to the system.';
 
 
 --
--- TOC entry 3336 (class 0 OID 0)
--- Dependencies: 2432
--- Name: COLUMN system.repository; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2959 (class 0 OID 0)
+-- Dependencies: 2320
+-- Name: COLUMN surveys.title; Type: COMMENT; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN system.repository IS 'SVN repository path.';
-
-
---
--- TOC entry 3337 (class 0 OID 0)
--- Dependencies: 2432
--- Name: COLUMN system.release_date; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN system.release_date IS 'Release date for version.';
+COMMENT ON COLUMN surveys.title IS 'Title of the survey.';
 
 
 --
--- TOC entry 2433 (class 1259 OID 50092)
+-- TOC entry 2960 (class 0 OID 0)
+-- Dependencies: 2320
+-- Name: COLUMN surveys.owner_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN surveys.owner_id IS 'Foreign key to the people table. Identifies the person responsible for the survey.';
+
+
+--
+-- TOC entry 2961 (class 0 OID 0)
+-- Dependencies: 2320
+-- Name: COLUMN surveys.description; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN surveys.description IS 'Description of the survey.';
+
+
+--
+-- TOC entry 2962 (class 0 OID 0)
+-- Dependencies: 2320
+-- Name: COLUMN surveys.website_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN surveys.website_id IS 'Foreign key to the websites table. Identifies the website that the survey is available for.';
+
+
+--
+-- TOC entry 2321 (class 1259 OID 65025)
+-- Dependencies: 6
+-- Name: taxa_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
+--
+
+CREATE SEQUENCE taxa_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2963 (class 0 OID 0)
+-- Dependencies: 2321
+-- Name: taxa_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
+--
+
+SELECT pg_catalog.setval('taxa_id_seq', 1, false);
+
+
+--
+-- TOC entry 2322 (class 1259 OID 65027)
+-- Dependencies: 2670 2671 6
+-- Name: taxa; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE taxa (
+    id integer DEFAULT nextval('taxa_id_seq'::regclass) NOT NULL,
+    taxon character varying(100),
+    taxon_group_id integer NOT NULL,
+    parent_id integer,
+    taxon_meaning_id integer,
+    language_id integer,
+    external_key character varying(50),
+    authority character varying(50),
+    search_code character varying(20),
+    taxonomic_sort_order integer,
+    scientific boolean,
+    preferred boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- TOC entry 2964 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: TABLE taxa; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE taxa IS 'List of taxa known to the system.';
+
+
+--
+-- TOC entry 2965 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.taxon; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.taxon IS 'Term used for the taxon, excluding the authority.';
+
+
+--
+-- TOC entry 2966 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.taxon_group_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.taxon_group_id IS 'Foreign key to the taxon_groups table. Identifies a label that describes the taxon''s higher level grouping.';
+
+
+--
+-- TOC entry 2967 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.parent_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.parent_id IS 'Foreign key to the taxa table. Identifies the taxonomic parent, for example the genus of a species.';
+
+
+--
+-- TOC entry 2968 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.taxon_meaning_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.taxon_meaning_id IS 'Foreign key to the taxon_meanings table. Identifies the meaning of this taxon record. Eacg group of taxa with the same meaning are considered synonymous.';
+
+
+--
+-- TOC entry 2969 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.language_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.language_id IS 'Foreign key to the languages table. Identifies the language used for this taxon name.';
+
+
+--
+-- TOC entry 2970 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.external_key; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.external_key IS 'For taxa which are directly mappable onto taxon records in an external system, identifies the external record''s key. For example, this is used to store the taxon version key from the NBN Gateway.';
+
+
+--
+-- TOC entry 2971 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.authority; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.authority IS 'Authority label for the taxon name.';
+
+
+--
+-- TOC entry 2972 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.search_code; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.search_code IS 'A search code that may be used for rapid lookup of the taxon name.';
+
+
+--
+-- TOC entry 2973 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.taxonomic_sort_order; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.taxonomic_sort_order IS 'Provides a sort order which allows the taxon hierarchy to be displayed in taxonomic rather than alphabetical order.';
+
+
+--
+-- TOC entry 2974 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.scientific; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.scientific IS 'Flag set to true if the name is a scientific name rather than vernacular.';
+
+
+--
+-- TOC entry 2975 (class 0 OID 0)
+-- Dependencies: 2322
+-- Name: COLUMN taxa.preferred; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxa.preferred IS 'Flag set to true if the name constitutes the preferred name when selected amongst all taxa that have the same meaning.';
+
+
+--
+-- TOC entry 2323 (class 1259 OID 65032)
+-- Dependencies: 6
+-- Name: taxa_taxon_lists; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE taxa_taxon_lists (
+    id integer NOT NULL,
+    taxon_list_id integer,
+    taxon_id integer NOT NULL
+);
+
+
+--
+-- TOC entry 2976 (class 0 OID 0)
+-- Dependencies: 2323
+-- Name: TABLE taxa_taxon_lists; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE taxa_taxon_lists IS 'Join table that defines which taxa belong to which taxon lists.';
+
+
+--
+-- TOC entry 2324 (class 1259 OID 65035)
+-- Dependencies: 6
+-- Name: taxon_groups; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE taxon_groups (
+    id integer NOT NULL,
+    title character varying(100)
+);
+
+
+--
+-- TOC entry 2977 (class 0 OID 0)
+-- Dependencies: 2324
+-- Name: TABLE taxon_groups; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE taxon_groups IS 'List of higher level taxonomic groups, used to give a label that can quickly confirm that a selected name is in the right taxonomic area.';
+
+
+--
+-- TOC entry 2325 (class 1259 OID 65038)
+-- Dependencies: 6 2322
+-- Name: taxon_lists_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
+--
+
+CREATE SEQUENCE taxon_lists_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2978 (class 0 OID 0)
+-- Dependencies: 2325
+-- Name: taxon_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
+--
+
+ALTER SEQUENCE taxon_lists_id_seq OWNED BY taxa.id;
+
+
+--
+-- TOC entry 2979 (class 0 OID 0)
+-- Dependencies: 2325
+-- Name: taxon_lists_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
+--
+
+SELECT pg_catalog.setval('taxon_lists_id_seq', 1, false);
+
+
+--
+-- TOC entry 2326 (class 1259 OID 65040)
+-- Dependencies: 2674 6
+-- Name: taxon_lists; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE taxon_lists (
+    id integer DEFAULT nextval('taxon_lists_id_seq'::regclass) NOT NULL,
+    title character varying(100),
+    description text,
+    website_id integer,
+    parent_id integer
+);
+
+
+--
+-- TOC entry 2980 (class 0 OID 0)
+-- Dependencies: 2326
+-- Name: TABLE taxon_lists; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE taxon_lists IS 'List of taxon lists known to the system, including the main species list and all subsets.';
+
+
+--
+-- TOC entry 2981 (class 0 OID 0)
+-- Dependencies: 2326
+-- Name: COLUMN taxon_lists.title; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxon_lists.title IS 'Title of the taxon list.';
+
+
+--
+-- TOC entry 2982 (class 0 OID 0)
+-- Dependencies: 2326
+-- Name: COLUMN taxon_lists.description; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxon_lists.description IS 'Description of the taxon list.';
+
+
+--
+-- TOC entry 2983 (class 0 OID 0)
+-- Dependencies: 2326
+-- Name: COLUMN taxon_lists.website_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxon_lists.website_id IS 'Foreign key to the websites table. Identifies the website that this list is available for, or null for lists available across all websites.';
+
+
+--
+-- TOC entry 2984 (class 0 OID 0)
+-- Dependencies: 2326
+-- Name: COLUMN taxon_lists.parent_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN taxon_lists.parent_id IS 'Foreign key to the taxon_lists table. For lists that are subsets of other taxon lists, identifies the parent list.';
+
+
+--
+-- TOC entry 2327 (class 1259 OID 65047)
 -- Dependencies: 6
 -- Name: taxon_meanings; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
@@ -3836,8 +1897,8 @@ CREATE TABLE taxon_meanings (
 
 
 --
--- TOC entry 3338 (class 0 OID 0)
--- Dependencies: 2433
+-- TOC entry 2985 (class 0 OID 0)
+-- Dependencies: 2327
 -- Name: TABLE taxon_meanings; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3845,69 +1906,380 @@ COMMENT ON TABLE taxon_meanings IS 'List of distinct taxonomic meanings. Each me
 
 
 --
--- TOC entry 2434 (class 1259 OID 50095)
+-- TOC entry 2328 (class 1259 OID 65050)
 -- Dependencies: 6
--- Name: user_tokens; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+-- Name: termlists_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
-CREATE TABLE user_tokens (
-    id integer NOT NULL,
-    user_id integer NOT NULL,
-    expires timestamp without time zone NOT NULL,
-    created timestamp without time zone NOT NULL,
-    user_agent character varying NOT NULL,
-    token character varying NOT NULL
+CREATE SEQUENCE termlists_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2986 (class 0 OID 0)
+-- Dependencies: 2328
+-- Name: termlists_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
+--
+
+SELECT pg_catalog.setval('termlists_id_seq', 1, false);
+
+
+--
+-- TOC entry 2329 (class 1259 OID 65052)
+-- Dependencies: 2676 2677 6
+-- Name: termlists; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE termlists (
+    id integer DEFAULT nextval('termlists_id_seq'::regclass) NOT NULL,
+    title character varying(100) NOT NULL,
+    description text,
+    website_id integer,
+    parent_id integer,
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
 --
--- TOC entry 3339 (class 0 OID 0)
--- Dependencies: 2434
--- Name: COLUMN user_tokens.user_id; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2987 (class 0 OID 0)
+-- Dependencies: 2329
+-- Name: TABLE termlists; Type: COMMENT; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN user_tokens.user_id IS 'User who to whom this token belongs. Foreign key to the users table';
-
-
---
--- TOC entry 3340 (class 0 OID 0)
--- Dependencies: 2434
--- Name: COLUMN user_tokens.expires; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN user_tokens.expires IS 'Date and time this token was expires.';
+COMMENT ON TABLE termlists IS 'List of all controlled terminology lists known to the system. Each termlist is used to store a list of known terms, which can provide a lookup for populating a field, or the values which may be selected when entering data into an auto-complete text box for example.';
 
 
 --
--- TOC entry 3341 (class 0 OID 0)
--- Dependencies: 2434
--- Name: COLUMN user_tokens.created; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2988 (class 0 OID 0)
+-- Dependencies: 2329
+-- Name: COLUMN termlists.title; Type: COMMENT; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN user_tokens.created IS 'Date and time this token was created.';
-
-
---
--- TOC entry 3342 (class 0 OID 0)
--- Dependencies: 2434
--- Name: COLUMN user_tokens.user_agent; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN user_tokens.user_agent IS 'Hash of User agent details';
+COMMENT ON COLUMN termlists.title IS 'Title of the termlist.';
 
 
 --
--- TOC entry 3343 (class 0 OID 0)
--- Dependencies: 2434
--- Name: COLUMN user_tokens.token; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2989 (class 0 OID 0)
+-- Dependencies: 2329
+-- Name: COLUMN termlists.description; Type: COMMENT; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN user_tokens.token IS 'Value of token stored in cookie';
+COMMENT ON COLUMN termlists.description IS 'Description of the termlist.';
 
 
 --
--- TOC entry 2435 (class 1259 OID 50101)
--- Dependencies: 2827 2828 2829 6
+-- TOC entry 2990 (class 0 OID 0)
+-- Dependencies: 2329
+-- Name: COLUMN termlists.website_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN termlists.website_id IS 'Foreign key to the websites table. Identifies the website that this termlist is owned by, or null if indicialy owned.';
+
+
+--
+-- TOC entry 2991 (class 0 OID 0)
+-- Dependencies: 2329
+-- Name: COLUMN termlists.parent_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN termlists.parent_id IS 'Foreign key to the termlists table. Identifies the parent list when a list is a subset of another.';
+
+
+--
+-- TOC entry 2992 (class 0 OID 0)
+-- Dependencies: 2329
+-- Name: COLUMN termlists.deleted; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN termlists.deleted IS 'Identifies if the termlist has been marked as deleted.';
+
+
+--
+-- TOC entry 2330 (class 1259 OID 65060)
+-- Dependencies: 6
+-- Name: termlists_terms_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
+--
+
+CREATE SEQUENCE termlists_terms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2993 (class 0 OID 0)
+-- Dependencies: 2330
+-- Name: termlists_terms_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
+--
+
+SELECT pg_catalog.setval('termlists_terms_id_seq', 1, false);
+
+
+--
+-- TOC entry 2331 (class 1259 OID 65062)
+-- Dependencies: 2678 6
+-- Name: termlists_terms; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE termlists_terms (
+    id integer DEFAULT nextval('termlists_terms_id_seq'::regclass) NOT NULL,
+    termlist_id integer,
+    term_id integer
+);
+
+
+--
+-- TOC entry 2994 (class 0 OID 0)
+-- Dependencies: 2331
+-- Name: TABLE termlists_terms; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE termlists_terms IS 'Join table that identifies the terms that belong to each termlist.';
+
+
+--
+-- TOC entry 2995 (class 0 OID 0)
+-- Dependencies: 2331
+-- Name: COLUMN termlists_terms.termlist_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN termlists_terms.termlist_id IS 'Foreign key to the termlists table. Identifies the termlist that the term is listed within.';
+
+
+--
+-- TOC entry 2996 (class 0 OID 0)
+-- Dependencies: 2331
+-- Name: COLUMN termlists_terms.term_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN termlists_terms.term_id IS 'Foreign key to the terms table. Identifies the term that is listed within the termlist.';
+
+
+--
+-- TOC entry 2332 (class 1259 OID 65066)
+-- Dependencies: 6
+-- Name: terms_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
+--
+
+CREATE SEQUENCE terms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2997 (class 0 OID 0)
+-- Dependencies: 2332
+-- Name: terms_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
+--
+
+SELECT pg_catalog.setval('terms_id_seq', 1, false);
+
+
+--
+-- TOC entry 2333 (class 1259 OID 65068)
+-- Dependencies: 2679 2680 6
+-- Name: terms; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE terms (
+    id integer DEFAULT nextval('terms_id_seq'::regclass) NOT NULL,
+    term character varying(100),
+    parent_id integer,
+    meaning_id integer,
+    language_id integer,
+    preferred boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- TOC entry 2998 (class 0 OID 0)
+-- Dependencies: 2333
+-- Name: TABLE terms; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE terms IS 'Distinct list of all terms which are included in termlists.';
+
+
+--
+-- TOC entry 2999 (class 0 OID 0)
+-- Dependencies: 2333
+-- Name: COLUMN terms.term; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN terms.term IS 'Term text.';
+
+
+--
+-- TOC entry 3000 (class 0 OID 0)
+-- Dependencies: 2333
+-- Name: COLUMN terms.parent_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN terms.parent_id IS 'Foreign key to the terms table. For termlists that are hierarchical, allows a term to identify its parent.';
+
+
+--
+-- TOC entry 3001 (class 0 OID 0)
+-- Dependencies: 2333
+-- Name: COLUMN terms.meaning_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN terms.meaning_id IS 'Foreign key to the meanings table. Identifies the term''s unique meaning. Each group of terms with the same meaning are considered synonymous.';
+
+
+--
+-- TOC entry 3002 (class 0 OID 0)
+-- Dependencies: 2333
+-- Name: COLUMN terms.language_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN terms.language_id IS 'Foreign key to the languages table. Identifies the language used for the term.';
+
+
+--
+-- TOC entry 3003 (class 0 OID 0)
+-- Dependencies: 2333
+-- Name: COLUMN terms.preferred; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN terms.preferred IS 'Flag set to true if the term is the preferred term amongst the group of terms with the same meaning.';
+
+
+--
+-- TOC entry 2334 (class 1259 OID 65073)
+-- Dependencies: 2681 2682 2684 2685 2686 966 6
+-- Name: users; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    openid_url character varying(1000),
+    home_entered_sref character varying(30),
+    home_entered_sref_system character varying(10),
+    home_geom geometry,
+    interests character varying,
+    location_name character varying(200),
+    person_id integer,
+    email_visible boolean DEFAULT false NOT NULL,
+    view_common_names boolean DEFAULT true NOT NULL,
+    core_role_id integer,
+    CONSTRAINT enforce_dims_home_geom CHECK ((ndims(home_geom) = 2)),
+    CONSTRAINT enforce_geotype_home_geom CHECK (((geometrytype(home_geom) = 'LINESTRING'::text) OR (home_geom IS NULL))),
+    CONSTRAINT enforce_srid_home_geom CHECK ((srid(home_geom) = (-1)))
+);
+
+
+--
+-- TOC entry 3004 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: TABLE users; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON TABLE users IS 'List of all users of the system. Contains login specific information only as each user is also identified as a record in the people table.';
+
+
+--
+-- TOC entry 3005 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.openid_url; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.openid_url IS 'For users with an OpenID login, identifies their OpenID URL.';
+
+
+--
+-- TOC entry 3006 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.home_entered_sref; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.home_entered_sref IS 'Spatial reference of the user''s home, if specified. This can be used to provide shortcuts when entering records, for example an "At my home" checkbox.';
+
+
+--
+-- TOC entry 3007 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.home_entered_sref_system; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.home_entered_sref_system IS 'Spatial reference system used for the home_entered_sref value.';
+
+
+--
+-- TOC entry 3008 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.home_geom; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.home_geom IS 'Geometry of the home spatial reference. This is a polygon representing the grid square, or a point for other spatial references. Uses Latitude and Longitude in the WGS84 datum.';
+
+
+--
+-- TOC entry 3009 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.interests; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.interests IS 'The user''s interests specified in their profile.';
+
+
+--
+-- TOC entry 3010 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.location_name; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.location_name IS 'Free text description of the user''s location, from their profile.';
+
+
+--
+-- TOC entry 3011 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.person_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.person_id IS 'Foreign key to the people table. Identifies the person record that this user is associated with.';
+
+
+--
+-- TOC entry 3012 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.email_visible; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.email_visible IS 'Flag set to true if the user allows their email to be visible to other users.';
+
+
+--
+-- TOC entry 3013 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.view_common_names; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.view_common_names IS 'Flag set to true if the user prefers common names for taxa over scientific names.';
+
+
+--
+-- TOC entry 3014 (class 0 OID 0)
+-- Dependencies: 2334
+-- Name: COLUMN users.core_role_id; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN users.core_role_id IS 'Foreign key to the core_roles table. Identifies the user''s role within the core module.';
+
+
+--
+-- TOC entry 2335 (class 1259 OID 65084)
+-- Dependencies: 2687 2688 2689 6
 -- Name: users_websites; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -3919,19 +2291,13 @@ CREATE TABLE users_websites (
     activated boolean DEFAULT false NOT NULL,
     banned boolean DEFAULT false NOT NULL,
     activation_key character varying(128),
-    site_role_id integer,
-    registration_datetime timestamp without time zone,
-    last_login_datetime timestamp without time zone,
-    created_on timestamp without time zone NOT NULL,
-    created_by_id integer NOT NULL,
-    updated_on timestamp without time zone NOT NULL,
-    updated_by_id integer NOT NULL
+    site_role_id integer
 );
 
 
 --
--- TOC entry 3344 (class 0 OID 0)
--- Dependencies: 2435
+-- TOC entry 3015 (class 0 OID 0)
+-- Dependencies: 2335
 -- Name: TABLE users_websites; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3939,8 +2305,8 @@ COMMENT ON TABLE users_websites IS 'Join table that identifies the websites that
 
 
 --
--- TOC entry 3345 (class 0 OID 0)
--- Dependencies: 2435
+-- TOC entry 3016 (class 0 OID 0)
+-- Dependencies: 2335
 -- Name: COLUMN users_websites.user_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3948,8 +2314,8 @@ COMMENT ON COLUMN users_websites.user_id IS 'Foreign key to the users table. Ide
 
 
 --
--- TOC entry 3346 (class 0 OID 0)
--- Dependencies: 2435
+-- TOC entry 3017 (class 0 OID 0)
+-- Dependencies: 2335
 -- Name: COLUMN users_websites.website_id; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3957,8 +2323,8 @@ COMMENT ON COLUMN users_websites.website_id IS 'Foreign key to the websites tabl
 
 
 --
--- TOC entry 3347 (class 0 OID 0)
--- Dependencies: 2435
+-- TOC entry 3018 (class 0 OID 0)
+-- Dependencies: 2335
 -- Name: COLUMN users_websites.deleted; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3966,8 +2332,8 @@ COMMENT ON COLUMN users_websites.deleted IS 'Indicates if the user account has b
 
 
 --
--- TOC entry 3348 (class 0 OID 0)
--- Dependencies: 2435
+-- TOC entry 3019 (class 0 OID 0)
+-- Dependencies: 2335
 -- Name: COLUMN users_websites.activated; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3975,8 +2341,8 @@ COMMENT ON COLUMN users_websites.activated IS 'Flag indicating if the user''s ac
 
 
 --
--- TOC entry 3349 (class 0 OID 0)
--- Dependencies: 2435
+-- TOC entry 3020 (class 0 OID 0)
+-- Dependencies: 2335
 -- Name: COLUMN users_websites.banned; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3984,8 +2350,8 @@ COMMENT ON COLUMN users_websites.banned IS 'Flag indicating if the user''s accou
 
 
 --
--- TOC entry 3350 (class 0 OID 0)
--- Dependencies: 2435
+-- TOC entry 3021 (class 0 OID 0)
+-- Dependencies: 2335
 -- Name: COLUMN users_websites.activation_key; Type: COMMENT; Schema: indicia; Owner: -
 --
 
@@ -3993,71 +2359,71 @@ COMMENT ON COLUMN users_websites.activation_key IS 'Unique key used by the activ
 
 
 --
--- TOC entry 3351 (class 0 OID 0)
--- Dependencies: 2435
--- Name: COLUMN users_websites.site_role_id; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2336 (class 1259 OID 65090)
+-- Dependencies: 6
+-- Name: websites_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN users_websites.site_role_id IS 'Foreign key to the site_roles table. Identifies the role of the user on this specific site.';
-
-
---
--- TOC entry 3352 (class 0 OID 0)
--- Dependencies: 2435
--- Name: COLUMN users_websites.registration_datetime; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users_websites.registration_datetime IS 'Date and time of registration on this website.';
+CREATE SEQUENCE websites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 
 --
--- TOC entry 3353 (class 0 OID 0)
--- Dependencies: 2435
--- Name: COLUMN users_websites.last_login_datetime; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 3022 (class 0 OID 0)
+-- Dependencies: 2336
+-- Name: websites_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN users_websites.last_login_datetime IS 'Date and time of last login to this website.';
-
-
---
--- TOC entry 3354 (class 0 OID 0)
--- Dependencies: 2435
--- Name: COLUMN users_websites.created_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users_websites.created_on IS 'Date this record was created.';
+SELECT pg_catalog.setval('websites_id_seq', 1, false);
 
 
 --
--- TOC entry 3355 (class 0 OID 0)
--- Dependencies: 2435
--- Name: COLUMN users_websites.created_by_id; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 2337 (class 1259 OID 65092)
+-- Dependencies: 2691 6
+-- Name: websites; Type: TABLE; Schema: indicia; Owner: -; Tablespace: 
 --
 
-COMMENT ON COLUMN users_websites.created_by_id IS 'Foreign key to the users table (creator).';
-
-
---
--- TOC entry 3356 (class 0 OID 0)
--- Dependencies: 2435
--- Name: COLUMN users_websites.updated_on; Type: COMMENT; Schema: indicia; Owner: -
---
-
-COMMENT ON COLUMN users_websites.updated_on IS 'Date this record was last updated.';
+CREATE TABLE websites (
+    id integer DEFAULT nextval('websites_id_seq'::regclass) NOT NULL,
+    title character varying(100) NOT NULL,
+    description text
+);
 
 
 --
--- TOC entry 3357 (class 0 OID 0)
--- Dependencies: 2435
--- Name: COLUMN users_websites.updated_by_id; Type: COMMENT; Schema: indicia; Owner: -
+-- TOC entry 3023 (class 0 OID 0)
+-- Dependencies: 2337
+-- Name: TABLE websites; Type: COMMENT; Schema: indicia; Owner: -
 --
 
-COMMENT ON COLUMN users_websites.updated_by_id IS 'Foreign key to the users table (last updater).';
+COMMENT ON TABLE websites IS 'List of data entry websites using this instance of the core module.';
 
 
 --
--- TOC entry 38 (class 1255 OID 50107)
--- Dependencies: 6 966
+-- TOC entry 3024 (class 0 OID 0)
+-- Dependencies: 2337
+-- Name: COLUMN websites.title; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN websites.title IS 'Website title.';
+
+
+--
+-- TOC entry 3025 (class 0 OID 0)
+-- Dependencies: 2337
+-- Name: COLUMN websites.description; Type: COMMENT; Schema: indicia; Owner: -
+--
+
+COMMENT ON COLUMN websites.description IS 'Website description.';
+
+
+--
+-- TOC entry 38 (class 1255 OID 65099)
+-- Dependencies: 966 6
 -- Name: _st_asgml(integer, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4067,8 +2433,8 @@ CREATE FUNCTION _st_asgml(integer, geometry, integer) RETURNS text
 
 
 --
--- TOC entry 39 (class 1255 OID 50108)
--- Dependencies: 6 966
+-- TOC entry 39 (class 1255 OID 65100)
+-- Dependencies: 966 6
 -- Name: _st_askml(integer, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4078,8 +2444,8 @@ CREATE FUNCTION _st_askml(integer, geometry, integer) RETURNS text
 
 
 --
--- TOC entry 40 (class 1255 OID 50109)
--- Dependencies: 966 6 966
+-- TOC entry 40 (class 1255 OID 65101)
+-- Dependencies: 966 966 6
 -- Name: _st_contains(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4089,8 +2455,8 @@ CREATE FUNCTION _st_contains(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 41 (class 1255 OID 50110)
--- Dependencies: 966 6 966
+-- TOC entry 41 (class 1255 OID 65102)
+-- Dependencies: 6 966 966
 -- Name: _st_coveredby(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4100,8 +2466,8 @@ CREATE FUNCTION _st_coveredby(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 42 (class 1255 OID 50111)
--- Dependencies: 966 6 966
+-- TOC entry 42 (class 1255 OID 65103)
+-- Dependencies: 966 966 6
 -- Name: _st_covers(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4111,8 +2477,8 @@ CREATE FUNCTION _st_covers(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 43 (class 1255 OID 50112)
--- Dependencies: 966 6 966
+-- TOC entry 43 (class 1255 OID 65104)
+-- Dependencies: 966 966 6
 -- Name: _st_crosses(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4122,7 +2488,7 @@ CREATE FUNCTION _st_crosses(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 44 (class 1255 OID 50113)
+-- TOC entry 44 (class 1255 OID 65105)
 -- Dependencies: 966 6 966
 -- Name: _st_intersects(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4133,8 +2499,8 @@ CREATE FUNCTION _st_intersects(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 45 (class 1255 OID 50114)
--- Dependencies: 6 966 966
+-- TOC entry 45 (class 1255 OID 65106)
+-- Dependencies: 966 6 966
 -- Name: _st_overlaps(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4144,8 +2510,8 @@ CREATE FUNCTION _st_overlaps(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 46 (class 1255 OID 50115)
--- Dependencies: 6 966 966
+-- TOC entry 46 (class 1255 OID 65107)
+-- Dependencies: 966 6 966
 -- Name: _st_touches(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4155,8 +2521,8 @@ CREATE FUNCTION _st_touches(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 47 (class 1255 OID 50116)
--- Dependencies: 966 966 6
+-- TOC entry 47 (class 1255 OID 65108)
+-- Dependencies: 966 6 966
 -- Name: _st_within(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4166,8 +2532,8 @@ CREATE FUNCTION _st_within(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 48 (class 1255 OID 50117)
--- Dependencies: 6 1152
+-- TOC entry 48 (class 1255 OID 65109)
+-- Dependencies: 6 1085
 -- Name: addauth(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4204,8 +2570,8 @@ $_$
 
 
 --
--- TOC entry 49 (class 1255 OID 50118)
--- Dependencies: 6 966 966
+-- TOC entry 49 (class 1255 OID 65110)
+-- Dependencies: 966 6 966
 -- Name: addbbox(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4215,8 +2581,8 @@ CREATE FUNCTION addbbox(geometry) RETURNS geometry
 
 
 --
--- TOC entry 50 (class 1255 OID 50119)
--- Dependencies: 1152 6
+-- TOC entry 50 (class 1255 OID 65111)
+-- Dependencies: 6 1085
 -- Name: addgeometrycolumn(character varying, character varying, character varying, character varying, integer, character varying, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4402,8 +2768,8 @@ $_$
 
 
 --
--- TOC entry 51 (class 1255 OID 50120)
--- Dependencies: 1152 6
+-- TOC entry 51 (class 1255 OID 65112)
+-- Dependencies: 6 1085
 -- Name: addgeometrycolumn(character varying, character varying, character varying, integer, character varying, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4420,8 +2786,8 @@ $_$
 
 
 --
--- TOC entry 52 (class 1255 OID 50121)
--- Dependencies: 1152 6
+-- TOC entry 52 (class 1255 OID 65113)
+-- Dependencies: 6 1085
 -- Name: addgeometrycolumn(character varying, character varying, integer, character varying, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4438,7 +2804,7 @@ $_$
 
 
 --
--- TOC entry 53 (class 1255 OID 50122)
+-- TOC entry 53 (class 1255 OID 65114)
 -- Dependencies: 966 6 966 966
 -- Name: addpoint(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4449,8 +2815,8 @@ CREATE FUNCTION addpoint(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 54 (class 1255 OID 50123)
--- Dependencies: 966 966 6 966
+-- TOC entry 54 (class 1255 OID 65115)
+-- Dependencies: 966 6 966 966
 -- Name: addpoint(geometry, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4460,7 +2826,7 @@ CREATE FUNCTION addpoint(geometry, geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 55 (class 1255 OID 50124)
+-- TOC entry 55 (class 1255 OID 65116)
 -- Dependencies: 966 6 966
 -- Name: affine(geometry, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4471,8 +2837,8 @@ CREATE FUNCTION affine(geometry, double precision, double precision, double prec
 
 
 --
--- TOC entry 56 (class 1255 OID 50125)
--- Dependencies: 6 966 966
+-- TOC entry 56 (class 1255 OID 65117)
+-- Dependencies: 966 6 966
 -- Name: affine(geometry, double precision, double precision, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4482,8 +2848,8 @@ CREATE FUNCTION affine(geometry, double precision, double precision, double prec
 
 
 --
--- TOC entry 57 (class 1255 OID 50126)
--- Dependencies: 966 6
+-- TOC entry 57 (class 1255 OID 65118)
+-- Dependencies: 6 966
 -- Name: area(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4493,7 +2859,7 @@ CREATE FUNCTION area(geometry) RETURNS double precision
 
 
 --
--- TOC entry 58 (class 1255 OID 50127)
+-- TOC entry 58 (class 1255 OID 65119)
 -- Dependencies: 6 966
 -- Name: area2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4504,7 +2870,7 @@ CREATE FUNCTION area2d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 59 (class 1255 OID 50128)
+-- TOC entry 59 (class 1255 OID 65120)
 -- Dependencies: 6 966
 -- Name: asbinary(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4515,8 +2881,8 @@ CREATE FUNCTION asbinary(geometry) RETURNS bytea
 
 
 --
--- TOC entry 60 (class 1255 OID 50129)
--- Dependencies: 966 6
+-- TOC entry 60 (class 1255 OID 65121)
+-- Dependencies: 6 966
 -- Name: asbinary(geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4526,7 +2892,7 @@ CREATE FUNCTION asbinary(geometry, text) RETURNS bytea
 
 
 --
--- TOC entry 61 (class 1255 OID 50130)
+-- TOC entry 61 (class 1255 OID 65122)
 -- Dependencies: 966 6
 -- Name: asewkb(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4537,7 +2903,7 @@ CREATE FUNCTION asewkb(geometry) RETURNS bytea
 
 
 --
--- TOC entry 62 (class 1255 OID 50131)
+-- TOC entry 62 (class 1255 OID 65123)
 -- Dependencies: 966 6
 -- Name: asewkb(geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4548,7 +2914,7 @@ CREATE FUNCTION asewkb(geometry, text) RETURNS bytea
 
 
 --
--- TOC entry 63 (class 1255 OID 50132)
+-- TOC entry 63 (class 1255 OID 65124)
 -- Dependencies: 966 6
 -- Name: asewkt(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4559,8 +2925,8 @@ CREATE FUNCTION asewkt(geometry) RETURNS text
 
 
 --
--- TOC entry 64 (class 1255 OID 50133)
--- Dependencies: 6 966
+-- TOC entry 64 (class 1255 OID 65125)
+-- Dependencies: 966 6
 -- Name: asgml(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4570,7 +2936,7 @@ CREATE FUNCTION asgml(geometry, integer) RETURNS text
 
 
 --
--- TOC entry 65 (class 1255 OID 50134)
+-- TOC entry 65 (class 1255 OID 65126)
 -- Dependencies: 966 6
 -- Name: asgml(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4581,7 +2947,7 @@ CREATE FUNCTION asgml(geometry) RETURNS text
 
 
 --
--- TOC entry 66 (class 1255 OID 50135)
+-- TOC entry 66 (class 1255 OID 65127)
 -- Dependencies: 6 966
 -- Name: ashexewkb(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4592,7 +2958,7 @@ CREATE FUNCTION ashexewkb(geometry) RETURNS text
 
 
 --
--- TOC entry 67 (class 1255 OID 50136)
+-- TOC entry 67 (class 1255 OID 65128)
 -- Dependencies: 6 966
 -- Name: ashexewkb(geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4603,8 +2969,8 @@ CREATE FUNCTION ashexewkb(geometry, text) RETURNS text
 
 
 --
--- TOC entry 68 (class 1255 OID 50137)
--- Dependencies: 6 966
+-- TOC entry 68 (class 1255 OID 65129)
+-- Dependencies: 966 6
 -- Name: askml(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4614,7 +2980,7 @@ CREATE FUNCTION askml(geometry, integer) RETURNS text
 
 
 --
--- TOC entry 69 (class 1255 OID 50138)
+-- TOC entry 69 (class 1255 OID 65130)
 -- Dependencies: 6 966
 -- Name: askml(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4625,8 +2991,8 @@ CREATE FUNCTION askml(geometry) RETURNS text
 
 
 --
--- TOC entry 70 (class 1255 OID 50139)
--- Dependencies: 6 966
+-- TOC entry 70 (class 1255 OID 65131)
+-- Dependencies: 966 6
 -- Name: askml(integer, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4636,7 +3002,7 @@ CREATE FUNCTION askml(integer, geometry, integer) RETURNS text
 
 
 --
--- TOC entry 71 (class 1255 OID 50140)
+-- TOC entry 71 (class 1255 OID 65132)
 -- Dependencies: 966 6
 -- Name: assvg(geometry, integer, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4647,7 +3013,7 @@ CREATE FUNCTION assvg(geometry, integer, integer) RETURNS text
 
 
 --
--- TOC entry 72 (class 1255 OID 50141)
+-- TOC entry 72 (class 1255 OID 65133)
 -- Dependencies: 966 6
 -- Name: assvg(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4658,7 +3024,7 @@ CREATE FUNCTION assvg(geometry, integer) RETURNS text
 
 
 --
--- TOC entry 73 (class 1255 OID 50142)
+-- TOC entry 73 (class 1255 OID 65134)
 -- Dependencies: 966 6
 -- Name: assvg(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4669,7 +3035,7 @@ CREATE FUNCTION assvg(geometry) RETURNS text
 
 
 --
--- TOC entry 74 (class 1255 OID 50143)
+-- TOC entry 74 (class 1255 OID 65135)
 -- Dependencies: 6 966
 -- Name: astext(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4680,8 +3046,8 @@ CREATE FUNCTION astext(geometry) RETURNS text
 
 
 --
--- TOC entry 75 (class 1255 OID 50144)
--- Dependencies: 966 6 966
+-- TOC entry 75 (class 1255 OID 65136)
+-- Dependencies: 6 966 966
 -- Name: azimuth(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4691,8 +3057,8 @@ CREATE FUNCTION azimuth(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 76 (class 1255 OID 50145)
--- Dependencies: 1152 6 966
+-- TOC entry 76 (class 1255 OID 65137)
+-- Dependencies: 1085 966 6
 -- Name: bdmpolyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4720,8 +3086,8 @@ $_$
 
 
 --
--- TOC entry 77 (class 1255 OID 50146)
--- Dependencies: 1152 6 966
+-- TOC entry 77 (class 1255 OID 65138)
+-- Dependencies: 966 1085 6
 -- Name: bdpolyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4754,8 +3120,8 @@ $_$
 
 
 --
--- TOC entry 78 (class 1255 OID 50147)
--- Dependencies: 966 966 6
+-- TOC entry 78 (class 1255 OID 65139)
+-- Dependencies: 6 966 966
 -- Name: boundary(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4765,7 +3131,7 @@ CREATE FUNCTION boundary(geometry) RETURNS geometry
 
 
 --
--- TOC entry 79 (class 1255 OID 50148)
+-- TOC entry 79 (class 1255 OID 65140)
 -- Dependencies: 6 966
 -- Name: box(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4776,7 +3142,7 @@ CREATE FUNCTION box(geometry) RETURNS box
 
 
 --
--- TOC entry 80 (class 1255 OID 50149)
+-- TOC entry 80 (class 1255 OID 65141)
 -- Dependencies: 6 958
 -- Name: box(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4787,8 +3153,8 @@ CREATE FUNCTION box(box3d) RETURNS box
 
 
 --
--- TOC entry 81 (class 1255 OID 50150)
--- Dependencies: 6 919 966
+-- TOC entry 81 (class 1255 OID 65142)
+-- Dependencies: 6 966 919
 -- Name: box2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4798,8 +3164,8 @@ CREATE FUNCTION box2d(geometry) RETURNS box2d
 
 
 --
--- TOC entry 82 (class 1255 OID 50151)
--- Dependencies: 958 919 6
+-- TOC entry 82 (class 1255 OID 65143)
+-- Dependencies: 6 919 958
 -- Name: box2d(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4809,7 +3175,7 @@ CREATE FUNCTION box2d(box3d) RETURNS box2d
 
 
 --
--- TOC entry 83 (class 1255 OID 50152)
+-- TOC entry 83 (class 1255 OID 65144)
 -- Dependencies: 919 6 919
 -- Name: box2d_contain(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4820,7 +3186,7 @@ CREATE FUNCTION box2d_contain(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 84 (class 1255 OID 50153)
+-- TOC entry 84 (class 1255 OID 65145)
 -- Dependencies: 919 6 919
 -- Name: box2d_contained(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4831,8 +3197,8 @@ CREATE FUNCTION box2d_contained(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 85 (class 1255 OID 50154)
--- Dependencies: 6 919
+-- TOC entry 85 (class 1255 OID 65146)
+-- Dependencies: 919 6
 -- Name: box2d_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4842,8 +3208,8 @@ CREATE FUNCTION box2d_in(cstring) RETURNS box2d
 
 
 --
--- TOC entry 86 (class 1255 OID 50155)
--- Dependencies: 6 919 919
+-- TOC entry 86 (class 1255 OID 65147)
+-- Dependencies: 919 6 919
 -- Name: box2d_intersects(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4853,7 +3219,7 @@ CREATE FUNCTION box2d_intersects(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 87 (class 1255 OID 50156)
+-- TOC entry 87 (class 1255 OID 65148)
 -- Dependencies: 919 6 919
 -- Name: box2d_left(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4864,7 +3230,7 @@ CREATE FUNCTION box2d_left(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 88 (class 1255 OID 50157)
+-- TOC entry 88 (class 1255 OID 65149)
 -- Dependencies: 6 919
 -- Name: box2d_out(box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4875,8 +3241,8 @@ CREATE FUNCTION box2d_out(box2d) RETURNS cstring
 
 
 --
--- TOC entry 89 (class 1255 OID 50158)
--- Dependencies: 6 919 919
+-- TOC entry 89 (class 1255 OID 65150)
+-- Dependencies: 919 6 919
 -- Name: box2d_overlap(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4886,7 +3252,7 @@ CREATE FUNCTION box2d_overlap(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 90 (class 1255 OID 50159)
+-- TOC entry 90 (class 1255 OID 65151)
 -- Dependencies: 6 919 919
 -- Name: box2d_overleft(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4897,8 +3263,8 @@ CREATE FUNCTION box2d_overleft(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 91 (class 1255 OID 50160)
--- Dependencies: 919 919 6
+-- TOC entry 91 (class 1255 OID 65152)
+-- Dependencies: 6 919 919
 -- Name: box2d_overright(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4908,7 +3274,7 @@ CREATE FUNCTION box2d_overright(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 92 (class 1255 OID 50161)
+-- TOC entry 92 (class 1255 OID 65153)
 -- Dependencies: 6 919 919
 -- Name: box2d_right(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4919,7 +3285,7 @@ CREATE FUNCTION box2d_right(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 93 (class 1255 OID 50162)
+-- TOC entry 93 (class 1255 OID 65154)
 -- Dependencies: 6 919 919
 -- Name: box2d_same(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4930,8 +3296,8 @@ CREATE FUNCTION box2d_same(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 94 (class 1255 OID 50163)
--- Dependencies: 958 6 966
+-- TOC entry 94 (class 1255 OID 65155)
+-- Dependencies: 966 958 6
 -- Name: box3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4941,8 +3307,8 @@ CREATE FUNCTION box3d(geometry) RETURNS box3d
 
 
 --
--- TOC entry 95 (class 1255 OID 50164)
--- Dependencies: 6 919 958
+-- TOC entry 95 (class 1255 OID 65156)
+-- Dependencies: 919 958 6
 -- Name: box3d(box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4952,7 +3318,7 @@ CREATE FUNCTION box3d(box2d) RETURNS box3d
 
 
 --
--- TOC entry 96 (class 1255 OID 50165)
+-- TOC entry 96 (class 1255 OID 65157)
 -- Dependencies: 958 6
 -- Name: box3d_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4963,8 +3329,8 @@ CREATE FUNCTION box3d_in(cstring) RETURNS box3d
 
 
 --
--- TOC entry 97 (class 1255 OID 50166)
--- Dependencies: 6 958
+-- TOC entry 97 (class 1255 OID 65158)
+-- Dependencies: 958 6
 -- Name: box3d_out(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4974,7 +3340,7 @@ CREATE FUNCTION box3d_out(box3d) RETURNS cstring
 
 
 --
--- TOC entry 98 (class 1255 OID 50167)
+-- TOC entry 98 (class 1255 OID 65159)
 -- Dependencies: 6 958
 -- Name: box3dtobox(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -4985,8 +3351,8 @@ CREATE FUNCTION box3dtobox(box3d) RETURNS box
 
 
 --
--- TOC entry 99 (class 1255 OID 50168)
--- Dependencies: 6 966 966
+-- TOC entry 99 (class 1255 OID 65160)
+-- Dependencies: 966 966 6
 -- Name: buffer(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -4996,7 +3362,7 @@ CREATE FUNCTION buffer(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 100 (class 1255 OID 50169)
+-- TOC entry 100 (class 1255 OID 65161)
 -- Dependencies: 6 966 966
 -- Name: buffer(geometry, double precision, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5007,8 +3373,8 @@ CREATE FUNCTION buffer(geometry, double precision, integer) RETURNS geometry
 
 
 --
--- TOC entry 101 (class 1255 OID 50170)
--- Dependencies: 6 1048 1048
+-- TOC entry 101 (class 1255 OID 65162)
+-- Dependencies: 6 974 974
 -- Name: build_histogram2d(histogram2d, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5018,8 +3384,8 @@ CREATE FUNCTION build_histogram2d(histogram2d, text, text) RETURNS histogram2d
 
 
 --
--- TOC entry 102 (class 1255 OID 50171)
--- Dependencies: 6 1048 1152 1048
+-- TOC entry 102 (class 1255 OID 65163)
+-- Dependencies: 6 974 1085 974
 -- Name: build_histogram2d(histogram2d, text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5034,8 +3400,8 @@ $_$
 
 
 --
--- TOC entry 103 (class 1255 OID 50172)
--- Dependencies: 6 966 966
+-- TOC entry 103 (class 1255 OID 65164)
+-- Dependencies: 966 6 966
 -- Name: buildarea(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5045,8 +3411,8 @@ CREATE FUNCTION buildarea(geometry) RETURNS geometry
 
 
 --
--- TOC entry 104 (class 1255 OID 50173)
--- Dependencies: 966 6
+-- TOC entry 104 (class 1255 OID 65165)
+-- Dependencies: 6 966
 -- Name: bytea(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5056,7 +3422,7 @@ CREATE FUNCTION bytea(geometry) RETURNS bytea
 
 
 --
--- TOC entry 105 (class 1255 OID 50174)
+-- TOC entry 105 (class 1255 OID 65166)
 -- Dependencies: 6
 -- Name: cache_bbox(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5067,7 +3433,7 @@ CREATE FUNCTION cache_bbox() RETURNS trigger
 
 
 --
--- TOC entry 106 (class 1255 OID 50175)
+-- TOC entry 106 (class 1255 OID 65167)
 -- Dependencies: 6 966 966
 -- Name: centroid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5078,8 +3444,8 @@ CREATE FUNCTION centroid(geometry) RETURNS geometry
 
 
 --
--- TOC entry 107 (class 1255 OID 50176)
--- Dependencies: 1152 6
+-- TOC entry 107 (class 1255 OID 65168)
+-- Dependencies: 6 1085
 -- Name: checkauth(text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5120,7 +3486,7 @@ $_$
 
 
 --
--- TOC entry 108 (class 1255 OID 50177)
+-- TOC entry 108 (class 1255 OID 65169)
 -- Dependencies: 6
 -- Name: checkauth(text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5131,7 +3497,7 @@ CREATE FUNCTION checkauth(text, text) RETURNS integer
 
 
 --
--- TOC entry 109 (class 1255 OID 50178)
+-- TOC entry 109 (class 1255 OID 65170)
 -- Dependencies: 6
 -- Name: checkauthtrigger(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5142,7 +3508,7 @@ CREATE FUNCTION checkauthtrigger() RETURNS trigger
 
 
 --
--- TOC entry 110 (class 1255 OID 50179)
+-- TOC entry 110 (class 1255 OID 65171)
 -- Dependencies: 6 961
 -- Name: chip_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5153,7 +3519,7 @@ CREATE FUNCTION chip_in(cstring) RETURNS chip
 
 
 --
--- TOC entry 111 (class 1255 OID 50180)
+-- TOC entry 111 (class 1255 OID 65172)
 -- Dependencies: 6 961
 -- Name: chip_out(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5164,8 +3530,8 @@ CREATE FUNCTION chip_out(chip) RETURNS cstring
 
 
 --
--- TOC entry 112 (class 1255 OID 50181)
--- Dependencies: 966 6 966 966
+-- TOC entry 112 (class 1255 OID 65173)
+-- Dependencies: 6 966 966 966
 -- Name: collect(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5175,8 +3541,8 @@ CREATE FUNCTION collect(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 113 (class 1255 OID 50182)
--- Dependencies: 966 6 968
+-- TOC entry 113 (class 1255 OID 65174)
+-- Dependencies: 6 966 968
 -- Name: collect_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5186,8 +3552,8 @@ CREATE FUNCTION collect_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 114 (class 1255 OID 50183)
--- Dependencies: 966 6 966 966
+-- TOC entry 114 (class 1255 OID 65175)
+-- Dependencies: 966 966 966 6
 -- Name: collector(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5197,8 +3563,8 @@ CREATE FUNCTION collector(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 115 (class 1255 OID 50184)
--- Dependencies: 919 966 919 6
+-- TOC entry 115 (class 1255 OID 65176)
+-- Dependencies: 966 919 919 6
 -- Name: combine_bbox(box2d, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5208,8 +3574,8 @@ CREATE FUNCTION combine_bbox(box2d, geometry) RETURNS box2d
 
 
 --
--- TOC entry 116 (class 1255 OID 50185)
--- Dependencies: 6 958 958 966
+-- TOC entry 116 (class 1255 OID 65177)
+-- Dependencies: 966 958 6 958
 -- Name: combine_bbox(box3d, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5219,7 +3585,7 @@ CREATE FUNCTION combine_bbox(box3d, geometry) RETURNS box3d
 
 
 --
--- TOC entry 117 (class 1255 OID 50186)
+-- TOC entry 117 (class 1255 OID 65178)
 -- Dependencies: 961 6
 -- Name: compression(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5230,8 +3596,8 @@ CREATE FUNCTION compression(chip) RETURNS integer
 
 
 --
--- TOC entry 118 (class 1255 OID 50187)
--- Dependencies: 966 6 966
+-- TOC entry 118 (class 1255 OID 65179)
+-- Dependencies: 6 966 966
 -- Name: contains(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5241,8 +3607,8 @@ CREATE FUNCTION contains(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 119 (class 1255 OID 50188)
--- Dependencies: 966 6 966
+-- TOC entry 119 (class 1255 OID 65180)
+-- Dependencies: 6 966 966
 -- Name: convexhull(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5252,8 +3618,8 @@ CREATE FUNCTION convexhull(geometry) RETURNS geometry
 
 
 --
--- TOC entry 120 (class 1255 OID 50189)
--- Dependencies: 1048 6 919
+-- TOC entry 120 (class 1255 OID 65181)
+-- Dependencies: 6 974 919
 -- Name: create_histogram2d(box2d, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5263,8 +3629,8 @@ CREATE FUNCTION create_histogram2d(box2d, integer) RETURNS histogram2d
 
 
 --
--- TOC entry 121 (class 1255 OID 50190)
--- Dependencies: 966 6 966
+-- TOC entry 121 (class 1255 OID 65182)
+-- Dependencies: 966 966 6
 -- Name: crosses(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5274,8 +3640,8 @@ CREATE FUNCTION crosses(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 122 (class 1255 OID 50191)
--- Dependencies: 6 961
+-- TOC entry 122 (class 1255 OID 65183)
+-- Dependencies: 961 6
 -- Name: datatype(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5285,8 +3651,8 @@ CREATE FUNCTION datatype(chip) RETURNS integer
 
 
 --
--- TOC entry 123 (class 1255 OID 50192)
--- Dependencies: 966 6 966 966
+-- TOC entry 123 (class 1255 OID 65184)
+-- Dependencies: 6 966 966 966
 -- Name: difference(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5296,8 +3662,8 @@ CREATE FUNCTION difference(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 124 (class 1255 OID 50193)
--- Dependencies: 966 6
+-- TOC entry 124 (class 1255 OID 65185)
+-- Dependencies: 6 966
 -- Name: dimension(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5307,8 +3673,8 @@ CREATE FUNCTION dimension(geometry) RETURNS integer
 
 
 --
--- TOC entry 125 (class 1255 OID 50194)
--- Dependencies: 6 1152
+-- TOC entry 125 (class 1255 OID 65186)
+-- Dependencies: 6 1085
 -- Name: disablelongtransactions(); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5351,8 +3717,8 @@ $$
 
 
 --
--- TOC entry 126 (class 1255 OID 50195)
--- Dependencies: 966 6 966
+-- TOC entry 126 (class 1255 OID 65187)
+-- Dependencies: 6 966 966
 -- Name: disjoint(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5362,8 +3728,8 @@ CREATE FUNCTION disjoint(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 127 (class 1255 OID 50196)
--- Dependencies: 966 6 966
+-- TOC entry 127 (class 1255 OID 65188)
+-- Dependencies: 6 966 966
 -- Name: distance(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5373,7 +3739,7 @@ CREATE FUNCTION distance(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 128 (class 1255 OID 50197)
+-- TOC entry 128 (class 1255 OID 65189)
 -- Dependencies: 966 6 966
 -- Name: distance_sphere(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5384,8 +3750,8 @@ CREATE FUNCTION distance_sphere(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 129 (class 1255 OID 50198)
--- Dependencies: 966 6 966 1114
+-- TOC entry 129 (class 1255 OID 65190)
+-- Dependencies: 966 6 966 1024
 -- Name: distance_spheroid(geometry, geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5395,7 +3761,7 @@ CREATE FUNCTION distance_spheroid(geometry, geometry, spheroid) RETURNS double p
 
 
 --
--- TOC entry 130 (class 1255 OID 50199)
+-- TOC entry 130 (class 1255 OID 65191)
 -- Dependencies: 966 6 966
 -- Name: dropbbox(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5406,8 +3772,8 @@ CREATE FUNCTION dropbbox(geometry) RETURNS geometry
 
 
 --
--- TOC entry 131 (class 1255 OID 50200)
--- Dependencies: 1152 6
+-- TOC entry 131 (class 1255 OID 65192)
+-- Dependencies: 6 1085
 -- Name: dropgeometrycolumn(character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5478,8 +3844,8 @@ $_$
 
 
 --
--- TOC entry 132 (class 1255 OID 50201)
--- Dependencies: 1152 6
+-- TOC entry 132 (class 1255 OID 65193)
+-- Dependencies: 1085 6
 -- Name: dropgeometrycolumn(character varying, character varying, character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5496,8 +3862,8 @@ $_$
 
 
 --
--- TOC entry 133 (class 1255 OID 50202)
--- Dependencies: 6 1152
+-- TOC entry 133 (class 1255 OID 65194)
+-- Dependencies: 1085 6
 -- Name: dropgeometrycolumn(character varying, character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5514,8 +3880,8 @@ $_$
 
 
 --
--- TOC entry 134 (class 1255 OID 50203)
--- Dependencies: 6 1152
+-- TOC entry 134 (class 1255 OID 65195)
+-- Dependencies: 1085 6
 -- Name: dropgeometrytable(character varying, character varying, character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5564,7 +3930,7 @@ $_$
 
 
 --
--- TOC entry 135 (class 1255 OID 50204)
+-- TOC entry 135 (class 1255 OID 65196)
 -- Dependencies: 6
 -- Name: dropgeometrytable(character varying, character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5575,7 +3941,7 @@ CREATE FUNCTION dropgeometrytable(character varying, character varying) RETURNS 
 
 
 --
--- TOC entry 136 (class 1255 OID 50205)
+-- TOC entry 136 (class 1255 OID 65197)
 -- Dependencies: 6
 -- Name: dropgeometrytable(character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5586,8 +3952,8 @@ CREATE FUNCTION dropgeometrytable(character varying) RETURNS text
 
 
 --
--- TOC entry 137 (class 1255 OID 50206)
--- Dependencies: 966 1034 6
+-- TOC entry 137 (class 1255 OID 65198)
+-- Dependencies: 972 966 6
 -- Name: dump(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5597,8 +3963,8 @@ CREATE FUNCTION dump(geometry) RETURNS SETOF geometry_dump
 
 
 --
--- TOC entry 138 (class 1255 OID 50207)
--- Dependencies: 966 1034 6
+-- TOC entry 138 (class 1255 OID 65199)
+-- Dependencies: 6 972 966
 -- Name: dumprings(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5608,8 +3974,8 @@ CREATE FUNCTION dumprings(geometry) RETURNS SETOF geometry_dump
 
 
 --
--- TOC entry 139 (class 1255 OID 50208)
--- Dependencies: 6 1152
+-- TOC entry 139 (class 1255 OID 65200)
+-- Dependencies: 1085 6
 -- Name: enablelongtransactions(); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5673,8 +4039,8 @@ $$
 
 
 --
--- TOC entry 140 (class 1255 OID 50209)
--- Dependencies: 966 966 6
+-- TOC entry 140 (class 1255 OID 65201)
+-- Dependencies: 966 6 966
 -- Name: endpoint(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5684,8 +4050,8 @@ CREATE FUNCTION endpoint(geometry) RETURNS geometry
 
 
 --
--- TOC entry 141 (class 1255 OID 50210)
--- Dependencies: 966 6 966
+-- TOC entry 141 (class 1255 OID 65202)
+-- Dependencies: 966 966 6
 -- Name: envelope(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5695,8 +4061,8 @@ CREATE FUNCTION envelope(geometry) RETURNS geometry
 
 
 --
--- TOC entry 142 (class 1255 OID 50211)
--- Dependencies: 966 6 966
+-- TOC entry 142 (class 1255 OID 65203)
+-- Dependencies: 966 966 6
 -- Name: equals(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5706,8 +4072,8 @@ CREATE FUNCTION equals(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 143 (class 1255 OID 50212)
--- Dependencies: 1048 919 6
+-- TOC entry 143 (class 1255 OID 65204)
+-- Dependencies: 974 6 919
 -- Name: estimate_histogram2d(histogram2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5717,7 +4083,7 @@ CREATE FUNCTION estimate_histogram2d(histogram2d, box2d) RETURNS double precisio
 
 
 --
--- TOC entry 144 (class 1255 OID 50213)
+-- TOC entry 144 (class 1255 OID 65205)
 -- Dependencies: 919 6
 -- Name: estimated_extent(text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5728,7 +4094,7 @@ CREATE FUNCTION estimated_extent(text, text, text) RETURNS box2d
 
 
 --
--- TOC entry 145 (class 1255 OID 50214)
+-- TOC entry 145 (class 1255 OID 65206)
 -- Dependencies: 6 919
 -- Name: estimated_extent(text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -5739,8 +4105,8 @@ CREATE FUNCTION estimated_extent(text, text) RETURNS box2d
 
 
 --
--- TOC entry 146 (class 1255 OID 50215)
--- Dependencies: 6 958 958
+-- TOC entry 146 (class 1255 OID 65207)
+-- Dependencies: 958 958 6
 -- Name: expand(box3d, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5750,8 +4116,8 @@ CREATE FUNCTION expand(box3d, double precision) RETURNS box3d
 
 
 --
--- TOC entry 147 (class 1255 OID 50216)
--- Dependencies: 919 6 919
+-- TOC entry 147 (class 1255 OID 65208)
+-- Dependencies: 919 919 6
 -- Name: expand(box2d, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5761,8 +4127,8 @@ CREATE FUNCTION expand(box2d, double precision) RETURNS box2d
 
 
 --
--- TOC entry 148 (class 1255 OID 50217)
--- Dependencies: 966 6 966
+-- TOC entry 148 (class 1255 OID 65209)
+-- Dependencies: 966 966 6
 -- Name: expand(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5772,8 +4138,8 @@ CREATE FUNCTION expand(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 149 (class 1255 OID 50218)
--- Dependencies: 6 1048 1048
+-- TOC entry 149 (class 1255 OID 65210)
+-- Dependencies: 974 6 974
 -- Name: explode_histogram2d(histogram2d, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5783,8 +4149,8 @@ CREATE FUNCTION explode_histogram2d(histogram2d, text) RETURNS histogram2d
 
 
 --
--- TOC entry 150 (class 1255 OID 50219)
--- Dependencies: 6 966 966
+-- TOC entry 150 (class 1255 OID 65211)
+-- Dependencies: 966 6 966
 -- Name: exteriorring(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5794,8 +4160,8 @@ CREATE FUNCTION exteriorring(geometry) RETURNS geometry
 
 
 --
--- TOC entry 151 (class 1255 OID 50220)
--- Dependencies: 6 961
+-- TOC entry 151 (class 1255 OID 65212)
+-- Dependencies: 961 6
 -- Name: factor(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5805,8 +4171,8 @@ CREATE FUNCTION factor(chip) RETURNS real
 
 
 --
--- TOC entry 152 (class 1255 OID 50221)
--- Dependencies: 6 919 1152
+-- TOC entry 152 (class 1255 OID 65213)
+-- Dependencies: 6 1085 919
 -- Name: find_extent(text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5828,8 +4194,8 @@ $_$
 
 
 --
--- TOC entry 153 (class 1255 OID 50222)
--- Dependencies: 6 1152 919
+-- TOC entry 153 (class 1255 OID 65214)
+-- Dependencies: 6 1085 919
 -- Name: find_extent(text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5850,8 +4216,8 @@ $_$
 
 
 --
--- TOC entry 154 (class 1255 OID 50223)
--- Dependencies: 6 1152
+-- TOC entry 154 (class 1255 OID 65215)
+-- Dependencies: 1085 6
 -- Name: find_srid(character varying, character varying, character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -5893,8 +4259,8 @@ $_$
 
 
 --
--- TOC entry 155 (class 1255 OID 50224)
--- Dependencies: 6 1152
+-- TOC entry 155 (class 1255 OID 65216)
+-- Dependencies: 1085 6
 -- Name: fix_geometry_columns(); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6006,7 +4372,7 @@ $$
 
 
 --
--- TOC entry 156 (class 1255 OID 50225)
+-- TOC entry 156 (class 1255 OID 65217)
 -- Dependencies: 6 966 966
 -- Name: force_2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6017,7 +4383,7 @@ CREATE FUNCTION force_2d(geometry) RETURNS geometry
 
 
 --
--- TOC entry 157 (class 1255 OID 50226)
+-- TOC entry 157 (class 1255 OID 65218)
 -- Dependencies: 966 6 966
 -- Name: force_3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6028,8 +4394,8 @@ CREATE FUNCTION force_3d(geometry) RETURNS geometry
 
 
 --
--- TOC entry 158 (class 1255 OID 50227)
--- Dependencies: 6 966 966
+-- TOC entry 158 (class 1255 OID 65219)
+-- Dependencies: 966 966 6
 -- Name: force_3dm(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6039,8 +4405,8 @@ CREATE FUNCTION force_3dm(geometry) RETURNS geometry
 
 
 --
--- TOC entry 159 (class 1255 OID 50228)
--- Dependencies: 966 966 6
+-- TOC entry 159 (class 1255 OID 65220)
+-- Dependencies: 6 966 966
 -- Name: force_3dz(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6050,7 +4416,7 @@ CREATE FUNCTION force_3dz(geometry) RETURNS geometry
 
 
 --
--- TOC entry 160 (class 1255 OID 50229)
+-- TOC entry 160 (class 1255 OID 65221)
 -- Dependencies: 966 966 6
 -- Name: force_4d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6061,7 +4427,7 @@ CREATE FUNCTION force_4d(geometry) RETURNS geometry
 
 
 --
--- TOC entry 161 (class 1255 OID 50230)
+-- TOC entry 161 (class 1255 OID 65222)
 -- Dependencies: 6 966 966
 -- Name: force_collection(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6072,8 +4438,8 @@ CREATE FUNCTION force_collection(geometry) RETURNS geometry
 
 
 --
--- TOC entry 162 (class 1255 OID 50231)
--- Dependencies: 966 966 6
+-- TOC entry 162 (class 1255 OID 65223)
+-- Dependencies: 6 966 966
 -- Name: forcerhr(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6083,8 +4449,8 @@ CREATE FUNCTION forcerhr(geometry) RETURNS geometry
 
 
 --
--- TOC entry 163 (class 1255 OID 50232)
--- Dependencies: 6 968 966 968
+-- TOC entry 163 (class 1255 OID 65224)
+-- Dependencies: 966 968 968 6
 -- Name: geom_accum(geometry[], geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6094,8 +4460,8 @@ CREATE FUNCTION geom_accum(geometry[], geometry) RETURNS geometry[]
 
 
 --
--- TOC entry 164 (class 1255 OID 50233)
--- Dependencies: 6 966
+-- TOC entry 164 (class 1255 OID 65225)
+-- Dependencies: 966 6
 -- Name: geomcollfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6110,7 +4476,7 @@ CREATE FUNCTION geomcollfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 165 (class 1255 OID 50234)
+-- TOC entry 165 (class 1255 OID 65226)
 -- Dependencies: 6 966
 -- Name: geomcollfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6126,8 +4492,8 @@ CREATE FUNCTION geomcollfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 166 (class 1255 OID 50235)
--- Dependencies: 6 966
+-- TOC entry 166 (class 1255 OID 65227)
+-- Dependencies: 966 6
 -- Name: geomcollfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6142,7 +4508,7 @@ CREATE FUNCTION geomcollfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 167 (class 1255 OID 50236)
+-- TOC entry 167 (class 1255 OID 65228)
 -- Dependencies: 966 6
 -- Name: geomcollfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6158,8 +4524,8 @@ CREATE FUNCTION geomcollfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 168 (class 1255 OID 50237)
--- Dependencies: 966 6 919
+-- TOC entry 168 (class 1255 OID 65229)
+-- Dependencies: 966 919 6
 -- Name: geometry(box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6169,8 +4535,8 @@ CREATE FUNCTION geometry(box2d) RETURNS geometry
 
 
 --
--- TOC entry 169 (class 1255 OID 50238)
--- Dependencies: 958 6 966
+-- TOC entry 169 (class 1255 OID 65230)
+-- Dependencies: 6 966 958
 -- Name: geometry(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6180,7 +4546,7 @@ CREATE FUNCTION geometry(box3d) RETURNS geometry
 
 
 --
--- TOC entry 170 (class 1255 OID 50239)
+-- TOC entry 170 (class 1255 OID 65231)
 -- Dependencies: 966 6
 -- Name: geometry(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6191,8 +4557,8 @@ CREATE FUNCTION geometry(text) RETURNS geometry
 
 
 --
--- TOC entry 171 (class 1255 OID 50240)
--- Dependencies: 961 966 6
+-- TOC entry 171 (class 1255 OID 65232)
+-- Dependencies: 966 961 6
 -- Name: geometry(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6202,8 +4568,8 @@ CREATE FUNCTION geometry(chip) RETURNS geometry
 
 
 --
--- TOC entry 172 (class 1255 OID 50241)
--- Dependencies: 6 966
+-- TOC entry 172 (class 1255 OID 65233)
+-- Dependencies: 966 6
 -- Name: geometry(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6213,7 +4579,7 @@ CREATE FUNCTION geometry(bytea) RETURNS geometry
 
 
 --
--- TOC entry 173 (class 1255 OID 50242)
+-- TOC entry 173 (class 1255 OID 65234)
 -- Dependencies: 966 6 966
 -- Name: geometry_above(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6224,7 +4590,7 @@ CREATE FUNCTION geometry_above(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 174 (class 1255 OID 50243)
+-- TOC entry 174 (class 1255 OID 65235)
 -- Dependencies: 6
 -- Name: geometry_analyze(internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6235,8 +4601,8 @@ CREATE FUNCTION geometry_analyze(internal) RETURNS boolean
 
 
 --
--- TOC entry 175 (class 1255 OID 50244)
--- Dependencies: 6 966 966
+-- TOC entry 175 (class 1255 OID 65236)
+-- Dependencies: 966 6 966
 -- Name: geometry_below(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6246,8 +4612,8 @@ CREATE FUNCTION geometry_below(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 176 (class 1255 OID 50245)
--- Dependencies: 966 6 966
+-- TOC entry 176 (class 1255 OID 65237)
+-- Dependencies: 6 966 966
 -- Name: geometry_cmp(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6257,8 +4623,8 @@ CREATE FUNCTION geometry_cmp(geometry, geometry) RETURNS integer
 
 
 --
--- TOC entry 177 (class 1255 OID 50246)
--- Dependencies: 966 6 966
+-- TOC entry 177 (class 1255 OID 65238)
+-- Dependencies: 6 966 966
 -- Name: geometry_contain(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6268,7 +4634,7 @@ CREATE FUNCTION geometry_contain(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 178 (class 1255 OID 50247)
+-- TOC entry 178 (class 1255 OID 65239)
 -- Dependencies: 966 6 966
 -- Name: geometry_contained(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6279,8 +4645,8 @@ CREATE FUNCTION geometry_contained(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 179 (class 1255 OID 50248)
--- Dependencies: 966 966 6
+-- TOC entry 179 (class 1255 OID 65240)
+-- Dependencies: 966 6 966
 -- Name: geometry_eq(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6290,8 +4656,8 @@ CREATE FUNCTION geometry_eq(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 180 (class 1255 OID 50249)
--- Dependencies: 6 966 966
+-- TOC entry 180 (class 1255 OID 65241)
+-- Dependencies: 966 6 966
 -- Name: geometry_ge(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6301,7 +4667,7 @@ CREATE FUNCTION geometry_ge(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 181 (class 1255 OID 50250)
+-- TOC entry 181 (class 1255 OID 65242)
 -- Dependencies: 966 6 966
 -- Name: geometry_gt(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6312,7 +4678,7 @@ CREATE FUNCTION geometry_gt(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 182 (class 1255 OID 50251)
+-- TOC entry 182 (class 1255 OID 65243)
 -- Dependencies: 6 966
 -- Name: geometry_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6323,7 +4689,7 @@ CREATE FUNCTION geometry_in(cstring) RETURNS geometry
 
 
 --
--- TOC entry 183 (class 1255 OID 50252)
+-- TOC entry 183 (class 1255 OID 65244)
 -- Dependencies: 966 6 966
 -- Name: geometry_le(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6334,8 +4700,8 @@ CREATE FUNCTION geometry_le(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 184 (class 1255 OID 50253)
--- Dependencies: 966 966 6
+-- TOC entry 184 (class 1255 OID 65245)
+-- Dependencies: 966 6 966
 -- Name: geometry_left(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6345,7 +4711,7 @@ CREATE FUNCTION geometry_left(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 185 (class 1255 OID 50254)
+-- TOC entry 185 (class 1255 OID 65246)
 -- Dependencies: 966 6 966
 -- Name: geometry_lt(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6356,8 +4722,8 @@ CREATE FUNCTION geometry_lt(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 186 (class 1255 OID 50255)
--- Dependencies: 6 966
+-- TOC entry 186 (class 1255 OID 65247)
+-- Dependencies: 966 6
 -- Name: geometry_out(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6367,7 +4733,7 @@ CREATE FUNCTION geometry_out(geometry) RETURNS cstring
 
 
 --
--- TOC entry 187 (class 1255 OID 50256)
+-- TOC entry 187 (class 1255 OID 65248)
 -- Dependencies: 966 966 6
 -- Name: geometry_overabove(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6378,7 +4744,7 @@ CREATE FUNCTION geometry_overabove(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 188 (class 1255 OID 50257)
+-- TOC entry 188 (class 1255 OID 65249)
 -- Dependencies: 966 6 966
 -- Name: geometry_overbelow(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6389,8 +4755,8 @@ CREATE FUNCTION geometry_overbelow(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 189 (class 1255 OID 50258)
--- Dependencies: 6 966 966
+-- TOC entry 189 (class 1255 OID 65250)
+-- Dependencies: 966 966 6
 -- Name: geometry_overlap(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6400,8 +4766,8 @@ CREATE FUNCTION geometry_overlap(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 190 (class 1255 OID 50259)
--- Dependencies: 6 966 966
+-- TOC entry 190 (class 1255 OID 65251)
+-- Dependencies: 966 6 966
 -- Name: geometry_overleft(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6411,8 +4777,8 @@ CREATE FUNCTION geometry_overleft(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 191 (class 1255 OID 50260)
--- Dependencies: 6 966 966
+-- TOC entry 191 (class 1255 OID 65252)
+-- Dependencies: 966 966 6
 -- Name: geometry_overright(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6422,7 +4788,7 @@ CREATE FUNCTION geometry_overright(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 192 (class 1255 OID 50261)
+-- TOC entry 192 (class 1255 OID 65253)
 -- Dependencies: 6 966
 -- Name: geometry_recv(internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6433,8 +4799,8 @@ CREATE FUNCTION geometry_recv(internal) RETURNS geometry
 
 
 --
--- TOC entry 193 (class 1255 OID 50262)
--- Dependencies: 966 6 966
+-- TOC entry 193 (class 1255 OID 65254)
+-- Dependencies: 966 966 6
 -- Name: geometry_right(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6444,8 +4810,8 @@ CREATE FUNCTION geometry_right(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 194 (class 1255 OID 50263)
--- Dependencies: 6 966 966
+-- TOC entry 194 (class 1255 OID 65255)
+-- Dependencies: 966 966 6
 -- Name: geometry_same(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6455,8 +4821,8 @@ CREATE FUNCTION geometry_same(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 195 (class 1255 OID 50264)
--- Dependencies: 6 966
+-- TOC entry 195 (class 1255 OID 65256)
+-- Dependencies: 966 6
 -- Name: geometry_send(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6466,7 +4832,7 @@ CREATE FUNCTION geometry_send(geometry) RETURNS bytea
 
 
 --
--- TOC entry 196 (class 1255 OID 50265)
+-- TOC entry 196 (class 1255 OID 65257)
 -- Dependencies: 966 6
 -- Name: geometryfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6477,7 +4843,7 @@ CREATE FUNCTION geometryfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 197 (class 1255 OID 50266)
+-- TOC entry 197 (class 1255 OID 65258)
 -- Dependencies: 966 6
 -- Name: geometryfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6488,7 +4854,7 @@ CREATE FUNCTION geometryfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 198 (class 1255 OID 50267)
+-- TOC entry 198 (class 1255 OID 65259)
 -- Dependencies: 6 966 966
 -- Name: geometryn(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6499,7 +4865,7 @@ CREATE FUNCTION geometryn(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 199 (class 1255 OID 50268)
+-- TOC entry 199 (class 1255 OID 65260)
 -- Dependencies: 6 966
 -- Name: geomfromewkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6510,7 +4876,7 @@ CREATE FUNCTION geomfromewkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 200 (class 1255 OID 50269)
+-- TOC entry 200 (class 1255 OID 65261)
 -- Dependencies: 6 966
 -- Name: geomfromewkt(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6521,7 +4887,7 @@ CREATE FUNCTION geomfromewkt(text) RETURNS geometry
 
 
 --
--- TOC entry 201 (class 1255 OID 50270)
+-- TOC entry 201 (class 1255 OID 65262)
 -- Dependencies: 6 966
 -- Name: geomfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6532,7 +4898,7 @@ CREATE FUNCTION geomfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 202 (class 1255 OID 50271)
+-- TOC entry 202 (class 1255 OID 65263)
 -- Dependencies: 6 966
 -- Name: geomfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6543,8 +4909,8 @@ CREATE FUNCTION geomfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 203 (class 1255 OID 50272)
--- Dependencies: 966 6
+-- TOC entry 203 (class 1255 OID 65264)
+-- Dependencies: 6 966
 -- Name: geomfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6554,8 +4920,8 @@ CREATE FUNCTION geomfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 204 (class 1255 OID 50273)
--- Dependencies: 6 966
+-- TOC entry 204 (class 1255 OID 65265)
+-- Dependencies: 966 6
 -- Name: geomfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6565,8 +4931,8 @@ CREATE FUNCTION geomfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 205 (class 1255 OID 50274)
--- Dependencies: 966 6 966 966
+-- TOC entry 205 (class 1255 OID 65266)
+-- Dependencies: 6 966 966 966
 -- Name: geomunion(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6576,8 +4942,8 @@ CREATE FUNCTION geomunion(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 206 (class 1255 OID 50275)
--- Dependencies: 966 6 966
+-- TOC entry 206 (class 1255 OID 65267)
+-- Dependencies: 6 966 966
 -- Name: geosnoop(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6587,8 +4953,8 @@ CREATE FUNCTION geosnoop(geometry) RETURNS geometry
 
 
 --
--- TOC entry 207 (class 1255 OID 50276)
--- Dependencies: 1152 6
+-- TOC entry 207 (class 1255 OID 65268)
+-- Dependencies: 6 1085
 -- Name: get_proj4_from_srid(integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6602,8 +4968,8 @@ $_$
 
 
 --
--- TOC entry 208 (class 1255 OID 50277)
--- Dependencies: 6 919 966
+-- TOC entry 208 (class 1255 OID 65269)
+-- Dependencies: 6 966 919
 -- Name: getbbox(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6613,7 +4979,7 @@ CREATE FUNCTION getbbox(geometry) RETURNS box2d
 
 
 --
--- TOC entry 209 (class 1255 OID 50278)
+-- TOC entry 209 (class 1255 OID 65270)
 -- Dependencies: 6 966
 -- Name: getsrid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6624,7 +4990,7 @@ CREATE FUNCTION getsrid(geometry) RETURNS integer
 
 
 --
--- TOC entry 210 (class 1255 OID 50279)
+-- TOC entry 210 (class 1255 OID 65271)
 -- Dependencies: 6
 -- Name: gettransactionid(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6635,8 +5001,8 @@ CREATE FUNCTION gettransactionid() RETURNS xid
 
 
 --
--- TOC entry 211 (class 1255 OID 50280)
--- Dependencies: 966 6
+-- TOC entry 211 (class 1255 OID 65272)
+-- Dependencies: 6 966
 -- Name: hasbbox(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6646,8 +5012,8 @@ CREATE FUNCTION hasbbox(geometry) RETURNS boolean
 
 
 --
--- TOC entry 212 (class 1255 OID 50281)
--- Dependencies: 961 6
+-- TOC entry 212 (class 1255 OID 65273)
+-- Dependencies: 6 961
 -- Name: height(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6657,8 +5023,8 @@ CREATE FUNCTION height(chip) RETURNS integer
 
 
 --
--- TOC entry 213 (class 1255 OID 50282)
--- Dependencies: 6 1048
+-- TOC entry 213 (class 1255 OID 65274)
+-- Dependencies: 6 974
 -- Name: histogram2d_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6668,8 +5034,8 @@ CREATE FUNCTION histogram2d_in(cstring) RETURNS histogram2d
 
 
 --
--- TOC entry 214 (class 1255 OID 50283)
--- Dependencies: 1048 6
+-- TOC entry 214 (class 1255 OID 65275)
+-- Dependencies: 6 974
 -- Name: histogram2d_out(histogram2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6679,7 +5045,7 @@ CREATE FUNCTION histogram2d_out(histogram2d) RETURNS cstring
 
 
 --
--- TOC entry 215 (class 1255 OID 50284)
+-- TOC entry 215 (class 1255 OID 65276)
 -- Dependencies: 966 6 966
 -- Name: interiorringn(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6690,8 +5056,8 @@ CREATE FUNCTION interiorringn(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 216 (class 1255 OID 50285)
--- Dependencies: 966 6 966 966
+-- TOC entry 216 (class 1255 OID 65277)
+-- Dependencies: 966 966 6 966
 -- Name: intersection(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6701,7 +5067,7 @@ CREATE FUNCTION intersection(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 217 (class 1255 OID 50286)
+-- TOC entry 217 (class 1255 OID 65278)
 -- Dependencies: 6 966 966
 -- Name: intersects(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6712,8 +5078,8 @@ CREATE FUNCTION intersects(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 218 (class 1255 OID 50287)
--- Dependencies: 966 6
+-- TOC entry 218 (class 1255 OID 65279)
+-- Dependencies: 6 966
 -- Name: isclosed(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6723,7 +5089,7 @@ CREATE FUNCTION isclosed(geometry) RETURNS boolean
 
 
 --
--- TOC entry 219 (class 1255 OID 50288)
+-- TOC entry 219 (class 1255 OID 65280)
 -- Dependencies: 966 6
 -- Name: isempty(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6734,7 +5100,7 @@ CREATE FUNCTION isempty(geometry) RETURNS boolean
 
 
 --
--- TOC entry 220 (class 1255 OID 50289)
+-- TOC entry 220 (class 1255 OID 65281)
 -- Dependencies: 966 6
 -- Name: isring(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6745,7 +5111,7 @@ CREATE FUNCTION isring(geometry) RETURNS boolean
 
 
 --
--- TOC entry 221 (class 1255 OID 50290)
+-- TOC entry 221 (class 1255 OID 65282)
 -- Dependencies: 6 966
 -- Name: issimple(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6756,7 +5122,7 @@ CREATE FUNCTION issimple(geometry) RETURNS boolean
 
 
 --
--- TOC entry 222 (class 1255 OID 50291)
+-- TOC entry 222 (class 1255 OID 65283)
 -- Dependencies: 6 966
 -- Name: isvalid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6767,7 +5133,7 @@ CREATE FUNCTION isvalid(geometry) RETURNS boolean
 
 
 --
--- TOC entry 223 (class 1255 OID 50292)
+-- TOC entry 223 (class 1255 OID 65284)
 -- Dependencies: 6 966 966
 -- Name: jtsnoop(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6778,8 +5144,8 @@ CREATE FUNCTION jtsnoop(geometry) RETURNS geometry
 
 
 --
--- TOC entry 224 (class 1255 OID 50293)
--- Dependencies: 6 966
+-- TOC entry 224 (class 1255 OID 65285)
+-- Dependencies: 966 6
 -- Name: length(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6789,8 +5155,8 @@ CREATE FUNCTION length(geometry) RETURNS double precision
 
 
 --
--- TOC entry 225 (class 1255 OID 50294)
--- Dependencies: 6 966
+-- TOC entry 225 (class 1255 OID 65286)
+-- Dependencies: 966 6
 -- Name: length2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6800,8 +5166,8 @@ CREATE FUNCTION length2d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 226 (class 1255 OID 50295)
--- Dependencies: 966 6 1114
+-- TOC entry 226 (class 1255 OID 65287)
+-- Dependencies: 1024 966 6
 -- Name: length2d_spheroid(geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6811,8 +5177,8 @@ CREATE FUNCTION length2d_spheroid(geometry, spheroid) RETURNS double precision
 
 
 --
--- TOC entry 227 (class 1255 OID 50296)
--- Dependencies: 6 966
+-- TOC entry 227 (class 1255 OID 65288)
+-- Dependencies: 966 6
 -- Name: length3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6822,8 +5188,8 @@ CREATE FUNCTION length3d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 228 (class 1255 OID 50297)
--- Dependencies: 6 966 1114
+-- TOC entry 228 (class 1255 OID 65289)
+-- Dependencies: 6 966 1024
 -- Name: length3d_spheroid(geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6833,8 +5199,8 @@ CREATE FUNCTION length3d_spheroid(geometry, spheroid) RETURNS double precision
 
 
 --
--- TOC entry 229 (class 1255 OID 50298)
--- Dependencies: 966 6 1114
+-- TOC entry 229 (class 1255 OID 65290)
+-- Dependencies: 6 1024 966
 -- Name: length_spheroid(geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6844,8 +5210,8 @@ CREATE FUNCTION length_spheroid(geometry, spheroid) RETURNS double precision
 
 
 --
--- TOC entry 230 (class 1255 OID 50299)
--- Dependencies: 966 6 966
+-- TOC entry 230 (class 1255 OID 65291)
+-- Dependencies: 966 966 6
 -- Name: line_interpolate_point(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6855,8 +5221,8 @@ CREATE FUNCTION line_interpolate_point(geometry, double precision) RETURNS geome
 
 
 --
--- TOC entry 231 (class 1255 OID 50300)
--- Dependencies: 966 966 6
+-- TOC entry 231 (class 1255 OID 65292)
+-- Dependencies: 966 6 966
 -- Name: line_locate_point(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6866,8 +5232,8 @@ CREATE FUNCTION line_locate_point(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 232 (class 1255 OID 50301)
--- Dependencies: 966 6 966
+-- TOC entry 232 (class 1255 OID 65293)
+-- Dependencies: 966 966 6
 -- Name: line_substring(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6877,8 +5243,8 @@ CREATE FUNCTION line_substring(geometry, double precision, double precision) RET
 
 
 --
--- TOC entry 233 (class 1255 OID 50302)
--- Dependencies: 966 6 966
+-- TOC entry 233 (class 1255 OID 65294)
+-- Dependencies: 966 966 6
 -- Name: linefrommultipoint(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6888,8 +5254,8 @@ CREATE FUNCTION linefrommultipoint(geometry) RETURNS geometry
 
 
 --
--- TOC entry 234 (class 1255 OID 50303)
--- Dependencies: 6 966
+-- TOC entry 234 (class 1255 OID 65295)
+-- Dependencies: 966 6
 -- Name: linefromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6903,7 +5269,7 @@ CREATE FUNCTION linefromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 235 (class 1255 OID 50304)
+-- TOC entry 235 (class 1255 OID 65296)
 -- Dependencies: 6 966
 -- Name: linefromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6918,7 +5284,7 @@ CREATE FUNCTION linefromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 236 (class 1255 OID 50305)
+-- TOC entry 236 (class 1255 OID 65297)
 -- Dependencies: 6 966
 -- Name: linefromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6933,8 +5299,8 @@ CREATE FUNCTION linefromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 237 (class 1255 OID 50306)
--- Dependencies: 966 6
+-- TOC entry 237 (class 1255 OID 65298)
+-- Dependencies: 6 966
 -- Name: linefromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6948,7 +5314,7 @@ CREATE FUNCTION linefromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 238 (class 1255 OID 50307)
+-- TOC entry 238 (class 1255 OID 65299)
 -- Dependencies: 966 6 966
 -- Name: linemerge(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6959,7 +5325,7 @@ CREATE FUNCTION linemerge(geometry) RETURNS geometry
 
 
 --
--- TOC entry 239 (class 1255 OID 50308)
+-- TOC entry 239 (class 1255 OID 65300)
 -- Dependencies: 6 966
 -- Name: linestringfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6970,7 +5336,7 @@ CREATE FUNCTION linestringfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 240 (class 1255 OID 50309)
+-- TOC entry 240 (class 1255 OID 65301)
 -- Dependencies: 6 966
 -- Name: linestringfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -6981,8 +5347,8 @@ CREATE FUNCTION linestringfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 241 (class 1255 OID 50310)
--- Dependencies: 966 6
+-- TOC entry 241 (class 1255 OID 65302)
+-- Dependencies: 6 966
 -- Name: linestringfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -6996,7 +5362,7 @@ CREATE FUNCTION linestringfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 242 (class 1255 OID 50311)
+-- TOC entry 242 (class 1255 OID 65303)
 -- Dependencies: 6 966
 -- Name: linestringfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7011,8 +5377,8 @@ CREATE FUNCTION linestringfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 243 (class 1255 OID 50312)
--- Dependencies: 966 966 6
+-- TOC entry 243 (class 1255 OID 65304)
+-- Dependencies: 6 966 966
 -- Name: locate_along_measure(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7022,8 +5388,8 @@ CREATE FUNCTION locate_along_measure(geometry, double precision) RETURNS geometr
 
 
 --
--- TOC entry 244 (class 1255 OID 50313)
--- Dependencies: 6 966 966
+-- TOC entry 244 (class 1255 OID 65305)
+-- Dependencies: 966 6 966
 -- Name: locate_between_measures(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7033,8 +5399,8 @@ CREATE FUNCTION locate_between_measures(geometry, double precision, double preci
 
 
 --
--- TOC entry 245 (class 1255 OID 50314)
--- Dependencies: 6 1152
+-- TOC entry 245 (class 1255 OID 65306)
+-- Dependencies: 1085 6
 -- Name: lockrow(text, text, text, text, timestamp without time zone); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7093,7 +5459,7 @@ END;$_$
 
 
 --
--- TOC entry 246 (class 1255 OID 50315)
+-- TOC entry 246 (class 1255 OID 65307)
 -- Dependencies: 6
 -- Name: lockrow(text, text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7104,7 +5470,7 @@ CREATE FUNCTION lockrow(text, text, text, text) RETURNS integer
 
 
 --
--- TOC entry 247 (class 1255 OID 50316)
+-- TOC entry 247 (class 1255 OID 65308)
 -- Dependencies: 6
 -- Name: lockrow(text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7115,7 +5481,7 @@ CREATE FUNCTION lockrow(text, text, text) RETURNS integer
 
 
 --
--- TOC entry 248 (class 1255 OID 50317)
+-- TOC entry 248 (class 1255 OID 65309)
 -- Dependencies: 6
 -- Name: lockrow(text, text, text, timestamp without time zone); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7126,8 +5492,8 @@ CREATE FUNCTION lockrow(text, text, text, timestamp without time zone) RETURNS i
 
 
 --
--- TOC entry 249 (class 1255 OID 50318)
--- Dependencies: 6 1152
+-- TOC entry 249 (class 1255 OID 65310)
+-- Dependencies: 6 1085
 -- Name: longtransactionsenabled(); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7147,7 +5513,7 @@ $$
 
 
 --
--- TOC entry 250 (class 1255 OID 50319)
+-- TOC entry 250 (class 1255 OID 65311)
 -- Dependencies: 6
 -- Name: lwgeom_gist_compress(internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7158,7 +5524,7 @@ CREATE FUNCTION lwgeom_gist_compress(internal) RETURNS internal
 
 
 --
--- TOC entry 251 (class 1255 OID 50320)
+-- TOC entry 251 (class 1255 OID 65312)
 -- Dependencies: 6 966
 -- Name: lwgeom_gist_consistent(internal, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7169,7 +5535,7 @@ CREATE FUNCTION lwgeom_gist_consistent(internal, geometry, integer) RETURNS bool
 
 
 --
--- TOC entry 252 (class 1255 OID 50321)
+-- TOC entry 252 (class 1255 OID 65313)
 -- Dependencies: 6
 -- Name: lwgeom_gist_decompress(internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7180,7 +5546,7 @@ CREATE FUNCTION lwgeom_gist_decompress(internal) RETURNS internal
 
 
 --
--- TOC entry 253 (class 1255 OID 50322)
+-- TOC entry 253 (class 1255 OID 65314)
 -- Dependencies: 6
 -- Name: lwgeom_gist_penalty(internal, internal, internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7191,7 +5557,7 @@ CREATE FUNCTION lwgeom_gist_penalty(internal, internal, internal) RETURNS intern
 
 
 --
--- TOC entry 254 (class 1255 OID 50323)
+-- TOC entry 254 (class 1255 OID 65315)
 -- Dependencies: 6
 -- Name: lwgeom_gist_picksplit(internal, internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7202,8 +5568,8 @@ CREATE FUNCTION lwgeom_gist_picksplit(internal, internal) RETURNS internal
 
 
 --
--- TOC entry 255 (class 1255 OID 50324)
--- Dependencies: 6 919 919
+-- TOC entry 255 (class 1255 OID 65316)
+-- Dependencies: 919 919 6
 -- Name: lwgeom_gist_same(box2d, box2d, internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7213,7 +5579,7 @@ CREATE FUNCTION lwgeom_gist_same(box2d, box2d, internal) RETURNS internal
 
 
 --
--- TOC entry 256 (class 1255 OID 50325)
+-- TOC entry 256 (class 1255 OID 65317)
 -- Dependencies: 6
 -- Name: lwgeom_gist_union(bytea, internal); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7224,7 +5590,7 @@ CREATE FUNCTION lwgeom_gist_union(bytea, internal) RETURNS internal
 
 
 --
--- TOC entry 257 (class 1255 OID 50326)
+-- TOC entry 257 (class 1255 OID 65318)
 -- Dependencies: 966 6
 -- Name: m(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7235,7 +5601,7 @@ CREATE FUNCTION m(geometry) RETURNS double precision
 
 
 --
--- TOC entry 258 (class 1255 OID 50327)
+-- TOC entry 258 (class 1255 OID 65319)
 -- Dependencies: 966 966 919 6
 -- Name: makebox2d(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7246,8 +5612,8 @@ CREATE FUNCTION makebox2d(geometry, geometry) RETURNS box2d
 
 
 --
--- TOC entry 259 (class 1255 OID 50328)
--- Dependencies: 966 958 966 6
+-- TOC entry 259 (class 1255 OID 65320)
+-- Dependencies: 966 966 6 958
 -- Name: makebox3d(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7257,7 +5623,7 @@ CREATE FUNCTION makebox3d(geometry, geometry) RETURNS box3d
 
 
 --
--- TOC entry 260 (class 1255 OID 50329)
+-- TOC entry 260 (class 1255 OID 65321)
 -- Dependencies: 966 966 966 6
 -- Name: makeline(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7268,7 +5634,7 @@ CREATE FUNCTION makeline(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 261 (class 1255 OID 50330)
+-- TOC entry 261 (class 1255 OID 65322)
 -- Dependencies: 968 6 966
 -- Name: makeline_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7279,7 +5645,7 @@ CREATE FUNCTION makeline_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 262 (class 1255 OID 50331)
+-- TOC entry 262 (class 1255 OID 65323)
 -- Dependencies: 966 6
 -- Name: makepoint(double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7290,8 +5656,8 @@ CREATE FUNCTION makepoint(double precision, double precision) RETURNS geometry
 
 
 --
--- TOC entry 263 (class 1255 OID 50332)
--- Dependencies: 6 966
+-- TOC entry 263 (class 1255 OID 65324)
+-- Dependencies: 966 6
 -- Name: makepoint(double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7301,8 +5667,8 @@ CREATE FUNCTION makepoint(double precision, double precision, double precision) 
 
 
 --
--- TOC entry 264 (class 1255 OID 50333)
--- Dependencies: 6 966
+-- TOC entry 264 (class 1255 OID 65325)
+-- Dependencies: 966 6
 -- Name: makepoint(double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7312,8 +5678,8 @@ CREATE FUNCTION makepoint(double precision, double precision, double precision, 
 
 
 --
--- TOC entry 265 (class 1255 OID 50334)
--- Dependencies: 6 966
+-- TOC entry 265 (class 1255 OID 65326)
+-- Dependencies: 966 6
 -- Name: makepointm(double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7323,8 +5689,8 @@ CREATE FUNCTION makepointm(double precision, double precision, double precision)
 
 
 --
--- TOC entry 266 (class 1255 OID 50335)
--- Dependencies: 6 968 966 966
+-- TOC entry 266 (class 1255 OID 65327)
+-- Dependencies: 966 6 966 968
 -- Name: makepolygon(geometry, geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7334,7 +5700,7 @@ CREATE FUNCTION makepolygon(geometry, geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 267 (class 1255 OID 50336)
+-- TOC entry 267 (class 1255 OID 65328)
 -- Dependencies: 6 966 966
 -- Name: makepolygon(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7345,7 +5711,7 @@ CREATE FUNCTION makepolygon(geometry) RETURNS geometry
 
 
 --
--- TOC entry 268 (class 1255 OID 50337)
+-- TOC entry 268 (class 1255 OID 65329)
 -- Dependencies: 6 966 966
 -- Name: max_distance(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7356,8 +5722,8 @@ CREATE FUNCTION max_distance(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 269 (class 1255 OID 50338)
--- Dependencies: 966 6
+-- TOC entry 269 (class 1255 OID 65330)
+-- Dependencies: 6 966
 -- Name: mem_size(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7367,8 +5733,8 @@ CREATE FUNCTION mem_size(geometry) RETURNS integer
 
 
 --
--- TOC entry 270 (class 1255 OID 50339)
--- Dependencies: 966 6
+-- TOC entry 270 (class 1255 OID 65331)
+-- Dependencies: 6 966
 -- Name: mlinefromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7383,8 +5749,8 @@ CREATE FUNCTION mlinefromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 271 (class 1255 OID 50340)
--- Dependencies: 966 6
+-- TOC entry 271 (class 1255 OID 65332)
+-- Dependencies: 6 966
 -- Name: mlinefromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7398,8 +5764,8 @@ CREATE FUNCTION mlinefromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 272 (class 1255 OID 50341)
--- Dependencies: 966 6
+-- TOC entry 272 (class 1255 OID 65333)
+-- Dependencies: 6 966
 -- Name: mlinefromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7413,8 +5779,8 @@ CREATE FUNCTION mlinefromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 273 (class 1255 OID 50342)
--- Dependencies: 966 6
+-- TOC entry 273 (class 1255 OID 65334)
+-- Dependencies: 6 966
 -- Name: mlinefromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7428,8 +5794,8 @@ CREATE FUNCTION mlinefromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 274 (class 1255 OID 50343)
--- Dependencies: 966 6
+-- TOC entry 274 (class 1255 OID 65335)
+-- Dependencies: 6 966
 -- Name: mpointfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7443,8 +5809,8 @@ CREATE FUNCTION mpointfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 275 (class 1255 OID 50344)
--- Dependencies: 966 6
+-- TOC entry 275 (class 1255 OID 65336)
+-- Dependencies: 6 966
 -- Name: mpointfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7458,7 +5824,7 @@ CREATE FUNCTION mpointfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 276 (class 1255 OID 50345)
+-- TOC entry 276 (class 1255 OID 65337)
 -- Dependencies: 966 6
 -- Name: mpointfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7473,7 +5839,7 @@ CREATE FUNCTION mpointfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 277 (class 1255 OID 50346)
+-- TOC entry 277 (class 1255 OID 65338)
 -- Dependencies: 966 6
 -- Name: mpointfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7488,7 +5854,7 @@ CREATE FUNCTION mpointfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 278 (class 1255 OID 50347)
+-- TOC entry 278 (class 1255 OID 65339)
 -- Dependencies: 6 966
 -- Name: mpolyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7503,8 +5869,8 @@ CREATE FUNCTION mpolyfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 279 (class 1255 OID 50348)
--- Dependencies: 6 966
+-- TOC entry 279 (class 1255 OID 65340)
+-- Dependencies: 966 6
 -- Name: mpolyfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7518,7 +5884,7 @@ CREATE FUNCTION mpolyfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 280 (class 1255 OID 50349)
+-- TOC entry 280 (class 1255 OID 65341)
 -- Dependencies: 6 966
 -- Name: mpolyfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7533,8 +5899,8 @@ CREATE FUNCTION mpolyfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 281 (class 1255 OID 50350)
--- Dependencies: 6 966
+-- TOC entry 281 (class 1255 OID 65342)
+-- Dependencies: 966 6
 -- Name: mpolyfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7548,8 +5914,8 @@ CREATE FUNCTION mpolyfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 282 (class 1255 OID 50351)
--- Dependencies: 966 6 966
+-- TOC entry 282 (class 1255 OID 65343)
+-- Dependencies: 6 966 966
 -- Name: multi(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7559,7 +5925,7 @@ CREATE FUNCTION multi(geometry) RETURNS geometry
 
 
 --
--- TOC entry 283 (class 1255 OID 50352)
+-- TOC entry 283 (class 1255 OID 65344)
 -- Dependencies: 6 966
 -- Name: multilinefromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7574,8 +5940,8 @@ CREATE FUNCTION multilinefromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 284 (class 1255 OID 50353)
--- Dependencies: 6 966
+-- TOC entry 284 (class 1255 OID 65345)
+-- Dependencies: 966 6
 -- Name: multilinefromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7589,8 +5955,8 @@ CREATE FUNCTION multilinefromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 285 (class 1255 OID 50354)
--- Dependencies: 6 966
+-- TOC entry 285 (class 1255 OID 65346)
+-- Dependencies: 966 6
 -- Name: multilinestringfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7600,8 +5966,8 @@ CREATE FUNCTION multilinestringfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 286 (class 1255 OID 50355)
--- Dependencies: 6 966
+-- TOC entry 286 (class 1255 OID 65347)
+-- Dependencies: 966 6
 -- Name: multilinestringfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7611,7 +5977,7 @@ CREATE FUNCTION multilinestringfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 287 (class 1255 OID 50356)
+-- TOC entry 287 (class 1255 OID 65348)
 -- Dependencies: 6 966
 -- Name: multipointfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7622,8 +5988,8 @@ CREATE FUNCTION multipointfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 288 (class 1255 OID 50357)
--- Dependencies: 6 966
+-- TOC entry 288 (class 1255 OID 65349)
+-- Dependencies: 966 6
 -- Name: multipointfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7633,7 +5999,7 @@ CREATE FUNCTION multipointfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 289 (class 1255 OID 50358)
+-- TOC entry 289 (class 1255 OID 65350)
 -- Dependencies: 966 6
 -- Name: multipointfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7648,7 +6014,7 @@ CREATE FUNCTION multipointfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 290 (class 1255 OID 50359)
+-- TOC entry 290 (class 1255 OID 65351)
 -- Dependencies: 6 966
 -- Name: multipointfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7663,8 +6029,8 @@ CREATE FUNCTION multipointfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 291 (class 1255 OID 50360)
--- Dependencies: 6 966
+-- TOC entry 291 (class 1255 OID 65352)
+-- Dependencies: 966 6
 -- Name: multipolyfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7678,8 +6044,8 @@ CREATE FUNCTION multipolyfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 292 (class 1255 OID 50361)
--- Dependencies: 6 966
+-- TOC entry 292 (class 1255 OID 65353)
+-- Dependencies: 966 6
 -- Name: multipolyfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7693,7 +6059,7 @@ CREATE FUNCTION multipolyfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 293 (class 1255 OID 50362)
+-- TOC entry 293 (class 1255 OID 65354)
 -- Dependencies: 6 966
 -- Name: multipolygonfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7704,8 +6070,8 @@ CREATE FUNCTION multipolygonfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 294 (class 1255 OID 50363)
--- Dependencies: 6 966
+-- TOC entry 294 (class 1255 OID 65355)
+-- Dependencies: 966 6
 -- Name: multipolygonfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7715,8 +6081,8 @@ CREATE FUNCTION multipolygonfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 295 (class 1255 OID 50364)
--- Dependencies: 6 966 966
+-- TOC entry 295 (class 1255 OID 65356)
+-- Dependencies: 966 6 966
 -- Name: noop(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7726,7 +6092,7 @@ CREATE FUNCTION noop(geometry) RETURNS geometry
 
 
 --
--- TOC entry 296 (class 1255 OID 50365)
+-- TOC entry 296 (class 1255 OID 65357)
 -- Dependencies: 6 966
 -- Name: npoints(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7737,8 +6103,8 @@ CREATE FUNCTION npoints(geometry) RETURNS integer
 
 
 --
--- TOC entry 297 (class 1255 OID 50366)
--- Dependencies: 6 966
+-- TOC entry 297 (class 1255 OID 65358)
+-- Dependencies: 966 6
 -- Name: nrings(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7748,7 +6114,7 @@ CREATE FUNCTION nrings(geometry) RETURNS integer
 
 
 --
--- TOC entry 298 (class 1255 OID 50367)
+-- TOC entry 298 (class 1255 OID 65359)
 -- Dependencies: 6 966
 -- Name: numgeometries(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7759,7 +6125,7 @@ CREATE FUNCTION numgeometries(geometry) RETURNS integer
 
 
 --
--- TOC entry 299 (class 1255 OID 50368)
+-- TOC entry 299 (class 1255 OID 65360)
 -- Dependencies: 6 966
 -- Name: numinteriorring(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7770,8 +6136,8 @@ CREATE FUNCTION numinteriorring(geometry) RETURNS integer
 
 
 --
--- TOC entry 300 (class 1255 OID 50369)
--- Dependencies: 6 966
+-- TOC entry 300 (class 1255 OID 65361)
+-- Dependencies: 966 6
 -- Name: numinteriorrings(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7781,7 +6147,7 @@ CREATE FUNCTION numinteriorrings(geometry) RETURNS integer
 
 
 --
--- TOC entry 301 (class 1255 OID 50370)
+-- TOC entry 301 (class 1255 OID 65362)
 -- Dependencies: 6 966
 -- Name: numpoints(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7792,8 +6158,8 @@ CREATE FUNCTION numpoints(geometry) RETURNS integer
 
 
 --
--- TOC entry 302 (class 1255 OID 50371)
--- Dependencies: 6 966 966
+-- TOC entry 302 (class 1255 OID 65363)
+-- Dependencies: 966 966 6
 -- Name: overlaps(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7803,7 +6169,7 @@ CREATE FUNCTION "overlaps"(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 303 (class 1255 OID 50372)
+-- TOC entry 303 (class 1255 OID 65364)
 -- Dependencies: 6 966
 -- Name: perimeter(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7814,8 +6180,8 @@ CREATE FUNCTION perimeter(geometry) RETURNS double precision
 
 
 --
--- TOC entry 304 (class 1255 OID 50373)
--- Dependencies: 6 966
+-- TOC entry 304 (class 1255 OID 65365)
+-- Dependencies: 966 6
 -- Name: perimeter2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7825,7 +6191,7 @@ CREATE FUNCTION perimeter2d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 305 (class 1255 OID 50374)
+-- TOC entry 305 (class 1255 OID 65366)
 -- Dependencies: 6 966
 -- Name: perimeter3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7836,7 +6202,7 @@ CREATE FUNCTION perimeter3d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 306 (class 1255 OID 50375)
+-- TOC entry 306 (class 1255 OID 65367)
 -- Dependencies: 6 966
 -- Name: point_inside_circle(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7847,8 +6213,8 @@ CREATE FUNCTION point_inside_circle(geometry, double precision, double precision
 
 
 --
--- TOC entry 307 (class 1255 OID 50376)
--- Dependencies: 6 966
+-- TOC entry 307 (class 1255 OID 65368)
+-- Dependencies: 966 6
 -- Name: pointfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7862,7 +6228,7 @@ CREATE FUNCTION pointfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 308 (class 1255 OID 50377)
+-- TOC entry 308 (class 1255 OID 65369)
 -- Dependencies: 6 966
 -- Name: pointfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7877,7 +6243,7 @@ CREATE FUNCTION pointfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 309 (class 1255 OID 50378)
+-- TOC entry 309 (class 1255 OID 65370)
 -- Dependencies: 6 966
 -- Name: pointfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7892,8 +6258,8 @@ CREATE FUNCTION pointfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 310 (class 1255 OID 50379)
--- Dependencies: 6 966
+-- TOC entry 310 (class 1255 OID 65371)
+-- Dependencies: 966 6
 -- Name: pointfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7907,8 +6273,8 @@ CREATE FUNCTION pointfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 311 (class 1255 OID 50380)
--- Dependencies: 6 966 966
+-- TOC entry 311 (class 1255 OID 65372)
+-- Dependencies: 966 6 966
 -- Name: pointn(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7918,8 +6284,8 @@ CREATE FUNCTION pointn(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 312 (class 1255 OID 50381)
--- Dependencies: 6 966 966
+-- TOC entry 312 (class 1255 OID 65373)
+-- Dependencies: 966 6 966
 -- Name: pointonsurface(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7929,7 +6295,7 @@ CREATE FUNCTION pointonsurface(geometry) RETURNS geometry
 
 
 --
--- TOC entry 313 (class 1255 OID 50382)
+-- TOC entry 313 (class 1255 OID 65374)
 -- Dependencies: 6 966
 -- Name: polyfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7944,7 +6310,7 @@ CREATE FUNCTION polyfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 314 (class 1255 OID 50383)
+-- TOC entry 314 (class 1255 OID 65375)
 -- Dependencies: 6 966
 -- Name: polyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7959,8 +6325,8 @@ CREATE FUNCTION polyfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 315 (class 1255 OID 50384)
--- Dependencies: 6 966
+-- TOC entry 315 (class 1255 OID 65376)
+-- Dependencies: 966 6
 -- Name: polyfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -7974,7 +6340,7 @@ CREATE FUNCTION polyfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 316 (class 1255 OID 50385)
+-- TOC entry 316 (class 1255 OID 65377)
 -- Dependencies: 6 966
 -- Name: polyfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -7989,7 +6355,7 @@ CREATE FUNCTION polyfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 317 (class 1255 OID 50386)
+-- TOC entry 317 (class 1255 OID 65378)
 -- Dependencies: 6 966
 -- Name: polygonfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8000,8 +6366,8 @@ CREATE FUNCTION polygonfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 318 (class 1255 OID 50387)
--- Dependencies: 6 966
+-- TOC entry 318 (class 1255 OID 65379)
+-- Dependencies: 966 6
 -- Name: polygonfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8011,8 +6377,8 @@ CREATE FUNCTION polygonfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 319 (class 1255 OID 50388)
--- Dependencies: 6 966
+-- TOC entry 319 (class 1255 OID 65380)
+-- Dependencies: 966 6
 -- Name: polygonfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8026,7 +6392,7 @@ CREATE FUNCTION polygonfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 320 (class 1255 OID 50389)
+-- TOC entry 320 (class 1255 OID 65381)
 -- Dependencies: 6 966
 -- Name: polygonfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8041,8 +6407,8 @@ CREATE FUNCTION polygonfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 321 (class 1255 OID 50390)
--- Dependencies: 6 966 968
+-- TOC entry 321 (class 1255 OID 65382)
+-- Dependencies: 6 968 966
 -- Name: polygonize_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8052,8 +6418,8 @@ CREATE FUNCTION polygonize_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 322 (class 1255 OID 50391)
--- Dependencies: 6 1152
+-- TOC entry 322 (class 1255 OID 65383)
+-- Dependencies: 1085 6
 -- Name: postgis_full_version(); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8109,7 +6475,7 @@ $$
 
 
 --
--- TOC entry 323 (class 1255 OID 50392)
+-- TOC entry 323 (class 1255 OID 65384)
 -- Dependencies: 6
 -- Name: postgis_geos_version(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8120,7 +6486,7 @@ CREATE FUNCTION postgis_geos_version() RETURNS text
 
 
 --
--- TOC entry 324 (class 1255 OID 50393)
+-- TOC entry 324 (class 1255 OID 65385)
 -- Dependencies: 6
 -- Name: postgis_gist_joinsel(internal, oid, internal, smallint); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8131,7 +6497,7 @@ CREATE FUNCTION postgis_gist_joinsel(internal, oid, internal, smallint) RETURNS 
 
 
 --
--- TOC entry 325 (class 1255 OID 50394)
+-- TOC entry 325 (class 1255 OID 65386)
 -- Dependencies: 6
 -- Name: postgis_gist_sel(internal, oid, internal, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8142,7 +6508,7 @@ CREATE FUNCTION postgis_gist_sel(internal, oid, internal, integer) RETURNS doubl
 
 
 --
--- TOC entry 326 (class 1255 OID 50395)
+-- TOC entry 326 (class 1255 OID 65387)
 -- Dependencies: 6
 -- Name: postgis_jts_version(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8153,7 +6519,7 @@ CREATE FUNCTION postgis_jts_version() RETURNS text
 
 
 --
--- TOC entry 327 (class 1255 OID 50396)
+-- TOC entry 327 (class 1255 OID 65388)
 -- Dependencies: 6
 -- Name: postgis_lib_build_date(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8164,7 +6530,7 @@ CREATE FUNCTION postgis_lib_build_date() RETURNS text
 
 
 --
--- TOC entry 328 (class 1255 OID 50397)
+-- TOC entry 328 (class 1255 OID 65389)
 -- Dependencies: 6
 -- Name: postgis_lib_version(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8175,7 +6541,7 @@ CREATE FUNCTION postgis_lib_version() RETURNS text
 
 
 --
--- TOC entry 329 (class 1255 OID 50398)
+-- TOC entry 329 (class 1255 OID 65390)
 -- Dependencies: 6
 -- Name: postgis_proj_version(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8186,7 +6552,7 @@ CREATE FUNCTION postgis_proj_version() RETURNS text
 
 
 --
--- TOC entry 330 (class 1255 OID 50399)
+-- TOC entry 330 (class 1255 OID 65391)
 -- Dependencies: 6
 -- Name: postgis_scripts_build_date(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8197,7 +6563,7 @@ CREATE FUNCTION postgis_scripts_build_date() RETURNS text
 
 
 --
--- TOC entry 331 (class 1255 OID 50400)
+-- TOC entry 331 (class 1255 OID 65392)
 -- Dependencies: 6
 -- Name: postgis_scripts_installed(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8208,7 +6574,7 @@ CREATE FUNCTION postgis_scripts_installed() RETURNS text
 
 
 --
--- TOC entry 332 (class 1255 OID 50401)
+-- TOC entry 332 (class 1255 OID 65393)
 -- Dependencies: 6
 -- Name: postgis_scripts_released(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8219,7 +6585,7 @@ CREATE FUNCTION postgis_scripts_released() RETURNS text
 
 
 --
--- TOC entry 333 (class 1255 OID 50402)
+-- TOC entry 333 (class 1255 OID 65394)
 -- Dependencies: 6
 -- Name: postgis_uses_stats(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8230,7 +6596,7 @@ CREATE FUNCTION postgis_uses_stats() RETURNS boolean
 
 
 --
--- TOC entry 334 (class 1255 OID 50403)
+-- TOC entry 334 (class 1255 OID 65395)
 -- Dependencies: 6
 -- Name: postgis_version(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8241,8 +6607,8 @@ CREATE FUNCTION postgis_version() RETURNS text
 
 
 --
--- TOC entry 335 (class 1255 OID 50404)
--- Dependencies: 6 1152
+-- TOC entry 335 (class 1255 OID 65396)
+-- Dependencies: 1085 6
 -- Name: probe_geometry_columns(); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8369,8 +6735,8 @@ $$
 
 
 --
--- TOC entry 336 (class 1255 OID 50405)
--- Dependencies: 6 966 966
+-- TOC entry 336 (class 1255 OID 65397)
+-- Dependencies: 966 6 966
 -- Name: relate(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8380,7 +6746,7 @@ CREATE FUNCTION relate(geometry, geometry) RETURNS text
 
 
 --
--- TOC entry 337 (class 1255 OID 50406)
+-- TOC entry 337 (class 1255 OID 65398)
 -- Dependencies: 6 966 966
 -- Name: relate(geometry, geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8391,8 +6757,8 @@ CREATE FUNCTION relate(geometry, geometry, text) RETURNS boolean
 
 
 --
--- TOC entry 338 (class 1255 OID 50407)
--- Dependencies: 6 966 966
+-- TOC entry 338 (class 1255 OID 65399)
+-- Dependencies: 966 966 6
 -- Name: removepoint(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8402,7 +6768,7 @@ CREATE FUNCTION removepoint(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 339 (class 1255 OID 50408)
+-- TOC entry 339 (class 1255 OID 65400)
 -- Dependencies: 6
 -- Name: rename_geometry_table_constraints(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8415,7 +6781,7 @@ $$
 
 
 --
--- TOC entry 340 (class 1255 OID 50409)
+-- TOC entry 340 (class 1255 OID 65401)
 -- Dependencies: 6 966 966
 -- Name: reverse(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8426,8 +6792,8 @@ CREATE FUNCTION reverse(geometry) RETURNS geometry
 
 
 --
--- TOC entry 341 (class 1255 OID 50410)
--- Dependencies: 6 966 966
+-- TOC entry 341 (class 1255 OID 65402)
+-- Dependencies: 966 6 966
 -- Name: rotate(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8437,7 +6803,7 @@ CREATE FUNCTION rotate(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 342 (class 1255 OID 50411)
+-- TOC entry 342 (class 1255 OID 65403)
 -- Dependencies: 6 966 966
 -- Name: rotatex(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8448,8 +6814,8 @@ CREATE FUNCTION rotatex(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 343 (class 1255 OID 50412)
--- Dependencies: 6 966 966
+-- TOC entry 343 (class 1255 OID 65404)
+-- Dependencies: 966 966 6
 -- Name: rotatey(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8459,8 +6825,8 @@ CREATE FUNCTION rotatey(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 344 (class 1255 OID 50413)
--- Dependencies: 6 966 966
+-- TOC entry 344 (class 1255 OID 65405)
+-- Dependencies: 966 6 966
 -- Name: rotatez(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8470,8 +6836,8 @@ CREATE FUNCTION rotatez(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 345 (class 1255 OID 50414)
--- Dependencies: 6 966 966
+-- TOC entry 345 (class 1255 OID 65406)
+-- Dependencies: 966 966 6
 -- Name: scale(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8481,7 +6847,7 @@ CREATE FUNCTION scale(geometry, double precision, double precision, double preci
 
 
 --
--- TOC entry 346 (class 1255 OID 50415)
+-- TOC entry 346 (class 1255 OID 65407)
 -- Dependencies: 6 966 966
 -- Name: scale(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8492,8 +6858,8 @@ CREATE FUNCTION scale(geometry, double precision, double precision) RETURNS geom
 
 
 --
--- TOC entry 347 (class 1255 OID 50416)
--- Dependencies: 6 966 966
+-- TOC entry 347 (class 1255 OID 65408)
+-- Dependencies: 966 6 966
 -- Name: se_envelopesintersect(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8505,7 +6871,7 @@ CREATE FUNCTION se_envelopesintersect(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 348 (class 1255 OID 50417)
+-- TOC entry 348 (class 1255 OID 65409)
 -- Dependencies: 6 966
 -- Name: se_is3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8524,8 +6890,8 @@ CREATE FUNCTION se_is3d(geometry) RETURNS boolean
 
 
 --
--- TOC entry 349 (class 1255 OID 50418)
--- Dependencies: 6 966
+-- TOC entry 349 (class 1255 OID 65410)
+-- Dependencies: 966 6
 -- Name: se_ismeasured(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8543,8 +6909,8 @@ CREATE FUNCTION se_ismeasured(geometry) RETURNS boolean
 
 
 --
--- TOC entry 350 (class 1255 OID 50419)
--- Dependencies: 6 966 966
+-- TOC entry 350 (class 1255 OID 65411)
+-- Dependencies: 966 6 966
 -- Name: se_locatealong(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8554,7 +6920,7 @@ CREATE FUNCTION se_locatealong(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 351 (class 1255 OID 50420)
+-- TOC entry 351 (class 1255 OID 65412)
 -- Dependencies: 6 966 966
 -- Name: se_locatebetween(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8565,7 +6931,7 @@ CREATE FUNCTION se_locatebetween(geometry, double precision, double precision) R
 
 
 --
--- TOC entry 352 (class 1255 OID 50421)
+-- TOC entry 352 (class 1255 OID 65413)
 -- Dependencies: 6 966
 -- Name: se_m(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8576,7 +6942,7 @@ CREATE FUNCTION se_m(geometry) RETURNS double precision
 
 
 --
--- TOC entry 353 (class 1255 OID 50422)
+-- TOC entry 353 (class 1255 OID 65414)
 -- Dependencies: 6 966
 -- Name: se_z(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8587,7 +6953,7 @@ CREATE FUNCTION se_z(geometry) RETURNS double precision
 
 
 --
--- TOC entry 354 (class 1255 OID 50423)
+-- TOC entry 354 (class 1255 OID 65415)
 -- Dependencies: 6 966 966
 -- Name: segmentize(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8598,8 +6964,8 @@ CREATE FUNCTION segmentize(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 355 (class 1255 OID 50424)
--- Dependencies: 6 961 961
+-- TOC entry 355 (class 1255 OID 65416)
+-- Dependencies: 961 961 6
 -- Name: setfactor(chip, real); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8609,7 +6975,7 @@ CREATE FUNCTION setfactor(chip, real) RETURNS chip
 
 
 --
--- TOC entry 356 (class 1255 OID 50425)
+-- TOC entry 356 (class 1255 OID 65417)
 -- Dependencies: 6 966 966 966
 -- Name: setpoint(geometry, integer, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8620,7 +6986,7 @@ CREATE FUNCTION setpoint(geometry, integer, geometry) RETURNS geometry
 
 
 --
--- TOC entry 357 (class 1255 OID 50426)
+-- TOC entry 357 (class 1255 OID 65418)
 -- Dependencies: 6 961 961
 -- Name: setsrid(chip, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8631,8 +6997,8 @@ CREATE FUNCTION setsrid(chip, integer) RETURNS chip
 
 
 --
--- TOC entry 358 (class 1255 OID 50427)
--- Dependencies: 6 966 966
+-- TOC entry 358 (class 1255 OID 65419)
+-- Dependencies: 966 6 966
 -- Name: setsrid(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8642,8 +7008,8 @@ CREATE FUNCTION setsrid(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 359 (class 1255 OID 50428)
--- Dependencies: 6 966 966
+-- TOC entry 359 (class 1255 OID 65420)
+-- Dependencies: 966 6 966
 -- Name: shift_longitude(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8653,8 +7019,8 @@ CREATE FUNCTION shift_longitude(geometry) RETURNS geometry
 
 
 --
--- TOC entry 360 (class 1255 OID 50429)
--- Dependencies: 6 966 966
+-- TOC entry 360 (class 1255 OID 65421)
+-- Dependencies: 966 6 966
 -- Name: simplify(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8664,8 +7030,8 @@ CREATE FUNCTION simplify(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 361 (class 1255 OID 50430)
--- Dependencies: 6 966 966
+-- TOC entry 361 (class 1255 OID 65422)
+-- Dependencies: 966 966 6
 -- Name: snaptogrid(geometry, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8675,7 +7041,7 @@ CREATE FUNCTION snaptogrid(geometry, double precision, double precision, double 
 
 
 --
--- TOC entry 362 (class 1255 OID 50431)
+-- TOC entry 362 (class 1255 OID 65423)
 -- Dependencies: 6 966 966
 -- Name: snaptogrid(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8686,8 +7052,8 @@ CREATE FUNCTION snaptogrid(geometry, double precision, double precision) RETURNS
 
 
 --
--- TOC entry 363 (class 1255 OID 50432)
--- Dependencies: 6 966 966
+-- TOC entry 363 (class 1255 OID 65424)
+-- Dependencies: 966 966 6
 -- Name: snaptogrid(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8697,8 +7063,8 @@ CREATE FUNCTION snaptogrid(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 364 (class 1255 OID 50433)
--- Dependencies: 6 966 966 966
+-- TOC entry 364 (class 1255 OID 65425)
+-- Dependencies: 966 6 966 966
 -- Name: snaptogrid(geometry, geometry, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8708,8 +7074,8 @@ CREATE FUNCTION snaptogrid(geometry, geometry, double precision, double precisio
 
 
 --
--- TOC entry 365 (class 1255 OID 50434)
--- Dependencies: 6 1114
+-- TOC entry 365 (class 1255 OID 65426)
+-- Dependencies: 1024 6
 -- Name: spheroid_in(cstring); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8719,8 +7085,8 @@ CREATE FUNCTION spheroid_in(cstring) RETURNS spheroid
 
 
 --
--- TOC entry 366 (class 1255 OID 50435)
--- Dependencies: 6 1114
+-- TOC entry 366 (class 1255 OID 65427)
+-- Dependencies: 6 1024
 -- Name: spheroid_out(spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8730,8 +7096,8 @@ CREATE FUNCTION spheroid_out(spheroid) RETURNS cstring
 
 
 --
--- TOC entry 367 (class 1255 OID 50436)
--- Dependencies: 6 961
+-- TOC entry 367 (class 1255 OID 65428)
+-- Dependencies: 961 6
 -- Name: srid(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8741,7 +7107,7 @@ CREATE FUNCTION srid(chip) RETURNS integer
 
 
 --
--- TOC entry 368 (class 1255 OID 50437)
+-- TOC entry 368 (class 1255 OID 65429)
 -- Dependencies: 6 966 966
 -- Name: st_addbbox(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8752,8 +7118,8 @@ CREATE FUNCTION st_addbbox(geometry) RETURNS geometry
 
 
 --
--- TOC entry 369 (class 1255 OID 50438)
--- Dependencies: 6 966 966 966
+-- TOC entry 369 (class 1255 OID 65430)
+-- Dependencies: 966 966 966 6
 -- Name: st_addpoint(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8763,8 +7129,8 @@ CREATE FUNCTION st_addpoint(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 370 (class 1255 OID 50439)
--- Dependencies: 6 966 966 966
+-- TOC entry 370 (class 1255 OID 65431)
+-- Dependencies: 966 966 966 6
 -- Name: st_addpoint(geometry, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8774,8 +7140,8 @@ CREATE FUNCTION st_addpoint(geometry, geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 371 (class 1255 OID 50440)
--- Dependencies: 6 966 966
+-- TOC entry 371 (class 1255 OID 65432)
+-- Dependencies: 966 6 966
 -- Name: st_affine(geometry, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8785,8 +7151,8 @@ CREATE FUNCTION st_affine(geometry, double precision, double precision, double p
 
 
 --
--- TOC entry 372 (class 1255 OID 50441)
--- Dependencies: 6 966 966
+-- TOC entry 372 (class 1255 OID 65433)
+-- Dependencies: 966 966 6
 -- Name: st_affine(geometry, double precision, double precision, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8796,8 +7162,8 @@ CREATE FUNCTION st_affine(geometry, double precision, double precision, double p
 
 
 --
--- TOC entry 373 (class 1255 OID 50442)
--- Dependencies: 6 966
+-- TOC entry 373 (class 1255 OID 65434)
+-- Dependencies: 966 6
 -- Name: st_area(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8807,7 +7173,7 @@ CREATE FUNCTION st_area(geometry) RETURNS double precision
 
 
 --
--- TOC entry 374 (class 1255 OID 50443)
+-- TOC entry 374 (class 1255 OID 65435)
 -- Dependencies: 6 966
 -- Name: st_area2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8818,8 +7184,8 @@ CREATE FUNCTION st_area2d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 375 (class 1255 OID 50444)
--- Dependencies: 6 966
+-- TOC entry 375 (class 1255 OID 65436)
+-- Dependencies: 966 6
 -- Name: st_asbinary(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8829,8 +7195,8 @@ CREATE FUNCTION st_asbinary(geometry) RETURNS bytea
 
 
 --
--- TOC entry 376 (class 1255 OID 50445)
--- Dependencies: 6 966
+-- TOC entry 376 (class 1255 OID 65437)
+-- Dependencies: 966 6
 -- Name: st_asbinary(geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8840,8 +7206,8 @@ CREATE FUNCTION st_asbinary(geometry, text) RETURNS bytea
 
 
 --
--- TOC entry 377 (class 1255 OID 50446)
--- Dependencies: 6 966
+-- TOC entry 377 (class 1255 OID 65438)
+-- Dependencies: 966 6
 -- Name: st_asewkb(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8851,7 +7217,7 @@ CREATE FUNCTION st_asewkb(geometry) RETURNS bytea
 
 
 --
--- TOC entry 378 (class 1255 OID 50447)
+-- TOC entry 378 (class 1255 OID 65439)
 -- Dependencies: 6 966
 -- Name: st_asewkb(geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8862,7 +7228,7 @@ CREATE FUNCTION st_asewkb(geometry, text) RETURNS bytea
 
 
 --
--- TOC entry 379 (class 1255 OID 50448)
+-- TOC entry 379 (class 1255 OID 65440)
 -- Dependencies: 6 966
 -- Name: st_asewkt(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8873,7 +7239,7 @@ CREATE FUNCTION st_asewkt(geometry) RETURNS text
 
 
 --
--- TOC entry 380 (class 1255 OID 50449)
+-- TOC entry 380 (class 1255 OID 65441)
 -- Dependencies: 6 966
 -- Name: st_asgml(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8884,7 +7250,7 @@ CREATE FUNCTION st_asgml(geometry, integer) RETURNS text
 
 
 --
--- TOC entry 381 (class 1255 OID 50450)
+-- TOC entry 381 (class 1255 OID 65442)
 -- Dependencies: 6 966
 -- Name: st_asgml(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8895,7 +7261,7 @@ CREATE FUNCTION st_asgml(geometry) RETURNS text
 
 
 --
--- TOC entry 382 (class 1255 OID 50451)
+-- TOC entry 382 (class 1255 OID 65443)
 -- Dependencies: 6 966
 -- Name: st_asgml(integer, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8906,7 +7272,7 @@ CREATE FUNCTION st_asgml(integer, geometry) RETURNS text
 
 
 --
--- TOC entry 383 (class 1255 OID 50452)
+-- TOC entry 383 (class 1255 OID 65444)
 -- Dependencies: 6 966
 -- Name: st_asgml(integer, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8917,7 +7283,7 @@ CREATE FUNCTION st_asgml(integer, geometry, integer) RETURNS text
 
 
 --
--- TOC entry 384 (class 1255 OID 50453)
+-- TOC entry 384 (class 1255 OID 65445)
 -- Dependencies: 6 966
 -- Name: st_ashexewkb(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8928,7 +7294,7 @@ CREATE FUNCTION st_ashexewkb(geometry) RETURNS text
 
 
 --
--- TOC entry 385 (class 1255 OID 50454)
+-- TOC entry 385 (class 1255 OID 65446)
 -- Dependencies: 6 966
 -- Name: st_ashexewkb(geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8939,7 +7305,7 @@ CREATE FUNCTION st_ashexewkb(geometry, text) RETURNS text
 
 
 --
--- TOC entry 386 (class 1255 OID 50455)
+-- TOC entry 386 (class 1255 OID 65447)
 -- Dependencies: 6 966
 -- Name: st_askml(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8950,7 +7316,7 @@ CREATE FUNCTION st_askml(geometry, integer) RETURNS text
 
 
 --
--- TOC entry 387 (class 1255 OID 50456)
+-- TOC entry 387 (class 1255 OID 65448)
 -- Dependencies: 6 966
 -- Name: st_askml(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8961,8 +7327,8 @@ CREATE FUNCTION st_askml(geometry) RETURNS text
 
 
 --
--- TOC entry 388 (class 1255 OID 50457)
--- Dependencies: 6 966
+-- TOC entry 388 (class 1255 OID 65449)
+-- Dependencies: 966 6
 -- Name: st_askml(integer, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8972,7 +7338,7 @@ CREATE FUNCTION st_askml(integer, geometry) RETURNS text
 
 
 --
--- TOC entry 389 (class 1255 OID 50458)
+-- TOC entry 389 (class 1255 OID 65450)
 -- Dependencies: 6 966
 -- Name: st_askml(integer, geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -8983,8 +7349,8 @@ CREATE FUNCTION st_askml(integer, geometry, integer) RETURNS text
 
 
 --
--- TOC entry 390 (class 1255 OID 50459)
--- Dependencies: 6 966
+-- TOC entry 390 (class 1255 OID 65451)
+-- Dependencies: 966 6
 -- Name: st_assvg(geometry, integer, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -8994,7 +7360,7 @@ CREATE FUNCTION st_assvg(geometry, integer, integer) RETURNS text
 
 
 --
--- TOC entry 391 (class 1255 OID 50460)
+-- TOC entry 391 (class 1255 OID 65452)
 -- Dependencies: 6 966
 -- Name: st_assvg(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9005,8 +7371,8 @@ CREATE FUNCTION st_assvg(geometry, integer) RETURNS text
 
 
 --
--- TOC entry 392 (class 1255 OID 50461)
--- Dependencies: 6 966
+-- TOC entry 392 (class 1255 OID 65453)
+-- Dependencies: 966 6
 -- Name: st_assvg(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9016,7 +7382,7 @@ CREATE FUNCTION st_assvg(geometry) RETURNS text
 
 
 --
--- TOC entry 393 (class 1255 OID 50462)
+-- TOC entry 393 (class 1255 OID 65454)
 -- Dependencies: 6 966
 -- Name: st_astext(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9027,7 +7393,7 @@ CREATE FUNCTION st_astext(geometry) RETURNS text
 
 
 --
--- TOC entry 394 (class 1255 OID 50463)
+-- TOC entry 394 (class 1255 OID 65455)
 -- Dependencies: 6 966 966
 -- Name: st_azimuth(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9038,8 +7404,8 @@ CREATE FUNCTION st_azimuth(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 395 (class 1255 OID 50464)
--- Dependencies: 6 1152 966
+-- TOC entry 395 (class 1255 OID 65456)
+-- Dependencies: 6 1085 966
 -- Name: st_bdmpolyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9067,8 +7433,8 @@ $_$
 
 
 --
--- TOC entry 396 (class 1255 OID 50465)
--- Dependencies: 6 1152 966
+-- TOC entry 396 (class 1255 OID 65457)
+-- Dependencies: 6 1085 966
 -- Name: st_bdpolyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9101,7 +7467,7 @@ $_$
 
 
 --
--- TOC entry 397 (class 1255 OID 50466)
+-- TOC entry 397 (class 1255 OID 65458)
 -- Dependencies: 6 966 966
 -- Name: st_boundary(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9112,7 +7478,7 @@ CREATE FUNCTION st_boundary(geometry) RETURNS geometry
 
 
 --
--- TOC entry 398 (class 1255 OID 50467)
+-- TOC entry 398 (class 1255 OID 65459)
 -- Dependencies: 6 966
 -- Name: st_box(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9123,7 +7489,7 @@ CREATE FUNCTION st_box(geometry) RETURNS box
 
 
 --
--- TOC entry 399 (class 1255 OID 50468)
+-- TOC entry 399 (class 1255 OID 65460)
 -- Dependencies: 6 958
 -- Name: st_box(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9134,7 +7500,7 @@ CREATE FUNCTION st_box(box3d) RETURNS box
 
 
 --
--- TOC entry 400 (class 1255 OID 50469)
+-- TOC entry 400 (class 1255 OID 65461)
 -- Dependencies: 6 919 966
 -- Name: st_box2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9145,7 +7511,7 @@ CREATE FUNCTION st_box2d(geometry) RETURNS box2d
 
 
 --
--- TOC entry 401 (class 1255 OID 50470)
+-- TOC entry 401 (class 1255 OID 65462)
 -- Dependencies: 6 919 958
 -- Name: st_box2d(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9156,7 +7522,7 @@ CREATE FUNCTION st_box2d(box3d) RETURNS box2d
 
 
 --
--- TOC entry 402 (class 1255 OID 50471)
+-- TOC entry 402 (class 1255 OID 65463)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_contain(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9167,7 +7533,7 @@ CREATE FUNCTION st_box2d_contain(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 403 (class 1255 OID 50472)
+-- TOC entry 403 (class 1255 OID 65464)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_contained(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9178,7 +7544,7 @@ CREATE FUNCTION st_box2d_contained(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 404 (class 1255 OID 50473)
+-- TOC entry 404 (class 1255 OID 65465)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_intersects(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9189,7 +7555,7 @@ CREATE FUNCTION st_box2d_intersects(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 405 (class 1255 OID 50474)
+-- TOC entry 405 (class 1255 OID 65466)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_left(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9200,7 +7566,7 @@ CREATE FUNCTION st_box2d_left(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 406 (class 1255 OID 50475)
+-- TOC entry 406 (class 1255 OID 65467)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_overlap(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9211,7 +7577,7 @@ CREATE FUNCTION st_box2d_overlap(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 407 (class 1255 OID 50476)
+-- TOC entry 407 (class 1255 OID 65468)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_overleft(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9222,7 +7588,7 @@ CREATE FUNCTION st_box2d_overleft(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 408 (class 1255 OID 50477)
+-- TOC entry 408 (class 1255 OID 65469)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_overright(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9233,7 +7599,7 @@ CREATE FUNCTION st_box2d_overright(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 409 (class 1255 OID 50478)
+-- TOC entry 409 (class 1255 OID 65470)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_right(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9244,7 +7610,7 @@ CREATE FUNCTION st_box2d_right(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 410 (class 1255 OID 50479)
+-- TOC entry 410 (class 1255 OID 65471)
 -- Dependencies: 6 919 919
 -- Name: st_box2d_same(box2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9255,7 +7621,7 @@ CREATE FUNCTION st_box2d_same(box2d, box2d) RETURNS boolean
 
 
 --
--- TOC entry 411 (class 1255 OID 50480)
+-- TOC entry 411 (class 1255 OID 65472)
 -- Dependencies: 6 958 966
 -- Name: st_box3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9266,7 +7632,7 @@ CREATE FUNCTION st_box3d(geometry) RETURNS box3d
 
 
 --
--- TOC entry 412 (class 1255 OID 50481)
+-- TOC entry 412 (class 1255 OID 65473)
 -- Dependencies: 6 958 919
 -- Name: st_box3d(box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9277,7 +7643,7 @@ CREATE FUNCTION st_box3d(box2d) RETURNS box3d
 
 
 --
--- TOC entry 413 (class 1255 OID 50482)
+-- TOC entry 413 (class 1255 OID 65474)
 -- Dependencies: 6 966 966
 -- Name: st_buffer(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9288,7 +7654,7 @@ CREATE FUNCTION st_buffer(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 414 (class 1255 OID 50483)
+-- TOC entry 414 (class 1255 OID 65475)
 -- Dependencies: 6 966 966
 -- Name: st_buffer(geometry, double precision, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9299,8 +7665,8 @@ CREATE FUNCTION st_buffer(geometry, double precision, integer) RETURNS geometry
 
 
 --
--- TOC entry 415 (class 1255 OID 50484)
--- Dependencies: 6 1048 1048
+-- TOC entry 415 (class 1255 OID 65476)
+-- Dependencies: 6 974 974
 -- Name: st_build_histogram2d(histogram2d, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9310,8 +7676,8 @@ CREATE FUNCTION st_build_histogram2d(histogram2d, text, text) RETURNS histogram2
 
 
 --
--- TOC entry 416 (class 1255 OID 50485)
--- Dependencies: 6 1152 1048 1048
+-- TOC entry 416 (class 1255 OID 65477)
+-- Dependencies: 6 1085 974 974
 -- Name: st_build_histogram2d(histogram2d, text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9326,7 +7692,7 @@ $_$
 
 
 --
--- TOC entry 417 (class 1255 OID 50486)
+-- TOC entry 417 (class 1255 OID 65478)
 -- Dependencies: 6 966 966
 -- Name: st_buildarea(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9337,7 +7703,7 @@ CREATE FUNCTION st_buildarea(geometry) RETURNS geometry
 
 
 --
--- TOC entry 418 (class 1255 OID 50487)
+-- TOC entry 418 (class 1255 OID 65479)
 -- Dependencies: 6 966
 -- Name: st_bytea(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9348,7 +7714,7 @@ CREATE FUNCTION st_bytea(geometry) RETURNS bytea
 
 
 --
--- TOC entry 419 (class 1255 OID 50488)
+-- TOC entry 419 (class 1255 OID 65480)
 -- Dependencies: 6
 -- Name: st_cache_bbox(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9359,7 +7725,7 @@ CREATE FUNCTION st_cache_bbox() RETURNS trigger
 
 
 --
--- TOC entry 420 (class 1255 OID 50489)
+-- TOC entry 420 (class 1255 OID 65481)
 -- Dependencies: 6 966 966
 -- Name: st_centroid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9370,7 +7736,7 @@ CREATE FUNCTION st_centroid(geometry) RETURNS geometry
 
 
 --
--- TOC entry 421 (class 1255 OID 50490)
+-- TOC entry 421 (class 1255 OID 65482)
 -- Dependencies: 6 966 966 966
 -- Name: st_collect(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9381,7 +7747,7 @@ CREATE FUNCTION st_collect(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 422 (class 1255 OID 50491)
+-- TOC entry 422 (class 1255 OID 65483)
 -- Dependencies: 6 966 968
 -- Name: st_collect_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9392,7 +7758,7 @@ CREATE FUNCTION st_collect_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 423 (class 1255 OID 50492)
+-- TOC entry 423 (class 1255 OID 65484)
 -- Dependencies: 6 966 966 966
 -- Name: st_collector(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9403,7 +7769,7 @@ CREATE FUNCTION st_collector(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 424 (class 1255 OID 50493)
+-- TOC entry 424 (class 1255 OID 65485)
 -- Dependencies: 6 919 919 966
 -- Name: st_combine_bbox(box2d, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9414,7 +7780,7 @@ CREATE FUNCTION st_combine_bbox(box2d, geometry) RETURNS box2d
 
 
 --
--- TOC entry 425 (class 1255 OID 50494)
+-- TOC entry 425 (class 1255 OID 65486)
 -- Dependencies: 6 958 958 966
 -- Name: st_combine_bbox(box3d, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9425,7 +7791,7 @@ CREATE FUNCTION st_combine_bbox(box3d, geometry) RETURNS box3d
 
 
 --
--- TOC entry 426 (class 1255 OID 50495)
+-- TOC entry 426 (class 1255 OID 65487)
 -- Dependencies: 6 961
 -- Name: st_compression(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9436,7 +7802,7 @@ CREATE FUNCTION st_compression(chip) RETURNS integer
 
 
 --
--- TOC entry 427 (class 1255 OID 50496)
+-- TOC entry 427 (class 1255 OID 65488)
 -- Dependencies: 6 966 966
 -- Name: st_contains(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9447,7 +7813,7 @@ CREATE FUNCTION st_contains(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 428 (class 1255 OID 50497)
+-- TOC entry 428 (class 1255 OID 65489)
 -- Dependencies: 6 966 966
 -- Name: st_convexhull(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9458,7 +7824,7 @@ CREATE FUNCTION st_convexhull(geometry) RETURNS geometry
 
 
 --
--- TOC entry 429 (class 1255 OID 50498)
+-- TOC entry 429 (class 1255 OID 65490)
 -- Dependencies: 6 966
 -- Name: st_coorddim(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9469,7 +7835,7 @@ CREATE FUNCTION st_coorddim(geometry) RETURNS smallint
 
 
 --
--- TOC entry 430 (class 1255 OID 50499)
+-- TOC entry 430 (class 1255 OID 65491)
 -- Dependencies: 6 966 966
 -- Name: st_coveredby(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9480,7 +7846,7 @@ CREATE FUNCTION st_coveredby(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 431 (class 1255 OID 50500)
+-- TOC entry 431 (class 1255 OID 65492)
 -- Dependencies: 6 966 966
 -- Name: st_covers(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9491,8 +7857,8 @@ CREATE FUNCTION st_covers(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 432 (class 1255 OID 50501)
--- Dependencies: 6 1048 919
+-- TOC entry 432 (class 1255 OID 65493)
+-- Dependencies: 6 974 919
 -- Name: st_create_histogram2d(box2d, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9502,7 +7868,7 @@ CREATE FUNCTION st_create_histogram2d(box2d, integer) RETURNS histogram2d
 
 
 --
--- TOC entry 433 (class 1255 OID 50502)
+-- TOC entry 433 (class 1255 OID 65494)
 -- Dependencies: 6 966 966
 -- Name: st_crosses(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9513,7 +7879,7 @@ CREATE FUNCTION st_crosses(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 434 (class 1255 OID 50503)
+-- TOC entry 434 (class 1255 OID 65495)
 -- Dependencies: 6 966 966
 -- Name: st_curvetoline(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9524,7 +7890,7 @@ CREATE FUNCTION st_curvetoline(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 435 (class 1255 OID 50504)
+-- TOC entry 435 (class 1255 OID 65496)
 -- Dependencies: 6 966 966
 -- Name: st_curvetoline(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9535,7 +7901,7 @@ CREATE FUNCTION st_curvetoline(geometry) RETURNS geometry
 
 
 --
--- TOC entry 436 (class 1255 OID 50505)
+-- TOC entry 436 (class 1255 OID 65497)
 -- Dependencies: 6 961
 -- Name: st_datatype(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9546,7 +7912,7 @@ CREATE FUNCTION st_datatype(chip) RETURNS integer
 
 
 --
--- TOC entry 437 (class 1255 OID 50506)
+-- TOC entry 437 (class 1255 OID 65498)
 -- Dependencies: 6 966 966 966
 -- Name: st_difference(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9557,7 +7923,7 @@ CREATE FUNCTION st_difference(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 438 (class 1255 OID 50507)
+-- TOC entry 438 (class 1255 OID 65499)
 -- Dependencies: 6 966
 -- Name: st_dimension(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9568,7 +7934,7 @@ CREATE FUNCTION st_dimension(geometry) RETURNS integer
 
 
 --
--- TOC entry 439 (class 1255 OID 50508)
+-- TOC entry 439 (class 1255 OID 65500)
 -- Dependencies: 6 966 966
 -- Name: st_disjoint(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9579,7 +7945,7 @@ CREATE FUNCTION st_disjoint(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 440 (class 1255 OID 50509)
+-- TOC entry 440 (class 1255 OID 65501)
 -- Dependencies: 6 966 966
 -- Name: st_distance(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9590,7 +7956,7 @@ CREATE FUNCTION st_distance(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 441 (class 1255 OID 50510)
+-- TOC entry 441 (class 1255 OID 65502)
 -- Dependencies: 6 966 966
 -- Name: st_distance_sphere(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9601,8 +7967,8 @@ CREATE FUNCTION st_distance_sphere(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 442 (class 1255 OID 50511)
--- Dependencies: 6 966 966 1114
+-- TOC entry 442 (class 1255 OID 65503)
+-- Dependencies: 6 966 966 1024
 -- Name: st_distance_spheroid(geometry, geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9612,7 +7978,7 @@ CREATE FUNCTION st_distance_spheroid(geometry, geometry, spheroid) RETURNS doubl
 
 
 --
--- TOC entry 443 (class 1255 OID 50512)
+-- TOC entry 443 (class 1255 OID 65504)
 -- Dependencies: 6 966 966
 -- Name: st_dropbbox(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9623,8 +7989,8 @@ CREATE FUNCTION st_dropbbox(geometry) RETURNS geometry
 
 
 --
--- TOC entry 444 (class 1255 OID 50513)
--- Dependencies: 6 1034 966
+-- TOC entry 444 (class 1255 OID 65505)
+-- Dependencies: 6 972 966
 -- Name: st_dump(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9634,8 +8000,8 @@ CREATE FUNCTION st_dump(geometry) RETURNS SETOF geometry_dump
 
 
 --
--- TOC entry 445 (class 1255 OID 50514)
--- Dependencies: 6 1034 966
+-- TOC entry 445 (class 1255 OID 65506)
+-- Dependencies: 6 972 966
 -- Name: st_dumprings(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9645,7 +8011,7 @@ CREATE FUNCTION st_dumprings(geometry) RETURNS SETOF geometry_dump
 
 
 --
--- TOC entry 446 (class 1255 OID 50515)
+-- TOC entry 446 (class 1255 OID 65507)
 -- Dependencies: 6 966 966
 -- Name: st_dwithin(geometry, geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9656,7 +8022,7 @@ CREATE FUNCTION st_dwithin(geometry, geometry, double precision) RETURNS boolean
 
 
 --
--- TOC entry 447 (class 1255 OID 50516)
+-- TOC entry 447 (class 1255 OID 65508)
 -- Dependencies: 6 966 966
 -- Name: st_endpoint(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9667,7 +8033,7 @@ CREATE FUNCTION st_endpoint(geometry) RETURNS geometry
 
 
 --
--- TOC entry 448 (class 1255 OID 50517)
+-- TOC entry 448 (class 1255 OID 65509)
 -- Dependencies: 6 966 966
 -- Name: st_envelope(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9678,7 +8044,7 @@ CREATE FUNCTION st_envelope(geometry) RETURNS geometry
 
 
 --
--- TOC entry 449 (class 1255 OID 50518)
+-- TOC entry 449 (class 1255 OID 65510)
 -- Dependencies: 6 966 966
 -- Name: st_equals(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9689,8 +8055,8 @@ CREATE FUNCTION st_equals(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 450 (class 1255 OID 50519)
--- Dependencies: 6 1048 919
+-- TOC entry 450 (class 1255 OID 65511)
+-- Dependencies: 6 974 919
 -- Name: st_estimate_histogram2d(histogram2d, box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9700,7 +8066,7 @@ CREATE FUNCTION st_estimate_histogram2d(histogram2d, box2d) RETURNS double preci
 
 
 --
--- TOC entry 451 (class 1255 OID 50520)
+-- TOC entry 451 (class 1255 OID 65512)
 -- Dependencies: 6 919
 -- Name: st_estimated_extent(text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9711,7 +8077,7 @@ CREATE FUNCTION st_estimated_extent(text, text, text) RETURNS box2d
 
 
 --
--- TOC entry 452 (class 1255 OID 50521)
+-- TOC entry 452 (class 1255 OID 65513)
 -- Dependencies: 6 919
 -- Name: st_estimated_extent(text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9722,7 +8088,7 @@ CREATE FUNCTION st_estimated_extent(text, text) RETURNS box2d
 
 
 --
--- TOC entry 453 (class 1255 OID 50522)
+-- TOC entry 453 (class 1255 OID 65514)
 -- Dependencies: 6 958 958
 -- Name: st_expand(box3d, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9733,7 +8099,7 @@ CREATE FUNCTION st_expand(box3d, double precision) RETURNS box3d
 
 
 --
--- TOC entry 454 (class 1255 OID 50523)
+-- TOC entry 454 (class 1255 OID 65515)
 -- Dependencies: 6 919 919
 -- Name: st_expand(box2d, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9744,7 +8110,7 @@ CREATE FUNCTION st_expand(box2d, double precision) RETURNS box2d
 
 
 --
--- TOC entry 455 (class 1255 OID 50524)
+-- TOC entry 455 (class 1255 OID 65516)
 -- Dependencies: 6 966 966
 -- Name: st_expand(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9755,8 +8121,8 @@ CREATE FUNCTION st_expand(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 456 (class 1255 OID 50525)
--- Dependencies: 6 1048 1048
+-- TOC entry 456 (class 1255 OID 65517)
+-- Dependencies: 6 974 974
 -- Name: st_explode_histogram2d(histogram2d, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9766,7 +8132,7 @@ CREATE FUNCTION st_explode_histogram2d(histogram2d, text) RETURNS histogram2d
 
 
 --
--- TOC entry 457 (class 1255 OID 50526)
+-- TOC entry 457 (class 1255 OID 65518)
 -- Dependencies: 6 966 966
 -- Name: st_exteriorring(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9777,7 +8143,7 @@ CREATE FUNCTION st_exteriorring(geometry) RETURNS geometry
 
 
 --
--- TOC entry 458 (class 1255 OID 50527)
+-- TOC entry 458 (class 1255 OID 65519)
 -- Dependencies: 6 961
 -- Name: st_factor(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9788,8 +8154,8 @@ CREATE FUNCTION st_factor(chip) RETURNS real
 
 
 --
--- TOC entry 459 (class 1255 OID 50528)
--- Dependencies: 6 1152 919
+-- TOC entry 459 (class 1255 OID 65520)
+-- Dependencies: 6 1085 919
 -- Name: st_find_extent(text, text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9811,8 +8177,8 @@ $_$
 
 
 --
--- TOC entry 460 (class 1255 OID 50529)
--- Dependencies: 6 1152 919
+-- TOC entry 460 (class 1255 OID 65521)
+-- Dependencies: 6 1085 919
 -- Name: st_find_extent(text, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -9833,7 +8199,7 @@ $_$
 
 
 --
--- TOC entry 461 (class 1255 OID 50530)
+-- TOC entry 461 (class 1255 OID 65522)
 -- Dependencies: 6 966 966
 -- Name: st_force_2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9844,7 +8210,7 @@ CREATE FUNCTION st_force_2d(geometry) RETURNS geometry
 
 
 --
--- TOC entry 462 (class 1255 OID 50531)
+-- TOC entry 462 (class 1255 OID 65523)
 -- Dependencies: 6 966 966
 -- Name: st_force_3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9855,7 +8221,7 @@ CREATE FUNCTION st_force_3d(geometry) RETURNS geometry
 
 
 --
--- TOC entry 463 (class 1255 OID 50532)
+-- TOC entry 463 (class 1255 OID 65524)
 -- Dependencies: 6 966 966
 -- Name: st_force_3dm(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9866,7 +8232,7 @@ CREATE FUNCTION st_force_3dm(geometry) RETURNS geometry
 
 
 --
--- TOC entry 464 (class 1255 OID 50533)
+-- TOC entry 464 (class 1255 OID 65525)
 -- Dependencies: 6 966 966
 -- Name: st_force_3dz(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9877,7 +8243,7 @@ CREATE FUNCTION st_force_3dz(geometry) RETURNS geometry
 
 
 --
--- TOC entry 465 (class 1255 OID 50534)
+-- TOC entry 465 (class 1255 OID 65526)
 -- Dependencies: 6 966 966
 -- Name: st_force_4d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9888,7 +8254,7 @@ CREATE FUNCTION st_force_4d(geometry) RETURNS geometry
 
 
 --
--- TOC entry 466 (class 1255 OID 50535)
+-- TOC entry 466 (class 1255 OID 65527)
 -- Dependencies: 6 966 966
 -- Name: st_force_collection(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9899,7 +8265,7 @@ CREATE FUNCTION st_force_collection(geometry) RETURNS geometry
 
 
 --
--- TOC entry 467 (class 1255 OID 50536)
+-- TOC entry 467 (class 1255 OID 65528)
 -- Dependencies: 6 966 966
 -- Name: st_forcerhr(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9910,7 +8276,7 @@ CREATE FUNCTION st_forcerhr(geometry) RETURNS geometry
 
 
 --
--- TOC entry 468 (class 1255 OID 50537)
+-- TOC entry 468 (class 1255 OID 65529)
 -- Dependencies: 6 968 968 966
 -- Name: st_geom_accum(geometry[], geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9921,7 +8287,7 @@ CREATE FUNCTION st_geom_accum(geometry[], geometry) RETURNS geometry[]
 
 
 --
--- TOC entry 469 (class 1255 OID 50538)
+-- TOC entry 469 (class 1255 OID 65530)
 -- Dependencies: 6 966
 -- Name: st_geomcollfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9937,7 +8303,7 @@ CREATE FUNCTION st_geomcollfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 470 (class 1255 OID 50539)
+-- TOC entry 470 (class 1255 OID 65531)
 -- Dependencies: 6 966
 -- Name: st_geomcollfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9953,7 +8319,7 @@ CREATE FUNCTION st_geomcollfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 471 (class 1255 OID 50540)
+-- TOC entry 471 (class 1255 OID 65532)
 -- Dependencies: 6 966
 -- Name: st_geomcollfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9969,7 +8335,7 @@ CREATE FUNCTION st_geomcollfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 472 (class 1255 OID 50541)
+-- TOC entry 472 (class 1255 OID 65533)
 -- Dependencies: 6 966
 -- Name: st_geomcollfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9985,7 +8351,7 @@ CREATE FUNCTION st_geomcollfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 473 (class 1255 OID 50542)
+-- TOC entry 473 (class 1255 OID 65534)
 -- Dependencies: 6 966 919
 -- Name: st_geometry(box2d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -9996,7 +8362,7 @@ CREATE FUNCTION st_geometry(box2d) RETURNS geometry
 
 
 --
--- TOC entry 474 (class 1255 OID 50543)
+-- TOC entry 474 (class 1255 OID 65535)
 -- Dependencies: 6 966 958
 -- Name: st_geometry(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10007,7 +8373,7 @@ CREATE FUNCTION st_geometry(box3d) RETURNS geometry
 
 
 --
--- TOC entry 475 (class 1255 OID 50544)
+-- TOC entry 475 (class 1255 OID 65536)
 -- Dependencies: 6 966
 -- Name: st_geometry(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10018,7 +8384,7 @@ CREATE FUNCTION st_geometry(text) RETURNS geometry
 
 
 --
--- TOC entry 476 (class 1255 OID 50545)
+-- TOC entry 476 (class 1255 OID 65537)
 -- Dependencies: 6 966 961
 -- Name: st_geometry(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10029,7 +8395,7 @@ CREATE FUNCTION st_geometry(chip) RETURNS geometry
 
 
 --
--- TOC entry 477 (class 1255 OID 50546)
+-- TOC entry 477 (class 1255 OID 65538)
 -- Dependencies: 6 966
 -- Name: st_geometry(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10040,7 +8406,7 @@ CREATE FUNCTION st_geometry(bytea) RETURNS geometry
 
 
 --
--- TOC entry 478 (class 1255 OID 50547)
+-- TOC entry 478 (class 1255 OID 65539)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_above(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10051,7 +8417,7 @@ CREATE FUNCTION st_geometry_above(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 479 (class 1255 OID 50548)
+-- TOC entry 479 (class 1255 OID 65540)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_below(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10062,7 +8428,7 @@ CREATE FUNCTION st_geometry_below(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 480 (class 1255 OID 50549)
+-- TOC entry 480 (class 1255 OID 65541)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_cmp(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10073,7 +8439,7 @@ CREATE FUNCTION st_geometry_cmp(geometry, geometry) RETURNS integer
 
 
 --
--- TOC entry 481 (class 1255 OID 50550)
+-- TOC entry 481 (class 1255 OID 65542)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_contain(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10084,7 +8450,7 @@ CREATE FUNCTION st_geometry_contain(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 482 (class 1255 OID 50551)
+-- TOC entry 482 (class 1255 OID 65543)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_contained(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10095,7 +8461,7 @@ CREATE FUNCTION st_geometry_contained(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 483 (class 1255 OID 50552)
+-- TOC entry 483 (class 1255 OID 65544)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_eq(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10106,7 +8472,7 @@ CREATE FUNCTION st_geometry_eq(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 484 (class 1255 OID 50553)
+-- TOC entry 484 (class 1255 OID 65545)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_ge(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10117,7 +8483,7 @@ CREATE FUNCTION st_geometry_ge(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 485 (class 1255 OID 50554)
+-- TOC entry 485 (class 1255 OID 65546)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_gt(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10128,7 +8494,7 @@ CREATE FUNCTION st_geometry_gt(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 486 (class 1255 OID 50555)
+-- TOC entry 486 (class 1255 OID 65547)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_le(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10139,7 +8505,7 @@ CREATE FUNCTION st_geometry_le(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 487 (class 1255 OID 50556)
+-- TOC entry 487 (class 1255 OID 65548)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_left(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10150,7 +8516,7 @@ CREATE FUNCTION st_geometry_left(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 488 (class 1255 OID 50557)
+-- TOC entry 488 (class 1255 OID 65549)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_lt(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10161,7 +8527,7 @@ CREATE FUNCTION st_geometry_lt(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 489 (class 1255 OID 50558)
+-- TOC entry 489 (class 1255 OID 65550)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_overabove(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10172,7 +8538,7 @@ CREATE FUNCTION st_geometry_overabove(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 490 (class 1255 OID 50559)
+-- TOC entry 490 (class 1255 OID 65551)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_overbelow(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10183,7 +8549,7 @@ CREATE FUNCTION st_geometry_overbelow(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 491 (class 1255 OID 50560)
+-- TOC entry 491 (class 1255 OID 65552)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_overlap(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10194,7 +8560,7 @@ CREATE FUNCTION st_geometry_overlap(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 492 (class 1255 OID 50561)
+-- TOC entry 492 (class 1255 OID 65553)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_overleft(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10205,7 +8571,7 @@ CREATE FUNCTION st_geometry_overleft(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 493 (class 1255 OID 50562)
+-- TOC entry 493 (class 1255 OID 65554)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_overright(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10216,7 +8582,7 @@ CREATE FUNCTION st_geometry_overright(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 494 (class 1255 OID 50563)
+-- TOC entry 494 (class 1255 OID 65555)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_right(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10227,7 +8593,7 @@ CREATE FUNCTION st_geometry_right(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 495 (class 1255 OID 50564)
+-- TOC entry 495 (class 1255 OID 65556)
 -- Dependencies: 6 966 966
 -- Name: st_geometry_same(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10238,7 +8604,7 @@ CREATE FUNCTION st_geometry_same(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 496 (class 1255 OID 50565)
+-- TOC entry 496 (class 1255 OID 65557)
 -- Dependencies: 6 966
 -- Name: st_geometryfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10249,7 +8615,7 @@ CREATE FUNCTION st_geometryfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 497 (class 1255 OID 50566)
+-- TOC entry 497 (class 1255 OID 65558)
 -- Dependencies: 6 966
 -- Name: st_geometryfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10260,7 +8626,7 @@ CREATE FUNCTION st_geometryfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 498 (class 1255 OID 50567)
+-- TOC entry 498 (class 1255 OID 65559)
 -- Dependencies: 6 966 966
 -- Name: st_geometryn(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10271,8 +8637,8 @@ CREATE FUNCTION st_geometryn(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 499 (class 1255 OID 50568)
--- Dependencies: 6 1152 966
+-- TOC entry 499 (class 1255 OID 65560)
+-- Dependencies: 6 1085 966
 -- Name: st_geometrytype(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -10303,7 +8669,7 @@ CREATE FUNCTION st_geometrytype(geometry) RETURNS text
 
 
 --
--- TOC entry 500 (class 1255 OID 50569)
+-- TOC entry 500 (class 1255 OID 65561)
 -- Dependencies: 6 966
 -- Name: st_geomfromewkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10314,7 +8680,7 @@ CREATE FUNCTION st_geomfromewkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 501 (class 1255 OID 50570)
+-- TOC entry 501 (class 1255 OID 65562)
 -- Dependencies: 6 966
 -- Name: st_geomfromewkt(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10325,7 +8691,7 @@ CREATE FUNCTION st_geomfromewkt(text) RETURNS geometry
 
 
 --
--- TOC entry 502 (class 1255 OID 50571)
+-- TOC entry 502 (class 1255 OID 65563)
 -- Dependencies: 6 966
 -- Name: st_geomfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10336,7 +8702,7 @@ CREATE FUNCTION st_geomfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 503 (class 1255 OID 50572)
+-- TOC entry 503 (class 1255 OID 65564)
 -- Dependencies: 6 966
 -- Name: st_geomfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10347,7 +8713,7 @@ CREATE FUNCTION st_geomfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 504 (class 1255 OID 50573)
+-- TOC entry 504 (class 1255 OID 65565)
 -- Dependencies: 6 966
 -- Name: st_geomfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10358,7 +8724,7 @@ CREATE FUNCTION st_geomfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 505 (class 1255 OID 50574)
+-- TOC entry 505 (class 1255 OID 65566)
 -- Dependencies: 6 966
 -- Name: st_geomfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10369,7 +8735,7 @@ CREATE FUNCTION st_geomfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 506 (class 1255 OID 50575)
+-- TOC entry 506 (class 1255 OID 65567)
 -- Dependencies: 6 966
 -- Name: st_hasarc(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10380,7 +8746,7 @@ CREATE FUNCTION st_hasarc(geometry) RETURNS boolean
 
 
 --
--- TOC entry 507 (class 1255 OID 50576)
+-- TOC entry 507 (class 1255 OID 65568)
 -- Dependencies: 6 966
 -- Name: st_hasbbox(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10391,7 +8757,7 @@ CREATE FUNCTION st_hasbbox(geometry) RETURNS boolean
 
 
 --
--- TOC entry 508 (class 1255 OID 50577)
+-- TOC entry 508 (class 1255 OID 65569)
 -- Dependencies: 6 961
 -- Name: st_height(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10402,7 +8768,7 @@ CREATE FUNCTION st_height(chip) RETURNS integer
 
 
 --
--- TOC entry 509 (class 1255 OID 50578)
+-- TOC entry 509 (class 1255 OID 65570)
 -- Dependencies: 6 966 966
 -- Name: st_interiorringn(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10413,7 +8779,7 @@ CREATE FUNCTION st_interiorringn(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 510 (class 1255 OID 50579)
+-- TOC entry 510 (class 1255 OID 65571)
 -- Dependencies: 6 966 966 966
 -- Name: st_intersection(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10424,7 +8790,7 @@ CREATE FUNCTION st_intersection(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 511 (class 1255 OID 50580)
+-- TOC entry 511 (class 1255 OID 65572)
 -- Dependencies: 6 966 966
 -- Name: st_intersects(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10435,7 +8801,7 @@ CREATE FUNCTION st_intersects(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 512 (class 1255 OID 50581)
+-- TOC entry 512 (class 1255 OID 65573)
 -- Dependencies: 6 966
 -- Name: st_isclosed(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10446,7 +8812,7 @@ CREATE FUNCTION st_isclosed(geometry) RETURNS boolean
 
 
 --
--- TOC entry 513 (class 1255 OID 50582)
+-- TOC entry 513 (class 1255 OID 65574)
 -- Dependencies: 6 966
 -- Name: st_isempty(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10457,7 +8823,7 @@ CREATE FUNCTION st_isempty(geometry) RETURNS boolean
 
 
 --
--- TOC entry 514 (class 1255 OID 50583)
+-- TOC entry 514 (class 1255 OID 65575)
 -- Dependencies: 6 966
 -- Name: st_isring(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10468,7 +8834,7 @@ CREATE FUNCTION st_isring(geometry) RETURNS boolean
 
 
 --
--- TOC entry 515 (class 1255 OID 50584)
+-- TOC entry 515 (class 1255 OID 65576)
 -- Dependencies: 6 966
 -- Name: st_issimple(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10479,7 +8845,7 @@ CREATE FUNCTION st_issimple(geometry) RETURNS boolean
 
 
 --
--- TOC entry 516 (class 1255 OID 50585)
+-- TOC entry 516 (class 1255 OID 65577)
 -- Dependencies: 6 966
 -- Name: st_isvalid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10490,7 +8856,7 @@ CREATE FUNCTION st_isvalid(geometry) RETURNS boolean
 
 
 --
--- TOC entry 517 (class 1255 OID 50586)
+-- TOC entry 517 (class 1255 OID 65578)
 -- Dependencies: 6 966
 -- Name: st_length(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10501,7 +8867,7 @@ CREATE FUNCTION st_length(geometry) RETURNS double precision
 
 
 --
--- TOC entry 518 (class 1255 OID 50587)
+-- TOC entry 518 (class 1255 OID 65579)
 -- Dependencies: 6 966
 -- Name: st_length2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10512,8 +8878,8 @@ CREATE FUNCTION st_length2d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 519 (class 1255 OID 50588)
--- Dependencies: 6 966 1114
+-- TOC entry 519 (class 1255 OID 65580)
+-- Dependencies: 6 966 1024
 -- Name: st_length2d_spheroid(geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -10523,7 +8889,7 @@ CREATE FUNCTION st_length2d_spheroid(geometry, spheroid) RETURNS double precisio
 
 
 --
--- TOC entry 520 (class 1255 OID 50589)
+-- TOC entry 520 (class 1255 OID 65581)
 -- Dependencies: 6 966
 -- Name: st_length3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10534,8 +8900,8 @@ CREATE FUNCTION st_length3d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 521 (class 1255 OID 50590)
--- Dependencies: 6 966 1114
+-- TOC entry 521 (class 1255 OID 65582)
+-- Dependencies: 6 966 1024
 -- Name: st_length3d_spheroid(geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -10545,8 +8911,8 @@ CREATE FUNCTION st_length3d_spheroid(geometry, spheroid) RETURNS double precisio
 
 
 --
--- TOC entry 522 (class 1255 OID 50591)
--- Dependencies: 6 966 1114
+-- TOC entry 522 (class 1255 OID 65583)
+-- Dependencies: 6 966 1024
 -- Name: st_length_spheroid(geometry, spheroid); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -10556,7 +8922,7 @@ CREATE FUNCTION st_length_spheroid(geometry, spheroid) RETURNS double precision
 
 
 --
--- TOC entry 523 (class 1255 OID 50592)
+-- TOC entry 523 (class 1255 OID 65584)
 -- Dependencies: 6 966 966
 -- Name: st_line_interpolate_point(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10567,7 +8933,7 @@ CREATE FUNCTION st_line_interpolate_point(geometry, double precision) RETURNS ge
 
 
 --
--- TOC entry 524 (class 1255 OID 50593)
+-- TOC entry 524 (class 1255 OID 65585)
 -- Dependencies: 6 966 966
 -- Name: st_line_locate_point(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10578,7 +8944,7 @@ CREATE FUNCTION st_line_locate_point(geometry, geometry) RETURNS double precisio
 
 
 --
--- TOC entry 525 (class 1255 OID 50594)
+-- TOC entry 525 (class 1255 OID 65586)
 -- Dependencies: 6 966 966
 -- Name: st_line_substring(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10589,7 +8955,7 @@ CREATE FUNCTION st_line_substring(geometry, double precision, double precision) 
 
 
 --
--- TOC entry 526 (class 1255 OID 50595)
+-- TOC entry 526 (class 1255 OID 65587)
 -- Dependencies: 6 966 966
 -- Name: st_linefrommultipoint(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10600,7 +8966,7 @@ CREATE FUNCTION st_linefrommultipoint(geometry) RETURNS geometry
 
 
 --
--- TOC entry 527 (class 1255 OID 50596)
+-- TOC entry 527 (class 1255 OID 65588)
 -- Dependencies: 6 966
 -- Name: st_linefromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10615,7 +8981,7 @@ CREATE FUNCTION st_linefromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 528 (class 1255 OID 50597)
+-- TOC entry 528 (class 1255 OID 65589)
 -- Dependencies: 6 966
 -- Name: st_linefromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10630,7 +8996,7 @@ CREATE FUNCTION st_linefromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 529 (class 1255 OID 50598)
+-- TOC entry 529 (class 1255 OID 65590)
 -- Dependencies: 6 966
 -- Name: st_linefromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10645,7 +9011,7 @@ CREATE FUNCTION st_linefromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 530 (class 1255 OID 50599)
+-- TOC entry 530 (class 1255 OID 65591)
 -- Dependencies: 6 966
 -- Name: st_linefromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10660,7 +9026,7 @@ CREATE FUNCTION st_linefromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 531 (class 1255 OID 50600)
+-- TOC entry 531 (class 1255 OID 65592)
 -- Dependencies: 6 966 966
 -- Name: st_linemerge(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10671,7 +9037,7 @@ CREATE FUNCTION st_linemerge(geometry) RETURNS geometry
 
 
 --
--- TOC entry 532 (class 1255 OID 50601)
+-- TOC entry 532 (class 1255 OID 65593)
 -- Dependencies: 6 966
 -- Name: st_linestringfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10686,7 +9052,7 @@ CREATE FUNCTION st_linestringfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 533 (class 1255 OID 50602)
+-- TOC entry 533 (class 1255 OID 65594)
 -- Dependencies: 6 966
 -- Name: st_linestringfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10701,7 +9067,7 @@ CREATE FUNCTION st_linestringfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 534 (class 1255 OID 50603)
+-- TOC entry 534 (class 1255 OID 65595)
 -- Dependencies: 6 966 966
 -- Name: st_linetocurve(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10712,7 +9078,7 @@ CREATE FUNCTION st_linetocurve(geometry) RETURNS geometry
 
 
 --
--- TOC entry 535 (class 1255 OID 50604)
+-- TOC entry 535 (class 1255 OID 65596)
 -- Dependencies: 6 966 966
 -- Name: st_locate_along_measure(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10723,7 +9089,7 @@ CREATE FUNCTION st_locate_along_measure(geometry, double precision) RETURNS geom
 
 
 --
--- TOC entry 536 (class 1255 OID 50605)
+-- TOC entry 536 (class 1255 OID 65597)
 -- Dependencies: 6 966 966
 -- Name: st_locate_between_measures(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10734,7 +9100,7 @@ CREATE FUNCTION st_locate_between_measures(geometry, double precision, double pr
 
 
 --
--- TOC entry 537 (class 1255 OID 50606)
+-- TOC entry 537 (class 1255 OID 65598)
 -- Dependencies: 6 966
 -- Name: st_m(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10745,7 +9111,7 @@ CREATE FUNCTION st_m(geometry) RETURNS double precision
 
 
 --
--- TOC entry 538 (class 1255 OID 50607)
+-- TOC entry 538 (class 1255 OID 65599)
 -- Dependencies: 6 919 966 966
 -- Name: st_makebox2d(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10756,7 +9122,7 @@ CREATE FUNCTION st_makebox2d(geometry, geometry) RETURNS box2d
 
 
 --
--- TOC entry 539 (class 1255 OID 50608)
+-- TOC entry 539 (class 1255 OID 65600)
 -- Dependencies: 6 958 966 966
 -- Name: st_makebox3d(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10767,7 +9133,7 @@ CREATE FUNCTION st_makebox3d(geometry, geometry) RETURNS box3d
 
 
 --
--- TOC entry 540 (class 1255 OID 50609)
+-- TOC entry 540 (class 1255 OID 65601)
 -- Dependencies: 6 966 966 966
 -- Name: st_makeline(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10778,7 +9144,7 @@ CREATE FUNCTION st_makeline(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 541 (class 1255 OID 50610)
+-- TOC entry 541 (class 1255 OID 65602)
 -- Dependencies: 6 966 968
 -- Name: st_makeline_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10789,7 +9155,7 @@ CREATE FUNCTION st_makeline_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 542 (class 1255 OID 50611)
+-- TOC entry 542 (class 1255 OID 65603)
 -- Dependencies: 6 966
 -- Name: st_makepoint(double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10800,7 +9166,7 @@ CREATE FUNCTION st_makepoint(double precision, double precision) RETURNS geometr
 
 
 --
--- TOC entry 543 (class 1255 OID 50612)
+-- TOC entry 543 (class 1255 OID 65604)
 -- Dependencies: 6 966
 -- Name: st_makepoint(double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10811,7 +9177,7 @@ CREATE FUNCTION st_makepoint(double precision, double precision, double precisio
 
 
 --
--- TOC entry 544 (class 1255 OID 50613)
+-- TOC entry 544 (class 1255 OID 65605)
 -- Dependencies: 6 966
 -- Name: st_makepoint(double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10822,7 +9188,7 @@ CREATE FUNCTION st_makepoint(double precision, double precision, double precisio
 
 
 --
--- TOC entry 545 (class 1255 OID 50614)
+-- TOC entry 545 (class 1255 OID 65606)
 -- Dependencies: 6 966 966 968
 -- Name: st_makepolygon(geometry, geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10833,7 +9199,7 @@ CREATE FUNCTION st_makepolygon(geometry, geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 546 (class 1255 OID 50615)
+-- TOC entry 546 (class 1255 OID 65607)
 -- Dependencies: 6 966 966
 -- Name: st_makepolygon(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10844,7 +9210,7 @@ CREATE FUNCTION st_makepolygon(geometry) RETURNS geometry
 
 
 --
--- TOC entry 547 (class 1255 OID 50616)
+-- TOC entry 547 (class 1255 OID 65608)
 -- Dependencies: 6 966 966
 -- Name: st_max_distance(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10855,7 +9221,7 @@ CREATE FUNCTION st_max_distance(geometry, geometry) RETURNS double precision
 
 
 --
--- TOC entry 548 (class 1255 OID 50617)
+-- TOC entry 548 (class 1255 OID 65609)
 -- Dependencies: 6 966
 -- Name: st_mem_size(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10866,7 +9232,7 @@ CREATE FUNCTION st_mem_size(geometry) RETURNS integer
 
 
 --
--- TOC entry 549 (class 1255 OID 50618)
+-- TOC entry 549 (class 1255 OID 65610)
 -- Dependencies: 6 966
 -- Name: st_mlinefromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10882,7 +9248,7 @@ CREATE FUNCTION st_mlinefromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 550 (class 1255 OID 50619)
+-- TOC entry 550 (class 1255 OID 65611)
 -- Dependencies: 6 966
 -- Name: st_mlinefromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10897,7 +9263,7 @@ CREATE FUNCTION st_mlinefromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 551 (class 1255 OID 50620)
+-- TOC entry 551 (class 1255 OID 65612)
 -- Dependencies: 6 966
 -- Name: st_mlinefromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10912,7 +9278,7 @@ CREATE FUNCTION st_mlinefromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 552 (class 1255 OID 50621)
+-- TOC entry 552 (class 1255 OID 65613)
 -- Dependencies: 6 966
 -- Name: st_mlinefromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10927,7 +9293,7 @@ CREATE FUNCTION st_mlinefromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 553 (class 1255 OID 50622)
+-- TOC entry 553 (class 1255 OID 65614)
 -- Dependencies: 6 966
 -- Name: st_mpointfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10942,7 +9308,7 @@ CREATE FUNCTION st_mpointfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 554 (class 1255 OID 50623)
+-- TOC entry 554 (class 1255 OID 65615)
 -- Dependencies: 6 966
 -- Name: st_mpointfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10957,7 +9323,7 @@ CREATE FUNCTION st_mpointfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 555 (class 1255 OID 50624)
+-- TOC entry 555 (class 1255 OID 65616)
 -- Dependencies: 6 966
 -- Name: st_mpointfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10972,7 +9338,7 @@ CREATE FUNCTION st_mpointfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 556 (class 1255 OID 50625)
+-- TOC entry 556 (class 1255 OID 65617)
 -- Dependencies: 6 966
 -- Name: st_mpointfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -10987,7 +9353,7 @@ CREATE FUNCTION st_mpointfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 557 (class 1255 OID 50626)
+-- TOC entry 557 (class 1255 OID 65618)
 -- Dependencies: 6 966
 -- Name: st_mpolyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11002,7 +9368,7 @@ CREATE FUNCTION st_mpolyfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 558 (class 1255 OID 50627)
+-- TOC entry 558 (class 1255 OID 65619)
 -- Dependencies: 6 966
 -- Name: st_mpolyfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11017,7 +9383,7 @@ CREATE FUNCTION st_mpolyfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 559 (class 1255 OID 50628)
+-- TOC entry 559 (class 1255 OID 65620)
 -- Dependencies: 6 966
 -- Name: st_mpolyfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11032,7 +9398,7 @@ CREATE FUNCTION st_mpolyfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 560 (class 1255 OID 50629)
+-- TOC entry 560 (class 1255 OID 65621)
 -- Dependencies: 6 966
 -- Name: st_mpolyfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11047,7 +9413,7 @@ CREATE FUNCTION st_mpolyfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 561 (class 1255 OID 50630)
+-- TOC entry 561 (class 1255 OID 65622)
 -- Dependencies: 6 966 966
 -- Name: st_multi(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11058,7 +9424,7 @@ CREATE FUNCTION st_multi(geometry) RETURNS geometry
 
 
 --
--- TOC entry 562 (class 1255 OID 50631)
+-- TOC entry 562 (class 1255 OID 65623)
 -- Dependencies: 6 966
 -- Name: st_multilinefromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11073,7 +9439,7 @@ CREATE FUNCTION st_multilinefromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 563 (class 1255 OID 50632)
+-- TOC entry 563 (class 1255 OID 65624)
 -- Dependencies: 6 966
 -- Name: st_multilinestringfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11084,7 +9450,7 @@ CREATE FUNCTION st_multilinestringfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 564 (class 1255 OID 50633)
+-- TOC entry 564 (class 1255 OID 65625)
 -- Dependencies: 6 966
 -- Name: st_multilinestringfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11095,7 +9461,7 @@ CREATE FUNCTION st_multilinestringfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 565 (class 1255 OID 50634)
+-- TOC entry 565 (class 1255 OID 65626)
 -- Dependencies: 6 966
 -- Name: st_multipointfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11106,7 +9472,7 @@ CREATE FUNCTION st_multipointfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 566 (class 1255 OID 50635)
+-- TOC entry 566 (class 1255 OID 65627)
 -- Dependencies: 6 966
 -- Name: st_multipointfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11121,7 +9487,7 @@ CREATE FUNCTION st_multipointfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 567 (class 1255 OID 50636)
+-- TOC entry 567 (class 1255 OID 65628)
 -- Dependencies: 6 966
 -- Name: st_multipointfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11136,7 +9502,7 @@ CREATE FUNCTION st_multipointfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 568 (class 1255 OID 50637)
+-- TOC entry 568 (class 1255 OID 65629)
 -- Dependencies: 6 966
 -- Name: st_multipolyfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11151,7 +9517,7 @@ CREATE FUNCTION st_multipolyfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 569 (class 1255 OID 50638)
+-- TOC entry 569 (class 1255 OID 65630)
 -- Dependencies: 6 966
 -- Name: st_multipolyfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11166,7 +9532,7 @@ CREATE FUNCTION st_multipolyfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 570 (class 1255 OID 50639)
+-- TOC entry 570 (class 1255 OID 65631)
 -- Dependencies: 6 966
 -- Name: st_multipolygonfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11177,7 +9543,7 @@ CREATE FUNCTION st_multipolygonfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 571 (class 1255 OID 50640)
+-- TOC entry 571 (class 1255 OID 65632)
 -- Dependencies: 6 966
 -- Name: st_multipolygonfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11188,7 +9554,7 @@ CREATE FUNCTION st_multipolygonfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 572 (class 1255 OID 50641)
+-- TOC entry 572 (class 1255 OID 65633)
 -- Dependencies: 6 966
 -- Name: st_ndims(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11199,7 +9565,7 @@ CREATE FUNCTION st_ndims(geometry) RETURNS smallint
 
 
 --
--- TOC entry 573 (class 1255 OID 50642)
+-- TOC entry 573 (class 1255 OID 65634)
 -- Dependencies: 6 966 966
 -- Name: st_noop(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11210,7 +9576,7 @@ CREATE FUNCTION st_noop(geometry) RETURNS geometry
 
 
 --
--- TOC entry 574 (class 1255 OID 50643)
+-- TOC entry 574 (class 1255 OID 65635)
 -- Dependencies: 6 966
 -- Name: st_npoints(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11221,7 +9587,7 @@ CREATE FUNCTION st_npoints(geometry) RETURNS integer
 
 
 --
--- TOC entry 575 (class 1255 OID 50644)
+-- TOC entry 575 (class 1255 OID 65636)
 -- Dependencies: 6 966
 -- Name: st_nrings(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11232,7 +9598,7 @@ CREATE FUNCTION st_nrings(geometry) RETURNS integer
 
 
 --
--- TOC entry 576 (class 1255 OID 50645)
+-- TOC entry 576 (class 1255 OID 65637)
 -- Dependencies: 6 966
 -- Name: st_numgeometries(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11243,7 +9609,7 @@ CREATE FUNCTION st_numgeometries(geometry) RETURNS integer
 
 
 --
--- TOC entry 577 (class 1255 OID 50646)
+-- TOC entry 577 (class 1255 OID 65638)
 -- Dependencies: 6 966
 -- Name: st_numinteriorring(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11254,7 +9620,7 @@ CREATE FUNCTION st_numinteriorring(geometry) RETURNS integer
 
 
 --
--- TOC entry 578 (class 1255 OID 50647)
+-- TOC entry 578 (class 1255 OID 65639)
 -- Dependencies: 6 966
 -- Name: st_numinteriorrings(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11265,7 +9631,7 @@ CREATE FUNCTION st_numinteriorrings(geometry) RETURNS integer
 
 
 --
--- TOC entry 579 (class 1255 OID 50648)
+-- TOC entry 579 (class 1255 OID 65640)
 -- Dependencies: 6 966
 -- Name: st_numpoints(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11276,8 +9642,8 @@ CREATE FUNCTION st_numpoints(geometry) RETURNS integer
 
 
 --
--- TOC entry 580 (class 1255 OID 50649)
--- Dependencies: 6 966 966
+-- TOC entry 580 (class 1255 OID 65641)
+-- Dependencies: 966 6 966
 -- Name: st_orderingequals(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11289,8 +9655,8 @@ CREATE FUNCTION st_orderingequals(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 581 (class 1255 OID 50650)
--- Dependencies: 6 966 966
+-- TOC entry 581 (class 1255 OID 65642)
+-- Dependencies: 966 6 966
 -- Name: st_overlaps(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11300,7 +9666,7 @@ CREATE FUNCTION st_overlaps(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 582 (class 1255 OID 50651)
+-- TOC entry 582 (class 1255 OID 65643)
 -- Dependencies: 6 966
 -- Name: st_perimeter(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11311,7 +9677,7 @@ CREATE FUNCTION st_perimeter(geometry) RETURNS double precision
 
 
 --
--- TOC entry 583 (class 1255 OID 50652)
+-- TOC entry 583 (class 1255 OID 65644)
 -- Dependencies: 6 966
 -- Name: st_perimeter2d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11322,8 +9688,8 @@ CREATE FUNCTION st_perimeter2d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 584 (class 1255 OID 50653)
--- Dependencies: 6 966
+-- TOC entry 584 (class 1255 OID 65645)
+-- Dependencies: 966 6
 -- Name: st_perimeter3d(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11333,8 +9699,8 @@ CREATE FUNCTION st_perimeter3d(geometry) RETURNS double precision
 
 
 --
--- TOC entry 585 (class 1255 OID 50654)
--- Dependencies: 6 966
+-- TOC entry 585 (class 1255 OID 65646)
+-- Dependencies: 966 6
 -- Name: st_point(double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11344,7 +9710,7 @@ CREATE FUNCTION st_point(double precision, double precision) RETURNS geometry
 
 
 --
--- TOC entry 586 (class 1255 OID 50655)
+-- TOC entry 586 (class 1255 OID 65647)
 -- Dependencies: 6 966
 -- Name: st_point_inside_circle(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11355,7 +9721,7 @@ CREATE FUNCTION st_point_inside_circle(geometry, double precision, double precis
 
 
 --
--- TOC entry 587 (class 1255 OID 50656)
+-- TOC entry 587 (class 1255 OID 65648)
 -- Dependencies: 6 966
 -- Name: st_pointfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11370,8 +9736,8 @@ CREATE FUNCTION st_pointfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 588 (class 1255 OID 50657)
--- Dependencies: 6 966
+-- TOC entry 588 (class 1255 OID 65649)
+-- Dependencies: 966 6
 -- Name: st_pointfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11385,8 +9751,8 @@ CREATE FUNCTION st_pointfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 589 (class 1255 OID 50658)
--- Dependencies: 6 966
+-- TOC entry 589 (class 1255 OID 65650)
+-- Dependencies: 966 6
 -- Name: st_pointfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11400,7 +9766,7 @@ CREATE FUNCTION st_pointfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 590 (class 1255 OID 50659)
+-- TOC entry 590 (class 1255 OID 65651)
 -- Dependencies: 6 966
 -- Name: st_pointfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11415,7 +9781,7 @@ CREATE FUNCTION st_pointfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 591 (class 1255 OID 50660)
+-- TOC entry 591 (class 1255 OID 65652)
 -- Dependencies: 6 966 966
 -- Name: st_pointn(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11426,8 +9792,8 @@ CREATE FUNCTION st_pointn(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 592 (class 1255 OID 50661)
--- Dependencies: 6 966 966
+-- TOC entry 592 (class 1255 OID 65653)
+-- Dependencies: 966 6 966
 -- Name: st_pointonsurface(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11437,8 +9803,8 @@ CREATE FUNCTION st_pointonsurface(geometry) RETURNS geometry
 
 
 --
--- TOC entry 593 (class 1255 OID 50662)
--- Dependencies: 6 966
+-- TOC entry 593 (class 1255 OID 65654)
+-- Dependencies: 966 6
 -- Name: st_polyfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11452,7 +9818,7 @@ CREATE FUNCTION st_polyfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 594 (class 1255 OID 50663)
+-- TOC entry 594 (class 1255 OID 65655)
 -- Dependencies: 6 966
 -- Name: st_polyfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11467,8 +9833,8 @@ CREATE FUNCTION st_polyfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 595 (class 1255 OID 50664)
--- Dependencies: 6 966
+-- TOC entry 595 (class 1255 OID 65656)
+-- Dependencies: 966 6
 -- Name: st_polyfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11482,7 +9848,7 @@ CREATE FUNCTION st_polyfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 596 (class 1255 OID 50665)
+-- TOC entry 596 (class 1255 OID 65657)
 -- Dependencies: 6 966
 -- Name: st_polyfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11497,8 +9863,8 @@ CREATE FUNCTION st_polyfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 597 (class 1255 OID 50666)
--- Dependencies: 6 966 966
+-- TOC entry 597 (class 1255 OID 65658)
+-- Dependencies: 966 6 966
 -- Name: st_polygon(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11510,8 +9876,8 @@ CREATE FUNCTION st_polygon(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 598 (class 1255 OID 50667)
--- Dependencies: 6 966
+-- TOC entry 598 (class 1255 OID 65659)
+-- Dependencies: 966 6
 -- Name: st_polygonfromtext(text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11521,7 +9887,7 @@ CREATE FUNCTION st_polygonfromtext(text, integer) RETURNS geometry
 
 
 --
--- TOC entry 599 (class 1255 OID 50668)
+-- TOC entry 599 (class 1255 OID 65660)
 -- Dependencies: 6 966
 -- Name: st_polygonfromtext(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11532,8 +9898,8 @@ CREATE FUNCTION st_polygonfromtext(text) RETURNS geometry
 
 
 --
--- TOC entry 600 (class 1255 OID 50669)
--- Dependencies: 6 966
+-- TOC entry 600 (class 1255 OID 65661)
+-- Dependencies: 966 6
 -- Name: st_polygonfromwkb(bytea, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11547,7 +9913,7 @@ CREATE FUNCTION st_polygonfromwkb(bytea, integer) RETURNS geometry
 
 
 --
--- TOC entry 601 (class 1255 OID 50670)
+-- TOC entry 601 (class 1255 OID 65662)
 -- Dependencies: 6 966
 -- Name: st_polygonfromwkb(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11562,8 +9928,8 @@ CREATE FUNCTION st_polygonfromwkb(bytea) RETURNS geometry
 
 
 --
--- TOC entry 602 (class 1255 OID 50671)
--- Dependencies: 6 966 968
+-- TOC entry 602 (class 1255 OID 65663)
+-- Dependencies: 966 968 6
 -- Name: st_polygonize_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11573,7 +9939,7 @@ CREATE FUNCTION st_polygonize_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 603 (class 1255 OID 50672)
+-- TOC entry 603 (class 1255 OID 65664)
 -- Dependencies: 6
 -- Name: st_postgis_gist_joinsel(internal, oid, internal, smallint); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11584,7 +9950,7 @@ CREATE FUNCTION st_postgis_gist_joinsel(internal, oid, internal, smallint) RETUR
 
 
 --
--- TOC entry 604 (class 1255 OID 50673)
+-- TOC entry 604 (class 1255 OID 65665)
 -- Dependencies: 6
 -- Name: st_postgis_gist_sel(internal, oid, internal, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11595,8 +9961,8 @@ CREATE FUNCTION st_postgis_gist_sel(internal, oid, internal, integer) RETURNS do
 
 
 --
--- TOC entry 605 (class 1255 OID 50674)
--- Dependencies: 6 966 966
+-- TOC entry 605 (class 1255 OID 65666)
+-- Dependencies: 966 6 966
 -- Name: st_relate(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11606,7 +9972,7 @@ CREATE FUNCTION st_relate(geometry, geometry) RETURNS text
 
 
 --
--- TOC entry 606 (class 1255 OID 50675)
+-- TOC entry 606 (class 1255 OID 65667)
 -- Dependencies: 6 966 966
 -- Name: st_relate(geometry, geometry, text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11617,8 +9983,8 @@ CREATE FUNCTION st_relate(geometry, geometry, text) RETURNS boolean
 
 
 --
--- TOC entry 607 (class 1255 OID 50676)
--- Dependencies: 6 966 966
+-- TOC entry 607 (class 1255 OID 65668)
+-- Dependencies: 966 966 6
 -- Name: st_removepoint(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11628,8 +9994,8 @@ CREATE FUNCTION st_removepoint(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 608 (class 1255 OID 50677)
--- Dependencies: 966 6 966
+-- TOC entry 608 (class 1255 OID 65669)
+-- Dependencies: 6 966 966
 -- Name: st_reverse(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11639,8 +10005,8 @@ CREATE FUNCTION st_reverse(geometry) RETURNS geometry
 
 
 --
--- TOC entry 609 (class 1255 OID 50678)
--- Dependencies: 966 6 966
+-- TOC entry 609 (class 1255 OID 65670)
+-- Dependencies: 6 966 966
 -- Name: st_rotate(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11650,8 +10016,8 @@ CREATE FUNCTION st_rotate(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 610 (class 1255 OID 50679)
--- Dependencies: 966 6 966
+-- TOC entry 610 (class 1255 OID 65671)
+-- Dependencies: 6 966 966
 -- Name: st_rotatex(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11661,8 +10027,8 @@ CREATE FUNCTION st_rotatex(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 611 (class 1255 OID 50680)
--- Dependencies: 966 966 6
+-- TOC entry 611 (class 1255 OID 65672)
+-- Dependencies: 966 6 966
 -- Name: st_rotatey(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11672,8 +10038,8 @@ CREATE FUNCTION st_rotatey(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 612 (class 1255 OID 50681)
--- Dependencies: 966 6 966
+-- TOC entry 612 (class 1255 OID 65673)
+-- Dependencies: 966 966 6
 -- Name: st_rotatez(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11683,8 +10049,8 @@ CREATE FUNCTION st_rotatez(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 613 (class 1255 OID 50682)
--- Dependencies: 966 6 966
+-- TOC entry 613 (class 1255 OID 65674)
+-- Dependencies: 966 966 6
 -- Name: st_scale(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11694,7 +10060,7 @@ CREATE FUNCTION st_scale(geometry, double precision, double precision, double pr
 
 
 --
--- TOC entry 614 (class 1255 OID 50683)
+-- TOC entry 614 (class 1255 OID 65675)
 -- Dependencies: 966 6 966
 -- Name: st_scale(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11705,8 +10071,8 @@ CREATE FUNCTION st_scale(geometry, double precision, double precision) RETURNS g
 
 
 --
--- TOC entry 615 (class 1255 OID 50684)
--- Dependencies: 6 966 966
+-- TOC entry 615 (class 1255 OID 65676)
+-- Dependencies: 966 6 966
 -- Name: st_segmentize(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11716,8 +10082,8 @@ CREATE FUNCTION st_segmentize(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 616 (class 1255 OID 50685)
--- Dependencies: 6 961 961
+-- TOC entry 616 (class 1255 OID 65677)
+-- Dependencies: 961 6 961
 -- Name: st_setfactor(chip, real); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11727,7 +10093,7 @@ CREATE FUNCTION st_setfactor(chip, real) RETURNS chip
 
 
 --
--- TOC entry 617 (class 1255 OID 50686)
+-- TOC entry 617 (class 1255 OID 65678)
 -- Dependencies: 6 966 966 966
 -- Name: st_setpoint(geometry, integer, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11738,8 +10104,8 @@ CREATE FUNCTION st_setpoint(geometry, integer, geometry) RETURNS geometry
 
 
 --
--- TOC entry 618 (class 1255 OID 50687)
--- Dependencies: 6 966 966
+-- TOC entry 618 (class 1255 OID 65679)
+-- Dependencies: 966 6 966
 -- Name: st_setsrid(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11749,8 +10115,8 @@ CREATE FUNCTION st_setsrid(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 619 (class 1255 OID 50688)
--- Dependencies: 966 966 6
+-- TOC entry 619 (class 1255 OID 65680)
+-- Dependencies: 6 966 966
 -- Name: st_shift_longitude(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11760,7 +10126,7 @@ CREATE FUNCTION st_shift_longitude(geometry) RETURNS geometry
 
 
 --
--- TOC entry 620 (class 1255 OID 50689)
+-- TOC entry 620 (class 1255 OID 65681)
 -- Dependencies: 966 6 966
 -- Name: st_simplify(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11771,8 +10137,8 @@ CREATE FUNCTION st_simplify(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 621 (class 1255 OID 50690)
--- Dependencies: 6 966 966
+-- TOC entry 621 (class 1255 OID 65682)
+-- Dependencies: 966 6 966
 -- Name: st_simplifypreservetopology(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11782,8 +10148,8 @@ CREATE FUNCTION st_simplifypreservetopology(geometry, double precision) RETURNS 
 
 
 --
--- TOC entry 622 (class 1255 OID 50691)
--- Dependencies: 6 966 966
+-- TOC entry 622 (class 1255 OID 65683)
+-- Dependencies: 966 6 966
 -- Name: st_snaptogrid(geometry, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11793,8 +10159,8 @@ CREATE FUNCTION st_snaptogrid(geometry, double precision, double precision, doub
 
 
 --
--- TOC entry 623 (class 1255 OID 50692)
--- Dependencies: 6 966 966
+-- TOC entry 623 (class 1255 OID 65684)
+-- Dependencies: 966 6 966
 -- Name: st_snaptogrid(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11804,8 +10170,8 @@ CREATE FUNCTION st_snaptogrid(geometry, double precision, double precision) RETU
 
 
 --
--- TOC entry 624 (class 1255 OID 50693)
--- Dependencies: 6 966 966
+-- TOC entry 624 (class 1255 OID 65685)
+-- Dependencies: 966 966 6
 -- Name: st_snaptogrid(geometry, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11815,8 +10181,8 @@ CREATE FUNCTION st_snaptogrid(geometry, double precision) RETURNS geometry
 
 
 --
--- TOC entry 625 (class 1255 OID 50694)
--- Dependencies: 966 6 966 966
+-- TOC entry 625 (class 1255 OID 65686)
+-- Dependencies: 6 966 966 966
 -- Name: st_snaptogrid(geometry, geometry, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11826,8 +10192,8 @@ CREATE FUNCTION st_snaptogrid(geometry, geometry, double precision, double preci
 
 
 --
--- TOC entry 626 (class 1255 OID 50695)
--- Dependencies: 6 961
+-- TOC entry 626 (class 1255 OID 65687)
+-- Dependencies: 961 6
 -- Name: st_srid(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11837,7 +10203,7 @@ CREATE FUNCTION st_srid(chip) RETURNS integer
 
 
 --
--- TOC entry 627 (class 1255 OID 50696)
+-- TOC entry 627 (class 1255 OID 65688)
 -- Dependencies: 6 966
 -- Name: st_srid(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11848,8 +10214,8 @@ CREATE FUNCTION st_srid(geometry) RETURNS integer
 
 
 --
--- TOC entry 628 (class 1255 OID 50697)
--- Dependencies: 6 966 966
+-- TOC entry 628 (class 1255 OID 65689)
+-- Dependencies: 966 6 966
 -- Name: st_startpoint(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11859,8 +10225,8 @@ CREATE FUNCTION st_startpoint(geometry) RETURNS geometry
 
 
 --
--- TOC entry 629 (class 1255 OID 50698)
--- Dependencies: 6 966
+-- TOC entry 629 (class 1255 OID 65690)
+-- Dependencies: 966 6
 -- Name: st_summary(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11870,7 +10236,7 @@ CREATE FUNCTION st_summary(geometry) RETURNS text
 
 
 --
--- TOC entry 630 (class 1255 OID 50699)
+-- TOC entry 630 (class 1255 OID 65691)
 -- Dependencies: 6 966 966 966
 -- Name: st_symdifference(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11881,8 +10247,8 @@ CREATE FUNCTION st_symdifference(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 631 (class 1255 OID 50700)
--- Dependencies: 6 966 966 966
+-- TOC entry 631 (class 1255 OID 65692)
+-- Dependencies: 966 966 6 966
 -- Name: st_symmetricdifference(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11892,8 +10258,8 @@ CREATE FUNCTION st_symmetricdifference(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 632 (class 1255 OID 50701)
--- Dependencies: 6 966
+-- TOC entry 632 (class 1255 OID 65693)
+-- Dependencies: 966 6
 -- Name: st_text(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11903,7 +10269,7 @@ CREATE FUNCTION st_text(geometry) RETURNS text
 
 
 --
--- TOC entry 633 (class 1255 OID 50702)
+-- TOC entry 633 (class 1255 OID 65694)
 -- Dependencies: 6
 -- Name: st_text(boolean); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11914,7 +10280,7 @@ CREATE FUNCTION st_text(boolean) RETURNS text
 
 
 --
--- TOC entry 634 (class 1255 OID 50703)
+-- TOC entry 634 (class 1255 OID 65695)
 -- Dependencies: 966 966 6
 -- Name: st_touches(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11925,8 +10291,8 @@ CREATE FUNCTION st_touches(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 635 (class 1255 OID 50704)
--- Dependencies: 6 966 966
+-- TOC entry 635 (class 1255 OID 65696)
+-- Dependencies: 966 6 966
 -- Name: st_transform(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11936,8 +10302,8 @@ CREATE FUNCTION st_transform(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 636 (class 1255 OID 50705)
--- Dependencies: 966 966 6
+-- TOC entry 636 (class 1255 OID 65697)
+-- Dependencies: 966 6 966
 -- Name: st_translate(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11947,8 +10313,8 @@ CREATE FUNCTION st_translate(geometry, double precision, double precision, doubl
 
 
 --
--- TOC entry 637 (class 1255 OID 50706)
--- Dependencies: 966 966 6
+-- TOC entry 637 (class 1255 OID 65698)
+-- Dependencies: 966 6 966
 -- Name: st_translate(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11958,7 +10324,7 @@ CREATE FUNCTION st_translate(geometry, double precision, double precision) RETUR
 
 
 --
--- TOC entry 638 (class 1255 OID 50707)
+-- TOC entry 638 (class 1255 OID 65699)
 -- Dependencies: 966 6 966
 -- Name: st_transscale(geometry, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11970,8 +10336,8 @@ CREATE FUNCTION st_transscale(geometry, double precision, double precision, doub
 
 
 --
--- TOC entry 639 (class 1255 OID 50708)
--- Dependencies: 966 966 966 6
+-- TOC entry 639 (class 1255 OID 65700)
+-- Dependencies: 966 966 6 966
 -- Name: st_union(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -11981,7 +10347,7 @@ CREATE FUNCTION st_union(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 640 (class 1255 OID 50709)
+-- TOC entry 640 (class 1255 OID 65701)
 -- Dependencies: 968 6 966
 -- Name: st_unite_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -11992,7 +10358,7 @@ CREATE FUNCTION st_unite_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 641 (class 1255 OID 50710)
+-- TOC entry 641 (class 1255 OID 65702)
 -- Dependencies: 6 961
 -- Name: st_width(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12003,8 +10369,8 @@ CREATE FUNCTION st_width(chip) RETURNS integer
 
 
 --
--- TOC entry 642 (class 1255 OID 50711)
--- Dependencies: 966 966 6
+-- TOC entry 642 (class 1255 OID 65703)
+-- Dependencies: 966 6 966
 -- Name: st_within(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12014,8 +10380,8 @@ CREATE FUNCTION st_within(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 643 (class 1255 OID 50712)
--- Dependencies: 966 6
+-- TOC entry 643 (class 1255 OID 65704)
+-- Dependencies: 6 966
 -- Name: st_wkbtosql(bytea); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12025,7 +10391,7 @@ CREATE FUNCTION st_wkbtosql(bytea) RETURNS geometry
 
 
 --
--- TOC entry 644 (class 1255 OID 50713)
+-- TOC entry 644 (class 1255 OID 65705)
 -- Dependencies: 6 966
 -- Name: st_wkttosql(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12036,8 +10402,8 @@ CREATE FUNCTION st_wkttosql(text) RETURNS geometry
 
 
 --
--- TOC entry 645 (class 1255 OID 50714)
--- Dependencies: 966 6
+-- TOC entry 645 (class 1255 OID 65706)
+-- Dependencies: 6 966
 -- Name: st_x(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12047,7 +10413,7 @@ CREATE FUNCTION st_x(geometry) RETURNS double precision
 
 
 --
--- TOC entry 646 (class 1255 OID 50715)
+-- TOC entry 646 (class 1255 OID 65707)
 -- Dependencies: 6 958
 -- Name: st_xmax(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12058,8 +10424,8 @@ CREATE FUNCTION st_xmax(box3d) RETURNS double precision
 
 
 --
--- TOC entry 647 (class 1255 OID 50716)
--- Dependencies: 958 6
+-- TOC entry 647 (class 1255 OID 65708)
+-- Dependencies: 6 958
 -- Name: st_xmin(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12069,7 +10435,7 @@ CREATE FUNCTION st_xmin(box3d) RETURNS double precision
 
 
 --
--- TOC entry 648 (class 1255 OID 50717)
+-- TOC entry 648 (class 1255 OID 65709)
 -- Dependencies: 6 966
 -- Name: st_y(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12080,7 +10446,7 @@ CREATE FUNCTION st_y(geometry) RETURNS double precision
 
 
 --
--- TOC entry 649 (class 1255 OID 50718)
+-- TOC entry 649 (class 1255 OID 65710)
 -- Dependencies: 6 958
 -- Name: st_ymax(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12091,7 +10457,7 @@ CREATE FUNCTION st_ymax(box3d) RETURNS double precision
 
 
 --
--- TOC entry 650 (class 1255 OID 50719)
+-- TOC entry 650 (class 1255 OID 65711)
 -- Dependencies: 6 958
 -- Name: st_ymin(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12102,8 +10468,8 @@ CREATE FUNCTION st_ymin(box3d) RETURNS double precision
 
 
 --
--- TOC entry 651 (class 1255 OID 50720)
--- Dependencies: 6 966
+-- TOC entry 651 (class 1255 OID 65712)
+-- Dependencies: 966 6
 -- Name: st_z(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12113,8 +10479,8 @@ CREATE FUNCTION st_z(geometry) RETURNS double precision
 
 
 --
--- TOC entry 652 (class 1255 OID 50721)
--- Dependencies: 958 6
+-- TOC entry 652 (class 1255 OID 65713)
+-- Dependencies: 6 958
 -- Name: st_zmax(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12124,7 +10490,7 @@ CREATE FUNCTION st_zmax(box3d) RETURNS double precision
 
 
 --
--- TOC entry 653 (class 1255 OID 50722)
+-- TOC entry 653 (class 1255 OID 65714)
 -- Dependencies: 6 966
 -- Name: st_zmflag(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12135,8 +10501,8 @@ CREATE FUNCTION st_zmflag(geometry) RETURNS smallint
 
 
 --
--- TOC entry 654 (class 1255 OID 50723)
--- Dependencies: 958 6
+-- TOC entry 654 (class 1255 OID 65715)
+-- Dependencies: 6 958
 -- Name: st_zmin(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12146,8 +10512,8 @@ CREATE FUNCTION st_zmin(box3d) RETURNS double precision
 
 
 --
--- TOC entry 655 (class 1255 OID 50724)
--- Dependencies: 6 966 966
+-- TOC entry 655 (class 1255 OID 65716)
+-- Dependencies: 966 966 6
 -- Name: startpoint(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12157,8 +10523,8 @@ CREATE FUNCTION startpoint(geometry) RETURNS geometry
 
 
 --
--- TOC entry 656 (class 1255 OID 50725)
--- Dependencies: 966 6
+-- TOC entry 656 (class 1255 OID 65717)
+-- Dependencies: 6 966
 -- Name: summary(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12168,7 +10534,7 @@ CREATE FUNCTION summary(geometry) RETURNS text
 
 
 --
--- TOC entry 657 (class 1255 OID 50726)
+-- TOC entry 657 (class 1255 OID 65718)
 -- Dependencies: 966 6 966 966
 -- Name: symdifference(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12179,7 +10545,7 @@ CREATE FUNCTION symdifference(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 658 (class 1255 OID 50727)
+-- TOC entry 658 (class 1255 OID 65719)
 -- Dependencies: 966 6 966 966
 -- Name: symmetricdifference(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12190,8 +10556,8 @@ CREATE FUNCTION symmetricdifference(geometry, geometry) RETURNS geometry
 
 
 --
--- TOC entry 659 (class 1255 OID 50728)
--- Dependencies: 6 966
+-- TOC entry 659 (class 1255 OID 65720)
+-- Dependencies: 966 6
 -- Name: text(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12201,7 +10567,7 @@ CREATE FUNCTION text(geometry) RETURNS text
 
 
 --
--- TOC entry 660 (class 1255 OID 50729)
+-- TOC entry 660 (class 1255 OID 65721)
 -- Dependencies: 6
 -- Name: text(boolean); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12212,8 +10578,8 @@ CREATE FUNCTION text(boolean) RETURNS text
 
 
 --
--- TOC entry 661 (class 1255 OID 50730)
--- Dependencies: 966 966 6
+-- TOC entry 661 (class 1255 OID 65722)
+-- Dependencies: 966 6 966
 -- Name: touches(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12223,8 +10589,8 @@ CREATE FUNCTION touches(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 662 (class 1255 OID 50731)
--- Dependencies: 6 966 966
+-- TOC entry 662 (class 1255 OID 65723)
+-- Dependencies: 966 6 966
 -- Name: transform(geometry, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12234,8 +10600,8 @@ CREATE FUNCTION transform(geometry, integer) RETURNS geometry
 
 
 --
--- TOC entry 663 (class 1255 OID 50732)
--- Dependencies: 6 966 966
+-- TOC entry 663 (class 1255 OID 65724)
+-- Dependencies: 966 966 6
 -- Name: transform_geometry(geometry, text, text, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12245,8 +10611,8 @@ CREATE FUNCTION transform_geometry(geometry, text, text, integer) RETURNS geomet
 
 
 --
--- TOC entry 664 (class 1255 OID 50733)
--- Dependencies: 966 966 6
+-- TOC entry 664 (class 1255 OID 65725)
+-- Dependencies: 6 966 966
 -- Name: translate(geometry, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12256,7 +10622,7 @@ CREATE FUNCTION translate(geometry, double precision, double precision, double p
 
 
 --
--- TOC entry 665 (class 1255 OID 50734)
+-- TOC entry 665 (class 1255 OID 65726)
 -- Dependencies: 6 966 966
 -- Name: translate(geometry, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12267,8 +10633,8 @@ CREATE FUNCTION translate(geometry, double precision, double precision) RETURNS 
 
 
 --
--- TOC entry 666 (class 1255 OID 50735)
--- Dependencies: 966 966 6
+-- TOC entry 666 (class 1255 OID 65727)
+-- Dependencies: 966 6 966
 -- Name: transscale(geometry, double precision, double precision, double precision, double precision); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12279,8 +10645,8 @@ CREATE FUNCTION transscale(geometry, double precision, double precision, double 
 
 
 --
--- TOC entry 667 (class 1255 OID 50736)
--- Dependencies: 966 968 6
+-- TOC entry 667 (class 1255 OID 65728)
+-- Dependencies: 966 6 968
 -- Name: unite_garray(geometry[]); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12290,8 +10656,8 @@ CREATE FUNCTION unite_garray(geometry[]) RETURNS geometry
 
 
 --
--- TOC entry 668 (class 1255 OID 50737)
--- Dependencies: 1152 6
+-- TOC entry 668 (class 1255 OID 65729)
+-- Dependencies: 1085 6
 -- Name: unlockrows(text); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12317,7 +10683,7 @@ $_$
 
 
 --
--- TOC entry 669 (class 1255 OID 50738)
+-- TOC entry 669 (class 1255 OID 65730)
 -- Dependencies: 6
 -- Name: update_geometry_stats(); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12328,7 +10694,7 @@ CREATE FUNCTION update_geometry_stats() RETURNS text
 
 
 --
--- TOC entry 670 (class 1255 OID 50739)
+-- TOC entry 670 (class 1255 OID 65731)
 -- Dependencies: 6
 -- Name: update_geometry_stats(character varying, character varying); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12339,8 +10705,8 @@ CREATE FUNCTION update_geometry_stats(character varying, character varying) RETU
 
 
 --
--- TOC entry 671 (class 1255 OID 50740)
--- Dependencies: 6 1152
+-- TOC entry 671 (class 1255 OID 65732)
+-- Dependencies: 1085 6
 -- Name: updategeometrysrid(character varying, character varying, character varying, character varying, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12438,8 +10804,8 @@ $_$
 
 
 --
--- TOC entry 672 (class 1255 OID 50741)
--- Dependencies: 6 1152
+-- TOC entry 672 (class 1255 OID 65733)
+-- Dependencies: 1085 6
 -- Name: updategeometrysrid(character varying, character varying, character varying, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12456,8 +10822,8 @@ $_$
 
 
 --
--- TOC entry 673 (class 1255 OID 50742)
--- Dependencies: 6 1152
+-- TOC entry 673 (class 1255 OID 65734)
+-- Dependencies: 6 1085
 -- Name: updategeometrysrid(character varying, character varying, integer); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12474,7 +10840,7 @@ $_$
 
 
 --
--- TOC entry 674 (class 1255 OID 50743)
+-- TOC entry 674 (class 1255 OID 65735)
 -- Dependencies: 6 961
 -- Name: width(chip); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12485,7 +10851,7 @@ CREATE FUNCTION width(chip) RETURNS integer
 
 
 --
--- TOC entry 675 (class 1255 OID 50744)
+-- TOC entry 675 (class 1255 OID 65736)
 -- Dependencies: 966 6 966
 -- Name: within(geometry, geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12496,8 +10862,8 @@ CREATE FUNCTION within(geometry, geometry) RETURNS boolean
 
 
 --
--- TOC entry 676 (class 1255 OID 50745)
--- Dependencies: 6 966
+-- TOC entry 676 (class 1255 OID 65737)
+-- Dependencies: 966 6
 -- Name: x(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12507,8 +10873,8 @@ CREATE FUNCTION x(geometry) RETURNS double precision
 
 
 --
--- TOC entry 677 (class 1255 OID 50746)
--- Dependencies: 6 958
+-- TOC entry 677 (class 1255 OID 65738)
+-- Dependencies: 958 6
 -- Name: xmax(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12518,7 +10884,7 @@ CREATE FUNCTION xmax(box3d) RETURNS double precision
 
 
 --
--- TOC entry 678 (class 1255 OID 50747)
+-- TOC entry 678 (class 1255 OID 65739)
 -- Dependencies: 6 958
 -- Name: xmin(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12529,7 +10895,7 @@ CREATE FUNCTION xmin(box3d) RETURNS double precision
 
 
 --
--- TOC entry 679 (class 1255 OID 50748)
+-- TOC entry 679 (class 1255 OID 65740)
 -- Dependencies: 966 6
 -- Name: y(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12540,7 +10906,7 @@ CREATE FUNCTION y(geometry) RETURNS double precision
 
 
 --
--- TOC entry 680 (class 1255 OID 50749)
+-- TOC entry 680 (class 1255 OID 65741)
 -- Dependencies: 6 958
 -- Name: ymax(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12551,7 +10917,7 @@ CREATE FUNCTION ymax(box3d) RETURNS double precision
 
 
 --
--- TOC entry 681 (class 1255 OID 50750)
+-- TOC entry 681 (class 1255 OID 65742)
 -- Dependencies: 6 958
 -- Name: ymin(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12562,7 +10928,7 @@ CREATE FUNCTION ymin(box3d) RETURNS double precision
 
 
 --
--- TOC entry 682 (class 1255 OID 50751)
+-- TOC entry 682 (class 1255 OID 65743)
 -- Dependencies: 6 966
 -- Name: z(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12573,7 +10939,7 @@ CREATE FUNCTION z(geometry) RETURNS double precision
 
 
 --
--- TOC entry 683 (class 1255 OID 50752)
+-- TOC entry 683 (class 1255 OID 65744)
 -- Dependencies: 6 958
 -- Name: zmax(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12584,8 +10950,8 @@ CREATE FUNCTION zmax(box3d) RETURNS double precision
 
 
 --
--- TOC entry 684 (class 1255 OID 50753)
--- Dependencies: 6 966
+-- TOC entry 684 (class 1255 OID 65745)
+-- Dependencies: 966 6
 -- Name: zmflag(geometry); Type: FUNCTION; Schema: indicia; Owner: -
 --
 
@@ -12595,7 +10961,7 @@ CREATE FUNCTION zmflag(geometry) RETURNS smallint
 
 
 --
--- TOC entry 685 (class 1255 OID 50754)
+-- TOC entry 685 (class 1255 OID 65746)
 -- Dependencies: 958 6
 -- Name: zmin(box3d); Type: FUNCTION; Schema: indicia; Owner: -
 --
@@ -12606,8 +10972,8 @@ CREATE FUNCTION zmin(box3d) RETURNS double precision
 
 
 --
--- TOC entry 1153 (class 1255 OID 50755)
--- Dependencies: 6 968 966 468
+-- TOC entry 1086 (class 1255 OID 65747)
+-- Dependencies: 968 468 966 6
 -- Name: accum(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12618,8 +10984,8 @@ CREATE AGGREGATE accum(geometry) (
 
 
 --
--- TOC entry 1154 (class 1255 OID 50756)
--- Dependencies: 422 468 6 966 966
+-- TOC entry 1087 (class 1255 OID 65748)
+-- Dependencies: 422 6 966 966 468
 -- Name: collect(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12631,8 +10997,8 @@ CREATE AGGREGATE collect(geometry) (
 
 
 --
--- TOC entry 1155 (class 1255 OID 50757)
--- Dependencies: 424 6 919 966
+-- TOC entry 1088 (class 1255 OID 65749)
+-- Dependencies: 966 6 919 424
 -- Name: extent(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12643,8 +11009,8 @@ CREATE AGGREGATE extent(geometry) (
 
 
 --
--- TOC entry 1156 (class 1255 OID 50758)
--- Dependencies: 116 966 958 6
+-- TOC entry 1089 (class 1255 OID 65750)
+-- Dependencies: 966 6 958 116
 -- Name: extent3d(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12655,8 +11021,8 @@ CREATE AGGREGATE extent3d(geometry) (
 
 
 --
--- TOC entry 1157 (class 1255 OID 50759)
--- Dependencies: 966 6 966 163 640
+-- TOC entry 1090 (class 1255 OID 65751)
+-- Dependencies: 163 6 966 966 640
 -- Name: geomunion(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12668,8 +11034,8 @@ CREATE AGGREGATE geomunion(geometry) (
 
 
 --
--- TOC entry 1158 (class 1255 OID 50760)
--- Dependencies: 966 966 6 261 163
+-- TOC entry 1091 (class 1255 OID 65752)
+-- Dependencies: 966 6 966 163 261
 -- Name: makeline(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12681,8 +11047,8 @@ CREATE AGGREGATE makeline(geometry) (
 
 
 --
--- TOC entry 1159 (class 1255 OID 50761)
--- Dependencies: 966 966 6 421
+-- TOC entry 1092 (class 1255 OID 65753)
+-- Dependencies: 6 966 966 421
 -- Name: memcollect(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12693,8 +11059,8 @@ CREATE AGGREGATE memcollect(geometry) (
 
 
 --
--- TOC entry 1160 (class 1255 OID 50762)
--- Dependencies: 6 966 205 966
+-- TOC entry 1093 (class 1255 OID 65754)
+-- Dependencies: 6 966 966 205
 -- Name: memgeomunion(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12705,7 +11071,7 @@ CREATE AGGREGATE memgeomunion(geometry) (
 
 
 --
--- TOC entry 1161 (class 1255 OID 50763)
+-- TOC entry 1094 (class 1255 OID 65755)
 -- Dependencies: 6 966 966 163 321
 -- Name: polygonize(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
@@ -12718,8 +11084,8 @@ CREATE AGGREGATE polygonize(geometry) (
 
 
 --
--- TOC entry 1162 (class 1255 OID 50764)
--- Dependencies: 968 6 966 468
+-- TOC entry 1095 (class 1255 OID 65756)
+-- Dependencies: 6 968 966 468
 -- Name: st_accum(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12730,8 +11096,8 @@ CREATE AGGREGATE st_accum(geometry) (
 
 
 --
--- TOC entry 1163 (class 1255 OID 50765)
--- Dependencies: 468 422 966 6 966
+-- TOC entry 1096 (class 1255 OID 65757)
+-- Dependencies: 6 966 966 468 422
 -- Name: st_collect(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12743,8 +11109,8 @@ CREATE AGGREGATE st_collect(geometry) (
 
 
 --
--- TOC entry 1164 (class 1255 OID 50766)
--- Dependencies: 6 919 966 424
+-- TOC entry 1097 (class 1255 OID 65758)
+-- Dependencies: 966 424 919 6
 -- Name: st_extent(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12755,8 +11121,8 @@ CREATE AGGREGATE st_extent(geometry) (
 
 
 --
--- TOC entry 1165 (class 1255 OID 50767)
--- Dependencies: 966 6 958 425
+-- TOC entry 1098 (class 1255 OID 65759)
+-- Dependencies: 958 966 425 6
 -- Name: st_extent3d(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12767,8 +11133,8 @@ CREATE AGGREGATE st_extent3d(geometry) (
 
 
 --
--- TOC entry 1166 (class 1255 OID 50768)
--- Dependencies: 163 966 966 6 541
+-- TOC entry 1099 (class 1255 OID 65760)
+-- Dependencies: 6 966 966 163 541
 -- Name: st_makeline(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12780,8 +11146,8 @@ CREATE AGGREGATE st_makeline(geometry) (
 
 
 --
--- TOC entry 1167 (class 1255 OID 50769)
--- Dependencies: 966 421 966 6
+-- TOC entry 1100 (class 1255 OID 65761)
+-- Dependencies: 6 966 966 421
 -- Name: st_memcollect(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12792,8 +11158,8 @@ CREATE AGGREGATE st_memcollect(geometry) (
 
 
 --
--- TOC entry 1168 (class 1255 OID 50770)
--- Dependencies: 966 966 6 639
+-- TOC entry 1101 (class 1255 OID 65762)
+-- Dependencies: 6 966 966 639
 -- Name: st_memunion(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12804,8 +11170,8 @@ CREATE AGGREGATE st_memunion(geometry) (
 
 
 --
--- TOC entry 1169 (class 1255 OID 50771)
--- Dependencies: 468 602 966 966 6
+-- TOC entry 1102 (class 1255 OID 65763)
+-- Dependencies: 468 6 966 966 602
 -- Name: st_polygonize(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12817,8 +11183,8 @@ CREATE AGGREGATE st_polygonize(geometry) (
 
 
 --
--- TOC entry 1170 (class 1255 OID 50772)
--- Dependencies: 966 640 468 966 6
+-- TOC entry 1103 (class 1255 OID 65764)
+-- Dependencies: 640 966 966 468 6
 -- Name: st_union(geometry); Type: AGGREGATE; Schema: indicia; Owner: -
 --
 
@@ -12830,8 +11196,8 @@ CREATE AGGREGATE st_union(geometry) (
 
 
 --
--- TOC entry 1882 (class 2617 OID 50773)
--- Dependencies: 603 966 6 491 966 604
+-- TOC entry 1806 (class 2617 OID 65765)
+-- Dependencies: 6 966 491 604 603 966
 -- Name: &&; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12846,8 +11212,8 @@ CREATE OPERATOR && (
 
 
 --
--- TOC entry 1883 (class 2617 OID 50775)
--- Dependencies: 6 966 492 966
+-- TOC entry 1807 (class 2617 OID 65767)
+-- Dependencies: 492 6 966 966
 -- Name: &<; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12862,8 +11228,8 @@ CREATE OPERATOR &< (
 
 
 --
--- TOC entry 1884 (class 2617 OID 50777)
--- Dependencies: 966 6 490 966
+-- TOC entry 1809 (class 2617 OID 65769)
+-- Dependencies: 966 6 966 490
 -- Name: &<|; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12878,8 +11244,8 @@ CREATE OPERATOR &<| (
 
 
 --
--- TOC entry 1885 (class 2617 OID 50774)
--- Dependencies: 6 493 966 966
+-- TOC entry 1811 (class 2617 OID 65766)
+-- Dependencies: 493 6 966 966
 -- Name: &>; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12894,8 +11260,8 @@ CREATE OPERATOR &> (
 
 
 --
--- TOC entry 1886 (class 2617 OID 50780)
--- Dependencies: 966 6 488 966
+-- TOC entry 1812 (class 2617 OID 65772)
+-- Dependencies: 488 6 966 966
 -- Name: <; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12911,7 +11277,7 @@ CREATE OPERATOR < (
 
 
 --
--- TOC entry 1873 (class 2617 OID 50782)
+-- TOC entry 1814 (class 2617 OID 65774)
 -- Dependencies: 487 6 966 966
 -- Name: <<; Type: OPERATOR; Schema: indicia; Owner: -
 --
@@ -12927,8 +11293,8 @@ CREATE OPERATOR << (
 
 
 --
--- TOC entry 1874 (class 2617 OID 50784)
--- Dependencies: 479 966 966 6
+-- TOC entry 1815 (class 2617 OID 65776)
+-- Dependencies: 6 966 966 479
 -- Name: <<|; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12943,8 +11309,8 @@ CREATE OPERATOR <<| (
 
 
 --
--- TOC entry 1875 (class 2617 OID 50785)
--- Dependencies: 486 966 966 6
+-- TOC entry 1816 (class 2617 OID 65777)
+-- Dependencies: 486 6 966 966
 -- Name: <=; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12960,7 +11326,7 @@ CREATE OPERATOR <= (
 
 
 --
--- TOC entry 1876 (class 2617 OID 50786)
+-- TOC entry 1817 (class 2617 OID 65778)
 -- Dependencies: 966 966 483 6
 -- Name: =; Type: OPERATOR; Schema: indicia; Owner: -
 --
@@ -12976,8 +11342,8 @@ CREATE OPERATOR = (
 
 
 --
--- TOC entry 1877 (class 2617 OID 50778)
--- Dependencies: 966 485 6 966
+-- TOC entry 1818 (class 2617 OID 65770)
+-- Dependencies: 966 6 966 485
 -- Name: >; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -12993,8 +11359,8 @@ CREATE OPERATOR > (
 
 
 --
--- TOC entry 1878 (class 2617 OID 50779)
--- Dependencies: 966 6 484 966
+-- TOC entry 1819 (class 2617 OID 65771)
+-- Dependencies: 484 6 966 966
 -- Name: >=; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -13010,8 +11376,8 @@ CREATE OPERATOR >= (
 
 
 --
--- TOC entry 1879 (class 2617 OID 50781)
--- Dependencies: 966 494 6 966
+-- TOC entry 1808 (class 2617 OID 65773)
+-- Dependencies: 494 6 966 966
 -- Name: >>; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -13026,8 +11392,8 @@ CREATE OPERATOR >> (
 
 
 --
--- TOC entry 1880 (class 2617 OID 50788)
--- Dependencies: 966 966 482 6
+-- TOC entry 1820 (class 2617 OID 65780)
+-- Dependencies: 482 966 966 6
 -- Name: @; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -13042,8 +11408,8 @@ CREATE OPERATOR @ (
 
 
 --
--- TOC entry 1881 (class 2617 OID 50776)
--- Dependencies: 966 6 966 489
+-- TOC entry 1813 (class 2617 OID 65768)
+-- Dependencies: 489 966 966 6
 -- Name: |&>; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -13058,8 +11424,8 @@ CREATE OPERATOR |&> (
 
 
 --
--- TOC entry 1887 (class 2617 OID 50783)
--- Dependencies: 6 966 966 478
+-- TOC entry 1810 (class 2617 OID 65775)
+-- Dependencies: 478 6 966 966
 -- Name: |>>; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -13074,8 +11440,8 @@ CREATE OPERATOR |>> (
 
 
 --
--- TOC entry 1888 (class 2617 OID 50787)
--- Dependencies: 481 6 966 966
+-- TOC entry 1821 (class 2617 OID 65779)
+-- Dependencies: 966 6 966 481
 -- Name: ~; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -13090,8 +11456,8 @@ CREATE OPERATOR ~ (
 
 
 --
--- TOC entry 1889 (class 2617 OID 50789)
--- Dependencies: 966 966 495 6
+-- TOC entry 1822 (class 2617 OID 65781)
+-- Dependencies: 495 966 6 966
 -- Name: ~=; Type: OPERATOR; Schema: indicia; Owner: -
 --
 
@@ -13106,8 +11472,8 @@ CREATE OPERATOR ~= (
 
 
 --
--- TOC entry 2002 (class 2616 OID 50791)
--- Dependencies: 966 2111 6
+-- TOC entry 1935 (class 2616 OID 65783)
+-- Dependencies: 6 966 2044
 -- Name: btree_geometry_ops; Type: OPERATOR CLASS; Schema: indicia; Owner: -
 --
 
@@ -13122,8 +11488,8 @@ CREATE OPERATOR CLASS btree_geometry_ops
 
 
 --
--- TOC entry 2003 (class 2616 OID 50799)
--- Dependencies: 966 6 2112 919
+-- TOC entry 1936 (class 2616 OID 65791)
+-- Dependencies: 966 2045 6 919
 -- Name: gist_geometry_ops; Type: OPERATOR CLASS; Schema: indicia; Owner: -
 --
 
@@ -13154,8 +11520,8 @@ CREATE OPERATOR CLASS gist_geometry_ops
 SET search_path = pg_catalog;
 
 --
--- TOC entry 2758 (class 2605 OID 50819)
--- Dependencies: 412 919 958 412
+-- TOC entry 2629 (class 2605 OID 65811)
+-- Dependencies: 412 919 412 958
 -- Name: CAST (indicia.box2d AS indicia.box3d); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13163,8 +11529,8 @@ CREATE CAST (indicia.box2d AS indicia.box3d) WITH FUNCTION indicia.st_box3d(indi
 
 
 --
--- TOC entry 2759 (class 2605 OID 50820)
--- Dependencies: 473 919 966 473
+-- TOC entry 2630 (class 2605 OID 65812)
+-- Dependencies: 473 473 966 919
 -- Name: CAST (indicia.box2d AS indicia.geometry); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13172,8 +11538,8 @@ CREATE CAST (indicia.box2d AS indicia.geometry) WITH FUNCTION indicia.st_geometr
 
 
 --
--- TOC entry 2760 (class 2605 OID 50821)
--- Dependencies: 399 958 399
+-- TOC entry 2631 (class 2605 OID 65813)
+-- Dependencies: 399 399 958
 -- Name: CAST (indicia.box3d AS box); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13181,8 +11547,8 @@ CREATE CAST (indicia.box3d AS box) WITH FUNCTION indicia.st_box(indicia.box3d) A
 
 
 --
--- TOC entry 2761 (class 2605 OID 50822)
--- Dependencies: 401 958 919 401
+-- TOC entry 2632 (class 2605 OID 65814)
+-- Dependencies: 401 401 958 919
 -- Name: CAST (indicia.box3d AS indicia.box2d); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13190,7 +11556,7 @@ CREATE CAST (indicia.box3d AS indicia.box2d) WITH FUNCTION indicia.st_box2d(indi
 
 
 --
--- TOC entry 2762 (class 2605 OID 50823)
+-- TOC entry 2633 (class 2605 OID 65815)
 -- Dependencies: 474 966 474 958
 -- Name: CAST (indicia.box3d AS indicia.geometry); Type: CAST; Schema: pg_catalog; Owner: -
 --
@@ -13199,8 +11565,8 @@ CREATE CAST (indicia.box3d AS indicia.geometry) WITH FUNCTION indicia.st_geometr
 
 
 --
--- TOC entry 2569 (class 2605 OID 50824)
--- Dependencies: 477 477 966
+-- TOC entry 2440 (class 2605 OID 65816)
+-- Dependencies: 477 966 477
 -- Name: CAST (bytea AS indicia.geometry); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13208,8 +11574,8 @@ CREATE CAST (bytea AS indicia.geometry) WITH FUNCTION indicia.st_geometry(bytea)
 
 
 --
--- TOC entry 2763 (class 2605 OID 50825)
--- Dependencies: 476 476 966 961
+-- TOC entry 2634 (class 2605 OID 65817)
+-- Dependencies: 476 966 961 476
 -- Name: CAST (indicia.chip AS indicia.geometry); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13217,8 +11583,8 @@ CREATE CAST (indicia.chip AS indicia.geometry) WITH FUNCTION indicia.st_geometry
 
 
 --
--- TOC entry 2766 (class 2605 OID 50826)
--- Dependencies: 398 398 966
+-- TOC entry 2637 (class 2605 OID 65818)
+-- Dependencies: 398 966 398
 -- Name: CAST (indicia.geometry AS box); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13226,8 +11592,8 @@ CREATE CAST (indicia.geometry AS box) WITH FUNCTION indicia.st_box(indicia.geome
 
 
 --
--- TOC entry 2767 (class 2605 OID 50827)
--- Dependencies: 400 966 919 400
+-- TOC entry 2638 (class 2605 OID 65819)
+-- Dependencies: 400 919 966 400
 -- Name: CAST (indicia.geometry AS indicia.box2d); Type: CAST; Schema: pg_catalog; Owner: -
 --
 
@@ -13235,7 +11601,7 @@ CREATE CAST (indicia.geometry AS indicia.box2d) WITH FUNCTION indicia.st_box2d(i
 
 
 --
--- TOC entry 2768 (class 2605 OID 50828)
+-- TOC entry 2639 (class 2605 OID 65820)
 -- Dependencies: 411 411 966 958
 -- Name: CAST (indicia.geometry AS indicia.box3d); Type: CAST; Schema: pg_catalog; Owner: -
 --
@@ -13244,7 +11610,7 @@ CREATE CAST (indicia.geometry AS indicia.box3d) WITH FUNCTION indicia.st_box3d(i
 
 
 --
--- TOC entry 2764 (class 2605 OID 50829)
+-- TOC entry 2635 (class 2605 OID 65821)
 -- Dependencies: 418 966 418
 -- Name: CAST (indicia.geometry AS bytea); Type: CAST; Schema: pg_catalog; Owner: -
 --
@@ -13253,7 +11619,7 @@ CREATE CAST (indicia.geometry AS bytea) WITH FUNCTION indicia.st_bytea(indicia.g
 
 
 --
--- TOC entry 2765 (class 2605 OID 50830)
+-- TOC entry 2636 (class 2605 OID 65822)
 -- Dependencies: 632 966 632
 -- Name: CAST (indicia.geometry AS text); Type: CAST; Schema: pg_catalog; Owner: -
 --
@@ -13262,7 +11628,7 @@ CREATE CAST (indicia.geometry AS text) WITH FUNCTION indicia.st_text(indicia.geo
 
 
 --
--- TOC entry 2635 (class 2605 OID 50831)
+-- TOC entry 2506 (class 2605 OID 65823)
 -- Dependencies: 475 966 475
 -- Name: CAST (text AS indicia.geometry); Type: CAST; Schema: pg_catalog; Owner: -
 --
@@ -13273,8 +11639,8 @@ CREATE CAST (text AS indicia.geometry) WITH FUNCTION indicia.st_geometry(text) A
 SET search_path = indicia, pg_catalog;
 
 --
--- TOC entry 2436 (class 1259 OID 50832)
--- Dependencies: 6 2414
+-- TOC entry 2338 (class 1259 OID 65824)
+-- Dependencies: 2301 6
 -- Name: location_attribute_values_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13287,8 +11653,8 @@ CREATE SEQUENCE location_attribute_values_id_seq
 
 
 --
--- TOC entry 3358 (class 0 OID 0)
--- Dependencies: 2436
+-- TOC entry 3026 (class 0 OID 0)
+-- Dependencies: 2338
 -- Name: location_attribute_values_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13296,8 +11662,8 @@ ALTER SEQUENCE location_attribute_values_id_seq OWNED BY location_attribute_valu
 
 
 --
--- TOC entry 3359 (class 0 OID 0)
--- Dependencies: 2436
+-- TOC entry 3027 (class 0 OID 0)
+-- Dependencies: 2338
 -- Name: location_attribute_values_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13305,8 +11671,8 @@ SELECT pg_catalog.setval('location_attribute_values_id_seq', 1, false);
 
 
 --
--- TOC entry 2437 (class 1259 OID 50834)
--- Dependencies: 6 2415
+-- TOC entry 2339 (class 1259 OID 65826)
+-- Dependencies: 6 2302
 -- Name: location_attributes_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13319,8 +11685,8 @@ CREATE SEQUENCE location_attributes_id_seq
 
 
 --
--- TOC entry 3360 (class 0 OID 0)
--- Dependencies: 2437
+-- TOC entry 3028 (class 0 OID 0)
+-- Dependencies: 2339
 -- Name: location_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13328,8 +11694,8 @@ ALTER SEQUENCE location_attributes_id_seq OWNED BY location_attributes.id;
 
 
 --
--- TOC entry 3361 (class 0 OID 0)
--- Dependencies: 2437
+-- TOC entry 3029 (class 0 OID 0)
+-- Dependencies: 2339
 -- Name: location_attributes_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13337,8 +11703,8 @@ SELECT pg_catalog.setval('location_attributes_id_seq', 1, false);
 
 
 --
--- TOC entry 2438 (class 1259 OID 50836)
--- Dependencies: 6 2416
+-- TOC entry 2340 (class 1259 OID 65828)
+-- Dependencies: 2303 6
 -- Name: location_attributes_websites_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13351,8 +11717,8 @@ CREATE SEQUENCE location_attributes_websites_id_seq
 
 
 --
--- TOC entry 3362 (class 0 OID 0)
--- Dependencies: 2438
+-- TOC entry 3030 (class 0 OID 0)
+-- Dependencies: 2340
 -- Name: location_attributes_websites_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13360,8 +11726,8 @@ ALTER SEQUENCE location_attributes_websites_id_seq OWNED BY location_attributes_
 
 
 --
--- TOC entry 3363 (class 0 OID 0)
--- Dependencies: 2438
+-- TOC entry 3031 (class 0 OID 0)
+-- Dependencies: 2340
 -- Name: location_attributes_websites_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13369,8 +11735,8 @@ SELECT pg_catalog.setval('location_attributes_websites_id_seq', 1, false);
 
 
 --
--- TOC entry 2439 (class 1259 OID 50838)
--- Dependencies: 2368 6
+-- TOC entry 2341 (class 1259 OID 65830)
+-- Dependencies: 6 2304
 -- Name: locations_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13383,8 +11749,8 @@ CREATE SEQUENCE locations_id_seq
 
 
 --
--- TOC entry 3364 (class 0 OID 0)
--- Dependencies: 2439
+-- TOC entry 3032 (class 0 OID 0)
+-- Dependencies: 2341
 -- Name: locations_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13392,8 +11758,8 @@ ALTER SEQUENCE locations_id_seq OWNED BY locations.id;
 
 
 --
--- TOC entry 3365 (class 0 OID 0)
--- Dependencies: 2439
+-- TOC entry 3033 (class 0 OID 0)
+-- Dependencies: 2341
 -- Name: locations_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13401,8 +11767,8 @@ SELECT pg_catalog.setval('locations_id_seq', 1, false);
 
 
 --
--- TOC entry 2440 (class 1259 OID 50840)
--- Dependencies: 6 2417
+-- TOC entry 2342 (class 1259 OID 65832)
+-- Dependencies: 2305 6
 -- Name: locations_websites_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13415,8 +11781,8 @@ CREATE SEQUENCE locations_websites_id_seq
 
 
 --
--- TOC entry 3366 (class 0 OID 0)
--- Dependencies: 2440
+-- TOC entry 3034 (class 0 OID 0)
+-- Dependencies: 2342
 -- Name: locations_websites_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13424,8 +11790,8 @@ ALTER SEQUENCE locations_websites_id_seq OWNED BY locations_websites.id;
 
 
 --
--- TOC entry 3367 (class 0 OID 0)
--- Dependencies: 2440
+-- TOC entry 3035 (class 0 OID 0)
+-- Dependencies: 2342
 -- Name: locations_websites_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13433,8 +11799,8 @@ SELECT pg_catalog.setval('locations_websites_id_seq', 1, false);
 
 
 --
--- TOC entry 2441 (class 1259 OID 50842)
--- Dependencies: 6 2420
+-- TOC entry 2343 (class 1259 OID 65834)
+-- Dependencies: 2308 6
 -- Name: occurrence_attribute_values_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13447,8 +11813,8 @@ CREATE SEQUENCE occurrence_attribute_values_id_seq
 
 
 --
--- TOC entry 3368 (class 0 OID 0)
--- Dependencies: 2441
+-- TOC entry 3036 (class 0 OID 0)
+-- Dependencies: 2343
 -- Name: occurrence_attribute_values_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13456,8 +11822,8 @@ ALTER SEQUENCE occurrence_attribute_values_id_seq OWNED BY occurrence_attribute_
 
 
 --
--- TOC entry 3369 (class 0 OID 0)
--- Dependencies: 2441
+-- TOC entry 3037 (class 0 OID 0)
+-- Dependencies: 2343
 -- Name: occurrence_attribute_values_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13465,8 +11831,8 @@ SELECT pg_catalog.setval('occurrence_attribute_values_id_seq', 1, false);
 
 
 --
--- TOC entry 2442 (class 1259 OID 50844)
--- Dependencies: 2421 6
+-- TOC entry 2344 (class 1259 OID 65836)
+-- Dependencies: 2309 6
 -- Name: occurrence_attributes_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13479,8 +11845,8 @@ CREATE SEQUENCE occurrence_attributes_id_seq
 
 
 --
--- TOC entry 3370 (class 0 OID 0)
--- Dependencies: 2442
+-- TOC entry 3038 (class 0 OID 0)
+-- Dependencies: 2344
 -- Name: occurrence_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13488,8 +11854,8 @@ ALTER SEQUENCE occurrence_attributes_id_seq OWNED BY occurrence_attributes.id;
 
 
 --
--- TOC entry 3371 (class 0 OID 0)
--- Dependencies: 2442
+-- TOC entry 3039 (class 0 OID 0)
+-- Dependencies: 2344
 -- Name: occurrence_attributes_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13497,8 +11863,8 @@ SELECT pg_catalog.setval('occurrence_attributes_id_seq', 1, false);
 
 
 --
--- TOC entry 2443 (class 1259 OID 50846)
--- Dependencies: 6 2422
+-- TOC entry 2345 (class 1259 OID 65838)
+-- Dependencies: 6 2310
 -- Name: occurrence_attributes_websites_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13511,8 +11877,8 @@ CREATE SEQUENCE occurrence_attributes_websites_id_seq
 
 
 --
--- TOC entry 3372 (class 0 OID 0)
--- Dependencies: 2443
+-- TOC entry 3040 (class 0 OID 0)
+-- Dependencies: 2345
 -- Name: occurrence_attributes_websites_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13520,8 +11886,8 @@ ALTER SEQUENCE occurrence_attributes_websites_id_seq OWNED BY occurrence_attribu
 
 
 --
--- TOC entry 3373 (class 0 OID 0)
--- Dependencies: 2443
+-- TOC entry 3041 (class 0 OID 0)
+-- Dependencies: 2345
 -- Name: occurrence_attributes_websites_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13529,40 +11895,8 @@ SELECT pg_catalog.setval('occurrence_attributes_websites_id_seq', 1, false);
 
 
 --
--- TOC entry 2444 (class 1259 OID 50848)
--- Dependencies: 2423 6
--- Name: occurrence_comments_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE occurrence_comments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3374 (class 0 OID 0)
--- Dependencies: 2444
--- Name: occurrence_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
---
-
-ALTER SEQUENCE occurrence_comments_id_seq OWNED BY occurrence_comments.id;
-
-
---
--- TOC entry 3375 (class 0 OID 0)
--- Dependencies: 2444
--- Name: occurrence_comments_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('occurrence_comments_id_seq', 1, false);
-
-
---
--- TOC entry 2445 (class 1259 OID 50850)
--- Dependencies: 2424 6
+-- TOC entry 2346 (class 1259 OID 65840)
+-- Dependencies: 2311 6
 -- Name: occurrence_images_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13575,8 +11909,8 @@ CREATE SEQUENCE occurrence_images_id_seq
 
 
 --
--- TOC entry 3376 (class 0 OID 0)
--- Dependencies: 2445
+-- TOC entry 3042 (class 0 OID 0)
+-- Dependencies: 2346
 -- Name: occurrence_images_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13584,8 +11918,8 @@ ALTER SEQUENCE occurrence_images_id_seq OWNED BY occurrence_images.id;
 
 
 --
--- TOC entry 3377 (class 0 OID 0)
--- Dependencies: 2445
+-- TOC entry 3043 (class 0 OID 0)
+-- Dependencies: 2346
 -- Name: occurrence_images_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13593,8 +11927,8 @@ SELECT pg_catalog.setval('occurrence_images_id_seq', 1, false);
 
 
 --
--- TOC entry 2446 (class 1259 OID 50852)
--- Dependencies: 6 2425
+-- TOC entry 2347 (class 1259 OID 65842)
+-- Dependencies: 2312 6
 -- Name: occurrences_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13607,8 +11941,8 @@ CREATE SEQUENCE occurrences_id_seq
 
 
 --
--- TOC entry 3378 (class 0 OID 0)
--- Dependencies: 2446
+-- TOC entry 3044 (class 0 OID 0)
+-- Dependencies: 2347
 -- Name: occurrences_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13616,8 +11950,8 @@ ALTER SEQUENCE occurrences_id_seq OWNED BY occurrences.id;
 
 
 --
--- TOC entry 3379 (class 0 OID 0)
--- Dependencies: 2446
+-- TOC entry 3045 (class 0 OID 0)
+-- Dependencies: 2347
 -- Name: occurrences_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13625,12 +11959,13 @@ SELECT pg_catalog.setval('occurrences_id_seq', 1, false);
 
 
 --
--- TOC entry 2447 (class 1259 OID 50854)
--- Dependencies: 6 2370
+-- TOC entry 2348 (class 1259 OID 65844)
+-- Dependencies: 2313 6
 -- Name: people_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
 CREATE SEQUENCE people_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -13638,8 +11973,8 @@ CREATE SEQUENCE people_id_seq
 
 
 --
--- TOC entry 3380 (class 0 OID 0)
--- Dependencies: 2447
+-- TOC entry 3046 (class 0 OID 0)
+-- Dependencies: 2348
 -- Name: people_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13647,21 +11982,22 @@ ALTER SEQUENCE people_id_seq OWNED BY people.id;
 
 
 --
--- TOC entry 3381 (class 0 OID 0)
--- Dependencies: 2447
+-- TOC entry 3047 (class 0 OID 0)
+-- Dependencies: 2348
 -- Name: people_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
-SELECT pg_catalog.setval('people_id_seq', 1, true);
+SELECT pg_catalog.setval('people_id_seq', 1, false);
 
 
 --
--- TOC entry 2448 (class 1259 OID 50856)
--- Dependencies: 2363 6
+-- TOC entry 2349 (class 1259 OID 65846)
+-- Dependencies: 2296 6
 -- Name: roles_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
 CREATE SEQUENCE roles_id_seq
+    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
@@ -13669,8 +12005,8 @@ CREATE SEQUENCE roles_id_seq
 
 
 --
--- TOC entry 3382 (class 0 OID 0)
--- Dependencies: 2448
+-- TOC entry 3048 (class 0 OID 0)
+-- Dependencies: 2349
 -- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13678,17 +12014,17 @@ ALTER SEQUENCE roles_id_seq OWNED BY core_roles.id;
 
 
 --
--- TOC entry 3383 (class 0 OID 0)
--- Dependencies: 2448
+-- TOC entry 3049 (class 0 OID 0)
+-- Dependencies: 2349
 -- Name: roles_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
-SELECT pg_catalog.setval('roles_id_seq', 2, true);
+SELECT pg_catalog.setval('roles_id_seq', 1, false);
 
 
 --
--- TOC entry 2449 (class 1259 OID 50858)
--- Dependencies: 2426 6
+-- TOC entry 2350 (class 1259 OID 65848)
+-- Dependencies: 6 2314
 -- Name: sample_attribute_values_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13701,8 +12037,8 @@ CREATE SEQUENCE sample_attribute_values_id_seq
 
 
 --
--- TOC entry 3384 (class 0 OID 0)
--- Dependencies: 2449
+-- TOC entry 3050 (class 0 OID 0)
+-- Dependencies: 2350
 -- Name: sample_attribute_values_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13710,8 +12046,8 @@ ALTER SEQUENCE sample_attribute_values_id_seq OWNED BY sample_attribute_values.i
 
 
 --
--- TOC entry 3385 (class 0 OID 0)
--- Dependencies: 2449
+-- TOC entry 3051 (class 0 OID 0)
+-- Dependencies: 2350
 -- Name: sample_attribute_values_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13719,8 +12055,8 @@ SELECT pg_catalog.setval('sample_attribute_values_id_seq', 1, false);
 
 
 --
--- TOC entry 2450 (class 1259 OID 50860)
--- Dependencies: 2427 6
+-- TOC entry 2351 (class 1259 OID 65850)
+-- Dependencies: 6 2315
 -- Name: sample_attributes_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13733,8 +12069,8 @@ CREATE SEQUENCE sample_attributes_id_seq
 
 
 --
--- TOC entry 3386 (class 0 OID 0)
--- Dependencies: 2450
+-- TOC entry 3052 (class 0 OID 0)
+-- Dependencies: 2351
 -- Name: sample_attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13742,8 +12078,8 @@ ALTER SEQUENCE sample_attributes_id_seq OWNED BY sample_attributes.id;
 
 
 --
--- TOC entry 3387 (class 0 OID 0)
--- Dependencies: 2450
+-- TOC entry 3053 (class 0 OID 0)
+-- Dependencies: 2351
 -- Name: sample_attributes_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13751,8 +12087,8 @@ SELECT pg_catalog.setval('sample_attributes_id_seq', 1, false);
 
 
 --
--- TOC entry 2451 (class 1259 OID 50862)
--- Dependencies: 2428 6
+-- TOC entry 2352 (class 1259 OID 65852)
+-- Dependencies: 6 2316
 -- Name: sample_attributes_websites_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13765,8 +12101,8 @@ CREATE SEQUENCE sample_attributes_websites_id_seq
 
 
 --
--- TOC entry 3388 (class 0 OID 0)
--- Dependencies: 2451
+-- TOC entry 3054 (class 0 OID 0)
+-- Dependencies: 2352
 -- Name: sample_attributes_websites_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13774,8 +12110,8 @@ ALTER SEQUENCE sample_attributes_websites_id_seq OWNED BY sample_attributes_webs
 
 
 --
--- TOC entry 3389 (class 0 OID 0)
--- Dependencies: 2451
+-- TOC entry 3055 (class 0 OID 0)
+-- Dependencies: 2352
 -- Name: sample_attributes_websites_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13783,8 +12119,8 @@ SELECT pg_catalog.setval('sample_attributes_websites_id_seq', 1, false);
 
 
 --
--- TOC entry 2452 (class 1259 OID 50864)
--- Dependencies: 6 2429
+-- TOC entry 2353 (class 1259 OID 65854)
+-- Dependencies: 6 2317
 -- Name: samples_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13797,8 +12133,8 @@ CREATE SEQUENCE samples_id_seq
 
 
 --
--- TOC entry 3390 (class 0 OID 0)
--- Dependencies: 2452
+-- TOC entry 3056 (class 0 OID 0)
+-- Dependencies: 2353
 -- Name: samples_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13806,8 +12142,8 @@ ALTER SEQUENCE samples_id_seq OWNED BY samples.id;
 
 
 --
--- TOC entry 3391 (class 0 OID 0)
--- Dependencies: 2452
+-- TOC entry 3057 (class 0 OID 0)
+-- Dependencies: 2353
 -- Name: samples_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13815,8 +12151,8 @@ SELECT pg_catalog.setval('samples_id_seq', 1, false);
 
 
 --
--- TOC entry 2453 (class 1259 OID 50866)
--- Dependencies: 2430 6
+-- TOC entry 2354 (class 1259 OID 65856)
+-- Dependencies: 6 2318
 -- Name: site_roles_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13829,8 +12165,8 @@ CREATE SEQUENCE site_roles_id_seq
 
 
 --
--- TOC entry 3392 (class 0 OID 0)
--- Dependencies: 2453
+-- TOC entry 3058 (class 0 OID 0)
+-- Dependencies: 2354
 -- Name: site_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13838,8 +12174,8 @@ ALTER SEQUENCE site_roles_id_seq OWNED BY site_roles.id;
 
 
 --
--- TOC entry 3393 (class 0 OID 0)
--- Dependencies: 2453
+-- TOC entry 3059 (class 0 OID 0)
+-- Dependencies: 2354
 -- Name: site_roles_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13847,8 +12183,8 @@ SELECT pg_catalog.setval('site_roles_id_seq', 1, false);
 
 
 --
--- TOC entry 2454 (class 1259 OID 50868)
--- Dependencies: 6 2372
+-- TOC entry 2355 (class 1259 OID 65858)
+-- Dependencies: 6 2320
 -- Name: surveys_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13861,8 +12197,8 @@ CREATE SEQUENCE surveys_id_seq
 
 
 --
--- TOC entry 3394 (class 0 OID 0)
--- Dependencies: 2454
+-- TOC entry 3060 (class 0 OID 0)
+-- Dependencies: 2355
 -- Name: surveys_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13870,8 +12206,8 @@ ALTER SEQUENCE surveys_id_seq OWNED BY surveys.id;
 
 
 --
--- TOC entry 3395 (class 0 OID 0)
--- Dependencies: 2454
+-- TOC entry 3061 (class 0 OID 0)
+-- Dependencies: 2355
 -- Name: surveys_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13879,40 +12215,8 @@ SELECT pg_catalog.setval('surveys_id_seq', 1, false);
 
 
 --
--- TOC entry 2455 (class 1259 OID 50870)
--- Dependencies: 6 2432
--- Name: system_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE system_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3396 (class 0 OID 0)
--- Dependencies: 2455
--- Name: system_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
---
-
-ALTER SEQUENCE system_id_seq OWNED BY system.id;
-
-
---
--- TOC entry 3397 (class 0 OID 0)
--- Dependencies: 2455
--- Name: system_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('system_id_seq', 1, false);
-
-
---
--- TOC entry 2456 (class 1259 OID 50872)
--- Dependencies: 2378 6
+-- TOC entry 2356 (class 1259 OID 65860)
+-- Dependencies: 2323 6
 -- Name: taxa_taxon_lists_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13925,8 +12229,8 @@ CREATE SEQUENCE taxa_taxon_lists_id_seq
 
 
 --
--- TOC entry 3398 (class 0 OID 0)
--- Dependencies: 2456
+-- TOC entry 3062 (class 0 OID 0)
+-- Dependencies: 2356
 -- Name: taxa_taxon_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13934,8 +12238,8 @@ ALTER SEQUENCE taxa_taxon_lists_id_seq OWNED BY taxa_taxon_lists.id;
 
 
 --
--- TOC entry 3399 (class 0 OID 0)
--- Dependencies: 2456
+-- TOC entry 3063 (class 0 OID 0)
+-- Dependencies: 2356
 -- Name: taxa_taxon_lists_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13943,8 +12247,8 @@ SELECT pg_catalog.setval('taxa_taxon_lists_id_seq', 1, false);
 
 
 --
--- TOC entry 2457 (class 1259 OID 50874)
--- Dependencies: 6 2382
+-- TOC entry 2357 (class 1259 OID 65862)
+-- Dependencies: 2324 6
 -- Name: taxon_groups_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13957,8 +12261,8 @@ CREATE SEQUENCE taxon_groups_id_seq
 
 
 --
--- TOC entry 3400 (class 0 OID 0)
--- Dependencies: 2457
+-- TOC entry 3064 (class 0 OID 0)
+-- Dependencies: 2357
 -- Name: taxon_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13966,8 +12270,8 @@ ALTER SEQUENCE taxon_groups_id_seq OWNED BY taxon_groups.id;
 
 
 --
--- TOC entry 3401 (class 0 OID 0)
--- Dependencies: 2457
+-- TOC entry 3065 (class 0 OID 0)
+-- Dependencies: 2357
 -- Name: taxon_groups_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -13975,8 +12279,8 @@ SELECT pg_catalog.setval('taxon_groups_id_seq', 1, false);
 
 
 --
--- TOC entry 2458 (class 1259 OID 50876)
--- Dependencies: 2433 6
+-- TOC entry 2358 (class 1259 OID 65864)
+-- Dependencies: 6 2327
 -- Name: taxon_meanings_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -13989,8 +12293,8 @@ CREATE SEQUENCE taxon_meanings_id_seq
 
 
 --
--- TOC entry 3402 (class 0 OID 0)
--- Dependencies: 2458
+-- TOC entry 3066 (class 0 OID 0)
+-- Dependencies: 2358
 -- Name: taxon_meanings_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -13998,8 +12302,8 @@ ALTER SEQUENCE taxon_meanings_id_seq OWNED BY taxon_meanings.id;
 
 
 --
--- TOC entry 3403 (class 0 OID 0)
--- Dependencies: 2458
+-- TOC entry 3067 (class 0 OID 0)
+-- Dependencies: 2358
 -- Name: taxon_meanings_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -14007,12 +12311,12 @@ SELECT pg_catalog.setval('taxon_meanings_id_seq', 1, false);
 
 
 --
--- TOC entry 2459 (class 1259 OID 50878)
--- Dependencies: 6 2434
--- Name: user_tokens_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
+-- TOC entry 2359 (class 1259 OID 65866)
+-- Dependencies: 6 2334
+-- Name: users_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
-CREATE SEQUENCE user_tokens_id_seq
+CREATE SEQUENCE users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
@@ -14021,39 +12325,8 @@ CREATE SEQUENCE user_tokens_id_seq
 
 
 --
--- TOC entry 3404 (class 0 OID 0)
--- Dependencies: 2459
--- Name: user_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
---
-
-ALTER SEQUENCE user_tokens_id_seq OWNED BY user_tokens.id;
-
-
---
--- TOC entry 3405 (class 0 OID 0)
--- Dependencies: 2459
--- Name: user_tokens_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
---
-
-SELECT pg_catalog.setval('user_tokens_id_seq', 1, false);
-
-
---
--- TOC entry 2460 (class 1259 OID 50880)
--- Dependencies: 2366 6
--- Name: users_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
---
-
-CREATE SEQUENCE users_id_seq
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
---
--- TOC entry 3406 (class 0 OID 0)
--- Dependencies: 2460
+-- TOC entry 3068 (class 0 OID 0)
+-- Dependencies: 2359
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -14061,17 +12334,17 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
--- TOC entry 3407 (class 0 OID 0)
--- Dependencies: 2460
+-- TOC entry 3069 (class 0 OID 0)
+-- Dependencies: 2359
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
-SELECT pg_catalog.setval('users_id_seq', 1, true);
+SELECT pg_catalog.setval('users_id_seq', 1, false);
 
 
 --
--- TOC entry 2461 (class 1259 OID 50882)
--- Dependencies: 6 2435
+-- TOC entry 2360 (class 1259 OID 65868)
+-- Dependencies: 6 2335
 -- Name: users_websites_id_seq; Type: SEQUENCE; Schema: indicia; Owner: -
 --
 
@@ -14084,8 +12357,8 @@ CREATE SEQUENCE users_websites_id_seq
 
 
 --
--- TOC entry 3408 (class 0 OID 0)
--- Dependencies: 2461
+-- TOC entry 3070 (class 0 OID 0)
+-- Dependencies: 2360
 -- Name: users_websites_id_seq; Type: SEQUENCE OWNED BY; Schema: indicia; Owner: -
 --
 
@@ -14093,8 +12366,8 @@ ALTER SEQUENCE users_websites_id_seq OWNED BY users_websites.id;
 
 
 --
--- TOC entry 3409 (class 0 OID 0)
--- Dependencies: 2461
+-- TOC entry 3071 (class 0 OID 0)
+-- Dependencies: 2360
 -- Name: users_websites_id_seq; Type: SEQUENCE SET; Schema: indicia; Owner: -
 --
 
@@ -14102,8 +12375,8 @@ SELECT pg_catalog.setval('users_websites_id_seq', 1, false);
 
 
 --
--- TOC entry 2769 (class 2604 OID 50884)
--- Dependencies: 2448 2363
+-- TOC entry 2640 (class 2604 OID 65870)
+-- Dependencies: 2349 2296
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14111,8 +12384,8 @@ ALTER TABLE core_roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regcl
 
 
 --
--- TOC entry 2801 (class 2604 OID 50885)
--- Dependencies: 2436 2414
+-- TOC entry 2642 (class 2604 OID 65871)
+-- Dependencies: 2338 2301
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14120,8 +12393,8 @@ ALTER TABLE location_attribute_values ALTER COLUMN id SET DEFAULT nextval('locat
 
 
 --
--- TOC entry 2802 (class 2604 OID 50886)
--- Dependencies: 2437 2415
+-- TOC entry 2643 (class 2604 OID 65872)
+-- Dependencies: 2339 2302
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14129,8 +12402,8 @@ ALTER TABLE location_attributes ALTER COLUMN id SET DEFAULT nextval('location_at
 
 
 --
--- TOC entry 2803 (class 2604 OID 50887)
--- Dependencies: 2438 2416
+-- TOC entry 2644 (class 2604 OID 65873)
+-- Dependencies: 2340 2303
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14138,8 +12411,8 @@ ALTER TABLE location_attributes_websites ALTER COLUMN id SET DEFAULT nextval('lo
 
 
 --
--- TOC entry 2777 (class 2604 OID 50888)
--- Dependencies: 2439 2368
+-- TOC entry 2645 (class 2604 OID 65874)
+-- Dependencies: 2341 2304
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14147,8 +12420,8 @@ ALTER TABLE locations ALTER COLUMN id SET DEFAULT nextval('locations_id_seq'::re
 
 
 --
--- TOC entry 2804 (class 2604 OID 50889)
--- Dependencies: 2440 2417
+-- TOC entry 2652 (class 2604 OID 65875)
+-- Dependencies: 2342 2305
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14156,8 +12429,8 @@ ALTER TABLE locations_websites ALTER COLUMN id SET DEFAULT nextval('locations_we
 
 
 --
--- TOC entry 2806 (class 2604 OID 50890)
--- Dependencies: 2441 2420
+-- TOC entry 2654 (class 2604 OID 65876)
+-- Dependencies: 2343 2308
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14165,8 +12438,8 @@ ALTER TABLE occurrence_attribute_values ALTER COLUMN id SET DEFAULT nextval('occ
 
 
 --
--- TOC entry 2807 (class 2604 OID 50891)
--- Dependencies: 2442 2421
+-- TOC entry 2655 (class 2604 OID 65877)
+-- Dependencies: 2344 2309
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14174,8 +12447,8 @@ ALTER TABLE occurrence_attributes ALTER COLUMN id SET DEFAULT nextval('occurrenc
 
 
 --
--- TOC entry 2808 (class 2604 OID 50892)
--- Dependencies: 2443 2422
+-- TOC entry 2656 (class 2604 OID 65878)
+-- Dependencies: 2345 2310
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14183,17 +12456,8 @@ ALTER TABLE occurrence_attributes_websites ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 2809 (class 2604 OID 50893)
--- Dependencies: 2444 2423
--- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
---
-
-ALTER TABLE occurrence_comments ALTER COLUMN id SET DEFAULT nextval('occurrence_comments_id_seq'::regclass);
-
-
---
--- TOC entry 2810 (class 2604 OID 50894)
--- Dependencies: 2445 2424
+-- TOC entry 2657 (class 2604 OID 65879)
+-- Dependencies: 2346 2311
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14201,8 +12465,8 @@ ALTER TABLE occurrence_images ALTER COLUMN id SET DEFAULT nextval('occurrence_im
 
 
 --
--- TOC entry 2812 (class 2604 OID 50895)
--- Dependencies: 2446 2425
+-- TOC entry 2659 (class 2604 OID 65880)
+-- Dependencies: 2347 2312
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14210,8 +12474,8 @@ ALTER TABLE occurrences ALTER COLUMN id SET DEFAULT nextval('occurrences_id_seq'
 
 
 --
--- TOC entry 2784 (class 2604 OID 50896)
--- Dependencies: 2447 2370
+-- TOC entry 2660 (class 2604 OID 65881)
+-- Dependencies: 2348 2313
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14219,8 +12483,8 @@ ALTER TABLE people ALTER COLUMN id SET DEFAULT nextval('people_id_seq'::regclass
 
 
 --
--- TOC entry 2813 (class 2604 OID 50897)
--- Dependencies: 2449 2426
+-- TOC entry 2661 (class 2604 OID 65882)
+-- Dependencies: 2350 2314
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14228,8 +12492,8 @@ ALTER TABLE sample_attribute_values ALTER COLUMN id SET DEFAULT nextval('sample_
 
 
 --
--- TOC entry 2814 (class 2604 OID 50898)
--- Dependencies: 2450 2427
+-- TOC entry 2662 (class 2604 OID 65883)
+-- Dependencies: 2351 2315
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14237,8 +12501,8 @@ ALTER TABLE sample_attributes ALTER COLUMN id SET DEFAULT nextval('sample_attrib
 
 
 --
--- TOC entry 2815 (class 2604 OID 50899)
--- Dependencies: 2451 2428
+-- TOC entry 2663 (class 2604 OID 65884)
+-- Dependencies: 2352 2316
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14246,8 +12510,8 @@ ALTER TABLE sample_attributes_websites ALTER COLUMN id SET DEFAULT nextval('samp
 
 
 --
--- TOC entry 2816 (class 2604 OID 50900)
--- Dependencies: 2452 2429
+-- TOC entry 2664 (class 2604 OID 65885)
+-- Dependencies: 2353 2317
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14255,8 +12519,8 @@ ALTER TABLE samples ALTER COLUMN id SET DEFAULT nextval('samples_id_seq'::regcla
 
 
 --
--- TOC entry 2820 (class 2604 OID 50901)
--- Dependencies: 2453 2430
+-- TOC entry 2668 (class 2604 OID 65886)
+-- Dependencies: 2354 2318
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14264,8 +12528,8 @@ ALTER TABLE site_roles ALTER COLUMN id SET DEFAULT nextval('site_roles_id_seq'::
 
 
 --
--- TOC entry 2785 (class 2604 OID 50902)
--- Dependencies: 2454 2372
+-- TOC entry 2669 (class 2604 OID 65887)
+-- Dependencies: 2355 2320
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14273,17 +12537,8 @@ ALTER TABLE surveys ALTER COLUMN id SET DEFAULT nextval('surveys_id_seq'::regcla
 
 
 --
--- TOC entry 2824 (class 2604 OID 50903)
--- Dependencies: 2455 2432
--- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
---
-
-ALTER TABLE system ALTER COLUMN id SET DEFAULT nextval('system_id_seq'::regclass);
-
-
---
--- TOC entry 2790 (class 2604 OID 50904)
--- Dependencies: 2456 2378
+-- TOC entry 2672 (class 2604 OID 65888)
+-- Dependencies: 2356 2323
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14291,8 +12546,8 @@ ALTER TABLE taxa_taxon_lists ALTER COLUMN id SET DEFAULT nextval('taxa_taxon_lis
 
 
 --
--- TOC entry 2793 (class 2604 OID 50905)
--- Dependencies: 2457 2382
+-- TOC entry 2673 (class 2604 OID 65889)
+-- Dependencies: 2357 2324
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14300,8 +12555,8 @@ ALTER TABLE taxon_groups ALTER COLUMN id SET DEFAULT nextval('taxon_groups_id_se
 
 
 --
--- TOC entry 2825 (class 2604 OID 50906)
--- Dependencies: 2458 2433
+-- TOC entry 2675 (class 2604 OID 65890)
+-- Dependencies: 2358 2327
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14309,17 +12564,8 @@ ALTER TABLE taxon_meanings ALTER COLUMN id SET DEFAULT nextval('taxon_meanings_i
 
 
 --
--- TOC entry 2826 (class 2604 OID 50907)
--- Dependencies: 2459 2434
--- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
---
-
-ALTER TABLE user_tokens ALTER COLUMN id SET DEFAULT nextval('user_tokens_id_seq'::regclass);
-
-
---
--- TOC entry 2773 (class 2604 OID 50908)
--- Dependencies: 2460 2366
+-- TOC entry 2683 (class 2604 OID 65891)
+-- Dependencies: 2359 2334
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14327,8 +12573,8 @@ ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- TOC entry 2830 (class 2604 OID 50909)
--- Dependencies: 2461 2435
+-- TOC entry 2690 (class 2604 OID 65892)
+-- Dependencies: 2360 2335
 -- Name: id; Type: DEFAULT; Schema: indicia; Owner: -
 --
 
@@ -14336,18 +12582,16 @@ ALTER TABLE users_websites ALTER COLUMN id SET DEFAULT nextval('users_websites_i
 
 
 --
--- TOC entry 3028 (class 0 OID 49755)
--- Dependencies: 2363
+-- TOC entry 2830 (class 0 OID 64895)
+-- Dependencies: 2296
 -- Data for Name: core_roles; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
-INSERT INTO core_roles (id, title, created_on, created_by_id, updated_on, updated_by_id) VALUES (1, 'CoreAdmin', '2008-12-05 09:08:45.904', 1, '2008-12-05 09:08:45.904', 1);
-INSERT INTO core_roles (id, title, created_on, created_by_id, updated_on, updated_by_id) VALUES (2, 'SiteController', '2008-12-05 09:08:45.904', 1, '2008-12-05 09:08:45.904', 1);
 
 
 --
--- TOC entry 3042 (class 0 OID 49922)
--- Dependencies: 2395
+-- TOC entry 2831 (class 0 OID 64905)
+-- Dependencies: 2297
 -- Data for Name: geometry_columns; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
@@ -14358,166 +12602,152 @@ INSERT INTO geometry_columns (f_table_catalog, f_table_schema, f_table_name, f_g
 
 
 --
--- TOC entry 3029 (class 0 OID 49770)
--- Dependencies: 2365
+-- TOC entry 2832 (class 0 OID 64920)
+-- Dependencies: 2300
 -- Data for Name: languages; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
-INSERT INTO languages (id, iso, language, created_on, created_by_id, updated_on, updated_by_id) VALUES (1, 'eng', 'English', '2008-12-05 09:06:36.351', 1, '2008-12-05 09:06:36.351', 1);
-INSERT INTO languages (id, iso, language, created_on, created_by_id, updated_on, updated_by_id) VALUES (2, 'lat', 'Latin', '2008-12-05 09:06:36.351', 1, '2008-12-05 09:06:36.351', 1);
-INSERT INTO languages (id, iso, language, created_on, created_by_id, updated_on, updated_by_id) VALUES (3, 'cym', 'Welsh', '2008-12-05 09:06:36.351', 1, '2008-12-05 09:06:36.351', 1);
-INSERT INTO languages (id, iso, language, created_on, created_by_id, updated_on, updated_by_id) VALUES (4, 'gla', 'Gaelic', '2008-12-05 09:06:36.351', 1, '2008-12-05 09:06:36.351', 1);
-INSERT INTO languages (id, iso, language, created_on, created_by_id, updated_on, updated_by_id) VALUES (5, 'gle', 'Irish', '2008-12-05 09:06:36.351', 1, '2008-12-05 09:06:36.351', 1);
 
 
 --
--- TOC entry 3043 (class 0 OID 50006)
--- Dependencies: 2414
+-- TOC entry 2833 (class 0 OID 64924)
+-- Dependencies: 2301
 -- Data for Name: location_attribute_values; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3044 (class 0 OID 50012)
--- Dependencies: 2415
+-- TOC entry 2834 (class 0 OID 64930)
+-- Dependencies: 2302
 -- Data for Name: location_attributes; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3045 (class 0 OID 50015)
--- Dependencies: 2416
+-- TOC entry 2835 (class 0 OID 64933)
+-- Dependencies: 2303
 -- Data for Name: location_attributes_websites; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3031 (class 0 OID 49790)
--- Dependencies: 2368
+-- TOC entry 2836 (class 0 OID 64939)
+-- Dependencies: 2304
 -- Data for Name: locations; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3046 (class 0 OID 50018)
--- Dependencies: 2417
+-- TOC entry 2837 (class 0 OID 64951)
+-- Dependencies: 2305
 -- Data for Name: locations_websites; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3047 (class 0 OID 50023)
--- Dependencies: 2419
+-- TOC entry 2838 (class 0 OID 64956)
+-- Dependencies: 2307
 -- Data for Name: meanings; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3048 (class 0 OID 50027)
--- Dependencies: 2420
+-- TOC entry 2839 (class 0 OID 64960)
+-- Dependencies: 2308
 -- Data for Name: occurrence_attribute_values; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3049 (class 0 OID 50033)
--- Dependencies: 2421
+-- TOC entry 2840 (class 0 OID 64966)
+-- Dependencies: 2309
 -- Data for Name: occurrence_attributes; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3050 (class 0 OID 50036)
--- Dependencies: 2422
+-- TOC entry 2841 (class 0 OID 64969)
+-- Dependencies: 2310
 -- Data for Name: occurrence_attributes_websites; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3051 (class 0 OID 50039)
--- Dependencies: 2423
--- Data for Name: occurrence_comments; Type: TABLE DATA; Schema: indicia; Owner: -
---
-
-
-
---
--- TOC entry 3052 (class 0 OID 50045)
--- Dependencies: 2424
+-- TOC entry 2842 (class 0 OID 64972)
+-- Dependencies: 2311
 -- Data for Name: occurrence_images; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3053 (class 0 OID 50048)
--- Dependencies: 2425
+-- TOC entry 2843 (class 0 OID 64975)
+-- Dependencies: 2312
 -- Data for Name: occurrences; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3032 (class 0 OID 49807)
--- Dependencies: 2370
+-- TOC entry 2844 (class 0 OID 64979)
+-- Dependencies: 2313
 -- Data for Name: people; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
-INSERT INTO people (id, first_name, surname, initials, email_address, website_url, created_on, created_by_id, updated_on, updated_by_id) VALUES (1, NULL, 'admin', NULL, NULL, NULL, '2008-12-05 09:05:41.156', 1, '2008-12-05 09:05:41.156', 1);
 
 
 --
--- TOC entry 3054 (class 0 OID 50052)
--- Dependencies: 2426
+-- TOC entry 2845 (class 0 OID 64985)
+-- Dependencies: 2314
 -- Data for Name: sample_attribute_values; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3055 (class 0 OID 50058)
--- Dependencies: 2427
+-- TOC entry 2846 (class 0 OID 64991)
+-- Dependencies: 2315
 -- Data for Name: sample_attributes; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3056 (class 0 OID 50061)
--- Dependencies: 2428
+-- TOC entry 2847 (class 0 OID 64994)
+-- Dependencies: 2316
 -- Data for Name: sample_attributes_websites; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3057 (class 0 OID 50064)
--- Dependencies: 2429
+-- TOC entry 2848 (class 0 OID 64997)
+-- Dependencies: 2317
 -- Data for Name: samples; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3058 (class 0 OID 50073)
--- Dependencies: 2430
+-- TOC entry 2849 (class 0 OID 65006)
+-- Dependencies: 2318
 -- Data for Name: site_roles; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3059 (class 0 OID 50076)
--- Dependencies: 2431
+-- TOC entry 2850 (class 0 OID 65009)
+-- Dependencies: 2319
 -- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
@@ -17686,122 +15916,104 @@ INSERT INTO spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) VALU
 
 
 --
--- TOC entry 3033 (class 0 OID 49818)
--- Dependencies: 2372
+-- TOC entry 2851 (class 0 OID 65019)
+-- Dependencies: 2320
 -- Data for Name: surveys; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3060 (class 0 OID 50086)
--- Dependencies: 2432
--- Data for Name: system; Type: TABLE DATA; Schema: indicia; Owner: -
---
-
-INSERT INTO system (id, version, name, repository, release_date) VALUES (1, '0.1', '', 'http://indicia.googlecode.com/svn/tag/version_0_1', '2009-01-15');
-
-
---
--- TOC entry 3035 (class 0 OID 49840)
--- Dependencies: 2377
+-- TOC entry 2852 (class 0 OID 65027)
+-- Dependencies: 2322
 -- Data for Name: taxa; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3036 (class 0 OID 49844)
--- Dependencies: 2378
+-- TOC entry 2853 (class 0 OID 65032)
+-- Dependencies: 2323
 -- Data for Name: taxa_taxon_lists; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3038 (class 0 OID 49864)
--- Dependencies: 2382
+-- TOC entry 2854 (class 0 OID 65035)
+-- Dependencies: 2324
 -- Data for Name: taxon_groups; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3037 (class 0 OID 49851)
--- Dependencies: 2380
+-- TOC entry 2855 (class 0 OID 65040)
+-- Dependencies: 2326
 -- Data for Name: taxon_lists; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3061 (class 0 OID 50092)
--- Dependencies: 2433
+-- TOC entry 2856 (class 0 OID 65047)
+-- Dependencies: 2327
 -- Data for Name: taxon_meanings; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3039 (class 0 OID 49879)
--- Dependencies: 2386
+-- TOC entry 2857 (class 0 OID 65052)
+-- Dependencies: 2329
 -- Data for Name: termlists; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3040 (class 0 OID 49894)
--- Dependencies: 2389
+-- TOC entry 2858 (class 0 OID 65062)
+-- Dependencies: 2331
 -- Data for Name: termlists_terms; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3041 (class 0 OID 49902)
--- Dependencies: 2391
+-- TOC entry 2859 (class 0 OID 65068)
+-- Dependencies: 2333
 -- Data for Name: terms; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3062 (class 0 OID 50095)
--- Dependencies: 2434
--- Data for Name: user_tokens; Type: TABLE DATA; Schema: indicia; Owner: -
---
-
-
-
---
--- TOC entry 3030 (class 0 OID 49774)
--- Dependencies: 2366
+-- TOC entry 2860 (class 0 OID 65073)
+-- Dependencies: 2334
 -- Data for Name: users; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
-INSERT INTO users (id, openid_url, home_entered_sref, home_entered_sref_system, home_geom, interests, location_name, person_id, email_visible, view_common_names, core_role_id, created_on, created_by_id, updated_on, updated_by_id, username, password, forgotten_password_key) VALUES (1, NULL, NULL, NULL, NULL, NULL, NULL, 1, false, true, 1, '2008-12-05 09:05:41.156', 1, '2008-12-05 09:05:41.156', 1, 'admin', NULL, NULL);
 
 
 --
--- TOC entry 3063 (class 0 OID 50101)
--- Dependencies: 2435
+-- TOC entry 2861 (class 0 OID 65084)
+-- Dependencies: 2335
 -- Data for Name: users_websites; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 3034 (class 0 OID 49826)
--- Dependencies: 2374
+-- TOC entry 2862 (class 0 OID 65092)
+-- Dependencies: 2337
 -- Data for Name: websites; Type: TABLE DATA; Schema: indicia; Owner: -
 --
 
 
 
 --
--- TOC entry 2834 (class 2606 OID 50915)
--- Dependencies: 2365 2365
+-- TOC entry 2697 (class 2606 OID 65898)
+-- Dependencies: 2300 2300
 -- Name: fk_languages; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17810,8 +16022,8 @@ ALTER TABLE ONLY languages
 
 
 --
--- TOC entry 2884 (class 2606 OID 50917)
--- Dependencies: 2419 2419
+-- TOC entry 2711 (class 2606 OID 65900)
+-- Dependencies: 2307 2307
 -- Name: fk_meanings; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17820,8 +16032,8 @@ ALTER TABLE ONLY meanings
 
 
 --
--- TOC entry 2872 (class 2606 OID 50919)
--- Dependencies: 2395 2395 2395 2395 2395
+-- TOC entry 2695 (class 2606 OID 65902)
+-- Dependencies: 2297 2297 2297 2297 2297
 -- Name: geometry_columns_pk; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17830,8 +16042,8 @@ ALTER TABLE ONLY geometry_columns
 
 
 --
--- TOC entry 2832 (class 2606 OID 50921)
--- Dependencies: 2363 2363
+-- TOC entry 2693 (class 2606 OID 65904)
+-- Dependencies: 2296 2296
 -- Name: pk_core_roles; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17840,8 +16052,8 @@ ALTER TABLE ONLY core_roles
 
 
 --
--- TOC entry 2876 (class 2606 OID 50923)
--- Dependencies: 2414 2414
+-- TOC entry 2701 (class 2606 OID 65906)
+-- Dependencies: 2301 2301
 -- Name: pk_location_attribute_values; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17850,8 +16062,8 @@ ALTER TABLE ONLY location_attribute_values
 
 
 --
--- TOC entry 2878 (class 2606 OID 50925)
--- Dependencies: 2415 2415
+-- TOC entry 2703 (class 2606 OID 65908)
+-- Dependencies: 2302 2302
 -- Name: pk_location_attributes; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17860,8 +16072,8 @@ ALTER TABLE ONLY location_attributes
 
 
 --
--- TOC entry 2880 (class 2606 OID 50927)
--- Dependencies: 2416 2416
+-- TOC entry 2705 (class 2606 OID 65910)
+-- Dependencies: 2303 2303
 -- Name: pk_location_attributes_websites; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17870,8 +16082,8 @@ ALTER TABLE ONLY location_attributes_websites
 
 
 --
--- TOC entry 2840 (class 2606 OID 50929)
--- Dependencies: 2368 2368
+-- TOC entry 2707 (class 2606 OID 65912)
+-- Dependencies: 2304 2304
 -- Name: pk_locations; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17880,8 +16092,8 @@ ALTER TABLE ONLY locations
 
 
 --
--- TOC entry 2882 (class 2606 OID 50931)
--- Dependencies: 2417 2417
+-- TOC entry 2709 (class 2606 OID 65914)
+-- Dependencies: 2305 2305
 -- Name: pk_locations_websites; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17890,8 +16102,8 @@ ALTER TABLE ONLY locations_websites
 
 
 --
--- TOC entry 2888 (class 2606 OID 50933)
--- Dependencies: 2420 2420
+-- TOC entry 2715 (class 2606 OID 65916)
+-- Dependencies: 2308 2308
 -- Name: pk_occurrence_attribute_values; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17900,8 +16112,8 @@ ALTER TABLE ONLY occurrence_attribute_values
 
 
 --
--- TOC entry 2890 (class 2606 OID 50935)
--- Dependencies: 2421 2421
+-- TOC entry 2717 (class 2606 OID 65918)
+-- Dependencies: 2309 2309
 -- Name: pk_occurrence_attributes; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17910,8 +16122,8 @@ ALTER TABLE ONLY occurrence_attributes
 
 
 --
--- TOC entry 2892 (class 2606 OID 50937)
--- Dependencies: 2422 2422
+-- TOC entry 2719 (class 2606 OID 65920)
+-- Dependencies: 2310 2310
 -- Name: pk_occurrence_attributes_websites; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17920,18 +16132,8 @@ ALTER TABLE ONLY occurrence_attributes_websites
 
 
 --
--- TOC entry 2894 (class 2606 OID 50939)
--- Dependencies: 2423 2423
--- Name: pk_occurrence_comments; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY occurrence_comments
-    ADD CONSTRAINT pk_occurrence_comments PRIMARY KEY (id);
-
-
---
--- TOC entry 2896 (class 2606 OID 50941)
--- Dependencies: 2424 2424
+-- TOC entry 2721 (class 2606 OID 65922)
+-- Dependencies: 2311 2311
 -- Name: pk_occurrence_images; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17940,8 +16142,8 @@ ALTER TABLE ONLY occurrence_images
 
 
 --
--- TOC entry 2901 (class 2606 OID 50943)
--- Dependencies: 2425 2425
+-- TOC entry 2726 (class 2606 OID 65924)
+-- Dependencies: 2312 2312
 -- Name: pk_occurrences; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17950,8 +16152,8 @@ ALTER TABLE ONLY occurrences
 
 
 --
--- TOC entry 2842 (class 2606 OID 50945)
--- Dependencies: 2370 2370
+-- TOC entry 2728 (class 2606 OID 65926)
+-- Dependencies: 2313 2313
 -- Name: pk_people; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17960,8 +16162,8 @@ ALTER TABLE ONLY people
 
 
 --
--- TOC entry 2905 (class 2606 OID 50947)
--- Dependencies: 2426 2426
+-- TOC entry 2732 (class 2606 OID 65928)
+-- Dependencies: 2314 2314
 -- Name: pk_sample_attribute_values; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17970,8 +16172,8 @@ ALTER TABLE ONLY sample_attribute_values
 
 
 --
--- TOC entry 2907 (class 2606 OID 50949)
--- Dependencies: 2427 2427
+-- TOC entry 2734 (class 2606 OID 65930)
+-- Dependencies: 2315 2315
 -- Name: pk_sample_attributes; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17980,8 +16182,8 @@ ALTER TABLE ONLY sample_attributes
 
 
 --
--- TOC entry 2911 (class 2606 OID 50951)
--- Dependencies: 2428 2428
+-- TOC entry 2738 (class 2606 OID 65932)
+-- Dependencies: 2316 2316
 -- Name: pk_sample_attributes_websites; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -17990,8 +16192,8 @@ ALTER TABLE ONLY sample_attributes_websites
 
 
 --
--- TOC entry 2915 (class 2606 OID 50953)
--- Dependencies: 2429 2429
+-- TOC entry 2742 (class 2606 OID 65934)
+-- Dependencies: 2317 2317
 -- Name: pk_samples; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18000,8 +16202,8 @@ ALTER TABLE ONLY samples
 
 
 --
--- TOC entry 2917 (class 2606 OID 50955)
--- Dependencies: 2430 2430
+-- TOC entry 2744 (class 2606 OID 65936)
+-- Dependencies: 2318 2318
 -- Name: pk_site_roles; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18010,8 +16212,8 @@ ALTER TABLE ONLY site_roles
 
 
 --
--- TOC entry 2845 (class 2606 OID 50957)
--- Dependencies: 2372 2372
+-- TOC entry 2749 (class 2606 OID 65938)
+-- Dependencies: 2320 2320
 -- Name: pk_surveys; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18020,18 +16222,8 @@ ALTER TABLE ONLY surveys
 
 
 --
--- TOC entry 2921 (class 2606 OID 50959)
--- Dependencies: 2432 2432
--- Name: pk_system; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY system
-    ADD CONSTRAINT pk_system PRIMARY KEY (id);
-
-
---
--- TOC entry 2851 (class 2606 OID 50961)
--- Dependencies: 2377 2377
+-- TOC entry 2755 (class 2606 OID 65940)
+-- Dependencies: 2322 2322
 -- Name: pk_taxa; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18040,8 +16232,8 @@ ALTER TABLE ONLY taxa
 
 
 --
--- TOC entry 2855 (class 2606 OID 50963)
--- Dependencies: 2378 2378
+-- TOC entry 2759 (class 2606 OID 65942)
+-- Dependencies: 2323 2323
 -- Name: pk_taxa_taxon_lists; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18050,8 +16242,8 @@ ALTER TABLE ONLY taxa_taxon_lists
 
 
 --
--- TOC entry 2861 (class 2606 OID 50965)
--- Dependencies: 2382 2382
+-- TOC entry 2761 (class 2606 OID 65944)
+-- Dependencies: 2324 2324
 -- Name: pk_taxon_groups; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18060,8 +16252,8 @@ ALTER TABLE ONLY taxon_groups
 
 
 --
--- TOC entry 2859 (class 2606 OID 50967)
--- Dependencies: 2380 2380
+-- TOC entry 2765 (class 2606 OID 65946)
+-- Dependencies: 2326 2326
 -- Name: pk_taxon_lists; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18070,8 +16262,8 @@ ALTER TABLE ONLY taxon_lists
 
 
 --
--- TOC entry 2923 (class 2606 OID 50969)
--- Dependencies: 2433 2433
+-- TOC entry 2767 (class 2606 OID 65948)
+-- Dependencies: 2327 2327
 -- Name: pk_taxon_meanings; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18080,8 +16272,8 @@ ALTER TABLE ONLY taxon_meanings
 
 
 --
--- TOC entry 2865 (class 2606 OID 50971)
--- Dependencies: 2386 2386
+-- TOC entry 2771 (class 2606 OID 65950)
+-- Dependencies: 2329 2329
 -- Name: pk_termlists; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18090,8 +16282,8 @@ ALTER TABLE ONLY termlists
 
 
 --
--- TOC entry 2867 (class 2606 OID 50973)
--- Dependencies: 2389 2389
+-- TOC entry 2773 (class 2606 OID 65952)
+-- Dependencies: 2331 2331
 -- Name: pk_termlists_terms; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18100,8 +16292,8 @@ ALTER TABLE ONLY termlists_terms
 
 
 --
--- TOC entry 2870 (class 2606 OID 50975)
--- Dependencies: 2391 2391
+-- TOC entry 2778 (class 2606 OID 65954)
+-- Dependencies: 2333 2333
 -- Name: pk_terms; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18110,18 +16302,8 @@ ALTER TABLE ONLY terms
 
 
 --
--- TOC entry 2925 (class 2606 OID 50977)
--- Dependencies: 2434 2434
--- Name: pk_user_tokens; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY user_tokens
-    ADD CONSTRAINT pk_user_tokens PRIMARY KEY (id);
-
-
---
--- TOC entry 2838 (class 2606 OID 50979)
--- Dependencies: 2366 2366
+-- TOC entry 2782 (class 2606 OID 65956)
+-- Dependencies: 2334 2334
 -- Name: pk_users; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18130,8 +16312,8 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2928 (class 2606 OID 50981)
--- Dependencies: 2435 2435
+-- TOC entry 2785 (class 2606 OID 65958)
+-- Dependencies: 2335 2335
 -- Name: pk_users_websites; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18140,8 +16322,8 @@ ALTER TABLE ONLY users_websites
 
 
 --
--- TOC entry 2847 (class 2606 OID 50983)
--- Dependencies: 2374 2374
+-- TOC entry 2787 (class 2606 OID 65960)
+-- Dependencies: 2337 2337
 -- Name: pk_websites; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18150,8 +16332,8 @@ ALTER TABLE ONLY websites
 
 
 --
--- TOC entry 2919 (class 2606 OID 50985)
--- Dependencies: 2431 2431
+-- TOC entry 2746 (class 2606 OID 65962)
+-- Dependencies: 2319 2319
 -- Name: spatial_ref_sys_pkey; Type: CONSTRAINT; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18160,8 +16342,8 @@ ALTER TABLE ONLY spatial_ref_sys
 
 
 --
--- TOC entry 2873 (class 1259 OID 50986)
--- Dependencies: 2414
+-- TOC entry 2698 (class 1259 OID 65963)
+-- Dependencies: 2301
 -- Name: fki_location_attribute_value_location_attribute; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18169,8 +16351,8 @@ CREATE INDEX fki_location_attribute_value_location_attribute ON location_attribu
 
 
 --
--- TOC entry 2874 (class 1259 OID 50987)
--- Dependencies: 2414
+-- TOC entry 2699 (class 1259 OID 65964)
+-- Dependencies: 2301
 -- Name: fki_location_attribute_values_location; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18178,8 +16360,8 @@ CREATE INDEX fki_location_attribute_values_location ON location_attribute_values
 
 
 --
--- TOC entry 2885 (class 1259 OID 50988)
--- Dependencies: 2420
+-- TOC entry 2712 (class 1259 OID 65965)
+-- Dependencies: 2308
 -- Name: fki_occurrence_attribute_value_occurrence_attribute; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18187,8 +16369,8 @@ CREATE INDEX fki_occurrence_attribute_value_occurrence_attribute ON occurrence_a
 
 
 --
--- TOC entry 2886 (class 1259 OID 50989)
--- Dependencies: 2420
+-- TOC entry 2713 (class 1259 OID 65966)
+-- Dependencies: 2308
 -- Name: fki_occurrence_attribute_values_occurrence; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18196,8 +16378,8 @@ CREATE INDEX fki_occurrence_attribute_values_occurrence ON occurrence_attribute_
 
 
 --
--- TOC entry 2897 (class 1259 OID 50990)
--- Dependencies: 2425
+-- TOC entry 2722 (class 1259 OID 65967)
+-- Dependencies: 2312
 -- Name: fki_occurrence_determiner; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18205,8 +16387,8 @@ CREATE INDEX fki_occurrence_determiner ON occurrences USING btree (determiner_id
 
 
 --
--- TOC entry 2898 (class 1259 OID 50991)
--- Dependencies: 2425
+-- TOC entry 2723 (class 1259 OID 65968)
+-- Dependencies: 2312
 -- Name: fki_occurrence_sample; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18214,8 +16396,8 @@ CREATE INDEX fki_occurrence_sample ON occurrences USING btree (sample_id);
 
 
 --
--- TOC entry 2899 (class 1259 OID 50992)
--- Dependencies: 2425
+-- TOC entry 2724 (class 1259 OID 65969)
+-- Dependencies: 2312
 -- Name: fki_occurrence_taxon; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18223,8 +16405,8 @@ CREATE INDEX fki_occurrence_taxon ON occurrences USING btree (taxon_id);
 
 
 --
--- TOC entry 2862 (class 1259 OID 50993)
--- Dependencies: 2386
+-- TOC entry 2768 (class 1259 OID 65970)
+-- Dependencies: 2329
 -- Name: fki_parent_termlist; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18232,8 +16414,8 @@ CREATE INDEX fki_parent_termlist ON termlists USING btree (parent_id);
 
 
 --
--- TOC entry 2902 (class 1259 OID 50994)
--- Dependencies: 2426
+-- TOC entry 2729 (class 1259 OID 65971)
+-- Dependencies: 2314
 -- Name: fki_sample_attribute_value_sample_attribute; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18241,8 +16423,8 @@ CREATE INDEX fki_sample_attribute_value_sample_attribute ON sample_attribute_val
 
 
 --
--- TOC entry 2903 (class 1259 OID 50995)
--- Dependencies: 2426
+-- TOC entry 2730 (class 1259 OID 65972)
+-- Dependencies: 2314
 -- Name: fki_sample_attribute_values_sample; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18250,8 +16432,8 @@ CREATE INDEX fki_sample_attribute_values_sample ON sample_attribute_values USING
 
 
 --
--- TOC entry 2908 (class 1259 OID 50996)
--- Dependencies: 2428
+-- TOC entry 2735 (class 1259 OID 65973)
+-- Dependencies: 2316
 -- Name: fki_sample_attributes_websites_sample_attributes; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18259,8 +16441,8 @@ CREATE INDEX fki_sample_attributes_websites_sample_attributes ON sample_attribut
 
 
 --
--- TOC entry 2909 (class 1259 OID 50997)
--- Dependencies: 2428
+-- TOC entry 2736 (class 1259 OID 65974)
+-- Dependencies: 2316
 -- Name: fki_sample_attributes_websites_websites; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18268,8 +16450,8 @@ CREATE INDEX fki_sample_attributes_websites_websites ON sample_attributes_websit
 
 
 --
--- TOC entry 2912 (class 1259 OID 50998)
--- Dependencies: 2429
+-- TOC entry 2739 (class 1259 OID 65975)
+-- Dependencies: 2317
 -- Name: fki_samples_locations; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18277,8 +16459,8 @@ CREATE INDEX fki_samples_locations ON samples USING btree (location_id);
 
 
 --
--- TOC entry 2913 (class 1259 OID 50999)
--- Dependencies: 2429
+-- TOC entry 2740 (class 1259 OID 65976)
+-- Dependencies: 2317
 -- Name: fki_samples_surveys; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18286,8 +16468,8 @@ CREATE INDEX fki_samples_surveys ON samples USING btree (survey_id);
 
 
 --
--- TOC entry 2843 (class 1259 OID 51000)
--- Dependencies: 2372
+-- TOC entry 2747 (class 1259 OID 65977)
+-- Dependencies: 2320
 -- Name: fki_survey_website; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18295,8 +16477,8 @@ CREATE INDEX fki_survey_website ON surveys USING btree (website_id);
 
 
 --
--- TOC entry 2852 (class 1259 OID 51001)
--- Dependencies: 2378
+-- TOC entry 2756 (class 1259 OID 65978)
+-- Dependencies: 2323
 -- Name: fki_taxa_taxon_lists_taxa; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18304,8 +16486,8 @@ CREATE INDEX fki_taxa_taxon_lists_taxa ON taxa_taxon_lists USING btree (taxon_id
 
 
 --
--- TOC entry 2853 (class 1259 OID 51002)
--- Dependencies: 2378
+-- TOC entry 2757 (class 1259 OID 65979)
+-- Dependencies: 2323
 -- Name: fki_taxa_taxon_lists_taxon_lists; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18313,8 +16495,8 @@ CREATE INDEX fki_taxa_taxon_lists_taxon_lists ON taxa_taxon_lists USING btree (t
 
 
 --
--- TOC entry 2848 (class 1259 OID 51003)
--- Dependencies: 2377
+-- TOC entry 2750 (class 1259 OID 65980)
+-- Dependencies: 2322
 -- Name: fki_taxon_language; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18322,8 +16504,8 @@ CREATE INDEX fki_taxon_language ON taxa USING btree (language_id);
 
 
 --
--- TOC entry 2856 (class 1259 OID 51004)
--- Dependencies: 2380
+-- TOC entry 2762 (class 1259 OID 65981)
+-- Dependencies: 2326
 -- Name: fki_taxon_list_parent; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18331,8 +16513,8 @@ CREATE INDEX fki_taxon_list_parent ON taxon_lists USING btree (parent_id);
 
 
 --
--- TOC entry 2857 (class 1259 OID 51005)
--- Dependencies: 2380
+-- TOC entry 2763 (class 1259 OID 65982)
+-- Dependencies: 2326
 -- Name: fki_taxon_list_website; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18340,8 +16522,17 @@ CREATE INDEX fki_taxon_list_website ON taxon_lists USING btree (website_id);
 
 
 --
--- TOC entry 2849 (class 1259 OID 51006)
--- Dependencies: 2377
+-- TOC entry 2751 (class 1259 OID 65983)
+-- Dependencies: 2322
+-- Name: fki_taxon_parent; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fki_taxon_parent ON taxa USING btree (parent_id);
+
+
+--
+-- TOC entry 2752 (class 1259 OID 65984)
+-- Dependencies: 2322
 -- Name: fki_taxon_taxon_group; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18349,8 +16540,17 @@ CREATE INDEX fki_taxon_taxon_group ON taxa USING btree (taxon_group_id);
 
 
 --
--- TOC entry 2868 (class 1259 OID 51007)
--- Dependencies: 2391
+-- TOC entry 2753 (class 1259 OID 65985)
+-- Dependencies: 2322
+-- Name: fki_taxon_taxon_meaning; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fki_taxon_taxon_meaning ON taxa USING btree (taxon_meaning_id);
+
+
+--
+-- TOC entry 2774 (class 1259 OID 65986)
+-- Dependencies: 2333
 -- Name: fki_term_language; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18358,8 +16558,26 @@ CREATE INDEX fki_term_language ON terms USING btree (language_id);
 
 
 --
--- TOC entry 2835 (class 1259 OID 51008)
--- Dependencies: 2366
+-- TOC entry 2775 (class 1259 OID 65987)
+-- Dependencies: 2333
+-- Name: fki_term_meaning; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fki_term_meaning ON terms USING btree (meaning_id);
+
+
+--
+-- TOC entry 2776 (class 1259 OID 65988)
+-- Dependencies: 2333
+-- Name: fki_term_parent; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
+--
+
+CREATE INDEX fki_term_parent ON terms USING btree (parent_id);
+
+
+--
+-- TOC entry 2779 (class 1259 OID 65989)
+-- Dependencies: 2334
 -- Name: fki_user_core_role; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18367,8 +16585,8 @@ CREATE INDEX fki_user_core_role ON users USING btree (core_role_id);
 
 
 --
--- TOC entry 2836 (class 1259 OID 51009)
--- Dependencies: 2366
+-- TOC entry 2780 (class 1259 OID 65990)
+-- Dependencies: 2334
 -- Name: fki_user_person; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18376,8 +16594,8 @@ CREATE INDEX fki_user_person ON users USING btree (person_id);
 
 
 --
--- TOC entry 2926 (class 1259 OID 51010)
--- Dependencies: 2435
+-- TOC entry 2783 (class 1259 OID 65991)
+-- Dependencies: 2335
 -- Name: fki_users_websites_site_roles; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18385,8 +16603,8 @@ CREATE INDEX fki_users_websites_site_roles ON users_websites USING btree (site_r
 
 
 --
--- TOC entry 2863 (class 1259 OID 51011)
--- Dependencies: 2386
+-- TOC entry 2769 (class 1259 OID 65992)
+-- Dependencies: 2329
 -- Name: fki_website; Type: INDEX; Schema: indicia; Owner: -; Tablespace: 
 --
 
@@ -18394,78 +16612,8 @@ CREATE INDEX fki_website ON termlists USING btree (website_id);
 
 
 --
--- TOC entry 2929 (class 2606 OID 51012)
--- Dependencies: 2366 2837 2363
--- Name: fk_core_role_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY core_roles
-    ADD CONSTRAINT fk_core_role_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2930 (class 2606 OID 51017)
--- Dependencies: 2366 2837 2363
--- Name: fk_core_role_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY core_roles
-    ADD CONSTRAINT fk_core_role_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2931 (class 2606 OID 51022)
--- Dependencies: 2365 2366 2837
--- Name: fk_language_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY languages
-    ADD CONSTRAINT fk_language_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2932 (class 2606 OID 51027)
--- Dependencies: 2837 2365 2366
--- Name: fk_language_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY languages
-    ADD CONSTRAINT fk_language_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2980 (class 2606 OID 51032)
--- Dependencies: 2837 2415 2366
--- Name: fk_location_attribute_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY location_attributes
-    ADD CONSTRAINT fk_location_attribute_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2981 (class 2606 OID 51037)
--- Dependencies: 2837 2415 2366
--- Name: fk_location_attribute_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY location_attributes
-    ADD CONSTRAINT fk_location_attribute_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2976 (class 2606 OID 51042)
--- Dependencies: 2837 2414 2366
--- Name: fk_location_attribute_value_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY location_attribute_values
-    ADD CONSTRAINT fk_location_attribute_value_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2977 (class 2606 OID 51047)
--- Dependencies: 2877 2414 2415
+-- TOC entry 2788 (class 2606 OID 65993)
+-- Dependencies: 2302 2702 2301
 -- Name: fk_location_attribute_value_location_attribute; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18474,18 +16622,8 @@ ALTER TABLE ONLY location_attribute_values
 
 
 --
--- TOC entry 2978 (class 2606 OID 51052)
--- Dependencies: 2414 2366 2837
--- Name: fk_location_attribute_value_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY location_attribute_values
-    ADD CONSTRAINT fk_location_attribute_value_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2979 (class 2606 OID 51057)
--- Dependencies: 2839 2414 2368
+-- TOC entry 2789 (class 2606 OID 65998)
+-- Dependencies: 2304 2706 2301
 -- Name: fk_location_attribute_values_location; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18494,18 +16632,8 @@ ALTER TABLE ONLY location_attribute_values
 
 
 --
--- TOC entry 2982 (class 2606 OID 51062)
--- Dependencies: 2366 2416 2837
--- Name: fk_location_attributes_website_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY location_attributes_websites
-    ADD CONSTRAINT fk_location_attributes_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2983 (class 2606 OID 51067)
--- Dependencies: 2415 2416 2877
+-- TOC entry 2790 (class 2606 OID 66003)
+-- Dependencies: 2303 2302 2702
 -- Name: fk_location_attributes_websites_location_attributes; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18514,8 +16642,8 @@ ALTER TABLE ONLY location_attributes_websites
 
 
 --
--- TOC entry 2984 (class 2606 OID 51072)
--- Dependencies: 2846 2374 2416
+-- TOC entry 2791 (class 2606 OID 66008)
+-- Dependencies: 2303 2337 2786
 -- Name: fk_location_attributes_websites_websites; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18524,18 +16652,8 @@ ALTER TABLE ONLY location_attributes_websites
 
 
 --
--- TOC entry 2937 (class 2606 OID 51077)
--- Dependencies: 2368 2366 2837
--- Name: fk_location_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY locations
-    ADD CONSTRAINT fk_location_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2938 (class 2606 OID 51082)
--- Dependencies: 2839 2368 2368
+-- TOC entry 2792 (class 2606 OID 66013)
+-- Dependencies: 2304 2304 2706
 -- Name: fk_location_parent; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18544,28 +16662,8 @@ ALTER TABLE ONLY locations
 
 
 --
--- TOC entry 2939 (class 2606 OID 51087)
--- Dependencies: 2368 2366 2837
--- Name: fk_location_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY locations
-    ADD CONSTRAINT fk_location_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2985 (class 2606 OID 51092)
--- Dependencies: 2417 2366 2837
--- Name: fk_locations_website_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY locations_websites
-    ADD CONSTRAINT fk_locations_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2986 (class 2606 OID 51097)
--- Dependencies: 2368 2839 2417
+-- TOC entry 2793 (class 2606 OID 66018)
+-- Dependencies: 2305 2304 2706
 -- Name: fk_locations_websites_locations; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18574,8 +16672,8 @@ ALTER TABLE ONLY locations_websites
 
 
 --
--- TOC entry 2987 (class 2606 OID 51102)
--- Dependencies: 2374 2417 2846
+-- TOC entry 2794 (class 2606 OID 66023)
+-- Dependencies: 2305 2337 2786
 -- Name: fk_locations_websites_websites; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18584,38 +16682,8 @@ ALTER TABLE ONLY locations_websites
 
 
 --
--- TOC entry 2992 (class 2606 OID 51107)
--- Dependencies: 2421 2837 2366
--- Name: fk_occurrence_attribute_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_attributes
-    ADD CONSTRAINT fk_occurrence_attribute_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2993 (class 2606 OID 51112)
--- Dependencies: 2837 2421 2366
--- Name: fk_occurrence_attribute_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_attributes
-    ADD CONSTRAINT fk_occurrence_attribute_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2988 (class 2606 OID 51117)
--- Dependencies: 2837 2420 2366
--- Name: fk_occurrence_attribute_value_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_attribute_values
-    ADD CONSTRAINT fk_occurrence_attribute_value_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2989 (class 2606 OID 51122)
--- Dependencies: 2420 2889 2421
+-- TOC entry 2795 (class 2606 OID 66028)
+-- Dependencies: 2308 2716 2309
 -- Name: fk_occurrence_attribute_value_occurrence_attribute; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18624,18 +16692,8 @@ ALTER TABLE ONLY occurrence_attribute_values
 
 
 --
--- TOC entry 2990 (class 2606 OID 51127)
--- Dependencies: 2420 2366 2837
--- Name: fk_occurrence_attribute_value_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_attribute_values
-    ADD CONSTRAINT fk_occurrence_attribute_value_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2991 (class 2606 OID 51132)
--- Dependencies: 2420 2900 2425
+-- TOC entry 2796 (class 2606 OID 66033)
+-- Dependencies: 2312 2308 2725
 -- Name: fk_occurrence_attribute_values_occurrence; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18644,18 +16702,8 @@ ALTER TABLE ONLY occurrence_attribute_values
 
 
 --
--- TOC entry 2994 (class 2606 OID 51137)
--- Dependencies: 2366 2837 2422
--- Name: fk_occurrence_attributes_website_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_attributes_websites
-    ADD CONSTRAINT fk_occurrence_attributes_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2995 (class 2606 OID 51142)
--- Dependencies: 2422 2889 2421
+-- TOC entry 2797 (class 2606 OID 66038)
+-- Dependencies: 2309 2310 2716
 -- Name: fk_occurrence_attributes_websites_occurrence_attributes; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18664,8 +16712,8 @@ ALTER TABLE ONLY occurrence_attributes_websites
 
 
 --
--- TOC entry 2996 (class 2606 OID 51147)
--- Dependencies: 2422 2846 2374
+-- TOC entry 2798 (class 2606 OID 66043)
+-- Dependencies: 2337 2310 2786
 -- Name: fk_occurrence_attributes_websites_websites; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18674,48 +16722,8 @@ ALTER TABLE ONLY occurrence_attributes_websites
 
 
 --
--- TOC entry 2997 (class 2606 OID 51152)
--- Dependencies: 2366 2423 2837
--- Name: fk_occurrence_comment_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_comments
-    ADD CONSTRAINT fk_occurrence_comment_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2998 (class 2606 OID 51157)
--- Dependencies: 2425 2423 2900
--- Name: fk_occurrence_comment_occurrence; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_comments
-    ADD CONSTRAINT fk_occurrence_comment_occurrence FOREIGN KEY (occurrence_id) REFERENCES occurrences(id);
-
-
---
--- TOC entry 2999 (class 2606 OID 51162)
--- Dependencies: 2837 2366 2423
--- Name: fk_occurrence_comment_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_comments
-    ADD CONSTRAINT fk_occurrence_comment_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3002 (class 2606 OID 51167)
--- Dependencies: 2366 2425 2837
--- Name: fk_occurrence_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrences
-    ADD CONSTRAINT fk_occurrence_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3003 (class 2606 OID 51172)
--- Dependencies: 2841 2425 2370
+-- TOC entry 2799 (class 2606 OID 66048)
+-- Dependencies: 2313 2312 2727
 -- Name: fk_occurrence_determiner; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18724,28 +16732,8 @@ ALTER TABLE ONLY occurrences
 
 
 --
--- TOC entry 3000 (class 2606 OID 51177)
--- Dependencies: 2837 2424 2366
--- Name: fk_occurrence_image_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_images
-    ADD CONSTRAINT fk_occurrence_image_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3001 (class 2606 OID 51182)
--- Dependencies: 2424 2366 2837
--- Name: fk_occurrence_image_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrence_images
-    ADD CONSTRAINT fk_occurrence_image_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3004 (class 2606 OID 51187)
--- Dependencies: 2914 2425 2429
+-- TOC entry 2800 (class 2606 OID 66053)
+-- Dependencies: 2741 2317 2312
 -- Name: fk_occurrence_sample; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18754,8 +16742,8 @@ ALTER TABLE ONLY occurrences
 
 
 --
--- TOC entry 3005 (class 2606 OID 51192)
--- Dependencies: 2850 2377 2425
+-- TOC entry 2801 (class 2606 OID 66058)
+-- Dependencies: 2322 2312 2754
 -- Name: fk_occurrence_taxon; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18764,18 +16752,8 @@ ALTER TABLE ONLY occurrences
 
 
 --
--- TOC entry 3006 (class 2606 OID 51197)
--- Dependencies: 2837 2366 2425
--- Name: fk_occurrence_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY occurrences
-    ADD CONSTRAINT fk_occurrence_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2963 (class 2606 OID 51202)
--- Dependencies: 2864 2386 2386
+-- TOC entry 2818 (class 2606 OID 66063)
+-- Dependencies: 2770 2329 2329
 -- Name: fk_parent_termlist; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18784,58 +16762,8 @@ ALTER TABLE ONLY termlists
 
 
 --
--- TOC entry 2940 (class 2606 OID 51207)
--- Dependencies: 2837 2370 2366
--- Name: fk_person_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY people
-    ADD CONSTRAINT fk_person_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2941 (class 2606 OID 51212)
--- Dependencies: 2370 2366 2837
--- Name: fk_person_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY people
-    ADD CONSTRAINT fk_person_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3011 (class 2606 OID 51217)
--- Dependencies: 2837 2427 2366
--- Name: fk_sample_attribute_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY sample_attributes
-    ADD CONSTRAINT fk_sample_attribute_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3012 (class 2606 OID 51222)
--- Dependencies: 2366 2427 2837
--- Name: fk_sample_attribute_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY sample_attributes
-    ADD CONSTRAINT fk_sample_attribute_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3007 (class 2606 OID 51227)
--- Dependencies: 2426 2366 2837
--- Name: fk_sample_attribute_value_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY sample_attribute_values
-    ADD CONSTRAINT fk_sample_attribute_value_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3008 (class 2606 OID 51232)
--- Dependencies: 2426 2427 2906
+-- TOC entry 2802 (class 2606 OID 66068)
+-- Dependencies: 2733 2314 2315
 -- Name: fk_sample_attribute_value_sample_attribute; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18844,18 +16772,8 @@ ALTER TABLE ONLY sample_attribute_values
 
 
 --
--- TOC entry 3009 (class 2606 OID 51237)
--- Dependencies: 2837 2426 2366
--- Name: fk_sample_attribute_value_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY sample_attribute_values
-    ADD CONSTRAINT fk_sample_attribute_value_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3010 (class 2606 OID 51242)
--- Dependencies: 2429 2426 2914
+-- TOC entry 2803 (class 2606 OID 66073)
+-- Dependencies: 2741 2314 2317
 -- Name: fk_sample_attribute_values_sample; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18864,18 +16782,8 @@ ALTER TABLE ONLY sample_attribute_values
 
 
 --
--- TOC entry 3013 (class 2606 OID 51247)
--- Dependencies: 2366 2428 2837
--- Name: fk_sample_attributes_website_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY sample_attributes_websites
-    ADD CONSTRAINT fk_sample_attributes_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3014 (class 2606 OID 51252)
--- Dependencies: 2427 2428 2906
+-- TOC entry 2804 (class 2606 OID 66078)
+-- Dependencies: 2733 2316 2315
 -- Name: fk_sample_attributes_websites_sample_attributes; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18884,8 +16792,8 @@ ALTER TABLE ONLY sample_attributes_websites
 
 
 --
--- TOC entry 3015 (class 2606 OID 51257)
--- Dependencies: 2374 2428 2846
+-- TOC entry 2805 (class 2606 OID 66083)
+-- Dependencies: 2337 2316 2786
 -- Name: fk_sample_attributes_websites_websites; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18894,28 +16802,8 @@ ALTER TABLE ONLY sample_attributes_websites
 
 
 --
--- TOC entry 3016 (class 2606 OID 51262)
--- Dependencies: 2366 2429 2837
--- Name: fk_sample_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY samples
-    ADD CONSTRAINT fk_sample_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3017 (class 2606 OID 51267)
--- Dependencies: 2366 2429 2837
--- Name: fk_sample_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY samples
-    ADD CONSTRAINT fk_sample_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3018 (class 2606 OID 51272)
--- Dependencies: 2368 2429 2839
+-- TOC entry 2806 (class 2606 OID 66088)
+-- Dependencies: 2317 2304 2706
 -- Name: fk_samples_locations; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18924,8 +16812,8 @@ ALTER TABLE ONLY samples
 
 
 --
--- TOC entry 3019 (class 2606 OID 51277)
--- Dependencies: 2372 2429 2844
+-- TOC entry 2807 (class 2606 OID 66093)
+-- Dependencies: 2320 2317 2748
 -- Name: fk_samples_surveys; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18934,48 +16822,8 @@ ALTER TABLE ONLY samples
 
 
 --
--- TOC entry 3020 (class 2606 OID 51282)
--- Dependencies: 2366 2430 2837
--- Name: fk_site_role_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY site_roles
-    ADD CONSTRAINT fk_site_role_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3021 (class 2606 OID 51287)
--- Dependencies: 2837 2430 2366
--- Name: fk_site_role_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY site_roles
-    ADD CONSTRAINT fk_site_role_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2942 (class 2606 OID 51292)
--- Dependencies: 2372 2366 2837
--- Name: fk_survey_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY surveys
-    ADD CONSTRAINT fk_survey_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2943 (class 2606 OID 51297)
--- Dependencies: 2837 2372 2366
--- Name: fk_survey_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY surveys
-    ADD CONSTRAINT fk_survey_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2944 (class 2606 OID 51302)
--- Dependencies: 2374 2372 2846
+-- TOC entry 2808 (class 2606 OID 66098)
+-- Dependencies: 2320 2786 2337
 -- Name: fk_survey_website; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -18984,18 +16832,8 @@ ALTER TABLE ONLY surveys
 
 
 --
--- TOC entry 2952 (class 2606 OID 51307)
--- Dependencies: 2366 2378 2837
--- Name: fk_taxa_taxon_list_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY taxa_taxon_lists
-    ADD CONSTRAINT fk_taxa_taxon_list_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2953 (class 2606 OID 51312)
--- Dependencies: 2377 2378 2850
+-- TOC entry 2814 (class 2606 OID 66103)
+-- Dependencies: 2323 2322 2754
 -- Name: fk_taxa_taxon_lists_taxa; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19004,8 +16842,8 @@ ALTER TABLE ONLY taxa_taxon_lists
 
 
 --
--- TOC entry 2954 (class 2606 OID 51317)
--- Dependencies: 2380 2378 2858
+-- TOC entry 2815 (class 2606 OID 66108)
+-- Dependencies: 2764 2323 2326
 -- Name: fk_taxa_taxon_lists_taxon_lists; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19014,38 +16852,8 @@ ALTER TABLE ONLY taxa_taxon_lists
 
 
 --
--- TOC entry 2948 (class 2606 OID 51322)
--- Dependencies: 2366 2377 2837
--- Name: fk_taxon_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY taxa
-    ADD CONSTRAINT fk_taxon_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2961 (class 2606 OID 51327)
--- Dependencies: 2366 2382 2837
--- Name: fk_taxon_group_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY taxon_groups
-    ADD CONSTRAINT fk_taxon_group_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2962 (class 2606 OID 51332)
--- Dependencies: 2366 2382 2837
--- Name: fk_taxon_group_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY taxon_groups
-    ADD CONSTRAINT fk_taxon_group_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2949 (class 2606 OID 51337)
--- Dependencies: 2365 2377 2833
+-- TOC entry 2810 (class 2606 OID 66113)
+-- Dependencies: 2300 2322 2696
 -- Name: fk_taxon_language; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19054,18 +16862,8 @@ ALTER TABLE ONLY taxa
 
 
 --
--- TOC entry 2957 (class 2606 OID 51342)
--- Dependencies: 2366 2380 2837
--- Name: fk_taxon_list_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY taxon_lists
-    ADD CONSTRAINT fk_taxon_list_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2958 (class 2606 OID 51347)
--- Dependencies: 2380 2858 2380
+-- TOC entry 2816 (class 2606 OID 66118)
+-- Dependencies: 2326 2326 2764
 -- Name: fk_taxon_list_parent; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19074,18 +16872,8 @@ ALTER TABLE ONLY taxon_lists
 
 
 --
--- TOC entry 2959 (class 2606 OID 51352)
--- Dependencies: 2366 2837 2380
--- Name: fk_taxon_list_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY taxon_lists
-    ADD CONSTRAINT fk_taxon_list_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2960 (class 2606 OID 51357)
--- Dependencies: 2846 2380 2374
+-- TOC entry 2817 (class 2606 OID 66123)
+-- Dependencies: 2326 2337 2786
 -- Name: fk_taxon_list_website; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19094,18 +16882,18 @@ ALTER TABLE ONLY taxon_lists
 
 
 --
--- TOC entry 2955 (class 2606 OID 51362)
--- Dependencies: 2378 2854 2378
+-- TOC entry 2811 (class 2606 OID 66128)
+-- Dependencies: 2322 2322 2754
 -- Name: fk_taxon_parent; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
-ALTER TABLE ONLY taxa_taxon_lists
-    ADD CONSTRAINT fk_taxon_parent FOREIGN KEY (parent_id) REFERENCES taxa_taxon_lists(id);
+ALTER TABLE ONLY taxa
+    ADD CONSTRAINT fk_taxon_parent FOREIGN KEY (parent_id) REFERENCES taxa(id);
 
 
 --
--- TOC entry 2950 (class 2606 OID 51367)
--- Dependencies: 2860 2382 2377
+-- TOC entry 2812 (class 2606 OID 66133)
+-- Dependencies: 2322 2324 2760
 -- Name: fk_taxon_taxon_group; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19114,38 +16902,18 @@ ALTER TABLE ONLY taxa
 
 
 --
--- TOC entry 2956 (class 2606 OID 51372)
--- Dependencies: 2378 2922 2433
+-- TOC entry 2813 (class 2606 OID 66138)
+-- Dependencies: 2322 2766 2327
 -- Name: fk_taxon_taxon_meaning; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
-ALTER TABLE ONLY taxa_taxon_lists
+ALTER TABLE ONLY taxa
     ADD CONSTRAINT fk_taxon_taxon_meaning FOREIGN KEY (taxon_meaning_id) REFERENCES taxon_meanings(id);
 
 
 --
--- TOC entry 2951 (class 2606 OID 51377)
--- Dependencies: 2366 2837 2377
--- Name: fk_taxon_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY taxa
-    ADD CONSTRAINT fk_taxon_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2973 (class 2606 OID 51382)
--- Dependencies: 2366 2391 2837
--- Name: fk_term_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY terms
-    ADD CONSTRAINT fk_term_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2974 (class 2606 OID 51387)
--- Dependencies: 2833 2391 2365
+-- TOC entry 2822 (class 2606 OID 66143)
+-- Dependencies: 2696 2333 2300
 -- Name: fk_term_language; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19154,78 +16922,28 @@ ALTER TABLE ONLY terms
 
 
 --
--- TOC entry 2975 (class 2606 OID 51392)
--- Dependencies: 2837 2391 2366
--- Name: fk_term_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
+-- TOC entry 2823 (class 2606 OID 66148)
+-- Dependencies: 2307 2333 2710
+-- Name: fk_term_meaning; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
 ALTER TABLE ONLY terms
-    ADD CONSTRAINT fk_term_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
+    ADD CONSTRAINT fk_term_meaning FOREIGN KEY (meaning_id) REFERENCES meanings(id);
 
 
 --
--- TOC entry 2964 (class 2606 OID 51397)
--- Dependencies: 2837 2386 2366
--- Name: fk_termlist_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
+-- TOC entry 2824 (class 2606 OID 66153)
+-- Dependencies: 2777 2333 2333
+-- Name: fk_term_parent; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
-ALTER TABLE ONLY termlists
-    ADD CONSTRAINT fk_termlist_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2965 (class 2606 OID 51402)
--- Dependencies: 2386 2366 2837
--- Name: fk_termlist_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY termlists
-    ADD CONSTRAINT fk_termlist_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
+ALTER TABLE ONLY terms
+    ADD CONSTRAINT fk_term_parent FOREIGN KEY (parent_id) REFERENCES terms(id);
 
 
 --
--- TOC entry 2967 (class 2606 OID 51407)
--- Dependencies: 2366 2389 2837
--- Name: fk_termlists_term_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY termlists_terms
-    ADD CONSTRAINT fk_termlists_term_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2968 (class 2606 OID 51412)
--- Dependencies: 2883 2419 2389
--- Name: fk_termlists_term_meaning; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY termlists_terms
-    ADD CONSTRAINT fk_termlists_term_meaning FOREIGN KEY (meaning_id) REFERENCES meanings(id);
-
-
---
--- TOC entry 2969 (class 2606 OID 51417)
--- Dependencies: 2866 2389 2389
--- Name: fk_termlists_term_parent; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY termlists_terms
-    ADD CONSTRAINT fk_termlists_term_parent FOREIGN KEY (parent_id) REFERENCES termlists_terms(id);
-
-
---
--- TOC entry 2970 (class 2606 OID 51422)
--- Dependencies: 2837 2389 2366
--- Name: fk_termlists_term_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY termlists_terms
-    ADD CONSTRAINT fk_termlists_term_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2971 (class 2606 OID 51427)
--- Dependencies: 2864 2386 2389
+-- TOC entry 2820 (class 2606 OID 66158)
+-- Dependencies: 2329 2331 2770
 -- Name: fk_termlists_terms_termlists; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19234,8 +16952,8 @@ ALTER TABLE ONLY termlists_terms
 
 
 --
--- TOC entry 2972 (class 2606 OID 51432)
--- Dependencies: 2391 2389 2869
+-- TOC entry 2821 (class 2606 OID 66163)
+-- Dependencies: 2777 2331 2333
 -- Name: fk_termlists_terms_terms; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19244,8 +16962,8 @@ ALTER TABLE ONLY termlists_terms
 
 
 --
--- TOC entry 2933 (class 2606 OID 51437)
--- Dependencies: 2831 2366 2363
+-- TOC entry 2825 (class 2606 OID 66168)
+-- Dependencies: 2334 2296 2692
 -- Name: fk_user_core_role; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19254,18 +16972,8 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2934 (class 2606 OID 51442)
--- Dependencies: 2366 2837 2366
--- Name: fk_user_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY users
-    ADD CONSTRAINT fk_user_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2935 (class 2606 OID 51447)
--- Dependencies: 2841 2366 2370
+-- TOC entry 2826 (class 2606 OID 66173)
+-- Dependencies: 2727 2334 2313
 -- Name: fk_user_person; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19274,48 +16982,8 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 3022 (class 2606 OID 51452)
--- Dependencies: 2366 2837 2434
--- Name: fk_user_tokens_user; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY user_tokens
-    ADD CONSTRAINT fk_user_tokens_user FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
--- TOC entry 2936 (class 2606 OID 51457)
--- Dependencies: 2837 2366 2366
--- Name: fk_user_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY users
-    ADD CONSTRAINT fk_user_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3023 (class 2606 OID 51462)
--- Dependencies: 2366 2435 2837
--- Name: fk_users_website_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY users_websites
-    ADD CONSTRAINT fk_users_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3024 (class 2606 OID 51467)
--- Dependencies: 2837 2435 2366
--- Name: fk_users_website_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY users_websites
-    ADD CONSTRAINT fk_users_website_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 3025 (class 2606 OID 51472)
--- Dependencies: 2435 2916 2430
+-- TOC entry 2827 (class 2606 OID 66178)
+-- Dependencies: 2318 2335 2743
 -- Name: fk_users_websites_site_roles; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19324,8 +16992,8 @@ ALTER TABLE ONLY users_websites
 
 
 --
--- TOC entry 3026 (class 2606 OID 51477)
--- Dependencies: 2837 2435 2366
+-- TOC entry 2828 (class 2606 OID 66183)
+-- Dependencies: 2334 2335 2781
 -- Name: fk_users_websites_users; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19334,8 +17002,8 @@ ALTER TABLE ONLY users_websites
 
 
 --
--- TOC entry 3027 (class 2606 OID 51482)
--- Dependencies: 2374 2435 2846
+-- TOC entry 2829 (class 2606 OID 66188)
+-- Dependencies: 2335 2786 2337
 -- Name: fk_users_websites_websites; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19344,8 +17012,8 @@ ALTER TABLE ONLY users_websites
 
 
 --
--- TOC entry 2966 (class 2606 OID 51487)
--- Dependencies: 2846 2374 2386
+-- TOC entry 2819 (class 2606 OID 66193)
+-- Dependencies: 2786 2329 2337
 -- Name: fk_website; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
@@ -19354,140 +17022,25 @@ ALTER TABLE ONLY termlists
 
 
 --
--- TOC entry 2946 (class 2606 OID 51492)
--- Dependencies: 2837 2374 2366
--- Name: fk_website_creator; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY websites
-    ADD CONSTRAINT fk_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2947 (class 2606 OID 51497)
--- Dependencies: 2366 2374 2837
--- Name: fk_website_updater; Type: FK CONSTRAINT; Schema: indicia; Owner: -
---
-
-ALTER TABLE ONLY websites
-    ADD CONSTRAINT fk_website_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
-
-
---
--- TOC entry 2945 (class 2606 OID 51502)
--- Dependencies: 2370 2841 2372
+-- TOC entry 2809 (class 2606 OID 66198)
+-- Dependencies: 2313 2320 2727
 -- Name: pk_surveys_owner; Type: FK CONSTRAINT; Schema: indicia; Owner: -
 --
 
 ALTER TABLE ONLY surveys
     ADD CONSTRAINT pk_surveys_owner FOREIGN KEY (owner_id) REFERENCES people(id);
 
---
--- 200812051625_alter_ttl_parent_relation.sql
---
-      
-ALTER TABLE taxa_taxon_lists
-DROP CONSTRAINT fk_taxon_parent,
-ADD CONSTRAINT fk_taxon_parent FOREIGN KEY (parent_id)
-      REFERENCES taxa_taxon_lists (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 --
--- 200812072122_model_update.sql
---
-    
-ALTER TABLE occurrences ADD COLUMN website_id integer NOT NULL;
-ALTER TABLE occurrences ADD COLUMN external_key character varying(50);
-ALTER TABLE occurrences ADD COLUMN "comment" text;
-
-ALTER TABLE occurrences
-  ADD CONSTRAINT fk_occurrence_website FOREIGN KEY (website_id)
-      REFERENCES websites (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-COMMENT ON COLUMN occurrences.website_id IS 'Foreign key to the websites table. Website that the occurrence record is linked to.';
-COMMENT ON COLUMN occurrences.external_key IS 'For occurrences imported from an external system, provides a field to store the external system''s primary key for the record allowing re-synchronisation.';
-COMMENT ON COLUMN occurrences."comment" IS 'User'' comment on data entry of the occurrence.';
-
-ALTER TABLE locations ADD COLUMN "comment" text;
-ALTER TABLE locations ADD COLUMN external_key character varying(50);
-
-COMMENT ON COLUMN locations."comment" IS 'Comment regarding the location.';
-COMMENT ON COLUMN locations.external_key IS 'For locations imported from an external system, provides a field to store the external system''s primary key for the record allowing re-synchronisation.';
-
-ALTER TABLE samples ADD COLUMN "comment" text;
-ALTER TABLE samples ADD COLUMN external_key character varying(50);
-
-COMMENT ON COLUMN samples."comment" IS 'Comment regarding the sample.';
-COMMENT ON COLUMN samples.external_key IS 'For samples imported from an external system, provides a field to store the external system''s primary key for the record allowing re-synchronisation.';
-
-ALTER TABLE occurrence_comments ADD COLUMN email_address character varying(50);
-ALTER TABLE occurrence_comments ALTER COLUMN created_by_id DROP NOT NULL;
-ALTER TABLE occurrence_comments ALTER COLUMN updated_by_id DROP NOT NULL;
-
-COMMENT ON COLUMN occurrence_comments.email_address IS 'Email of user who created the comment, if the user was not logged in but supplied an email address.';
-COMMENT ON COLUMN occurrence_comments.updated_by_id IS 'Foreign key to the users table (updater), if user was logged in when comment updated.';
-COMMENT ON COLUMN occurrence_comments.created_by_id IS 'Foreign key to the users table (creator), if user was logged in when comment created.';
-
-ALTER TABLE sample_attributes ADD COLUMN applies_to_location boolean NOT NULL DEFAULT false;
-COMMENT ON COLUMN sample_attributes.applies_to_location IS 'For attributes that are gathered which pertain to the site or location rather than the specific sample, this flag is set to true.';
-
-ALTER TABLE websites ADD COLUMN default_survey_id integer;
-COMMENT ON COLUMN websites.default_survey_id IS 'Survey which records for this website are created under if not specified by the data entry form.';
-
-ALTER TABLE websites
-  ADD CONSTRAINT fk_website_default_survey FOREIGN KEY (default_survey_id)
-      REFERENCES surveys (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE users_websites ADD COLUMN preferred_sref_system character varying(10);
-COMMENT ON COLUMN users_websites.preferred_sref_system IS 'Spatial reference system used for data entry and viewing of spatial data by this user of the website.';
-
-COMMENT ON TABLE occurrence_comments IS 'List of comments regarding the occurrence posted by users viewing the occurrence subsequent to initial data entry.';
-COMMENT ON TABLE site_roles IS 'List of roles that exist at the online recording website level.';
-COMMENT ON TABLE "system" IS 'Contains system versioning information.';
-COMMENT ON TABLE user_tokens IS 'Contains tokens stored in cookies used to authenticate users on the core module.';
-
-ALTER TABLE samples ADD COLUMN sample_method_id integer;
-COMMENT ON COLUMN samples.sample_method_id IS 'Foreign key to the termlists_terms table. Identifies the term which describes the sampling method.';
-
-ALTER TABLE samples
-  ADD CONSTRAINT fk_sample_method FOREIGN KEY (sample_method_id)
-      REFERENCES termlists_terms (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-ALTER TABLE occurrences DROP CONSTRAINT fk_occurrence_taxon;
-ALTER TABLE occurrences DROP COLUMN taxon_id;
-
-ALTER TABLE occurrences
-   ADD COLUMN taxa_taxon_list_id integer;
-
-ALTER TABLE occurrences
-  ADD CONSTRAINT fk_occurrence_taxa_taxon_list FOREIGN KEY (taxa_taxon_list_id)
-      REFERENCES taxa_taxon_lists (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-
-COMMENT ON COLUMN occurrences.taxa_taxon_list_id IS 'Foreign key to the taxa_taxon_lists table. Identifies the taxa on a taxon list that this occurrence is a record of.';
-
-CREATE INDEX fki_occurrence_taxa_taxon_list
-  ON occurrences
-  USING btree
-  (taxa_taxon_list_id);
-
-
---
--- TOC entry 3066 (class 0 OID 0)
+-- TOC entry 2866 (class 0 OID 0)
 -- Dependencies: 6
 -- Name: indicia; Type: ACL; Schema: -; Owner: -
 --
 
-REVOKE ALL ON SCHEMA indicia FROM PUBLIC;
-REVOKE ALL ON SCHEMA indicia FROM postgres;
-GRANT ALL ON SCHEMA indicia TO postgres;
-GRANT ALL ON SCHEMA indicia TO indicia;
 
 
--- Completed on 2008-12-05 12:41:38
+
+-- Completed on 2008-12-11 13:56:00
 
 --
 -- PostgreSQL database dump complete
