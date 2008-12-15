@@ -9,3 +9,13 @@ label {
 	line-height: 1.7em;
 	vertical-align: middle;
 }
+
+p#addOccAttr {
+	text-align: right;
+	color: #D00002;
+	cursor: pointer;
+}
+
+div#occAttr0 {
+	display: none;
+}

@@ -528,6 +528,7 @@ class Data_Controller extends Service_Base_Controller {
 			$model = ORM::factory($m['id']);
 			$model->submission = $m;
 			$result = $model->submit();
+			$id = $model->id;
 			if ($result)
 				$this->response=json_encode(array('success'=>$id));
 			else
@@ -541,6 +542,35 @@ class Data_Controller extends Service_Base_Controller {
 				$id=$model->id;
 		}
 		return $id;
+	}
+
+	/**
+	 * We may need to do extra processing after the model has been submitted - such as 
+	 * adding occurrence attributes or synonomy. Usually we would do this in the individual
+	 * controller, but here we handle everything in one place, so we have a big method
+	 * that then partitions into sections depending on the model.
+	 */
+	protected function submit_succ($model){
+		$id = $model->id;
+		switch($model->object_name) {
+		case 'occurrence':
+			// Occurrences have occurrence attributes associated, stored in a 
+			// metafield.
+			if (array_key_exists('metaFields', $model->submission) &&
+				array_key_exists('occAttributes', $model->submission['metaFields']))
+			{
+				foreach ($model->submission['metaFields']['occAttributes']['value'] as
+					$attr)
+				{
+					$oam = ORM::factory('occurrence_attribute');
+					$oam->submission = $attr->model;
+					$oam->submission['fields']['occurrence_id'] = $id;
+					$oam->submit();
+				}
+			}
+			break;
+		}
+
 	}
 
 	/**
