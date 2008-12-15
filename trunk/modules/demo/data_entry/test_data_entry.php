@@ -12,22 +12,38 @@
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	var occAttrIndex = 2;
 	$('#date').datepicker({constrainInput: false});
+
+	// Method for adding further occurrence attributes
+	$('p#addOccAttr').click(function() {
+		$('div#occAttr0').clone(true).insertBefore(this)
+			.attr('id', 'occAttr'+occAttrIndex);
+		$('div#occAttr'+occAttrIndex+' label')
+			.attr('for',function(arr){
+				return $(this).attr('for').replace('0', occAttrIndex);
+			});
+		$('div#occAttr'+occAttrIndex+' select')
+			.attr('id', function(arr){
+				return $(this).attr('id').replace('0', occAttrIndex);
+			});
+		$('div#occAttr'+occAttrIndex+' input')
+			.attr('name', function(arr){
+				return $(this).attr('name').replace('0', occAttrIndex);
+			});
+		occAttrIndex++;
+	});
 
 	// We need to do stuff to occurrence attributes
 	$('div.occAttr select').change(function(){
 		// Get the attribute index
-		var index = this.id.charAt(this.id.indexOf("!") - 1);
+		var index = this.id.charAt(this.id.indexOf("|") - 1);
 		// Get the signature string
 		var sSig = this.value;
 		// Split the signature
 		var aSig = sSig.split("|");
 		// Update the value to be the first part of the signature (the record id)
-		var idField = 'input#occAttr' + index.toString() + '!occurrence_attribute_id';
-		alert(idField);
-		alert(aSig[0]);
-		$('#occAttr1!occurrence_attribute_id').val(aSig[0]);
-		alert($(idField).val());
+		$('div#occAttr'+index+' input.occAttrId').val(aSig[0]);
 	});
 });
 </script>
@@ -42,12 +58,22 @@ $(document).ready(function() {
 		// PHP to catch and submit the POST data from the form - we need to wrap
 		// some things manually in order to get the submodel in.
 		if ($_POST) {
+			// We have occurrence attributes that we have to wrap
+			$occAttrFilter = create_function('$a', '
+				if (substr($a, "occAttr")) {
+					return explode($a, "|")[0];
+				}');
+			$oap = array_flip(array_filter(array_flip($_POST), $occAttrFilter)); 
+			$oam = data_entry_helper::wrap($oap, 'occurrence_attribute');
+			print_r($_POST);
+
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
 			$occurrenceMod['subModels'][] = array(
 				'fkId' => 'sample_id',
 				'model' => $sampleMod
 			);
+			$occurrenceMod['metaFields']['occAttributes'] = array();
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
 			)));
@@ -94,11 +120,18 @@ $(document).ready(function() {
 <fieldset>
 <legend>Occurrence attributes</legend>
 <div class='occAttr' id='occAttr1'>
-<label for="occAttr1!occurrence_attribute_sig">Attribute</label>
-<?php echo data_entry_helper::select('occAttr1!occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
-<input type='hidden' value='test' id='occAttr1!occurrence_attribute_id' name='occAttr1!occurrence_attribute_id'/>
-<input type='text' value='' class='occAttr!value' id='occAttr1!text_value' name='occAttr1!text_value' />
+<label for="occAttr1|occurrence_attribute_sig">Attribute</label>
+<?php echo data_entry_helper::select('occAttr1|occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
+<input type='hidden' value='test' class='occAttrId' name='occAttr1|occurrence_attribute_id'/>
+<input type='text' value='' class='occAttrValue' name='occAttr1|text_value' />
 </div>
+<p id='addOccAttr'>Add Occurrence Attribute</p>
 </fieldset>
 <input type="submit" value="Save" />
 </form>
+<div class='occAttr' id='occAttr0'>
+<label for="occAttr0|occurrence_attribute_sig">Attribute</label>
+<?php echo data_entry_helper::select('occAttr0|occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
+<input type='hidden' value='1' class='occAttrId' name='occAttr0|occurrence_attribute_id'/>
+<input type='text' value='' class='occAttrValue' name='occAttr0|text_value' />
+</div>
