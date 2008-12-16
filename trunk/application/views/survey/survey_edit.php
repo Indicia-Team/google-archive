@@ -20,7 +20,10 @@
 <select id="website_id" name="website_id">
 	<option>&lt;Please select&gt;</option>
 <?php
-	$websites = ORM::factory('website')->orderby('title','asc')->find_all();
+	if (!is_null($this->auth_filter))
+		$websites = ORM::factory('website')->in('id',$this->auth_filter['values'])->orderby('title','asc')->find_all();
+	else
+		$websites = ORM::factory('website')->orderby('title','asc')->find_all();
 	foreach ($websites as $website) {
 		echo '	<option value="'.$website->id.'" ';
 		if ($website->id==$model->website_id)

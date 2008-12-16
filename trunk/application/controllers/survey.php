@@ -27,6 +27,14 @@ class Survey_Controller extends Gridview_Base_Controller {
 		else
 		{
 			$survey = new Survey_Model($this->uri->argument(1));
+			if (!is_null($survey->id) AND !is_null($this->auth_filter) AND
+				!in_array($survey->website_id, $this->auth_filter['values']))
+    	   	{
+        		// we need a general error controller
+	        	print "The survey you wish to edit is associated with a website for which you do not have admin rights. You, therefore, can not edit this survey";
+				return;
+    	    }
+    	    
 			$this->template->title = $this->GetEditPageTitle($survey, 'Survey');
 			$view = new View('survey/survey_edit');
 			$view->model = $survey;
