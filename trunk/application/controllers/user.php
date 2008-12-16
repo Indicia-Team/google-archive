@@ -34,12 +34,15 @@ class User_Controller extends Gridview_Base_Controller {
 	 * driven by ther person id.
 	 */
 	public function edit_from_person($id = NULL) {
-        if ($id == null)
+		if (!$this->page_authorised())
+		{
+			$this->access_denied();
+		}
+		else if ($id == null)
         {
-            // we need a general error controller
-			print "Cannot edit user through edit_from_person() without an associated Person ID";
+	   		$this->setError('Invocation error: missing argument', 'You cannot edit user through edit_from_person() without an associated Person ID');
         }
-		else
+        else
 		{
 			$this->model = new User_Model(array('person_id' => $id));
 	    	$websites = ORM::factory('website')->find_all();
@@ -128,6 +131,12 @@ class User_Controller extends Gridview_Base_Controller {
 					,'value' => (is_numeric($_POST['website_'.$website->id]) ? $_POST['website_'.$website->id] : NULL)
 				);
 		}
+	}
+	
+	
+	protected function page_authorised ()
+	{
+		return $this->auth->logged_in('CoreAdmin');
 	}
 }
 
