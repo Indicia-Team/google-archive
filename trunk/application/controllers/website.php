@@ -30,6 +30,7 @@ class Website_Controller extends Gridview_Base_Controller
                                'url' =>'' );
 
         $this->pagetitle = "Websites";
+		$this->model = ORM::factory('website');
     }
 
     /**
@@ -42,7 +43,14 @@ class Website_Controller extends Gridview_Base_Controller
      */
     public function create()
     {
-        $this->setView('website/website_edit', 'Website');
+		if (!$this->page_authorised())
+		{
+			$this->access_denied();
+		}
+		else
+		{
+    		$this->setView('website/website_edit', 'Website');
+		}
     }
 
     /**
@@ -52,19 +60,26 @@ class Website_Controller extends Gridview_Base_Controller
      */
     public function edit($id = null)
     {
-        if ($id == null)
+		if (!$this->page_authorised())
+		{
+			$this->access_denied();
+		}
+		else if ($id == null)
         {
-            // we need a general error controller
-            print "cannot edit website without an ID";
+	   		$this->setError('Invocation error: missing argument', 'You cannot call edit website without an ID');
         }
-        else
+       else
         {
             $this->model = new Website_Model($id);
             $this->setView('website/website_edit', 'Website');
         }
     }
 
-
+	
+	public function page_authorised ()
+	{
+		return $this->auth->logged_in('CoreAdmin');
+	}
 }
 
 ?>
