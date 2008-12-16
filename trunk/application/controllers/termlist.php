@@ -13,11 +13,15 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		$this->model = ORM::factory('termlist');
 		$this->auth_filter = $this->gen_auth_filter;
 	}
-	public function edit($id,$page_no,$limit) {
 
-		if ($id == null) {
-			print "Cannot edit a termlist without an id";
-		} else {
+	public function edit($id,$page_no,$limit)
+	{
+		if (!$this->record_authorised($id))
+		{
+			$this->access_denied('record with ID='.$id);
+		}
+        else
+        {
 			// Generate models
 			$this->model->find($id);
 			$gridmodel = ORM::factory('gv_termlist',$id);
@@ -41,6 +45,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 			$this->setView('termlist/termlist_edit', 'Termlist', $vArgs);
 		}
 	}
+	
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
 	public function edit_gv($id,$page_no,$limit) {
 		$this->auto_render=false;
@@ -61,6 +66,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		);
 		return $grid->display();
 	}
+
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
@@ -68,6 +74,16 @@ class Termlist_Controller extends Gridview_Base_Controller {
 
 		$vArgs = array('table' => null);
 		$this->setView('termlist/termlist_edit', 'Termlist');
+	}
+
+	protected function record_authorised ($id)
+	{
+		if (!is_null($id) AND !is_null($this->auth_filter))
+		{
+			$termlist=ORM::factory('termlist',$id);
+			return (in_array($termlist->website_id, $this->auth_filter['values']));
+		}		
+		return true;
 	}
 }
 ?>

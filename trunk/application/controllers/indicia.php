@@ -251,9 +251,9 @@ class Indicia_Controller extends Template_Controller {
 		$this->template->content->message = $message;
 	}
 
-	protected function access_denied()
+	protected function access_denied($level = 'records.')
 	{
-	    $this->setError('Access Denied', 'You do not have sufficient permissions to access the '.$this->model->table_name.' records.');
+	    $this->setError('Access Denied', 'You do not have sufficient permissions to access the '.$this->model->table_name.' '.$level);
 	}
  
 }
