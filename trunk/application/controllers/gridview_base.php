@@ -44,7 +44,16 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		
 	}
 
+	public function page_authorised()
+	{
+		return true;
+	}
+		
 	public function page($page_no, $limit) {
+		if ($this->page_authorised() == false) {
+			$this->access_denied();
+			return;
+		}
 		$grid =	Gridview_Controller::factory($this->gridmodel,
 			$page_no,
 			$limit,
