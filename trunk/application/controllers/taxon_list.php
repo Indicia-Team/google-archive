@@ -14,6 +14,14 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 	public function edit($id,$page_no,$limit) {
 		$this->model->find($id);
 
+		if (!is_null($id) AND !is_null($this->auth_filter) AND
+				!in_array($this->model->website_id, $this->auth_filter['values']))
+       	{
+        	// we need a general error controller
+	        print "The taxon list you wish to edit is associated with a website for which you do not have admin rights. You, therefore, can not edit this taxon list";
+			return;
+        }
+		
 		// Configure the grid
 		$grid =	Gridview_Controller::factory($this->model,
 				$page_no,
