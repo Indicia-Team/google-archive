@@ -65,7 +65,6 @@ $(document).ready(function() {
 				}');
 			$oap = array_flip(array_filter(array_flip($_POST), $occAttrFilter));
 			$oam = data_entry_helper::wrap($oap, 'occurrence_attribute');
-			print_r($_POST);
 
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
