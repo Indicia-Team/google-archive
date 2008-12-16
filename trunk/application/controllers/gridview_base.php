@@ -46,7 +46,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 
 	protected function page_authorised()
 	{
-		return true;
+		return $this->auth->logged_in();
 	}
 		
 	public function page($page_no, $limit) {
