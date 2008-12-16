@@ -12,6 +12,7 @@ class Gridview_Controller extends Controller {
 		$gridview->limit = $limit;
 		$gridview->uri_segment = $uri_segment;
 		$gridview->base_filter = null;
+		$gridview->auth_filter = null;
 		$gridview->actionColumns = array();
 		return $gridview;
 	}
@@ -38,6 +39,13 @@ class Gridview_Controller extends Controller {
 		}
 		$lists = $this->model->orderby($orderclause);
 
+		// If we are logged on as a site controller, then need to restrict access to those
+		// records on websites we are site controller for.
+		// Core Admins get access to everything - no filter applied.
+		if ($this->auth_filter != null){
+			$filter = $this->auth_filter;
+			$lists = $lists->in($filter['field'], $filter['values']);
+		}
 		// Are we doing server-side filtering?
 		if ($this->base_filter != null){
 			$filter = $this->base_filter;

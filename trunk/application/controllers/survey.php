@@ -10,6 +10,7 @@ class Survey_Controller extends Gridview_Base_Controller {
 			'website'=>'');
 		$this->pagetitle = "Surveys";
 		$this->model = ORM::factory('survey');
+		$this->auth_filter = $this->gen_auth_filter;
 	}
 
 	/**

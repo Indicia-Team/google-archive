@@ -15,6 +15,8 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->gridmodel = ORM::factory($this->gridmodelname);
 		$this->pageNoUriSegment = 3;
 		$this->base_filter = array();
+		$this->auth_filter = null;
+		$this->gen_auth_filter = null;
 		$this->columns = $this->gridmodel->table_columns;
 		$this->actionColumns = array(
 			'edit' => $this->controllerpath."/edit/£id£"
@@ -26,6 +28,20 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->upload_csv_form->controllerpath = $this->controllerpath;
 		$this->view->upload_csv_form = $this->upload_csv_form;
 		parent::__construct();
+		
+		// If not logged in as a Core admin, restrict access to available websites. 
+		if(!$this->auth->logged_in('CoreAdmin')){
+			$site_role = (new Site_role_Model('Admin'));
+			$websites=ORM::factory('users_website')->where(
+					array('user_id' => $_SESSION['auth_user']->id,
+							'site_role_id' => $site_role->id))->find_all();
+			$website_id_values = array();
+			foreach($websites as $website)
+				$website_id_values[] = $website->website_id;
+			$website_id_values[] = null;
+			$this->gen_auth_filter = array('field' => 'website_id', 'values' => $website_id_values);
+		}
+		
 	}
 
 	public function page($page_no, $limit) {
@@ -34,6 +50,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$limit,
 			$this->pageNoUriSegment);
 		$grid->base_filter = $this->base_filter;
+		$grid->auth_filter = $this->auth_filter;
 		$grid->columns = array_intersect_key($grid->columns, $this->columns);
 		$grid->actionColumns = $this->actionColumns;
 
@@ -52,6 +69,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$limit,
 			$this->pageNoUriSegment);
 		$grid->base_filter = $this->base_filter;
+		$grid->auth_filter = $this->auth_filter;
 		$grid->columns = array_intersect_key($grid->columns, $this->columns);
 		$grid->actionColumns = $this->actionColumns;
 		return $grid->display();
