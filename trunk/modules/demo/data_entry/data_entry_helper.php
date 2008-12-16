@@ -94,14 +94,10 @@ class data_entry_helper {
 				echo 'Data was successfully inserted. The record\'s ID is'.
 							$response['success'].'</p>';
 			}
-			if (array_key_exists('trace', $response)) {
+			if (!array_key_exists('success',$response) && array_key_exists('trace', $response)) {
 				print_r($response['trace']);
 			}
-    	} else {
-    		print_r($response);
     	}
-
-
     }
 
     /**
@@ -188,7 +184,7 @@ class data_entry_helper {
     }
 
     /**
-     * Retrieves a read token and passes it back as an array suitable to drop into the 
+     * Retrieves a read token and passes it back as an array suitable to drop into the
      * 'extraParams' options for an Ajax call.
      */
     public static function get_read_auth($website_id, $password) {
