@@ -51,7 +51,8 @@ class Language_Controller extends Gridview_Base_Controller {
      * Action for language/edit page
      * Edit website data
      */
-	public function edit($id) {
+	public function edit($id  = null)
+	{
 		if (!$this->page_authorised())
 		{
 			$this->access_denied();

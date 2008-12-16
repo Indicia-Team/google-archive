@@ -44,7 +44,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		
 	}
 
-	public function page_authorised()
+	protected function page_authorised()
 	{
 		return true;
 	}
