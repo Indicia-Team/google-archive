@@ -43,7 +43,6 @@ class Language_Controller extends Gridview_Base_Controller {
 		}
 		else
 		{
-			$this->model = ORM::factory('language');
 	        $this->setView('language/language_edit', 'Website');
 		}
 	}
