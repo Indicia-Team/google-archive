@@ -37,8 +37,15 @@ class Language_Controller extends Gridview_Base_Controller {
 	 */
 	public function create()
 	{
-		$this->model = ORM::factory('language');
-        $this->setView('language/language_edit', 'Website');
+		if (!$this->page_authorised())
+		{
+			$this->access_denied();
+		}
+		else
+		{
+			$this->model = ORM::factory('language');
+	        $this->setView('language/language_edit', 'Website');
+		}
 	}
 
     /**
@@ -46,16 +53,24 @@ class Language_Controller extends Gridview_Base_Controller {
      * Edit website data
      */
 	public function edit($id) {
-		if ($id == null)
+		if (!$this->page_authorised())
+		{
+			$this->access_denied();
+		}
+		else if ($id == null)
         {
-            // we need a general error controller
-            print "cannot edit language without an ID";
+	   		$this->setError('Invocation error: missing argument', 'You cannot call edit language without an ID');
         }
         else
         {
             $this->model = new Language_Model($id);
             $this->setView('language/language_edit', 'Website');
         }
+	}
+	
+	public function page_authorised ()
+	{
+		return $this->auth->logged_in('CoreAdmin');
 	}
 }
 ?>
