@@ -30,7 +30,10 @@
 <select id="website_id" name="website_id" <?php if ($model->parent_id != null && $model->parent->website_id != null) echo "disabled='disabled'"; ?>>
 	<option value=''>&lt;Core Module&gt;</option>
 <?php
-	$websites = ORM::factory('website')->orderby('title','asc')->find_all();
+	if (!is_null($this->auth_filter))
+		$websites = ORM::factory('website')->in('id',$this->auth_filter['values'])->orderby('title','asc')->find_all();
+	else
+		$websites = ORM::factory('website')->orderby('title','asc')->find_all();
 	foreach ($websites as $website) {
 		echo '	<option value="'.$website->id.'" ';
 		if ($website->id==$model->website_id)
