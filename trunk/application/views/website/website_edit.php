@@ -21,12 +21,12 @@
 </li>
 <li>
 <label for="password">Password</label>
-<input type="password" id="password" name="password" value="<?php echo html::specialchars($model->password); ?>" />
+<input type="password" id="password" name="password" value="" />
 <?php echo html::error_message($model->getError('password')); ?>
 </li>
 <li>
 <label for="password2">Retype Password</label>
-<input type="password" id="password2" name="password2" value="<?php echo html::specialchars($model->password); ?>" />
+<input type="password" id="password2" name="password2" value="" />
 <?php echo html::error_message($model->getError('password2')); ?>
 </li>
 </ol>
