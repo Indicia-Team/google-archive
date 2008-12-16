@@ -11,6 +11,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 			);
 		$this->pagetitle = "Term lists";
 		$this->model = ORM::factory('termlist');
+		$this->auth_filter = $this->gen_auth_filter;
 	}
 	public function edit($id,$page_no,$limit) {
 
