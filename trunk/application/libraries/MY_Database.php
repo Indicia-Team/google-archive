@@ -51,7 +51,7 @@ class Database extends Database_Core {
 		foreach ($keys as $key => $value)
 		{
 			$key           = (strpos($key, '.') !== FALSE) ? $this->config['table_prefix'].$key : $key;
-			$key = ($value == null) ? $key.' IS NULL' : $value;
+#			$key = ($value == null) ? $key.' IS NULL' : $value;
 			$this->where[] = $this->driver->where($key, $value, 'AND ', count($this->where), $quote);
 		}
 
