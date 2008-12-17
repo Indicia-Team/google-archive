@@ -73,6 +73,26 @@ $(document).ready(function() {
 </li>
 </ol>
 </fieldset>
+<fieldset>
+<legend>Location Websites</legend>
+<ol>
+<?php
+	if (!is_null($this->gen_auth_filter))
+		$websites = ORM::factory('website')->in('id',$this->gen_auth_filter['values'])->orderby('title','asc')->find_all();
+	else
+		$websites = ORM::factory('website')->orderby('title','asc')->find_all();
+	foreach ($websites as $website) {
+		echo '<li><label for="website_'.$website->id.'">'.$website->title.'</label>';
+		echo '<INPUT TYPE=CHECKBOX NAME="website_'.$website->id.'" ';
+		if(!is_null($model->id)){
+			$locations_website = ORM::factory('locations_website', array('website_id' => $website->id, 'location_id' => $model->id));
+			if(ORM::factory('locations_website', array('website_id' => $website->id, 'location_id' => $model->id))->loaded) echo "CHECKED";
+		}
+		echo '></li>';
+	}
+?>
+</ol>
+</fieldset>
 <?php echo $metadata ?>
 <input type="submit" value="Save" name="submit"/>
 </form>
