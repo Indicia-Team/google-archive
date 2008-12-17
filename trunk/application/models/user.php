@@ -32,10 +32,10 @@ class User_Model extends ORM {
 		return parent::validate($array, $save);
 	}
 
-	public function presubmit() {
+	public function preSubmit() {
 		if (!is_numeric($this->submission['fields']['core_role_id']['value']))
 			$this->submission['fields']['core_role_id']['value'] = NULL;
-		return parent::presubmit();
+		return parent::preSubmit();
 	}
 
 	public function password_validate(Validation $array, $save = FALSE) {
