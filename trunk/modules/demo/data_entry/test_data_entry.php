@@ -59,12 +59,21 @@ $(document).ready(function() {
 		// some things manually in order to get the submodel in.
 		if ($_POST) {
 			// We have occurrence attributes that we have to wrap
-			$occAttrFilter = create_function('$a', '
-				if (substr($a, "occAttr")) {
-					return explode($a, "|")[0];
-				}');
-			$oap = array_flip(array_filter(array_flip($_POST), $occAttrFilter));
-			$oam = data_entry_helper::wrap($oap, 'occurrence_attribute');
+			
+			$oap = array();
+			foreach ($_POST as $key => $value) {
+				if (strpos('occAttr', $key)){
+					$a = explode($key, "|");
+					$i = substr($a[0], strlen($a[0]));
+					if ($i != 0) {
+						$oap[$i][$a[1]] = $value;
+					}
+				}
+			}	
+			$occAttrs = array();
+			foreach ($oap as $oa){
+				$occAttrs[] = data_entry_helper::wrap($oa, 'occurrence_attribute');
+			}
 
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
@@ -72,7 +81,7 @@ $(document).ready(function() {
 				'fkId' => 'sample_id',
 				'model' => $sampleMod
 			);
-			$occurrenceMod['metaFields']['occAttributes'] = array();
+			$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
 			)));
