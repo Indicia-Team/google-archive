@@ -119,7 +119,7 @@ abstract class ORM extends ORM_Core {
 	}
 	/**
 	 * Submits the data by:
-	 * - Calling the pre_submit function to clean data.
+	 * - Calling the preSubmit function to clean data.
 	 * - Linking in any foreign fields specified in the "fk-fields" array.
 	 * - For each entry in the "submodels" array, calling the submit function
 	 *   for that model and linking in the resultant object.

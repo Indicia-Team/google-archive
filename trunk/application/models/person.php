@@ -30,7 +30,7 @@ class Person_Model extends ORM {
 			$this->submission['fields']['email_address']['value'] = NULL;
 		if (!is_numeric($this->submission['fields']['title_id']['value']))
 			$this->submission['fields']['title_id']['value'] = NULL;
-		return parent::presubmit();
+		return parent::preSubmit();
 	}
 	
 	/**
