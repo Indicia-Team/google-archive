@@ -21,20 +21,18 @@ class Survey_Controller extends Gridview_Base_Controller {
 		$this->setView('survey/survey_edit', 'Survey');
 	}
 
-	public function edit() {
-		if ($this->uri->total_arguments()==0)
-			print "cannot edit survey without an ID";
-		else
+	public function edit($id = null) {
+		if ($id == null)
+        {
+	   		$this->setError('Invocation error: missing argument', 'You cannot call edit survey without an ID');
+        }
+        else if (!$this->record_authorised($id))
 		{
-			$survey = new Survey_Model($this->uri->argument(1));
-			if (!is_null($survey->id) AND !is_null($this->auth_filter) AND
-				!in_array($survey->website_id, $this->auth_filter['values']))
-    	   	{
-        		// we need a general error controller
-	        	print "The survey you wish to edit is associated with a website for which you do not have admin rights. You, therefore, can not edit this survey";
-				return;
-    	    }
-    	    
+			$this->access_denied('record with ID='.$id);
+		}
+        else
+		{
+			$survey = new Survey_Model($id);  	    
 			$this->template->title = $this->GetEditPageTitle($survey, 'Survey');
 			$view = new View('survey/survey_edit');
 			$view->model = $survey;
@@ -61,6 +59,17 @@ class Survey_Controller extends Gridview_Base_Controller {
 		}
 
 	}
+	
+
+    protected function record_authorised ($id)
+	{
+		if (!is_null($id) AND !is_null($this->auth_filter))
+		{
+			$survey = new Survey_Model($id);
+			return (in_array($survey->website_id, $this->auth_filter['values']));
+		}		
+		return true;
+	} 
 }
 
 ?>
