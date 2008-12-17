@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
     <link rel="stylesheet" href="style.css" type="text/css" />
     <script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
     <script type="text/javascript">
         // making this a global variable so that it is accessible for
         // debugging/inspecting in Firebug
@@ -27,6 +28,12 @@
                 {layers: "landsat7"}
             );
 
+            var velayer = new OpenLayers.Layer.VirtualEarth(
+            	"Virtual Earth",
+            	{'type': VEMapStyle.Aerial}
+            );
+
+
 			// Samples layer
             var samples = new OpenLayers.Layer.WMS(
                 "Samples from Indicia", "http://192.171.199.208:8080/geoserver/wms",
@@ -39,7 +46,7 @@
                 {singleTile: true, ratio: 1,isBaseLayer:false}
             );
 
-            map.addLayers([jpl_wms, ol_wms, samples]);
+            map.addLayers([velayer, jpl_wms, ol_wms, samples]);
             map.addControl(new OpenLayers.Control.LayerSwitcher());
             map.setCenter(new OpenLayers.LonLat(-2,50.77));
             map.zoomTo(11);
