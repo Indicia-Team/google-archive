@@ -14,6 +14,17 @@ class Person_Controller extends Gridview_Base_Controller {
 		);
 		$this->pagetitle = "People";
 		$this->model = new Person_Model();
+		
+		if(!is_null($this->gen_auth_filter)){
+			$users_websites=ORM::factory('users_website')->where('site_role_id IS NOT ', null)->in('website_id', $this->gen_auth_filter['values'])->find_all();
+			$person_id_values = array();
+			foreach($users_websites as $users_website) {
+				$user=ORM::factory('user', $users_website->user_id);
+				$person_id_values[] = $user->person_id;
+			}
+			$this->auth_filter = array('field' => 'id', 'values' => $person_id_values);
+		}
+		
 	}
 
 	protected function return_url($return_url)
@@ -47,11 +58,14 @@ class Person_Controller extends Gridview_Base_Controller {
 	 * 2) Direct URL
 	 */
 	public function edit($id = NULL) {
-        if ($id == null)
+		if ($id == null)
         {
-            // we need a general error controller
-            print "You cannot use the edit person functionality without an ID";
+	   		$this->setError('Invocation error: missing argument', 'You cannot use the edit person functionality without an ID');
         }
+        else if (!$this->record_authorised($id))
+		{
+			$this->access_denied('record with ID='.$id);
+		}
         else
 		{
 			$this->model = new Person_Model($id);
@@ -67,14 +81,17 @@ class Person_Controller extends Gridview_Base_Controller {
 	 * When called from User we want to return back to the User gridview on submission for that person
 	 */
 	public function edit_from_user($id = NULL) {
-        if ($id == null)
+		if ($id == null)
         {
-            // we need a general error controller
-            print "You cannot edit a person through edit_from_user() without a Person ID";
+	   		$this->setError('Invocation error: missing argument', 'You cannot edit a person through edit_from_user() without a Person ID');
         }
-        else
+        else if (!$this->record_authorised($id))
 		{
-			$this->model = new Person_Model($id);
+			$this->access_denied('record with ID='.$id);
+		}
+        else
+        {
+        	$this->model = new Person_Model($id);
 			$this->setView('person/person_edit', 'Person',
 					array('return_url' => $this->return_url('user')));
 		}
@@ -95,7 +112,16 @@ class Person_Controller extends Gridview_Base_Controller {
 		$this->setView('person/person_edit', 'Person',
 			array('return_url' => isset($_POST['return_url']) ? $this->return_url($_POST['return_url']) : ''));
 	}
-    
+
+	protected function record_authorised ($id)
+	{
+		if (!is_null($id) AND !is_null($this->auth_filter))
+		{
+			return (in_array($id, $this->auth_filter['values']));
+		}		
+		return true;
+	}
+	
 }
 
 ?>
