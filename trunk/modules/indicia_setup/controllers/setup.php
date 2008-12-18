@@ -85,11 +85,31 @@ class Setup_Controller extends Template_Controller
     {
         if(false !== ($this->dbconn = $this->db_connect()))
         {
-            $_db_file = str_replace("indicia",$this->db['schema'], file_get_contents( $this->db_file));
+        	if(($this->db['schema'] == 'public') || empty($this->db['schema']))
+        	{
+        		$this->db['schema'] = '';
+        		$this->schema_and_postfix = '';
+        	}
+        	else
+        	{
+        		$this->schema_and_postfix = $this->db['schema'] . '.';
+        	}
+
+            $_db_file = str_replace("indicia.",$this->schema_and_postfix, file_get_contents( $this->db_file));
+            $_db_file = str_replace("indicia",$this->db['schema'], $_db_file);
 
             pg_query($this->dbconn, "BEGIN");
 
-            pg_send_query($this->dbconn, "SET search_path TO {$this->db['schema']}, public, pg_catalog");
+			if(!empty($this->db['schema']))
+			{
+				pg_send_query($this->dbconn, "SET search_path TO {$this->db['schema']}, public, pg_catalog");
+			}
+			else
+			{
+				pg_send_query($this->dbconn, "SET search_path TO public, pg_catalog");
+			}
+
+
             $res1 = pg_get_result($this->dbconn);
 
             if(false != ($error = pg_result_error($res1)))
@@ -114,12 +134,15 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
-            if(false === pg_query($this->dbconn, "GRANT ALL ON SCHEMA {$this->db['schema']} TO {$this->db['user']}" ))
-            {
-                $error = pg_last_error($this->dbconn);
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-                Kohana::log("error", "Setup failed: {$error}");
-                return false;
+			if(!empty($this->db['schema']))
+			{
+				if(false === pg_query($this->dbconn, "GRANT ALL ON SCHEMA {$this->db['schema']} TO {$this->db['user']}" ))
+				{
+					$error = pg_last_error($this->dbconn);
+					$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+					Kohana::log("error", "Setup failed: {$error}");
+					return false;
+				}
             }
 
             $stat = pg_transaction_status($this->dbconn);
@@ -286,7 +309,7 @@ class Setup_Controller extends Template_Controller
         $tmp_config = file_get_contents(dirname(dirname(__file__ )) . '/config/_database.php');
 
         $_config = str_replace(array("*host*","*port*","*name*","*user*","*password*","*schema*"),
-                               array($this->db['host'],$this->db['port'],$this->db['name'],$this->db['user'],$this->db['password'],$this->db['schema']),
+                               array($this->db['host'],$this->db['port'],$this->db['name'],$this->db['user'],$this->db['password'],$this->schema_and_postfix),
                                $tmp_config);
 
         $database_config = dirname(dirname(dirname(dirname(__file__)))) . "/application/config/database.php";
@@ -360,6 +383,7 @@ class Setup_Controller extends Template_Controller
         {
             $_db_file = file_get_contents( $db_dir . '/' . $name );
 
+            $_db_file = str_replace("indicia.",$this->schema_and_postfix, $_db_file);
             $_db_file = str_replace("indicia",$this->db['schema'], $_db_file);
 
             try

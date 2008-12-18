@@ -247,7 +247,7 @@ class Indicia_Controller extends Template_Controller {
     protected function setError($title, $message)
 	{
 	    $this->template->title   = $title;
-        $this->template->content = new View('templates/error_message');		
+        $this->template->content = new View('templates/error_message');
 		$this->template->content->message = $message;
 	}
 
@@ -255,5 +255,5 @@ class Indicia_Controller extends Template_Controller {
 	{
 	    $this->setError('Access Denied', 'You do not have sufficient permissions to access the '.$this->model->table_name.' '.$level);
 	}
- 
+
 }
