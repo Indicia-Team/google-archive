@@ -11517,8 +11517,6 @@ CREATE OPERATOR CLASS gist_geometry_ops
     FUNCTION 7 lwgeom_gist_same(box2d,box2d,internal);
 
 
-SET search_path = pg_catalog;
-
 --
 -- TOC entry 2629 (class 2605 OID 65811)
 -- Dependencies: 412 919 412 958
@@ -11634,9 +11632,6 @@ CREATE CAST (indicia.geometry AS text) WITH FUNCTION indicia.st_text(indicia.geo
 --
 
 CREATE CAST (text AS indicia.geometry) WITH FUNCTION indicia.st_geometry(text) AS IMPLICIT;
-
-
-SET search_path = indicia, pg_catalog;
 
 --
 -- TOC entry 2338 (class 1259 OID 65824)

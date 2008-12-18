@@ -15,7 +15,7 @@ $config['default'] = array
 		'database' => '*name*'
 	),
 	'character_set' => 'utf8',
-	'table_prefix'  => '*schema*.',
+	'table_prefix'  => '*schema*',
 	'object'        => TRUE,
 	'cache'         => FALSE,
 	'escape'        => TRUE
