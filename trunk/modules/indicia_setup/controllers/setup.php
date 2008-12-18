@@ -70,7 +70,7 @@ class Setup_Controller extends Template_Controller
 
         if(true === $this->db_insert_data())
         {
-            //url::redirect();
+            url::redirect();
         }
 
         $this->assign_view_vars();
