@@ -11,14 +11,13 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		$this->model = ORM::factory('taxon_list');
 		$this->auth_filter = $this->gen_auth_filter;
 	}
+
 	public function edit($id,$page_no,$limit) {
 		$this->model->find($id);
 
-		if (!is_null($id) AND !is_null($this->auth_filter) AND
-				!in_array($this->model->website_id, $this->auth_filter['values']))
-       	{
-        	// we need a general error controller
-	        print "The taxon list you wish to edit is associated with a website for which you do not have admin rights. You, therefore, can not edit this taxon list";
+		if (!$this->record_authorised($id))
+		{
+			$this->access_denied('record with ID='.$id);
 			return;
         }
 		
@@ -56,12 +55,31 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		);
 		return $grid->display();
 	}
+
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
-		if ($parent != null) $this->model->website_id = $this->model->parent->website_id;
-
+		if ($parent != null)
+		{
+			if (!$this->record_authorised($parent))
+			{
+				$this->access_denied('table to create a record with parent ID='.$id);
+				return;
+	        }
+			$this->model->website_id = $this->model->parent->website_id;
+		}
+	
 		$this->setView('taxon_list/taxon_list_edit', 'Species List');
+	}
+
+    protected function record_authorised ($id)
+	{
+		if (!is_null($id) AND !is_null($this->auth_filter))
+		{
+			$taxon_list = new Taxon_list_Model($id);
+			return (in_array($taxon_list->website_id, $this->auth_filter['values']));
+		}		
+		return true;
 	}
 }
 ?>

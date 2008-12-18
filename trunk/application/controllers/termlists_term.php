@@ -61,6 +61,14 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	 * Override the default page functionality to filter by termlist.
 	 */
 	public function page($termlist_id, $page_no, $limit){
+		// At this point, $termlist_id has a value - the framework will trap the other case.
+		// No further filtering of the gridview required as the very fact you can access the parent term list
+		// means you can access all the terms for it.
+		if (!$this->termlist_authorised($termlist_id))
+		{
+			$this->access_denied('table to view records with a termlist ID='.$termlist_id);
+			return;
+        }
 		$this->base_filter['termlist_id'] = $termlist_id;
 		$this->pagetitle = "Terms in ".ORM::factory('termlist',$termlist_id)->title;
 		$this->view->termlist_id = $termlist_id;
@@ -74,6 +82,12 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	}
 
 	public function edit($id,$page_no,$limit) {
+		// At this point, $id is provided - the framework will trap the empty or null case.
+		if (!$this->record_authorised($id))
+		{
+			$this->access_denied('record with ID='.$id);
+			return;
+        }
 		// Generate model
 		$this->model->find($id);
 		$gridmodel = ORM::factory('gv_termlists_term');
@@ -97,7 +111,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			'synonomy' => $this->formatCommonSynonomy($this->
 					getSynonomy($this->model->meaning_id)),
 			);
-		$this->setView('termlists_term/termlists_term_edit', 'Taxon', $vArgs);
+		$this->setView('termlists_term/termlists_term_edit', 'Term', $vArgs);
 
 	}
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
@@ -122,6 +136,12 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 	 * Creates a new term given the id of the termlist to initially attach it to
 	 */
 	public function create($termlist_id){
+		// At this point, $termlist_id has a value - the framework will trap the other case.
+		if (!$this->termlist_authorised($termlist_id))
+		{
+			$this->access_denied('table to create records with a taxon list ID='.$termlist_id);
+			return;
+        }
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
 
@@ -262,6 +282,32 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		}
 
 		url::redirect('termlists_term/'.$this->model->termlist_id);
+	}
+
+    protected function record_authorised ($id)
+	{
+		// note this function is not accessed when creating a record
+		// for this controller, any null ID termlist_term can not be accessed
+		if (is_null($id)) return false;
+		$term = new Termlists_term_Model($id);
+		// for this controller, any termlist_term that does not exist can not be accessed.
+		// ie prevent sly creation using the edit function
+		if (!$term->loaded) return false;		
+		return ($this->termlist_authorised($term->termlist_id));
+	}
+	
+	protected function termlist_authorised ($id)
+	{
+		// for this controller, any null ID termlist can not be accessed
+		if (is_null($id)) return false;
+		if (!is_null($this->gen_auth_filter))
+		{
+			$termlist = new Termlist_Model($id);
+			// for this controller, any termlist that does not exist can not be accessed.
+			if (!$termlist->loaded) return false;		
+			return (in_array($termlist->website_id, $this->gen_auth_filter['values']));
+		}		
+		return true;
 	}
 }
 ?>
