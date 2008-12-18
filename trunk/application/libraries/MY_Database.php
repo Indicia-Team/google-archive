@@ -34,34 +34,4 @@ class Database extends Database_Core {
 
 		return $this;
 	}
-
-	/**
-	 * Selects the where(s) for a database query.
-	 *
-	 * @param   string|array  key name or array of key => value pairs
-	 * @param   string        value to match with key
-	 * @param   boolean       disable quoting of WHERE clause
-	 * @return  Database_Core        This Database object.
-	 */
-	public function where($key, $value = NULL, $quote = TRUE)
-	{
-		// If keys is an array, we deal with nulls by turning them into
-		// an IS NULL statement, but we leave them otherwise because they
-		// may be encapsulated in $key
-		$is_arr = is_array($key);
-		$quote = (func_num_args() < 2 AND ! is_array($key)) ? -1 : $quote;
-		$keys  = is_array($key) ? $key : array($key => $value);
-
-		foreach ($keys as $key => $value)
-		{
-			$key           = (strpos($key, '.') !== FALSE) ? $this->config['table_prefix'].$key : $key;
-			if ($is_arr) $key = ($value == null) ? $key.' IS NULL' : $key;
-			$this->where[] = $this->driver->where($key, $value, 'AND ', count($this->where), $quote);
-		}
-
-		return $this;
-	}
-
 }
-
-?>

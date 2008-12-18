@@ -59,6 +59,39 @@ class valid extends valid_Core {
 
 		return ($number_of_records == 0);
 	}
-}
 
+	/**
+	 * Service at URL services/validation/valid_term. Tests if a term can be found
+	 * on the termlist identified by the supplied id in $_GET.
+	 */
+	public function valid_term($term, $id)
+	{
+		$this->valid_term_or_taxon($taxon, $id,'termlist_id', 'term', 'gv_termlists_term');
+	}
+
+	/**
+	 * Service at URL services/validation/valid_taxon. Tests if a taxon can be found
+	 * on the taxon list identified by the supplied id in $_GET.
+	 */
+	public function valid_taxon($taxon, $id)
+	{
+		$this->valid_term_or_taxon($taxon, $id, 'taxon_list_id', 'taxon', 'gv_taxon_lists_taxa');
+	}
+
+	/**
+	 * Internal method that provides functionality for validating a term or taxon
+	 * against a list.
+	 */
+	protected function valid_term_or_taxon($value, $list_id, $list_id_field, $search_field, $view_name)
+	{
+		$found=	ORM::factory($view_name)
+				->where(array($list_idi_field=>$list_id))
+				->like(array($search_field=>$value))
+				->find_all();
+		// TODO - proper handling of output XML.
+		// TODO - Only accept multiple entries as valid if a single match can be determined.
+		return ($found->count()>1);
+	}
+
+}
 ?>
