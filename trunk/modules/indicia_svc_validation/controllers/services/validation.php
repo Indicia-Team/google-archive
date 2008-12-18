@@ -9,11 +9,11 @@ class Validation_Controller extends Service_Base_Controller {
 	  */
 	public function check()
 	{
-		if (!array_key_exists('submission', $_POST) return 'No array!';
+		if (!array_key_exists('submission', $_POST)) $retVal = 'No array!';
 		$mode = $this->get_input_mode();
 		switch ($mode) {
 			case 'json':
-			$s = json_decode($_POST['submission'], true)
+			$s = json_decode($_POST['submission'], true);
 			break;
 		}
 		if (array_key_exists('fields', $s)) {
@@ -37,9 +37,8 @@ class Validation_Controller extends Service_Base_Controller {
 					$val->add_rules($name, $rule);
 				}
 			}
-
 			if ($val->validate()){
-				return 'success';
+				$retVal = 'success';
 			} else {
 				$errRules = $val->errors();
 				$errMessages = $val->errors('form_error_messages');
@@ -47,8 +46,14 @@ class Validation_Controller extends Service_Base_Controller {
 					$msg = $errMessages[$name];
 					$s['fields'][$name][$rule]['result'] = $msg;
 				}
-				return $s;
+				$retVal = $s;
 			}
+		}
+		$output_mode = $this->get_output_mode();
+		switch ($output_mode) {
+			case 'json':
+				return json_encode($retval);
+				break;
 		}
 	}
 }
