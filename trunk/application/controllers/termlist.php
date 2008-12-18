@@ -70,7 +70,15 @@ class Termlist_Controller extends Gridview_Base_Controller {
 	public function create(){
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
-		if ($parent != null) $this->model->website_id = $this->model->parent->website_id;
+		if ($parent != null)
+		{
+			if (!$this->record_authorised($parent))
+			{
+				$this->access_denied('table to create a record with parent ID='.$id);
+				return;
+	        }
+			$this->model->website_id = $this->model->parent->website_id;
+		}
 
 		$vArgs = array('table' => null);
 		$this->setView('termlist/termlist_edit', 'Termlist');
