@@ -3,57 +3,52 @@
 class Validation_Controller extends Service_Base_Controller {
 
 	/**
-	 * Service at URL services/validation/valid_term. Tests if a term can be found
-	 * on the termlist identified by the supplied id in $_GET.
-	 */
-	public function valid_term()
+	  * Service call method. This will parse the POST data for a submission type
+	  * format encapsulating some data to be validated and the rules to validate
+	  * it against.
+	  */
+	public function check()
 	{
-		$this->valid_term_or_taxon('termlist_id', 'term', 'gv_termlists_term');
-	}
-
-	/**
-	 * Service at URL services/validation/valid_taxon. Tests if a taxon can be found
-	 * on the taxon list identified by the supplied id in $_GET.
-	 */
-	public function valid_taxon()
-	{
-		$this->valid_term_or_taxon('taxon_list_id', 'taxon', 'gv_taxon_lists_taxon');
-	}
-
-	/**
-	 * Internal method that provides functionality for validating a term or taxon
-	 * against a list.
-	 */
-	protected function valid_term_or_taxon($list_id, $search_field, $view_name)
-	{
-		if (array_key_exists($list_id, $_GET))
-			$termlist_id = $_GET[$list_id];
-		else
-			$this->error("No $list_id supplied to validate the term against");
-		if (array_key_exists($search_field, $_GET))
-			$term = $_GET[$search_field];
-		else
-			$this->error("No $search_field supplied to validate");
-		$mode = $this->get_output_mode();
-		$found=	ORM::factory($view_name)
-				->where(array($list_id=>$termlist_id))
-				->like(array($search_field=>$term))
-				->find_all();
-		// TODO - proper handling of output XML.
-		// TODO - Only accept multiple entries as valid if a single match can be determined.
-		if ($found->count()>1)
-			$id['id'] = $found[0]->id; // Found a valid term, so return it's ID
-		else
-			$id['id'] = "not found"; // Return information that the term wasn't found
+		if (!array_key_exists('submission', $_POST) return 'No array!';
+		$mode = $this->get_input_mode();
 		switch ($mode) {
 			case 'json':
-				echo json_encode($id);
-				break;
-			case 'xml':
-				//echo $this->xml_encode($id, TRUE);
-				break;
+			$s = json_decode($_POST['submission'], true)
+			break;
+		}
+		if (array_key_exists('fields', $s)) {
+			$fields = array();
+			$rules = array();
+			foreach ($s['fields'] as $name => $arr) {
+				// We build an array, convert it to a validation object
+				// and add all of the rules. Then we validate it.
+				if (array_key_exists('value', $arr)){
+					$fields[$name] = $arr['value'];
+					if (array_key_exists('rules', $arr)){
+						foreach ($arr['rules'] as $r){
+							$rules['name'][] = $r['rule'];
+						}
+					}
+				}
+			}
+			$val = Validation::factory($fields);
+			foreach ($rules as $name => $arr){
+				foreach ($arr as $rule) {
+					$val->add_rules($name, $rule);
+				}
+			}
+
+			if ($val->validate()){
+				return 'success';
+			} else {
+				$errRules = $val->errors();
+				$errMessages = $val->errors('form_error_messages');
+				foreach ($errRules as $name => $rule){
+					$msg = $errMessages[$name];
+					$s['fields'][$name][$rule]['result'] = $msg;
+				}
+				return $s;
+			}
 		}
 	}
-
 }
-?>

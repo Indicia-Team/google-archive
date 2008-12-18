@@ -110,16 +110,16 @@ $(document).ready(function() {
 <label for="location_name">Locality Description:</label>
 <input name="location_name" size="50" /><br />
 <label for="survey_id">Survey</label>
-<?php echo data_entry_helper::select('survey_id', 'http://192.171.199.208/indicia/index.php/services/data', 'survey', 'title', 'id', $readAuth); ?>
+<?php echo data_entry_helper::select('survey_id', 'http://localhost/indicia/index.php/services/data', 'survey', 'title', 'id', $readAuth); ?>
 <br />
 <fieldset>
 <legend>Occurrence Data</legend>
 <input type='hidden' id='website_id' name='website_id' value='1' />
 <label for='acdeterminer_id'>Determiner</label>
-<?php echo data_entry_helper::autocomplete('determiner_id', 'http://192.171.199.208/indicia/index.php/services/data', 'person', 'caption', 'id', $readAuth); ?>
+<?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'caption', 'id', $readAuth); ?>
 <br />
 <label for='actaxa_taxon_list_id'>Taxon</label>
-<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://192.171.199.208/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
+<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
 <br/>
 <label for='comment'>Comment</label>
 <textarea id='comment' name='comment'></textarea>
@@ -129,7 +129,7 @@ $(document).ready(function() {
 <legend>Occurrence attributes</legend>
 <div class='occAttr' id='occAttr1'>
 <label for="occAttr1|occurrence_attribute_sig">Attribute</label>
-<?php echo data_entry_helper::select('occAttr1|occurrence_attribute_sig', 'http://192.171.199.208/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
+<?php echo data_entry_helper::select('occAttr1|occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
 <input type='hidden' value='test' class='occAttrId' name='occAttr1|occurrence_attribute_id'/>
 <input type='text' value='' class='occAttrValue' name='occAttr1|text_value' />
 </div>
@@ -139,7 +139,7 @@ $(document).ready(function() {
 </form>
 <div class='occAttr' id='occAttr0'>
 <label for="occAttr0|occurrence_attribute_sig">Attribute</label>
-<?php echo data_entry_helper::select('occAttr0|occurrence_attribute_sig', 'http://192.171.199.208/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
+<?php echo data_entry_helper::select('occAttr0|occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
 <input type='hidden' value='1' class='occAttrId' name='occAttr0|occurrence_attribute_id'/>
 <input type='text' value='' class='occAttrValue' name='occAttr0|text_value' />
 </div>
