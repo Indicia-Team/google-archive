@@ -44,6 +44,22 @@ $(document).ready(function() {
 		var aSig = sSig.split("|");
 		// Update the value to be the first part of the signature (the record id)
 		$('div#occAttr'+index+' input.occAttrId').val(aSig[0]);
+		// Update the type of field submitted.
+		$('div#occAttr'+index+' input.occAttrType').attr('name', function(arr){
+			var a = $(this).attr('name').split("|");
+			switch (aSig[1]) {
+			case 'T':
+			a[1] = 'text_value';
+			break;
+			case 'I':
+			a[1] = 'int_value';
+			break;
+			case 'F':
+			a[1] = 'float_value';
+			}
+			return a.join('|')
+		});
+			
 	});
 });
 </script>
