@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class valid extends valid_Core {
+class Valid extends Valid_Core {
 
 	/**
 	 * Validate a spatial reference system is recognised, either an EPSG code or a notation.
@@ -64,7 +64,7 @@ class valid extends valid_Core {
 	 * Service at URL services/validation/valid_term. Tests if a term can be found
 	 * on the termlist identified by the supplied id in $_GET.
 	 */
-	public function valid_term($term, $id)
+	public static function valid_term($term, $id)
 	{
 		$this->valid_term_or_taxon($taxon, $id,'termlist_id', 'term', 'gv_termlists_term');
 	}
@@ -73,7 +73,7 @@ class valid extends valid_Core {
 	 * Service at URL services/validation/valid_taxon. Tests if a taxon can be found
 	 * on the taxon list identified by the supplied id in $_GET.
 	 */
-	public function valid_taxon($taxon, $id)
+	public static function valid_taxon($taxon, $id)
 	{
 		$this->valid_term_or_taxon($taxon, $id, 'taxon_list_id', 'taxon', 'gv_taxon_lists_taxa');
 	}
@@ -82,7 +82,7 @@ class valid extends valid_Core {
 	 * Internal method that provides functionality for validating a term or taxon
 	 * against a list.
 	 */
-	protected function valid_term_or_taxon($value, $list_id, $list_id_field, $search_field, $view_name)
+	protected static function valid_term_or_taxon($value, $list_id, $list_id_field, $search_field, $view_name)
 	{
 		$found=	ORM::factory($view_name)
 				->where(array($list_idi_field=>$list_id))
@@ -93,5 +93,11 @@ class valid extends valid_Core {
 		return ($found->count()>1);
 	}
 
+	/**
+	 * Validates a given string against a (Perl-style) regular expression.
+	 */
+	protected static function regex($value, $regex){
+		return (preg_match($regex, $value) >= 1);
+	}
 }
 ?>
