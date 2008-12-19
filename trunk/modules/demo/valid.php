@@ -5,7 +5,7 @@ if (array_key_exists('submission', $_POST)) {
 	$session = curl_init($url);
 	curl_setopt($session, CURLOPT_POST, true);
 	curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
-	curl_setopt($session, CURLOPT_HEADER, true);
+	curl_setopt($session, CURLOPT_HEADER, false);
 	curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 	$response = curl_exec($session);
 } else {
