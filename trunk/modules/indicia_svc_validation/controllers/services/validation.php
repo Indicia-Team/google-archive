@@ -2,6 +2,9 @@
 
 class Validation_Controller extends Service_Base_Controller {
 
+	private $aError = array('errors' => array());
+	private $response;
+
 	/**
 	  * Service call method. This will parse the POST data for a submission type
 	  * format encapsulating some data to be validated and the rules to validate
@@ -9,13 +12,14 @@ class Validation_Controller extends Service_Base_Controller {
 	  */
 	public function check()
 	{
-		if (!array_key_exists('submission', $_POST)) $retVal = 'No array!';
+		if (!array_key_exists('submission', $_POST)) $this->response = errEncode('No array submitted');
 		$mode = $this->get_input_mode();
 		switch ($mode) {
 			case 'json':
 			$s = json_decode($_POST['submission'], true);
 			break;
 		}
+		try {
 		if (array_key_exists('fields', $s)) {
 			$fields = array();
 			$rules = array();
@@ -25,8 +29,8 @@ class Validation_Controller extends Service_Base_Controller {
 				if (array_key_exists('value', $arr)){
 					$fields[$name] = $arr['value'];
 					if (array_key_exists('rules', $arr)){
-						foreach ($arr['rules'] as $r){
-							$rules['name'][] = $r['rule'];
+						foreach ($arr['rules'] as $rule => $result){
+							$rules[$name][] = $rule;
 						}
 					}
 				}
@@ -38,22 +42,33 @@ class Validation_Controller extends Service_Base_Controller {
 				}
 			}
 			if ($val->validate()){
-				$retVal = 'success';
+				$this->response = 'success';
 			} else {
 				$errRules = $val->errors();
 				$errMessages = $val->errors('form_error_messages');
 				foreach ($errRules as $name => $rule){
 					$msg = $errMessages[$name];
-					$s['fields'][$name][$rule]['result'] = $msg;
+					$s['fields'][$name]['rules'][$rule] = $msg;
 				}
-				$retVal = $s;
+				$this->response = $s;
 			}
+		}
+		} catch (Exception $e) {
+			$this->errEncode($e);
 		}
 		$output_mode = $this->get_output_mode();
 		switch ($output_mode) {
 			case 'json':
-				return json_encode($retval);
+				echo json_encode($this->response);
 				break;
+			default:
+				echo json_encode($this->response);
 		}
+	}	
+
+	private function errEncode($string) {
+		$this->aError['errors'][] = $string;
+		return $this->aError;
 	}
+
 }
