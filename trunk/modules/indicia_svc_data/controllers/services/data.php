@@ -529,14 +529,15 @@ class Data_Controller extends Service_Base_Controller {
 			$model->submission = $m;
 			$result = $model->submit();
 			$id = $model->id;
-			if ($result)
+			if ($result) {
+				$this->submit_succ($model);
 				$this->response=json_encode(array('success'=>$id));
-			else
+			} else {
 				if (isset($model))
 					Throw new ArrayException($model->getAllErrors());
 				else
 					Throw new Exception('Unknown error on submission (to do - get correct error info)');
-
+			}
 			// return the first model
 			if (!isset($this->model))
 				$id=$model->id;
@@ -556,14 +557,16 @@ class Data_Controller extends Service_Base_Controller {
 		case 'occurrence':
 			// Occurrences have occurrence attributes associated, stored in a 
 			// metafield.
+			syslog(LOG_DEBUG, "About to submit occurrence attributes.");
 			if (array_key_exists('metaFields', $model->submission) &&
 				array_key_exists('occAttributes', $model->submission['metaFields']))
 			{
 				foreach ($model->submission['metaFields']['occAttributes']['value'] as
 					$attr)
 				{
-					$oam = ORM::factory('occurrence_attribute');
-					$oam->submission = $attr->model;
+					syslog(LOG_DEBUG, print_r($attr, true));
+					$oam = ORM::factory('occurrence_attribute_value');
+					$oam->submission = $attr;
 					$oam->submission['fields']['occurrence_id'] = $id;
 					$oam->submit();
 				}
