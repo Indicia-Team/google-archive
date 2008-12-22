@@ -78,18 +78,21 @@ $(document).ready(function() {
 			
 			$oap = array();
 			foreach ($_POST as $key => $value) {
-				if (strpos('occAttr', $key)){
-					$a = explode($key, "|");
-					$i = substr($a[0], strlen($a[0]));
-					if ($i != 0) {
-						$oap[$i][$a[1]] = $value;
-					}
+				if (strpos($key, 'occAttr') !== false){
+					$a = explode("|", $key);
+					$i = substr($a[0], strlen($a[0])-1);
+					$oap[$i][$a[1]] = $value;
 				}
-			}	
+			}
+			print_r($oap);
+			print "<br/>";
 			$occAttrs = array();
 			foreach ($oap as $oa){
 				$occAttrs[] = data_entry_helper::wrap($oa, 'occurrence_attribute');
 			}
+			print "<br/>";
+			print_r($occAttrs);
+			print "<br/>";
 
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
@@ -101,6 +104,7 @@ $(document).ready(function() {
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
 			)));
+			print_r($submission);
 			$response = data_entry_helper::forward_post_to(
 				'http://localhost/indicia/index.php/services/data',
 				'save', $submission

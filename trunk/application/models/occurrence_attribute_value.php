@@ -14,8 +14,9 @@ class Occurrence_Attribute_Value_Model extends ORM {
 
 		// We apply the validation rules specified in the occurrence attribute
 		// table to the value given.
-		if (array_key_exists('occurrence_attribute_id', $array->as_array()) {
-			$id = $array->as_array()['occurrence_attribute_id'];
+		if (array_key_exists('occurrence_attribute_id', $array->as_array())) {
+			$id = $array->as_array();
+			$id = $id['occurrence_attribute_id'];
 			$oam = ORM::factory('occurrence_attribute', $id);
 			switch ($oam->data_type) {
 			case 'T':
@@ -31,7 +32,7 @@ class Occurrence_Attribute_Value_Model extends ORM {
 			// Vague date - presumably already validated?
 			break;
 			default:
-			$vf = 'int_value'
+			$vf = 'int_value';
 			}
 			// Require the field with the value in
 			$array->add_rules($vf, 'required');
