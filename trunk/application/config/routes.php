@@ -36,4 +36,8 @@ $config['taxa_taxon_list'] = 'taxa_taxon_list/page/1/1/10';
 $config['taxa_taxon_list/([0-9]+)'] = 'taxa_taxon_list/page/$1/1/10';
 $config['taxa_taxon_list/page/([0-9]+)'] = 'taxa_taxon_list/page/$1/1/10';
 $config['taxa_taxon_list/edit/([0-9]+)'] = 'taxa_taxon_list/edit/$1/1/10';
+// Custom Attribute
+$config['occurrence_attribute'] = 'occurrence_attribute/page/1/10';
+$config['sample_attribute'] = 'sample_attribute/page/1/10';
+$config['location_attribute'] = 'location_attribute/page/1/10';
 
