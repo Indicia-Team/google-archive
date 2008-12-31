@@ -59,7 +59,7 @@ $(document).ready(function() {
 			}
 			return a.join('|')
 		});
-			
+
 	});
 });
 </script>
@@ -75,7 +75,7 @@ $(document).ready(function() {
 		// some things manually in order to get the submodel in.
 		if ($_POST) {
 			// We have occurrence attributes that we have to wrap
-			
+
 			$oap = array();
 			foreach ($_POST as $key => $value) {
 				if (strpos($key, 'occAttr') !== false){
@@ -84,14 +84,12 @@ $(document).ready(function() {
 					$oap[$i][$a[1]] = $value;
 				}
 			}
-			print_r($oap);
 			print "<br/>";
 			$occAttrs = array();
 			foreach ($oap as $oa){
 				$occAttrs[] = data_entry_helper::wrap($oa, 'occurrence_attribute');
 			}
 			print "<br/>";
-			print_r($occAttrs);
 			print "<br/>";
 
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
@@ -104,7 +102,6 @@ $(document).ready(function() {
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
 			)));
-			print_r($submission);
 			$response = data_entry_helper::forward_post_to(
 				'http://localhost/indicia/index.php/services/data',
 				'save', $submission
@@ -125,8 +122,9 @@ $(document).ready(function() {
 <style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
 <br />
 <label for="entered_sref">Spatial Reference:</label>
-<input name="entered_sref" /><br />
-<input type="hidden" value="osgb" name="entered_sref_system">
+<?php echo data_entry_helper::map_picker('entered_sref',
+	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)')); ?>
+<br />
 <label for="location_name">Locality Description:</label>
 <input name="location_name" size="50" /><br />
 <label for="survey_id">Survey</label>

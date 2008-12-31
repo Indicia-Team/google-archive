@@ -3,7 +3,7 @@
     <title>OpenLayers Example</title>
     <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
     <link rel="stylesheet" href="style.css" type="text/css" />
-    <script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script src="../../media/js/OpenLayers.js"></script>
     <script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
     <script type="text/javascript">
         // making this a global variable so that it is accessible for
