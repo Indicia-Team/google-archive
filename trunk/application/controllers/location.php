@@ -8,9 +8,9 @@ class Location_Controller extends Gridview_Base_Controller {
 		$this->columns = array(
                         'name'=>'',
                         'code'=>'',
-                        'entered_sref'=>'');
+                        'centroid_sref'=>'');
         $this->pagetitle = "Locations";
-        
+
 		if(!is_null($this->gen_auth_filter)){
 			$locations=ORM::factory('locations_website')->in('website_id', $this->gen_auth_filter['values'])->find_all();
 			$location_id_values = array();
@@ -84,13 +84,13 @@ class Location_Controller extends Gridview_Base_Controller {
             $this->submit_fail();
         }
     }
-	
+
     protected function record_authorised ($id)
 	{
 		if (!is_null($id) AND !is_null($this->auth_filter))
 		{
 			return (in_array($id, $this->auth_filter['values']));
-		}		
+		}
 		return true;
 	}
 }

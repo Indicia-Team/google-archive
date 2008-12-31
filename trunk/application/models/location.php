@@ -18,22 +18,45 @@ class Location_Model extends ORM_Tree {
 		$this->code = $array['code'];
 		$this->parent_id = $array['parent_id'];
 		$this->centroid_sref_system = $array['centroid_sref_system'];
-		$this->centroid_geom = $array['centroid_geom'];
+		$this->centroid_sref = $array['centroid_sref'];
+		try {
+			$this->centroid_geom = spatial_ref::sref_to_internal_wkt($this->centroid_sref, $this->centroid_sref_system);
+		} catch (Exception $e) {
+			$this->errors['centroid_sref']=$e->getMessage();
+			return FALSE;
+		}
 		// TODO: boundarys!
 		$this->boundary_geom = null;
 		return parent::validate($array, $save);
 	}
 
 	/**
-	 * Before submission, map spatial references to their underlying database fields.
+	 * Override set handler to translate WKT to PostGIS internal spatial data.
 	 */
-	protected function preSubmit()
+	public function __set($key, $value)
 	{
-		$sref = $this->submission['fields']['centroid_sref']['value'];
-		$sref_system = $this->submission['fields']['centroid_sref_system']['value'];
-		$geom = spatial_ref::sref_to_wgs84($sref, $sref_system);
-		$this->submission['fields']['centroid_geom']['value']="ST_GeomFromText('$geom')";
-		return parent::presubmit();
+		if (substr($key,-5) == '_geom')
+		{
+			if ($value) {
+				$row = $this->db->query("SELECT ST_GeomFromText('$value', ".kohana::config('sref_notations.internal_srid').") AS geom")->current();
+				$value = $row->geom;
+			}
+		}
+		parent::__set($key, $value);
+	}
+
+	/**
+	 * Override get handler to translate PostGIS internal spatial data to WKT.
+	 */
+	public function __get($column)
+	{
+		$value = parent::__get($column);
+
+		if  ($column === 'centroid_geom' || $column === 'boundary_geom') {
+			$row = $this->db->query("SELECT ST_asText('$value') AS wkt, 'hello' AS test")->current();
+			$value = $row->wkt;
+		}
+		return $value;
 	}
 
 }
