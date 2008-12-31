@@ -1,5 +1,7 @@
 <?php
 
+include('helper_config.php');
+
 class data_entry_helper {
 
 	public static function forward_post_to($url, $entity, $array = null) {
@@ -131,6 +133,7 @@ class data_entry_helper {
 
 		return $r;
     }
+
     /**
      * Helper function to generate an autocomplete box from an Indicia core service query.
      */
@@ -184,13 +187,51 @@ class data_entry_helper {
     }
 
     /**
+     * Puts a spatial reference entry control, optional system selector, and map onto a data entry form.
+     * The system selector is automatically output if there is more than one system present, otherwise it
+     * is replaced by a hidden input.
+     */
+    public static function map_picker($field_name, $systems, $value='', $width=600, $height=350, $instruct=null) {
+    	global $config;
+
+    	$r = '<script type="text/javascript" src="../../../media/js/OpenLayers.js"></script>';
+		$r .= '<script type="text/javascript" src="../../../media/js/spatial-ref.js"></script>';
+		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
+    	$r .= '<script type="text/javascript">' .
+    			'$(document).ready(function() { '.
+    			'init_map("'.$config['base_url'].'", null, "'.$field_name.'")' .
+    			'}); </script>';
+
+    	$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$value.'" '.
+    		'onblur="exit_sref();" onclick="enter_sref();"/>';
+    	if (count($systems)==1) {
+    		$srids = array_keys($systems);
+    		// only 1 spatial reference system, so put it into a hidden input
+    		$r .= '<input id="'.$field_name.'_system" name="'.$field_name.'_system" type="hidden" value="'.$srids[0].'" />';
+    	} else {
+    		$r .= '<select id="'.$field_name.'_system" name="'.$field_name.'_system">';
+    		foreach($systems as $srid=>$desc)
+    			$r .= "<option value=\"$srid\">$desc</option>";
+			$r .= '</select>';
+    	}
+		if ($instruct===null)
+			$instruct="Zoom the map in by double-clicking then single click on the location's centre to set the ".
+				"spatial reference. The more you zoom in, the more accurate the reference will be.";
+		$r .= '<p class="instruct">'.$instruct.'</p>';
+		$r .= '<div id="map" class="smallmap" style="width: '.$width.'px; height: '.$height.'px;"></div>';
+		return $r;
+    }
+
+
+    /**
      * Retrieves a read token and passes it back as an array suitable to drop into the
      * 'extraParams' options for an Ajax call.
      */
     public static function get_read_auth($website_id, $password) {
+    	global $config;
 		$postargs = "website_id=$website_id";
 		// Get the curl session object
-		$session = curl_init('http://localhost/indicia/index.php/services/security/get_read_nonce');
+		$session = curl_init($config['base_url'].'/index.php/services/security/get_read_nonce');
 		// Set the POST options.
 		curl_setopt ($session, CURLOPT_POST, true);
 		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
@@ -205,15 +246,15 @@ class data_entry_helper {
 		);
     }
 
-
     /**
      * Retrieves a token and inserts it into a data entry form which authenticates that the
      * form was submitted by this website.
      */
     public static function get_auth($website_id, $password) {
+    	global $config;
 		$postargs = "website_id=$website_id";
 		// Get the curl session object
-		$session = curl_init('http://localhost/indicia/index.php/services/security/get_nonce');
+		$session = curl_init($config['base_url'].'/index.php/services/security/get_nonce');
 		// Set the POST options.
 		curl_setopt ($session, CURLOPT_POST, true);
 		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
@@ -229,6 +270,7 @@ class data_entry_helper {
     			'value="'.$nonce.'">';
     	return $result;
     }
+
 	/**
 	 * Helper function to generate a radio group from a Indicia core service query.
 	 */

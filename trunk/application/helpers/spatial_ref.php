@@ -47,6 +47,7 @@ class spatial_ref {
 	public static function sref_to_internal_wkt($sref, $sref_system)
 	{
 		$system = strtolower($sref_system);
+		$sref = strtoupper($sref);
 		if (is_numeric($system)) {
 			$coords = explode(kohana::lang('misc.x_y_separator'), $sref);
 			$wkt = 'POINT('.$coords[0].' '.$coords[1].')';
@@ -68,7 +69,8 @@ class spatial_ref {
 		// WGS84 = same as internally stored values, so don't bother transforming if already there.
 		if ($srid!=kohana::config('sref_notations.internal_srid')) {
 			$db = new Database;
-			$result = $db->query("SELECT ST_asText(ST_Transform(ST_GeomFromText('$wkt',$srid),900913)) AS wkt;")->current();
+			$result = $db->query("SELECT ST_asText(ST_Transform(ST_GeomFromText('$wkt',$srid),".
+				kohana::config('sref_notations.internal_srid').")) AS wkt;")->current();
 			return $result->wkt;
 		} else
 			return $wkt;
