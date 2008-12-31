@@ -19,6 +19,10 @@ class osgb {
 		return TRUE;
 	}
 
+	/**
+	 * Converts a spatial reference in OSGB notation into the WKT text for the polygon, in
+	 * OSGB easting northings.
+	 */
 	public static function sref_to_wkt($sref)
 	{
 		if (!self::is_valid($sref))
@@ -40,9 +44,62 @@ class osgb {
 				"$eastEdge $northEdge,$eastEdge $southEdge,$westEdge $southEdge))";
 	}
 
-	public static function wkt_to_sref($x, $y)
+	/**
+	 * Converts a WKT polygon for a grid square (easting northing OSGB) into the
+	 * spatial reference notation. Only accepts POINT & POLYGON WKT at the moment.
+	 */
+	public static function wkt_to_sref($wkt, $precision=null)
 	{
+		if (substr($wkt, 0, 7) == 'POLYGON')
+			$points = substr($wkt, 9, -2);
+		elseif (substr($wkt, 0, 5) == 'POINT') {
+			$points = substr($wkt, 6, -1);
+			if ($precision===null)
+				throw new Exception('wkt_to_sref translation for POINTs requires an accuracy.');
+		}
+		else
+			throw new Exception('wkt_to_sref translation only works for POINT or POLYGON wkt.');
+		$points = explode(',',$points);
+		// use the first point to do the conversion
+		$point = explode(' ',$points[0]);
+		$easting = $point[0];
+		$northing = $point[1];
+		if ($precision===null) {
+			// find the distance in metres from point 2 to point 1 (assuming a square is passed).
+			// This is the accuracy of the polygon.
+			$point_2 = explode(' ',$points[1]);
+			$accuracy = abs(($point_2[0]-$point[0]) + ($point_2[1]-$point[1]));
+			$precision = 12 - strlen($accuracy)*2;
+		} else
+		    $accuracy = pow(10, (10-$precision)/2);
 
+		$hundredKmE = floor($easting / 100000);
+    	$hundredKmN = floor($northing / 100000);
+    	$firstLetter = "";
+	    if ($hundredKmN < 5) {
+	        if ($hundredKmE < 5) {
+	            $firstLetter = "S";
+	        } else {
+	            $firstLetter = "T";
+	        }
+	    } else if ($hundredKmN < 10) {
+	        if ($hundredKmE < 5) {
+	            $firstLetter = "N";
+	        } else {
+	            $firstLetter = "O";
+	        }
+	    } else {
+	        $firstLetter = "H";
+	    }
+	    $secondLetter = "";
+	    $index = 65 + ((4 - ($hundredKmN % 5)) * 5) + ($hundredKmE % 5);
+	    $ti = $index;
+	    // Shift index along if letter is greater than I, since I is skipped
+	    if ($index >= 73) $index++;
+	    $secondLetter = chr($index);
+	    $e = floor(($easting - (100000 * $hundredKmE)) / $accuracy);
+	    $n = floor(($northing - (100000 * $hundredKmN)) / $accuracy);
+	    return $firstLetter.$secondLetter.str_pad($e, $precision/2, '0', STR_PAD_LEFT).str_pad($n, $precision/2, '0', STR_PAD_LEFT);
 	}
 
 	/**

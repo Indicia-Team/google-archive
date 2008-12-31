@@ -61,7 +61,7 @@ class Sample_Model extends ORM
 			$sref = $this->submission['fields']['entered_sref']['value'];
 			$sref_system = $this->submission['fields']['entered_sref_system']['value'];
 			if (!empty($sref)) {
-				$geom = spatial_ref::sref_to_wgs84($sref, $sref_system);
+				$geom = spatial_ref::sref_to_internal_wkt($sref, $sref_system);
 				$this->submission['fields']['geom']['value']="ST_GeomFromText('$geom')";
 			}
 		}

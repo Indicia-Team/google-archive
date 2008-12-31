@@ -8,4 +8,7 @@ $config['sref_notations'] = array
 	'4326'=>'Latitude and Longitude (WGS84)',
 );
 
+// Set the internally stored geoms to use spherical mercator projection
+$config['internal_srid']=900913;
+
 ?>
