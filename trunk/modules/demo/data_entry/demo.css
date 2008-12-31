@@ -1,6 +1,29 @@
+*
+{
+	margin: 0;
+	padding: 0;
+}
+
+body
+{
+	padding: 30px;
+	font-size: 80%;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+
+p
+{
+	padding-bottom: 12px;
+}
+
 form {
 	background: #eee;
-	width: 600px;
+	width: 624px;
+	padding: 12px;
+}
+
+input, select, textarea {
+	vertical-align: top;
 }
 
 label {
@@ -18,4 +41,16 @@ p#addOccAttr {
 
 div#occAttr0 {
 	display: none;
+}
+
+.instruct {
+	width: 600px;
+	color: #666666;
+	font-size: 90%;
+	border: 0;
+	padding: 0;
+}
+
+#ui-datepicker-div {
+	z-index: 1000;
 }
