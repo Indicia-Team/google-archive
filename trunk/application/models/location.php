@@ -10,23 +10,25 @@ class Location_Model extends ORM_Tree {
 	protected $search_field='name';
 
 	public function validate(Validation $array, $save = FALSE) {
+		$orig_values = $array->as_array();
+
+		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
 		$array->pre_filter('trim');
 		$array->add_rules('name', 'required');
-		$array->add_rules('centroid_sref', 'required');
+		$system = $orig_values['entered_sref_system'];
+		$array->add_rules('centroid_sref', 'required', "sref[$system]");
+		$array->add_rules('centroid_sref_system', 'required', 'sref_system');
 
 		// Explicitly add those fields for which we don't do validation
-		$this->code = $array['code'];
-		$this->parent_id = $array['parent_id'];
-		$this->centroid_sref_system = $array['centroid_sref_system'];
-		$this->centroid_sref = $array['centroid_sref'];
-		try {
-			$this->centroid_geom = spatial_ref::sref_to_internal_wkt($this->centroid_sref, $this->centroid_sref_system);
-		} catch (Exception $e) {
-			$this->errors['centroid_sref']=$e->getMessage();
-			return FALSE;
-		}
-		// TODO: boundarys!
-		$this->boundary_geom = null;
+		if (array_key_exists('code', $orig_values))
+			$this->code = $array['code'];
+		if (array_key_exists('parent_id', $orig_values))
+			$this->parent_id = $array['parent_id'];
+		if (array_key_exists('centroid_geom', $orig_values))
+			$this->centroid_geom 		= $array['centroid_geom'];
+		if (array_key_exists('boundary_geom', $orig_values))
+			$this->boundary_geom 		= $array['boundary_geom'];
+
 		return parent::validate($array, $save);
 	}
 
@@ -52,8 +54,8 @@ class Location_Model extends ORM_Tree {
 	{
 		$value = parent::__get($column);
 
-		if  ($column === 'centroid_geom' || $column === 'boundary_geom') {
-			$row = $this->db->query("SELECT ST_asText('$value') AS wkt, 'hello' AS test")->current();
+		if  (substr($column,-5) == '_geom') {
+			$row = $this->db->query("SELECT ST_asText('$value') AS wkt")->current();
 			$value = $row->wkt;
 		}
 		return $value;

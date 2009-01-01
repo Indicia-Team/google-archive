@@ -22,9 +22,9 @@ class data_entry_helper {
 		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 		// Do the POST and then close the session
 		$response = curl_exec($session);
-		list($response_headers,$response_body) = explode("\r\n\r\n",$response,2);
 		curl_close($session);
-		return json_decode($response_body, TRUE);
+		// The last block of text in the response is the body
+		return json_decode(array_pop(explode("\r\n\r\n",$response)), true);
 	}
 
 	public static function wrap( $array, $entity, $fkLink = false) {
@@ -80,24 +80,32 @@ class data_entry_helper {
     {
     	if (is_array($response)) {
 	    	if (array_key_exists('error',$response)) {
-				echo 'An error occurred when the data was submitted.';
+	    		echo '<div class="error">';
+				echo '<p>An error occurred when the data was submitted.</p>';
 				if (is_array($response['error'])) {
 					echo '<ul>';
 					foreach ($response['error'] as $field=>$message)
 						echo "<li>$field: $message</li>";
 					echo '</ul>';
 				} else {
-					echo '<p class="error">'.$response['error'].'</p>';
+					echo '<p class="error_message">'.$response['error'].'</p>';
 				}
+				if (array_key_exists('file', $response) && array_key_exists('line', $response)) {
+					echo '<p>Error occurred in '.$response['file'].' at line '.$response['line'].'</p>';
+	    		}
+	    		if (array_key_exists('errors', $response)) {
+					echo '<pre>'.print_r($response['errors'], true).'</pre>';
+				}
+				if (array_key_exists('trace', $response)) {
+					echo '<pre>'.print_r($response['trace'], true).'</pre>';
+				}
+				echo '</div>';
 			} elseif (array_key_exists('warning',$response)) {
 				echo 'A warning occurred when the data was submitted.';
 				echo '<p class="error">'.$response['error'].'</p>';
 			} elseif (array_key_exists('success',$response)) {
 				echo 'Data was successfully inserted. The record\'s ID is'.
 							$response['success'].'</p>';
-			}
-			if (!array_key_exists('success',$response) && array_key_exists('trace', $response)) {
-				print_r($response['trace']);
 			}
     	}
     }
@@ -113,10 +121,11 @@ class data_entry_helper {
 		foreach ($extraParams as $a => $b){
 			$request .= "&$a=$b";
 		}
-	    	// Get the curl session object
-	    	$session = curl_init($request);
+		// Get the curl session object
+		$session = curl_init($request);
 		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-		$response = json_decode(curl_exec($session), true);
+		$response = curl_exec($session);
+		$response = json_decode(array_pop(explode("\r\n\r\n",$response)), true);
 		$r = "";
 		if (!array_key_exists('error', $response)){
 			$r .= "<select id='$id' >";
@@ -128,8 +137,10 @@ class data_entry_helper {
 						$r .= "</option>";
 				}
 			}
-		$r .= "</select>";
+			$r .= "</select>";
 		}
+		else
+			echo "Error loading control";
 
 		return $r;
     }
@@ -264,10 +275,10 @@ class data_entry_helper {
 		$response = curl_exec($session);
 		list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
 		curl_close($session);
-    	$result = '<input id="auth_token" name="auth_token" type="hidden"' .
-    			'value="'.sha1("$nonce:$password").'">';
-    	$result .= '<input id="nonce" name="nonce" type="hidden"' .
-    			'value="'.$nonce.'">';
+    	$result = '<input id="auth_token" name="auth_token" type="hidden" ' .
+    			'value="'.sha1("$nonce:$password").'">'."\r\n";
+    	$result .= '<input id="nonce" name="nonce" type="hidden" ' .
+    			'value="'.$nonce.'">'."\r\n";
     	return $result;
     }
 

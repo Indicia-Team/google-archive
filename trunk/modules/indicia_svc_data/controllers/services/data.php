@@ -1,22 +1,5 @@
 <?php
 
-class ArrayException extends Kohana_Exception {
-	private $errors = array();
-
-	/**
-	 * Override constructor to accept an errors array
-	 */
-	public function __construct($errors) {
-		$this->errors = $errors;
-		// make sure everything is assigned properly
-		parent::__construct('Error array.');
-	}
-
-	public function errors() {
-		return $this->errors;
-	}
-}
-
 class Data_Controller extends Service_Base_Controller {
 	protected $model;
 	protected $entity;
@@ -182,10 +165,8 @@ class Data_Controller extends Service_Base_Controller {
 			if ($this->content_type)
 				header($this->content_type);
 			echo $this->response;
-		} catch (ArrayException $e) {
-			echo json_encode(array('error'=>$e->errors()));
 		} catch (Exception $e) {
-			$this->error($e->getMessage(),$e);
+			$this->handle_error($e);
 		}
 	}
 
@@ -210,13 +191,15 @@ class Data_Controller extends Service_Base_Controller {
 			$result = $model->submit();
 			$id = $model->id;
 		}
-		if ($result)
+		if ($result) {
 			$this->response=json_encode(array('success'=>$id));
-		else
+			$this->delete_nonce();
+		} else
 			if (isset($model))
 				Throw new ArrayException($model->getAllErrors());
 			else
 				Throw new Exception('Unknown error on submission (to do - get correct error info)');
+
 	}
 
 	/**
@@ -227,7 +210,7 @@ class Data_Controller extends Service_Base_Controller {
 	protected function handle_request()
 	{
 		// Authenticate for a 'read' parameter
-		$this->authenticate('read');
+		//$this->authenticate('read');
 		// Store the entity in class member, so less recursion overhead when building XML.
 		$this->viewname = $this->get_view_name();
 		$this->model=ORM::factory($this->entity);
@@ -261,7 +244,7 @@ class Data_Controller extends Service_Base_Controller {
 				if (kohana::file_exists('views',"services/data/$entity/$mode")) {
 					$this->response = $this->view_encode($records, View::factory("services/data/$entity/$mode"));
 				} else {
-					$this->error("$entity data cannot be output using mode $mode.");
+					throw new ServiceError("$entity data cannot be output using mode $mode.");
 				}
 		}
 	}
@@ -351,7 +334,7 @@ class Data_Controller extends Service_Base_Controller {
 		$select = '*';
 		$this->db->select($select);
 		// Make sure that we're only showing items appropriate to the logged-in website
-		if ($this->website_id != null && 
+		if ($this->website_id != null &&
 			array_key_exists ('website_id', $this->view_columns)) {
 				$this->db->in('website_id', array(
 					null, $this->website_id
@@ -512,10 +495,9 @@ class Data_Controller extends Service_Base_Controller {
 			}
 			// return a success message
 			echo json_encode(array('success'=>'multiple records'));
-		} catch (ArrayException $e) {
-			echo json_encode(array('error'=>$e->errors()));
+			$this->delete_nonce();
 		} catch (Exception $e) {
-			$this->error($e->getMessage(),$e);
+			$this->handle_error($e);
 		}
 	}
 
@@ -534,7 +516,7 @@ class Data_Controller extends Service_Base_Controller {
 				$this->response=json_encode(array('success'=>$id));
 			} else {
 				if (isset($model))
-					Throw new ArrayException($model->getAllErrors());
+					Throw new ArrayException('Validation error', $model->getAllErrors());
 				else
 					Throw new Exception('Unknown error on submission (to do - get correct error info)');
 			}
@@ -546,7 +528,7 @@ class Data_Controller extends Service_Base_Controller {
 	}
 
 	/**
-	 * We may need to do extra processing after the model has been submitted - such as 
+	 * We may need to do extra processing after the model has been submitted - such as
 	 * adding occurrence attributes or synonomy. Usually we would do this in the individual
 	 * controller, but here we handle everything in one place, so we have a big method
 	 * that then partitions into sections depending on the model.
@@ -555,7 +537,7 @@ class Data_Controller extends Service_Base_Controller {
 		$id = $model->id;
 		switch($model->object_name) {
 		case 'occurrence':
-			// Occurrences have occurrence attributes associated, stored in a 
+			// Occurrences have occurrence attributes associated, stored in a
 			// metafield.
 			syslog(LOG_DEBUG, "About to submit occurrence attributes.");
 			if (array_key_exists('metaFields', $model->submission) &&
@@ -589,31 +571,35 @@ class Data_Controller extends Service_Base_Controller {
 			$nonce = $array['nonce'];
 			$this->cache = new Cache;
 			$nonces = $this->cache->find($mode);
-			$website_id = $nonces[$nonce];
-			$this->website_id = $website_id;
-			if ($website_id) {
+			if (array_key_exists($nonce, $nonces)) {
+				$website_id = $nonces[$nonce];
 				$password = ORM::factory('website', $website_id)->password;
 				if (sha1("$nonce:$password")==$array['auth_token']) {
 					$authentic=TRUE;
+					$this->website_id = $website_id;
 				}
-				// Either update or remove the nonce from the cache depending on
-				// whether it is a read or write nonce.
-				switch ($mode){
-				case 'write':
-					$this->cache->delete($nonce);
-					break;
-				case 'read':
-					$this->cache->delete($nonce);
-					$this->cache->set($nonce, $website_id, 'read');
-				}
-
+				// Refresh the nonce. If it's a write nonce, we'll delete it later when the data has been saved
+				$this->cache->delete($nonce);
+				$this->cache->set($nonce, $website_id, $mode);
 			}
 		}
 
 		if (!$authentic) {
-			$this->error("unauthorised");
+			throw new ServiceError("unauthorised");
 		};
 	}
+
+	/**
+	 * Cleanup a write once nonce from the cache. Should be called after a call to authenticate.
+	 */
+	 protected function delete_nonce()
+	 {
+	 	$array = array_merge($_POST, $_GET);
+		if (array_key_exists('nonce', $array)) {
+			$nonce = $array['nonce'];
+	 		$this->cache->delete($nonce);
+		}
+	 }
 }
 
 ?>

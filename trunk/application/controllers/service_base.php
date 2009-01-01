@@ -1,38 +1,51 @@
 <?php
 
+
+class ArrayException extends Kohana_Exception {
+	private $errors = array();
+
+	/**
+	 * Override constructor to accept an errors array
+	 */
+	public function __construct($message, $errors) {
+		$this->errors = $errors;
+		// make sure everything is assigned properly
+		parent::__construct($message);
+	}
+
+	public function errors() {
+		return $this->errors;
+	}
+}
+
+class ServiceError extends Kohana_Exception {
+}
+
+
+
 class Service_Base_Controller extends Controller {
 
 
 	/**
 	 * Return an error XML or json document to the client
 	 */
-	protected function error($message, $e=NULL)
-	{
-		$this->problem($message, 'error', $e);
-	}
-
-	/**
-	 * Return an warning XML or json document to the client
-	 */
-	protected function warning($message)
-	{
-		$this->problem($message, 'warning');
-	}
-
-	/**
-	 * Return an error or warning XML or json document to the client
-	 */
-	private function problem($message, $type, $e=NULL)
+	protected function handle_error($e)
 	{
 		$mode = $this->get_input_mode();
 		if ($mode=='xml') {
-			$view = new View("services/$type");
+			$view = new View("services/error");
 			$view->message = $message;
 			$view->render(true);
 		} else {
-			$response = array($type=>$message);
-			if ($e) {
-				$response['trace'] = $e->getTrace();
+			$response = array(
+				'error'=>$e->getMessage()
+			);
+			if (get_class($e)=='ArrayException') {
+				$response['errors'] = $e->errors();
+			} elseif (get_class($e)!='ServiceError') {
+				$response['file']=$e->getFile();
+				$response['line']=$e->getLine();
+				$response['trace']=$e->getTrace();
 			}
 			echo json_encode($response);
 		}
