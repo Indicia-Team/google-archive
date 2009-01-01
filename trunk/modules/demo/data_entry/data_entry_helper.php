@@ -79,7 +79,7 @@ class data_entry_helper {
     public static function dump_errors($response)
     {
     	if (is_array($response)) {
-	    	if (array_key_exists('error',$response)) {
+    		if (array_key_exists('error',$response)) {
 	    		echo '<div class="error">';
 				echo '<p>An error occurred when the data was submitted.</p>';
 				if (is_array($response['error'])) {
@@ -104,10 +104,12 @@ class data_entry_helper {
 				echo 'A warning occurred when the data was submitted.';
 				echo '<p class="error">'.$response['error'].'</p>';
 			} elseif (array_key_exists('success',$response)) {
-				echo 'Data was successfully inserted. The record\'s ID is'.
-							$response['success'].'</p>';
+				echo '<div class="success">Data was successfully inserted ('.
+							$response['success'].')</div>';
 			}
     	}
+    	else
+    		echo $response;
     }
 
     /**

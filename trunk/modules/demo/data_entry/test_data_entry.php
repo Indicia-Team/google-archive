@@ -84,14 +84,10 @@ $(document).ready(function() {
 					$oap[$i][$a[1]] = $value;
 				}
 			}
-			print "<br/>";
 			$occAttrs = array();
 			foreach ($oap as $oa){
 				$occAttrs[] = data_entry_helper::wrap($oa, 'occurrence_attribute');
 			}
-			print "<br/>";
-			print "<br/>";
-
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
 			$occurrenceMod['subModels'][] = array(
@@ -116,6 +112,10 @@ $(document).ready(function() {
 	echo data_entry_helper::get_auth(1,'password');
 	$readAuth = data_entry_helper::get_read_auth(1, 'password');
 ?>
+<input type='hidden' id='website_id' name='website_id' value='1' />
+<label for='actaxa_taxon_list_id'>Taxon</label>
+<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
+<br/>
 <label for="date">Date:</label>
 <input type="text" size="30" value="click here" id="date" name="date"/>
 <style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
@@ -129,27 +129,14 @@ $(document).ready(function() {
 <label for="survey_id">Survey</label>
 <?php echo data_entry_helper::select('survey_id', 'http://localhost/indicia/index.php/services/data', 'survey', 'title', 'id', $readAuth); ?>
 <br />
-<fieldset>
-<legend>Occurrence Data</legend>
-<input type='hidden' id='website_id' name='website_id' value='1' />
 <label for='acdeterminer_id'>Determiner</label>
 <?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'caption', 'id', $readAuth); ?>
 <br />
-<label for='actaxa_taxon_list_id'>Taxon</label>
-<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
-<br/>
 <label for='comment'>Comment</label>
 <textarea id='comment' name='comment'></textarea>
 <br />
-</fieldset>
 <fieldset>
 <legend>Occurrence attributes</legend>
-<div class='occAttr' id='occAttr1'>
-<label for="occAttr1|occurrence_attribute_sig">Attribute</label>
-<?php echo data_entry_helper::select('occAttr1|occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
-<input type='hidden' value='test' class='occAttrId' name='occAttr1|occurrence_attribute_id'/>
-<input type='text' value='' class='occAttrValue' name='occAttr1|text_value' />
-</div>
 <p id='addOccAttr'>Add Occurrence Attribute</p>
 </fieldset>
 <input type="submit" value="Save" />
