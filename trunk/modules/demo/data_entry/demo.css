@@ -54,3 +54,12 @@ div#occAttr0 {
 #ui-datepicker-div {
 	z-index: 1000;
 }
+
+.error {
+	border: solid red 1px;
+	background-color: #FFCCCC;
+}
+
+.error_message {
+	font-weight: bold;
+}

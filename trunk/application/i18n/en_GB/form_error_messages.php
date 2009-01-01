@@ -65,7 +65,11 @@ $lang = array (
 		'required' => 'The first name cannot be blank.',
 		'length' => 'The first name must be between 1 and 30 letters.',
 		'default' => 'Invalid Input.',
-	)
+	),
+	'determiner_id' => Array (
+		'required' => 'The determiner cannot be blank.',
+		'default' => 'Invalid Input.',
+	),
 );
 
 ?>

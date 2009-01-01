@@ -104,10 +104,9 @@ $(document).ready(function() {
 			)));
 			$response = data_entry_helper::forward_post_to(
 				'http://localhost/indicia/index.php/services/data',
-				'save', $submission
-		);
-		data_entry_helper::dump_errors($response);
-	}
+				'save', $submission);
+			data_entry_helper::dump_errors($response);
+		}
 
 ?>
 <form method="post">
