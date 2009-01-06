@@ -4,9 +4,10 @@ include('helper_config.php');
 
 class data_entry_helper {
 
-	public static function forward_post_to($url, $entity, $array = null) {
+	public static function forward_post_to($entity, $array = null) {
+		global $config;
 		if ($array == null) $array = self::wrap($_POST, $entity);
-		$request = "$url/$entity";
+		$request = $config['base_url']."index.php/services/data/$entity";
 		$postargs = 'submission='.json_encode($array);
 		// passthrough the authentication tokens as POST data
 		if (array_key_exists('auth_token', $_POST))
@@ -27,6 +28,45 @@ class data_entry_helper {
 		return json_decode(array_pop(explode("\r\n\r\n",$response)), true);
 	}
 
+	/**
+	 * Wraps attribute fields (entered as normal) into a suitable container for submission.
+	 * Throws an error if $entity is not something for which attributes are known to exist.
+	 * @return array
+	 */
+	public static function wrap_attributes($arr, $entity) {
+		switch ($entity) {
+		case 'occurrence':
+			$prefix = 'occAttr';
+			break;
+		case 'location':
+			$prefix = 'locAttr';
+			break;
+		case 'sample':
+			$prefix = 'smpAttr';
+			break;
+		default:
+			throw new Exception('Unknown attribute type. Unable to wrap.');
+		}
+		$oap = array();
+		$occAttrs = array();
+		foreach ($arr as $key => $value) {
+			if (strpos($key, $prefix) !== false) {
+				$a = explode('|', $key);
+				// Attribute in the form occAttr|36 for attribute with attribute id
+				// of 36.
+				$oap[] = array(
+					$entity."_attribute_id" => $a[1],
+					'value' => $value
+				);
+
+			}
+		}
+		foreach ($oap as $oa) {
+			$occAttrs = data_entry_helper::wrap($oa, "$prefix"."_attribute");
+		}
+		return $occAttrs;
+
+	}	
 	public static function wrap( $array, $entity, $fkLink = false) {
         // Initialise the wrapped array
         $sa = array(
@@ -113,9 +153,11 @@ class data_entry_helper {
     }
 
     /**
-     * Helper function to generate a drop-down list box from a Indicia core service query.
+     * Helper function to generate a select control from a Indicia core service query.
      */
-	public static function select($id, $url, $entity, $nameField, $valueField = null, $extraParams = null) {
+	public static function select($id, $entity, $nameField, $valueField = null, $extraParams = null) {
+		global $config;
+	    	$url = $config['base_url']."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 	   	if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service
@@ -145,12 +187,51 @@ class data_entry_helper {
 			echo "Error loading control";
 
 		return $r;
+	}
+    /**
+     * Helper function to generate a list box from a Indicia core service query.
+     */
+	public static function listbox($id, $entity, $nameField, $size = 3, $multival = false, $valueField = null, $extraParams = null) {
+		global $config;
+	    	$url = $config['base_url']."/index.php/services/data";
+		// If valueField is null, set it to $nameField
+	   	if ($valueField == null) $valueField = $nameField;
+		// Execute a request to the service
+	    	$request = "$url/$entity?mode=json";
+		foreach ($extraParams as $a => $b){
+			$request .= "&$a=$b";
+		}
+		// Get the curl session object
+		$session = curl_init($request);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($session);
+		$response = json_decode(array_pop(explode("\r\n\r\n",$response)), true);
+		$r = "";
+		if (!array_key_exists('error', $response)){
+			$r .= "<select id='$id' multiple='$multival' size='$size'>";
+			foreach ($response as $item){
+				if (array_key_exists($nameField, $item) &&
+					array_key_exists($valueField, $item)) {
+						$r .= "<option value='$item[$valueField]' >";
+						$r .= $item[$nameField];
+						$r .= "</option>";
+				}
+			}
+			$r .= "</select>";
+		}
+		else
+			echo "Error loading control";
+
+		return $r;
     }
+
 
     /**
      * Helper function to generate an autocomplete box from an Indicia core service query.
      */
-    public static function autocomplete($id, $url, $entity, $nameField, $valueField = null, $extraParams = null) {
+    public static function autocomplete($id, $entity, $nameField, $valueField = null, $extraParams = null) {
+	    global $config;
+	    $url = $config['base_url']."/index.php/services/data";
 	    // If valueField is null, set it to $nameField
 	    if ($valueField == null) $valueField = $nameField;
 	    // Do stuff with extraParams
@@ -287,7 +368,9 @@ class data_entry_helper {
 	/**
 	 * Helper function to generate a radio group from a Indicia core service query.
 	 */
-	public static function radio_group($id, $url, $entity, $nameField, $valueField = null, $extraParams = null) {
+	public static function radio_group($id, $entity, $nameField, $valueField = null, $extraParams = null) {
+		global $config;
+	    	$url = $config['base_url']."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 	   	if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service

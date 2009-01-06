@@ -75,19 +75,8 @@ $(document).ready(function() {
 		// some things manually in order to get the submodel in.
 		if ($_POST) {
 			// We have occurrence attributes that we have to wrap
+			$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
 
-			$oap = array();
-			foreach ($_POST as $key => $value) {
-				if (strpos($key, 'occAttr') !== false){
-					$a = explode("|", $key);
-					$i = substr($a[0], strlen($a[0])-1);
-					$oap[$i][$a[1]] = $value;
-				}
-			}
-			$occAttrs = array();
-			foreach ($oap as $oa){
-				$occAttrs[] = data_entry_helper::wrap($oa, 'occurrence_attribute');
-			}
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
 			$occurrenceMod['subModels'][] = array(
@@ -99,7 +88,6 @@ $(document).ready(function() {
 				array ( 'model' => $occurrenceMod )
 			)));
 			$response = data_entry_helper::forward_post_to(
-				'http://localhost/indicia/index.php/services/data',
 				'save', $submission);
 			data_entry_helper::dump_errors($response);
 		}
@@ -114,7 +102,7 @@ $(document).ready(function() {
 ?>
 <input type='hidden' id='website_id' name='website_id' value='1' />
 <label for='actaxa_taxon_list_id'>Taxon</label>
-<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'http://localhost/indicia/index.php/services/data', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
+<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
 <br/>
 <label for="date">Date:</label>
 <input type="text" size="30" value="click here" id="date" name="date"/>
@@ -127,10 +115,10 @@ $(document).ready(function() {
 <label for="location_name">Locality Description:</label>
 <input name="location_name" size="50" /><br />
 <label for="survey_id">Survey</label>
-<?php echo data_entry_helper::select('survey_id', 'http://localhost/indicia/index.php/services/data', 'survey', 'title', 'id', $readAuth); ?>
+<?php echo data_entry_helper::select('survey_id', 'survey', 'title', 'id', $readAuth); ?>
 <br />
 <label for='acdeterminer_id'>Determiner</label>
-<?php echo data_entry_helper::autocomplete('determiner_id', 'http://localhost/indicia/index.php/services/data', 'person', 'caption', 'id', $readAuth); ?>
+<?php echo data_entry_helper::autocomplete('determiner_id', 'person', 'caption', 'id', $readAuth); ?>
 <br />
 <label for='comment'>Comment</label>
 <textarea id='comment' name='comment'></textarea>
