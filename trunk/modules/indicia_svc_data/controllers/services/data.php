@@ -547,9 +547,38 @@ class Data_Controller extends Service_Base_Controller {
 					$attr)
 				{
 					syslog(LOG_DEBUG, print_r($attr, true));
+					$value = $attr['fields']['value'];
+					$attrId = $attr['fields']['occurrence_attribute_id'];
+					$oa = ORM::factory('occurrence_attribute', $attrId);
+					switch ($oa->data_type) {
+					case 'T':
+						$vf = 'text_value';
+						break;
+					case 'I':
+						$vf = 'int_value';
+						break;
+					case 'F':
+						$vf = 'float_value';
+						break;
+					case 'D':
+						// Date
+						// TODO
+						break;
+					case 'V':
+						// Vague Date
+						// TODO
+						break;
+					case 'L':
+						// Lookup in list
+						$vf = 'int_value';
+						break;
+					}
+
+					$attr['fields'][$vf] = $value;
+					$attr['fields']['occurrence_id'] = $id;
+
 					$oam = ORM::factory('occurrence_attribute_value');
 					$oam->submission = $attr;
-					$oam->submission['fields']['occurrence_id'] = $id;
 					$oam->submit();
 				}
 			}
