@@ -167,7 +167,7 @@ class data_entry_helper {
 	public static function forward_post_to($entity, $array = null) {
 		global $config;
 		if ($array == null) $array = self::wrap($_POST, $entity);
-		$request = $config['base_url']."index.php/services/data/$entity";
+		$request = $config['base_url']."/index.php/services/data/$entity";
 		$postargs = 'submission='.json_encode($array);
 		// passthrough the authentication tokens as POST data
 		if (array_key_exists('auth_token', $_POST))
