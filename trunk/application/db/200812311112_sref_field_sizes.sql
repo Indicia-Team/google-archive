@@ -14,4 +14,17 @@ CREATE OR REPLACE VIEW list_locations AS
  SELECT l.id, l.name, l.code, l.centroid_sref
    FROM locations l;
 
+DROP VIEW detail_samples;
+DROP VIEW list_samples;
+
 ALTER TABLE samples ALTER entered_sref TYPE character varying(40);
+
+CREATE OR REPLACE VIEW detail_samples AS
+SELECT s.*, su.title AS "survey", su.description
+FROM samples s
+JOIN surveys su ON s.survey_id = su.id;
+
+CREATE OR REPLACE VIEW list_samples AS
+SELECT s.date_start, s.date_end, s.date_type, s.entered_sref, s.location_name, s.comment, su.title, su.description
+FROM samples s
+JOIN surveys su ON s.survey_id = su.id;

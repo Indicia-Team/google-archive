@@ -1,6 +1,4 @@
 ALTER TABLE taxa
-DROP CONSTRAINT fk_taxon_parent,
-DROP CONSTRAINT fk_taxon_taxon_meaning,
 DROP COLUMN parent_id,
 DROP COLUMN taxon_meaning_id,
 DROP COLUMN taxonomic_sort_order,
