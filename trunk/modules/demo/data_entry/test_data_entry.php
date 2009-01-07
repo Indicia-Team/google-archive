@@ -10,61 +10,6 @@
 <script type="text/javascript" src="../../../media/js/ui.datepicker.js"></script>
 <script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	var occAttrIndex = 2;
-	$('#date').datepicker({constrainInput: false});
-
-	// Method for adding further occurrence attributes
-	$('p#addOccAttr').click(function() {
-		$('div#occAttr0').clone(true).insertBefore(this)
-			.attr('id', 'occAttr'+occAttrIndex);
-		$('div#occAttr'+occAttrIndex+' label')
-			.attr('for',function(arr){
-				return $(this).attr('for').replace('0', occAttrIndex);
-			});
-		$('div#occAttr'+occAttrIndex+' select')
-			.attr('id', function(arr){
-				return $(this).attr('id').replace('0', occAttrIndex);
-			});
-		$('div#occAttr'+occAttrIndex+' input')
-			.attr('name', function(arr){
-				return $(this).attr('name').replace('0', occAttrIndex);
-			});
-		occAttrIndex++;
-	});
-
-	// We need to do stuff to occurrence attributes
-	$('div.occAttr select').change(function(){
-		// Get the attribute index
-		var index = this.id.charAt(this.id.indexOf("|") - 1);
-		// Get the signature string
-		var sSig = this.value;
-		// Split the signature
-		var aSig = sSig.split("|");
-		// Update the value to be the first part of the signature (the record id)
-		$('div#occAttr'+index+' input.occAttrId').val(aSig[0]);
-		// Update the type of field submitted.
-		$('div#occAttr'+index+' input.occAttrType').attr('name', function(arr){
-			var a = $(this).attr('name').split("|");
-			switch (aSig[1]) {
-			case 'T':
-			a[1] = 'text_value';
-			break;
-			case 'I':
-			a[1] = 'int_value';
-			break;
-			case 'F':
-			a[1] = 'float_value';
-			}
-			return a.join('|')
-		});
-
-	});
-});
-</script>
-
-
 </head>
 <body>
 <h1>Indicia Data entry test</h1>
@@ -125,13 +70,7 @@ $(document).ready(function() {
 <br />
 <fieldset>
 <legend>Occurrence attributes</legend>
-<p id='addOccAttr'>Add Occurrence Attribute</p>
+<label for='occAttr|'>Weather</label>
 </fieldset>
 <input type="submit" value="Save" />
 </form>
-<div class='occAttr' id='occAttr0'>
-<label for="occAttr0|occurrence_attribute_sig">Attribute</label>
-<?php echo data_entry_helper::select('occAttr0|occurrence_attribute_sig', 'http://localhost/indicia/index.php/services/data', 'occurrence_attribute', 'caption', 'signature', $readAuth); ?>
-<input type='hidden' value='1' class='occAttrId' name='occAttr0|occurrence_attribute_id'/>
-<input type='text' value='' class='occAttrValue' name='occAttr0|text_value' />
-</div>
