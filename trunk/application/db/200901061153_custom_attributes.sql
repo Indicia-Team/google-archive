@@ -56,7 +56,7 @@ BEGIN
 		m_id := nextval('meanings_id_seq'::regclass);
 		INSERT INTO meanings VALUES (m_id);
 		INSERT INTO termlists_terms (term_id, termlist_id, meaning_id, created_on, created_by_id, updated_on, updated_by_id)
-		VALUES ((SELECT id FROM terms WHERE term = dafor_array[idx]),
+		VALUES ((SELECT id FROM terms WHERE term = surroundings_array[idx]),
 			(SELECT id FROM termlists WHERE title = 'Surroundings'),
 			m_id, now(), 1, now(), 1);
 	END LOOP;
@@ -67,7 +67,7 @@ BEGIN
 		m_id := nextval('meanings_id_seq'::regclass);
 		INSERT INTO meanings VALUES (m_id);
 		INSERT INTO termlists_terms (term_id, termlist_id, meaning_id, created_on, created_by_id, updated_on, updated_by_id)
-		VALUES ((SELECT id FROM terms WHERE term = dafor_array[idx]),
+		VALUES ((SELECT id FROM terms WHERE term = usage_array[idx]),
 			(SELECT id FROM termlists WHERE title = 'Site_Usages'),
 			m_id, now(), 1, now(), 1);
 	END LOOP;
