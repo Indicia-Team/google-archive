@@ -43,7 +43,7 @@
                     transparent: true,
                     format: format
                 },
-                {singleTile: true, ratio: 1,isBaseLayer:false}
+                {singleTile: true, ratio: 1,isBaseLayer:false, opacity:0.5}
             );
 
             map.addLayers([velayer, jpl_wms, ol_wms, samples]);
