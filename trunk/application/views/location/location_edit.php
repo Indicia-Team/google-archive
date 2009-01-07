@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	init_map('<?php echo url::base(); ?>', '<?php echo $model->centroid_geom; ?>', 'centroid_sref');
+	init_map('<?php echo url::base(); ?>', <?php if ($model->id) echo "'$model->centroid_geom'"; else echo 'null'; ?>, 'centroid_sref');
 
 	$("input#parent").autocomplete("<?php echo url::site() ?>index.php/services/data/location", {
 		minChars : 1,
