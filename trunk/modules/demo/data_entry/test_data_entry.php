@@ -10,6 +10,12 @@
 <script type="text/javascript" src="../../../media/js/ui.datepicker.js"></script>
 <script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var occAttrIndex = 2;
+	$('#date').datepicker({constrainInput: false});
+});
+</script>
 </head>
 <body>
 <h1>Indicia Data entry test</h1>
@@ -21,6 +27,7 @@
 		if ($_POST) {
 			// We have occurrence attributes that we have to wrap
 			$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
+			$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
 
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
@@ -70,7 +77,22 @@
 <br />
 <fieldset>
 <legend>Occurrence attributes</legend>
-<label for='occAttr|'>Weather</label>
+<label for='occAttr|3'>Abundance DAFOR</label>
+<?php echo data_entry_helper::select('occAttr|3', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 1)); ?>
+<br />
+<label for='occAttr|1'>Determination Date</label>
+<input type='text' name='occAttr|1' /><br />
+</fieldset>
+<fieldset>
+<legend>Sample attributes</legend>
+<label for='smpAttr|1'>Weather</label>
+<input type='text' name='smpAttr|1' /><br />
+<label for='smpAttr|2'>Temperature (Celsius)</label>
+<input type='text' name='smpAttr|2' /><br />
+<label for='smpAttr|3'>Surroundings</label>
+<?php echo data_entry_helper::radio_group('smpAttr|3', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 2)); ?> </br>
+<label for='smpAttr|4'>Site Usage</label>
+<?php echo data_entry_helper::listbox('smpAttr|4', 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => 3)); ?>
 </fieldset>
 <input type="submit" value="Save" />
 </form>
