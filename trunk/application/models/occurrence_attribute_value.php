@@ -45,5 +45,4 @@ class Occurrence_Attribute_Value_Model extends ORM {
 		}
 		return parent::validate($array, $save);
 	}
-
 }
