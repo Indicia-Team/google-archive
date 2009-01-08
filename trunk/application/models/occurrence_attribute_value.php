@@ -30,6 +30,7 @@ class Occurrence_Attribute_Value_Model extends ORM {
 			break;
 			case 'V':
 			// Vague date - presumably already validated?
+			$vf = 'date_value';
 			break;
 			default:
 			$vf = 'int_value';
@@ -37,7 +38,7 @@ class Occurrence_Attribute_Value_Model extends ORM {
 			// Require the field with the value in
 			$array->add_rules($vf, 'required');
 			// Now get the custom attributes
-			$rules = explode($oam->validation_rules, ',');
+			$rules = explode(',', $oam->validation_rules);
 			foreach ($rules as $a){
 				$array->add_rules($vf, $a);
 			}
