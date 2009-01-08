@@ -130,8 +130,17 @@ abstract class ORM extends ORM_Core {
 	 * If not, returns null - errors are embedded in the model.
 	 */
 	public function submit(){
+		$this->db->query('BEGIN;');
+		$res = $this->inner_submit();
+		if ($res) {
+			$this->db->query('COMMIT;');
+		}
+		return $res;
+	}
+	public function inner_submit(){
 			// Useful
 		$mn = $this->object_name;
+		$return = null;
 		$collapseVals = create_function('$arr', 'return $arr["value"];');
 		// Link in foreign fields
 		if (array_key_exists('fkFields', $this->submission)) {
@@ -162,10 +171,14 @@ abstract class ORM extends ORM_Core {
 				// Call the submit method for that model and
 				// check whether it returns correctly
 				$m->submission = $a['model'];
-				$result = $m->submit();
-				syslog(LOG_DEBUG, "Setting field ".$a['fkId']." to ".$result);
-
-				$this->submission['fields'][$a['fkId']]['value'] = $result;
+				$result = $m->inner_submit();
+				if ($result) {
+					syslog(LOG_DEBUG, "Setting field ".$a['fkId']." to ".$result);
+					$this->submission['fields'][$a['fkId']]['value'] = $result;
+				} else {
+					$this->db->query('ROLLBACK');
+					return null;
+				}
 			}
 		}
 
@@ -180,7 +193,7 @@ abstract class ORM extends ORM_Core {
 		}
 		// Check whether this object already exists in the database with an exact match
 		$a = (array_key_exists('id', $vArray) && $vArray['id'] != null) ?
-				$this->where($vArray)->find()->id : null;
+			$this->where($vArray)->find()->id : null;
 		if ($a == null){
 			// If we're editing an existing record.
 			if (array_key_exists('id', $vArray) && $vArray['id'] != null) {
@@ -192,9 +205,10 @@ abstract class ORM extends ORM_Core {
 				syslog(LOG_DEBUG, "Record ".
 					$this->id.
 					" has validated successfully");
-				return $this->id;
+				$return = $this->id;
 			} else {
-				// Errors. Return null.
+				// Errors. Return null and rollback the transaction.
+				$this->db->query('ROLLBACK');
 				syslog(LOG_DEBUG, "Record did not validate.");
 				return null;
 			}
@@ -202,8 +216,21 @@ abstract class ORM extends ORM_Core {
 			// Set the model to point to the existing record.
 			$this->find($a);
 			syslog(LOG_DEBUG, "Existing record - linking to ".$a);
-			return $a;
+			$return = $a;
 		}
+		// Call postSubmit
+		if ($return != null) $ps = $this->postSubmit();
+		if ($ps == null) {
+			return null;
+		}
+		return $return;
+	}
+
+	/**
+	 * Function to be overridden by and model doing post-submission processing (for example,
+	 * submitting occurrence attributes.)
+	 */
+	protected function postSubmit(){
 	}
 
 	/**

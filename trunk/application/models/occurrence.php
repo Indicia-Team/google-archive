@@ -29,7 +29,7 @@ class Occurrence_Model extends ORM
 		$array->add_rules('determiner_id', 'required');
 		$array->add_rules('website_id', 'required');
 		$array->add_rules('taxa_taxon_list_id', 'required');
-		
+
 		// Explicitly add those fields for which we don't do validation
 		$extraFields = array(
 			'comment',
@@ -42,6 +42,67 @@ class Occurrence_Model extends ORM
 		return parent::validate($array, $save);
 
 	}
+
+	/**
+	 * Overrides the postSubmit() function to provide support for adding occurrence attributes
+	 * within the transaction.
+	 */
+	protected function postSubmit() {
+		// Occurrences have occurrence attributes associated, stored in a
+		// metafield.
+		syslog(LOG_DEBUG, "About to submit occurrence attributes.");
+		if (array_key_exists('metaFields', $model->submission) &&
+			array_key_exists('occAttributes', $model->submission['metaFields']))
+		{
+			foreach ($model->submission['metaFields']['occAttributes']['value'] as
+				$idx => $attr)
+			{
+				syslog(LOG_DEBUG, print_r($attr, true));
+				$value = $attr['fields']['value'];
+				$attrId = $attr['fields']['occurrence_attribute_id']['value'];
+				$oa = ORM::factory('occurrence_attribute', $attrId);
+				$vf = 'text_value';
+				switch ($oa->data_type) {
+				case 'T':
+					$vf = 'text_value';
+					break;
+				case 'I':
+					$vf = 'int_value';
+					break;
+				case 'F':
+					$vf = 'float_value';
+					break;
+				case 'D':
+					// Date
+					$vf = 'date_value';
+					break;
+				case 'V':
+					// Vague Date
+					// TODO
+					$vf = 'date_value';
+					break;
+				case 'L':
+					// Lookup in list
+					$vf = 'int_value';
+					break;
+				}
+
+				$attr['fields'][$vf] = $value;
+				$attr['fields']['occurrence_id'] = $id;
+
+				$oam = ORM::factory('occurrence_attribute_value');
+				$oam->submission = $attr;
+				if ($oam->inner_submit()) {
+					return true;
+				} else {
+					$this->db->query('ROLLBACK');
+					return null;
+				}
+			}
+		}
+		break;
+	}
+}
 
 }
 ?>

@@ -511,10 +511,7 @@ class Data_Controller extends Service_Base_Controller {
 			$model->submission = $m;
 			$result = $model->submit();
 			$id = $model->id;
-			if ($result) {
-				$this->submit_succ($model);
-				$this->response=json_encode(array('success'=>$id));
-			} else {
+			if (!$result) {
 				if (isset($model))
 					Throw new ArrayException('Validation error', $model->getAllErrors());
 				else
@@ -525,69 +522,6 @@ class Data_Controller extends Service_Base_Controller {
 				$id=$model->id;
 		}
 		return $id;
-	}
-
-	/**
-	 * We may need to do extra processing after the model has been submitted - such as
-	 * adding occurrence attributes or synonomy. Usually we would do this in the individual
-	 * controller, but here we handle everything in one place, so we have a big method
-	 * that then partitions into sections depending on the model.
-	 */
-	protected function submit_succ($model){
-		$id = $model->id;
-		switch($model->object_name) {
-		case 'occurrence':
-			// Occurrences have occurrence attributes associated, stored in a
-			// metafield.
-			syslog(LOG_DEBUG, "About to submit occurrence attributes.");
-			if (array_key_exists('metaFields', $model->submission) &&
-				array_key_exists('occAttributes', $model->submission['metaFields']))
-			{
-				foreach ($model->submission['metaFields']['occAttributes']['value'] as
-					$idx => $attr)
-				{
-					syslog(LOG_DEBUG, print_r($attr, true));
-					$value = $attr['fields']['value'];
-					$attrId = $attr['fields']['occurrence_attribute_id']['value'];
-					$oa = ORM::factory('occurrence_attribute', $attrId);
-					$vf = 'text_value';
-					switch ($oa->data_type) {
-					case 'T':
-						$vf = 'text_value';
-						break;
-					case 'I':
-						$vf = 'int_value';
-						break;
-					case 'F':
-						$vf = 'float_value';
-						break;
-					case 'D':
-						// Date
-						// TODO
-						$vf = 'text_value';
-						break;
-					case 'V':
-						// Vague Date
-						// TODO
-						$vf = 'text_value';
-						break;
-					case 'L':
-						// Lookup in list
-						$vf = 'int_value';
-						break;
-					}
-
-					$attr['fields'][$vf] = $value;
-					$attr['fields']['occurrence_id'] = $id;
-
-					$oam = ORM::factory('occurrence_attribute_value');
-					$oam->submission = $attr;
-					$oam->submit();
-				}
-			}
-			break;
-		}
-
 	}
 
 	/**
