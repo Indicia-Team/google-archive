@@ -544,12 +544,13 @@ class Data_Controller extends Service_Base_Controller {
 				array_key_exists('occAttributes', $model->submission['metaFields']))
 			{
 				foreach ($model->submission['metaFields']['occAttributes']['value'] as
-					$attr)
+					$idx => $attr)
 				{
 					syslog(LOG_DEBUG, print_r($attr, true));
 					$value = $attr['fields']['value'];
-					$attrId = $attr['fields']['occurrence_attribute_id'];
+					$attrId = $attr['fields']['occurrence_attribute_id']['value'];
 					$oa = ORM::factory('occurrence_attribute', $attrId);
+					$vf = 'text_value';
 					switch ($oa->data_type) {
 					case 'T':
 						$vf = 'text_value';
@@ -563,10 +564,12 @@ class Data_Controller extends Service_Base_Controller {
 					case 'D':
 						// Date
 						// TODO
+						$vf = 'text_value';
 						break;
 					case 'V':
 						// Vague Date
 						// TODO
+						$vf = 'text_value';
 						break;
 					case 'L':
 						// Lookup in list
