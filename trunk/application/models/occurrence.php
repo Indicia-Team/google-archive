@@ -51,10 +51,10 @@ class Occurrence_Model extends ORM
 		// Occurrences have occurrence attributes associated, stored in a
 		// metafield.
 		syslog(LOG_DEBUG, "About to submit occurrence attributes.");
-		if (array_key_exists('metaFields', $model->submission) &&
-			array_key_exists('occAttributes', $model->submission['metaFields']))
+		if (array_key_exists('metaFields', $this->submission) &&
+			array_key_exists('occAttributes', $this->submission['metaFields']))
 		{
-			foreach ($model->submission['metaFields']['occAttributes']['value'] as
+			foreach ($this->submission['metaFields']['occAttributes']['value'] as
 				$idx => $attr)
 			{
 				syslog(LOG_DEBUG, print_r($attr, true));
@@ -66,43 +66,37 @@ class Occurrence_Model extends ORM
 				case 'T':
 					$vf = 'text_value';
 					break;
-				case 'I':
-					$vf = 'int_value';
-					break;
 				case 'F':
 					$vf = 'float_value';
 					break;
 				case 'D':
 					// Date
-					$vf = 'date_value';
+					$vf = 'text_value';
 					break;
 				case 'V':
 					// Vague Date
 					// TODO
-					$vf = 'date_value';
+					$vf = 'text_value';
 					break;
-				case 'L':
+				default:
 					// Lookup in list
 					$vf = 'int_value';
 					break;
 				}
 
 				$attr['fields'][$vf] = $value;
-				$attr['fields']['occurrence_id'] = $id;
+				$attr['fields']['occurrence_id'] = $this->id;
 
 				$oam = ORM::factory('occurrence_attribute_value');
 				$oam->submission = $attr;
-				if ($oam->inner_submit()) {
-					return true;
-				} else {
+				if (!$oam->inner_submit()) {
 					$this->db->query('ROLLBACK');
 					return null;
 				}
 			}
+			return true;
 		}
 		break;
 	}
-}
-
 }
 ?>
