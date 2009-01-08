@@ -80,8 +80,8 @@ $(document).ready(function() {
 <br />
 <fieldset>
 <legend>Occurrence attributes</legend>
-<label for='occAttr|3'>Abundance DAFOR</label>
-<?php echo data_entry_helper::select('occAttr|3', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 1)); ?>
+<label for='occAttr|2'>Abundance DAFOR</label>
+<?php echo data_entry_helper::select('occAttr|2', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 1)); ?>
 <br />
 <label for='occAttr|1'>Determination Date</label>
 <input type='text' name='occAttr|1' id='occAttr|1'/><br />

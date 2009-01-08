@@ -210,6 +210,10 @@ abstract class ORM extends ORM_Core {
 				// Errors. Return null and rollback the transaction.
 				$this->db->query('ROLLBACK');
 				syslog(LOG_DEBUG, "Record did not validate.");
+				// Print more detailed information on why
+				foreach ($this->errors as $f => $e){
+					syslog(LOG_DEBUG, "Field ".$f.": ".$e.".");
+				}
 				return null;
 			}
 		} else {
@@ -231,6 +235,7 @@ abstract class ORM extends ORM_Core {
 	 * submitting occurrence attributes.)
 	 */
 	protected function postSubmit(){
+		return true;
 	}
 
 	/**
