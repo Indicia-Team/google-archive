@@ -12,7 +12,6 @@
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	var occAttrIndex = 2;
 	$('#date').datepicker({constrainInput: false});
 });
 </script>
@@ -25,6 +24,8 @@ $(document).ready(function() {
 		// PHP to catch and submit the POST data from the form - we need to wrap
 		// some things manually in order to get the submodel in.
 		if ($_POST) {
+			// Replace the site usage array with a comma sep list
+			$_POST['smpAttr|4'] = implode(',',$_POST['smpAttr|4']);
 			// We have occurrence attributes that we have to wrap
 			$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
 			$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
@@ -36,6 +37,8 @@ $(document).ready(function() {
 				'model' => $sampleMod
 			);
 			$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
+			$occurrenceMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
+
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
 			)));
@@ -81,14 +84,14 @@ $(document).ready(function() {
 <?php echo data_entry_helper::select('occAttr|3', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 1)); ?>
 <br />
 <label for='occAttr|1'>Determination Date</label>
-<input type='text' name='occAttr|1' /><br />
+<input type='text' name='occAttr|1' id='occAttr|1'/><br />
 </fieldset>
 <fieldset>
 <legend>Sample attributes</legend>
 <label for='smpAttr|1'>Weather</label>
-<input type='text' name='smpAttr|1' /><br />
+<input type='text' name='smpAttr|1' id='ocAttr|1'/><br />
 <label for='smpAttr|2'>Temperature (Celsius)</label>
-<input type='text' name='smpAttr|2' /><br />
+<input type='text' name='smpAttr|2' id='occAttr|1'/><br />
 <label for='smpAttr|3'>Surroundings</label>
 <?php echo data_entry_helper::radio_group('smpAttr|3', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 2)); ?> </br>
 <label for='smpAttr|4'>Site Usage</label>
