@@ -24,7 +24,7 @@ class data_entry_helper {
 		$response = json_decode(array_pop(explode("\r\n\r\n",$response)), true);
 		$r = "";
 		if (!array_key_exists('error', $response)){
-			$r .= "<select id='$id' >";
+			$r .= "<select name='$id' id='$id' >";
 			foreach ($response as $item){
 				if (array_key_exists($nameField, $item) &&
 					array_key_exists($valueField, $item)) {
@@ -60,7 +60,7 @@ class data_entry_helper {
 		$response = json_decode(array_pop(explode("\r\n\r\n",$response)), true);
 		$r = "";
 		if (!array_key_exists('error', $response)){
-			$r .= "<select id='$id' multiple='$multival' size='$size'>";
+			$r .= "<select id='$id' name='$id' multiple='$multival' size='$size'>";
 			foreach ($response as $item){
 				if (array_key_exists($nameField, $item) &&
 					array_key_exists($valueField, $item)) {
@@ -154,7 +154,7 @@ class data_entry_helper {
 			foreach ($response as $item){
 				if (array_key_exists($nameField, $item) &&
 					array_key_exists($valueField, $item)) {
-						$r .= "<input type='radio' name='$id' value='$item[$valueField]' >";
+						$r .= "<input type='radio' id='$id' name='$id' value='$item[$valueField]' >";
 						$r .= $item[$nameField];
 						$r .= "</input>";
 				}
@@ -222,7 +222,7 @@ class data_entry_helper {
 			}
 		}
 		foreach ($oap as $oa) {
-			$occAttrs = data_entry_helper::wrap($oa, "$prefix"."_attribute");
+			$occAttrs[] = data_entry_helper::wrap($oa, "$entity"."_attribute");
 		}
 		return $occAttrs;
 
