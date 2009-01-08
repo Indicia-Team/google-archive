@@ -14,32 +14,42 @@
 
         function init(){
 
-            map = new OpenLayers.Map('map');
+			var options = {
+				projection: new OpenLayers.Projection("EPSG:900913"),
+				displayProjection: new OpenLayers.Projection("EPSG:4326"),
+				units: "m",
+				numZoomLevels: 18,
+				maxResolution: 156543.0339,
+				maxExtent: new OpenLayers.Bounds(
+					-20037508, -20037508,
+					20037508, 20037508.34)
+			};
+
+            map = new OpenLayers.Map('map', options);
 
             var ol_wms = new OpenLayers.Layer.WMS(
                 "OpenLayers WMS",
                 "http://labs.metacarta.com/wms/vmap0",
-                {layers: 'basic'}
+                {layers: 'basic', 'sphericalMercator': true}
             );
 
             var jpl_wms = new OpenLayers.Layer.WMS(
                 "NASA Global Mosaic",
                 "http://t1.hypercube.telascience.org/cgi-bin/landsat7",
-                {layers: "landsat7"}
+                {layers: "landsat7", 'sphericalMercator': true}
             );
 
             var velayer = new OpenLayers.Layer.VirtualEarth(
             	"Virtual Earth",
-            	{'type': VEMapStyle.Aerial}
+            	{'type': VEMapStyle.Aerial, 'sphericalMercator': true}
             );
-
 
 			// Samples layer
             var samples = new OpenLayers.Layer.WMS(
                 "Samples from Indicia", "http://192.171.199.208:8080/geoserver/wms",
                 {
                     layers: 'opal:indicia_samples',
-                    srs: 'EPSG:4326',
+                    srs: 'EPSG:900913',
                     transparent: true,
                     format: format
                 },
@@ -48,8 +58,7 @@
 
             map.addLayers([velayer, jpl_wms, ol_wms, samples]);
             map.addControl(new OpenLayers.Control.LayerSwitcher());
-            map.setCenter(new OpenLayers.LonLat(-2,50.77));
-            map.zoomTo(11);
+            map.setCenter(new OpenLayers.LonLat(-100000,6700000),7);
         }
     </script>
   </head>
