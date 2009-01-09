@@ -73,7 +73,7 @@ class Location_Controller extends Gridview_Base_Controller {
         									,'website_id' => array('value' => $website->id)
         									)
         				,'fkFields' => array()
-        				,'subModels' => array());
+        				,'superModels' => array());
  					$locations_website->submission = $save_array;
 					$locations_website->submit();
 				}

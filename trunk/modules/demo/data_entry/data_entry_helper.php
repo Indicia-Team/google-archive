@@ -233,7 +233,7 @@ class data_entry_helper {
 	    'id' => $entity,
 	    'fields' => array(),
 	    'fkFields' => array(),
-	    'subModels' => array()
+	    'superModels' => array()
 	);
 
 	// Iterate through the array

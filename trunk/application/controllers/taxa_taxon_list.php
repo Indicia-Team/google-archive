@@ -187,7 +187,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'id' => 'taxa_taxon_list',
 			'fields' => array(),
 			'fkFields' => array(),
-			'subModels' => array(),
+			'superModels' => array(),
 			'metaFields' => array()
 		);
 
@@ -200,7 +200,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		// Declare child models
 		if (array_key_exists('taxon_meaning_id', $array) == false ||
 			$array['taxon_meaning_id'] == '') {
-				$sa['subModels'][] = array(
+				$sa['superModels'][] = array(
 					'fkId' => 'taxon_meaning_id',
 					'model' => parent::wrap(
 						array_intersect_key($array, ORM::factory('taxon_meaning')
@@ -217,7 +217,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 				if (array_key_exists('fk_taxon_group', $array)) {
 					$taxonFields['fk_taxon_group'] = $array['fk_taxon_group'];
 				}
-				$sa['subModels'][] = array(
+				$sa['superModels'][] = array(
 					'fkId' => 'taxon_id',
 					'model' => parent::wrap($taxonFields, $linkFk, 'taxon')
 				);

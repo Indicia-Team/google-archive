@@ -23,7 +23,7 @@ $(document).ready(function() {
 		include 'data_entry_helper.php';
 		include 'data_entry_config.php';
 		// PHP to catch and submit the POST data from the form - we need to wrap
-		// some things manually in order to get the submodel in.
+		// some things manually in order to get the supermodel in.
 		if ($_POST) {
 			// Replace the site usage array with a comma sep list
 			if (is_array($_POST[$config['site_usage']])){
@@ -37,7 +37,7 @@ $(document).ready(function() {
 			$sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
 
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
-			$occurrenceMod['subModels'][] = array(
+			$occurrenceMod['superModels'][] = array(
 				'fkId' => 'sample_id',
 				'model' => $sampleMod
 			);

@@ -121,7 +121,7 @@ abstract class ORM extends ORM_Core {
 	 * Submits the data by:
 	 * - Calling the preSubmit function to clean data.
 	 * - Linking in any foreign fields specified in the "fk-fields" array.
-	 * - For each entry in the "submodels" array, calling the submit function
+	 * - For each entry in the "supermodels" array, calling the submit function
 	 *   for that model and linking in the resultant object.
 	 * - Checking (by a where clause for all set fields) that an existing
 	 *   record does not exist. If it does, return that.
@@ -159,11 +159,11 @@ abstract class ORM extends ORM_Core {
 			}
 		}
 
-		// Iterate through submodels, calling their submit methods with subarrays
-		if (array_key_exists('subModels', $this->submission)) {
-			foreach ($this->submission['subModels'] as $a) {
+		// Iterate through supermodels, calling their submit methods with subarrays
+		if (array_key_exists('superModels', $this->submission)) {
+			foreach ($this->submission['superModels'] as $a) {
 
-				syslog(LOG_DEBUG, "Submitting submodel ".$a['model']['id'].".");
+				syslog(LOG_DEBUG, "Submitting supermodel ".$a['model']['id'].".");
 
 				// Establish the right model
 				$m = ORM::factory($a['model']['id']);
@@ -241,7 +241,7 @@ abstract class ORM extends ORM_Core {
 	/**
 	 * Returns an array of fields that this model will take when submitting.
 	 * By default, this will return the fields of the underlying table, but where
-	 * submodels are involved this may be overridden to include those also.
+	 * supermodels are involved this may be overridden to include those also.
 	 *
 	 * When called with true, this will also add fk_ columns for any _id columns
 	 * in the model.
