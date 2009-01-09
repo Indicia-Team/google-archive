@@ -26,17 +26,23 @@ class Occurrence_Attribute_Value_Model extends ORM {
 			$vf = 'float_value';
 			break;
 			case 'D':
-			$vf = 'text_value';
+				$array->add_rules('date_start_value', 'required');
+				$array->add_rules('date_end_value', 'required');
+				$array->add_rules('date_type_value', 'required');
+				$vf = null;
 			break;
 			case 'V':
 			// Vague date - presumably already validated?
-			$vf = 'text_value';
+				$array->add_rules('date_start_value', 'required');
+				$array->add_rules('date_end_value', 'required');
+				$array->add_rules('date_type_value', 'required');
+				$vf = null;
 			break;
 			default:
 			$vf = 'int_value';
 			}
 			// Require the field with the value in
-			$array->add_rules($vf, 'required');
+			if ($vf != null) $array->add_rules($vf, 'required');
 			// Now get the custom attributes
 			if ($oam->validation_rules != '') {
 				$rules = explode(',', $oam->validation_rules);

@@ -186,6 +186,7 @@ abstract class ORM extends ORM_Core {
 		$this->preSubmit();
 
 		// Flatten the array to one that can be validated
+		syslog(LOG_DEBUG, print_r($this->submission, true));
 		$vArray = array_map($collapseVals, $this->submission['fields']);
 		syslog(LOG_DEBUG, "About to validate the following array in model ".$this->object_name);
 		foreach ($vArray as $a => $b){
