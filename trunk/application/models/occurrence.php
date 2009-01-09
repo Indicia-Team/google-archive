@@ -58,10 +58,10 @@ class Occurrence_Model extends ORM
 				$idx => $attr)
 			{
 				$value = $attr['fields']['value'];
-				$vf = null;
 				if ($value['value'] != '') {
 					$attrId = $attr['fields']['occurrence_attribute_id']['value'];
 					$oa = ORM::factory('occurrence_attribute', $attrId);
+					$vf = null;
 					switch ($oa->data_type) {
 					case 'T':
 						$vf = 'text_value';
@@ -82,7 +82,7 @@ class Occurrence_Model extends ORM
 						$attr['fields']['date_start_value']['value'] = $vd['start'];
 						$attr['fields']['date_end_value']['value'] = $vd['end'];
 						$attr['fields']['date_type_value']['value'] = $vd['type'];
-						
+
 						break;
 					default:
 						// Lookup in list
