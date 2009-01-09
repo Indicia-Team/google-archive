@@ -57,46 +57,52 @@ class Occurrence_Model extends ORM
 			foreach ($this->submission['metaFields']['occAttributes']['value'] as
 				$idx => $attr)
 			{
-				syslog(LOG_DEBUG, print_r($attr, true));
 				$value = $attr['fields']['value'];
-				$attrId = $attr['fields']['occurrence_attribute_id']['value'];
-				$oa = ORM::factory('occurrence_attribute', $attrId);
-				$vf = 'text_value';
-				switch ($oa->data_type) {
-				case 'T':
-					$vf = 'text_value';
-					break;
-				case 'F':
-					$vf = 'float_value';
-					break;
-				case 'D':
-					// Date
-					$vf = 'text_value';
-					break;
-				case 'V':
-					// Vague Date
-					// TODO
-					$vf = 'text_value';
-					break;
-				default:
-					// Lookup in list
-					$vf = 'int_value';
-					break;
-				}
+				$vf = null;
+				if ($value['value'] != '') {
+					$attrId = $attr['fields']['occurrence_attribute_id']['value'];
+					$oa = ORM::factory('occurrence_attribute', $attrId);
+					switch ($oa->data_type) {
+					case 'T':
+						$vf = 'text_value';
+						break;
+					case 'F':
+						$vf = 'float_value';
+						break;
+					case 'D':
+						// Date
+						$vd=vague_date::string_to_vague_date($value['value']);
+						$attr['fields']['date_start_value']['value'] = $vd['start'];
+						$attr['fields']['date_end_value']['value'] = $vd['end'];
+						$attr['fields']['date_type_value']['value'] = $vd['type'];
+						break;
+					case 'V':
+						// Vague Date
+						$vd=vague_date::string_to_vague_date($value['value']);
+						$attr['fields']['date_start_value']['value'] = $vd['start'];
+						$attr['fields']['date_end_value']['value'] = $vd['end'];
+						$attr['fields']['date_type_value']['value'] = $vd['type'];
+						
+						break;
+					default:
+						// Lookup in list
+						$vf = 'int_value';
+						break;
+					}
 
-				$attr['fields'][$vf] = $value;
-				$attr['fields']['occurrence_id'] = $this->id;
+					if ($vf != null) $attr['fields'][$vf] = $value;
+					$attr['fields']['occurrence_id']['value'] = $this->id;
 
-				$oam = ORM::factory('occurrence_attribute_value');
-				$oam->submission = $attr;
-				if (!$oam->inner_submit()) {
-					$this->db->query('ROLLBACK');
-					return null;
+					$oam = ORM::factory('occurrence_attribute_value');
+					$oam->submission = $attr;
+					if (!$oam->inner_submit()) {
+						$this->db->query('ROLLBACK');
+						return null;
+					}
 				}
 			}
 			return true;
 		}
-		break;
 	}
 }
 ?>
