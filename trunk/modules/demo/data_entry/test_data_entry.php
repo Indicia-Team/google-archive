@@ -26,7 +26,9 @@ $(document).ready(function() {
 		// some things manually in order to get the submodel in.
 		if ($_POST) {
 			// Replace the site usage array with a comma sep list
-			$_POST['smpAttr|4'] = implode(',',$_POST['smpAttr|4']);
+			if (is_array($_POST[$config['site_usage']])){
+				$_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
+			}
 			// We have occurrence attributes that we have to wrap
 			$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
 			$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
@@ -38,7 +40,7 @@ $(document).ready(function() {
 				'model' => $sampleMod
 			);
 			$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
-			$occurrenceMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
+			$sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
 
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
