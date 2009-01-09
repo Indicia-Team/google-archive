@@ -165,7 +165,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			'id' => 'termlists_term',
 			'fields' => array(),
 			'fkFields' => array(),
-			'subModels' => array(),
+			'superModels' => array(),
 			'metaFields' => array()
 		);
 
@@ -178,7 +178,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		// Declare child models
 		if (array_key_exists('meaning_id', $array) == false ||
 			$array['meaning_id'] == '') {
-				$sa['subModels'][] = array(
+				$sa['superModels'][] = array(
 					'fkId' => 'meaning_id',
 					'model' => parent::wrap(
 						array_intersect_key($array, ORM::factory('meaning')
@@ -187,7 +187,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 		if (array_key_exists('term_id', $array) == false ||
 			$array['term_id'] == '') {
-				$sa['subModels'][] = array(
+				$sa['superModels'][] = array(
 					'fkId' => 'term_id',
 					'model' => parent::wrap(
 						array_intersect_key($array, ORM::factory('term')

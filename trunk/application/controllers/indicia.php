@@ -128,7 +128,7 @@ class Indicia_Controller extends Template_Controller {
             'id' => $id,
             'fields' => array(),
             'fkFields' => array(),
-            'subModels' => array()
+            'superModels' => array()
         );
 
         // Iterate through the array

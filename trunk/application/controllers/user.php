@@ -101,7 +101,7 @@ class User_Controller extends Gridview_Base_Controller {
         									,'website_id' => array('value' => $website->id)
         									)
         				,'fkFields' => array()
-        				,'subModels' => array());
+        				,'superModels' => array());
 				if ($users_websites->loaded || is_numeric($submission['fields']['website_'.$website->id]['value'])) {
 					if ($users_websites->loaded)
 							$save_array['fields']['id'] = array('value' => $users_websites->id);
