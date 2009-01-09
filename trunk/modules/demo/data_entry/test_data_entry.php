@@ -34,13 +34,14 @@ $(document).ready(function() {
 			$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
 
 			$sampleMod = data_entry_helper::wrap($_POST, 'sample');
+			$sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
+
 			$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
 			$occurrenceMod['subModels'][] = array(
 				'fkId' => 'sample_id',
 				'model' => $sampleMod
 			);
 			$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
-			$sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
 
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
