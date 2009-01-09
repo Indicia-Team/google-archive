@@ -21,6 +21,7 @@ $(document).ready(function() {
 <p>Note that this page requires the PHP curl extension to send requests to the Indicia server.</p>
 <?php
 		include 'data_entry_helper.php';
+		include 'data_entry_config.php';
 		// PHP to catch and submit the POST data from the form - we need to wrap
 		// some things manually in order to get the submodel in.
 		if ($_POST) {
@@ -80,22 +81,22 @@ $(document).ready(function() {
 <br />
 <fieldset>
 <legend>Occurrence attributes</legend>
-<label for='occAttr|2'>Abundance DAFOR</label>
-<?php echo data_entry_helper::select('occAttr|2', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 1)); ?>
+<label for='<?php echo $config['dafor']; ?>'>Abundance DAFOR</label>
+<?php echo data_entry_helper::select($config['dafor'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 1)); ?>
 <br />
-<label for='occAttr|1'>Determination Date</label>
-<input type='text' name='occAttr|1' id='occAttr|1'/><br />
+	<label for='<?php echo $config['det_date']; ?>'>Determination Date</label>
+<input type='text' name='<?php echo $config['det_date']; ?>' id='<?php echo $config['det_date']; ?>'/><br />
 </fieldset>
 <fieldset>
 <legend>Sample attributes</legend>
-<label for='smpAttr|1'>Weather</label>
-<input type='text' name='smpAttr|1' id='ocAttr|1'/><br />
-<label for='smpAttr|2'>Temperature (Celsius)</label>
-<input type='text' name='smpAttr|2' id='occAttr|1'/><br />
-<label for='smpAttr|3'>Surroundings</label>
-<?php echo data_entry_helper::radio_group('smpAttr|3', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 2)); ?> </br>
-<label for='smpAttr|4'>Site Usage</label>
-<?php echo data_entry_helper::listbox('smpAttr|4', 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => 3)); ?>
+<label for='<?php echo $config['weather']; ?>'>Weather</label>
+<input type='text' name='<?php echo $config['weather']; ?>' id='<?php echo $config['weather']; ?>'/><br />
+<label for='<?php echo $config['temperature']; ?>'>Temperature (Celsius)</label>
+<input type='text' name='<?php echo $config['temperature']; ?>' id='<?php echo $config['temperature']; ?>'/><br />
+<label for='<?php echo $config['surroundings']; ?>'>Surroundings</label>
+<?php echo data_entry_helper::radio_group($config['surroundings'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 2)); ?> </br>
+<label for='<?php echo $config['site_usage']; ?>'>Site Usage</label>
+<?php echo data_entry_helper::listbox($config['site_usage'], 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => 3)); ?>
 </fieldset>
 <input type="submit" value="Save" />
 </form>

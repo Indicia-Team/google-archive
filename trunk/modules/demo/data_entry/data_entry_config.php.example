@@ -1,0 +1,9 @@
+<?php
+	$config['dafor']='occAttr|2';
+	$config['det_date']='occAttr|1';
+	$config['weather']='smpAttr|1';
+	$config['temperature']='smpAttr|2';
+	$config['surroundings']='smpAttr|3';
+	$config['site_usage']='smpAttr|4';
+
+?>php
