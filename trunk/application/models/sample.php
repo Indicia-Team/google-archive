@@ -93,5 +93,61 @@ class Sample_Model extends ORM
 		return $value;
 	}
 
+	/**
+	 * Overrides the postSubmit() function to provide support for adding sample attributes
+	 * within the transaction.
+	 */
+	protected function postSubmit() {
+		// Occurrences have sample attributes associated, stored in a
+		// metafield.
+		syslog(LOG_DEBUG, "About to submit sample attributes.");
+		if (array_key_exists('metaFields', $this->submission) &&
+			array_key_exists('smpAttributes', $this->submission['metaFields']))
+		{
+			foreach ($this->submission['metaFields']['smpAttributes']['value'] as
+				$idx => $attr)
+			{
+				syslog(LOG_DEBUG, print_r($attr, true));
+				$value = $attr['fields']['value'];
+				$attrId = $attr['fields']['sample_attribute_id']['value'];
+				$oa = ORM::factory('sample_attribute', $attrId);
+				$vf = 'text_value';
+				switch ($oa->data_type) {
+				case 'T':
+					$vf = 'text_value';
+					break;
+				case 'F':
+					$vf = 'float_value';
+					break;
+				case 'D':
+					// Date
+					$vf = 'text_value';
+					break;
+				case 'V':
+					// Vague Date
+					// TODO
+					$vf = 'text_value';
+					break;
+				default:
+					// Lookup in list
+					$vf = 'int_value';
+					break;
+				}
+
+				$attr['fields'][$vf] = $value;
+				$attr['fields']['sample_id'] = $this->id;
+
+				$oam = ORM::factory('sample_attribute_value');
+				$oam->submission = $attr;
+				if (!$oam->inner_submit()) {
+					$this->db->query('ROLLBACK');
+					return null;
+				}
+			}
+			return true;
+		} else {
+			return true;
+		}
+	}
 }
 ?>
