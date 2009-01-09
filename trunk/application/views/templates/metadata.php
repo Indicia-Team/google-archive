@@ -15,6 +15,9 @@ $(document).ready(function(){
 <input type="hidden" name="updated_by_id" id="updated_by_id" value="<?php echo html::specialchars($model->updated_by_id); ?>" />
 <ol>
 <li>
+Record ID is <?php if ($model->id) echo $model->id; else echo '<new record>';?>
+</li>
+<li>
 Created on <?php echo html::specialchars($model->created_on); ?> by <?php echo (($model->created_by_id != null) ? (html::specialchars($model->created_by->person->surname)) : ''); ?>.
 </li>
 <li>
