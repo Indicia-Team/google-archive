@@ -1,23 +1,23 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Occurrence_Attribute_Value_Model extends ORM {
+class sample_Attribute_Value_Model extends ORM {
 
-	protected $belongs_to = array('created_by'=>'user', 'updated_by'=>'user', 'occurrence', 'occurrence_attribute');
+	protected $belongs_to = array('created_by'=>'user', 'updated_by'=>'user', 'sample', 'sample_attribute');
 
 	protected $search_field='text_value';
 
 	public function validate(Validation $array, $save = FALSE) {
 		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
 		$array->pre_filter('trim');
-		$array->add_rules('occurrence_attribute_id', 'required');
-		$array->add_rules('occurrence_id', 'required');
+		$array->add_rules('sample_attribute_id', 'required');
+		$array->add_rules('sample_id', 'required');
 
-		// We apply the validation rules specified in the occurrence attribute
+		// We apply the validation rules specified in the sample attribute
 		// table to the value given.
-		if (array_key_exists('occurrence_attribute_id', $array->as_array())) {
+		if (array_key_exists('sample_attribute_id', $array->as_array())) {
 			$id = $array->as_array();
-			$id = $id['occurrence_attribute_id'];
-			$oam = ORM::factory('occurrence_attribute', $id);
+			$id = $id['sample_attribute_id'];
+			$oam = ORM::factory('sample_attribute', $id);
 			switch ($oam->data_type) {
 			case 'T':
 			$vf = 'text_value';
