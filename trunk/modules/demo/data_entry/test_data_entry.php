@@ -82,7 +82,7 @@ $(document).ready(function() {
 <fieldset>
 <legend>Occurrence attributes</legend>
 <label for='<?php echo $config['dafor']; ?>'>Abundance DAFOR</label>
-<?php echo data_entry_helper::select($config['dafor'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 1)); ?>
+<?php echo data_entry_helper::select($config['dafor'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => $config['dafor_termlist'])); ?>
 <br />
 	<label for='<?php echo $config['det_date']; ?>'>Determination Date</label>
 <input type='text' name='<?php echo $config['det_date']; ?>' id='<?php echo $config['det_date']; ?>'/><br />
@@ -94,9 +94,9 @@ $(document).ready(function() {
 <label for='<?php echo $config['temperature']; ?>'>Temperature (Celsius)</label>
 <input type='text' name='<?php echo $config['temperature']; ?>' id='<?php echo $config['temperature']; ?>'/><br />
 <label for='<?php echo $config['surroundings']; ?>'>Surroundings</label>
-<?php echo data_entry_helper::radio_group($config['surroundings'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => 2)); ?> </br>
+<?php echo data_entry_helper::radio_group($config['surroundings'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => $config['surroundings_termlist'])); ?> </br>
 <label for='<?php echo $config['site_usage']; ?>'>Site Usage</label>
-<?php echo data_entry_helper::listbox($config['site_usage'], 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => 3)); ?>
+<?php echo data_entry_helper::listbox($config['site_usage'], 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => $config['site_usage_termlist'])); ?>
 </fieldset>
 <input type="submit" value="Save" />
 </form>
