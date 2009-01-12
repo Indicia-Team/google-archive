@@ -176,7 +176,6 @@ abstract class ORM extends ORM_Core {
 					syslog(LOG_DEBUG, "Setting field ".$a['fkId']." to ".$result);
 					$this->submission['fields'][$a['fkId']]['value'] = $result;
 				} else {
-					$this->db->query('ROLLBACK');
 					return null;
 				}
 			}
@@ -222,6 +221,29 @@ abstract class ORM extends ORM_Core {
 			syslog(LOG_DEBUG, "Existing record - linking to ".$a);
 			$return = $a;
 		}
+		// If there are submodels, submit them.
+		if (array_key_exists('subModels', $this->submission)) {
+			// Iterate through the subModel array, linking them to this model
+			foreach ($this->submission['subModels'] as $a) {
+
+				syslog(LOG_DEBUG, "Submitting submodel ".$a['model']['id'].".");
+
+				// Establish the right model
+				$m = ORM::factory($a['model']['id']);
+
+				// Set the correct parent key in the subModel
+				$fkId = $a['fkId'];
+				$a['model']['fields'][$fkId] = $this->id;
+
+				// Call the submit method for that model and
+				// check whether it returns correctly
+				$m->submission = $a['model'];
+				$result = $m->inner_submit();
+				if ($result == null) return null;
+			}
+		}
+
+
 		// Call postSubmit
 		if ($return != null) $ps = $this->postSubmit();
 		if ($ps == null) {
