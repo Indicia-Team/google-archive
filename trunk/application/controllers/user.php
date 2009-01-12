@@ -64,8 +64,7 @@ class User_Controller extends Gridview_Base_Controller {
 				$person = ORM::factory('person', $id);
  				if ($person->email_address == null)
 		        {
-        		    // we need a general error controller
-					print "Cannot create user details for a person who has no email_address";
+	   				$this->setError('Invocation error: missing email address', 'You cannot create user details for a person who has no email_address');
 		        }
 				else
 				{
