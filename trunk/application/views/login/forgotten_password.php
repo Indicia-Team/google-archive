@@ -2,7 +2,7 @@ This page is used when you have forgotten your password. You may enter either yo
 This ensures that only the person at the registered email account for a user will be able to change the password. <br /><br />
 <?php if ( ! empty($error_message) )
 {
-    echo $error_message;
+    echo html::error_message($error_message);
 }
 ?>
 <form class="cmxform"  name = "login" action="<?php echo url::site(); ?>forgotten_password" method="post">
