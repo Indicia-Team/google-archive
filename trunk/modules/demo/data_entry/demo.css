@@ -79,3 +79,18 @@ div#occAttr0 {
 #comment {
 	width: 300px;
 }
+
+table.speciesCheckList {
+}
+
+table.speciesCheckList thead {
+	border: 1px solid #666666;
+}
+
+table.speciesCheckList tr {
+	border: 1px solid #666666;
+}
+
+table.speciesCheckList tbody td{
+	padding: 0 6px 0 6px;
+}
