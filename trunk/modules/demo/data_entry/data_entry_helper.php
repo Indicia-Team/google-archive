@@ -4,16 +4,107 @@ include('helper_config.php');
 
 class data_entry_helper {
 
-    /**
-     * Helper function to generate a select control from a Indicia core service query.
-     */
+	/**
+	 * Helper function to generate a species checklist from a given taxon list.
+	 *
+	 * <p>This function will generate a flexible grid control with one row for each species
+	 * in the specified list. For each row, the control will display the list preferred term
+	 * for that species, a checkbox to indicate its presence, and a series of cells for a set
+	 * of occurrence attributes passed to the control.</p>
+	 *
+	 * <p>Further, the control will incorporate the functionality to add extra terms to the
+	 * control from the parent list of the one given. This will take the form of an autocomplete
+	 * box against the parent list which will add an extra row to the control upon selection.</p>
+	 *
+	 * @param int list_id Database id of the taxon list to lookup against.
+	 * @param int[] occ_attrs Integer array, where each entry corresponds to the id of the
+	 * desired attribute in the occurrence_attributes table.
+	 * @param string[] readAuth The read authorisation key/value pair, needed for making
+	 * queries to the data services.
+	 * @param string[] extraParams Array of key=>value pairs which will be passed to the service
+	 * as GET parameters.
+	 */
+	public static function species_checklist($list_id, $occ_attrs, $readAuth, $extraParams = array()){
+		$occAttrControls = array();
+		$occAttrs = array();
+		// Reference to the config file.
+		global $config;
+		// Declare the data service
+		$url = $config['base_url']."/index.php/services/data";
+		$termRequest = "$url/taxa_taxon_list?mode=json&taxon_list_id=$list_id&preferred=t";
+		$termRequest .= "&$readAuth";
+		foreach ($extraParams as $a => $b){
+			$request .= "&$a=$b";
+		}
+		// Get the curl session object
+		$session = curl_init($termRequest);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		$taxalist = curl_exec($session);
+		$taxalist = json_decode(array_pop(explode("\r\n\r\n",$taxalist)), true);
+
+		// Get the list of occurrence attributes
+		foreach ($occ_attrs as $occAttr) {
+			$occAttrRequest = "$url/occurrence_attribute/$occAttr?mode=json";
+			$occAttrRequest .= "&$readAuth";
+			$session = curl_init($occAttrRequest);
+			curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+			$a = json_decode(array_pop(explode("\n\n", curl_exec($session))), true);
+			if (! array_key_exists('error', $a)){
+				$b = $a[0];
+				$occAttrs[$occAttr] = $b['caption'];
+				// Build the correct control
+				switch ($b['data_type']) {
+				case 'L':
+					$tlId = $b['termlist_id'];
+					$occAttrControls[$occAttr] = 
+						data_entry_helper::select(
+							$occAttr, 'termlists_term', 'term', 'id',
+							$readAuth + array('termlist_id' => $tlId));
+					break;
+				default:
+					$occAttrControls[$occAttr] =
+						"<input type='text' id='$occAttr' name='$occAttr'/>";
+					break;
+				}
+			}			
+
+		}
+
+		// Build the grid
+		if (! array_key_exists('error', $taxalist)){
+			$grid = "<table class='speciesCheckList'>";
+			$grid .= "<thead><th>Species</th><th>Present (Y/N)</th><th>Count</th>";
+			foreach ($occAttrs as $a) {
+				$grid .= "<th>$a</th>";
+			}
+			$grid .= "</thead><tbody>";
+			foreach ($taxalist as $taxon) {
+				$id = $taxon['id'];
+				$grid .= "<tr>";
+				$grid .= "<td>".$taxon['taxon']." (".$taxon['authority'].")</td>";
+				$grid .= "<td><input type='checkbox' name='sc|$id|present' 
+					value='sc|$id|present' checked='false'/></td>";
+				$grid .= "<td><input type='text' name='sc|$id|count' /></td>";
+				foreach ($occAttrControls as $oc){
+					$grid .= "<td>".$oc."</td>";
+				}
+				$grid .= "</tr>";
+			}
+			$grid .= "</tbody></thead>";
+
+			return $grid;
+		}
+	}
+	/**
+	 * Helper function to generate a select control from a Indicia core service query.
+	 */
 	public static function select($id, $entity, $nameField, $valueField = null, $extraParams = null) {
 		global $config;
-	    	$url = $config['base_url']."/index.php/services/data";
+		$url = $config['base_url']."/index.php/services/data";
 		// If valueField is null, set it to $nameField
-	   	if ($valueField == null) $valueField = $nameField;
+		if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service
-	    	$request = "$url/$entity?mode=json";
+		$request = "$url/$entity?mode=json";
 		foreach ($extraParams as $a => $b){
 			$request .= "&$a=$b";
 		}
@@ -31,7 +122,7 @@ class data_entry_helper {
 						$r .= "<option value='$item[$valueField]' >";
 						$r .= $item[$nameField];
 						$r .= "</option>";
-				}
+					}
 			}
 			$r .= "</select>";
 		}
