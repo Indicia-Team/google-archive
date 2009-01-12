@@ -18,7 +18,6 @@
  */
 class Website_Model extends ORM
 {
-
     protected $has_many = array(
 			'termlists',
 			'taxon_lists'
@@ -32,18 +31,24 @@ class Website_Model extends ORM
 			'users'
 	);
 
+	public $password2;
+	
     /**
      * Validate and save the data.
      */
     public function validate(Validation $array, $save = FALSE) {
-    	echo kohana::debug($array->as_array());
         // uses PHP trim() to remove whitespace from beginning and end of all fields before validation
         $array->pre_filter('trim');
         $array->add_rules('title', 'required', 'length[1,100]');
         $array->add_rules('url', 'required', 'length[1,500]', 'url');
-       	if (isset($array['password'])) $array->add_rules('password', 'required', 'length[7,30]');
+        // NOTE password is stored unencrypted.
+        // The repeat password held in password2 does not get through preSubmit during the submit process
+        // and is not present in the validation object at this point. The "matches" validation rule does not
+        // work in these circumstances, so a new "matches_post" has been inserted into MY_valid.php
+        $array->add_rules('password', 'required', 'length[7,30]', 'matches_post[password2]');
         // Any fields that don't have a validation rule need to be copied into the model manually
         $this->description = $array['description'];
+
         return parent::validate($array, $save);
     }
 

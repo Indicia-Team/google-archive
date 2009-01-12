@@ -50,7 +50,8 @@ $lang = array (
 		'required' => 'The password cannot be blank.',
 		'length' => 'The password must be between 7 and 30 letters in length.',
 		'matches' => 'The password and repeat password fields must match.',
-		'default' => 'Invalid Input.',
+		'matches_post' => 'The password and repeat password fields must match.',
+	    'default' => 'Invalid Input.',
 	),
 	'entered_sref_system' => Array (
 		'sref_system' => 'The spatial reference system is not a valid EPSG or notation code.',
