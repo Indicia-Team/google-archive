@@ -26,9 +26,12 @@ $(document).ready(function() {
 		// some things manually in order to get the supermodel in.
 		if ($_POST) {
 			// Replace the site usage array with a comma sep list
-			if (is_array($_POST[$config['site_usage']])){
-				$_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
+			if (array_key_exists($config['site_usage'], $_POST)) {
+				if (is_array($_POST[$config['site_usage']])){
+					$_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
+				}
 			}
+
 			// We have occurrence attributes that we have to wrap
 			$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
 			$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
@@ -98,8 +101,8 @@ $(document).ready(function() {
 <input type='text' name='<?php echo $config['temperature']; ?>' id='<?php echo $config['temperature']; ?>'/><br />
 <label for='<?php echo $config['surroundings']; ?>'>Surroundings</label>
 <?php echo data_entry_helper::radio_group($config['surroundings'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => $config['surroundings_termlist'])); ?> </br>
-<label for='<?php echo $config['site_usage']; ?>'>Site Usage</label>
-<?php echo data_entry_helper::listbox($config['site_usage'], 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => $config['site_usage_termlist'])); ?>
+<label for='<?php echo $config['site_usage']; ?>[]'>Site Usage</label>
+<?php echo data_entry_helper::listbox($config['site_usage'].'[]', 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => $config['site_usage_termlist'])); ?>
 </fieldset>
 <input type="submit" value="Save" />
 </form>
