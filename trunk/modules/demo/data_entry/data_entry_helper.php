@@ -58,12 +58,12 @@ class data_entry_helper {
 					$tlId = $b['termlist_id'];
 					$occAttrControls[$occAttr] = 
 						data_entry_helper::select(
-							$occAttr, 'termlists_term', 'term', 'id',
+							'oa#'.$occAttr, 'termlists_term', 'term', 'id',
 							$readAuth + array('termlist_id' => $tlId));
 					break;
 				default:
 					$occAttrControls[$occAttr] =
-						"<input type='text' id='$occAttr' name='$occAttr'/>";
+						"<input type='text' id='oa#$occAttr' name='oa#$occAttr'/>";
 					break;
 				}
 			}			
@@ -86,6 +86,7 @@ class data_entry_helper {
 					value='sc|$id|present' checked='false'/></td>";
 				$grid .= "<td><input type='text' name='sc|$id|count' /></td>";
 				foreach ($occAttrControls as $oc){
+					$oc = preg_replace('/oa#(\d+)/', "sc|$id|occAttr|$1", $oc);
 					$grid .= "<td>".$oc."</td>";
 				}
 				$grid .= "</tr>";
