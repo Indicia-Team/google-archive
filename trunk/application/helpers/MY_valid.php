@@ -99,5 +99,26 @@ class Valid extends Valid_Core {
 	protected static function regex($value, $regex){
 		return (preg_match($regex, $value) >= 1);
 	}
+
+	/**
+	 * Rule: matches_post.
+	 * Generates an error if the field does not match one or more other fields in the POST array.
+	 * This is subtly different to the matches function as that deals with the contents of the validation
+	 * array.
+	 *
+	 * @param   mixed   input value
+	 * @param   array   input names to match against
+	 * @return  bool
+	 */
+	public static function matches_post($str, array $inputs)
+	{
+		foreach ($inputs as $key)
+		{
+			if ($str !== (isset($_POST[$key]) ? $_POST[$key] : NULL))
+				return FALSE;
+		}
+
+		return TRUE;
+	}
 }
 ?>

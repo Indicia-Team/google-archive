@@ -71,10 +71,16 @@ class Website_Controller extends Gridview_Base_Controller
         else
         {
             $this->model = new Website_Model($id);
+            $this->model->password2 = $this->model->password;
             $this->setView('website/website_edit', 'Website');
         }
     }
 
+    protected function submit_fail() {
+        $this->model->password2 = $_POST['password2'];
+    	$mn = $this->model->object_name;
+        $this->setView($mn."/".$mn."_edit", ucfirst($mn));
+    }
 	
 	public function page_authorised ()
 	{
