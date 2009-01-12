@@ -1,9 +1,7 @@
 <p>This page allows you to specify a users details.</p>
 <form class="cmxform" action="<?php echo url::site().'user/save'; ?>" method="post">
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
-<?php if (isset($model->person_id)) { ?>
 <input type="hidden" name="person_id" id="person_id" value="<?php echo html::specialchars($model->person_id); ?>" />
-<?php } ?>
 <fieldset>
 <legend>User's Details</legend>
 <ol>
@@ -46,6 +44,7 @@
 </select>
 <?php echo html::error_message($model->getError('core_role_id')); ?>
 </li>
+<?php if (isset($password_field) and $password_field != '') { echo $password_field; } ?>
 </ol>
 </fieldset>
 <fieldset>
@@ -68,7 +67,6 @@
 ?>
 </ol>
 </fieldset>
-<?php if (isset($password_field) and $password_field != '') { echo '<fieldset><legend>Password Control</legend><ol><li>'.$password_field.html::error_message($model->getError('password')).'</li></ol></fieldset>'; } ?>
 <?php echo $metadata ?>
 <input type="submit" name="submit" value="Submit" />
 </form>
