@@ -5,7 +5,7 @@ In order to gain access to this Indicia system you must log on. If you do not ha
 <legend>Login details</legend>
 <?php if ( ! empty($error_message) )
 {
-    echo $error_message;
+    echo html::error_message($error_message);
 }
 ?>
 <ol>
