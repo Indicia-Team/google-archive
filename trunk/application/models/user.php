@@ -21,13 +21,13 @@ class User_Model extends ORM {
 		// Checkboxes only appear in the POST array if they are checked, ie TRUE. Have to convert to PgSQL boolean values, rather than PHP
 		$array->pre_filter('trim');
 		$array->add_rules('username', 'required', 'length[7,30]', 'unique[users,username,'.$array->id.']');
-		if (isset($array['password'])) $array->add_rules('password', 'required', 'length[7,30]');
+		if (array_key_exists('password', $_POST)) $array->add_rules('password', 'required', 'length[7,30]', 'matches_post[password2]');
 		$this->interests = $array['interests'];
 		$this->location_name = $array['location_name'];
-		if (isset($array['core_role_id'])) $this->core_role_id = (is_numeric ($array['core_role_id']) ? $array['core_role_id'] : NULL);
+		$this->core_role_id = (is_numeric ($array['core_role_id']) ? $array['core_role_id'] : NULL);
 		$this->email_visible = (isset($array['email_visible']) ? 't' : 'f');
 		$this->view_common_names = (isset($array['view_common_names']) ? 't' : 'f');
-		if (isset($array['person_id'])) $this->person_id = $array['person_id'];
+		$this->person_id = $array['person_id'];
 
 		return parent::validate($array, $save);
 	}

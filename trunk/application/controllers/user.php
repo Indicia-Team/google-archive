@@ -19,9 +19,9 @@ class User_Controller extends Gridview_Base_Controller {
 		
 	}
 	
-	protected function password_field($password = '')
+	protected function password_fields($password = '', $password2 = '')
 	{
-		return $password != '' ? '<label for="password">Password</label><input type="password" id="password" name="password" value="'.html::specialchars($password).'" />' : '';
+		return '<li><label for="password">Password</label><input type="password" id="password" name="password" value="'.html::specialchars($password).'" /><span class="form_error">'.$this->model->getError('password').'</span></li><li><label for="password">Repeat Password</label><input type="password" id="password2" name="password2" value="'.html::specialchars($password2).'" /></li>';
 	}
 
 	// Due to the way the Users gridview is displayed (ie driven off the person table)
@@ -69,7 +69,7 @@ class User_Controller extends Gridview_Base_Controller {
 				else
 				{
 					$this->setView('user/user_edit', 'User',
-						array('password_field' => $this->password_field($login_config['default_password'])));
+						array('password_field' => $this->password_fields($login_config['default_password'], $login_config['default_password'])));
 					$this->template->content->model->person_id = $id;
 					$this->template->content->model->username = $person->first_name.'.'.$person->surname;
 					foreach ($websites as $website)
@@ -118,7 +118,7 @@ class User_Controller extends Gridview_Base_Controller {
 	
 	protected function submit_fail() {
 		$this->setView('user/user_edit', 'User',
-			array('password_field' => isset($_POST['password']) ? $this->password_field($_POST['password']) : ''));
+			array('password_field' => array_key_exists('password', $_POST) ? $this->password_fields($_POST['password'], $_POST['password2']) : ''));
 
 		// copy the values of the websites into the users_websites array
 	    $websites = ORM::factory('website')->find_all();
