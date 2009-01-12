@@ -23,16 +23,16 @@
 <?php echo html::error_message($model->getError('location_name')); ?>
 </li>
 <li>
-<label for="email_visible">Show Email Address</label>
+<label class="wide" for="email_visible">Show Email Address</label>
 <?php echo form::checkbox('email_visible', TRUE, isset($model->email_visible) AND ($model->email_visible == 't') ) ?>
 </li>
 <li>
-<label for="view_common_names">Show Common Names</label>
+<label class="wide" for="view_common_names">Show Common Names</label>
 <?php echo form::checkbox('view_common_names', TRUE, isset($model->view_common_names) AND ($model->view_common_names == 't') ) ?>
 </li>
 <li>
-<label for="core_role_id">Role within CORE Module</label>
-<select id="core_role_id" name="core_role_id">
+<label class="wide" for="core_role_id">Role within CORE Module</label>
+<select class="narrow" id="core_role_id" name="core_role_id" >
 	<option>None</option>
 <?php
 	$core_roles = ORM::factory('core_role')->orderby('title','asc')->find_all();
@@ -53,8 +53,8 @@
 <ol>
 <?php
 	foreach ($model->users_websites as $website) {
-		echo '<li><label for="'.$website['name'].'">'.$website['title'].'</label>';
-		echo '  <select id="'.$website['name'].'" name="'.$website['name'].'">';
+		echo '<li><label class="wide" for="'.$website['name'].'">'.$website['title'].'</label>';
+		echo '  <select class="narrow" id="'.$website['name'].'" name="'.$website['name'].'">';
 		echo '	<option>None</option>';
 		$site_roles = ORM::factory('site_role')->orderby('title','asc')->find_all();
 		foreach ($site_roles as $site_role) {
