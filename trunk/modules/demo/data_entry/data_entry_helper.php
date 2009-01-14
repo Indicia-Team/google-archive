@@ -245,10 +245,10 @@ class data_entry_helper {
 								qfield : '$nameField',
 								$sParams
 	},
+	dataType: 'jsonp',
 	parse: function(data) {
 		var results = [];
-		var obj = JSON.parse(data);
-		$.each(obj, function(i, item) {
+		$.each(data, function(i, item) {
 			results[results.length] = {
 				'data' : item,
 					'result' : item.$nameField,
