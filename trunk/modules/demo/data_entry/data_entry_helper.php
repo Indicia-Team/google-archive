@@ -337,7 +337,7 @@ class data_entry_helper {
 	 * section of the submission array.
 	 */
 	public static function wrap_species_checklist($arr){
-		if (array_key_exists('website_id', $arr){
+		if (array_key_exists('website_id', $arr)){
 			$website_id = $arr['website_id'];
 		} else {
 			throw new Exception('Cannot find website id in POST array!');
@@ -353,7 +353,7 @@ class data_entry_helper {
 		}
 		foreach ($records as $id => $record){
 			if (!$record['presence']){
-				unset ($records[$id]]);	
+				unset ($records[$id]);	
 				break;
 			}
 			$record['id'] = $id;
