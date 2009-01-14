@@ -12,6 +12,7 @@ class Data_Controller extends Service_Base_Controller {
 	protected $response;
 	protected $content_type;
 	protected $website_id = null;
+	protected $callback = false;
 
 	/**
 	 * Provides the /services/data/language service.
@@ -45,7 +46,7 @@ class Data_Controller extends Service_Base_Controller {
 	 * Retrieves details of occurrence attributes.
 	 */
 	public function occurrence_attribute()
-       	{
+	{
 		$this->handle_call('occurrence_attribute');
 	}
 
@@ -177,8 +178,8 @@ class Data_Controller extends Service_Base_Controller {
 		$this->authenticate();
 		$mode = $this->get_input_mode();
 		switch ($mode) {
-			case 'json':
-				$s = json_decode($_POST['submission'], true);
+		case 'json':
+			$s = json_decode($_POST['submission'], true);
 		}
 
 		if (array_key_exists('submission', $s)) {
@@ -220,32 +221,34 @@ class Data_Controller extends Service_Base_Controller {
 		$records=$this->build_query_results();
 
 		switch ($mode) {
-			case 'json':
-				echo json_encode($records);
-				break;
-			case 'xml':
-				if (array_key_exists('xsl', $_GET)) {
-					$xsl = $_GET['xsl'];
-					if (!strpos($xsl, '/'))
+		case 'json':
+			$a =  json_encode($records);
+			if ($callback) $a = $callback."(".$a.")";
+			echo $a;
+			break;
+		case 'xml':
+			if (array_key_exists('xsl', $_GET)) {
+				$xsl = $_GET['xsl'];
+				if (!strpos($xsl, '/'))
 					// xsl is not a fully qualified path, so point it to the media folder.
 					$xsl = url::base().'media/services/stylesheets/'.$xsl;
-				} else {
-					$xsl = '';
-				}
-				$this->response = $this->xml_encode($records, $xsl, TRUE);
-				$this->content_type = 'Content-Type: text/xml';
-				break;
-			case 'csv':
-				$this->response =  $this->csv_encode($records);
-				$this->content_type = 'Content-Type: text/comma-separated-values';
-				break;
-			default:
-				// Code to load from a view
-				if (kohana::file_exists('views',"services/data/$entity/$mode")) {
-					$this->response = $this->view_encode($records, View::factory("services/data/$entity/$mode"));
-				} else {
-					throw new ServiceError("$entity data cannot be output using mode $mode.");
-				}
+			} else {
+				$xsl = '';
+			}
+			$this->response = $this->xml_encode($records, $xsl, TRUE);
+			$this->content_type = 'Content-Type: text/xml';
+			break;
+		case 'csv':
+			$this->response =  $this->csv_encode($records);
+			$this->content_type = 'Content-Type: text/comma-separated-values';
+			break;
+		default:
+			// Code to load from a view
+			if (kohana::file_exists('views',"services/data/$entity/$mode")) {
+				$this->response = $this->view_encode($records, View::factory("services/data/$entity/$mode"));
+			} else {
+				throw new ServiceError("$entity data cannot be output using mode $mode.");
+			}
 		}
 	}
 
@@ -271,10 +274,10 @@ class Data_Controller extends Service_Base_Controller {
 			}
 			$data = '<?xml version="1.0"?>';
 			if ($xsl)
-			$data .= '<?xml-stylesheet type="text/xsl" href="'.$xsl.'"?>';
+				$data .= '<?xml-stylesheet type="text/xsl" href="'.$xsl.'"?>';
 			$data .= ($indent?"\r\n":'').
 				"<$root xmlns:xlink=\"http://www.w3.org/1999/xlink\">".
-			($indent?"\r\n":'');
+				($indent?"\r\n":'');
 		} else {
 			$data = '';
 		}
@@ -362,7 +365,7 @@ class Data_Controller extends Service_Base_Controller {
 		}
 		// Check for allowed view prefixes, and use 'list' as the default
 		if ($prefix!='gv' && $prefix!='detail')
-		$prefix='list';
+			$prefix='list';
 		return $prefix.'_'.$table;
 	}
 
@@ -379,40 +382,43 @@ class Data_Controller extends Service_Base_Controller {
 		$where=array();
 		foreach ($_GET as $param => $value) {
 			switch ($param) {
-				case 'sortdir':
-					$sortdir=strtoupper($value);
-					if ($sortdir != 'ASC' && $sortdir != 'DESC') {
-						$sortdir='ASC';
-					}
-					break;
-				case 'orderby':
-					if (array_key_exists(strtolower($value), $this->view_columns))
+			case 'callback':
+				$callback = $value;
+				break;
+			case 'sortdir':
+				$sortdir=strtoupper($value);
+				if ($sortdir != 'ASC' && $sortdir != 'DESC') {
+					$sortdir='ASC';
+				}
+				break;
+			case 'orderby':
+				if (array_key_exists(strtolower($value), $this->view_columns))
 					$orderby=strtolower($value);
-					break;
-				case 'limit':
-					if (is_numeric($value))
+				break;
+			case 'limit':
+				if (is_numeric($value))
 					$this->db->limit($value);
-					break;
-				case 'offset':
-					if (is_numeric($value))
+				break;
+			case 'offset':
+				if (is_numeric($value))
 					$this->db->offset($value);
-					break;
-				case 'qfield':
-					if (array_key_exists(strtolower($value), $this->view_columns)) {
-						$qfield = strtolower($value);
-					}
-					break;
-				case 'q':
-					$q = strtolower($value);
-					break;
-				default:
-					if (array_key_exists(strtolower($param), $this->view_columns)) {
-						// A parameter has been supplied which specifies the field name of a filter field
-						if ($this->view_columns[$param]=='int' || $this->view_columns[$param]=='bool')
+				break;
+			case 'qfield':
+				if (array_key_exists(strtolower($value), $this->view_columns)) {
+					$qfield = strtolower($value);
+				}
+				break;
+			case 'q':
+				$q = strtolower($value);
+				break;
+			default:
+				if (array_key_exists(strtolower($param), $this->view_columns)) {
+					// A parameter has been supplied which specifies the field name of a filter field
+					if ($this->view_columns[$param]=='int' || $this->view_columns[$param]=='bool')
 						$where[$param]=$value;
-						else
+					else
 						$like[$param]=$value;
-					}
+				}
 			}
 		}
 		if (isset($qfield) && isset($q)){
@@ -423,11 +429,11 @@ class Data_Controller extends Service_Base_Controller {
 			}
 		}
 		if ($orderby)
-		$this->db->orderby($orderby, $sortdir);
+			$this->db->orderby($orderby, $sortdir);
 		if (count($like))
-		$this->db->like($like);
+			$this->db->like($like);
 		if (count($where))
-		$this->db->where($where);
+			$this->db->where($where);
 	}
 
 	/**
@@ -488,8 +494,8 @@ class Data_Controller extends Service_Base_Controller {
 			if (array_key_exists('submission', $_POST)) {
 				$mode = $this->get_input_mode();
 				switch ($mode) {
-					case 'json':
-						$s = json_decode($_POST['submission'], true);
+				case 'json':
+					$s = json_decode($_POST['submission'], true);
 				}
 				$this->submit($s);
 			}
@@ -558,14 +564,14 @@ class Data_Controller extends Service_Base_Controller {
 	/**
 	 * Cleanup a write once nonce from the cache. Should be called after a call to authenticate.
 	 */
-	 protected function delete_nonce()
-	 {
-	 	$array = array_merge($_POST, $_GET);
+	protected function delete_nonce()
+	{
+		$array = array_merge($_POST, $_GET);
 		if (array_key_exists('nonce', $array)) {
 			$nonce = $array['nonce'];
-	 		$this->cache->delete($nonce);
+			$this->cache->delete($nonce);
 		}
-	 }
+	}
 }
 
 ?>
