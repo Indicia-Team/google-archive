@@ -18,7 +18,7 @@ include 'data_entry_helper.php';
 include 'data_entry_config.php';
 ?>
 <form method='post'>
-<?php echo data_entry_helper::species_checklist(1, array(1,2), array()); ?>
+<?php echo data_entry_helper::species_checklist(2, array(1,2), array()); ?>
 </form>
 </body>
 </html>

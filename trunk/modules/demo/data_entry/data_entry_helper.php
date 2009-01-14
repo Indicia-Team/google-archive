@@ -72,7 +72,18 @@ class data_entry_helper {
 
 		// Build the grid
 		if (! array_key_exists('error', $taxalist)){
-			$grid = "<table class='speciesCheckList'>";
+			$grid = "<table class='invisible'><tbody><tr id='scClonableRow'><td class='scTaxonCell'></td>".
+				"<td class='scPresenceCell'>
+				<input type='checkbox' name='' 
+				value='' checked='false'/></td>".
+				"<td class='scCountCell'>
+				<input type='text' name='' />";
+			foreach ($occAttrControls as $oc){
+				$grid .= "<td class='scOccAttrCell'>$oc</td>";
+			}
+			$grid .= "</tr></tbody></table>";
+
+			$grid .= "<table class='speciesCheckList'>";
 			$grid .= "<thead><th>Species</th><th>Present (Y/N)</th><th>Count</th>";
 			foreach ($occAttrs as $a) {
 				$grid .= "<th>$a</th>";
@@ -81,17 +92,45 @@ class data_entry_helper {
 			foreach ($taxalist as $taxon) {
 				$id = $taxon['id'];
 				$grid .= "<tr>";
-				$grid .= "<td>".$taxon['taxon']." (".$taxon['authority'].")</td>";
-				$grid .= "<td><input type='checkbox' name='sc|$id|present' 
+				$grid .= "<td class='scTaxonCell'>".$taxon['taxon']." (".$taxon['authority'].")</td>";
+				$grid .= "<td class='scPresenceCell'><input type='checkbox' name='sc|$id|present' 
 					value='sc|$id|present' checked='false'/></td>";
-				$grid .= "<td><input type='text' name='sc|$id|count' /></td>";
+				$grid .= "<td class='scCountCell'><input type='text' name='sc|$id|count' /></td>";
 				foreach ($occAttrControls as $oc){
 					$oc = preg_replace('/oa#(\d+)/', "sc|$id|occAttr|$1", $oc);
-					$grid .= "<td>".$oc."</td>";
+					$grid .= "<td class='scOccAttrCell'>".$oc."</td>";
 				}
 				$grid .= "</tr>";
 			}
-			$grid .= "</tbody></thead>";
+			$grid .= "</tbody></table>";
+
+			// Insert an autocomplete box if the termlist has a parent.
+			$tlRequest = "$url/taxon_list/$list_id?mode=json&view=detail";
+			$session = curl_init($tlRequest);
+			curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+			$tl = json_decode(array_pop(explode("\r\n\r\n",curl_exec($session))), true);
+			if (! array_key_exists('error', $tl)){
+				$parent_id = $tl[0]['parent_id'];
+				if ($parent_id != null) {
+					// Javascript to add further rows to the grid
+					$grid .= "<script type='text/javascript' 
+						src='./addRowToGrid.js' ></script>";
+					$grid .= "<script type='text/javascript' >
+						$(document).ready(function(){
+							var addRowFn = addRowToGrid('$url', $readAuth);
+							$('#addRowButton').click(addRowFn);
+						});
+						</script>";
+
+					// Drop an autocomplete box against the parent termlist
+					$grid .= data_entry_helper::autocomplete('addSpeciesBox',
+						'taxa_taxon_list', 'taxon', 'id', $readAuth + 
+					array('preferred' => 't', 'taxon_list_id' => $parent_id));
+						$grid .= "<button type='button' id='addRowButton'>
+							Add Row</button>";
+
+				}
+			}
 
 			return $grid;
 		}
