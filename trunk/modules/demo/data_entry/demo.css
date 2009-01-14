@@ -94,3 +94,7 @@ table.speciesCheckList tr {
 table.speciesCheckList tbody td{
 	padding: 0 6px 0 6px;
 }
+
+table.invisible {
+	display: none;
+}
