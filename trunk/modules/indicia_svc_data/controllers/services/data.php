@@ -12,7 +12,6 @@ class Data_Controller extends Service_Base_Controller {
 	protected $response;
 	protected $content_type;
 	protected $website_id = null;
-	protected $callback = false;
 
 	/**
 	 * Provides the /services/data/language service.
@@ -223,7 +222,9 @@ class Data_Controller extends Service_Base_Controller {
 		switch ($mode) {
 		case 'json':
 			$a =  json_encode($records);
-			if ($callback) $a = $callback."(".$a.")";
+			if (array_key_exists('callback', $_GET)){
+			       	$a = $_GET['callback']."(".$a.")";
+			}
 			echo $a;
 			break;
 		case 'xml':
@@ -382,9 +383,6 @@ class Data_Controller extends Service_Base_Controller {
 		$where=array();
 		foreach ($_GET as $param => $value) {
 			switch ($param) {
-			case 'callback':
-				$callback = $value;
-				break;
 			case 'sortdir':
 				$sortdir=strtoupper($value);
 				if ($sortdir != 'ASC' && $sortdir != 'DESC') {
