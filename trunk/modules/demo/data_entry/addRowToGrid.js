@@ -21,8 +21,6 @@ function addRowToGrid(url, readAuth){
 					var a = 'sc|'+ttlId+'|present';
 					$('tr#scClonableRow td.scPresenceCell input')
 					.val(a).attr('name', a);
-					a = 'sc|'+ttlId+'|count';
-					$('tr#scClonableRow td.scCountCell input').attr('name', a);
 					// Iterate over all the occurrence attribute cells
 					$('tr#scClonableRow td.scOccAttrCell > *').each(
 						function(index){

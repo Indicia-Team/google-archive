@@ -10,6 +10,11 @@
 <script type="text/javascript" src="../../../media/js/ui.datepicker.js"></script>
 <script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#date').datepicker({constrainInput: false});
+});
+</script>
 </head>
 <body>
 <h1>Indicia Species Checklist Test</h1>
@@ -18,6 +23,21 @@ include 'data_entry_helper.php';
 include 'data_entry_config.php';
 ?>
 <form method='post'>
+<?php
+	// This PHP call demonstrates inserting authorisation into the form, for website ID
+	// 1 and password 'password'
+	echo data_entry_helper::get_auth(1,'password');
+	$readAuth = data_entry_helper::get_read_auth(1, 'password');
+?>
+<input type='hidden' id='website_id' name='website_id' value='1' />
+<label for="date">Date:</label>
+<input type="text" size="30" value="click here" id="date" name="date"/>
+<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
+<br />
+<label for="entered_sref">Spatial Reference:</label>
+<?php echo data_entry_helper::map_picker('entered_sref',
+	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)')); ?>
+<br />
 <?php echo data_entry_helper::species_checklist(2, array(1,2), array()); ?>
 </form>
 </body>

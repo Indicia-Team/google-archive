@@ -75,16 +75,14 @@ class data_entry_helper {
 			$grid = "<table class='invisible'><tbody><tr id='scClonableRow'><td class='scTaxonCell'></td>".
 				"<td class='scPresenceCell'>
 				<input type='checkbox' name='' 
-				value='' checked='false'/></td>".
-				"<td class='scCountCell'>
-				<input type='text' name='' />";
+				value='' checked='false'/></td>";
 			foreach ($occAttrControls as $oc){
 				$grid .= "<td class='scOccAttrCell'>$oc</td>";
 			}
 			$grid .= "</tr></tbody></table>";
 
 			$grid .= "<table class='speciesCheckList'>";
-			$grid .= "<thead><th>Species</th><th>Present (Y/N)</th><th>Count</th>";
+			$grid .= "<thead><th>Species</th><th>Present (Y/N)</th>";
 			foreach ($occAttrs as $a) {
 				$grid .= "<th>$a</th>";
 			}
@@ -95,7 +93,6 @@ class data_entry_helper {
 				$grid .= "<td class='scTaxonCell'>".$taxon['taxon']." (".$taxon['authority'].")</td>";
 				$grid .= "<td class='scPresenceCell'><input type='checkbox' name='sc|$id|present' 
 					value='sc|$id|present' checked='false'/></td>";
-				$grid .= "<td class='scCountCell'><input type='text' name='sc|$id|count' /></td>";
 				foreach ($occAttrControls as $oc){
 					$oc = preg_replace('/oa#(\d+)/', "sc|$id|occAttr|$1", $oc);
 					$grid .= "<td class='scOccAttrCell'>".$oc."</td>";
