@@ -7,7 +7,7 @@ function addRowToGrid(url, readAuth){
 		var speciesName;
 		var authority;
 		var ttlId = $('#addSpeciesBox').val();
-		$.getJSON(url+"/taxa_taxon_list/"+ttlId+"?mode=json", 
+		$.getJSON(url+"/taxa_taxon_list/"+ttlId+"?mode=json&callback=?", 
 				function(data){
 				$.each(data, function(i, item){
 					speciesName = item.taxon;
