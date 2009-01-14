@@ -243,6 +243,7 @@ class data_entry_helper {
 							orderby : '$nameField',
 								mode : 'json',
 								qfield : '$nameField',
+								callback : ?,
 								$sParams
 	},
 	parse: function(data) {
