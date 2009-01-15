@@ -56,7 +56,7 @@ if ($_POST){
 <?php echo data_entry_helper::map_picker('entered_sref',
 	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)')); ?>
 <br />
-<?php echo data_entry_helper::species_checklist(2, array(1,2), $readAuth); ?>
+<?php echo data_entry_helper::species_checklist($config['species_checklist_taxon_list'], $config['species_checklist_occ_attributes'], $readAuth); ?>
 <br />
 <input type='submit' value='submit' />
 </form>
