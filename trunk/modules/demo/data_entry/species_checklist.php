@@ -48,6 +48,7 @@ if ($_POST){
 	$readAuth = data_entry_helper::get_read_auth(1, 'password');
 ?>
 <input type='hidden' id='website_id' name='website_id' value='1' />
+<input type='hidden' id='determiner_id' name='determiner_id' value='1' />
 <label for="date">Date:</label>
 <input type="text" size="30" value="click here" id="date" name="date"/>
 <style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
