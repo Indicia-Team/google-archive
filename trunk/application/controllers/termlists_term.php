@@ -260,7 +260,10 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		// we wish to add to the database
 
 		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
+		$sm = ORM::factory('termlists_term');
 		foreach ($arrSyn as $term => $syn) {
+
+			$sm->clear();
 
 			$lang = $syn['lang'];
 
@@ -277,8 +280,9 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			$syn['meaning_id'] = $this->model->meaning_id;
 
 			$sub = $this->wrap($syn);
-			$this->model->submission = $sub;
-			$this->model->submit();
+
+			$sm->submission = $sub;
+			$sm->submit();
 		}
 
 		url::redirect('termlists_term/'.$this->model->termlist_id);
