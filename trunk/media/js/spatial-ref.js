@@ -4,6 +4,7 @@ var format = 'image/png';
 var current_sref=null;
 var indicia_url;
 var input_field_name;
+var geoplanet_api_key;
 
 OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 	defaultHandlerOptions: {
@@ -92,14 +93,21 @@ function show_wkt_feature(wkt) {
 	bounds.left = bounds.left - dx;
 	// Set the default view to show something triple the size of the grid square
 	map.zoomToExtent(bounds);
+	// if showing a point, don't zoom in too far
+	if (dy==0 && dx==0) {
+		map.zoomTo(10);
+	}
+
 }
 
 // When the document is ready, initialise the map. This needs to be passed the base url for services and the
-// wkt of the object to display if any.
-function init_map(base_url, wkt, field_name) {
+// wkt of the object to display if any. If Google=TRUE, then the calling page must have the Google Maps API
+// link in the header with a valid API key.
+function init_map(base_url, wkt, field_name, google, geoplanet) {
 	// store a couple of globals for future use
 	indicia_url=base_url;
 	input_field_name=field_name;
+	geoplanet_api_key=geoplanet;
 
 	var boundary_style = OpenLayers.Util.applyDefaults({
 		strokeWidth: 1,
@@ -110,7 +118,7 @@ function init_map(base_url, wkt, field_name) {
 
 	var options = {
 		projection: new OpenLayers.Projection("EPSG:900913"),
-		displayProjection: new OpenLayers.Projection("EPSG:4326"),
+		displayProjection: new OpenLayers.Projection("EPSG:27700"),
 		units: "m",
 		numZoomLevels: 18,
 		maxResolution: 156543.0339,
@@ -128,7 +136,29 @@ function init_map(base_url, wkt, field_name) {
 		{'type': VEMapStyle.Aerial, 'sphericalMercator': true}
 		);
 
-	map.addLayers([velayer, editlayer]);
+	if (google) {
+		var gphy = new OpenLayers.Layer.Google(
+			"Google Physical",
+ 			{type: G_PHYSICAL_MAP, 'sphericalMercator': true}
+		);
+		var gmap = new OpenLayers.Layer.Google(
+			"Google Streets", // the default
+			{numZoomLevels: 20, 'sphericalMercator': true}
+		);
+		var ghyb = new OpenLayers.Layer.Google(
+			"Google Hybrid",
+			{type: G_HYBRID_MAP, numZoomLevels: 20, 'sphericalMercator': true}
+		);
+		var gsat = new OpenLayers.Layer.Google(
+			"Google Satellite",
+			{type: G_SATELLITE_MAP, numZoomLevels: 20, 'sphericalMercator': true}
+		);
+
+		map.addLayers([velayer, gphy, gmap, ghyb, gsat, editlayer]);
+	}
+	else
+		map.addLayers([velayer, editlayer]);
+
   	map.addControl(new OpenLayers.Control.LayerSwitcher());
 	if (wkt!=null) {
 		show_wkt_feature(wkt);
@@ -138,4 +168,44 @@ function init_map(base_url, wkt, field_name) {
 	var click = new OpenLayers.Control.Click();
 	map.addControl(click);
 	click.activate();
+}
+
+// Method called to find a place using the GeoPlanet API.
+// Pref_area is the text to suffix to location searches to help keep them within the target region, e.g. gb or Dorset.
+function find_place(pref_area)
+{
+	$('#place_search_box').hide();
+	$('#place_search_output').empty();
+	var ref;
+	var searchtext = $('#place_search').attr('value');
+	var request = 'http://where.yahooapis.com/v1/places.q("' +
+			searchtext + ' ' + pref_area + ');count=10';
+    $.getJSON(request + "?format=json&appid="+geoplanet_api_key+"&callback=?", function(data){
+    	if (data.places.count==1 && data.places.place[0].name.toLowerCase()==searchtext.toLowerCase()) {
+    		ref=data.places.place[0].centroid.longitude + ', ' + data.places.place[0].centroid.latitude;
+			show_found_place(ref);
+    	} else if (data.places.count!=0) {
+    		$('<p>Select from the following places that were found matching your search:</p>').appendTo('#place_search_output');
+    		var ol=$('<ol>');
+	  		$.each(data.places.place, function(i,place){
+	  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
+				$('<li><a href="#" onclick="show_found_place('+ref+');">'+place.name+' (' + place.placeTypeName + '), '+place.admin1 + '\\' + place.admin2 + '</a></li>').appendTo(ol);
+	  		});
+	  		ol.appendTo('#place_search_output');
+	  		$('#place_search_box').show("slow");
+    	} else {
+    		$('<p>No locations found with that name. Try a nearby town name.</p>').appendTo('#place_search_output');
+			$('#place_search_box').show("slow");
+    	}
+	});
+}
+
+// Once a place has been found, places the spatial reference as a point on the map.
+function show_found_place(ref) {
+	$.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
+		{sref: ref, system: "4326"},
+		function(data){
+			show_wkt_feature(data);
+		}
+	);
 }

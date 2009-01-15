@@ -8,5 +8,7 @@
 	$config['surroundings_termlist']=2;
 	$config['site_usage']='smpAttr|4';
 	$config['site_usage_termlist']=3;
+	$config['google_api_key']='...';
+	$config['geoplanet_api_key']='...';
 
 ?>php
