@@ -14,7 +14,7 @@
       type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#date').datepicker({constrainInput: false});
+	$('.date').datepicker({constrainInput: false});
 });
 </script>
 </head>
@@ -69,7 +69,7 @@ $(document).ready(function() {
 <?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
 <br/>
 <label for="date">Date:</label>
-<input type="text" size="30" value="click here" id="date" name="date"/>
+<input type="text" size="30" value="click here" class='date' id="date" name="date"/>
 <style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
 <br />
 <label for="place_search">Search for place on map:</label>
