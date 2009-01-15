@@ -61,6 +61,12 @@ class data_entry_helper {
 							'oa#'.$occAttr, 'termlists_term', 'term', 'id',
 							$readAuth + array('termlist_id' => $tlId));
 					break;
+				case 'D' || 'V':
+					// Date-picker control
+					$occAttrControls[$occAttr] = 
+						"<input type='text' id='oa#$occAttr' name='oa#$occAttr' class='date' />";
+					break;
+
 				default:
 					$occAttrControls[$occAttr] =
 						"<input type='text' id='oa#$occAttr' name='oa#$occAttr'/>";
@@ -75,7 +81,7 @@ class data_entry_helper {
 			$grid = "<table class='invisible'><tbody><tr id='scClonableRow'><td class='scTaxonCell'></td>".
 				"<td class='scPresenceCell'>
 				<input type='checkbox' name=''
-				value='' checked='false'/></td>";
+				value='' /></td>";
 			foreach ($occAttrControls as $oc){
 				$grid .= "<td class='scOccAttrCell'>$oc</td>";
 			}
@@ -90,9 +96,9 @@ class data_entry_helper {
 			foreach ($taxalist as $taxon) {
 				$id = $taxon['id'];
 				$grid .= "<tr>";
-				$grid .= "<td class='scTaxonCell'>".$taxon['taxon']." (".$taxon['authority'].")</td>";
+				$grid .= "<td class='scTaxonCell'>".$taxon['taxon'].", ".$taxon['authority']."</td>";
 				$grid .= "<td class='scPresenceCell'><input type='checkbox' name='sc|$id|present'
-					value='sc|$id|present' checked='false'/></td>";
+					value='sc|$id|present' /></td>";
 				foreach ($occAttrControls as $oc){
 					$oc = preg_replace('/oa#(\d+)/', "sc|$id|occAttr|$1", $oc);
 					$grid .= "<td class='scOccAttrCell'>".$oc."</td>";
@@ -116,7 +122,7 @@ class data_entry_helper {
 						$(document).ready(function(){
 							var addRowFn = addRowToGrid('$url', $readAuth);
 							$('#addRowButton').click(addRowFn);
-						});
+				});
 						</script>";
 
 					// Drop an autocomplete box against the parent termlist
@@ -264,7 +270,7 @@ class data_entry_helper {
 		$('input#$id').attr('value', data.id);
 	});
 	});
-			</script>";
+	</script>";
 			$r .= "<input type='hidden' id='$id' name='$id' />".
 				"<input id='ac$id' name='ac$id' value='' />";
 			return $r;
@@ -411,59 +417,58 @@ class data_entry_helper {
 
 	}
 	public static function wrap( $array, $entity, $fkLink = false) {
-	// Initialise the wrapped array
-	$sa = array(
-	    'id' => $entity,
-	    'fields' => array(),
-	    'fkFields' => array(),
-	    'superModels' => array()
-	);
+		// Initialise the wrapped array
+		$sa = array(
+			'id' => $entity,
+			'fields' => array(),
+			'superModels' => array()
+		);
 
-	// Iterate through the array
-	foreach ($array as $a => $b) {
-	    // Check whether this is a fk placeholder
-	    if (substr($a,0,3) == 'fk_'
-		&& $fkLink) {
-		    // Generate a foreign key instance
-		    $sa['fkFields'][$a] = array(
-			// Foreign key id field is table_id
-			'fkIdField' => substr($a,3)."_id",
-			'fkTable' => substr($a,3),
-			'fkSearchField' =>
-			ORM::factory(substr($a,3))->get_search_field(),
-			'fkSearchValue' => $b);
-			    // Determine the foreign table name
-			    $m = ORM::factory($id);
-			    if (array_key_exists(substr($a,3), $m->belongs_to)) {
-				    $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
-			    } else if (array_key_exists(substr($a,3), $m->parent)) {
-				    $sa['fkFields'][$a]['fkTable'] = $id;
-			    }
-			} else {
-				// Don't wrap the authentication tokens
-				if ($a!='auth_token' && $a!='nonce') {
-					// This should be a field in the model.
-					// Add a new field to the save array
-					$sa['fields'][$a] = array(
-						// Set the value
-						'value' => $b);
+		// Iterate through the array
+		foreach ($array as $a => $b) {
+			// Check whether this is a fk placeholder
+			if (substr($a,0,3) == 'fk_'
+				&& $fkLink) {
+					// Generate a foreign key instance
+					$sa['fkFields'][$a] = array(
+						// Foreign key id field is table_id
+						'fkIdField' => substr($a,3)."_id",
+						'fkTable' => substr($a,3),
+						'fkSearchField' =>
+						ORM::factory(substr($a,3))->get_search_field(),
+							'fkSearchValue' => $b);
+					// Determine the foreign table name
+					$m = ORM::factory($id);
+					if (array_key_exists(substr($a,3), $m->belongs_to)) {
+						$sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
+					} else if (array_key_exists(substr($a,3), $m->parent)) {
+						$sa['fkFields'][$a]['fkTable'] = $id;
+					}
+				} else {
+					// Don't wrap the authentication tokens
+					if ($a!='auth_token' && $a!='nonce') {
+						// This should be a field in the model.
+						// Add a new field to the save array
+						$sa['fields'][$a] = array(
+							// Set the value
+							'value' => $b);
+					}
+
 				}
-
-			}
 		}
-	return $sa;
-    }
+		return $sa;
+	}
 
-    /**
-     * Takes a response, and outputs any errors from it onto the screen.
-     *
-     * @todo method of placing the errors alongside the controls.
-     */
-    public static function dump_errors($response)
-    {
-	if (is_array($response)) {
-		if (array_key_exists('error',$response)) {
-			echo '<div class="error">';
+	/**
+	 * Takes a response, and outputs any errors from it onto the screen.
+	 *
+	 * @todo method of placing the errors alongside the controls.
+	 */
+	public static function dump_errors($response)
+	{
+		if (is_array($response)) {
+			if (array_key_exists('error',$response)) {
+				echo '<div class="error">';
 				echo '<p>An error occurred when the data was submitted.</p>';
 				if (is_array($response['error'])) {
 					echo '<ul>';
@@ -475,8 +480,8 @@ class data_entry_helper {
 				}
 				if (array_key_exists('file', $response) && array_key_exists('line', $response)) {
 					echo '<p>Error occurred in '.$response['file'].' at line '.$response['line'].'</p>';
-			}
-			if (array_key_exists('errors', $response)) {
+				}
+				if (array_key_exists('errors', $response)) {
 					echo '<pre>'.print_r($response['errors'], true).'</pre>';
 				}
 				if (array_key_exists('trace', $response)) {
@@ -488,28 +493,28 @@ class data_entry_helper {
 				echo '<p class="error">'.$response['error'].'</p>';
 			} elseif (array_key_exists('success',$response)) {
 				echo '<div class="success">Data was successfully inserted ('.
-							$response['success'].')</div>';
+					$response['success'].')</div>';
 			}
+		}
+		else
+			echo $response;
 	}
-	else
-		echo $response;
-    }
 
-    /**
-     * Puts a spatial reference entry control, optional system selector, and map onto a data entry form.
-     * The system selector is automatically output if there is more than one system present, otherwise it
-     * is replaced by a hidden input.
-     */
-    public static function map_picker($field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
-	global $config;
+	/**
+	 * Puts a spatial reference entry control, optional system selector, and map onto a data entry form.
+	 * The system selector is automatically output if there is more than one system present, otherwise it
+	 * is replaced by a hidden input.
+	 */
+	public static function map_picker($field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
+		global $config;
 
-	$r = '<script type="text/javascript" src="../../../media/js/OpenLayers.js"></script>';
+		$r = '<script type="text/javascript" src="../../../media/js/OpenLayers.js"></script>';
 		$r .= '<script type="text/javascript" src="../../../media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
-	$r .= '<script type="text/javascript">' .
-		'$(document).ready(function() { '.
-		'init_map("'.$config['base_url'].'", null, "'.$field_name.'", '.$google.', \''.$config['geoplanet_api_key'].'\')' .
-		'}); </script>';
+		$r .= '<script type="text/javascript">' .
+			'$(document).ready(function() { '.
+			'init_map("'.$config['base_url'].'", null, "'.$field_name.'", '.$google.', \''.$config['geoplanet_api_key'].'\')' .
+			'}); </script>';
 
 		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$value.'" '.
 			'onblur="exit_sref();" onclick="enter_sref();"/>';
@@ -529,72 +534,72 @@ class data_entry_helper {
 		$r .= '<p class="instruct">'.$instruct.'</p>';
 		$r .= '<div id="map" class="smallmap" style="width: '.$width.'px; height: '.$height.'px;"></div>';
 		return $r;
-    }
+	}
 
-    /**
-     * Helper function to put a location search box onto the data entry page, linked to a map picker.
-     * The search box uses the GeoPlanet API to find locations.
-     *
-     * @param int $id id attribute for the returned control.
-     * @param string $link_text Text to display for the search link
-     * @param string $pref_area Text to suffix to location searches, to help keep them in the target region. E.g. Dorset.
-     *
-     * @return HTML for the location search box.
-     */
-    public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb') {
-    	$r = '<input name="'.$id.'" id="'.$id.'"/><a href="#" onclick="find_place(\''.$pref_area.'\');" />'.$link_text.'</a>' .
-    		'<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
-    		'<a href="#" id="place_close_button" onclick="$(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
-    	return $r;
-    }
+	/**
+	 * Helper function to put a location search box onto the data entry page, linked to a map picker.
+	 * The search box uses the GeoPlanet API to find locations.
+	 *
+	 * @param int $id id attribute for the returned control.
+	 * @param string $link_text Text to display for the search link
+	 * @param string $pref_area Text to suffix to location searches, to help keep them in the target region. E.g. Dorset.
+	 *
+	 * @return HTML for the location search box.
+	 */
+	public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb') {
+		$r = '<input name="'.$id.'" id="'.$id.'"/><a href="#" onclick="find_place(\''.$pref_area.'\');" />'.$link_text.'</a>' .
+			'<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
+			'<a href="#" id="place_close_button" onclick="$(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
+		return $r;
+	}
 
 
-    /**
-     * Retrieves a read token and passes it back as an array suitable to drop into the
-     * 'extraParams' options for an Ajax call.
-     */
-    public static function get_read_auth($website_id, $password) {
-	    global $config;
-	    $postargs = "website_id=$website_id";
-	    // Get the curl session object
-	    $session = curl_init($config['base_url'].'/index.php/services/security/get_read_nonce');
-	    // Set the POST options.
-	    curl_setopt ($session, CURLOPT_POST, true);
-	    curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
-	    curl_setopt($session, CURLOPT_HEADER, true);
-	    curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-	    // Do the POST and then close the session
-	    $response = curl_exec($session);
-	    list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
-	    return array(
-		    'auth_token' => sha1("$nonce:$password"),
-		    'nonce' => $nonce
-	    );
-    }
+	/**
+	 * Retrieves a read token and passes it back as an array suitable to drop into the
+	 * 'extraParams' options for an Ajax call.
+	 */
+	public static function get_read_auth($website_id, $password) {
+		global $config;
+		$postargs = "website_id=$website_id";
+		// Get the curl session object
+		$session = curl_init($config['base_url'].'/index.php/services/security/get_read_nonce');
+		// Set the POST options.
+		curl_setopt ($session, CURLOPT_POST, true);
+		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
+		curl_setopt($session, CURLOPT_HEADER, true);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		// Do the POST and then close the session
+		$response = curl_exec($session);
+		list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
+		return array(
+			'auth_token' => sha1("$nonce:$password"),
+			'nonce' => $nonce
+		);
+	}
 
-    /**
-     * Retrieves a token and inserts it into a data entry form which authenticates that the
-     * form was submitted by this website.
-     */
-    public static function get_auth($website_id, $password) {
-	    global $config;
-	    $postargs = "website_id=$website_id";
-	    // Get the curl session object
-	    $session = curl_init($config['base_url'].'/index.php/services/security/get_nonce');
-	    // Set the POST options.
-	    curl_setopt ($session, CURLOPT_POST, true);
-	    curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
-	    curl_setopt($session, CURLOPT_HEADER, true);
-	    curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-	    // Do the POST and then close the session
-	    $response = curl_exec($session);
-	    list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
-	    curl_close($session);
-	    $result = '<input id="auth_token" name="auth_token" type="hidden" ' .
-		    'value="'.sha1("$nonce:$password").'">'."\r\n";
-	    $result .= '<input id="nonce" name="nonce" type="hidden" ' .
-		    'value="'.$nonce.'">'."\r\n";
-	    return $result;
-    }
+	/**
+	 * Retrieves a token and inserts it into a data entry form which authenticates that the
+	 * form was submitted by this website.
+	 */
+	public static function get_auth($website_id, $password) {
+		global $config;
+		$postargs = "website_id=$website_id";
+		// Get the curl session object
+		$session = curl_init($config['base_url'].'/index.php/services/security/get_nonce');
+		// Set the POST options.
+		curl_setopt ($session, CURLOPT_POST, true);
+		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
+		curl_setopt($session, CURLOPT_HEADER, true);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		// Do the POST and then close the session
+		$response = curl_exec($session);
+		list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
+		curl_close($session);
+		$result = '<input id="auth_token" name="auth_token" type="hidden" ' .
+			'value="'.sha1("$nonce:$password").'">'."\r\n";
+		$result .= '<input id="nonce" name="nonce" type="hidden" ' .
+			'value="'.$nonce.'">'."\r\n";
+		return $result;
+	}
 }
 ?>

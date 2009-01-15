@@ -12,7 +12,8 @@
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#date').datepicker({constrainInput: false});
+	$('#sampleDate').datepicker();
+	$('.date').datepicker();
 });
 </script>
 </head>
@@ -49,7 +50,7 @@ if ($_POST){
 <input type='hidden' id='website_id' name='website_id' value='1' />
 <input type='hidden' id='determiner_id' name='determiner_id' value='1' />
 <label for="date">Date:</label>
-<input type="text" size="30" value="click here" id="date" name="date"/>
+<input type="text" size="30" value="click here" id="sampleDate" name="date" />
 <style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
 <br />
 <label for="entered_sref">Spatial Reference:</label>
