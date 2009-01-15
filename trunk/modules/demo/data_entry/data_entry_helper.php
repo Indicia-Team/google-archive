@@ -338,6 +338,11 @@ class data_entry_helper {
 		} else {
 			throw new Exception('Cannot find website id in POST array!');
 		}
+		if (array_key_exists('determiner_id', $arr)){
+			$determiner_id = $arr['determiner_id'];
+		} else {
+			throw new Exception('Cannot find determiner id in POST array!');
+		}
 		$records = array();
 		$subModels = array();
 		foreach ($arr as $key=>$value){
@@ -348,14 +353,15 @@ class data_entry_helper {
 			}
 		}
 		foreach ($records as $id => $record){
-			if (!$record['presence']){
+			if (!$record['present']){
 				unset ($records[$id]);
 				break;
 			}
-			$record['id'] = $id;
+			$record['taxa_taxon_list_id'] = $id;
 			$record['website_id'] = $website_id;
+			$record['determiner_id'] = $determiner_id;
 			$occAttrs = data_entry_helper::wrap_attributes($record, 'occurrence');
-			$occ = data_entry_helper::wrap($record);
+			$occ = data_entry_helper::wrap($record, 'occurrence');
 			$occ['metaFields']['occAttributes']['value'] = $occAttrs;
 			$subModels[] = array(
 				'fkId' => 'sample_id',
