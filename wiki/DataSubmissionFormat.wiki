@@ -52,9 +52,20 @@ URL at .../index.php/services/data/save as a POST parameter called submission. I
 					}
 					
 				},
+				"superModels" : [
+				{ 
+					"fkId" : "_foreign key field in model to insert supermodel id",
+					"model" :
+					{
+						"id" : "_Model Name",
+						"fields" : 
+							....
+					}
+					....
+				}],
 				"subModels" : [
 				{ 
-					"fkId" : "_foreign key field to insert submodel id",
+					"fkId" : "_foreign key field in submodel to insert model id",
 					"model" :
 					{
 						"id" : "_Model Name",
