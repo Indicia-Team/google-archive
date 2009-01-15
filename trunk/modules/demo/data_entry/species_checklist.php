@@ -33,7 +33,6 @@ if ($_POST){
 	// Wrap submission and submit
 	$submission = array('submission' => array('entries' => array(
 		array ( 'model' => $sampleMod ))));
-	print_r($submission);
 	$response = data_entry_helper::forward_post_to(
 		'save', $submission);
 	data_entry_helper::dump_errors($response);
