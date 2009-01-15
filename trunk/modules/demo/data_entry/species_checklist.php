@@ -21,6 +21,24 @@ $(document).ready(function() {
 <?php
 include 'data_entry_helper.php';
 include 'data_entry_config.php';
+// Catch and submit POST data.
+if ($_POST){
+	// We're mainly submitting to the sample model
+	$sampleMod = data_entry_helper::wrap($_POST, 'sample');
+	$occurrences = data_entry_helper::wrap_species_checklist($_POST);
+
+	// Add the occurrences in as submodels
+	$sampleMod['subModels'] = $occurrences;
+
+	// Wrap submission and submit
+	$submission = array('submission' => array('entries' => array(
+		array ( 'model' => $sampleMod ))));
+	print_r($submission);
+	$response = data_entry_helper::forward_post_to(
+		'save', $submission);
+	data_entry_helper::dump_errors($response);
+}
+
 ?>
 <form method='post'>
 <?php
@@ -38,7 +56,9 @@ include 'data_entry_config.php';
 <?php echo data_entry_helper::map_picker('entered_sref',
 	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)')); ?>
 <br />
-<?php echo data_entry_helper::species_checklist(2, array(1,2), array()); ?>
+<?php echo data_entry_helper::species_checklist(2, array(1,2), $readAuth); ?>
+<br />
+<input type='submit' value='submit' />
 </form>
 </body>
 </html>
