@@ -98,3 +98,28 @@ table.speciesCheckList tbody td{
 table.invisible {
 	display: none;
 }
+
+#place_search_box {
+	border: solid grey 1px;
+	background-color: #e7e7e7;
+	padding: 1em;
+	margin-left: 1em;
+	font-size: 90%;
+}
+
+#place_search_output p {
+	padding-bottom: 0;
+}
+
+
+#place_search_output ol  {
+	list-style-type: none;
+	padding-left: 2em;
+	padding-bottom: 1em;
+}
+
+#place_close_button {
+	border: solid grey 1px;
+	background-color: #eeeeee;
+	padding: 0.5em;
+}

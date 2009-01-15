@@ -24,6 +24,23 @@ class Spatial_Controller extends Service_Base_Controller {
 		echo spatial_ref::internal_wkt_to_sref($_GET['wkt'], $_GET['system'], $precision);
 	}
 
+	/**
+	 * Allow a service request to triangulate between 2 systems. GET parameters are:
+	 * 	from_sref
+	 * 	from_system
+	 * 	to_system
+	 *  to_precision (optional)
+	 */
+	 public function convert_sref()
+	 {
+	 	$wkt = spatial_ref::sref_to_internal_wkt($_GET['from_sref'], $_GET['from_system']);
+	 	if (array_key_exists('precision',$_GET))
+			$precision = $_GET['precision'];
+		else
+			$precision = null;
+	 	echo spatial_ref::internal_wkt_to_sref($wkt, $_GET['to_system'], $precision);
+	 }
+
 
 }
 ?>

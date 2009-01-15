@@ -10,6 +10,8 @@
 <script type="text/javascript" src="../../../media/js/ui.datepicker.js"></script>
 <script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo $config['google_api_key'] ?>"
+      type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#date').datepicker({constrainInput: false});
@@ -70,9 +72,14 @@ $(document).ready(function() {
 <input type="text" size="30" value="click here" id="date" name="date"/>
 <style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>
 <br />
+<label for="place_search">Search for place on map:</label>
+<?php echo data_entry_helper::geoplanet_search(); ?>
+<br/>
 <label for="entered_sref">Spatial Reference:</label>
 <?php echo data_entry_helper::map_picker('entered_sref',
-	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)')); ?>
+	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)'),
+	null,
+	'true'); ?>
 <br />
 <label for="location_name">Locality Description:</label>
 <input name="location_name" size="50" /><br />
