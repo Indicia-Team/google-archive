@@ -27,7 +27,7 @@ Helper function to generate an autocomplete box from an Indicia core service que
 
     * access: public
 
-static void autocomplete ( $id,  $entity,  $nameField, [ $valueField = null], [ $extraParams = null])
+`static void autocomplete ( $id,  $entity,  $nameField, [ $valueField = null], [ $extraParams = null])`
 
     * $id
     * $entity
@@ -42,7 +42,7 @@ Takes a response, and outputs any errors from it onto the screen.
     * todo: method of placing the errors alongside the controls.
     * access: public
 
-static void dump_errors ( $response)
+`static void dump_errors ( $response)`
 
     * $response
 
@@ -50,7 +50,7 @@ static method forward_post_to (line 305)
 
     * access: public
 
-static void forward_post_to ( $entity, [ $array = null])
+`static void forward_post_to ( $entity, [ $array = null])`
 
     * $entity
     * $array
@@ -61,7 +61,7 @@ Retrieves a token and inserts it into a data entry form which authenticates that
 
     * access: public
 
-static void get_auth ( $website_id,  $password)
+`static void get_auth ( $website_id,  $password)`
 
     * $website_id
     * $password
@@ -72,7 +72,7 @@ Retrieves a read token and passes it back as an array suitable to drop into the 
 
     * access: public
 
-static void get_read_auth ( $website_id,  $password)
+`static void get_read_auth ( $website_id,  $password)`
 
     * $website_id
     * $password
