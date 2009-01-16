@@ -14,6 +14,10 @@
 $(document).ready(function() {
 	$('#sampleDate').datepicker();
 	$('.date').datepicker();
+	$('#sampleDate').change(function() {
+		$('.date').removeClass('hasDatepicker')
+			.datepicker({ minDate : $(this).datepicker('getDate') });
+	});
 });
 </script>
 </head>
