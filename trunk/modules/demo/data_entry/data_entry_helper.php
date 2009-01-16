@@ -24,7 +24,7 @@ class data_entry_helper {
 	 * @param string[] extraParams Array of key=>value pairs which will be passed to the service
 	 * as GET parameters.
 	 */
-	public static function species_checklist($list_id, $occ_attrs, $readAuth, $extraParams = array()){
+	public static function species_checklist($list_id, $occ_attrs, $readAuth, $extraParams = array(), $lookupList = null){
 		$occAttrControls = array();
 		$occAttrs = array();
 		// Reference to the config file.
@@ -107,33 +107,38 @@ class data_entry_helper {
 			}
 			$grid .= "</tbody></table>";
 
-			// Insert an autocomplete box if the termlist has a parent.
-			$tlRequest = "$url/taxon_list/$list_id?mode=json&view=detail";
-			$session = curl_init($tlRequest);
-			curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-			$tl = json_decode(array_pop(explode("\r\n\r\n",curl_exec($session))), true);
-			if (! array_key_exists('error', $tl)){
-				$parent_id = $tl[0]['parent_id'];
-				if ($parent_id != null) {
-					// Javascript to add further rows to the grid
-					$grid .= "<script type='text/javascript'
-						src='./addRowToGrid.js' ></script>";
-					$grid .= "<script type='text/javascript' >
-						$(document).ready(function(){
-							var addRowFn = addRowToGrid('$url', $readAuth);
-							$('#addRowButton').click(addRowFn);
-				});
+			// Insert an autocomplete box if the termlist has a parent or an alternate
+			// termlist has been given in the parameter.
+			if ($lookupList == null) {
+				$tlRequest = "$url/taxon_list/$list_id?mode=json&view=detail";
+				$session = curl_init($tlRequest);
+				curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+				$tl = json_decode(array_pop(explode("\r\n\r\n",curl_exec($session))), true);
+				if (! array_key_exists('error', $tl)){
+					$lookupList = $tl[0]['parent_id'];
+				}
+			}
+
+			if ($lookupList != null) {
+				// Javascript to add further rows to the grid
+				$grid .= "<script type='text/javascript'
+					src='./addRowToGrid.js' ></script>";
+				$grid .= "<script type='text/javascript' >
+					$(document).ready(function(){
+						var addRowFn = addRowToGrid('$url', $readAuth);
+						$('#addRowButton').click(addRowFn);
+			});
 						</script>";
 
 					// Drop an autocomplete box against the parent termlist
 					$grid .= data_entry_helper::autocomplete('addSpeciesBox',
 						'taxa_taxon_list', 'taxon', 'id', $readAuth +
-					array('preferred' => 't', 'taxon_list_id' => $parent_id));
+						array('preferred' => 't', 
+						'taxon_list_id' => $lookupList));
 						$grid .= "<button type='button' id='addRowButton'>
 							Add Row</button>";
 
 				}
-			}
 
 			return $grid;
 		}
