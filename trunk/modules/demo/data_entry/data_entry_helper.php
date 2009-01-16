@@ -63,7 +63,7 @@ class data_entry_helper {
 					break;
 				case 'D' || 'V':
 					// Date-picker control
-					$occAttrControls[$occAttr] = 
+					$occAttrControls[$occAttr] =
 						"<input type='text' id='oa#$occAttr' name='oa#$occAttr' class='date' />";
 					break;
 
@@ -133,7 +133,7 @@ class data_entry_helper {
 					// Drop an autocomplete box against the parent termlist
 					$grid .= data_entry_helper::autocomplete('addSpeciesBox',
 						'taxa_taxon_list', 'taxon', 'id', $readAuth +
-						array('preferred' => 't', 
+						array('preferred' => 't',
 						'taxon_list_id' => $lookupList));
 						$grid .= "<button type='button' id='addRowButton'>
 							Add Row</button>";
@@ -513,8 +513,8 @@ class data_entry_helper {
 	public static function map_picker($field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
 		global $config;
 
-		$r = '<script type="text/javascript" src="../../../media/js/OpenLayers.js"></script>';
-		$r .= '<script type="text/javascript" src="../../../media/js/spatial-ref.js"></script>';
+		$r = '<script type="text/javascript" src="'.$config['base_url'].'/media/js/OpenLayers.js"></script>';
+		$r .= '<script type="text/javascript" src="'.$config['base_url'].'/media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
 		$r .= '<script type="text/javascript">' .
 			'$(document).ready(function() { '.
