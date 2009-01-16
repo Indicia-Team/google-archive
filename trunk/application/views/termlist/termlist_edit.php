@@ -1,5 +1,5 @@
 <?php if ($model->parent_id != null) { ?>
-<h1>Subset of: 
+<h1>Subset of:
 <a href="<?php echo url::site() ?>termlist/edit/<?php echo $model->parent_id ?>" >
 <?php echo ORM::factory("termlist",$model->parent_id)->title ?>
 </a>
@@ -57,10 +57,12 @@
 </form>
 <?php if ( $table != null) { ?>
 	<br />
+	<div id="sublists">
 	<h2> Sublists </h2>
 	<?php echo $table; ?>
 <form class="cmxform" action="<?php echo url::site(); ?>/termlist/create" method="post">
 	<input type="hidden" name="parent_id" value=<?php echo $model->id ?> />
 	<input type="submit" value="New Sublist" />
 	</form>
+	</div>
 <?php }} ?>

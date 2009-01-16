@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$('div#metadata').hide();
 	$('p#metadata_toggle').show();
 	$('p#metadata_toggle').click(function(){
-		$('div#metadata').toggle();
+		$('div#metadata').toggle('slow');
 	});
 });
 </script>
