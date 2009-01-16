@@ -143,6 +143,24 @@ class data_entry_helper {
 			return $grid;
 		}
 	}
+
+	/**
+	 * Helper function to insert a date picker control.
+	 */
+	public static function date_picker($id) {
+		$r =
+			'<script type="text/javascript"> '.
+			'$(document).ready(function() { '.
+			'$(\'.'.$id.'\').datepicker({dateFormat : \'yy-mm-dd\', constrainInput: false}); ' .
+			'}); '.
+			'</script>';
+		$r .=
+			'<input type="text" size="30" value="click here" class="date" id="'.$id.'" name="'.$id.'"/>' .
+			'<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style> ';
+		return $r;
+	}
+
+
 	/**
 	 * Helper function to generate a select control from a Indicia core service query.
 	 *
