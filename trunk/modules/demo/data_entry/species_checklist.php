@@ -12,11 +12,11 @@
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#sampleDate').datepicker();
-	$('.date').datepicker();
+	$('#sampleDate').datepicker({dateFormat : 'yy-mm-dd'});
+	$('.date').datepicker({dateFormat : 'yy-mm-dd'});
 	$('#sampleDate').change(function() {
 		$('.date').removeClass('hasDatepicker')
-			.datepicker({ minDate : $(this).datepicker('getDate') });
+			.datepicker({ dateFormat : 'yy-mm-dd', minDate : $(this).datepicker('getDate') });
 	});
 });
 </script>
