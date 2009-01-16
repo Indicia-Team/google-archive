@@ -13,7 +13,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#sampleDate').datepicker({dateFormat : 'yy-mm-dd'});
-	$('.date').datepicker({dateFormat : 'yy-mm-dd'});
 	$('#sampleDate').change(function() {
 		$('.date').removeClass('hasDatepicker')
 			.datepicker({ dateFormat : 'yy-mm-dd', minDate : $(this).datepicker('getDate') });

@@ -63,8 +63,8 @@ class data_entry_helper {
 					break;
 				case 'D' || 'V':
 					// Date-picker control
-					$occAttrControls[$occAttr] =
-						"<input type='text' id='oa#$occAttr' name='oa#$occAttr' class='date' />";
+					$occAttrControls[$occAttr] = 
+						data_entry_helper::date_picker("oa#$occAttr");
 					break;
 
 				default:
