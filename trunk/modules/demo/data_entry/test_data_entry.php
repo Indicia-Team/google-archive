@@ -14,7 +14,7 @@
       type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('.date').datepicker({constrainInput: false});
+	$('.date').datepicker({dateFormat : 'yy-mm-dd', constrainInput: false});
 });
 </script>
 </head>

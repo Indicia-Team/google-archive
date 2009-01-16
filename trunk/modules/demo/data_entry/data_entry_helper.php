@@ -364,7 +364,7 @@ class data_entry_helper {
 			}
 		}
 		foreach ($records as $id => $record){
-			if (!$record['present']){
+			if (! array_key_exists('present', $record) || !$record['present']){
 				unset ($records[$id]);
 				break;
 			}
