@@ -88,6 +88,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'taxon_list_id' => $taxon_list_id,
 			'preferred' => 't'
 		);
+		$this->upload_csv_form->returnPage = $taxon_list_id;
 		parent::page($page_no, $limit);
 	}
 

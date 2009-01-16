@@ -1,4 +1,4 @@
-<?php print form::open($controllerpath.'/upload_mappings', array('ENCTYPE'=>'multipart/form-data')); ?>
+<?php print form::open($controllerpath.'/upload_mappings/'.$returnPage, array('ENCTYPE'=>'multipart/form-data')); ?>
 <?php 
 if ($staticFields != null) {
 	foreach ($staticFields as $a => $b) {

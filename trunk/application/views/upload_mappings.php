@@ -1,4 +1,4 @@
-<?php echo form::open($controllerpath.'/upload', array('class'=>'cmxform')); ?>
+<?php echo form::open($controllerpath.'/upload/'.$returnPage, array('class'=>'cmxform')); ?>
 <p>Please map each column in the CSV file you are uploading to the associated attribute in the destination list.</p>
 <br />
 <table><thead><th>Column in CSV File</th><th>Maps to attribute</th></thead>

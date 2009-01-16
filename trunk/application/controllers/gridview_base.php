@@ -24,6 +24,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->pagetitle = "Abstract gridview class - override this title!";
 		$this->view = new View($this->viewname);
 		$this->upload_csv_form = new View('templates/upload_csv');
+		$this->upload_csv_form->returnPage = 1;
 		$this->upload_csv_form->staticFields = null;
 		$this->upload_csv_form->controllerpath = $this->controllerpath;
 		$this->view->upload_csv_form = $this->upload_csv_form;
@@ -84,7 +85,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		return $grid->display();
 	}
 
-	public function upload_mappings() {
+	public function upload_mappings($returnpage = 1) {
 		$_FILES = Validation::factory($_FILES)
 			->add_rules('csv_upload', 'upload::valid',
 			       	'upload::required', 'upload::type[csv]', 'upload::size[1M]');
@@ -101,19 +102,19 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$view->columns = fgetcsv($handle, 1000, ",");
 			fclose($handle);
 			$view->model = $this->model;
+			$view->returnPage = $returnpage;
 			$view->controllerpath = $this->controllerpath;
 			$this->template->content = $view;
 		} else {
 			// TODO: Display a validation error and remember current viewstate
-			url::redirect($this->controllerpath);
+			url::redirect($this->controllerpath.'/page/'.$this->model->id);
 		}
 
 
 	}
 
-	public function upload() {
+	public function upload($returnPage) {
 		$csvTempFile = $_SESSION['uploaded_csv'];
-
 		// make sure the file still exists
 		if (file_exists($csvTempFile))
 		{
@@ -136,7 +137,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 					} else {
 						// This is one of our static fields at the end
 						$saveArray[$col] = $attr;
-							syslog(LOG_DEBUG, "Upload ".$col.": ".$attr);
+						syslog(LOG_DEBUG, "Upload ".$col.": ".$attr);
 					}
 					$index++;
 				}
@@ -146,10 +147,10 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 				$this->model->submit();
 			}
 			fclose($handle);
-	    	// need to flash a success message
-	    	// clean up the uploaded file
-	    	unlink($csvTempFile);
-	    	url::redirect($this->controllerpath);
+			// need to flash a success message
+			// clean up the uploaded file
+			unlink($csvTempFile);
+			url::redirect($this->controllerpath."/page/".$returnPage);
 		}
 	}
 
