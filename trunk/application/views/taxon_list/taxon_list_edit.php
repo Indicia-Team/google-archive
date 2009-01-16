@@ -1,5 +1,5 @@
 <?php if ($model->parent_id != null) { ?>
-<h1>Subset of: 
+<h1>Subset of:
 <a href="<?php echo url::site() ?>taxon_list/edit/<?php echo $model->parent_id ?>" >
 <?php echo ORM::factory("taxon_list",$model->parent_id)->title ?>
 </a>
@@ -50,15 +50,16 @@
 <input type="submit" name="submit" value="Delete" />
 </form>
 <?php if ($model->id != '') { ?>
-<br/>
-<form class="cmxform" action="<?php echo url::site().'taxa_taxon_list/page/'.$model->id ?>" >
-<input type="submit" value="View Taxa" />
-</form>
+<br />
+<a href="<?php echo url::site().'taxa_taxon_list/page/'.$model->id ?>">View contents of this species list.</a>
 <?php if ($model->id != '' && $table != null) { ?>
+	<br />
+	<div id="sublists">
 	<h2> Sublists </h2>
 	<?php echo $table; ?>
-<form class="cmxform" action="<?php echo url::site(); ?>/taxon_list/create" method="post">
+	<form class="cmxform" action="<?php echo url::site(); ?>/taxon_list/create" method="post">
 	<input type="hidden" name="parent_id" value=<?php echo $model->id ?> />
 	<input type="submit" value="New Sublist" />
 	</form>
+	</div>
 <?php }} ?>

@@ -7,7 +7,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		$this->columns = array(
 			'title'=>'',
 			'description'=>'');
-		$this->pagetitle = "Taxon lists";
+		$this->pagetitle = "Species lists";
 		$this->model = ORM::factory('taxon_list');
 		$this->auth_filter = $this->gen_auth_filter;
 	}
@@ -20,7 +20,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 			$this->access_denied('record with ID='.$id);
 			return;
         }
-		
+
 		// Configure the grid
 		$grid =	Gridview_Controller::factory($this->model,
 				$page_no,
@@ -68,7 +68,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 	        }
 			$this->model->website_id = $this->model->parent->website_id;
 		}
-	
+
 		$this->setView('taxon_list/taxon_list_edit', 'Species List');
 	}
 
@@ -78,7 +78,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 		{
 			$taxon_list = new Taxon_list_Model($id);
 			return (in_array($taxon_list->website_id, $this->auth_filter['values']));
-		}		
+		}
 		return true;
 	}
 }

@@ -32,7 +32,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'authority'=>'',
 			'language'=>'',
 			);
-		$this->pagetitle = "Taxons";
+		$this->pagetitle = "Species";
 		$this->pageNoUriSegment = 4;
 		$this->model = ORM::factory('taxa_taxon_list');
 	}
@@ -82,7 +82,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			return;
         }
 		$this->base_filter['taxon_list_id'] = $taxon_list_id;
-		$this->pagetitle = "Taxons in ".ORM::factory('taxon_list',$taxon_list_id)->title;
+		$this->pagetitle = "Species in ".ORM::factory('taxon_list',$taxon_list_id)->title;
 		$this->view->taxon_list_id = $taxon_list_id;
 		$this->upload_csv_form->staticFields = array(
 			'taxon_list_id' => $taxon_list_id,
@@ -165,7 +165,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$this->model = ORM::factory('taxa_taxon_list');
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
-		
+
 		$vArgs = array(
 			'table' => null,
 			'taxon_list_id' => $taxon_list_id,
@@ -358,10 +358,10 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		$taxa = new Taxa_taxon_list_Model($id);
 		// for this controller, any taxon_list that does not exist can not be accessed.
 		// ie prevent sly creation using the edit function
-		if (!$taxa->loaded) return false;		
+		if (!$taxa->loaded) return false;
 		return ($this->taxon_list_authorised($taxa->taxon_list_id));
 	}
-	
+
 	protected function taxon_list_authorised ($id)
 	{
 		// for this controller, any null ID taxon_list can not be accessed
@@ -370,9 +370,9 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		{
 			$taxon_list = new Taxon_list_Model($id);
 			// for this controller, any taxon_list that does not exist can not be accessed.
-			if (!$taxon_list->loaded) return false;		
+			if (!$taxon_list->loaded) return false;
 			return (in_array($taxon_list->website_id, $this->gen_auth_filter['values']));
-		}		
+		}
 		return true;
 	}
 }

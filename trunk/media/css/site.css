@@ -155,3 +155,9 @@ p#metadata_toggle
 	color: #666666;
 	font-size: 90%;
 }
+
+#sublists
+{
+	border-top: 2px solid #C1DAD7;
+	margin-top: 16px;
+}

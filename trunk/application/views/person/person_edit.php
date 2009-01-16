@@ -47,7 +47,7 @@
 <?php echo html::error_message($model->getError('email_address')); ?>
 </li>
 <li>
-<label for="website_url">Website URL</label>
+<label for="website_url">Personal Website URL</label>
 <textarea rows="3" id="website_url" name="website_url"><?php echo html::specialchars($model->website_url); ?></textarea>
 <?php echo html::error_message($model->getError('website_url')); ?>
 </li>
