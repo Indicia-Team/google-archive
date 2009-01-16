@@ -233,7 +233,7 @@ abstract class ORM extends ORM_Core {
 				// Set the correct parent key in the subModel
 				$fkId = $a['fkId'];
 				syslog(LOG_DEBUG, "Setting field ".$fkId." to ".$this->id);
-				$a['model']['fields'][$fkId] = $this->id;
+				$a['model']['fields'][$fkId]['value'] = $this->id;
 
 				// Call the submit method for that model and
 				// check whether it returns correctly

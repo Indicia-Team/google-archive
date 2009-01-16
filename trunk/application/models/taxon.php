@@ -29,6 +29,9 @@ class Taxon_Model extends ORM {
 
 	protected function preSubmit(){
 
+		// Call the parent preSubmit function
+		parent::preSubmit();
+
 		// Set scientific as necessary
 		$l = ORM::factory('language');
 		$sci = 'f';
@@ -40,8 +43,6 @@ class Taxon_Model extends ORM {
 			'value' =>  $sci
 		);
 
-		// Call the parent preSubmit function
-		parent::preSubmit();
 	}
 }
 
