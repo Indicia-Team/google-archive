@@ -13,13 +13,17 @@ class Taxon_Model extends ORM {
 		$array->add_rules('taxon_group_id', 'required');
 
 		// Explicitly add those fields for which we don't do validation
-		$extraFields = array('language_id','external_key','authority','search_code');
+		$extraFields = array(
+			'language_id',
+			'external_key',
+			'authority',
+			'search_code'
+		);
 		foreach ($extraFields as $a) {
 			if (array_key_exists($a, $array->as_array())){
 				$this->__set($a, $array[$a]);
 			}
 		}
-
 		return parent::validate($array, $save);
 	}
 

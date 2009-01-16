@@ -138,7 +138,6 @@ abstract class ORM extends ORM_Core {
 		return $res;
 	}
 	public function inner_submit(){
-			// Useful
 		$mn = $this->object_name;
 		$return = null;
 		$collapseVals = create_function('$arr', 'return $arr["value"];');
@@ -233,6 +232,7 @@ abstract class ORM extends ORM_Core {
 
 				// Set the correct parent key in the subModel
 				$fkId = $a['fkId'];
+				syslog(LOG_DEBUG, "Setting field ".$fkId." to ".$this->id);
 				$a['model']['fields'][$fkId] = $this->id;
 
 				// Call the submit method for that model and
