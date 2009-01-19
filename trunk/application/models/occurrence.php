@@ -103,6 +103,7 @@ class Occurrence_Model extends ORM
 			}
 			return true;
 		}
+		return true;
 	}
 }
 ?>
