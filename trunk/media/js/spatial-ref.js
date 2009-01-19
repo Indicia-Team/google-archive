@@ -118,7 +118,7 @@ function init_map(base_url, wkt, field_name, google, geoplanet) {
 
 	var options = {
 		projection: new OpenLayers.Projection("EPSG:900913"),
-		displayProjection: new OpenLayers.Projection("EPSG:27700"),
+		displayProjection: new OpenLayers.Projection("EPSG:4326"),
 		units: "m",
 		numZoomLevels: 18,
 		maxResolution: 156543.0339,
