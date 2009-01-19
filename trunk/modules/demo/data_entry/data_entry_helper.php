@@ -77,7 +77,7 @@ class data_entry_helper {
 					break;
 				case 'D' || 'V':
 					// Date-picker control
-					$occAttrControls[$occAttr] = 
+					$occAttrControls[$occAttr] =
 						"<input type='text' class='date' id='oa:$occAttr' name='oa:$occAttr' value='click here'/>";
 					break;
 
@@ -266,6 +266,8 @@ class data_entry_helper {
 		foreach ($extraParams as $a => $b){
 			$sParams .= "$a : '$b',";
 		}
+		// lop the comma off the end
+		$sParams = substr($sParams, 0, -1);
 
 		// Reference the necessary libraries
 		$javascript .= "$('input#ac$id').autocomplete('$url/$entity', {
