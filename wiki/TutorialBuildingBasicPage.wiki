@@ -42,3 +42,16 @@ This tutorial takes you step by step through the process of building a basic dat
   #	Click the New Taxon button.
   #	Specify the Taxon Name, the Language for this term, and select the Taxon Group you previously created. All other fields are optional, but enter Common Names and Synonyms one on each line if required. Click the Submit button then repeat this for each taxon you require.
   #	Finally, in order to use this list on a data entry page, you need to know the ID of the list. To do this, select Lookup Lists\Species Lists from the menu and select the Edit option for the new list you created. Now click the Show/Hide Metadata link, and note the ID that is displayed in the box that appears.
+
+= Build a data entry page =
+  #	This part of the tutorial assumes you have access to a webserver that is running PHP 5 and are able to create web pages on the server. You should have a folder ready to contain the web pages on this server. Also, throughout this section of the tutorial, the website running the Indicia Core will be referred to as `<core_url>`. Make sure you replace this with the real URL!
+  #	The building of PHP pages using Indicia is simplified by using the supplied Data Entry Helper class. This is a static class (so you don’t have to create an instance of it to use it) which outputs ready made pieces of HTML and JavaScript into your page. To use this, copy the following files from an installation of Indicia into the folder your web page will be accessed from on the server:
+  * modules\demo\data_entry\data_entry_helper.php
+  * modules\demo\data_entry\helper_config.php.example
+  #	Remove the .example from the end of the latter file’s filename. Edit the helper_config.php file and change the value for the base_url setting to the URL of the folder which contains your Indicia installation (i.e. the same as you are replacing `<core_url>` with).
+  #	Now, create a basic, blank PHP web page using your site template but with no content.
+  #	Although you can take full control of the style sheets if you like, for this tutorial we will use some example styles provided. So, insert the following entries into the `<head>` section of of the page:
+{{{
+<link rel="stylesheet" href="<core_url>/media/css/ui.datepicker.css" type="text/css" media="screen">
+<link rel="stylesheet" href="<core_url>/media/css/jquery.autocomplete.css" />
+}}}
