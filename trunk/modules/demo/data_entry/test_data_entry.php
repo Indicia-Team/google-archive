@@ -1,5 +1,9 @@
 <html>
 <head>
+<?php
+		include 'data_entry_helper.php';
+		include 'data_entry_config.php';
+?>
 <title>Indicia external site data entry test page</title>
 <link rel="stylesheet" href="../../../media/css/ui.datepicker.css" type="text/css" media="screen">
 <link rel="stylesheet" href="demo.css" type="text/css" media="screen">
@@ -22,8 +26,6 @@ $(document).ready(function() {
 <h1>Indicia Data entry test</h1>
 <p>Note that this page requires the PHP curl extension to send requests to the Indicia server.</p>
 <?php
-		include 'data_entry_helper.php';
-		include 'data_entry_config.php';
 		// PHP to catch and submit the POST data from the form - we need to wrap
 		// some things manually in order to get the supermodel in.
 		if ($_POST) {
