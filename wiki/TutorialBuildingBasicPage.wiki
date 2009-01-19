@@ -88,3 +88,65 @@ This tutorial takes you step by step through the process of building a basic dat
 <br />
 }}}
   #	Now, try loading your page to check it works. With any luck you have a handy little auto-complete control for your species list, from just the lines of code above.
+  #	Next, add the following code for a date picker, then save and test it:
+{{{
+<label for="date">Date:</label>
+<?php echo data_entry_helper::date_picker('date'); ?> 
+<br />
+}}}
+  #	Because the date picker will drop down onto the controls below, it is a good idea to tell the web browser that it should always appear on top of those controls rather than underneath. You can do this using CSS (Cascading Style Sheets). If you already have a css file included with your template, you can paste the following into it to achieve this:
+{{{
+#ui-datepicker-div {
+z-index: 1000;
+}
+}}}
+If you don’t have a CSS file, you can paste the following into your HTML page directly, just above the line that reads </head>. Note that although this approach works, having an external CSS file for your styling information is good practice.
+{{{
+<style type="text/css">
+#ui-datepicker-div {
+z-index: 1000;
+}
+</style>
+}}}
+  #	Now, add the following code to your page under the date picker code. This will add a map for picking spatial references in either British National Grid, or Lat Long format, a Select control for the survey to post data into, and a Comment text box.
+{{{
+<label for="entered_sref">Spatial Reference:</label>
+<?php echo data_entry_helper::map_picker('entered_sref',
+	array(
+		'osgb'=>'British National Grid',
+		'4326'=>'Latitude and Longitude (WGS84)'),
+	null,
+	'false'); ?>
+<br />
+<label for="survey_id">Survey</label>
+<?php echo data_entry_helper::select(
+	'survey_id', 'survey', 'title', 'id', $readAuth); ?>
+<br />
+<label for='comment'>Comment</label>
+<textarea id='comment' name='comment'></textarea>
+<br />
+}}}
+  #	Ok, the data entry controls we need for a very basic form are done now, but you will also need to provide a method of submitting this data to the Indicia services where it will be stored. First, add a simple Submit button to your form (just above the </form> close tag). This button will post the data back to the same page – of course you could easily modify this to post the data to a different PHP page and process it from there.
+{{{
+<input type="submit" value="Save" />
+}}}
+  #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place:
+{{{
+<?php	include 'data_entry_helper.php';
+if ($_POST) {
+	$sampleMod = data_entry_helper::wrap($_POST, 'sample');
+	$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
+	$occurrenceMod['superModels'][] = array(
+				'fkId' => 'sample_id',
+				'model' => $sampleMod
+			);
+	$submission = array('submission' => array('entries' => array(
+		array ( 'model' => $occurrenceMod )
+	)));
+	$response = data_entry_helper::forward_post_to('save', $submission);
+	data_entry_helper::dump_errors($response);
+}
+?>
+}}}
+That code uses the data entry helper’s wrap method to convert your form’s post data into JSON, a handy notation used to send object data from JavaScript. It then joins the occurrence and sample together using the sample_id field, since the data on the form actually represents data from 2 database tables, not one. Finally, it forwards the wrapped and joined JSON data to Indicia for storage, and displays a success message or any errors that come back.
+That’s it! You’ve built a basic data entry form using Indicia.
