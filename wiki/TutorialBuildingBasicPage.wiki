@@ -1,0 +1,16 @@
+#summary A tutorial for building a basic data entry page using Indicia.
+
+= Introduction =
+
+This tutorial takes you step by step through the process of building a basic data entry page using Indicia and PHP. It assumes you are able to build a basic HTML page, and a little knowledge of PHP is useful though not essential.
+
+
+= Register the website =
+1.	Login to the Indicia Core as a user with administrative privileges.
+2.	Select Admin\Websites from the menu at the top.
+3.	Click the New Website button.
+4.	Enter the title of your website, e.g. “Tutorial”.
+5.	Fill in the URL of the website you will be setting up, e.g. http://www.mytutorial.com
+6.	Specify a password which will be used to authenticate that data posted to the server actually came from your website, and enter it again in the Retype Password box to confirm it.
+7.	Click the Save button.
+8.	Later in this tutorial you will need the ID of the website you have just created. To obtain this, click the Edit link next to the website in the grid, then click the Show/Hide Metadata link in the bottom right of the page. Note the ID in the box that appears.
