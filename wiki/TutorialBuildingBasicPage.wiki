@@ -6,11 +6,39 @@ This tutorial takes you step by step through the process of building a basic dat
 
 
 = Register the website =
-1.	Login to the Indicia Core as a user with administrative privileges.
-2.	Select Admin\Websites from the menu at the top.
-3.	Click the New Website button.
-4.	Enter the title of your website, e.g. “Tutorial”.
-5.	Fill in the URL of the website you will be setting up, e.g. http://www.mytutorial.com
-6.	Specify a password which will be used to authenticate that data posted to the server actually came from your website, and enter it again in the Retype Password box to confirm it.
-7.	Click the Save button.
-8.	Later in this tutorial you will need the ID of the website you have just created. To obtain this, click the Edit link next to the website in the grid, then click the Show/Hide Metadata link in the bottom right of the page. Note the ID in the box that appears.
+  #	Login to the Indicia Core as a user with administrative privileges.
+  #	Select Admin\Websites from the menu at the top.
+  #	Click the New Website button.
+  #	Enter the title of your website, e.g. “Tutorial”.
+  #	Fill in the URL of the website you will be setting up, e.g. http://www.mytutorial.com
+  #	Specify a password which will be used to authenticate that data posted to the server actually came from your website, and enter it again in the Retype Password box to confirm it.
+  #	Click the Save button.
+  #	Later in this tutorial you will need the ID of the website you have just created. To obtain this, click the Edit link next to the website in the grid, then click the Show/Hide Metadata link in the bottom right of the page. Note the ID in the box that appears.
+
+= Register the website administrator =
+  #	Select Lookup Lists\People from the menu.
+  #	Click the New Person button.
+  #	Enter the details of the person who will act as the administrator of the website you are building, including their email address.
+  #	Select Admin\Users from the menu.
+  #	Find the person record you just created, then click Edit User Details in that row.
+  #	In the User’s Details, enter a password for the user and confirm it in the Repeat Password control. 
+  #	Note the Username that has been generated or change it if required.
+  #	In the Role within CORE Module box, select SiteController which allows them to log in to the Core Module.
+  #	In the Website Roles list, select Admin in the drop down box next to the Website you created.
+  #	Save the page then select Me\Logout from the menu.
+
+= Create a species list to record against =
+  #	First, login as the user you created in the previous section.
+  #	Select Lookup Lists\Taxon Groups from the menu.
+  #	Click the New Taxon Group button and specify the title of a taxonomic group you would like to create a species list for, then save it.
+  #	Select Lookup Lists\Species Lists from the menu.
+  #	Click the New Species List button.
+  #	Enter a list title, e.g. “Dorset Butterflies”.
+  #	Enter a description for your list.
+  #	In the Owned By box, select the website that this list will be used for.
+  #	Press the Submit button.
+  #	Select the Edit option next to the new species list you have created.
+  #	Select the “View the contents of this list” link beneath the details of the list.
+  #	Click the New Taxon button.
+  #	Specify the Taxon Name, the Language for this term, and select the Taxon Group you previously created. All other fields are optional, but enter Common Names and Synonyms one on each line if required. Click the Submit button then repeat this for each taxon you require.
+  #	Finally, in order to use this list on a data entry page, you need to know the ID of the list. To do this, select Lookup Lists\Species Lists from the menu and select the Edit option for the new list you created. Now click the Show/Hide Metadata link, and note the ID that is displayed in the box that appears.
