@@ -100,7 +100,7 @@ This tutorial takes you step by step through the process of building a basic dat
 z-index: 1000;
 }
 }}}
-  If you don’t have a CSS file, you can paste the following into your HTML page directly, just above the line that reads `</head>`. Note that although this approach works, having an external CSS file for your styling information is good practice.
+  #	If you don’t have a CSS file, you can paste the following into your HTML page directly, just above the line that reads `</head>`. Note that although this approach works, having an external CSS file for your styling information is good practice.
 {{{
 <style type="text/css">
 #ui-datepicker-div {
