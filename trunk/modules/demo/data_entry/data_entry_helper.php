@@ -5,6 +5,19 @@ include('helper_config.php');
 class data_entry_helper {
 
 	/**
+	 * Helper function to collect javascript code in a single location.
+	 */
+	public static function dump_javascript() {
+		global $javascript;
+		$script = "<script type='text/javascript'>
+			$(document).ready(function() {
+				$javascript
+			});
+			</script>";
+		return $script;
+	}
+
+	/**
 	 * Helper function to generate a species checklist from a given taxon list.
 	 *
 	 * <p>This function will generate a flexible grid control with one row for each species
@@ -29,6 +42,7 @@ class data_entry_helper {
 		$occAttrs = array();
 		// Reference to the config file.
 		global $config;
+		global $javascript;
 		// Declare the data service
 		$url = $config['base_url']."/index.php/services/data";
 		$termRequest = "$url/taxa_taxon_list?mode=json&taxon_list_id=$list_id&preferred=t";
@@ -58,18 +72,18 @@ class data_entry_helper {
 					$tlId = $b['termlist_id'];
 					$occAttrControls[$occAttr] =
 						data_entry_helper::select(
-							'oa#'.$occAttr, 'termlists_term', 'term', 'id',
+							'oa:'.$occAttr, 'termlists_term', 'term', 'id',
 							$readAuth + array('termlist_id' => $tlId));
 					break;
 				case 'D' || 'V':
 					// Date-picker control
 					$occAttrControls[$occAttr] = 
-						data_entry_helper::date_picker("oa#$occAttr");
+						"<input type='text' class='date' id='oa:$occAttr' name='oa:$occAttr' value='click here'/>";
 					break;
 
 				default:
 					$occAttrControls[$occAttr] =
-						"<input type='text' id='oa#$occAttr' name='oa#$occAttr'/>";
+						"<input type='text' id='oa:$occAttr' name='oa:$occAttr'/>";
 					break;
 				}
 			}
@@ -100,7 +114,7 @@ class data_entry_helper {
 				$grid .= "<td class='scPresenceCell'><input type='checkbox' name='sc:$id:present'
 					value='sc:$id:present' /></td>";
 				foreach ($occAttrControls as $oc){
-					$oc = preg_replace('/oa#(\d+)/', "sc:$id:occAttr:$1", $oc);
+					$oc = preg_replace('/oa:(\d+)/', "sc:$id:occAttr:$1", $oc);
 					$grid .= "<td class='scOccAttrCell'>".$oc."</td>";
 				}
 				$grid .= "</tr>";
@@ -123,12 +137,8 @@ class data_entry_helper {
 				// Javascript to add further rows to the grid
 				$grid .= "<script type='text/javascript'
 					src='./addRowToGrid.js' ></script>";
-				$grid .= "<script type='text/javascript' >
-					$(document).ready(function(){
-						var addRowFn = addRowToGrid('$url', $readAuth);
-						$('#addRowButton').click(addRowFn);
-			});
-						</script>";
+				$javascript .= "var addRowFn = addRowToGrid('$url', $readAuth);
+						$('#addRowButton').click(addRowFn);";
 
 					// Drop an autocomplete box against the parent termlist
 					$grid .= data_entry_helper::autocomplete('addSpeciesBox',
@@ -148,12 +158,9 @@ class data_entry_helper {
 	 * Helper function to insert a date picker control.
 	 */
 	public static function date_picker($id) {
-		$r =
-			'<script type="text/javascript"> '.
-			'$(document).ready(function() { '.
-			'$(\'.'.$id.'\').datepicker({dateFormat : \'yy-mm-dd\', constrainInput: false}); ' .
-			'}); '.
-			'</script>';
+		global $javascript;
+		$javascript .=
+			'$(\'.'.$id.'\').datepicker({dateFormat : \'yy-mm-dd\', constrainInput: false}); ';
 		$r .=
 			'<input type="text" size="30" value="click here" class="date" id="'.$id.'" name="'.$id.'"/>' .
 			'<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style> ';
@@ -250,6 +257,7 @@ class data_entry_helper {
 	 */
 	public static function autocomplete($id, $entity, $nameField, $valueField = null, $extraParams = null) {
 		global $config;
+		global $javascript;
 		$url = $config['base_url']."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 		if ($valueField == null) $valueField = $nameField;
@@ -260,16 +268,14 @@ class data_entry_helper {
 		}
 
 		// Reference the necessary libraries
-		$r = "<script type='text/javascript' >
-			$(document).ready(function() {
-				$('input#ac$id').autocomplete('$url/$entity', {
-					minChars : 1,
-						mustMatch : true,
-						extraParams : {
-							orderby : '$nameField',
-								mode : 'json',
-								qfield : '$nameField',
-								$sParams
+		$javascript .= "$('input#ac$id').autocomplete('$url/$entity', {
+			minChars : 1,
+				mustMatch : true,
+				extraParams : {
+					orderby : '$nameField',
+						mode : 'json',
+						qfield : '$nameField',
+						$sParams
 	},
 	dataType: 'jsonp',
 	parse: function(data) {
@@ -291,13 +297,11 @@ class data_entry_helper {
 	});
 	$('input#ac$id').result(function(event, data){
 		$('input#$id').attr('value', data.id);
-	});
-	});
-	</script>";
-			$r .= "<input type='hidden' id='$id' name='$id' />".
-				"<input id='ac$id' name='ac$id' value='' />";
-			return $r;
-    }
+	});";
+	$r .= "<input type='hidden' id='$id' name='$id' />".
+		"<input id='ac$id' name='ac$id' value='' />";
+	return $r;
+	}
 
 	/**
 	 * Helper function to generate a radio group from a Indicia core service query.
@@ -324,12 +328,12 @@ class data_entry_helper {
 						$r .= "<input type='radio' id='$id' name='$id' value='$item[$valueField]' >";
 						$r .= $item[$nameField];
 						$r .= "</input>";
-				}
+					}
 			}
 		}
 
 		return $r;
-    }
+	}
 
 	public static function forward_post_to($entity, $array = null) {
 		global $config;
@@ -530,14 +534,12 @@ class data_entry_helper {
 	 */
 	public static function map_picker($field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
 		global $config;
+		global $javascript;
 
 		$r = '<script type="text/javascript" src="'.$config['base_url'].'/media/js/OpenLayers.js"></script>';
 		$r .= '<script type="text/javascript" src="'.$config['base_url'].'/media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
-		$r .= '<script type="text/javascript">' .
-			'$(document).ready(function() { '.
-			'init_map("'.$config['base_url'].'", null, "'.$field_name.'", '.$google.', \''.$config['geoplanet_api_key'].'\')' .
-			'}); </script>';
+		$javascript .= 'init_map("'.$config['base_url'].'", null, "'.$field_name.'", '.$google.', \''.$config['geoplanet_api_key'].'\');';
 
 		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$value.'" '.
 			'onblur="exit_sref();" onclick="enter_sref();"/>';

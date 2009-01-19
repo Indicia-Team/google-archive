@@ -26,7 +26,7 @@ function addRowToGrid(url, readAuth){
 					// Iterate over all the occurrence attribute cells
 					$('tr#scClonableRow td.scOccAttrCell > *').each(
 						function(index){
-						a = $(this).attr('id').replace(/oa#(\d+)/,
+						a = $(this).attr('id').replace(/oa:(\d+)/,
 							'sc:'+ttlId+':occAttr:$1');	
 						$(this).attr('name', a);
 

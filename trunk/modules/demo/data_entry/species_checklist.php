@@ -13,6 +13,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#sampleDate').datepicker({dateFormat : 'yy-mm-dd'});
+	$('.date').datepicker({dateFormat : 'yy-mm-dd'});
 	$('#sampleDate').change(function() {
 		$('.date').removeClass('hasDatepicker')
 			.datepicker({ dateFormat : 'yy-mm-dd', minDate : $(this).datepicker('getDate') });
@@ -25,6 +26,7 @@ $(document).ready(function() {
 <?php
 include 'data_entry_helper.php';
 include 'data_entry_config.php';
+$javascript = '';
 // Catch and submit POST data.
 if ($_POST){
 	// We're mainly submitting to the sample model
@@ -65,4 +67,5 @@ if ($_POST){
 <input type='submit' value='submit' />
 </form>
 </body>
+<?php echo data_entry_helper::dump_javascript(); ?>
 </html>
