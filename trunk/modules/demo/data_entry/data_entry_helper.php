@@ -12,9 +12,21 @@ class data_entry_helper {
 		$script = "<script type='text/javascript'>
 			$(document).ready(function() {
 				$javascript
-			});
+	});
 			</script>";
 		return $script;
+	}
+
+
+	/**
+	 * Helper function to support image upload 
+	 */
+	public static function image_upload($id){
+		$r = "<label for='$id'>Image upload</label>";
+		$r .= "<input type='file' id='$id' name='imgUploadFile' accept='png|jpg|gif'/>";
+		
+		return $r;
+
 	}
 
 	/**
@@ -138,17 +150,17 @@ class data_entry_helper {
 				$grid .= "<script type='text/javascript'
 					src='./addRowToGrid.js' ></script>";
 				$javascript .= "var addRowFn = addRowToGrid('$url', $readAuth);
-						$('#addRowButton').click(addRowFn);";
+				$('#addRowButton').click(addRowFn);";
 
-					// Drop an autocomplete box against the parent termlist
-					$grid .= data_entry_helper::autocomplete('addSpeciesBox',
-						'taxa_taxon_list', 'taxon', 'id', $readAuth +
-						array('preferred' => 't',
+				// Drop an autocomplete box against the parent termlist
+				$grid .= data_entry_helper::autocomplete('addSpeciesBox',
+					'taxa_taxon_list', 'taxon', 'id', $readAuth +
+					array('preferred' => 't',
 						'taxon_list_id' => $lookupList));
-						$grid .= "<button type='button' id='addRowButton'>
-							Add Row</button>";
+				$grid .= "<button type='button' id='addRowButton'>
+					Add Row</button>";
 
-				}
+			}
 
 			return $grid;
 		}
@@ -449,8 +461,7 @@ class data_entry_helper {
 		// Initialise the wrapped array
 		$sa = array(
 			'id' => $entity,
-			'fields' => array(),
-			'superModels' => array()
+			'fields' => array()
 		);
 
 		// Iterate through the array
