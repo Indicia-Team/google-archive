@@ -161,7 +161,7 @@ class data_entry_helper {
 		global $javascript;
 		$javascript .=
 			'$(\'.'.$id.'\').datepicker({dateFormat : \'yy-mm-dd\', constrainInput: false}); ';
-		$r .=
+		$r =
 			'<input type="text" size="30" value="click here" class="date" id="'.$id.'" name="'.$id.'"/>' .
 			'<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style> ';
 		return $r;
@@ -298,7 +298,7 @@ class data_entry_helper {
 	$('input#ac$id').result(function(event, data){
 		$('input#$id').attr('value', data.id);
 	});";
-	$r .= "<input type='hidden' id='$id' name='$id' />".
+	$r = "<input type='hidden' id='$id' name='$id' />".
 		"<input id='ac$id' name='ac$id' value='' />";
 	return $r;
 	}
