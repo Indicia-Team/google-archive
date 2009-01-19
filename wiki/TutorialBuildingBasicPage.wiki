@@ -55,3 +55,36 @@ This tutorial takes you step by step through the process of building a basic dat
 <link rel="stylesheet" href="<core_url>/media/css/ui.datepicker.css" type="text/css" media="screen">
 <link rel="stylesheet" href="<core_url>/media/css/jquery.autocomplete.css" />
 }}}
+  #	You’ll also need to link in some JavaScript files. Paste the following into your page, inside the `<head>` section just beneath the stylesheet links:
+{{{
+<script type="text/javascript" src="<core_url>/media/js/jquery-1.2.6.js"></script>
+<script type="text/javascript" src="<core_url>/media/js/ui.core.js"></script>
+<script type="text/javascript" src="<core_url>/media/js/ui.datepicker.js"></script>
+<script type="text/javascript" src="<core_url>/media/js/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="<core_url>/media/js/json2.js"></script>
+}}}
+  #	Now, just inside your <head> element, paste in the following:
+{{{
+<?php	include 'data_entry_helper.php'; ?>
+}}}
+  #	You will need an HTML form in which to place the data entry controls. Paste this into your web page to create the basic form container. You need to replace websiteID with the ID of the website you created earlier, and websitePassword with its password. Make sure you use the website password, not your user password!
+{{{
+<form method="post">
+<?php
+	// Get authorisation tokens to update and read from the Core.
+	echo data_entry_helper::get_auth(websiteID, 'websitePassword');
+	$readAuth = data_entry_helper::get_read_auth(websiteID, 'websitePassword');
+?>
+<input type='hidden' id='website_id' name='website_id' value='websiteId' />
+
+
+</form>
+<?php echo data_entry_helper::dump_javascript(); ?>
+}}}
+  #	Ok, you’ve now got a form “Indicia enabled” and ready to put controls into. Note the last call, to dump_javascript? That is because the data entry helper will dynamically build the required script for your page. Rather than inserting it higgledy piggledy into the html, it keeps things tidier if it is all kept in one place. The next task is to add a simple text box to allow selection of a species from your species list. Remember the ID of the species list we created earlier? Paste the following code into your page, just above the `</form>`, and replace ID with your ID.
+{{{
+<label for='actaxa_taxon_list_id'>Species</label>
+<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth + array('taxon_list_id' => 'ID')); ?>
+<br />
+}}}
+  #	Now, try loading your page to check it works. With any luck you have a handy little auto-complete control for your species list, from just the lines of code above.
