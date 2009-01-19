@@ -97,10 +97,10 @@ class data_entry_helper {
 				$id = $taxon['id'];
 				$grid .= "<tr>";
 				$grid .= "<td class='scTaxonCell'>".$taxon['taxon'].", ".$taxon['authority']."</td>";
-				$grid .= "<td class='scPresenceCell'><input type='checkbox' name='sc|$id|present'
-					value='sc|$id|present' /></td>";
+				$grid .= "<td class='scPresenceCell'><input type='checkbox' name='sc:$id:present'
+					value='sc:$id:present' /></td>";
 				foreach ($occAttrControls as $oc){
-					$oc = preg_replace('/oa#(\d+)/', "sc|$id|occAttr|$1", $oc);
+					$oc = preg_replace('/oa#(\d+)/', "sc:$id:occAttr:$1", $oc);
 					$grid .= "<td class='scOccAttrCell'>".$oc."</td>";
 				}
 				$grid .= "</tr>";
@@ -377,7 +377,7 @@ class data_entry_helper {
 		foreach ($arr as $key=>$value){
 			if (strpos($key, 'sc') !== false){
 				// Don't explode the last element for occurrence attributes
-				$a = explode('|', $key, 3);
+				$a = explode(':', $key, 3);
 				$records[$a[1]][$a[2]] = $value;
 			}
 		}
@@ -423,8 +423,8 @@ class data_entry_helper {
 		$occAttrs = array();
 		foreach ($arr as $key => $value) {
 			if (strpos($key, $prefix) !== false) {
-				$a = explode('|', $key);
-				// Attribute in the form occAttr|36 for attribute with attribute id
+				$a = explode(':', $key);
+				// Attribute in the form occAttr:36 for attribute with attribute id
 				// of 36.
 				$oap[] = array(
 					$entity."_attribute_id" => $a[1],
