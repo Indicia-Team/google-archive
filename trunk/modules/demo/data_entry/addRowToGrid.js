@@ -20,14 +20,14 @@ function addRowToGrid(url, readAuth){
 					 */
 					$('tr#scClonableRow td.scTaxonCell').html(
 						speciesName + ", "+authority);
-					var a = 'sc|'+ttlId+'|present';
+					var a = 'sc:'+ttlId+':present';
 					$('tr#scClonableRow td.scPresenceCell input')
 					.val(a).attr('name', a);
 					// Iterate over all the occurrence attribute cells
 					$('tr#scClonableRow td.scOccAttrCell > *').each(
 						function(index){
 						a = $(this).attr('id').replace(/oa#(\d+)/,
-							'sc|'+ttlId+'|occAttr|$1');	
+							'sc:'+ttlId+':occAttr:$1');	
 						$(this).attr('name', a);
 
 						});
