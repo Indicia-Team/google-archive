@@ -113,4 +113,5 @@ $(document).ready(function() {
 <?php echo data_entry_helper::listbox($config['site_usage'].'[]', 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => $config['site_usage_termlist'])); ?>
 </fieldset>
 <input type="submit" value="Save" />
+<?php echo data_entry_helper::dump_javascript(); ?>
 </form>
