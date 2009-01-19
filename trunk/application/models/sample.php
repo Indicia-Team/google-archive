@@ -100,10 +100,10 @@ class Sample_Model extends ORM
 	protected function postSubmit() {
 		// Occurrences have sample attributes associated, stored in a
 		// metafield.
-		syslog(LOG_DEBUG, "About to submit sample attributes.");
 		if (array_key_exists('metaFields', $this->submission) &&
 			array_key_exists('smpAttributes', $this->submission['metaFields']))
 		{
+			syslog(LOG_DEBUG, "About to submit sample attributes.");
 			foreach ($this->submission['metaFields']['smpAttributes']['value'] as
 				$idx => $attr)
 			{

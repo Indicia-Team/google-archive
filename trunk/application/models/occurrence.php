@@ -50,10 +50,10 @@ class Occurrence_Model extends ORM
 	protected function postSubmit() {
 		// Occurrences have occurrence attributes associated, stored in a
 		// metafield.
-		syslog(LOG_DEBUG, "About to submit occurrence attributes.");
 		if (array_key_exists('metaFields', $this->submission) &&
 			array_key_exists('occAttributes', $this->submission['metaFields']))
 		{
+			syslog(LOG_DEBUG, "About to submit occurrence attributes.");
 			foreach ($this->submission['metaFields']['occAttributes']['value'] as
 				$idx => $attr)
 			{
