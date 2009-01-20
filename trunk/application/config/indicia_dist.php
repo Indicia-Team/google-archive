@@ -19,4 +19,5 @@ $config['system'] = array
 
 $config['private_key'] = 'Indicia'; // Change this to a unique value for each Indicia install
 $config['nonce_life'] = 1200;		// life span of an authentication token for services, in seconds
+$config['maxUploadSize'] = '1M'; // Maximum size of an upload
 ?>

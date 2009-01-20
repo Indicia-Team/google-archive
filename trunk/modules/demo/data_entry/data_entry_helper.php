@@ -23,7 +23,7 @@ class data_entry_helper {
 	 */
 	public static function image_upload($id){
 		$r = "<label for='$id'>Image upload</label>";
-		$r .= "<input type='file' id='$id' name='imgUploadFile' accept='png|jpg|gif'/>";
+		$r .= "<input type='file' id='$id' name='$id' accept='png|jpg|gif'/>";
 		
 		return $r;
 
@@ -371,6 +371,46 @@ class data_entry_helper {
 		curl_close($session);
 		// The last block of text in the response is the body
 		return json_decode(array_pop(explode("\r\n\r\n",$response)), true);
+	}
+
+	public static function handle_media($media_id = 'imgUpload') {
+		global $config;
+		syslog(LOG_DEBUG, print_r($_FILES, true));
+		if (array_key_exists($media_id, $_FILES)) {
+			syslog(LOG_DEBUG, "SITE: Media id $media_id to upload.");
+			$uploadpath = $config['uploadpath'];
+			$target_url = $config['base_url']."/index.php/services/data/handle_media";
+
+			$name = $_FILES[$media_id]['name'];
+			$fname = $_FILES[$media_id]['tmp_name'];
+			$fext = array_pop(explode(".", $name));
+			$bname = basename($fname, ".$fext");
+
+			// Generate a file id to store the image as
+			$destination = time().rand(0,1000).".".$fext;
+
+			if (move_uploaded_file($fname, $uploadpath.$destination)) {
+				$postargs = array();
+				if (array_key_exists('auth_token', $_POST))
+					$postargs['auth_token'] = $_POST['auth_token'];
+				if (array_key_exists('nonce', $_POST))
+					$postargs['nonce'] = $_POST['nonce'];
+				$file_to_upload = array('media_upload'=>'@'.$uploadpath.
+					$destination);
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL,$target_url);
+				curl_setopt($ch, CURLOPT_POST,1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $file_to_upload + $postargs);
+				$result=curl_exec ($ch);
+				curl_close ($ch);
+
+			} else {
+				//TODO error messaging
+			}
+		}
+
+
+
 	}
 
 	/**
