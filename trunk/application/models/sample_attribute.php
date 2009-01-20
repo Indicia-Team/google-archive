@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Sample_Attribute_Model extends ORM {
+class Sample_Attribute_Model extends ATTR_ORM {
 
 	protected $belongs_to = array('created_by'=>'user', 'updated_by'=>'user', 'termlist');
 
