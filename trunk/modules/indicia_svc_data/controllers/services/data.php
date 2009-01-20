@@ -253,6 +253,30 @@ class Data_Controller extends Service_Base_Controller {
 		}
 	}
 
+	public function handle_media() {
+		syslog(LOG_DEBUG, "Attempting to handle media submission.");
+		// Ensure we have write permissions.
+		$this->authenticate();
+		syslog(LOG_DEBUG, "Authentication for media successful.");
+		// We will be using a POST array to send data, and presumably a FILES array for the
+		// media.
+		// Upload size
+		$ups = Kohana::config('indicia.maxUploadSize');
+		syslog(LOG_DEBUG, "Maximum upload size is $ups.");
+		$_FILES = Validation::factory($_FILES)
+			->add_rules('media_upload', 'upload::valid', 'upload::required',
+				'upload::type[png,gif,jpg]', "upload::size[$ups]");
+		if ($_FILES->validate()){
+			$fTmp = upload::save('media_upload');
+			syslog(LOG_DEBUG, "Media validated and saved as $fTmp.");
+		} else {
+			syslog(LOG_DEBUG, "Media did not validate.");
+			//TODO better error message
+			echo "Some sort of problem!";
+		}
+
+	}
+
 	/**
 	 * Encodes an array as xml. Uses $this->entity to decide the name of the root element.
 	 * Recurses into the array where array values are themselves arrays. Also inserts

@@ -36,24 +36,8 @@ $(document).ready(function() {
 				}
 			}
 
-			if (array_key_exists('imgUploadFile', $_FILES)) {
-				$uploadpath = $config['uploadpath'];
-
-				$fname = $_FILES['imgUploadFile']['tmp_name'];
-				$fext = array_pop(explode(".", $fname));
-				$bname = basename($fname, ".$fext");
-
-				// Generate a file id to store the image as
-				$destination = time().rand(0,1000).".".$fext;
-
-				if (move_uploaded_file($fname, $uploadpath.$destination)) {
-					//TODO upload to server and put correct file details
-					// in the right fields.
-
-				} else {
-					//TODO error messaging
-				}
-			}
+			// Send the image
+			data_entry_helper::handle_media('occurrence_image');
 
 			// We have occurrence attributes that we have to wrap
 			$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
@@ -78,7 +62,7 @@ $(document).ready(function() {
 		}
 
 ?>
-<form method="post">
+<form method="post" enctype="multipart/form-data" >
 <?php
 		// This PHP call demonstrates inserting authorisation into the form, for website ID
 		// 1 and password 'password'
@@ -133,7 +117,6 @@ $(document).ready(function() {
 <?php echo data_entry_helper::listbox($config['site_usage'].'[]', 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => $config['site_usage_termlist'])); ?>
 </fieldset>
 <input type="submit" value="Save" />
-<?php echo data_entry_helper::dump_javascript(); ?>
 </form>
 </body>
 <?php echo data_entry_helper::dump_javascript(); ?>
