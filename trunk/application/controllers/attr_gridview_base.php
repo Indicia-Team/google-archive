@@ -85,7 +85,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 			// ID points to id of *_attributes_website record.
             $attr_web = ORM::factory($this->websitemodelname, $id);
 			$this->model = ORM::factory($this->model->object_name, $attr_web->__get($this->model->object_name.'_id'));
-			$count = ORM::factory($this->websitemodelname)->where($this->model->object_name.'_id',$attr_web->occurrence_attribute_id)->find_all()->count();
+			$count = ORM::factory($this->websitemodelname)->where($this->model->object_name.'_id',$attr_web->__get($this->model->object_name.'_id')->find_all()->count();
 			if ($count == 1)
 				$this->setView('custom_attribute/custom_attribute_edit',
 								$this->model->object_name,
@@ -114,7 +114,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		if ($_POST['submit']=='Save' )
 			parent::save();
 		else if ($_POST['submit']=='Reuse' ) {
-			// _POST[load_attr_id] points to id of occurrence_attributes record.
+			// _POST[load_attr_id] points to id of *_attributes record.
 			$this->model = ORM::factory($this->model->object_name, $_POST['load_attr_id']);
 	        $this->setView('custom_attribute/custom_attribute_edit',
 	        				$this->model->object_name,
