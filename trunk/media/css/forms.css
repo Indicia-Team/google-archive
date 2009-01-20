@@ -53,6 +53,10 @@ form.cmxform fieldset input.narrow {
 	width: 150px;
 }
 
+form.cmxform fieldset input.vnarrow {
+	width: 50px;
+}
+
 form.cmxform fieldset input.wide {
 	width: 600px;
 }

@@ -32,9 +32,6 @@ class Attr_Gridview_Controller extends Controller {
 
 		$orderby = $this->input->get('orderby','id');
 		$direction = $this->input->get('direction','asc');
-
-//		if ($filter_website==null)
-//			return;
 		
 		$arrorder = explode(',',$orderby);
 		$arrdirect = explode(',',$direction);
@@ -60,9 +57,12 @@ class Attr_Gridview_Controller extends Controller {
 		// Are we doing client-side filtering?
 		if ($filter_website != null AND is_numeric($filter_website) AND $filter_website >= 0){
 			$lists = $lists->where(array('website_id' => $filter_website));
-		} else
+		} else {
+			// if the website is invalid ensure no records are displayed
+			$lists = $lists->where(array('website_id' => -1));
 			$filter_website = null;
-			
+		}
+		
 		if ($filter_survey != null AND is_numeric($filter_survey) AND $filter_survey >= 0 ){
 			$lists = $lists->where(array('survey_id' => $filter_survey));
 		} else 
