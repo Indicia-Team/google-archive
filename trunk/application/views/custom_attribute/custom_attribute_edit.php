@@ -1,12 +1,12 @@
-<p>This page allows you to specify a new attribute for an occurrence.</p>
-<form class="cmxform" action="<?php echo url::site().'occurrence_attribute/process'; ?>" method="post">
+<p>This page allows you to specify a new custom attribute for an <?php echo $name; ?>.</p>
+<form class="cmxform" action="<?php echo url::site().$processpath; ?>" method="post">
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <input type="hidden" name="website_id" id="website_id" value="<?php echo html::specialchars($website_id); ?>" />
 <input type="hidden" name="survey_id" id="survey_id" value="<?php echo html::specialchars($survey_id); ?>" />
 <input type="hidden" name="disabled_input" id="disabled_input" value="<?php echo html::specialchars($disabled_input); ?>" />
 <?php echo $attribute_load ?>
 <fieldset>
-<legend>Attribute details</legend>
+<legend><?php echo $name; ?> Attribute details</legend>
 <ol>
 <li>
 <label for="caption">Caption</label>
