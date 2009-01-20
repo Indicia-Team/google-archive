@@ -10,12 +10,4 @@ class Location_Attribute_Model extends ORM {
 
 	protected $has_and_belongs_to_many = array('websites');
 
-	protected $search_field='caption';
-
-	public function validate(Validation $array, $save = FALSE) {
-		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
-		$array->pre_filter('trim');
-		return parent::validate($array, $save);
-	}
-
 }
