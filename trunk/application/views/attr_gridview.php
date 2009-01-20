@@ -106,10 +106,10 @@ foreach ($actionColumns as $name => $action) {
 <br/>
 <form action="<?php echo url::site().$createpath; ?>" method="post">
 <?php if (isset($website_id)) { ?>
-<input type="hidden" name="website_id" value=<?php echo html::specialchars($website_id); ?>" />
+<input type="hidden" name="website_id" value="<?php echo html::specialchars($website_id); ?>" />
 <?php } ?>
 <?php if (isset($survey_id)) { ?>
-<input type="hidden" name="survey_id" value=<?php echo html::specialchars($survey_id); ?>" />
+<input type="hidden" name="survey_id" value="<?php echo html::specialchars($survey_id); ?>" />
 <?php } ?>
 <input type="submit" value="<?php echo $createbuttonname; ?>" 
 <?php if (isset($disable_new_button)) { echo ' disabled="disabled" '; } ?>

@@ -13,6 +13,8 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		$this->viewname=is_null($viewname) ? $modelname : $viewname;
 		$this->controllerpath=is_null($controllerpath) ? $modelname : $controllerpath;
 		$this->createpath=$this->controllerpath."/create";
+		$this->processpath=$this->controllerpath."/process";
+		$this->modelname=$modelname;
 		$this->createbutton='New '.$modelname;
 		$this->gridmodel = ORM::factory($this->gridmodelname);
 		$this->pageNoUriSegment = 3;
@@ -86,5 +88,21 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		return $grid->display();
 	}
 
-
+	/**
+     * Returns to the index view for this controller.
+     */
+    protected function submit_succ($id) {
+        syslog(LOG_DEBUG, "Submitted record ".$id." successfully.");
+        url::redirect($this->model->object_name.'?website_id='.$_POST['website_id'].'&survey_id='.$_POST['survey_id']);
+    }
+	
+    /**
+     * Returns to the edit page to correct errors - now embedded in the model
+     */
+    protected function submit_fail() {
+        $mn = $this->model->object_name;
+        $this->setView("custom_attribute/".$mn."_edit", ucfirst($mn), array('website_id' => $_POST['website_id'], 'survey_id' => $_POST['survey_id'], 'enabled'=>'', 'disabled_input'=>'NO', 'attribute_load' => ''));
+		$this->model->populate_validation_rules();
+    }
+	
 }

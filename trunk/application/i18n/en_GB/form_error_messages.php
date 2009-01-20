@@ -60,6 +60,7 @@ $lang = array (
 		'sref' => 'The spatial reference is not recognised.',
 	),
 	'date_type' => Array (
+		'required' => 'The data type must be provided.',
 		'default' => 'Unrecognised vague date type',
 	),
 	'first_name' => Array (
@@ -70,6 +71,9 @@ $lang = array (
 	'determiner_id' => Array (
 		'required' => 'The determiner cannot be blank.',
 		'default' => 'Invalid Input.',
+	),
+	'caption' => Array (
+		'required' => 'The caption cannot be blank.',
 	),
 );
 
