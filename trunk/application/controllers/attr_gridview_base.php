@@ -57,7 +57,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		if ($website == null)
 	   		$this->setError('Invocation error: missing argument', 'You cannot call create '.$this->model->object_name.' without posting a website ID');
         else {
-        	$attribute_load = new View('templates/attribute_load', array('website_id' => $website));
+        	$attribute_load = new View('templates/attribute_load', array('website_id' => $website, 'model' => $this->model));
         	$this->setView('custom_attribute/custom_attribute_edit',
         					$this->model->object_name,
         					array('website_id' => $website,
@@ -85,7 +85,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 			// ID points to id of *_attributes_website record.
             $attr_web = ORM::factory($this->websitemodelname, $id);
 			$this->model = ORM::factory($this->model->object_name, $attr_web->__get($this->model->object_name.'_id'));
-			$count = ORM::factory($this->websitemodelname)->where($this->model->object_name.'_id',$attr_web->__get($this->model->object_name.'_id')->find_all()->count();
+			$count = ORM::factory($this->websitemodelname)->where($this->model->object_name.'_id',$attr_web->__get($this->model->object_name.'_id'))->find_all()->count();
 			if ($count == 1)
 				$this->setView('custom_attribute/custom_attribute_edit',
 								$this->model->object_name,
