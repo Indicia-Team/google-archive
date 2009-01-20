@@ -36,9 +36,6 @@ $(document).ready(function() {
 				}
 			}
 
-			// Send the image
-			data_entry_helper::handle_media('occurrence_image');
-
 			// We have occurrence attributes that we have to wrap
 			$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
 			$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
@@ -52,6 +49,19 @@ $(document).ready(function() {
 				'model' => $sampleMod
 			);
 			$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
+			
+			// Send the image
+			if ($name = data_entry_helper::handle_media('occurrence_image')) {
+				// Add occurrence image model
+				// TODO Get a caption for the image
+				$oiFields = array(
+					'path' => $name,
+					'caption' => 'An image in need of a caption');
+				$oiMod = data_entry_helper::wrap($oiFields, 'occurrence_image');
+				$occurrenceMod['subModels'][] = array(
+					'fkId' => 'occurrence_id',
+					'model' => $oiMod);
+			}
 
 			$submission = array('submission' => array('entries' => array(
 				array ( 'model' => $occurrenceMod )
@@ -63,6 +73,7 @@ $(document).ready(function() {
 
 ?>
 <form method="post" enctype="multipart/form-data" >
+
 <?php
 		// This PHP call demonstrates inserting authorisation into the form, for website ID
 		// 1 and password 'password'
