@@ -403,9 +403,11 @@ class data_entry_helper {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $file_to_upload + $postargs);
 				$result=curl_exec ($ch);
 				curl_close ($ch);
+				return $destination;
 
 			} else {
 				//TODO error messaging
+				return false;
 			}
 		}
 
