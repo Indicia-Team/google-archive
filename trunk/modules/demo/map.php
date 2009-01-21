@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="style.css" type="text/css" />
     <script src="../../media/js/OpenLayers.js"></script>
     <script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo $config['google_api_key'] ?>"
+      type="text/javascript"></script>
     <script type="text/javascript">
         // making this a global variable so that it is accessible for
         // debugging/inspecting in Firebug
@@ -26,6 +28,23 @@
 			};
 
             map = new OpenLayers.Map('map', options);
+
+            var gphy = new OpenLayers.Layer.Google(
+			"Google Physical",
+ 			{type: G_PHYSICAL_MAP, 'sphericalMercator': true}
+			);
+			var gmap = new OpenLayers.Layer.Google(
+				"Google Streets", // the default
+				{numZoomLevels: 20, 'sphericalMercator': true}
+			);
+			var ghyb = new OpenLayers.Layer.Google(
+				"Google Hybrid",
+				{type: G_HYBRID_MAP, numZoomLevels: 20, 'sphericalMercator': true}
+			);
+			var gsat = new OpenLayers.Layer.Google(
+				"Google Satellite",
+				{type: G_SATELLITE_MAP, numZoomLevels: 20, 'sphericalMercator': true}
+			);
 
             var ol_wms = new OpenLayers.Layer.WMS(
                 "OpenLayers WMS",
@@ -56,7 +75,7 @@
                 {singleTile: true, ratio: 1,isBaseLayer:false, opacity:0.5}
             );
 
-            map.addLayers([velayer, jpl_wms, ol_wms, samples]);
+            map.addLayers([gphy, gmap, gsat, ghyb, velayer, jpl_wms, ol_wms, samples]);
             map.addControl(new OpenLayers.Control.LayerSwitcher());
             map.setCenter(new OpenLayers.LonLat(-100000,6700000),7);
         }
