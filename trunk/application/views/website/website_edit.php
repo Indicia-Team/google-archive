@@ -33,4 +33,5 @@
 </fieldset>
 <?php echo $metadata ?>
 <input type="submit" name="submit" value="Save" />
+<input type="submit" name="submit" value="Delete" />
 </form>
