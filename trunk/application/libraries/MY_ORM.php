@@ -189,36 +189,26 @@ abstract class ORM extends ORM_Core {
 		foreach ($vArray as $a => $b){
 			Kohana::log("debug", $a.": ".$b);
 		}
-		// Check whether this object already exists in the database with an exact match
-		$a = (array_key_exists('id', $vArray) && $vArray['id'] != null) ?
-			$this->where($vArray)->find()->id : null;
-		if ($a == null){
-			// If we're editing an existing record.
-			if (array_key_exists('id', $vArray) && $vArray['id'] != null) {
-				$this->find($vArray['id']);
-			}
-			// Create a new record by calling the validate method
-			if ($this->validate(new Validation($vArray), true)) {
-				// Record has successfully validated. Return the id.
-				syslog(LOG_DEBUG, "Record ".
-					$this->id.
-					" has validated successfully");
-				$return = $this->id;
-			} else {
-				// Errors. Return null and rollback the transaction.
-				$this->db->query('ROLLBACK');
-				Kohana::log("debug", "Record did not validate.");
-				// Print more detailed information on why
-				foreach ($this->errors as $f => $e){
-					Kohana::log("debug", "Field ".$f.": ".$e.".");
-				}
-				return null;
-			}
+		// If we're editing an existing record.
+		if (array_key_exists('id', $vArray) && $vArray['id'] != null) {
+			$this->find($vArray['id']);
+		}
+		// Create a new record by calling the validate method
+		if ($this->validate(new Validation($vArray), true)) {
+			// Record has successfully validated. Return the id.
+			Kohana::log("debug", "Record ".
+				$this->id.
+				" has validated successfully");
+			$return = $this->id;
 		} else {
-			// Set the model to point to the existing record.
-			$this->find($a);
-			Kohana::log("debug", "Existing record - linking to ".$a);
-			$return = $a;
+			// Errors. Return null and rollback the transaction.
+			$this->db->query('ROLLBACK');
+			Kohana::log("debug", "Record did not validate.");
+			// Print more detailed information on why
+			foreach ($this->errors as $f => $e){
+				Kohana::log("debug", "Field ".$f.": ".$e.".");
+			}
+			return null;
 		}
 		// If there are submodels, submit them.
 		if (array_key_exists('subModels', $this->submission)) {
