@@ -271,7 +271,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 					'auth' => '');
 			}
 		}
-		syslog(LOG_DEBUG, "Number of common names is: ".count($arrCommonNames));
+		Kohana::log("debug", "Number of common names is: ".count($arrCommonNames));
 
 		// Now do the same thing for synonomy
 		$arrLine = split("\n", trim($this
@@ -288,11 +288,11 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 					'lang' => 'lat');
 			}
 		}
-		syslog(LOG_DEBUG, "Number of synonyms is: ".count($arrSyn));
+		Kohana::log("debug", "Number of synonyms is: ".count($arrSyn));
 
 		$arrSyn = array_merge($arrSyn, $arrCommonNames);
 
-		syslog(LOG_DEBUG, "Looking for existing terms with meaning ".$this->model->taxon_meaning_id);
+		Kohana::log("debug", "Looking for existing terms with meaning ".$this->model->taxon_meaning_id);
 		$existingSyn = $this->getSynonomy($this->model->taxon_meaning_id);
 
 		// Iterate through existing synonomies, discarding those that have
@@ -308,11 +308,11 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			{
 				array_splice($arrSyn, array_search(
 					$syn->taxon->taxon, $arrSyn), 1);
-				syslog(LOG_DEBUG, "Known synonym: ".$syn->taxon->taxon);
+				Kohana::log("debug", "Known synonym: ".$syn->taxon->taxon);
 			} else {
 				// Synonym has been deleted - remove it from the db
 				$syn->deleted = 't';
-				syslog(LOG_DEBUG, "New synonym: ".$syn->taxon->taxon);
+				Kohana::log("debug", "New synonym: ".$syn->taxon->taxon);
 				$syn->save();
 			}
 		}
@@ -320,7 +320,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		// $arraySyn should now be left only with those synonyms
 		// we wish to add to the database
 
-		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
+		Kohana::log("debug", "Synonyms remaining to add: ".count($arrSyn));
 		$sm = ORM::factory('taxa_taxon_list');
 		foreach ($arrSyn as $taxon => $syn) {
 
@@ -330,7 +330,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$auth = $syn['auth'];
 
 			// Wrap a new submission
-			syslog(LOG_DEBUG, "Wrapping submission for synonym ".$taxon);
+			Kohana::log("debug", "Wrapping submission for synonym ".$taxon);
 
 			$syn = $_POST;
 			$syn['taxon_id'] = null;
