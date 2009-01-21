@@ -103,7 +103,7 @@ class Sample_Model extends ORM
 		if (array_key_exists('metaFields', $this->submission) &&
 			array_key_exists('smpAttributes', $this->submission['metaFields']))
 		{
-			syslog(LOG_DEBUG, "About to submit sample attributes.");
+			Kohana::log("debug", "About to submit sample attributes.");
 			foreach ($this->submission['metaFields']['smpAttributes']['value'] as
 				$idx => $attr)
 			{

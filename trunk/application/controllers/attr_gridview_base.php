@@ -208,7 +208,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
      * Returns to the index view for this controller.
      */
     protected function submit_succ($id) {
-        syslog(LOG_DEBUG, "Submitted record ".$id." successfully.");
+        Kohana::log("debug", "Submitted record ".$id." successfully.");
         url::redirect($this->model->object_name.'?website_id='.$_POST['website_id'].'&survey_id='.$_POST['survey_id']);
     }
 	

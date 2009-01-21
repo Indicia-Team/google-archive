@@ -181,7 +181,7 @@ class Indicia_Controller extends Template_Controller {
      * Returns to the index view for this controller.
      */
     protected function submit_succ($id) {
-        syslog(LOG_DEBUG, "Submitted record ".$id." successfully.");
+        Kohana::log("debug", "Submitted record ".$id." successfully.");
         url::redirect($this->model->object_name);
     }
 

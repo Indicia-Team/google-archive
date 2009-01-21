@@ -162,7 +162,7 @@ abstract class ORM extends ORM_Core {
 		if (array_key_exists('superModels', $this->submission)) {
 			foreach ($this->submission['superModels'] as $a) {
 
-				syslog(LOG_DEBUG, "Submitting supermodel ".$a['model']['id'].".");
+				Kohana::log("debug", "Submitting supermodel ".$a['model']['id'].".");
 
 				// Establish the right model
 				$m = ORM::factory($a['model']['id']);
@@ -172,7 +172,7 @@ abstract class ORM extends ORM_Core {
 				$m->submission = $a['model'];
 				$result = $m->inner_submit();
 				if ($result) {
-					syslog(LOG_DEBUG, "Setting field ".$a['fkId']." to ".$result);
+					Kohana::log("debug", "Setting field ".$a['fkId']." to ".$result);
 					$this->submission['fields'][$a['fkId']]['value'] = $result;
 				} else {
 					return null;
@@ -185,9 +185,9 @@ abstract class ORM extends ORM_Core {
 
 		// Flatten the array to one that can be validated
 		$vArray = array_map($collapseVals, $this->submission['fields']);
-		syslog(LOG_DEBUG, "About to validate the following array in model ".$this->object_name);
+		Kohana::log("debug", "About to validate the following array in model ".$this->object_name);
 		foreach ($vArray as $a => $b){
-			syslog(LOG_DEBUG, $a.": ".$b);
+			Kohana::log("debug", $a.": ".$b);
 		}
 		// Check whether this object already exists in the database with an exact match
 		$a = (array_key_exists('id', $vArray) && $vArray['id'] != null) ?
@@ -207,17 +207,17 @@ abstract class ORM extends ORM_Core {
 			} else {
 				// Errors. Return null and rollback the transaction.
 				$this->db->query('ROLLBACK');
-				syslog(LOG_DEBUG, "Record did not validate.");
+				Kohana::log("debug", "Record did not validate.");
 				// Print more detailed information on why
 				foreach ($this->errors as $f => $e){
-					syslog(LOG_DEBUG, "Field ".$f.": ".$e.".");
+					Kohana::log("debug", "Field ".$f.": ".$e.".");
 				}
 				return null;
 			}
 		} else {
 			// Set the model to point to the existing record.
 			$this->find($a);
-			syslog(LOG_DEBUG, "Existing record - linking to ".$a);
+			Kohana::log("debug", "Existing record - linking to ".$a);
 			$return = $a;
 		}
 		// If there are submodels, submit them.
@@ -225,14 +225,14 @@ abstract class ORM extends ORM_Core {
 			// Iterate through the subModel array, linking them to this model
 			foreach ($this->submission['subModels'] as $a) {
 
-				syslog(LOG_DEBUG, "Submitting submodel ".$a['model']['id'].".");
+				Kohana::log("debug", "Submitting submodel ".$a['model']['id'].".");
 
 				// Establish the right model
 				$m = ORM::factory($a['model']['id']);
 
 				// Set the correct parent key in the subModel
 				$fkId = $a['fkId'];
-				syslog(LOG_DEBUG, "Setting field ".$fkId." to ".$this->id);
+				Kohana::log("debug", "Setting field ".$fkId." to ".$this->id);
 				$a['model']['fields'][$fkId]['value'] = $this->id;
 
 				// Call the submit method for that model and
@@ -274,7 +274,7 @@ abstract class ORM extends ORM_Core {
 		if ($fk == true) {
 			foreach ($this->table_columns as $name => $type) {
 				if (substr($name, -3) == "_id") {
-					syslog(LOG_DEBUG, $name." added as fk field.");
+					Kohana::log("debug", $name." added as fk field.");
 					$a["fk_".substr($name, 0, -3)] = $type;
 				}
 			}

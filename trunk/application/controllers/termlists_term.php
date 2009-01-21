@@ -231,9 +231,9 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 				$arrSyn[$b[0]] = array('lang' => 'eng');
 			}
 		}
-		syslog(LOG_DEBUG, "Number of synonyms is: ".count($arrSyn));
+		Kohana::log("debug", "Number of synonyms is: ".count($arrSyn));
 
-		syslog(LOG_DEBUG, "Looking for existing terms with meaning ".$this->model->meaning_id);
+		Kohana::log("debug", "Looking for existing terms with meaning ".$this->model->meaning_id);
 		$existingSyn = $this->getSynonomy($this->model->meaning_id);
 
 		// Iterate through existing synonomies, discarding those that have
@@ -247,11 +247,11 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			{
 				array_splice($arrSyn, array_search(
 					$syn->term->term, $arrSyn), 1);
-				syslog(LOG_DEBUG, "Known synonym: ".$syn->term->term);
+				Kohana::log("debug", "Known synonym: ".$syn->term->term);
 			} else {
 				// Synonym has been deleted - remove it from the db
 				$syn->deleted = 't';
-				syslog(LOG_DEBUG, "New synonym: ".$syn->term->term);
+				Kohana::log("debug", "New synonym: ".$syn->term->term);
 				$syn->save();
 			}
 		}
@@ -259,7 +259,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		// $arraySyn should now be left only with those synonyms
 		// we wish to add to the database
 
-		syslog(LOG_DEBUG, "Synonyms remaining to add: ".count($arrSyn));
+		Kohana::log("debug", "Synonyms remaining to add: ".count($arrSyn));
 		$sm = ORM::factory('termlists_term');
 		foreach ($arrSyn as $term => $syn) {
 
@@ -268,7 +268,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			$lang = $syn['lang'];
 
 			// Wrap a new submission
-			syslog(LOG_DEBUG, "Wrapping submission for synonym ".$term);
+			Kohana::log("debug", "Wrapping submission for synonym ".$term);
 
 			$syn = $_POST;
 			$syn['term_id'] = null;
