@@ -49,7 +49,7 @@ $(document).ready(function() {
 				'model' => $sampleMod
 			);
 			$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
-			
+
 			// Send the image
 			if ($name = data_entry_helper::handle_media('occurrence_image')) {
 				// Add occurrence image model
@@ -91,7 +91,7 @@ $(document).ready(function() {
 <?php echo data_entry_helper::geoplanet_search(); ?>
 <br/>
 <label for="entered_sref">Spatial Reference:</label>
-<?php echo data_entry_helper::map_picker('entered_sref',
+<?php echo data_entry_helper::map_picker('entered_sref', 'geom',
 	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)'),
 	null,
 	'true'); ?>

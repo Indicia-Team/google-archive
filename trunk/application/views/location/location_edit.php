@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	init_map('<?php echo url::base(); ?>', <?php if ($model->id) echo "'$model->centroid_geom'"; else echo 'null'; ?>, 'centroid_sref');
+	init_map('<?php echo url::base(); ?>', <?php if ($model->id) echo "'$model->centroid_geom'"; else echo 'null'; ?>, 'centroid_sref', 'centroid_geom');
 
 	$("input#parent").autocomplete("<?php echo url::site() ?>index.php/services/data/location", {
 		minChars : 1,
@@ -73,6 +73,7 @@ $(document).ready(function() {
 	echo "<option value=\"$notation\"$selected>$caption</option>";}
 ?>
 </select>
+<input type="hidden" name="centroid_geom" id="centroid_geom" />
 <?php echo html::error_message($model->getError('centroid_sref')); ?>
 <?php echo html::error_message($model->getError('centroid_sref_system')); ?>
 <p class="instruct">Zoom the map in by double-clicking then single click on the location's centre to set the

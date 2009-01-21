@@ -69,7 +69,7 @@ class Sample_Model extends ORM
 	 */
 	public function __set($key, $value)
 	{
-		if (substr($key,-5) == '_geom')
+		if (substr($key,-4) == 'geom')
 		{
 			if ($value) {
 				$row = $this->db->query("SELECT ST_GeomFromText('$value', ".kohana::config('sref_notations.internal_srid').") AS geom")->current();
