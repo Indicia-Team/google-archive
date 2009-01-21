@@ -4,6 +4,7 @@ var format = 'image/png';
 var current_sref=null;
 var indicia_url;
 var input_field_name;
+var geom_field_name;
 var geoplanet_api_key;
 
 OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
@@ -50,6 +51,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 				$.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
 					{sref: data, system: document.getElementById(input_field_name + "_system").value },
 					function(data){
+						$("#"+geom_field_name).attr('value', data);
 						var parser = new OpenLayers.Format.WKT();
 						var feature = parser.read(data);
 						editlayer.addFeatures([feature]);
@@ -67,6 +69,7 @@ function exit_sref() {
 	   	$.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
 			{sref: document.getElementById(input_field_name).value, system: "osgb"},
 			function(data){
+				$("#"+geom_field_name).attr('value', data);
 				show_wkt_feature(data);
 			}
 		);
@@ -103,11 +106,12 @@ function show_wkt_feature(wkt) {
 // When the document is ready, initialise the map. This needs to be passed the base url for services and the
 // wkt of the object to display if any. If Google=TRUE, then the calling page must have the Google Maps API
 // link in the header with a valid API key.
-function init_map(base_url, wkt, field_name, google, geoplanet) {
+function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key) {
 	// store a couple of globals for future use
 	indicia_url=base_url;
 	input_field_name=field_name;
-	geoplanet_api_key=geoplanet;
+	geom_field_name = geom_name;
+	geoplanet_api_key=geoplanet_key;
 
 	var boundary_style = OpenLayers.Util.applyDefaults({
 		strokeWidth: 1,

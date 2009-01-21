@@ -19,12 +19,12 @@ class data_entry_helper {
 
 
 	/**
-	 * Helper function to support image upload 
+	 * Helper function to support image upload
 	 */
 	public static function image_upload($id){
 		$r = "<label for='$id'>Image upload</label>";
 		$r .= "<input type='file' id='$id' name='$id' accept='png|jpg|gif'/>";
-		
+
 		return $r;
 
 	}
@@ -587,14 +587,14 @@ class data_entry_helper {
 	 * The system selector is automatically output if there is more than one system present, otherwise it
 	 * is replaced by a hidden input.
 	 */
-	public static function map_picker($field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
+	public static function map_picker($field_name, $geom_field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
 		global $config;
 		global $javascript;
 
 		$r = '<script type="text/javascript" src="'.$config['base_url'].'/media/js/OpenLayers.js"></script>';
 		$r .= '<script type="text/javascript" src="'.$config['base_url'].'/media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
-		$javascript .= 'init_map("'.$config['base_url'].'", null, "'.$field_name.'", '.$google.', \''.$config['geoplanet_api_key'].'\');';
+		$javascript .= 'init_map("'.$config['base_url'].'", null, "'.$field_name.'", "'.$geom_field_name.'", '.$google.', \''.$config['geoplanet_api_key'].'\');';
 
 		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$value.'" '.
 			'onblur="exit_sref();" onclick="enter_sref();"/>';
@@ -608,6 +608,7 @@ class data_entry_helper {
 				$r .= "<option value=\"$srid\">$desc</option>";
 			$r .= '</select>';
 		}
+		$r .= "<input type=\"hidden\" id=\"$geom_field_name\" name=\"$geom_field_name\" />";
 		if ($instruct===null)
 			$instruct="Zoom the map in by double-clicking then single click on the location's centre to set the ".
 			"spatial reference. The more you zoom in, the more accurate the reference will be.";
