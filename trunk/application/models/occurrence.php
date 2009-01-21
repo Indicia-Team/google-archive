@@ -33,6 +33,7 @@ class Occurrence_Model extends ORM
 		$extraFields = array(
 			'comment',
 			'determiner_id',
+			'deleted'
 		);
 		foreach ($extraFields as $a) {
 			if (array_key_exists($a, $array->as_array())){

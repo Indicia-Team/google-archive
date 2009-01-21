@@ -14,7 +14,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->controllerpath=is_null($controllerpath) ? $modelname : $controllerpath;
 		$this->gridmodel = ORM::factory($this->gridmodelname);
 		$this->pageNoUriSegment = 3;
-		$this->base_filter = array();
+		$this->base_filter = array('deleted' => 'f');
 		$this->auth_filter = null;
 		$this->gen_auth_filter = null;
 		$this->columns = $this->gridmodel->table_columns;
