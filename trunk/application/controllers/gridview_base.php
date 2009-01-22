@@ -132,12 +132,12 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 						if ($attr!='<please select>') {
 							// Add the data to the save array
 							$saveArray[$attr] = $data[$index];
-							Kohana::log("debug", "Upload ".$attr.": ".$data[$index]);
+							Kohana::log("info", "Upload ".$attr.": ".$data[$index]);
 						}
 					} else {
 						// This is one of our static fields at the end
 						$saveArray[$col] = $attr;
-						Kohana::log("debug", "Upload ".$col.": ".$attr);
+						Kohana::log("info", "Upload ".$col.": ".$attr);
 					}
 					$index++;
 				}
