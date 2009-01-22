@@ -204,7 +204,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		// Use the parent method to wrap these
 		$sa = parent::wrap($nativeFields, $linkFk);
 
-		// Declare child models
+		// Declare parent models
 		if (array_key_exists('taxon_meaning_id', $array) == false ||
 			$array['taxon_meaning_id'] == '') {
 				$sa['superModels'][] = array(
@@ -214,21 +214,21 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 						->table_columns), $linkFk, 'taxon_meaning'));
 			}
 
-		if (array_key_exists('taxon_id', $array) == false ||
-			$array['taxon_id'] == '') {
-				$taxonFields = array_intersect_key($array, ORM::factory('taxon')
-					->table_columns);
-				if (array_key_exists('fk_language', $array)) {
-					$taxonFields['fk_language'] = $array['fk_language'];
-				}
-				if (array_key_exists('fk_taxon_group', $array)) {
-					$taxonFields['fk_taxon_group'] = $array['fk_taxon_group'];
-				}
-				$sa['superModels'][] = array(
-					'fkId' => 'taxon_id',
-					'model' => parent::wrap($taxonFields, $linkFk, 'taxon')
-				);
-			}
+		$taxonFields = array_intersect_key($array, ORM::factory('taxon')
+			->table_columns);
+		if (array_key_exists('fk_language', $array)) {
+			$taxonFields['fk_language'] = $array['fk_language'];
+		}
+		if (array_key_exists('fk_taxon_group', $array)) {
+			$taxonFields['fk_taxon_group'] = $array['fk_taxon_group'];
+		}
+		if (array_key_exists('taxon_id', $array) && $array['taxon_id'] != '') {
+			$taxonFields['id'] = $array['taxon_id'];
+		}
+		$sa['superModels'][] = array(
+			'fkId' => 'taxon_id',
+			'model' => parent::wrap($taxonFields, $linkFk, 'taxon')
+		);
 
 		if (array_key_exists('synonomy', $array)) {
 			$sa['metaFields']['synonomy'] = array(
