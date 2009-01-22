@@ -18,6 +18,10 @@
  */
 
 class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
+
+	private $taxonListId;
+	private $taxonListName;
+
 	public function __construct() {
 		parent::__construct(
 			'taxa_taxon_list',
@@ -162,7 +166,9 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		{
 			$this->access_denied('table to create records with a taxon list ID='.$taxon_list_id);
 			return;
-        }
+		}
+		$this->taxonListId = $taxon_list_id;
+		$this->taxonListName = ORM::factory('taxon_list', $taxon_list_id)->title;
 		$this->model = ORM::factory('taxa_taxon_list');
 		$parent = $this->input->post('parent_id', null);
 		$this->model->parent_id = $parent;
@@ -337,7 +343,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			$syn['taxon'] = $taxon;
 			$syn['authority'] = $auth;
 			$syn['language_id'] = ORM::factory('language')->where(array(
-					'iso' => $lang))->find()->id;
+				'iso' => $lang))->find()->id;
 			$syn['id'] = '';
 			$syn['preferred'] = 'f';
 			$syn['taxon_meaning_id'] = $this->model->taxon_meaning_id;
@@ -351,7 +357,7 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		url::redirect('taxa_taxon_list/'.$this->model->taxon_list_id);
 	}
 
-    protected function record_authorised ($id)
+	protected function record_authorised ($id)
 	{
 		// note this function is not accessed when creating a record
 		// for this controller, any null ID taxa_taxon_list can not be accessed
@@ -375,6 +381,16 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			return (in_array($taxon_list->website_id, $this->gen_auth_filter['values']));
 		}
 		return true;
+	}
+	/**
+	 * Retrieve a suitable title for the edit page, depending on whether it is a new record
+	 * or an existing one.
+	 */
+	protected function GetEditPageTitle($model, $name) {
+		if ($model->id)
+			return "Edit $name ".$model->caption();
+		else
+			return "New $name in ".$this->taxonListName;
 	}
 }
 ?>
