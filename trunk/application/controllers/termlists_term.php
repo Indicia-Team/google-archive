@@ -185,14 +185,14 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 						->table_columns), false, 'meaning'));
 			}
 
-		if (array_key_exists('term_id', $array) == false ||
-			$array['term_id'] == '') {
-				$sa['superModels'][] = array(
-					'fkId' => 'term_id',
-					'model' => parent::wrap(
-						array_intersect_key($array, ORM::factory('term')
-						->table_columns), false, 'term'));
-			}
+		$termFields = array_intersect_key($array, ORM::factory('term')
+			->table_columns);
+		if (array_key_exists('termlist_id', $array) && $array['termlist_id'] != ''){
+			$termFields['id'] = $array['termlist_id'];
+		}
+		$sa['superModels'][] = array(
+			'fkId' => 'term_id',
+			'model' => parent::wrap($termFields), false, 'term'));
 
 		$sa['metaFields']['synonomy'] = array(
 			'value' => $array['synonomy']
@@ -274,7 +274,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			$syn['term_id'] = null;
 			$syn['term'] = $term;
 			$syn['language_id'] = ORM::factory('language')->where(array(
-					'iso' => $lang))->find()->id;
+				'iso' => $lang))->find()->id;
 			$syn['id'] = '';
 			$syn['preferred'] = 'f';
 			$syn['meaning_id'] = $this->model->meaning_id;
@@ -288,7 +288,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		url::redirect('termlists_term/'.$this->model->termlist_id);
 	}
 
-    protected function record_authorised ($id)
+	protected function record_authorised ($id)
 	{
 		// note this function is not accessed when creating a record
 		// for this controller, any null ID termlist_term can not be accessed
@@ -299,7 +299,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		if (!$term->loaded) return false;		
 		return ($this->termlist_authorised($term->termlist_id));
 	}
-	
+
 	protected function termlist_authorised ($id)
 	{
 		// for this controller, any null ID termlist can not be accessed
