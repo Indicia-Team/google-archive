@@ -101,7 +101,7 @@ class Person_Controller extends Gridview_Base_Controller {
      * Returns to the index view for this controller.
      */
     protected function submit_succ($id) {
-        Kohana::log("debug", "Submitted record ".$id." successfully.");
+        Kohana::log("info", "Submitted record ".$id." successfully.");
 		if(isset($_POST['return_url'])) 
 			url::redirect($_POST['return_url']);
 

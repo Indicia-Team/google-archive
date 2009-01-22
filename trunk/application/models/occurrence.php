@@ -54,7 +54,7 @@ class Occurrence_Model extends ORM
 		if (array_key_exists('metaFields', $this->submission) &&
 			array_key_exists('occAttributes', $this->submission['metaFields']))
 		{
-			Kohana::log("debug", "About to submit occurrence attributes.");
+			Kohana::log("info", "About to submit occurrence attributes.");
 			foreach ($this->submission['metaFields']['occAttributes']['value'] as
 				$idx => $attr)
 			{
