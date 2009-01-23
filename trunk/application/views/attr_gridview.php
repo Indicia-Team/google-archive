@@ -56,7 +56,7 @@ $body - gridview_table object.
 </script>
 
 
-<div id='gvFilter'>
+<div>
 <form id='Filter' action='' method='get'>
 <fieldset>
 <?php
@@ -81,7 +81,7 @@ $body - gridview_table object.
 ?>
 <br />
 <label for="survey_id">Survey</label>
-<select id="survey_id" name="survey_id" disabled="disabled"><option>&lt;Please select the website first&gt;<option></select>
+<select id="survey_id" name="survey_id" disabled="disabled"><option>&lt;Please select the website first&gt;</option></select>
 
 <input id='gvFilterButton' type='submit' value='Filter'/>
 </fieldset>
@@ -101,7 +101,7 @@ foreach ($actionColumns as $name => $action) {
 ?>
 </tr>
 </thead>
-<tbody id='gvBody'/>
+<tbody id='gvBody'>
 <?php echo $body ?>
 </tbody>
 </table>
@@ -110,13 +110,16 @@ foreach ($actionColumns as $name => $action) {
 </div>
 <br/>
 <form action="<?php echo url::site().$createpath; ?>" method="post">
+<fieldset>
 <?php if (isset($website_id)) { ?>
 <input type="hidden" name="website_id" value="<?php echo html::specialchars($website_id); ?>" />
 <?php } ?>
 <?php if (isset($survey_id)) { ?>
 <input type="hidden" name="survey_id" value="<?php echo html::specialchars($survey_id); ?>" />
 <?php } ?>
-<input type="submit" value="<?php echo $createbuttonname; ?>"
+<input type="submit" value="<?php echo $createbuttonname; ?>" class="default"
 <?php if (isset($disable_new_button)) { echo ' disabled="disabled" '; } ?>
-/></form>
+/>
+</fieldset>
+</form>
 <br />
