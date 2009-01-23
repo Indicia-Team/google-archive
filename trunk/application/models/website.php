@@ -46,10 +46,18 @@ class Website_Model extends ORM
         // and is not present in the validation object at this point. The "matches" validation rule does not
         // work in these circumstances, so a new "matches_post" has been inserted into MY_valid.php
         $array->add_rules('password', 'required', 'length[7,30]', 'matches_post[password2]');
-        // Any fields that don't have a validation rule need to be copied into the model manually
-        $this->description = $array['description'];
+	// Explicitly add those fields for which we don't do validation
+	$extraFields = array(
+		'description',
+		'deleted'
+	);
+	foreach ($extraFields as $a) {
+		if (array_key_exists($a, $array->as_array())){
+			$this->__set($a, $array[$a]);
+		}
+	}
 
-        return parent::validate($array, $save);
+	return parent::validate($array, $save);
     }
 
 }

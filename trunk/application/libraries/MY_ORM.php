@@ -130,16 +130,21 @@ abstract class ORM extends ORM_Core {
 	 * If not, returns null - errors are embedded in the model.
 	 */
 	public function submit(){
+		Kohana::log('info', 'Commencing new transaction.');
 		$this->db->query('BEGIN;');
 		$res = $this->inner_submit();
 		if ($res) {
+			Kohana::log('info', 'Committing transaction.');
 			$this->db->query('COMMIT;');
+		} else {
+			Kohana::log('info', 'Rolling back transaction.');
+			$this->db->query('ROLLBACK;');
 		}
 		return $res;
 	}
 	public function inner_submit(){
 		$mn = $this->object_name;
-		$return = null;
+		$return = true;
 		$collapseVals = create_function('$arr', 'return $arr["value"];');
 		// Link in foreign fields
 		if (array_key_exists('fkFields', $this->submission)) {
@@ -175,8 +180,10 @@ abstract class ORM extends ORM_Core {
 					Kohana::log("info", "Setting field ".$a['fkId']." to ".$result);
 					$this->submission['fields'][$a['fkId']]['value'] = $result;
 				} else {
-					return null;
+					$return = null;
 				}
+				// We need to try attaching the model to get details back
+				$this->add($m);
 			}
 		}
 
@@ -199,16 +206,15 @@ abstract class ORM extends ORM_Core {
 			Kohana::log("info", "Record ".
 				$this->id.
 				" has validated successfully");
-			$return = $this->id;
+			if ($return != null) $return = $this->id;
 		} else {
 			// Errors. Return null and rollback the transaction.
-			$this->db->query('ROLLBACK');
 			Kohana::log("info", "Record did not validate.");
 			// Print more detailed information on why
 			foreach ($this->errors as $f => $e){
 				Kohana::log("info", "Field ".$f.": ".$e.".");
 			}
-			return null;
+			$return = null;
 		}
 		// If there are submodels, submit them.
 		if (array_key_exists('subModels', $this->submission)) {
@@ -229,15 +235,17 @@ abstract class ORM extends ORM_Core {
 				// check whether it returns correctly
 				$m->submission = $a['model'];
 				$result = $m->inner_submit();
-				if ($result == null) return null;
+				if ($result == null) $return = null;
 			}
 		}
 
 
 		// Call postSubmit
-		if ($return != null) $ps = $this->postSubmit();
-		if ($ps == null) {
-			return null;
+		if ($return != null) {
+			$ps = $this->postSubmit();
+				if ($ps == null) {
+					$return = null;
+				}
 		}
 		return $return;
 	}

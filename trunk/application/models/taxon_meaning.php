@@ -4,7 +4,7 @@ class Taxon_meaning_Model extends ORM {
 	protected $search_field='id';
 
 	protected $has_many = array(
-			'taxa'
+			'taxa_taxon_lists'
 		);
 
 	public function insert(){
