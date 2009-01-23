@@ -4,6 +4,9 @@
 
 This tutorial takes you step by step through the process of building a basic data entry page using Indicia and PHP. It assumes you are able to build a basic HTML page, and a little knowledge of PHP is useful though not essential.
 
+Before you can build an Indicia webpage you need access to the Indicia Core Services. You have a choice to either host these yourself (see Installation) or use the services provided by another institution (such as the [http://www.brc.ac.uk Biological Records Centre]).
+
+The first two sections of the following tutorial are performed by your Core Services administrator. If you are using services provided by another institution then these will be done for you and you will be sent a URL, username and password which you then use to log in to the Indicia Core and set up your recording scheme details.
 
 = Register the website =
   #	Login to the Indicia Core as a user with administrative privileges.
@@ -132,7 +135,7 @@ z-index: 1000;
 }}}
   #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place:
 {{{
-<?php	include 'data_entry_helper.php';
+<?php
 if ($_POST) {
 	$sampleMod = data_entry_helper::wrap($_POST, 'sample');
 	$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
