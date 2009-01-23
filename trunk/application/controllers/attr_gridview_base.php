@@ -16,7 +16,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		$this->controllerpath=is_null($controllerpath) ? $modelname : $controllerpath;
 		$this->createpath=$this->controllerpath."/create";
 		$this->processpath=$this->controllerpath."/process";
-		$this->createbutton='New '.$modelname;
+		$this->createbutton="New $name Attribute";
 		$this->gridmodel = ORM::factory($this->gridmodelname);
 		$this->pageNoUriSegment = 3;
 		$this->base_filter = array();
@@ -29,8 +29,8 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		$this->pagetitle = "Abstract Attribute gridview class - override this title!";
 		$this->view = new View($this->viewname);
 		parent::__construct();
-		
-		// If not logged in as a Core admin, restrict access to available websites. 
+
+		// If not logged in as a Core admin, restrict access to available websites.
 		if(!$this->auth->logged_in('CoreAdmin')){
 			$site_role = (new Site_role_Model('Admin'));
 			$websites=ORM::factory('users_website')->where(
@@ -42,7 +42,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 			$website_id_values[] = null;
 			$this->gen_auth_filter = array('field' => 'website_id', 'values' => $website_id_values);
 		}
-		
+
 	}
 
 	/**
@@ -70,7 +70,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
          }
 	}
 
-	// edit function is called with id of *_attribute_website record, not the *_attribute	 
+	// edit function is called with id of *_attribute_website record, not the *_attribute
 	public function edit($id = null) {
 		if ($id == null)
         {
@@ -95,7 +95,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 										'disabled_input'=>'NO',
 										'attribute_load' => '',
         								'name' => $this->name,
-        								'processpath' => $this->processpath));			
+        								'processpath' => $this->processpath));
 			else
 				$this->setView('custom_attribute/custom_attribute_edit',
 								$this->model->object_name,
@@ -105,7 +105,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 										'disabled_input'=>'YES',
 										'attribute_load' => '',
         								'name' => $this->name,
-        								'processpath' => $this->processpath));			
+        								'processpath' => $this->processpath));
 			$this->model->populate_validation_rules();
 		}
 	}
@@ -124,17 +124,17 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 	        						'disabled_input'=>'YES',
 	        						'attribute_load' => '',
         							'name' => $this->name,
-        							'processpath' => $this->processpath));			
+        							'processpath' => $this->processpath));
 			$this->model->populate_validation_rules();
 		} else
 	   		$this->setError('Invocation error: Invalid Submit', 'Value of Posted submit variable is invalid');
 	}
-	
+
 	protected function page_authorised()
 	{
 		return $this->auth->logged_in();
 	}
-		
+
 	public function page($page_no, $limit) {
 		if ($this->page_authorised() == false) {
 			$this->access_denied();
@@ -153,7 +153,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 
 		// Add table to view
 		$this->view->table = $grid->display();
-		
+
 		// Templating
 		$this->template->title = $this->GetEditPageTitle($this->gridmodel, $this->pagetitle);
 		$this->template->content = $this->view;
@@ -211,7 +211,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
         Kohana::log("info", "Submitted record ".$id." successfully.");
         url::redirect($this->model->object_name.'?website_id='.$_POST['website_id'].'&survey_id='.$_POST['survey_id']);
     }
-	
+
     /**
      * Returns to the edit page to correct errors - now embedded in the model
      */
@@ -235,7 +235,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		{
 			$attribute_website = ORM::factory($this->websitemodelname, $id);
 			return (in_array($attribute_website->website_id, $this->auth_filter['values']));
-		}		
+		}
 		return true;
-	} 
+	}
 }

@@ -3,7 +3,7 @@
 <legend>Reuse Attribute</legend>
 <ol>
 <li>
-<label class="wide" for="load_attr_id">Existing Attribute</label>
+<label for="load_attr_id">Existing Attribute</label>
 <select id="load_attr_id" name="load_attr_id" >
 	<option value=''>&lt;Please Select&gt;</option>
 <?php
@@ -22,7 +22,7 @@
 ?>
 </select>
 </li>
-<input type="submit" value="Reuse" name="submit"/>
+<input type="submit" value="Reuse" name="submit" class="default"/>
 </ol>
 </fieldset>
 </div>

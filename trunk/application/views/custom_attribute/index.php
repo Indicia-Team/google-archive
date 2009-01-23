@@ -1,3 +1,3 @@
-<div class="termlist">
+<div>
 <?php echo $table ?>
 </div>

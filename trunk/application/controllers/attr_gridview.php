@@ -32,7 +32,7 @@ class Attr_Gridview_Controller extends Controller {
 
 		$orderby = $this->input->get('orderby','id');
 		$direction = $this->input->get('direction','asc');
-		
+
 		$arrorder = explode(',',$orderby);
 		$arrdirect = explode(',',$direction);
 		if (count($arrorder)==count($arrdirect)){
@@ -62,12 +62,12 @@ class Attr_Gridview_Controller extends Controller {
 			$lists = $lists->where(array('website_id' => -1));
 			$filter_website = null;
 		}
-		
+
 		if ($filter_survey != null AND is_numeric($filter_survey) AND $filter_survey >= 0 ){
 			$lists = $lists->where(array('survey_id' => $filter_survey));
-		} else 
+		} else
 			$filter_survey = null;
-			
+
 		$offset = ($this->page -1) * $this->limit;
 		$table = $lists->find_all($this->limit, $offset);
 
@@ -88,7 +88,7 @@ class Attr_Gridview_Controller extends Controller {
 		$gridview->createbuttonname = $this->createbutton;
 		$gridview_body->columns = $this->columns;
 		$gridview_body->actionColumns = $this->actionColumns;
-		
+
 		if (!is_null($filter_website)) {
 			$gridview->website_id = $filter_website;
 			$website= new Website_Model($filter_website);
@@ -104,7 +104,8 @@ class Attr_Gridview_Controller extends Controller {
 			$gridview->filter_summary = "A filter must be applied in order to display or create records.";
 			$gridview->disable_new_button = true;
 		}
-					
+		$gridview->filter_summary = '<br /><p>'.$gridview->filter_summary.'</p>';
+
 		if(request::is_ajax()){
 			if ($this->input->get('type',null) == 'pager'){
 				echo $pagination;
