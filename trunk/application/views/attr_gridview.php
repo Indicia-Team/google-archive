@@ -4,7 +4,8 @@ $pagination - the pagination object
 $body - gridview_table object.
 -->
 <script type="text/javascript" src='<?php echo url::base() ?>application/views/gridview.js' ></script>
-<script language="javascript">
+<script type="text/javascript">
+<!--
 	var hardcoded_values = new Array();
 	hardcoded_values[-1] = "";
 <?php
@@ -31,6 +32,7 @@ $body - gridview_table object.
 
 		// 2. make sure survey_id combo is empty:
 		document.forms["Filter"].elements["survey_id"].options.length=0;
+		document.forms["Filter"].elements["survey_id"].disabled="";
 
 		var opt = document.createElement("option");
 		opt.setAttribute('value', -1);
@@ -40,7 +42,7 @@ $body - gridview_table object.
 		// 3. loop throught the hard-coded values:
 		for (var i=0;i<hardcoded_values[websitecombo_value].length;i++)
 		{
-			// dynamically create a new <option> element:
+			// dynamically create a new option element:
 			var opt = document.createElement("option");
 			// set the value-attribute of it:
 			opt.setAttribute('value', hardcoded_values[websitecombo_value][i][0]);
@@ -50,12 +52,13 @@ $body - gridview_table object.
 			document.forms["Filter"].elements["survey_id"].appendChild(opt);
 		}
 	}
+// -->
 </script>
 
 
 <div id='gvFilter'>
-<form class="cmxform" name='Filter' action='' method='get'>
-
+<form id='Filter' action='' method='get'>
+<fieldset>
 <?php
 	if (!is_null($this->auth_filter))
 		$websites = ORM::factory('website')->in('id',$this->auth_filter['values'])->orderby('title','asc')->find_all();
@@ -68,7 +71,8 @@ $body - gridview_table object.
 		var_dump($websites);
 		throw(1);
 	} else {
-		echo '<label for="website_id">Website</label><select id="website_id" name="website_id" onchange="website_selection_changed(this);"><option value="-1">&lt;Please select&gt;</option>';
+		echo "<label for=\"website_id\">Website</label>\r\n";
+		echo '<select id="website_id" name="website_id" onchange="website_selection_changed(this);"><option value="-1">&lt;Please select&gt;</option>';
 		foreach ($websites as $website) {
 			echo '	<option value="'.$website->id.'">'.$website->title.'</option>';
 		}
@@ -77,9 +81,10 @@ $body - gridview_table object.
 ?>
 <br />
 <label for="survey_id">Survey</label>
-<select id="survey_id" name="survey_id"></select>
+<select id="survey_id" name="survey_id" disabled="disabled"><option>&lt;Please select the website first&gt;<option></select>
 
 <input id='gvFilterButton' type='submit' value='Filter'/>
+</fieldset>
 </form>
 </div>
 <?php echo $filter_summary ?>
@@ -111,7 +116,7 @@ foreach ($actionColumns as $name => $action) {
 <?php if (isset($survey_id)) { ?>
 <input type="hidden" name="survey_id" value="<?php echo html::specialchars($survey_id); ?>" />
 <?php } ?>
-<input type="submit" value="<?php echo $createbuttonname; ?>" 
+<input type="submit" value="<?php echo $createbuttonname; ?>"
 <?php if (isset($disable_new_button)) { echo ' disabled="disabled" '; } ?>
 /></form>
 <br />

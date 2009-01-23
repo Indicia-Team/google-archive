@@ -1,4 +1,5 @@
 <p>This page allows you to specify the details of a taxon group..</p>
+<?php echo $metadata ?>
 <form class="cmxform" action="<?php echo url::site().'taxon_group/save'; ?>" method="post">
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <fieldset>
@@ -10,8 +11,7 @@
 <?php echo html::error_message($model->getError('title')); ?>
 </li>
 </ol>
+<input type="submit" value="Save" class="default" name="submit" />
+<input type="submit" value="Delete" class="default" name="submit" />
 </fieldset>
-<?php echo $metadata ?>
-<input type="submit" value="Save" name="submit" />
-<input type="submit" value="Delete" name="submit" />
 </form>
