@@ -178,4 +178,4 @@ The following tables are used by the Indicia Core Module:
 [http://indicia.googlecode.com/files/main%20erd%20v0.2.png]
 
 == Website related tables Entity Relationship Diagram ==
-[http://indicia.googlecode.com/files/website%20related%20erd%20v0.2.png]
+[http://indicia.googlecode.com/files/website_related_erd_v0.3.png]
