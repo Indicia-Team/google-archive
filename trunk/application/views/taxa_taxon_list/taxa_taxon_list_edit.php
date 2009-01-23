@@ -20,7 +20,7 @@ $(document).ready(function() {
 			var results = [];
 			var obj = JSON.parse(data);
 			$.each(obj, function(i, item) {
-				results[results.length] = { 
+				results[results.length] = {
 					'data' : item,
 					'value' : item.id,
 					'result' : item.taxon };
@@ -66,6 +66,7 @@ $(document).ready(function() {
 		echo '>'.$lang->language.'</option>';
 	}
 ?>
+</select>
 <?php echo html::error_message($model->getError('language_id')); ?>
 </li>
 <li>
@@ -95,6 +96,7 @@ $(document).ready(function() {
 		echo '>'.$lang->title.'</option>';
 	}
 ?>
+</select>
 </li>
 <li>
 <label for="authority">Authority</label>
