@@ -224,6 +224,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$arrSyn = array();
 
 		foreach ($arrLine as $line) {
+			if (trim($line) == '') break;
 			$b = preg_split("/(?<!\\\\ ),/",$line);
 			if (count($b) >= 2) {
 				$arrSyn[$b[0]] = array('lang' => trim($b[1]));
@@ -245,8 +246,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 				$arrSyn[$syn->term->term]['lang'] ==
 				$syn->term->language->iso )
 			{
-				array_splice($arrSyn, array_search(
-					$syn->term->term, $arrSyn), 1);
+				$arrSyn = array_diff_key($arrSyn, array($syn->term->term => ''));
 				Kohana::log("info", "Known synonym: ".$syn->term->term);
 			} else {
 				// Synonym has been deleted - remove it from the db

@@ -263,11 +263,12 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 	 */
 	protected function submit_succ($id){
 		// Okay, the thing saved correctly - we now need to add the common names
-		$arrLine = split("\n",trim($this
+		$arrLine = explode("\n",trim($this
 			->model->submission['metaFields']['commonNames']['value']));
 		$arrCommonNames = array();
 
 		foreach ($arrLine as $line) {
+			if (trim($line) == '') break;
 			$b = preg_split("/(?<!\\\\ ),/",$line);
 			if (count($b) == 2) {
 				$arrCommonNames[$b[0]] = array('lang' => trim($b[1]),
@@ -280,11 +281,12 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 		Kohana::log("info", "Number of common names is: ".count($arrCommonNames));
 
 		// Now do the same thing for synonomy
-		$arrLine = split("\n", trim($this
+		$arrLine = explode("\n", trim($this
 			->model->submission['metaFields']['synonomy']['value']));
 		$arrSyn = array();
 
 		foreach ($arrLine as $line) {
+			if (trim($line) == '') break;
 			$b = preg_split("/(?<!\\\\ ),/",$line);
 			if (count($b) == 2) {
 				$arrSyn[$b[0]] = array('auth' => trim($b[1]),
@@ -312,13 +314,12 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 				$arrSyn[$syn->taxon->taxon]['auth'] ==
 				$syn->taxon->authority)
 			{
-				array_splice($arrSyn, array_search(
-					$syn->taxon->taxon, $arrSyn), 1);
+				$arrSyn = array_diff_key($arrSyn, array($syn->taxon->taxon => ''));
 				Kohana::log("info", "Known synonym: ".$syn->taxon->taxon);
 			} else {
 				// Synonym has been deleted - remove it from the db
 				$syn->deleted = 't';
-				Kohana::log("info", "New synonym: ".$syn->taxon->taxon);
+				Kohana::log("info", "Deleting synonym: ".$syn->taxon->taxon);
 				$syn->save();
 			}
 		}
