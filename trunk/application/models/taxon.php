@@ -17,6 +17,7 @@ class Taxon_Model extends ORM {
 			'language_id',
 			'external_key',
 			'authority',
+			'deleted',
 			'search_code'
 		);
 		foreach ($extraFields as $a) {
