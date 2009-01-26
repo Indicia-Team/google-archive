@@ -3,7 +3,7 @@
 $lang = array
 (
     'title'       => 'Indicia Setup',
-    'description' => 'Before continue here you must first create a postgresql database and may a schema.',
+    'description' => 'Before continue here you must first create a postgresql database.',
     'database'    => 'Database',
     'db_schema'   => 'Schema',
     'db_host'     => 'Host',
