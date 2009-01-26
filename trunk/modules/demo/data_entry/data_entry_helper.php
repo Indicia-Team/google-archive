@@ -10,7 +10,7 @@ class data_entry_helper {
 	public static function dump_javascript() {
 		global $javascript;
 		$script = "<script type='text/javascript'>
-			$(document).ready(function() {
+			jQuery(document).ready(function() {
 				$javascript
 	});
 			</script>";
@@ -26,7 +26,6 @@ class data_entry_helper {
 		$r .= "<input type='file' id='$id' name='$id' accept='png|jpg|gif'/>";
 
 		return $r;
-
 	}
 
 	/**
@@ -150,7 +149,7 @@ class data_entry_helper {
 				$grid .= "<script type='text/javascript'
 					src='./addRowToGrid.js' ></script>";
 				$javascript .= "var addRowFn = addRowToGrid('$url', $readAuth);
-				$('#addRowButton').click(addRowFn);";
+				jQuery('#addRowButton').click(addRowFn);";
 
 				// Drop an autocomplete box against the parent termlist
 				$grid .= data_entry_helper::autocomplete('addSpeciesBox',
@@ -172,7 +171,7 @@ class data_entry_helper {
 	public static function date_picker($id) {
 		global $javascript;
 		$javascript .=
-			'$(\'.'.$id.'\').datepicker({dateFormat : \'yy-mm-dd\', constrainInput: false}); ';
+			'jQuery(\'.'.$id.'\').datepicker({dateFormat : \'yy-mm-dd\', constrainInput: false}); ';
 		$r =
 			'<input type="text" size="30" value="click here" class="date" id="'.$id.'" name="'.$id.'"/>' .
 			'<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style> ';
@@ -282,7 +281,7 @@ class data_entry_helper {
 		$sParams = substr($sParams, 0, -1);
 
 		// Reference the necessary libraries
-		$javascript .= "$('input#ac$id').autocomplete('$url/$entity', {
+		$javascript .= "jQuery('input#ac$id').autocomplete('$url/$entity', {
 			minChars : 1,
 				mustMatch : true,
 				extraParams : {
@@ -309,8 +308,8 @@ class data_entry_helper {
 			return item.$valueField;
 	}
 	});
-	$('input#ac$id').result(function(event, data){
-		$('input#$id').attr('value', data.id);
+	jQuery('input#ac$id').result(function(event, data){
+		jQuery('input#$id').attr('value', data.id);
 	});";
 	$r = "<input type='hidden' id='$id' name='$id' />".
 		"<input id='ac$id' name='ac$id' value='' />";
@@ -630,7 +629,7 @@ class data_entry_helper {
 	public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb') {
 		$r = '<input name="'.$id.'" id="'.$id.'"/><a href="#" onclick="find_place(\''.$pref_area.'\');" />'.$link_text.'</a>' .
 			'<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
-			'<a href="#" id="place_close_button" onclick="$(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
+			'<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
 		return $r;
 	}
 
