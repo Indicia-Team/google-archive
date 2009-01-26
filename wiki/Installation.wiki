@@ -3,7 +3,7 @@
 
 = Installation =
 
-This guide is a quick summary of the steps required to install the Indicia Core for developers.
+This guide is a quick summary of the steps required to install the Indicia Core for developers. *Work is currently underway on an automated installation procedure but this is not yet complete*.
 
 == Install PostgreSQL and PostGIS ==
 
@@ -59,6 +59,8 @@ Next, rename the application/config/database.php.example file to application/con
   # Change the user to the name of the postgreSQL super user.
   # Change the password to the user's password.
   # Change the name of the database to the database you created earlier.
+
+Once you have done this, also rename the file application/config/indicia_dist.php to indicia.php, otherwise accessing the site will initiate the automated setup procedure. Edit this file in a text editor and change the value for `$config['private_key']` to a any value unique to your site copy (it doesn't matter what you use here as long as it is unique).
 
 == Test it ==
 
