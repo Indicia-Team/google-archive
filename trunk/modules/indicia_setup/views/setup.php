@@ -38,6 +38,9 @@
 
         <form name="setup" action="<?php echo $url; ?>" method="post">
 
+        <!-- schema currently as hidden field until kohana schema handling is cleared up -->
+        <input type="hidden" id="dbschema" name="dbschema" value="" />
+
             <fieldset>
 
                 <h2><legend><?php echo Kohana::lang('setup.database'); ?></legend></h2>
@@ -98,6 +101,7 @@
                                              /></li>
 
                     <!-- DB schema -->
+                    <!--
                     <li class="item_title"><h3><label for="dbschema"><?php echo Kohana::lang('setup.db_schema'); ?></label></h3></li>
 
                     <?php if($error_dbschema): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbschema; ?></p></li><?php endif; ?>
@@ -114,6 +118,7 @@
                                                     aria-labelledby="dbschema"
                                                     <?php if($error_dbschema): ?>aria-invalid="true"<?php endif; ?>
                                              /></li>
+                    -->
 
                     <!-- DB user -->
                     <li class="item_title"><h3><label for="dbuser"><?php echo Kohana::lang('setup.db_user'); ?></label></h3></li>

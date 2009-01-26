@@ -44,7 +44,7 @@ class Setup_Controller extends Template_Controller
         $this->view_var['error_dbuser']     = false;
         $this->view_var['dbpassword']       = '';
         $this->view_var['error_dbpassword'] = false;
-        $this->view_var['dbschema']         = 'indicia';
+        $this->view_var['dbschema']         = '';
         $this->view_var['error_dbschema']   = false;
         $this->view_var['dbname']           = '';
         $this->view_var['page_title_error'] = '';
@@ -85,29 +85,29 @@ class Setup_Controller extends Template_Controller
     {
         if(false !== ($this->dbconn = $this->db_connect()))
         {
-        	if(($this->db['schema'] == 'public') || empty($this->db['schema']))
-        	{
-        		$this->db['schema'] = '';
-        		$this->schema_and_postfix = '';
-        	}
-        	else
-        	{
-        		$this->schema_and_postfix = $this->db['schema'] . '.';
-        	}
+            if(($this->db['schema'] == 'public') || empty($this->db['schema']))
+            {
+                $this->db['schema'] = '';
+                $this->schema_and_postfix = '';
+            }
+            else
+            {
+                $this->schema_and_postfix = $this->db['schema'] . '.';
+            }
 
             $_db_file = str_replace("indicia.",$this->schema_and_postfix, file_get_contents( $this->db_file));
             $_db_file = str_replace("indicia",$this->db['schema'], $_db_file);
 
             pg_query($this->dbconn, "BEGIN");
 
-			if(!empty($this->db['schema']))
-			{
-				pg_send_query($this->dbconn, "SET search_path TO {$this->db['schema']}, public, pg_catalog");
-			}
-			else
-			{
-				pg_send_query($this->dbconn, "SET search_path TO public, pg_catalog");
-			}
+            if(!empty($this->db['schema']))
+            {
+                pg_send_query($this->dbconn, "SET search_path TO {$this->db['schema']}, public, pg_catalog");
+            }
+            else
+            {
+                pg_send_query($this->dbconn, "SET search_path TO public, pg_catalog");
+            }
 
 
             $res1 = pg_get_result($this->dbconn);
@@ -134,15 +134,15 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
-			if(!empty($this->db['schema']))
-			{
-				if(false === pg_query($this->dbconn, "GRANT ALL ON SCHEMA {$this->db['schema']} TO {$this->db['user']}" ))
-				{
-					$error = pg_last_error($this->dbconn);
-					$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-					Kohana::log("error", "Setup failed: {$error}");
-					return false;
-				}
+            if(!empty($this->db['schema']))
+            {
+                if(false === pg_query($this->dbconn, "GRANT ALL ON SCHEMA {$this->db['schema']} TO {$this->db['user']}" ))
+                {
+                    $error = pg_last_error($this->dbconn);
+                    $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+                    Kohana::log("error", "Setup failed: {$error}");
+                    return false;
+                }
             }
 
             $stat = pg_transaction_status($this->dbconn);
