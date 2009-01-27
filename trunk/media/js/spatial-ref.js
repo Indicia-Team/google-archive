@@ -106,7 +106,8 @@ function show_wkt_feature(wkt) {
 // When the document is ready, initialise the map. This needs to be passed the base url for services and the
 // wkt of the object to display if any. If Google=TRUE, then the calling page must have the Google Maps API
 // link in the header with a valid API key.
-function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key, init_lat, init_long, init_zoom, init_layer) {
+function init_map(base_url, wkt, field_name, geom_name, virtual_earth, google, geoplanet_key,
+		init_lat, init_long, init_zoom, init_layer) {
 	// store a couple of globals for future use
 	indicia_url=base_url;
 	input_field_name=field_name;
@@ -135,10 +136,13 @@ function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key, i
 	editlayer = new OpenLayers.Layer.Vector("Current location boundary",
 		{style: boundary_style, 'sphericalMercator': true});
 
-	var velayer = new OpenLayers.Layer.VirtualEarth(
-		"Virtual Earth",
-		{'type': VEMapStyle.Aerial, 'sphericalMercator': true}
-		);
+	if (virtual_earth) {
+		var velayer = new OpenLayers.Layer.VirtualEarth(
+			"Virtual Earth",
+			{'type': VEMapStyle.Aerial, 'sphericalMercator': true}
+			);
+		map.addLayer(velayer);
+	}
 
 	if (google) {
 		var gphy = new OpenLayers.Layer.Google(
@@ -158,15 +162,15 @@ function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key, i
 			{type: G_SATELLITE_MAP, numZoomLevels: 20, 'sphericalMercator': true}
 		);
 
-		map.addLayers([velayer, gphy, gmap, ghyb, gsat, editlayer]);
-		if (init_layer!='') {
-			var layers = map.getLayersByName(init_layer);
-			if (layers.length==1)
-				map.setBaseLayer(layers[0]);
-		}
+		map.addLayers([velayer, gphy, gmap, ghyb, gsat]);
 	}
-	else
-		map.addLayers([velayer, editlayer]);
+	map.addLayer(editlayer);
+
+	if (init_layer!='') {
+		var layers = map.getLayersByName(init_layer);
+		if (layers.length==1)
+			map.setBaseLayer(layers[0]);
+	}
 
   	map.addControl(new OpenLayers.Control.LayerSwitcher());
 	if (wkt!=null) {

@@ -582,7 +582,7 @@ class data_entry_helper extends helper_config {
 	 * @param string $field_name Name of the spatial reference db field.
 	 * @param string $geom_field_name Name of the geom db field.
 	 * @param array $systems Associative array of the available spatial reference systems, in form code -> description.
-	 * @param array $opts Associative array of additional options. Possible options are init_value, width, height, instruct, inc_google, init_lat, init_long, init_zoom.
+	 * @param array $opts Associative array of additional options. Possible options are init_value, width, height, instruct, inc_virtual_earth, inc_google, init_lat, init_long, init_zoom.
 	 */
 	public static function map_picker($field_name, $geom_field_name, $systems, $opts) {
 		global $javascript;
@@ -593,6 +593,7 @@ class data_entry_helper extends helper_config {
 		$instruct   = self::option('instruct', $opts, "Zoom the map in by double-clicking then single click on the location's centre to set the ".
 					"spatial reference. The more you zoom in, the more accurate the reference will be.");
 		$inc_google = self::option('inc_google', $opts, 'false');
+		$inc_virtual_earth = self::option('inc_virtual_earth', $opts, 'true');
 		$init_lat   = self::option('init_lat', $opts, '7300000');
 		$init_long  = self::option('init_long', $opts, '-100000');
 		$init_zoom  = self::option('init_zoom', $opts, '4');
@@ -601,7 +602,7 @@ class data_entry_helper extends helper_config {
 		$r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
 		$javascript .= "init_map(\"".parent::$base_url."\", null, '$field_name', '$geom_field_name', ".
-			"$inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');";
+			"$inc_virtual_earth, $inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');";
 
 		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.
 			'onblur="exit_sref();" onclick="enter_sref();"/>';
