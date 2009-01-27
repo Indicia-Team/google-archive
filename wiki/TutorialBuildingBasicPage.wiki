@@ -118,8 +118,7 @@ z-index: 1000;
 	array(
 		'osgb'=>'British National Grid',
 		'4326'=>'Latitude and Longitude (WGS84)'),
-	null,
-	'false'); ?>
+	array()); ?>
 <br />
 <label for="survey_id">Survey</label>
 <?php echo data_entry_helper::select(
