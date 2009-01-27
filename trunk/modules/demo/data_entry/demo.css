@@ -51,10 +51,6 @@ div#occAttr0 {
 	padding: 0;
 }
 
-#ui-datepicker-div {
-	z-index: 1000;
-}
-
 .error {
 	border: solid red 1px;
 	background-color: #FFCCCC;
