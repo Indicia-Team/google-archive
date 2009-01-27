@@ -289,7 +289,7 @@ class data_entry_helper extends helper_config {
 	dataType: 'jsonp',
 	parse: function(data) {
 		var results = [];
-		$.each(data, function(i, item) {
+		jQuery.each(data, function(i, item) {
 			results[results.length] = {
 				'data' : item,
 					'result' : item.$nameField,

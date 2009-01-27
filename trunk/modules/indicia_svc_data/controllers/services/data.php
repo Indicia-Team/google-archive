@@ -353,6 +353,7 @@ class Data_Controller extends Service_Base_Controller {
 	 * include relationships to foreign key tables and the caption fields from those tables.
 	 *
 	 * @todo Review this code for SQL Injection attack!
+	 * @todo Basic website filter done, but not clever enough.
 	 */
 	protected function build_query_results()
 	{
