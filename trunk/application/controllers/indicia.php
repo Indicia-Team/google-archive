@@ -6,25 +6,11 @@ class Indicia_Controller extends Template_Controller {
 
     public function __construct()
     {
-        // setup/upgrade check
-        //
-        // load indicia system information
-        //
-        $system = Kohana::config('indicia.system', false, false);
-
-        // check if the general system setup was done
-        // The setup wasnt done if the indicia.php config file dosent exists.
-        //
-        if($system === null)
-        {
-            url::redirect('setup');
-        }
-
         parent::__construct();
 
         // assign view array with system informations
         //
-        $this->template->system = $system;
+        $this->template->system = Kohana::config('indicia.system', false, false);
 
         $this->db = Database::instance();
         $this->auth = new Auth;
@@ -33,38 +19,38 @@ class Indicia_Controller extends Template_Controller {
         // upgrade check
         //
         // $this->check_for_upgrade();
-		if($this->auth->logged_in()) {
-	        $menu = array
-    	    (
-        	    'Home' => array(),
-            	'Lookup Lists' => array(
-                	'Species Lists'=>'taxon_list',
-	                'Taxon Groups'=>'taxon_group',
-    	            'Term Lists'=>'termlist',
-        	        'Locations'=>'location',
-            	    'Surveys'=>'survey',
-                	'People'=>'person',
-	                ),
-    	        'Custom Attributes' => array(
-        	        'Occurrence Attributes'=>'occurrence_attribute',
-            	    'Sample Attributes'=>'sample_attribute',
-                	'Location Attributes'=>'location_attribute',
-	                ),
-    	        'Admin' => array(
-        	        'Users'=>'user',
-            	    'Websites'=>'website',
-                	'Languages'=>'language',
-	                ),
-    	        'Me' => array(
-        	        'Set New Password' => 'new_password',
-            	    'Logout'=>'logout',
-	                ),
-	        );
-	        if(!$this->auth->logged_in('CoreAdmin'))
-	        	unset($menu['Admin']);
-	        $this->template->menu = $menu;
-		} else
-	        $this->template->menu = array();
+        if($this->auth->logged_in()) {
+            $menu = array
+            (
+                'Home' => array(),
+                'Lookup Lists' => array(
+                    'Species Lists'=>'taxon_list',
+                    'Taxon Groups'=>'taxon_group',
+                    'Term Lists'=>'termlist',
+                    'Locations'=>'location',
+                    'Surveys'=>'survey',
+                    'People'=>'person',
+                    ),
+                'Custom Attributes' => array(
+                    'Occurrence Attributes'=>'occurrence_attribute',
+                    'Sample Attributes'=>'sample_attribute',
+                    'Location Attributes'=>'location_attribute',
+                    ),
+                'Admin' => array(
+                    'Users'=>'user',
+                    'Websites'=>'website',
+                    'Languages'=>'language',
+                    ),
+                'Me' => array(
+                    'Set New Password' => 'new_password',
+                    'Logout'=>'logout',
+                    ),
+            );
+            if(!$this->auth->logged_in('CoreAdmin'))
+                unset($menu['Admin']);
+            $this->template->menu = $menu;
+        } else
+            $this->template->menu = array();
     }
 
     /**
@@ -128,8 +114,8 @@ class Indicia_Controller extends Template_Controller {
             'id' => $id,
             'fields' => array(),
             'fkFields' => array(),
-	    'superModels' => array(),
-	    'subModels' => array()
+        'superModels' => array(),
+        'subModels' => array()
         );
 
         // Iterate through the array
@@ -145,21 +131,21 @@ class Indicia_Controller extends Template_Controller {
                         'fkSearchField' =>
                         ORM::factory(substr($a,3))->get_search_field(),
                         'fkSearchValue' => $b);
-		    // Determine the foreign table name
-		    $m = ORM::factory($id);
-		    if (array_key_exists(substr($a,3), $m->belongs_to)) {
-			    $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
-		    } else if ($m instanceof ORM_Tree && substr($a,3) == 'parent') {
-			    $sa['fkFields'][$a]['fkTable'] = $id;
-		    }
-		} else {
-			 // This should be a field in the model.
-	                 // Add a new field to the save array
-			 $sa['fields'][$a] = array(
-				 // Set the value
-				 'value' => $b);
-                	}
-	}
+            // Determine the foreign table name
+            $m = ORM::factory($id);
+            if (array_key_exists(substr($a,3), $m->belongs_to)) {
+                $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
+            } else if ($m instanceof ORM_Tree && substr($a,3) == 'parent') {
+                $sa['fkFields'][$a]['fkTable'] = $id;
+            }
+        } else {
+             // This should be a field in the model.
+                     // Add a new field to the save array
+             $sa['fields'][$a] = array(
+                 // Set the value
+                 'value' => $b);
+                    }
+    }
         return $sa;
     }
 
@@ -240,21 +226,21 @@ class Indicia_Controller extends Template_Controller {
             //
             if(false === $upgrade->run($db_system->getVersion(), $new_system))
             {
-				throw new Kohana_User_Exception('Upgrade Error', Kohana::lang('general_errors.upgrade.failure'));
+                throw new Kohana_User_Exception('Upgrade Error', Kohana::lang('general_errors.upgrade.failure'));
             }
         }
     }
 
     protected function setError($title, $message)
-	{
-	    $this->template->title   = $title;
+    {
+        $this->template->title   = $title;
         $this->template->content = new View('templates/error_message');
-		$this->template->content->message = $message;
-	}
+        $this->template->content->message = $message;
+    }
 
-	protected function access_denied($level = 'records.')
-	{
-	    $this->setError('Access Denied', 'You do not have sufficient permissions to access the '.$this->model->table_name.' '.$level);
-	}
+    protected function access_denied($level = 'records.')
+    {
+        $this->setError('Access Denied', 'You do not have sufficient permissions to access the '.$this->model->table_name.' '.$level);
+    }
 
 }
