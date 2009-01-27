@@ -596,11 +596,12 @@ class data_entry_helper extends helper_config {
 		$init_lat   = self::option('init_lat', $opts, '7300000');
 		$init_long  = self::option('init_long', $opts, '-100000');
 		$init_zoom  = self::option('init_zoom', $opts, '4');
+		$init_layer = self::option('init_layer', $opts, '');
 		$r = '<script type="text/javascript" src="'.parent::$base_url.'/media/js/OpenLayers.js"></script>';
 		$r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
 		$javascript .= "init_map(\"".parent::$base_url."\", null, '$field_name', '$geom_field_name', ".
-			"$inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom);";
+			"$inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');";
 
 		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.
 			'onblur="exit_sref();" onclick="enter_sref();"/>';
