@@ -1,0 +1,16 @@
+#summary Tutorial that demonstrates adding support for the Google Maps base layers to the basic data entry page.
+#labels Phase-Implementation
+
+= Introduction =
+
+This tutorial demonstrates adding support for the Google Maps base layers to the basic data entry page. Before starting the tutorial, you should have completed the [TutorialBuildingBasicPage Building a Basic Data Entry Page] tutorial.
+
+= Steps =
+
+  # First, you need a Google Maps API Key. To obtain one, visit the [http://code.google.com/intl/fr-LU/apis/maps/signup.html Google Maps API Signup site]. You need to enter the URL of the server you are developing your website on in the *My web site URL* box on this page, accept the conditions, then click *Generate API Key*.
+
+  # This will take you to a page which displays your API key. Copy this somewhere safe. Also, take a look at the code given on this page for your example web page. A few lines down, you will see a line that starts `script src=..`. Copy this line of code to the clipboard, all the way up to and including the `</script>` on the next line.
+
+  # Paste this line of code into the HTML template for your web page. Insert it beneath the other `<script>` elements in your HTML `<head>` section then save the template.
+
+  # Now, in the code you have already built for your data entry page, find the line of code that calls the `data_entry_helper::map_picker` method. Change this so that the 5th parameter reads 'true' instead of 'false' to enable the Google base layers. Save your page.
