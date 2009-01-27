@@ -13,6 +13,6 @@ This tutorial demonstrates adding support for the Google Maps base layers to the
 
   # Paste this line of code into the HTML template for your web page. Insert it beneath the other `<script>` elements in your HTML `<head>` section then save the template.
 
-  # Now, in the code you have already built for your data entry page, find the line of code that calls the `data_entry_helper::map_picker` method. Change this that the last parameter, which currently reads `array()`, now reads `array('inc_google'=>'true','init_layer'=>'Google Physical'). Save your page and have a look at it in the browser. Click on the + button on the right of the map to see the different base layers you are able to load by default.
+  # Now, in the code you have already built for your data entry page, find the line of code that calls the `data_entry_helper::map_picker` method. Change this that the last parameter, which currently reads `array()`, now reads `array('inc_google'=>'true','init_layer'=>'Google Physical')`. Save your page and have a look at it in the browser. Click on the + button on the right of the map to see the different base layers you are able to load by default.
 
   # You can remove the support for the Virtual Earth layer by specifying an option `'inc_virtual_earth'=>'false'` if desired.
