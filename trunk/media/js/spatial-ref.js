@@ -106,7 +106,7 @@ function show_wkt_feature(wkt) {
 // When the document is ready, initialise the map. This needs to be passed the base url for services and the
 // wkt of the object to display if any. If Google=TRUE, then the calling page must have the Google Maps API
 // link in the header with a valid API key.
-function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key, init_lat, init_long, init_zoom) {
+function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key, init_lat, init_long, init_zoom, init_layer) {
 	// store a couple of globals for future use
 	indicia_url=base_url;
 	input_field_name=field_name;
@@ -159,6 +159,11 @@ function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key, i
 		);
 
 		map.addLayers([velayer, gphy, gmap, ghyb, gsat, editlayer]);
+		if (init_layer!='') {
+			var layers = map.getLayersByName(init_layer);
+			if (layers.length==1)
+				map.setBaseLayer(layers[0]);
+		}
 	}
 	else
 		map.addLayers([velayer, editlayer]);
