@@ -97,12 +97,6 @@ The first two sections of the following tutorial are performed by your Core Serv
 <?php echo data_entry_helper::date_picker('date'); ?> 
 <br />
 }}}
-  #	Because the date picker will drop down onto the controls below, it is a good idea to tell the web browser that it should always appear on top of those controls rather than underneath. You can do this using CSS (Cascading Style Sheets). If you already have a css file included with your template, you can paste the following into it to achieve this:
-{{{
-#ui-datepicker-div {
-z-index: 1000;
-}
-}}}
   #	If you don’t have a CSS file, you can paste the following into your HTML page directly, just above the line that reads `</head>`. Note that although this approach works, having an external CSS file for your styling information is good practice.
 {{{
 <style type="text/css">
