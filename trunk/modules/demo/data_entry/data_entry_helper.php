@@ -2,7 +2,7 @@
 
 include('helper_config.php');
 
-class data_entry_helper {
+class data_entry_helper extends helper_config {
 
 	/**
 	 * Helper function to collect javascript code in a single location.
@@ -52,10 +52,9 @@ class data_entry_helper {
 		$occAttrControls = array();
 		$occAttrs = array();
 		// Reference to the config file.
-		global $config;
 		global $javascript;
 		// Declare the data service
-		$url = $config['base_url']."/index.php/services/data";
+		$url = parent::$base_url."/index.php/services/data";
 		$termRequest = "$url/taxa_taxon_list?mode=json&taxon_list_id=$list_id&preferred=t";
 		$termRequest .= "&$readAuth";
 		foreach ($extraParams as $a => $b){
@@ -193,8 +192,7 @@ class data_entry_helper {
 	 * @return string HTML code for a select control.
 	 */
 	public static function select($id, $entity, $nameField, $valueField = null, $extraParams = null) {
-		global $config;
-		$url = $config['base_url']."/index.php/services/data";
+		$url = parent::$base_url."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 		if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service
@@ -229,8 +227,7 @@ class data_entry_helper {
 	 * Helper function to generate a list box from a Indicia core service query.
 	 */
 	public static function listbox($id, $entity, $nameField, $size = 3, $multival = false, $valueField = null, $extraParams = null) {
-		global $config;
-		$url = $config['base_url']."/index.php/services/data";
+		$url = parent::$base_url."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 		if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service
@@ -267,9 +264,8 @@ class data_entry_helper {
 	 * Helper function to generate an autocomplete box from an Indicia core service query.
 	 */
 	public static function autocomplete($id, $entity, $nameField, $valueField = null, $extraParams = null) {
-		global $config;
 		global $javascript;
-		$url = $config['base_url']."/index.php/services/data";
+		$url = parent::$base_url."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 		if ($valueField == null) $valueField = $nameField;
 		// Do stuff with extraParams
@@ -320,8 +316,7 @@ class data_entry_helper {
 	 * Helper function to generate a radio group from a Indicia core service query.
 	 */
 	public static function radio_group($id, $entity, $nameField, $valueField = null, $extraParams = null) {
-		global $config;
-		$url = $config['base_url']."/index.php/services/data";
+		$url = parent::$base_url."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 		if ($valueField == null) $valueField = $nameField;
 		// Execute a request to the service
@@ -349,9 +344,8 @@ class data_entry_helper {
 	}
 
 	public static function forward_post_to($entity, $array = null) {
-		global $config;
 		if ($array == null) $array = self::wrap($_POST, $entity);
-		$request = $config['base_url']."/index.php/services/data/$entity";
+		$request = parent::$base_url."/index.php/services/data/$entity";
 		$postargs = 'submission='.json_encode($array);
 		// passthrough the authentication tokens as POST data
 		if (array_key_exists('auth_token', $_POST))
@@ -373,12 +367,11 @@ class data_entry_helper {
 	}
 
 	public static function handle_media($media_id = 'imgUpload') {
-		global $config;
 		syslog(LOG_DEBUG, print_r($_FILES, true));
 		if (array_key_exists($media_id, $_FILES)) {
 			syslog(LOG_DEBUG, "SITE: Media id $media_id to upload.");
-			$uploadpath = $config['uploadpath'];
-			$target_url = $config['base_url']."/index.php/services/data/handle_media";
+			$uploadpath = parent::$upload_path;
+			$target_url = parent::$base_url."/index.php/services/data/handle_media";
 
 			$name = $_FILES[$media_id]['name'];
 			$fname = $_FILES[$media_id]['tmp_name'];
@@ -587,13 +580,12 @@ class data_entry_helper {
 	 * is replaced by a hidden input.
 	 */
 	public static function map_picker($field_name, $geom_field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
-		global $config;
 		global $javascript;
 
-		$r = '<script type="text/javascript" src="'.$config['base_url'].'/media/js/OpenLayers.js"></script>';
-		$r .= '<script type="text/javascript" src="'.$config['base_url'].'/media/js/spatial-ref.js"></script>';
+		$r = '<script type="text/javascript" src="'.parent::$base_url.'/media/js/OpenLayers.js"></script>';
+		$r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
-		$javascript .= 'init_map("'.$config['base_url'].'", null, "'.$field_name.'", "'.$geom_field_name.'", '.$google.', \''.$config['geoplanet_api_key'].'\');';
+		$javascript .= 'init_map("'.parent::$base_url.'", null, "'.$field_name.'", "'.$geom_field_name.'", '.$google.', \''.parent::$geoplanet_api_key.'\');';
 
 		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$value.'" '.
 			'onblur="exit_sref();" onclick="enter_sref();"/>';
@@ -639,10 +631,9 @@ class data_entry_helper {
 	 * 'extraParams' options for an Ajax call.
 	 */
 	public static function get_read_auth($website_id, $password) {
-		global $config;
 		$postargs = "website_id=$website_id";
 		// Get the curl session object
-		$session = curl_init($config['base_url'].'/index.php/services/security/get_read_nonce');
+		$session = curl_init(parent::$base_url.'/index.php/services/security/get_read_nonce');
 		// Set the POST options.
 		curl_setopt ($session, CURLOPT_POST, true);
 		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);
@@ -662,10 +653,9 @@ class data_entry_helper {
 	 * form was submitted by this website.
 	 */
 	public static function get_auth($website_id, $password) {
-		global $config;
 		$postargs = "website_id=$website_id";
 		// Get the curl session object
-		$session = curl_init($config['base_url'].'/index.php/services/security/get_nonce');
+		$session = curl_init(parent::$base_url.'/index.php/services/security/get_nonce');
 		// Set the POST options.
 		curl_setopt ($session, CURLOPT_POST, true);
 		curl_setopt ($session, CURLOPT_POSTFIELDS, $postargs);

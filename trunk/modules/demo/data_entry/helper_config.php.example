@@ -1,5 +1,9 @@
 <?php
-	$config['base_url']='http://localhost/indicia';
-	$config['geoplanet_api_key']='';
-	$config['uploadpath'] = './upload/';
+
+class helper_config {
+	static $base_url='http://192.171.199.208/indicia';
+	static $geoplanet_api_key='...';
+	static $upload_path = './upload/';
+}
+
 ?>
