@@ -135,7 +135,6 @@ function init_map(base_url, wkt, field_name, geom_name, virtual_earth, google, g
 
 	editlayer = new OpenLayers.Layer.Vector("Current location boundary",
 		{style: boundary_style, 'sphericalMercator': true});
-
 	if (virtual_earth) {
 		var velayer = new OpenLayers.Layer.VirtualEarth(
 			"Virtual Earth",
@@ -143,7 +142,6 @@ function init_map(base_url, wkt, field_name, geom_name, virtual_earth, google, g
 			);
 		map.addLayer(velayer);
 	}
-
 	if (google) {
 		var gphy = new OpenLayers.Layer.Google(
 			"Google Physical",
@@ -164,14 +162,13 @@ function init_map(base_url, wkt, field_name, geom_name, virtual_earth, google, g
 
 		map.addLayers([velayer, gphy, gmap, ghyb, gsat]);
 	}
-	map.addLayer(editlayer);
 
-	if (init_layer!='') {
+	map.addLayer(editlayer);
+	if (init_layer!='' && typeof(init_layer)!="undefined") {
 		var layers = map.getLayersByName(init_layer);
 		if (layers.length==1)
 			map.setBaseLayer(layers[0]);
 	}
-
   	map.addControl(new OpenLayers.Control.LayerSwitcher());
 	if (wkt!=null) {
 		show_wkt_feature(wkt);
