@@ -85,6 +85,8 @@ class Setup_Controller extends Template_Controller
     {
         if(false !== ($this->dbconn = $this->db_connect()))
         {
+            $this->prefix = '';
+
             if(($this->db['schema'] == 'public') || empty($this->db['schema']))
             {
                 $this->db['schema'] = '';
@@ -308,8 +310,8 @@ class Setup_Controller extends Template_Controller
     {
         $tmp_config = file_get_contents(dirname(dirname(__file__ )) . '/config/_database.php');
 
-        $_config = str_replace(array("*host*","*port*","*name*","*user*","*password*","*schema*"),
-                               array($this->db['host'],$this->db['port'],$this->db['name'],$this->db['user'],$this->db['password'],$this->schema_and_postfix),
+        $_config = str_replace(array("*host*","*port*","*name*","*user*","*password*","*prefix*","*schema*"),
+                               array($this->db['host'],$this->db['port'],$this->db['name'],$this->db['user'],$this->db['password'],$this->prefix,$this->db['schema']),
                                $tmp_config);
 
         $database_config = dirname(dirname(dirname(dirname(__file__)))) . "/application/config/database.php";
