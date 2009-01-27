@@ -40,18 +40,18 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 		} else {
 			precision=2;
 		}
-		$.get(indicia_url + "/index.php/services/spatial/wkt_to_sref",
+		jQuery.get(indicia_url + "/index.php/services/spatial/wkt_to_sref",
 			{wkt: "POINT(" + lonlat.lon + "  " + lonlat.lat + ")",
 			system: document.getElementById(input_field_name + "_system").value,
 			precision: precision },
 			function(data){
-				$("#"+input_field_name).attr('value', data);
+				jQuery("#"+input_field_name).attr('value', data);
 				editlayer.destroyFeatures();
 				// TODO - Json encode this into the previous response so we don't call twice
-				$.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
+				jQuery.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
 					{sref: data, system: document.getElementById(input_field_name + "_system").value },
 					function(data){
-						$("#"+geom_field_name).attr('value', data);
+						jQuery("#"+geom_field_name).attr('value', data);
 						var parser = new OpenLayers.Format.WKT();
 						var feature = parser.read(data);
 						editlayer.addFeatures([feature]);
@@ -66,10 +66,10 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 function exit_sref() {
 	if (current_sref!=document.getElementById(input_field_name).value) {
 	   	// Send an AJAX request for the wkt to draw on the map
-	   	$.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
+	   	jQuery.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
 			{sref: document.getElementById(input_field_name).value, system: "osgb"},
 			function(data){
-				$("#"+geom_field_name).attr('value', data);
+				jQuery("#"+geom_field_name).attr('value', data);
 				show_wkt_feature(data);
 			}
 		);
@@ -106,7 +106,7 @@ function show_wkt_feature(wkt) {
 // When the document is ready, initialise the map. This needs to be passed the base url for services and the
 // wkt of the object to display if any. If Google=TRUE, then the calling page must have the Google Maps API
 // link in the header with a valid API key.
-function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key) {
+function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key, init_lat, init_long, init_zoom) {
 	// store a couple of globals for future use
 	indicia_url=base_url;
 	input_field_name=field_name;
@@ -167,7 +167,7 @@ function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key) {
 	if (wkt!=null) {
 		show_wkt_feature(wkt);
 	} else {
-		map.setCenter(new OpenLayers.LonLat(-100000,7300000),4);
+		map.setCenter(new OpenLayers.LonLat(init_long,init_lat),init_zoom);
 	}
 	var click = new OpenLayers.Control.Click();
 	map.addControl(click);
@@ -178,35 +178,35 @@ function init_map(base_url, wkt, field_name, geom_name, google, geoplanet_key) {
 // Pref_area is the text to suffix to location searches to help keep them within the target region, e.g. gb or Dorset.
 function find_place(pref_area)
 {
-	$('#place_search_box').hide();
-	$('#place_search_output').empty();
+	jQuery('#place_search_box').hide();
+	jQuery('#place_search_output').empty();
 	var ref;
-	var searchtext = $('#place_search').attr('value');
+	var searchtext = jQuery('#place_search').attr('value');
 	var request = 'http://where.yahooapis.com/v1/places.q("' +
 			searchtext + ' ' + pref_area + ');count=10';
-    $.getJSON(request + "?format=json&appid="+geoplanet_api_key+"&callback=?", function(data){
+    jQuery.getJSON(request + "?format=json&appid="+geoplanet_api_key+"&callback=?", function(data){
     	if (data.places.count==1 && data.places.place[0].name.toLowerCase()==searchtext.toLowerCase()) {
     		ref=data.places.place[0].centroid.longitude + ', ' + data.places.place[0].centroid.latitude;
 			show_found_place(ref);
     	} else if (data.places.count!=0) {
-    		$('<p>Select from the following places that were found matching your search:</p>').appendTo('#place_search_output');
-    		var ol=$('<ol>');
-	  		$.each(data.places.place, function(i,place){
+    		jQuery('<p>Select from the following places that were found matching your search:</p>').appendTo('#place_search_output');
+    		var ol=jQuery('<ol>');
+	  		jQuery.each(data.places.place, function(i,place){
 	  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
-				$('<li><a href="#" onclick="show_found_place('+ref+');">'+place.name+' (' + place.placeTypeName + '), '+place.admin1 + '\\' + place.admin2 + '</a></li>').appendTo(ol);
+				jQuery('<li><a href="#" onclick="show_found_place('+ref+');">'+place.name+' (' + place.placeTypeName + '), '+place.admin1 + '\\' + place.admin2 + '</a></li>').appendTo(ol);
 	  		});
 	  		ol.appendTo('#place_search_output');
-	  		$('#place_search_box').show("slow");
+	  		jQuery('#place_search_box').show("slow");
     	} else {
-    		$('<p>No locations found with that name. Try a nearby town name.</p>').appendTo('#place_search_output');
-			$('#place_search_box').show("slow");
+    		jQuery('<p>No locations found with that name. Try a nearby town name.</p>').appendTo('#place_search_output');
+			jQuery('#place_search_box').show("slow");
     	}
 	});
 }
 
 // Once a place has been found, places the spatial reference as a point on the map.
 function show_found_place(ref) {
-	$.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
+	jQuery.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
 		{sref: ref, system: "4326"},
 		function(data){
 			show_wkt_feature(data);

@@ -578,16 +578,31 @@ class data_entry_helper extends helper_config {
 	 * Puts a spatial reference entry control, optional system selector, and map onto a data entry form.
 	 * The system selector is automatically output if there is more than one system present, otherwise it
 	 * is replaced by a hidden input.
+	 *
+	 * @param string $field_name Name of the spatial reference db field.
+	 * @param string $geom_field_name Name of the geom db field.
+	 * @param array $systems Associative array of the available spatial reference systems, in form code -> description.
+	 * @param array $opts Associative array of additional options. Possible options are init_value, width, height, instruct, inc_google, init_lat, init_long, init_zoom.
 	 */
-	public static function map_picker($field_name, $geom_field_name, $systems, $value='', $google='false', $width=600, $height=350, $instruct=null) {
+	public static function map_picker($field_name, $geom_field_name, $systems, $opts) {
 		global $javascript;
-
+		// Handle the options
+		$init_value = self::option('init_value', $opts, '');
+		$width      = self::option('width', $opts, '600');
+		$height     = self::option('height', $opts, '350');
+		$instruct   = self::option('instruct', $opts, "Zoom the map in by double-clicking then single click on the location's centre to set the ".
+					"spatial reference. The more you zoom in, the more accurate the reference will be.");
+		$inc_google = self::option('inc_google', $opts, 'false');
+		$init_lat   = self::option('init_lat', $opts, '7300000');
+		$init_long  = self::option('init_long', $opts, '-100000');
+		$init_zoom  = self::option('init_zoom', $opts, '4');
 		$r = '<script type="text/javascript" src="'.parent::$base_url.'/media/js/OpenLayers.js"></script>';
 		$r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
 		$r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
-		$javascript .= 'init_map("'.parent::$base_url.'", null, "'.$field_name.'", "'.$geom_field_name.'", '.$google.', \''.parent::$geoplanet_api_key.'\');';
+		$javascript .= "init_map(\"".parent::$base_url."\", null, '$field_name', '$geom_field_name', ".
+			"$inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom);";
 
-		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$value.'" '.
+		$r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.
 			'onblur="exit_sref();" onclick="enter_sref();"/>';
 		if (count($systems)==1) {
 			$srids = array_keys($systems);
@@ -600,11 +615,21 @@ class data_entry_helper extends helper_config {
 			$r .= '</select>';
 		}
 		$r .= "<input type=\"hidden\" id=\"$geom_field_name\" name=\"$geom_field_name\" />";
-		if ($instruct===null)
-			$instruct="Zoom the map in by double-clicking then single click on the location's centre to set the ".
-			"spatial reference. The more you zoom in, the more accurate the reference will be.";
 		$r .= '<p class="instruct">'.$instruct.'</p>';
 		$r .= '<div id="map" class="smallmap" style="width: '.$width.'px; height: '.$height.'px;"></div>';
+		return $r;
+	}
+
+	/**
+	 * Private method to find an option from an associative array of options. If not present, returns the default.
+	 */
+	private static function option($key, array $opts, $default)
+	{
+		if (array_key_exists($key, $opts)) {
+			$r = $opts[$key];
+		} else {
+			$r = $default;
+		}
 		return $r;
 	}
 

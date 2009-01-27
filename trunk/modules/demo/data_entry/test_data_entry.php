@@ -93,8 +93,7 @@ $(document).ready(function() {
 <label for="entered_sref">Spatial Reference:</label>
 <?php echo data_entry_helper::map_picker('entered_sref', 'geom',
 	array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)'),
-	null,
-	'true'); ?>
+	array('google'=>'true')); ?>
 <br />
 <label for="location_name">Locality Description:</label>
 <input name="location_name" size="50" /><br />
