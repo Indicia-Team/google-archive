@@ -16,27 +16,13 @@ class Indicia
     }
 
     /**
-     * set schema search path for postgresql
-     */
-    public static function set_schema_search_path()
-    {
-        $db = Database::instance();
-
-        $_schema = Kohana::config('database.default.schema');
-
-        if(!empty($_schema))
-        {
-            $result = $db->query('SET search_path TO ' . $_schema . ', public, pg_catalog');
-        }
-    }
-
-    /**
      * check if setup wasnt done
+     * and continue to set the database schema paths
      */
     public static function _check_setup()
     {
         $uri = URI::instance();
-
+        // we havent to proceed futher if a setup call was made
         if($uri->segment(1) == 'setup')
         {
             return;
@@ -54,13 +40,23 @@ class Indicia
             unset($_COOKIE);
             url::redirect('setup');
         }
+
+        // continue to init the system
+        //
+        // add schema to the search path
+        //
+        $_schema = Kohana::config('database.default.schema');
+
+        if(!empty($_schema))
+        {
+            $db = Database::instance();
+            $result = $db->query('SET search_path TO ' . $_schema . ', public, pg_catalog');
+        }
     }
 
 }
 
 Event::add('system.routing', array('Indicia', '_check_setup'));
 Event::add('system.ready',   array('Indicia', 'Init'));
-Event::add('system.routing', array('Indicia', 'set_schema_search_path'));
-
 
 ?>
