@@ -40,23 +40,18 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 		} else {
 			precision=2;
 		}
-		jQuery.get(indicia_url + "/index.php/services/spatial/wkt_to_sref",
-			{wkt: "POINT(" + lonlat.lon + "  " + lonlat.lat + ")",
-			system: document.getElementById(input_field_name + "_system").value,
-			precision: precision },
+		jQuery.getJSON(indicia_url + "/index.php/services/spatial/wkt_to_sref"+
+			"?wkt=POINT(" + lonlat.lon + "  " + lonlat.lat + ")"+
+			"&system=" + document.getElementById(input_field_name + "_system").value +
+			"&precision=" + precision +
+			"&callback=?",
 			function(data){
-				jQuery("#"+input_field_name).attr('value', data);
+				jQuery("#"+input_field_name).attr('value', data.sref);
 				editlayer.destroyFeatures();
-				// TODO - Json encode this into the previous response so we don't call twice
-				jQuery.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
-					{sref: data, system: document.getElementById(input_field_name + "_system").value },
-					function(data){
-						jQuery("#"+geom_field_name).attr('value', data);
-						var parser = new OpenLayers.Format.WKT();
-						var feature = parser.read(data);
-						editlayer.addFeatures([feature]);
-					}
-				);
+				jQuery("#"+geom_field_name).attr('value', data.wkt);
+				var parser = new OpenLayers.Format.WKT();
+				var feature = parser.read(data.wkt);
+				editlayer.addFeatures([feature]);
 			}
 		);
 	}
@@ -66,11 +61,13 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
 function exit_sref() {
 	if (current_sref!=document.getElementById(input_field_name).value) {
 	   	// Send an AJAX request for the wkt to draw on the map
-	   	jQuery.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
-			{sref: document.getElementById(input_field_name).value, system: "osgb"},
+	   	jQuery.getJSON(indicia_url + "/index.php/services/spatial/sref_to_wkt"+
+	   		"?sref=" + document.getElementById(input_field_name).value +
+	   		"&system=osgb"+
+			"&callback=?",
 			function(data){
-				jQuery("#"+geom_field_name).attr('value', data);
-				show_wkt_feature(data);
+				jQuery("#"+geom_field_name).attr('value', data.wkt);
+				show_wkt_feature(data.wkt);
 			}
 		);
 	}
