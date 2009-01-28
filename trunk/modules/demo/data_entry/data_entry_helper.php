@@ -596,7 +596,7 @@ class data_entry_helper extends helper_config {
 		$inc_virtual_earth = self::option('inc_virtual_earth', $opts, 'true');
 		$init_lat   = self::option('init_lat', $opts, '7300000');
 		$init_long  = self::option('init_long', $opts, '-100000');
-		$init_zoom  = self::option('init_zoom', $opts, '4');
+		$init_zoom  = self::option('init_zoom', $opts, '5');
 		$init_layer = self::option('init_layer', $opts, '');
 		$r = '<script type="text/javascript" src="'.parent::$base_url.'/media/js/OpenLayers.js"></script>';
 		$r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
