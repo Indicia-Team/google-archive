@@ -192,7 +192,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		}
 		$sa['superModels'][] = array(
 			'fkId' => 'term_id',
-			'model' => parent::wrap($termFields), false, 'term'));
+			'model' => parent::wrap($termFields), false, 'term');
 
 		$sa['metaFields']['synonomy'] = array(
 			'value' => $array['synonomy']
@@ -296,7 +296,7 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		$term = new Termlists_term_Model($id);
 		// for this controller, any termlist_term that does not exist can not be accessed.
 		// ie prevent sly creation using the edit function
-		if (!$term->loaded) return false;		
+		if (!$term->loaded) return false;
 		return ($this->termlist_authorised($term->termlist_id));
 	}
 
@@ -308,9 +308,9 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 		{
 			$termlist = new Termlist_Model($id);
 			// for this controller, any termlist that does not exist can not be accessed.
-			if (!$termlist->loaded) return false;		
+			if (!$termlist->loaded) return false;
 			return (in_array($termlist->website_id, $this->gen_auth_filter['values']));
-		}		
+		}
 		return true;
 	}
 }
