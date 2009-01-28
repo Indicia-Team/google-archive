@@ -209,10 +209,12 @@ function find_place(pref_area)
 
 // Once a place has been found, places the spatial reference as a point on the map.
 function show_found_place(ref) {
-	jQuery.get(indicia_url + "/index.php/services/spatial/sref_to_wkt",
-		{sref: ref, system: "4326"},
+	jQuery.getJSON(indicia_url + "/index.php/services/spatial/sref_to_wkt" +
+		"?sref=" + ref +
+		"&system=4326" +
+		"&callback=?",
 		function(data){
-			show_wkt_feature(data);
+			show_wkt_feature(data.wkt);
 		}
 	);
 }
