@@ -185,12 +185,12 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 
 		$termFields = array_intersect_key($array, ORM::factory('term')
 			->table_columns);
-		if (array_key_exists('termlist_id', $array) && $array['termlist_id'] != ''){
-			$termFields['id'] = $array['termlist_id'];
+		if (array_key_exists('term_id', $array) && $array['term_id'] != ''){
+			$termFields['id'] = $array['term_id'];
 		}
 		$sa['superModels'][] = array(
 			'fkId' => 'term_id',
-			'model' => parent::wrap($termFields), false, 'term');
+			'model' => parent::wrap($termFields, false, 'term'));
 
 		$sa['metaFields']['synonomy'] = array(
 			'value' => $array['synonomy']
