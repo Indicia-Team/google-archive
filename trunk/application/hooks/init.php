@@ -12,7 +12,14 @@ class Indicia
      */
     public static function indicia_exception_handler($errno, $errstr, $errfile, $errline)
     {
-        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    	try
+    	{
+        	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    	}
+        catch (Exception $e)
+        {
+        	print get_class($e)." thrown within the exception handler. Message: ".$e->getMessage()." on line ".$e->getLine();
+        }
     }
 
     /**
