@@ -18,13 +18,19 @@ class Termlists_term_Model extends ORM_Tree {
 		$array->add_rules('term_id', 'required');
 		$array->add_rules('termlist_id', 'required');
 		$array->add_rules('meaning_id', 'required');
-		$array->add_callbacks('deleted', array($this, '__dependents'));
+		// $array->add_callbacks('deleted', array($this, '__dependents'));
 
 		// Explicitly add those fields for which we don't do validation
-		if (array_key_exists('parent_id', $array))
-			$this->parent_id = $array['parent_id'];
-		if (array_key_exists('preferred', $array))
-			$this->preferred = $array['preferred'];
+		$extraFields = array(
+			'parent_id',
+			'preferred',
+			'deleted'
+		);
+		foreach ($extraFields as $a) {
+			if (array_key_exists($a, $array->as_array())){
+				$this->__set($a, $array[$a]);
+			}
+		}
 		return parent::validate($array, $save);
 	}
 	/**
