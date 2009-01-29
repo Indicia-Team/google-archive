@@ -21,8 +21,10 @@ class Termlists_term_Model extends ORM_Tree {
 		$array->add_callbacks('deleted', array($this, '__dependents'));
 
 		// Explicitly add those fields for which we don't do validation
-		$this->parent_id = $array['parent_id'];
-		$this->preferred = $array['preferred'];
+		if (array_key_exists('parent_id', $array))
+			$this->parent_id = $array['parent_id'];
+		if (array_key_exists('preferred', $array))
+			$this->preferred = $array['preferred'];
 		return parent::validate($array, $save);
 	}
 	/**

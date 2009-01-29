@@ -27,10 +27,8 @@ class Taxa_taxon_list_Controller extends Gridview_Base_Controller {
 			'taxa_taxon_list',
 			'gv_taxon_lists_taxon',
 		       	'taxa_taxon_list/index');
-		$this->base_filter = array(
-			'parent_id' => null,
-			'deleted' => 'f',
-			'preferred' => 't');
+		$this->base_filter['parent_id']=null;
+		$this->base_filter['preferred']='t';
 		$this->columns = array(
 			'taxon'=>'',
 			'authority'=>'',
