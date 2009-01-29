@@ -99,6 +99,7 @@ class Setup_Controller extends Template_Controller
 
             $_db_file = str_replace("indicia.",$this->schema_and_postfix, file_get_contents( $this->db_file));
             $_db_file = str_replace("indicia",$this->db['schema'], $_db_file);
+            Kohana::log("info", "Processing: ".$this->db_file);
 
             pg_query($this->dbconn, "BEGIN");
 
