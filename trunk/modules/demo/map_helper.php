@@ -130,11 +130,11 @@ Class Map extends helper_config{
 	 */
 	public function addIndiciaLayer($title, $type){
 		$this->addLayer("OpenLayers.Layer.WFS(
-			'$title','".$this->indiciaCore."wfs?', 
-	{ request: 'GetFeature',
+			'$title','".$this->indiciaCore."wfs', 
+	{ request: 'GetFeature1.1',
 	PropertyName: '',
-	TypeName: '$type'},
-	{format: format,
+	TypeName: '$type',
+	format: format,
 	isBaseLayer: false,
 	extractAttributes: true})");
 	}
