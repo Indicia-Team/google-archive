@@ -23,10 +23,8 @@ class Termlists_term_Controller extends Gridview_Base_Controller {
 			'termlists_term',
 			'gv_termlists_term',
 		       	'termlists_term/index');
-		$this->base_filter = array(
-			'parent_id' => null,
-			'deleted' => 'f',
-			'preferred' => 't');
+		$this->base_filter['parent_id']=null;
+		$this->base_filter['preferred']='t';
 		$this->columns = array(
 			'term'=>'',
 			'language'=>'',

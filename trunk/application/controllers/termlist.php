@@ -3,7 +3,6 @@
 class Termlist_Controller extends Gridview_Base_Controller {
 	public function __construct() {
 		parent::__construct('termlist','gv_termlist','termlist/index');
-		$this->base_filter = array('deleted' => 'f');
 		$this->columns = array(
 			'title'=>'',
 			'description'=>'',
@@ -45,7 +44,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 			$this->setView('termlist/termlist_edit', 'Termlist', $vArgs);
 		}
 	}
-	
+
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
 	public function edit_gv($id,$page_no,$limit) {
 		$this->auto_render=false;
@@ -90,7 +89,7 @@ class Termlist_Controller extends Gridview_Base_Controller {
 		{
 			$termlist=ORM::factory('termlist',$id);
 			return (in_array($termlist->website_id, $this->auth_filter['values']));
-		}		
+		}
 		return true;
 	}
 }
