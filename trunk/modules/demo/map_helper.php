@@ -16,7 +16,7 @@ Class Map extends helper_config{
 	// Width of the map control
 	public $width = '850px';
 	// Base URL of the Indicia Core GeoServer instance to use - defaults to localhost
-	public $indiciaCore = 'http://localhost:8080/geoserver/wms';
+	public $indiciaCore = 'http://localhost:8080/geoserver/';
 	// Private array of options - passed in similar style to the javascript
 	private $options = Array(
 		'projection' => 'new OpenLayers.Projection("EPSG:900913")',
@@ -35,6 +35,7 @@ Class Map extends helper_config{
 	// Private array of libraries which may be included 
 	private $library_sources = Array();
 	private $libraries = Array();
+	private $centre = "new OpenLayers.LonLat(-100000,6700000),7";
 
 	// Constants used to add default layers
 	const LAYER_GOOGLE_PHYSICAL = 0;
@@ -127,15 +128,15 @@ Class Map extends helper_config{
 	/**
 	 * <p> Adds a layer from the Indicia Core to the map control.</p>
 	 */
-	public function addIndiciaLayer($title, $layer){
-		$this->addLayer("OpenLayers.Layer.WMS(
-			'$title','".$this->indiciaCore."', 
-	{ layers: '$layer',
-	srs: 'EPSG:900913',
-	transparent: true,
-	format: format
-	},
-	{singleTile: true, ratio: 1, isBaseLayer: false, opacity: 0.5})");
+	public function addIndiciaLayer($title, $type){
+		$this->addLayer("OpenLayers.Layer.WFS(
+			'$title','".$this->indiciaCore."wfs?', 
+	{ request: 'GetFeature',
+	PropertyName: '',
+	TypeName: '$type'},
+	{format: format,
+	isBaseLayer: false,
+	extractAttributes: true})");
 	}
 
 	/**
@@ -188,12 +189,13 @@ Class Map extends helper_config{
 	  if (count($this->layers) >=2 ){
 	    $r .= "$ion.addControl(new OpenLayers.Control.LayerSwitcher());\n";
 	  }
+	  $r .= "$ion.setCenter(".$this->centre.");";
 	  $r .= "}";
-	  $r .= "window.onload = init();";
-	  $r .= "</script>";
+	  $r .= "</script>\n";
 	  $r .= "<div class='smallmap' id='".$this->name
 		."' style='width: ".$this->width."; height: "
-		.$this->height.";'></div>";
+		.$this->height.";'></div>\n";
+	  $r .= "<script type='text/javascript'>init();</script>";
 	  return $r;
 	}
 
