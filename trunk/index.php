@@ -92,7 +92,7 @@ unset($kohana_application, $kohana_modules, $kohana_system);
 if ( ! IN_PRODUCTION)
 {
 	// Check APPPATH
-	if ( ! (is_dir(APPPATH) AND is_file(APPPATH.'config/config'.EXT)))
+	if ( ! (is_dir(APPPATH)))
 	{
 		die
 		(
@@ -100,6 +100,18 @@ if ( ! IN_PRODUCTION)
 				'<h3>Application Directory Not Found</h3>'.
 				'<p>The <code>$kohana_application</code> directory does not exist.</p>'.
 				'<p>Set <code>$kohana_application</code> in <tt>'.KOHANA.'</tt> to a valid directory and refresh the page.</p>'.
+			'</div>'
+		);
+	}
+	if ( !  (is_file(APPPATH.'config/config'.EXT)))
+	{
+		die
+		(
+			'<div style="width:80%;margin:50px auto;text-align:center;">'.
+				'<h3>Config file not found.</h3>'.
+				'<p>The <code>'.APPPATH.'config/config'.EXT.'</code> file does not exist.</p>'.
+				'<p>Rename the '.APPPATH.'config/config'.EXT.'.example file and '.
+				'set the correct URL path as described in the installation guide.</p>'.
 			'</div>'
 		);
 	}
