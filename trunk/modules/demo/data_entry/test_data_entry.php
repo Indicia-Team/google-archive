@@ -81,6 +81,7 @@ $(document).ready(function() {
 		$readAuth = data_entry_helper::get_read_auth(1, 'password');
 ?>
 <input type='hidden' id='website_id' name='website_id' value='1' />
+<input type='hidden' id='record_status' name='record_status' value='C' />
 <label for='actaxa_taxon_list_id'>Taxon</label>
 <?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
 <br/>

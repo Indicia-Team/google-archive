@@ -4,6 +4,7 @@ class helper_config {
 	static $base_url='http://192.171.199.208/indicia';
 	static $geoplanet_api_key='...';
 	static $upload_path = './upload/';
+	static $google_api_key='...';
 }
 
 ?>
