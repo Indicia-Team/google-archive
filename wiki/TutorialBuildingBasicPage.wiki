@@ -70,7 +70,7 @@ The first two sections of the following tutorial are performed by your Core Serv
 {{{
 <?php	include 'data_entry_helper.php'; ?>
 }}}
-  #	You will need an HTML form in which to place the data entry controls. Paste this into your web page to create the basic form container. You need to replace websiteID with the ID of the website you created earlier, and websitePassword with its password. Make sure you use the website password, not your user password!
+  #	You will need an HTML form in which to place the data entry controls. Paste this into your web page to create the basic form container. You need to replace websiteID with the ID of the website you created earlier, and websitePassword with its password. Make sure you use the website password, not your user password! The record_status field sets the status of the entered occurrence to 'Completed'.
 {{{
 <form method="post">
 <?php
@@ -79,7 +79,7 @@ The first two sections of the following tutorial are performed by your Core Serv
 	$readAuth = data_entry_helper::get_read_auth(websiteID, 'websitePassword');
 ?>
 <input type='hidden' id='website_id' name='website_id' value='websiteId' />
-
+<input type='hidden' id='record_status' name='record_status' value='C' />
 
 </form>
 <?php echo data_entry_helper::dump_javascript(); ?>
