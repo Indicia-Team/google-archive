@@ -1,7 +1,7 @@
 <html>
 <head>
 <?php
-		include 'data_entry_helper.php';
+		include '../../../client_helpers/data_entry_helper.php';
 		include 'data_entry_config.php';
 ?>
 <title>Indicia external site data entry test page</title>
