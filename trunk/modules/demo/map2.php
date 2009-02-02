@@ -1,7 +1,7 @@
 <html>
 <head>
 <?php
-	include 'map_helper.php';
+	include '../../client_helpers/map_helper.php';
 	$myMap = new Map('http://192.171.199.208:8080/geoserver/');
 	$myMap->addIndiciaLayer('Samples', 'opal:indicia_samples');
 ?>
