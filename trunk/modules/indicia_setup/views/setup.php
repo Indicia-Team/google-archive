@@ -151,6 +151,25 @@
                                                     aria-labelledby="dbpassword"
                                                     <?php if($error_dbpassword): ?>aria-invalid="true"<?php endif; ?>
                                              /></li>
+
+                    <!-- DB grants -->
+
+                    <li class="item_title"><h3><label for="dbgrant"><?php echo Kohana::lang('setup.db_grant'); ?></label></h3></li>
+
+                    <?php if($error_dbgrant): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbgrant; ?></p></li><?php endif; ?>
+
+                    <li class="item_content"><input type="text"
+                                                    title="<?php echo html::specialchars(Kohana::lang('setup.db_grant')); ?>"
+                                                    id="dbgrant"
+                                                    name="dbgrant"
+                                                    tabindex="5"
+                                                    maxlength="1500"
+                                                    class="text_field"
+                                                    value="<?php echo html::specialchars($dbgrant); ?>"
+                                                    aria-required="true"
+                                                    aria-labelledby="dbgrant"
+                                                    <?php if($error_dbgrant): ?>aria-invalid="true"<?php endif; ?>
+                                             /></li>
                 </ul>
 
             </fieldset>
