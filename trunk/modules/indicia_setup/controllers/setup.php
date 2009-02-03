@@ -49,6 +49,8 @@ class Setup_Controller extends Template_Controller
         $this->view_var['dbname']           = '';
         $this->view_var['page_title_error'] = '';
         $this->view_var['error_dbname']     = false;
+        $this->view_var['error_dbgrant']    = false;
+        $this->view_var['dbgrant']          = '';
         $this->view_var['error_general']          = array();
 
         // run system pre check
@@ -97,10 +99,6 @@ class Setup_Controller extends Template_Controller
                 $this->schema_and_postfix = $this->db['schema'] . '.';
             }
 
-            $_db_file = str_replace("indicia.",$this->schema_and_postfix, file_get_contents( $this->db_file));
-            $_db_file = str_replace("indicia",$this->db['schema'], $_db_file);
-            Kohana::log("info", "Processing: ".$this->db_file);
-
             pg_query($this->dbconn, "BEGIN");
 
             if(!empty($this->db['schema']))
@@ -122,7 +120,13 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
-            if(false === pg_query($this->dbconn, $_db_file ))
+			//
+			// create sequences
+			//
+            $_db_file_sequences = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_sequences));
+            Kohana::log("info", "Processing: ".$this->db_file_indicia_sequences);
+
+            if(false === pg_query($this->dbconn, $_db_file_sequences))
             {
                 $error = pg_last_error($this->dbconn);
                 $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
@@ -130,13 +134,51 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
-            // execute sql files from the application/db folder
-            //
-            if(false === $this->_tmp_load_sql_files())
+			//
+			// create tables
+			//
+            $_db_file_tables = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_tables));
+            Kohana::log("info", "Processing: ".$this->db_file_indicia_tables);
+
+            if(false === pg_query($this->dbconn, $_db_file_tables))
             {
+                $error = pg_last_error($this->dbconn);
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+                Kohana::log("error", "Setup failed: {$error}");
                 return false;
             }
 
+			//
+            // create views
+            //
+            $_db_file_views = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_views));
+            Kohana::log("info", "Processing: ".$this->db_file_indicia_views);
+
+            if(false === pg_query($this->dbconn, $_db_file_views))
+            {
+                $error = pg_last_error($this->dbconn);
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+                Kohana::log("error", "Setup failed: {$error}");
+                return false;
+            }
+
+			//
+			// insert alterations
+			//
+			$_db_file_alterations = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_postgis_alterations));
+			Kohana::log("info", "Processing: ".$this->db_file_postgis_alterations);
+
+			if(false === pg_query($this->dbconn, $_db_file_alterations))
+			{
+				$error = pg_last_error($this->dbconn);
+				$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+				Kohana::log("error", "Setup failed: {$error}");
+				return false;
+			}
+
+			//
+			// grant all on schema to users
+			//
             if(!empty($this->db['schema']))
             {
                 if(false === pg_query($this->dbconn, "GRANT ALL ON SCHEMA {$this->db['schema']} TO {$this->db['user']}" ))
@@ -148,6 +190,17 @@ class Setup_Controller extends Template_Controller
                 }
             }
 
+			// grant to other users on database items
+			//
+			if(!empty($this->db['grant_users']))
+			{
+				if(false === $this->grant_on_database_items())
+				{
+					return false;
+				}
+			}
+
+			// get transaction status
             $stat = pg_transaction_status($this->dbconn);
 
             if($stat === PGSQL_TRANSACTION_INERROR)
@@ -245,16 +298,50 @@ class Setup_Controller extends Template_Controller
             Kohana::log("error", "The following folder isnt writeable by php scripts: {$config_dir}");
         }
 
-        // /application/db/indicia_setup.sql file must be readable by php scripts
+        // /application/db/indicia_sequences.sql file must be readable by php scripts
         //
-        $this->db_file = dirname(dirname(dirname(dirname(__file__ )))) . '/modules/indicia_setup/db/indicia_setup.sql';
+        $this->db_file_indicia_sequences = dirname(dirname(dirname(dirname(__file__ )))) . '/modules/indicia_setup/db/indicia_sequences.sql';
 
-        if(!is_readable($this->db_file))
+        if(!is_readable($this->db_file_indicia_sequences))
         {
             $this->view_var['page_title_error'] = ' - Warning';
-            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$this->db_file}";
-            Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$this->db_file}");
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$this->db_file_indicia_sequences}";
+            Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$this->db_file_indicia_sequences}");
         }
+
+        // /application/db/indicia_tables.sql file must be readable by php scripts
+        //
+        $this->db_file_indicia_tables = dirname(dirname(dirname(dirname(__file__ )))) . '/modules/indicia_setup/db/indicia_tables.sql';
+
+        if(!is_readable($this->db_file_indicia_tables))
+        {
+            $this->view_var['page_title_error'] = ' - Warning';
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$this->db_file_indicia_tables}";
+            Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$this->db_file_indicia_tables}");
+        }
+
+        // /application/db/indicia_views.sql file must be readable by php scripts
+        //
+        $this->db_file_indicia_views = dirname(dirname(dirname(dirname(__file__ )))) . '/modules/indicia_setup/db/indicia_views.sql';
+
+        if(!is_readable($this->db_file_indicia_views))
+        {
+            $this->view_var['page_title_error'] = ' - Warning';
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$this->db_file_indicia_views}";
+            Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$this->db_file_indicia_views}");
+        }
+
+        // /application/db/postgis_alterations.sql file must be readable by php scripts
+        //
+        $this->db_file_postgis_alterations = dirname(dirname(dirname(dirname(__file__ )))) . '/modules/indicia_setup/db/postgis_alterations.sql';
+
+        if(!is_readable($this->db_file_postgis_alterations))
+        {
+            $this->view_var['page_title_error'] = ' - Warning';
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$this->db_file_postgis_alterations}";
+            Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$this->db_file_postgis_alterations}");
+        }
+
 
         // check if postgresql php extension is installed
         //
@@ -287,6 +374,7 @@ class Setup_Controller extends Template_Controller
         $this->db['schema']   = $this->view_var['dbschema'] = trim($_POST['dbschema']);
         $this->db['user']     = $this->view_var['dbuser']   = trim($_POST['dbuser']);
         $this->db['password'] = $this->view_var['dbpassword'] = trim($_POST['dbpassword']);
+		$this->db['grant_users'] = $this->view_var['dbgrant']    = trim($_POST['dbgrant']);
     }
 
 
@@ -350,61 +438,97 @@ class Setup_Controller extends Template_Controller
     }
 
     /**
-     * execute sql scripts from the application/db folder
-     * Except the dbcreate.sql
+     * grant privileges to additional users
      *
      * @return bool
      */
-    private function _tmp_load_sql_files()
+    private function grant_on_database_items()
     {
-        $file_name = array();
-        $db_dir  = dirname(dirname(dirname(dirname(__file__ )))) . '/application/db';
+    	// assign users in array
+    	$_users = explode(",", $this->db['grant_users']);
 
-        if ( (($handle = @opendir( $db_dir ))) != FALSE )
-        {
-            while ( (( $file = readdir( $handle ) )) != false )
-            {
-                if ( !preg_match("/^200\.*/", $file) )
-                {
-                    continue;
-                }
+    	// grant on tables
+    	//
+    	if(false !== ($result = pg_query($this->dbconn, "SELECT table_name FROM information_schema.tables WHERE table_schema = '{$this->db['schema']}'")))
+    	{
+			while ($row = pg_fetch_row($result))
+			{
+				foreach($_users as $user)
+				{
+					if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
+					{
+						$error = pg_last_error($this->dbconn);
+						$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+						Kohana::log("error", "Setup failed: {$error}");
+						return false;
+					}
+				}
+			}
+		}
+		else
+		{
+			$error = pg_last_error($this->dbconn);
+			$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+			Kohana::log("error", "Setup failed: {$error}");
+			return false;
+		}
 
-                $file_name[] = $file;
-            }
-            @closedir( $handle );
-        }
-        else
-        {
-            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-            Kohana::log("error", "Setup failed: cant open dir " . $db_dir);
-            return false;
-        }
 
-        sort( $file_name );
+    	// grant on views
+    	//
+    	if(false !== ($result = pg_query($this->dbconn, "SELECT table_name FROM information_schema.views WHERE table_schema = '{$this->db['schema']}'")))
+    	{
+			while ($row = pg_fetch_row($result))
+			{
+				foreach($_users as $user)
+				{
+					if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
+					{
+						$error = pg_last_error($this->dbconn);
+						$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+						Kohana::log("error", "Setup failed: {$error}");
+						return false;
+					}
+				}
+			}
+		}
+		else
+		{
+			$error = pg_last_error($this->dbconn);
+			$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+			Kohana::log("error", "Setup failed: {$error}");
+			return false;
+		}
 
-        foreach($file_name as $name)
-        {
-            $_db_file = file_get_contents( $db_dir . '/' . $name );
 
-            $_db_file = str_replace("indicia.",$this->schema_and_postfix, $_db_file);
-            $_db_file = str_replace("indicia",$this->db['schema'], $_db_file);
+    	// grant on sequences
+    	//
+    	if(false !== ($result = pg_query($this->dbconn, "SELECT sequence_name FROM information_schema.sequences")))
+    	{
+			while ($row = pg_fetch_row($result))
+			{
+				foreach($_users as $user)
+				{
+					if(false === pg_query($this->dbconn, "GRANT ALL ON SEQUENCE \"{$row[0]}\" TO \"{$user}\"" ))
+					{
+						$error = pg_last_error($this->dbconn);
+						$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+						Kohana::log("error", "Setup failed: {$error}");
+						return false;
+					}
+				}
+			}
+		}
+		else
+		{
+			$error = pg_last_error($this->dbconn);
+			$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+			Kohana::log("error", "Setup failed: {$error}");
+			return false;
+		}
 
-            try
-            {
-                pg_query($this->dbconn, $_db_file );
-            }
-            catch(ErrorException $e)
-            {
-                $this->view_var['error_general'][] = 'Problem in file: ' . $name;
-                $this->view_var['error_general'][] = $e->getMessage();
-                Kohana::log("error", "Setup failed: " . $e->getMessage());
-                return false;
-            }
-        }
-
-        return true;
+		return true;
     }
-
 }
 
 ?>
