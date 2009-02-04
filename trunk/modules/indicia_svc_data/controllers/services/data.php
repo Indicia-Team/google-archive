@@ -278,6 +278,33 @@ class Data_Controller extends Service_Base_Controller {
 	}
 
 	/**
+	 * Returns some information about the table - at least list of columns and
+	 * number of records. This is required for the external datagrid control.
+	 */
+	public function info_table($tablename){
+		// $this->authenticate('read');
+		$this->entity = $tablename;
+		$this->db = new Database();
+		$this->viewname = $this->get_view_name();
+		$mode = $this->get_output_mode();
+		$return = Array(
+			'record_count' => $this->db->count_records($this->viewname),
+			'columns' => array_keys($this->db->list_fields($this->viewname))
+		);
+		switch ($mode){
+		case 'json':
+			$a = json_encode($return);
+			if (array_key_exists('callback', $_GET)){
+			       	$a = $_GET['callback']."(".$a.")";
+			}
+			echo $a;
+			break;
+		default:
+			echo json_encode($return);
+		}
+	}
+
+	/**
 	 * Encodes an array as xml. Uses $this->entity to decide the name of the root element.
 	 * Recurses into the array where array values are themselves arrays. Also inserts
 	 * xlink paths to any foreign keys, and gets the caption of the foreign entity.
