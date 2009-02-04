@@ -27,6 +27,8 @@ class Setup_Controller extends Template_Controller
     {
         parent::__construct();
 
+        $this->disable_browser_caching();
+
         // init and default values of view vars
         //
 
@@ -57,19 +59,27 @@ class Setup_Controller extends Template_Controller
         $this->base_check();
     }
 
+    /**
+     * setup on first load
+     *
+     */
     public function index()
     {
+        // only assign default values
+        //
         $this->assign_view_vars();
     }
 
     /**
-     * run setup
+     * run setup on submit
      *
      */
     public function run()
     {
         $this->get_form_vars();
 
+        // reload the main page if setup was successful
+        //
         if(true === $this->db_insert_data())
         {
             url::redirect();
@@ -85,70 +95,71 @@ class Setup_Controller extends Template_Controller
      */
     private function db_insert_data()
     {
+        // first try to connect to the database
+        //
         if(false !== ($this->dbconn = $this->db_connect()))
         {
             $this->prefix = '';
 
+            // empty or public schema isnt allowed
+            //
             if(($this->db['schema'] == 'public') || empty($this->db['schema']))
             {
-                $this->db['schema'] = '';
-                $this->schema_and_postfix = '';
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_wrong_schema');
+                Kohana::log("error", "Setup failed: wrong schema {$this->db['schema']}");
+                $this->view_var['error_dbschema'] = true;
+                return false;
             }
             else
             {
                 $this->schema_and_postfix = $this->db['schema'] . '.';
             }
 
+            // start transaction
+            //
             pg_query($this->dbconn, "BEGIN");
 
-            if(!empty($this->db['schema']))
+            // set schema search path
+            // if the schema dosent exists we get an error
+            //
+            if(false === pg_query($this->dbconn, "SET search_path TO {$this->db['schema']}, public, pg_catalog"))
             {
-                pg_send_query($this->dbconn, "SET search_path TO {$this->db['schema']}, public, pg_catalog");
-            }
-            else
-            {
-                pg_send_query($this->dbconn, "SET search_path TO public, pg_catalog");
-            }
-
-
-            $res1 = pg_get_result($this->dbconn);
-
-            if(false != ($error = pg_result_error($res1)))
-            {
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . "<br />$error";
+                $error = pg_last_error($this->dbconn);
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_schema');
                 Kohana::log("error", "Setup failed: {$error}");
+                $this->view_var['error_dbschema'] = true;
                 return false;
             }
 
-			//
-			// create sequences
-			//
+            //
+            // create sequences
+            //
             $_db_file_sequences = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_sequences));
             Kohana::log("info", "Processing: ".$this->db_file_indicia_sequences);
 
             if(false === pg_query($this->dbconn, $_db_file_sequences))
             {
                 $error = pg_last_error($this->dbconn);
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
                 Kohana::log("error", "Setup failed: {$error}");
                 return false;
             }
 
-			//
-			// create tables
-			//
+            //
+            // create tables
+            //
             $_db_file_tables = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_tables));
             Kohana::log("info", "Processing: ".$this->db_file_indicia_tables);
 
             if(false === pg_query($this->dbconn, $_db_file_tables))
             {
                 $error = pg_last_error($this->dbconn);
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
                 Kohana::log("error", "Setup failed: {$error}");
                 return false;
             }
 
-			//
+            //
             // create views
             //
             $_db_file_views = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_views));
@@ -157,55 +168,42 @@ class Setup_Controller extends Template_Controller
             if(false === pg_query($this->dbconn, $_db_file_views))
             {
                 $error = pg_last_error($this->dbconn);
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
                 Kohana::log("error", "Setup failed: {$error}");
                 return false;
             }
 
-			//
-			// insert alterations
-			//
-			$_db_file_alterations = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_postgis_alterations));
-			Kohana::log("info", "Processing: ".$this->db_file_postgis_alterations);
+            //
+            // insert alterations
+            //
+            $_db_file_alterations = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_postgis_alterations));
+            Kohana::log("info", "Processing: ".$this->db_file_postgis_alterations);
 
-			if(false === pg_query($this->dbconn, $_db_file_alterations))
-			{
-				$error = pg_last_error($this->dbconn);
-				$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-				Kohana::log("error", "Setup failed: {$error}");
-				return false;
-			}
-
-			//
-			// grant all on schema to users
-			//
-            if(!empty($this->db['schema']))
+            if(false === pg_query($this->dbconn, $_db_file_alterations))
             {
-                if(false === pg_query($this->dbconn, "GRANT ALL ON SCHEMA {$this->db['schema']} TO {$this->db['user']}" ))
+                $error = pg_last_error($this->dbconn);
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+                Kohana::log("error", "Setup failed: {$error}");
+                return false;
+            }
+
+            // grant all privileges to other users on database items
+            //
+            if(!empty($this->db['grant_users']))
+            {
+                if(false === $this->grant_on_database_items())
                 {
-                    $error = pg_last_error($this->dbconn);
-                    $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-                    Kohana::log("error", "Setup failed: {$error}");
                     return false;
                 }
             }
 
-			// grant to other users on database items
-			//
-			if(!empty($this->db['grant_users']))
-			{
-				if(false === $this->grant_on_database_items())
-				{
-					return false;
-				}
-			}
-
-			// get transaction status
+            // get transaction status
             $stat = pg_transaction_status($this->dbconn);
 
             if($stat === PGSQL_TRANSACTION_INERROR)
             {
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+                $error = pg_last_error($this->dbconn);
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
                 Kohana::log("error", "Setup failed: {$error}");
                 return false;
             }
@@ -241,18 +239,14 @@ class Setup_Controller extends Template_Controller
      */
     private function db_connect()
     {
-        try
-        {
-            $dbconn = pg_connect("host={$this->db['host']}
-                                  port={$this->db['port']}
-                                  dbname={$this->db['name']}
-                                  user={$this->db['user']}
-                                  password={$this->db['password']}");
-        }
-        catch(ErrorException $e)
+        if( false === ($dbconn = pg_connect("host     = {$this->db['host']}
+                                             port     = {$this->db['port']}
+                                             dbname   = {$this->db['name']}
+                                             user     = {$this->db['user']}
+                                             password = {$this->db['password']}")))
         {
             $this->view_var['error_general'][] = Kohana::lang('setup.error_db_connect');
-            Kohana::log("error", "Setup failed: " . $e->getMessage());
+            Kohana::log("error", "Setup failed: database connection error");
             return false;
         }
 
@@ -374,7 +368,7 @@ class Setup_Controller extends Template_Controller
         $this->db['schema']   = $this->view_var['dbschema'] = trim($_POST['dbschema']);
         $this->db['user']     = $this->view_var['dbuser']   = trim($_POST['dbuser']);
         $this->db['password'] = $this->view_var['dbpassword'] = trim($_POST['dbpassword']);
-		$this->db['grant_users'] = $this->view_var['dbgrant']    = trim($_POST['dbgrant']);
+        $this->db['grant_users'] = $this->view_var['dbgrant'] = trim($_POST['dbgrant']);
     }
 
 
@@ -444,90 +438,108 @@ class Setup_Controller extends Template_Controller
      */
     private function grant_on_database_items()
     {
-    	// assign users in array
-    	$_users = explode(",", $this->db['grant_users']);
+        // assign users in array
+        $_users = explode(",", $this->db['grant_users']);
 
-    	// grant on tables
-    	//
-    	if(false !== ($result = pg_query($this->dbconn, "SELECT table_name FROM information_schema.tables WHERE table_schema = '{$this->db['schema']}'")))
-    	{
-			while ($row = pg_fetch_row($result))
-			{
-				foreach($_users as $user)
-				{
-					if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
-					{
-						$error = pg_last_error($this->dbconn);
-						$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-						Kohana::log("error", "Setup failed: {$error}");
-						return false;
-					}
-				}
-			}
-		}
-		else
-		{
-			$error = pg_last_error($this->dbconn);
-			$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-			Kohana::log("error", "Setup failed: {$error}");
-			return false;
-		}
-
-
-    	// grant on views
-    	//
-    	if(false !== ($result = pg_query($this->dbconn, "SELECT table_name FROM information_schema.views WHERE table_schema = '{$this->db['schema']}'")))
-    	{
-			while ($row = pg_fetch_row($result))
-			{
-				foreach($_users as $user)
-				{
-					if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
-					{
-						$error = pg_last_error($this->dbconn);
-						$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-						Kohana::log("error", "Setup failed: {$error}");
-						return false;
-					}
-				}
-			}
-		}
-		else
-		{
-			$error = pg_last_error($this->dbconn);
-			$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-			Kohana::log("error", "Setup failed: {$error}");
-			return false;
-		}
+        // grant on tables
+        //
+        if(false !== ($result = pg_query($this->dbconn, "SELECT table_name FROM information_schema.tables WHERE table_schema = '{$this->db['schema']}'")))
+        {
+            while ($row = pg_fetch_row($result))
+            {
+                foreach($_users as $user)
+                {
+                    if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
+                    {
+                        $error = pg_last_error($this->dbconn);
+                        $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+                        Kohana::log("error", "Setup failed: {$error}");
+                        $this->view_var['error_dbgrant'] = true;
+                        return false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            $error = pg_last_error($this->dbconn);
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+            Kohana::log("error", "Setup failed: {$error}");
+            return false;
+        }
 
 
-    	// grant on sequences
-    	//
-    	if(false !== ($result = pg_query($this->dbconn, "SELECT sequence_name FROM information_schema.sequences")))
-    	{
-			while ($row = pg_fetch_row($result))
-			{
-				foreach($_users as $user)
-				{
-					if(false === pg_query($this->dbconn, "GRANT ALL ON SEQUENCE \"{$row[0]}\" TO \"{$user}\"" ))
-					{
-						$error = pg_last_error($this->dbconn);
-						$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-						Kohana::log("error", "Setup failed: {$error}");
-						return false;
-					}
-				}
-			}
-		}
-		else
-		{
-			$error = pg_last_error($this->dbconn);
-			$this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
-			Kohana::log("error", "Setup failed: {$error}");
-			return false;
-		}
+        // grant on views
+        //
+        if(false !== ($result = pg_query($this->dbconn, "SELECT table_name FROM information_schema.views WHERE table_schema = '{$this->db['schema']}'")))
+        {
+            while ($row = pg_fetch_row($result))
+            {
+                foreach($_users as $user)
+                {
+                    if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
+                    {
+                        $error = pg_last_error($this->dbconn);
+                        $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+                        Kohana::log("error", "Setup failed: {$error}");
+                        $this->view_var['error_dbgrant'] = true;
+                        return false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            $error = pg_last_error($this->dbconn);
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+            Kohana::log("error", "Setup failed: {$error}");
+            return false;
+        }
 
-		return true;
+
+        // grant on sequences
+        //
+        if(false !== ($result = pg_query($this->dbconn, "SELECT sequence_name FROM information_schema.sequences")))
+        {
+            while ($row = pg_fetch_row($result))
+            {
+                foreach($_users as $user)
+                {
+                    if(false === pg_query($this->dbconn, "GRANT ALL ON SEQUENCE \"{$row[0]}\" TO \"{$user}\"" ))
+                    {
+                        $error = pg_last_error($this->dbconn);
+                        $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+                        Kohana::log("error", "Setup failed: {$error}");
+                        $this->view_var['error_dbgrant'] = true;
+                        return false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            $error = pg_last_error($this->dbconn);
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+            Kohana::log("error", "Setup failed: {$error}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Add http headers to disable browser caching
+     *
+     */
+    private function disable_browser_caching()
+    {
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+        header('P3P: CP="NOI NID ADMa OUR IND UNI COM NAV"');
     }
 }
 
