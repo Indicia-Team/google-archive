@@ -114,7 +114,7 @@
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_user')); ?>"
                                                     id="dbuser"
                                                     name="dbuser"
-                                                    tabindex="4"
+                                                    tabindex="5"
                                                     maxlength="255"
                                                     <?php if($error_dbuser): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbuser); ?>"
@@ -130,7 +130,7 @@
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_password')); ?>"
                                                     id="dbpassword"
                                                     name="dbpassword"
-                                                    tabindex="4"
+                                                    tabindex="6"
                                                     maxlength="255"
                                                     <?php if($error_dbpassword): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbpassword); ?>"
@@ -147,7 +147,7 @@
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_grant')); ?>"
                                                     id="dbgrant"
                                                     name="dbgrant"
-                                                    tabindex="5"
+                                                    tabindex="7"
                                                     maxlength="1500"
                                                     <?php if($error_dbgrant): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbgrant); ?>"
@@ -169,6 +169,7 @@
                     <li class="item_content"><input name="start_setup_button"
                                                     id="start_setup_button"
                                                     type="submit"
+                                                    tabindex="8"
                                                     role="button"
                                                     value="<?php echo html::specialchars(Kohana::lang('setup.start_setup_button')); ?>" /></li>
                 </ul>
