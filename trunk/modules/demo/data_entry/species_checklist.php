@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="demo.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../media/css/jquery.autocomplete.css" />
 
-<script type="text/javascript" src="../../../media/js/jquery-1.2.6.js"></script>
+<script type="text/javascript" src="../../../media/js/jquery-1.3.1.js"></script>
 <script type="text/javascript" src="../../../media/js/ui.core.js"></script>
 <script type="text/javascript" src="../../../media/js/ui.datepicker.js"></script>
 <script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
