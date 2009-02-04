@@ -46,15 +46,13 @@
                     <!-- DB host -->
                     <li class="item_title"><h3><label for="dbhost"><?php echo Kohana::lang('setup.db_host'); ?></label></h3></li>
 
-                    <?php if($error_dbhost): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbhost; ?></p></li><?php endif; ?>
-
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_host')); ?>"
                                                     id="dbhost"
                                                     name="dbhost"
                                                     tabindex="1"
                                                     maxlength="255"
-                                                    class="text_field"
+                                                    <?php if($error_dbhost): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbhost); ?>"
                                                     aria-required="true"
                                                     aria-labelledby="dbhost"
@@ -64,15 +62,13 @@
                     <!-- DB port -->
                     <li class="item_title"><h3><label for="dbport"><?php echo Kohana::lang('setup.db_port'); ?></label></h3></li>
 
-                    <?php if($error_dbport): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbport; ?></p></li><?php endif; ?>
-
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_port')); ?>"
                                                     id="dbport"
                                                     name="dbport"
                                                     tabindex="2"
                                                     maxlength="6"
-                                                    class="text_field"
+                                                    <?php if($error_dbport): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbport); ?>"
                                                     aria-required="true"
                                                     aria-labelledby="dbport"
@@ -82,15 +78,13 @@
                     <!-- DB name -->
                     <li class="item_title"><h3><label for="dbname"><?php echo Kohana::lang('setup.db_name'); ?></label></h3></li>
 
-                    <?php if($error_dbname): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbname; ?></p></li><?php endif; ?>
-
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_name')); ?>"
                                                     id="dbname"
                                                     name="dbname"
                                                     tabindex="3"
                                                     maxlength="255"
-                                                    class="text_field"
+                                                    <?php if($error_dbname): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbname); ?>"
                                                     aria-required="true"
                                                     aria-labelledby="dbname"
@@ -99,17 +93,13 @@
 
                     <!-- DB schema -->
 
-                    <li class="item_title"><h3><label for="dbschema"><?php echo Kohana::lang('setup.db_schema'); ?></label></h3></li>
-
-                    <?php if($error_dbschema): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbschema; ?></p></li><?php endif; ?>
-
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_schema')); ?>"
                                                     id="dbschema"
                                                     name="dbschema"
                                                     tabindex="4"
                                                     maxlength="255"
-                                                    class="text_field"
+                                                    <?php if($error_dbschema): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbschema); ?>"
                                                     aria-required="true"
                                                     aria-labelledby="dbschema"
@@ -119,15 +109,13 @@
                     <!-- DB user -->
                     <li class="item_title"><h3><label for="dbuser"><?php echo Kohana::lang('setup.db_user'); ?></label></h3></li>
 
-                    <?php if($error_dbuser): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbuser; ?></p></li><?php endif; ?>
-
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_user')); ?>"
                                                     id="dbuser"
                                                     name="dbuser"
                                                     tabindex="4"
                                                     maxlength="255"
-                                                    class="text_field"
+                                                    <?php if($error_dbuser): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbuser); ?>"
                                                     aria-required="true"
                                                     aria-labelledby="dbuser"
@@ -137,15 +125,13 @@
                     <!-- DB password -->
                     <li class="item_title"><h3><label for="dbpassword"><?php echo Kohana::lang('setup.db_password'); ?></label></h3></li>
 
-                    <?php if($error_dbpassword): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbpassword; ?></p></li><?php endif; ?>
-
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_password')); ?>"
                                                     id="dbpassword"
                                                     name="dbpassword"
                                                     tabindex="4"
                                                     maxlength="255"
-                                                    class="text_field"
+                                                    <?php if($error_dbpassword): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbpassword); ?>"
                                                     aria-required="true"
                                                     aria-labelledby="dbpassword"
@@ -156,15 +142,13 @@
 
                     <li class="item_title"><h3><label for="dbgrant"><?php echo Kohana::lang('setup.db_grant'); ?></label></h3></li>
 
-                    <?php if($error_dbgrant): ?><li class="item_description"><p class="item_error" role="alert"><?php echo $error_dbgrant; ?></p></li><?php endif; ?>
-
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_grant')); ?>"
                                                     id="dbgrant"
                                                     name="dbgrant"
                                                     tabindex="5"
                                                     maxlength="1500"
-                                                    class="text_field"
+                                                    <?php if($error_dbgrant): ?>class="text_field text_field_error"<?php else: ?>class="text_field"<?php endif; ?>
                                                     value="<?php echo html::specialchars($dbgrant); ?>"
                                                     aria-required="true"
                                                     aria-labelledby="dbgrant"
