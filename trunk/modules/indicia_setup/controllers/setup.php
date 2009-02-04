@@ -131,6 +131,13 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
+            // check postgis installation
+            //
+            if( false === $this->check_postgis())
+            {
+                return false;
+            }
+
             //
             // create sequences
             //
@@ -523,6 +530,24 @@ class Setup_Controller extends Template_Controller
         {
             $error = pg_last_error($this->dbconn);
             $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+            Kohana::log("error", "Setup failed: {$error}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * check if postscript scripts are installed
+     *
+     * @return bool
+     */
+    private function check_postgis()
+    {
+        if(false === ($result = pg_query($this->dbconn, "SELECT postgis_scripts_installed()")))
+        {
+            $error = pg_last_error($this->dbconn);
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_postgis');
             Kohana::log("error", "Setup failed: {$error}");
             return false;
         }
