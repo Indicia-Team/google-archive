@@ -9,26 +9,35 @@
     indiciaDataGrid: function() {
       this.recordCount = null;
       
-      this.defaults = {	
+      this.defaults = {
 	cssHeader: "header",
+	   cssSortable: "headerSort",
 	   cssAsc: "headerSortUp",
 	   cssDesc: "headerSortDown",
 	   sortInitialOrder: "asc",
 	   debug: false,
 	   indiciaSvc: "http://localhost/indicia/index.php/services/data",
-	   actionColumns: 
+	   actionColumns: Array("edit" : "?id=£id£")	   
       };
       
       this.construct = function(entity, options){
+	// Set the default settings object
+	this.settings = {};
+	// Extend with defaults and options
+	$.extend(this.settings, $.indiciaDataGrid.defaults, options);
 	return this.each(function(){
 	  this.filter = new HashTable();
 	  this.sort = new HashTable();
 	  this.identifier = "idg" + Math.floor(Math.random()*10000);
 	  
-	  // Set the default settings object
-	  this.settings = {};
-	  // Extend with defaults and options
-	  $.extend(this.settings, $.indiciaDataGrid.defaults, options);
+	  // Build the html to drop in the container
+	  
+	  var table = "<table class='idg' id='" + this.identifier + "' >";
+	  table .= "</table>";
+	  
+	  // Drop the table into the container
+	  
+	  $(this).html(table);
 	};
       };
       
