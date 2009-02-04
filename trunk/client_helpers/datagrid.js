@@ -6,7 +6,7 @@
 
 (function($) {
   $.extend({
-    indiciaDataGrid: function() {
+    indiciaDataGrid: new function() {
       this.recordCount = null;
       
       this.defaults = {
@@ -17,7 +17,8 @@
 	   sortInitialOrder: "asc",
 	   debug: false,
 	   indiciaSvc: "http://localhost/indicia/index.php/services/data",
-	   actionColumns: Array("edit" : "?id=£id£")	   
+	   actionColumns: {"edit" : "?id=£id£"},
+	   itemsPerPage: 10
       };
       
       this.construct = function(entity, options){
@@ -26,22 +27,27 @@
 	// Extend with defaults and options
 	$.extend(this.settings, $.indiciaDataGrid.defaults, options);
 	return this.each(function(){
-	  this.filter = new HashTable();
-	  this.sort = new HashTable();
+	  this.filter = new HashArray();
+	  this.sort = new HashArray();
 	  this.identifier = "idg" + Math.floor(Math.random()*10000);
 	  
 	  // Build the html to drop in the container
 	  
 	  var table = "<table class='idg' id='" + this.identifier + "' >";
-	  table .= "</table>";
+	  table += "<thead>";
+	  table += "</thead>";
+	  table += "</table>";
 	  
 	  // Drop the table into the container
 	  
 	  $(this).html(table);
-	};
+	});
       };
       
-      function recordCount(refresh=false){
+      function recordCount(refresh){
+	if (typeof refresh == "undefined"){
+	  refresh = false;
+	}
 	if (refresh || this.recordCount == null){
 	  // Get a record count through calling the services.
 	}
