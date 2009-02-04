@@ -92,6 +92,7 @@
                                              /></li>
 
                     <!-- DB schema -->
+                    <li class="item_title"><h3><label for="dbschema"><?php echo Kohana::lang('setup.db_schema'); ?></label></h3></li>
 
                     <li class="item_content"><input type="text"
                                                     title="<?php echo html::specialchars(Kohana::lang('setup.db_schema')); ?>"
