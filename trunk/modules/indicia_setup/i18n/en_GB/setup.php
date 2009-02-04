@@ -23,6 +23,7 @@ $lang = array
     'error_upload_folder'     => 'The upload folder must be writeable by php scripts:',
     'error_db_wrong_schema'   => 'A schema must be defined and it must be named else "public"',
     'error_db_schema'         => 'Schema connection problem. Verify the schema name.',
+    'error_db_postgis'        => 'It seems that postgis scripts arent installed in the public schema.',
     'error_db_file'           => 'The indicia setup sql file must be readable by php scripts:',
     'error_db_user'           => 'The following users dosent exists:',
     'error_db_connect'        => 'Could not connect to the database. Please verify database connection data.',
