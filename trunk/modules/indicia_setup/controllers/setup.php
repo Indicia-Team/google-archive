@@ -449,6 +449,7 @@ class Setup_Controller extends Template_Controller
             {
                 foreach($_users as $user)
                 {
+                    $user = trim($user);
                     if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
                     {
                         $error = pg_last_error($this->dbconn);
@@ -477,6 +478,7 @@ class Setup_Controller extends Template_Controller
             {
                 foreach($_users as $user)
                 {
+                    $user = trim($user);
                     if(false === pg_query($this->dbconn, "GRANT ALL ON TABLE \"{$row[0]}\" TO \"{$user}\"" ))
                     {
                         $error = pg_last_error($this->dbconn);
@@ -505,6 +507,7 @@ class Setup_Controller extends Template_Controller
             {
                 foreach($_users as $user)
                 {
+                    $user = trim($user);
                     if(false === pg_query($this->dbconn, "GRANT ALL ON SEQUENCE \"{$row[0]}\" TO \"{$user}\"" ))
                     {
                         $error = pg_last_error($this->dbconn);
