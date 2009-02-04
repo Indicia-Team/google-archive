@@ -204,6 +204,13 @@ class Setup_Controller extends Template_Controller
                 }
             }
 
+            // insert indicia version values into system table
+            //
+            if(false === $this->insert_into_system())
+            {
+                return false;
+            }
+
             // get transaction status
             $stat = pg_transaction_status($this->dbconn);
 
@@ -554,6 +561,32 @@ class Setup_Controller extends Template_Controller
 
         return true;
     }
+
+    /**
+     * insert values in the system table
+     *
+     * @return bool
+     */
+    private function insert_into_system()
+    {
+        $new_system = Kohana::config('indicia_dist.system');
+
+        if(false === ($result = pg_query($this->dbconn, "INSERT INTO \"system\"
+                                                           VALUES (1,
+                                                                   '{$new_system['version']}',
+                                                                   '{$new_system['name']}',
+                                                                   '{$new_system['repository']}',
+                                                                   '{$new_system['release_date']}')")))
+        {
+            $error = pg_last_error($this->dbconn);
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $error;
+            Kohana::log("error", "Setup failed: {$error}");
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * Add http headers to disable browser caching
