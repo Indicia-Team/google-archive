@@ -17,7 +17,8 @@
 	   indiciaSvc: "http://localhost/indicia/index.php/services/data",
 	   dataColumns: null,
 	   actionColumns: Array(Array("edit", "?id=£id£")),
-	   itemsPerPage: 10
+	   itemsPerPage: 10,
+	   multiSort: false
       };
       
       this.construct = function(entity, options){
@@ -58,8 +59,6 @@
       function generateHeader(div){
 	var url = div.settings.indiciaSvc;
 	var headers = "";
-	var cssAsc = div.settings.cssAsc;
-	var cssDesc = div.settings.cssDesc;
 	url += "/info_table/" + div.entity + "?mode=json&callback=?";
 	$.getJSON(url, function(data){
 	  div.recordCount = data.record_count;
@@ -76,36 +75,50 @@
 	  $("thead tr", div).html(headers);
 	  $("th."+div.settings.cssSortHeader, div).each(function(i){
 	    $(this).click(function(e){
-	      var h = $(this).html().toLowerCase();
-	      var a = div.sort.get(h);
-	      if (a != undefined) {
-		if (a == 'asc') {
-		  div.sort.clear();
-		  div.sort.unshift(h,'desc');
-		  $("th."+div.settings.cssSortHeader, div).removeClass(cssDesc + " " + cssAsc);
-		  $(this).addClass(cssDesc);
-		} else {
-		  div.sort.clear();
-		  $("th."+div.settings.cssSortHeader, div).removeClass(cssDesc + " " + cssAsc);
-		}
-	      } else {
-		div.sort.clear();
-		div.sort.unshift(h, 'asc');
-		$("th."+div.settings.cssSortHeader, div).removeClass(cssDesc + " " + cssAsc);
-		$(this).addClass(cssAsc);
-	      }
-	      // Reload the body
+	     sort(div, this);
 	    });
 	  });
 	});
       }
       
+      function sort(div, header){
+	var multiSort = div.settings.multiSort;
+	var h = $(header).html().toLowerCase();
+	var a = div.sort.get(h);
+	var cssAsc = div.settings.cssAsc;
+	var cssDesc = div.settings.cssDesc;
+	if (a != undefined) {
+	  if (a == 'asc') {
+	    if (multiSort){
+	      $(header).removeClass(cssAsc);
+	    } else {
+	      div.sort.clear();
+	      $("th."+div.settings.cssSortHeader, div).removeClass(cssDesc + " " + cssAsc);
+	    }
+	    div.sort.unshift(h,'desc');
+	    $(header).addClass(cssDesc);
+	  } else {
+	    if (multiSort){
+	      $(header).removeClass(cssAsc);
+	    } else {
+	      div.sort.clear();
+	      $("th."+div.settings.cssSortHeader, div).removeClass(cssDesc + " " + cssAsc);
+	    }
+	  }
+	} else {
+	  if (!multiSort){
+	    div.sort.clear();
+	    $("th."+div.settings.cssSortHeader, div).removeClass(cssDesc + " " + cssAsc);
+	  }
+	  div.sort.unshift(h, 'asc');
+	  $(header).addClass(cssAsc);
+	}
+	generateBody(div);
+      }
+      
       function generateBody(div){
-	var page = div.page;
-	var url = div.settings.indiciaSvc;
-	var offset = (page - 1)*div.settings.itemsPerPage;
 	var body = "";
-	url += "/" + div.entity + "?mode=json&callback=?&limit=" + div.settings.itemsPerPage + "&offset=" + offset;
+	var url = getUrl(div);
 	$.getJSON(url, function(data){
 	  $.each(data, function(r, record){
 	    body += "<tr>";
@@ -124,6 +137,25 @@
 	  });
 	  $("tbody", div).html(body);
 	});
+      }
+      
+      function getUrl(div){
+	var page = div.page;
+	var url = div.settings.indiciaSvc;
+	var offset = (page - 1)*div.settings.itemsPerPage;
+	var sortCols = div.sort.getKeys().join(",");
+	var sortDirs = div.sort.getValues().join(",");
+	var filterCols = div.filter.getKeys().join(",");
+	var filterVals = div.filter.getValues().join(",");
+	url += "/" + div.entity + "?mode=json&callback=?&limit=" + div.settings.itemsPerPage + "&offset=" + offset;
+	if (sortCols.length > 0){
+	  url += "&orderby="+sortCols+"&sortdir="+sortDirs;
+	}
+	if (filterCols.length > 0){
+	  url += "&qfield="+filterCols+"&q="+filterVals;
+	}
+	return url;
+	
       }
       
       function recordCount(refresh){
