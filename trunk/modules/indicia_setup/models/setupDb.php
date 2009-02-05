@@ -126,6 +126,30 @@ class SetupDb_Model extends Model
     }
 
     /**
+     * check postgres serversion. at least 8.2 required
+     *
+     * @return mixed bool true if successful, false if unknown version, else server_version
+     */
+    public function check_postgres_version()
+    {
+        $server_version = pg_parameter_status( $this->dbconn, "server_version" );
+
+        if(false !== $server_version)
+        {
+            if(-1 == version_compare($server_version, "8.2"))
+            {
+                return $server_version;
+            }
+
+            // version ok
+            return true;
+        }
+
+        // unknown server_version
+        return false;
+    }
+
+    /**
      * query
      *
      * @param string $content
