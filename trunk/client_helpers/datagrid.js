@@ -18,7 +18,8 @@
 	   dataColumns: null,
 	   actionColumns: Array(Array("edit", "?id=£id£")),
 	   itemsPerPage: 10,
-	   multiSort: false
+	   multiSort: false,
+	   parameters: Array()
       };
       
       this.construct = function(entity, options){
@@ -36,7 +37,6 @@
 	  this.recordCount = 0;
 	  
 	  // Build the basic html to drop in the container
-	  
 	  var table = "<table class='idg tablesorter' id='" + this.identifier + "' >";
 	  table += "<thead><tr>";
 	  table += "</tr></thead>";
@@ -44,12 +44,17 @@
 	  table += "</tbody>";
 	  table += "</table>";
 	  
-	  // Drop the table into the container
+	  // Build the basic pagination div
+	  var paginationDiv = "<div class='pager' />";
 	  
-	  $(this).html(table);
+	  // Build the basic filter div
+	  var filterDiv = "<div class='filter' />";
+	  
+	  // Drop the table into the container
+	  $(this).html(table + paginationDiv + filterDiv);
 	  
 	  generateHeader(this);
-	  generateBody(this, 1);
+	  apply_page(this, 1);
 	  
 	});
       };
@@ -59,29 +64,53 @@
       function generateHeader(div){
 	var url = div.settings.indiciaSvc;
 	var headers = "";
+	var filter = "<form name='Filter' action='' method='get'>Filter for <input type='text' name='filters' class='filter' /> in <select type='text' name='columns' class='filterCol'>";
 	url += "/info_table/" + div.entity + "?mode=json&callback=?";
 	$.getJSON(url, function(data){
 	  div.recordCount = data.record_count;
 	  $.each(data.columns, function(i, item){
 	    if (div.settings.dataColumns == null || div.settings.dataColumns.indexOf(item) != -1){
 	      headers += "<th class='" + div.settings.cssHeader + " " +div.settings.cssSortHeader + "'>"+item+"</th>";
+	      filter += "<option value='"+item+"'>"+item+"</option>";
 	    }
 	  });
+	  filter += "</select> <input class='filterButton' type='submit' value='Filter' /></form>";
 	  $.each(div.settings.actionColumns, function(i, item){
 	    headers += "<th class='" + div.settings.cssHeader + "'>";
 	    headers += item[0];
 	    headers += "</th>";
 	  });
 	  $("thead tr", div).html(headers);
+	  $("div.filter", div).html(filter);
 	  $("th."+div.settings.cssSortHeader, div).each(function(i){
 	    $(this).click(function(e){
-	     sort(div, this);
+	      apply_sort(div, this);
+	    });
+	  });
+	  $("input.filterButton", div).each(function(i){
+	    $(this).click(function(e){
+	      e.preventDefault();
+	      apply_filter(div);
 	    });
 	  });
 	});
       }
+ 
+      function apply_filter(div){
+	div.filter.clear();
+	div.filter.unshift($("select.filterCol", div).val(), $("input.filter", div).val());
+	generateBody(div);
+      }
       
-      function sort(div, header){
+      function apply_page(div, page){
+	div.page = page;
+	generateBody(div);
+	$("div.pager", div).each(function(i){
+	  generatePager(div, this);
+	});
+      }
+      
+      function apply_sort(div, header){
 	var multiSort = div.settings.multiSort;
 	var h = $(header).html().toLowerCase();
 	var a = div.sort.get(h);
@@ -115,13 +144,17 @@
 	}
 	generateBody(div);
       }
-      
+
       function generateBody(div){
 	var body = "";
 	var url = getUrl(div);
 	$.getJSON(url, function(data){
 	  $.each(data, function(r, record){
-	    body += "<tr>";
+	    if (r%2==0) {
+	      body += "<tr>";
+	    } else {
+	      body += "<tr class='odd'>";
+	    }
 	    $.each(record, function(i, item){
 	      if (div.settings.dataColumns == null || div.settings.dataColumns.indexOf(item) != -1){
 		body += "<td>"+item+"</td>";
@@ -136,6 +169,38 @@
 	    body += "</tr>";
 	  });
 	  $("tbody", div).html(body);
+	});
+      }
+      
+      function generatePager(div, pagerDiv){
+	var pageNo = div.page;
+	var totalPages = Math.ceil(div.recordCount / div.settings.itemsPerPage);
+	var pagerString = (pageNo == 1) ? "" : "<a href='' class='first'>&lt;&lt;</a> | <a href='' class='previous'>&lt;</a> | ";
+	pagerString += (pageNo == totalPages -1) ? pageNo : pageNo + " | <a href='' class='next'>&gt;</a> | <a href='' class='last'>&gt;&gt;</a>";
+	$(pagerDiv).html(pagerString);
+	$("a.first").each(function(i){
+	  $(this).click(function(e){
+	    e.preventDefault();
+	    apply_page(div, 1);
+	  });
+	});
+	$("a.previous").each(function(i){
+	  $(this).click(function(e){
+	    e.preventDefault();
+	    apply_page(div, pageNo - 1);
+	  });
+	});
+	$("a.next").each(function(i){
+	  $(this).click(function(e){
+	    e.preventDefault();
+	    apply_page(div, pageNo + 1);
+	  });
+	});
+	$("a.last").each(function(i){
+	  $(this).click(function(e){
+	    e.preventDefault();
+	    apply_page(div, totalPages - 1);
+	  });
 	});
       }
       
@@ -154,6 +219,9 @@
 	if (filterCols.length > 0){
 	  url += "&qfield="+filterCols+"&q="+filterVals;
 	}
+	$.each(div.settings.parameters, function(i, item){
+	  url += "&" + item[0] + "=" + item[1];
+	});
 	return url;
 	
       }
