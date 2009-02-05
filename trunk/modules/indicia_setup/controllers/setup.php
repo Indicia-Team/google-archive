@@ -80,7 +80,7 @@ class Setup_Controller extends Template_Controller
 
         // reload the main page if setup was successful
         //
-        if(true === $this->db_insert_data())
+        if(true === $this->db_create_items())
         {
             url::redirect();
         }
@@ -93,12 +93,35 @@ class Setup_Controller extends Template_Controller
      *
      * @return bool
      */
-    private function db_insert_data()
+    private function db_create_items()
     {
         // first try to connect to the database
         //
         if(true === $this->db_connect())
         {
+            // check postgres version. at least 8.2 required
+            //
+            if(true !== ($version = $this->db->check_postgres_version()))
+            {
+                if(false !== $version)
+                {
+                    $this->view_var['error_general'][] = Kohana::lang('setup.error_db_wrong_postgres_version1') . $version . '.';
+                    $this->view_var['error_general'][] = Kohana::lang('setup.error_db_wrong_postgres_version2');
+                    Kohana::log("error", "Setup failed: wrong postgres version {$version}. At least 8.2 required");
+                    return false;
+                }
+                else
+                {
+                    $this->view_var['error_general'][] = Kohana::lang('setup.error_db_unknown_postgres_version');
+                    $this->view_var['error_general'][] = Kohana::lang('setup.error_db_wrong_postgres_version2');
+                    Kohana::log("error", "Setup failed: unknown postgres version ");
+                    return false;
+                }
+            }
+
+            // init table name prefix
+            // currently not used
+            //
             $this->prefix = '';
 
             // empty or public schema isnt allowed
@@ -382,7 +405,7 @@ class Setup_Controller extends Template_Controller
 
 
     /**
-     * assign view vars
+     * assign view vars with previously filled form values
      *
      */
     private function assign_view_vars()
