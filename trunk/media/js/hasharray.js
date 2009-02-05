@@ -89,11 +89,19 @@ HashArray.prototype.getKeyAtIndex = function(i){
     return this._keys[i];
 };
 
+HashArray.prototype.getKeys = function(){
+  return this._keys;
+};
+
 HashArray.prototype.getValueAtIndex = function(i){
     if (i >= this._values.length){
 	return undefined;
     }
     return this._values[i];
+};
+
+HashArray.prototype.getValues = function(){
+  return this._values;
 };
 
 HashArray.prototype.remove = function(key){
