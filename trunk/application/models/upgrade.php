@@ -136,11 +136,13 @@ class Upgrade_Model extends Model
      */
     private function set_new_version( $new_system )
     {
-        $this->db->insert('system',
-                          array('version'      => $new_system['version'],
-                                'name'         => $new_system['name'],
-                                'repository'   => $new_system['repository'],
-                                'release_date' => $new_system['release_date']));
+        $this->db->query("INSERT INTO \"system\"
+                              (\"version\", \"name\", \"repository\", \"release_date\")
+                          VALUES
+                          ('{$new_system['version']}',
+                           '{$new_system['name']}',
+                           '{$new_system['repository']}',
+                           '{$new_system['release_date']}')");
     }
 
     /**
@@ -160,7 +162,7 @@ class Upgrade_Model extends Model
     private function log($e)
     {
         $message  = "\n\n\n________________________________________________\n";
-        $message .= "Upgrade Error - Time: " . date() . "\n";
+        $message .= "Upgrade Error - Time: " . date(DATE_RFC822) . "\n";
         $message .= "MESSAGE: "  .$e->getMessage()."\n";
         $message .= "CODE: "     .$e->getCode()."\n";
         $message .= "FILE: "     .$e->getFile()."\n";
@@ -188,7 +190,7 @@ class Upgrade_Model extends Model
 
         $str .= '$config[\'private_key\']   = \'' . $__config['private_key'] . "'; // Change this to a unique value for each Indicia install\n";
         $str .= '$config[\'nonce_life\']      = '   . $__config['nonce_life'] . ";       // life span of an authentication token for services, in seconds\n";
-        $str .= '$config[\'maxUploadSize\']   = '   . $__config['maxUploadSize'] . "; // Maximum size of an upload\n";
+        $str .= '$config[\'maxUploadSize\']   = \''   . $__config['maxUploadSize'] . "'; // Maximum size of an upload\n";
         $str .= '$config[\'defaultPersonId\'] = '   . $__config['defaultPersonId'] . ";\n";
 
         $str .= "\n?>";
