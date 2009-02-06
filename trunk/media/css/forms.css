@@ -1,5 +1,5 @@
 form fieldset {
-	border: none;
+  border: none;
 }
 
 form.cmxform fieldset {
@@ -46,26 +46,26 @@ form.cmxform fieldset fieldset label {
   margin-left: 123px; /* Width plus 3 (html space) */
 }
 form.cmxform fieldset textarea {
-	width: 560px;
+  width: 560px;
 }
 form.cmxform fieldset input, form.cmxform select {
-	width: 300px;
+  width: 300px;
 }
 
 form.cmxform fieldset input.narrow {
-	width: 150px;
+  width: 150px;
 }
 
 form.cmxform fieldset input.vnarrow {
-	width: 50px;
+  width: 50px;
 }
 
 form.cmxform fieldset input.wide {
-	width: 600px;
+  width: 600px;
 }
 
 form.cmxform fieldset input.default {
-	width: auto;
+  width: auto;
 }
 
 form.cmxform fieldset label.wide {
@@ -73,5 +73,5 @@ form.cmxform fieldset label.wide {
 }
 
 form.cmxform fieldset select.narrow {
-	width: 150px;
+  width: 150px;
 }
