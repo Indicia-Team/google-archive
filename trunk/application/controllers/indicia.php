@@ -18,7 +18,8 @@ class Indicia_Controller extends Template_Controller {
 
         // upgrade check
         //
-        // $this->check_for_upgrade();
+        $this->check_for_upgrade();
+
         if($this->auth->logged_in()) {
             $menu = array
             (
@@ -228,6 +229,10 @@ class Indicia_Controller extends Template_Controller {
             {
                 throw new Kohana_User_Exception('Upgrade Error', Kohana::lang('general_errors.upgrade.failure'));
             }
+
+            // if successful, reload the system
+            //
+            url::redirect();
         }
     }
 
