@@ -21,6 +21,11 @@
 	}
 ?>
 </select>
+<?php if ( ! empty($error_message) )
+{
+    echo html::error_message($error_message);
+}
+?>
 </li>
 <input type="submit" value="Reuse" name="submit" class="default"/>
 </ol>

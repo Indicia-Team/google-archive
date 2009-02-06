@@ -45,7 +45,7 @@ class sample_Attribute_Value_Model extends ORM {
 			if ($vf != null) $array->add_rules($vf, 'required');
 			// Now get the custom attributes
 			if ($oam->validation_rules != '') {
-				$rules = explode(',', $oam->validation_rules);
+				$rules = explode("\r\n", $oam->validation_rules);
 				foreach ($rules as $a){
 					$array->add_rules($vf, $a);
 				}
