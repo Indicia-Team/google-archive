@@ -16,7 +16,7 @@
 	   debug: false,
 	   indiciaSvc: "http://localhost/indicia/index.php/services/data",
 	   dataColumns: null,
-	   actionColumns: Array(Array("edit", "?id=£id£")),
+	   actionColumns: Array(),
 	   itemsPerPage: 10,
 	   multiSort: false,
 	   parameters: Array()
@@ -162,8 +162,7 @@
 	    });
 	    $.each(div.settings.actionColumns, function(i, item){
 	      body += "<td>";
-	      body += "<a href='" + item[1].replace(/£([a-zA-Z_\-]+)£/g, record["$1"]) +
-	      "'>"+item[0]+"</a>";
+	      body += "<a href='" + item[1].replace(/£([a-zA-Z_\-]+)£/g, function($0, $1){ return record[$1]; }) + "'>"+item[0]+"</a>";
 	      body += "</td>";
 	    });
 	    body += "</tr>";
@@ -178,25 +177,25 @@
 	var pagerString = (pageNo == 1) ? "" : "<a href='' class='first'>&lt;&lt;</a> | <a href='' class='previous'>&lt;</a> | ";
 	pagerString += (pageNo == totalPages) ? pageNo : pageNo + " | <a href='' class='next'>&gt;</a> | <a href='' class='last'>&gt;&gt;</a>";
 	$(pagerDiv).html(pagerString);
-	$("a.first").each(function(i){
+	$("a.first", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, 1);
 	  });
 	});
-	$("a.previous").each(function(i){
+	$("a.previous", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, pageNo - 1);
 	  });
 	});
-	$("a.next").each(function(i){
+	$("a.next", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, pageNo + 1);
 	  });
 	});
-	$("a.last").each(function(i){
+	$("a.last", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, totalPages);
