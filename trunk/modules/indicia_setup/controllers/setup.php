@@ -165,7 +165,8 @@ class Setup_Controller extends Template_Controller
             //
             // create sequences
             //
-            $_db_file_sequences = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_sequences));
+            $_db_file_sequences = file_get_contents( $this->db_file_indicia_sequences);
+
             Kohana::log("info", "Processing: ".$this->db_file_indicia_sequences);
 
             if(true !== ($result = $this->db->query($_db_file_sequences)))
@@ -178,7 +179,8 @@ class Setup_Controller extends Template_Controller
             //
             // create tables
             //
-            $_db_file_tables = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_tables));
+            $_db_file_tables = file_get_contents( $this->db_file_indicia_tables);
+
             Kohana::log("info", "Processing: ".$this->db_file_indicia_tables);
 
             if(true !== ($result = $this->db->query($_db_file_tables)))
@@ -191,7 +193,8 @@ class Setup_Controller extends Template_Controller
             //
             // create views
             //
-            $_db_file_views = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_indicia_views));
+            $_db_file_views = file_get_contents( $this->db_file_indicia_views);
+
             Kohana::log("info", "Processing: ".$this->db_file_indicia_views);
 
             if(true !== ($result = $this->db->query($_db_file_views)))
@@ -204,7 +207,8 @@ class Setup_Controller extends Template_Controller
             //
             // insert alterations
             //
-            $_db_file_alterations = str_replace("i_schema.",$this->schema_and_postfix, file_get_contents( $this->db_file_postgis_alterations));
+            $_db_file_alterations = file_get_contents( $this->db_file_postgis_alterations);
+
             Kohana::log("info", "Processing: ".$this->db_file_postgis_alterations);
 
             if(true !== ($result = $this->db->query($_db_file_alterations)))
