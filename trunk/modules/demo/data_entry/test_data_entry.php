@@ -70,7 +70,7 @@ $response = data_entry_helper::forward_post_to(
 'save', $submission);
 data_entry_helper::dump_errors($response);
 } else if ($_GET) {
-  if array_has_key('id', $_GET){
+  if (array_key_exists('id', $_GET)){
     
   }
 }
