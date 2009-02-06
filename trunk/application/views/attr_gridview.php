@@ -67,10 +67,7 @@ $body - gridview_table object.
 
 	if ($websites->count() == 0)
 		echo "This user has no associated websites, therefore can not retrieve or set custom attributes";
-	else if ($websites->count() == 1) {
-		var_dump($websites);
-		throw(1);
-	} else {
+	else {
 		echo "<label for=\"website_id\">Website</label>\r\n";
 		echo '<select id="website_id" name="website_id" onchange="website_selection_changed(this);"><option value="-1">&lt;Please select&gt;</option>';
 		foreach ($websites as $website) {

@@ -115,8 +115,9 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 			parent::save();
 		else if ($_POST['submit']=='Reuse' ) {
 			// _POST[load_attr_id] points to id of *_attributes record.
-			$this->model = ORM::factory($this->model->object_name, $_POST['load_attr_id']);
-	        $this->setView('custom_attribute/custom_attribute_edit',
+			if (is_numeric($_POST['load_attr_id'])){
+				$this->model = ORM::factory($this->model->object_name, $_POST['load_attr_id']);
+	       		$this->setView('custom_attribute/custom_attribute_edit',
 	        				$this->model->object_name,
 	        				array('website_id' => $_POST['website_id'],
 	        						'survey_id' => $_POST['survey_id'],
@@ -125,7 +126,24 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 	        						'attribute_load' => '',
         							'name' => $this->name,
         							'processpath' => $this->processpath));
-			$this->model->populate_validation_rules();
+				$this->model->populate_validation_rules();
+			} else {
+				$website = $this->input->post('website_id', null);
+				$survey = $this->input->post('survey_id', null);
+	        	$attribute_load = new View('templates/attribute_load',
+	        				array('website_id' => $website,
+	        						'model' => $this->model,
+        							'error_message' => 'The attribute must be selected before the Reuse button is pressed'));
+        		$this->setView('custom_attribute/custom_attribute_edit',
+        					$this->model->object_name,
+        					array('website_id' => $website,
+        							'survey_id' => $survey,
+        							'enabled'=>'',
+        							'disabled_input'=>'NO',
+        							'attribute_load' => $attribute_load,
+        							'name' => $this->name,
+        							'processpath' => $this->processpath));
+			}
 		} else
 	   		$this->setError('Invocation error: Invalid Submit', 'Value of Posted submit variable is invalid');
 	}
@@ -175,10 +193,16 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 	}
 
 	protected function submit($submission){
-
+		// If the disabled_input field is set to YES, the data is being reused and no changes can have been made to the main record.
+		// In this case submit only the *_websites record.
         $this->model->submission = $submission;
-        if (($id = $this->model->submit()) != null) {
-            // Record has saved correctly
+		if ($submission['fields']['disabled_input']['value'] == 'YES') {
+			$id = $submission['fields']['id']['value'];
+		} else {
+			$id = $this->model->submit();
+		}
+	    if ($id != null) {
+            // Record has saved correctly or is being reused
             // now save the users_websites records.
 			$survey_id = is_numeric($submission['fields']['survey_id']['value']) ? $submission['fields']['survey_id']['value'] : NULL;
         	$attributes_websites = ORM::factory($this->websitemodelname,
@@ -193,7 +217,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
          									)
         				,'fkFields' => array()
         				,'superModels' => array());
-       	if ($attributes_websites->loaded)
+       		if ($attributes_websites->loaded)
 				$save_array['fields']['id'] = array('value' => $attributes_websites->id);
 			$attributes_websites->submission = $save_array;
 			$attributes_websites->submit();
