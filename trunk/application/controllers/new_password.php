@@ -52,7 +52,6 @@ class New_Password_Controller extends Indicia_Controller {
 		$view->model = $user;
 		$view->username = $user->username; // as is disabled doesn't make it through to post, so unavailable in model post validation failure.
 		$view->email_address = $person->email_address;
-		$view->key = $key;
 		$this->template->title = 'Enter New Password';
 		$this->template->content = $view;
 		
@@ -77,7 +76,6 @@ class New_Password_Controller extends Indicia_Controller {
 			$view->model = $user;
 			$view->username = $username;
 			$view->email_address = $person->email_address;
-			$view->key = $user->key;
 			$this->template->title = 'Enter New Password';
 			$this->template->content = $view;
 	 		
