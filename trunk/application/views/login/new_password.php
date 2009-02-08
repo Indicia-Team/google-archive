@@ -1,8 +1,5 @@
 <form class="cmxform"  name = "new_password" action="<?php echo url::site(); ?>new_password/save" method="post">
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
-<?php if (isset($key)) { ?>
-<input type="hidden" name="key" id="key" value="<?php echo html::specialchars($key); ?>" />
-<?php } ?>
 <fieldset>
 <legend>Set Password</legend>
 <ol>
