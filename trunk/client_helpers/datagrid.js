@@ -81,7 +81,8 @@
 	    headers += "</th>";
 	  });
 	  $("thead tr", div).html(headers);
-	  $("div.filter", div).html(filter);
+	  // TODO enable filtering once this is sensible
+	  // $("div.filter", div).html(filter);
 	  $("th."+div.settings.cssSortHeader, div).each(function(i){
 	    $(this).click(function(e){
 	      apply_sort(div, this);

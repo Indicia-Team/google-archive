@@ -20,14 +20,18 @@ class Location_Model extends ORM_Tree {
 		$array->add_rules('centroid_sref_system', 'required', 'sref_system');
 
 		// Explicitly add those fields for which we don't do validation
-		if (array_key_exists('code', $orig_values))
-			$this->code = $array['code'];
-		if (array_key_exists('parent_id', $orig_values))
-			$this->parent_id = $array['parent_id'];
-		if (array_key_exists('centroid_geom', $orig_values))
-			$this->centroid_geom 		= $array['centroid_geom'];
-		if (array_key_exists('boundary_geom', $orig_values))
-			$this->boundary_geom 		= $array['boundary_geom'];
+		$extraFields = array(
+			'code',
+			'parent_id',
+			'deleted',
+			'centroid_geom',
+			'boundary_geom'
+		);
+		foreach ($extraFields as $a) {
+			if (array_key_exists($a, $array->as_array())){
+				$this->__set($a, $array[$a]);
+			}
+		}
 
 		return parent::validate($array, $save);
 	}

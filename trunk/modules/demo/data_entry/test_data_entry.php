@@ -70,9 +70,24 @@ $response = data_entry_helper::forward_post_to(
 'save', $submission);
 data_entry_helper::dump_errors($response);
 } else if ($_GET) {
-  if (array_key_exists('id', $_GET)){
-    
-  }
+if (array_key_exists('id', $_GET)){
+  $url = 'http://localhost/indicia/index.php/services/data/occurrence/'.$_GET['id'];
+  $url .= "?mode=json&view=detail";
+  $session = curl_init($url);
+  curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+  $entity = json_decode(curl_exec($session), true);
+  $entity = $entity[0];
+} else {
+  $entity = null;
+}
+}
+
+function field($field){
+if ($entity != null && array_key_exists($field, $entity)){
+return $entity[$field];
+} else {
+return '';
+}
 }
  
  ?>
