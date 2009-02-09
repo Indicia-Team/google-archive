@@ -4,9 +4,9 @@ $lang = array
 (
     'title'       => 'Indicia Setup',
     'description' => 'Before you start, please create a PostGIS database using the template, for example using the script: <br />' .
-		'CREATE DATABASE indicia TEMPLATE=template_postgis<br />'.
-		'Then, create a schema to insert the Indicia tables into, for example using the script: <br />'.
-		'CREATE SCHEMA Indicia',
+		'CREATE DATABASE indicia TEMPLATE=template_postgis;<br />'.
+		'Then, create a schema to insert the Indicia tables into, for example by running the following script against your new indicia database: <br />'.
+		'CREATE SCHEMA indicia;',
     'database'    => 'Database',
     'db_schema'   => 'Schema for Indicia tables',
     'db_host'     => 'Host',
@@ -27,15 +27,15 @@ $lang = array
     'error_db_wrong_postgres_version1'  => 'Installed postgres version:',
     'error_db_wrong_postgres_version2'  => 'At least version 8.2 required.',
     'error_db_unknown_postgres_version' => 'Unknown postgres version.',
-    'error_db_wrong_schema'   => 'A schema must be defined and it must be named else "public"',
+    'error_db_wrong_schema'   => 'A schema must be defined and it must be named something other than "public"',
     'error_db_schema'         => 'Schema connection problem. Verify the schema name.',
     'error_db_postgis'        => 'It seems that postgis scripts arent installed in the public schema.',
     'error_db_file'           => 'The indicia setup sql file must be readable by php scripts:',
     'error_db_user'           => 'The following users dosent exists:',
     'error_db_connect'        => 'Could not connect to the database. Please verify database connection data.',
-    'error_db_setup'          => 'Setup failed. Rollback database transactions.',
-    'error_db_database_config' => 'Setup failed. Rollback database transactions. Could not write /application/config/database.php file. Please check file write permission.',
-    'error_db_indicia_config'  => 'Setup failed. Rollback database transactions. Could not create /application/config/indicia.php file. Please check file write permission.',
+    'error_db_setup'          => 'Setup failed. Database transactions have been rolled back.',
+    'error_db_database_config' => 'Setup failed. Database transactions have been rolled back. Could not write /application/config/database.php file. Please check file write permission.',
+    'error_db_indicia_config'  => 'Setup failed. Database transactions have been rolled back. Could not create /application/config/indicia.php file. Please check file write permission.',
     'error_remove_folder'      => 'For continuing with the setup you have to remove or rename the config file /application/config/indicia.php',
     'error_file_read_permission'      => 'The following files must be readable by php scripts',
     'error_chars_not_allowed'         => 'wrong chars',

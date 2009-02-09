@@ -16,8 +16,6 @@ class login {
 	 */
 	public function check()
 	{
-		// Always logged in
-		$auth = new Auth();
 		$uri = new URI();
 
 		// check for setup request
@@ -39,7 +37,10 @@ class login {
 				}
 			}
 		}
-		elseif (! $auth->logged_in() AND
+		// Always logged in
+		$auth = new Auth();
+
+		if (! $auth->logged_in() AND
 				! $auth->auto_login() AND
 				$uri->segment(1) != 'login' AND
 				$uri->segment(1) != 'logout' AND
