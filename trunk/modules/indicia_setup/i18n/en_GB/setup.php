@@ -3,12 +3,15 @@
 $lang = array
 (
     'title'       => 'Indicia Setup',
-    'description' => 'Before continue here you must first create a postgresql database.',
+    'description' => 'Before you start, please create a PostGIS database using the template, for example using the script: <br />' .
+		'CREATE DATABASE indicia TEMPLATE=template_postgis<br />'.
+		'Then, create a schema to insert the Indicia tables into, for example using the script: <br />'.
+		'CREATE SCHEMA Indicia',
     'database'    => 'Database',
-    'db_schema'   => 'Schema',
+    'db_schema'   => 'Schema for Indicia tables',
     'db_host'     => 'Host',
     'db_port'     => 'Port',
-    'db_name'     => 'Name',
+    'db_name'     => 'Database Name',
     'db_user'     => 'User',
     'db_password' => 'Password',
     'db_grant'    => 'Grant permission to additional users (comma separated)',
