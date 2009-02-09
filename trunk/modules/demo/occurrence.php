@@ -11,7 +11,7 @@ if (array_key_exists('id', $_GET)){
   
   // Now grab the list of occurrence comments.
   $url = 'http://localhost/indicia/index.php/services/data/occurrence_comment';
-  $url .= "?mode=json";
+  $url .= "?mode=json&occurrence_id=".$_GET['id'];
   $csess = curl_init($url);
   curl_setopt($csess, CURLOPT_RETURNTRANSFER, true);
   $comments = json_decode(curl_exec($csess), true);
@@ -29,7 +29,7 @@ if (array_key_exists('id', $_GET)){
 (function($){
 $(document).ready(function(){
   $("div#addComment").hide();
-  $("span#addCommentToggle").click(function(e){
+  $("div#addCommentToggle").click(function(e){
     $("div#addComment").toggle('slow');
   });
 });
@@ -68,7 +68,7 @@ foreach ($comments as $comment){
  echo "</div>";
  }
  ?>
- <span id='addCommentToggle'>Add Comment</span>
+ <div id='addCommentToggle'>Add Comment</div>
  <div id='addComment'>
  <form>
  <fieldset>

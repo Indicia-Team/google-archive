@@ -1,7 +1,8 @@
-span#addCommentToggle {  
+div#addCommentToggle {  
   color: blue;
   text-decoration: underline;
   cursor: pointer;
+  margin: 10px 0 10px 0;
 }
 
 div#addComment fieldset {
