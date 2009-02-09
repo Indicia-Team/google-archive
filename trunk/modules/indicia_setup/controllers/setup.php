@@ -162,75 +162,20 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
-            //
             // create sequences
-            //
-            $_db_file_sequences = file_get_contents( $this->db_file_indicia_sequences);
+            if (!$this->run_script($this->db_file_indicia_sequences)) return false;
 
-            Kohana::log("info", "Processing: ".$this->db_file_indicia_sequences);
-
-            if(true !== ($result = $this->db->query($_db_file_sequences)))
-            {
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
-                Kohana::log("error", "Setup failed: {$result}");
-                return false;
-            }
-
-            //
             // create tables
-            //
-            $_db_file_tables = file_get_contents( $this->db_file_indicia_tables);
+            if (!$this->run_script($this->db_file_indicia_tables)) return false;
 
-            Kohana::log("info", "Processing: ".$this->db_file_indicia_tables);
-
-            if(true !== ($result = $this->db->query($_db_file_tables)))
-            {
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
-                Kohana::log("error", "Setup failed: {$result}");
-                return false;
-            }
-
-            //
             // create views
-            //
-            $_db_file_views = file_get_contents( $this->db_file_indicia_views);
+            if (!$this->run_script($this->db_file_indicia_views)) return false;
 
-            Kohana::log("info", "Processing: ".$this->db_file_indicia_views);
+            // postgis alterations
+            if (!$this->run_script($this->db_file_postgis_alterations)) return false;
 
-            if(true !== ($result = $this->db->query($_db_file_views)))
-            {
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
-                Kohana::log("error", "Setup failed: {$result}");
-                return false;
-            }
-
-            //
-            // insert alterations
-            //
-            $_db_file_alterations = file_get_contents( $this->db_file_postgis_alterations);
-
-            Kohana::log("info", "Processing: ".$this->db_file_postgis_alterations);
-
-            if(true !== ($result = $this->db->query($_db_file_alterations)))
-            {
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
-                Kohana::log("error", "Setup failed: {$result}");
-                return false;
-            }
-
-            //
             // insert default data
-            //
-            $_db_file_data = file_get_contents( $this->db_file_indicia_data);
-
-            Kohana::log("info", "Processing: ".$this->db_file_indicia_data);
-
-            if(true !== ($result = $this->db->query($_db_file_data)))
-            {
-                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
-                Kohana::log("error", "Setup failed: {$result}");
-                return false;
-            }
+            if (!$this->run_script($this->db_file_indicia_data)) return false;
 
             // grant all privileges to other users on database items
             //
@@ -278,6 +223,28 @@ class Setup_Controller extends Template_Controller
         }
 
         return false;
+    }
+
+    /**
+     * run a database script
+     *
+     * param string $db_file_name name and path of the database script to run
+     *
+     * return boolean Success of the operation
+     */
+    private function run_script($db_file_name)
+    {
+    	$_db_file = file_get_contents($db_file_name);
+
+        Kohana::log("info", "Processing: ".$db_file_name);
+
+        if(true !== ($result = $this->db->query($_db_file)))
+        {
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
+            Kohana::log("error", "Setup failed: {$result}");
+            return false;
+        }
+        return true;
     }
 
     /**
