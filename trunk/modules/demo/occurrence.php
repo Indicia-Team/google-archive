@@ -8,6 +8,13 @@ if (array_key_exists('id', $_GET)){
   curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
   $entity = json_decode(curl_exec($session), true);
   $entity = $entity[0];
+  
+  // Now grab the list of occurrence comments.
+  $url = 'http://localhost/indicia/index.php/services/data/occurrence_comments';
+  $url .= "?mode=json&view=detail";
+  $session = curl_init($url);
+  curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+  $comments = json_decode(curl_exec($session), true);
 } else {
   $entity = null;
 }
@@ -29,6 +36,15 @@ if (array_key_exists('id', $_GET)){
 <li><span class='label'>Created By:</span><span class='item'><?php echo $entity['created_by']; ?></span></li>
 <li><span class='label'>Created On:</span><span class='item'><?php echo $entity['created_on']; ?></span></li>
 </ol>
+</div>
+<div id='comments'>
+<?php
+foreach ($comments as $comment){
+echo "<div class='comment'>";
+
+echo "</div>";
+}
+?>
 </div>
 </body>
 </html>

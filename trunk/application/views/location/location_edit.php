@@ -110,4 +110,5 @@ spatial reference. The more you zoom in, the more accurate the reference will be
 </fieldset>
 <?php echo $metadata ?>
 <input type="submit" value="Save" name="submit"/>
+<input type="submit" value="Delete" name="submit"/>
 </form>
