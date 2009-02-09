@@ -149,6 +149,14 @@ class Data_Controller extends Service_Base_Controller {
 	}
 
 	/**
+	 * Provides the /services/data/occurrence_comments service.
+	 */
+	public function occurrence_comment()
+	{
+		$this->handle_call('occurrence_comment');
+	}
+
+	/**
 	 * Internal method to handle calls - decides if it's a request for data or a submission.
 	 * @todo include exception getTrace() in the error response?
 	 */
