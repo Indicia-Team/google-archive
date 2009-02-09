@@ -1,12 +1,8 @@
--- Define the system version
-INSERT INTO "system" ("id", "version", "name", "repository", "release_date")
-VALUES (1, '0.1', '', 'http://indicia.googlecode.com/svn/tag/version_0_1', '2009-01-15');
-
 -- Create a default admin user for the core module.
 ALTER TABLE users DROP CONSTRAINT fk_user_person;
 
-INSERT INTO users (person_id, created_on, created_by_id, updated_on, updated_by_id)
-VALUES (1, now(), 1, now(), 1);
+INSERT INTO users (person_id, username, created_on, created_by_id, updated_on, updated_by_id)
+VALUES (1, 'admin', now(), 1, now(), 1);
 
 INSERT INTO people (surname, first_name, created_on, created_by_id, updated_on, updated_by_id)
 VALUES ('admin', 'core', now(), 1, now(), 1);

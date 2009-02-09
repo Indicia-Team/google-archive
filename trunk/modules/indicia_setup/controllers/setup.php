@@ -218,6 +218,20 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
+            //
+            // insert default data
+            //
+            $_db_file_data = file_get_contents( $this->db_file_indicia_data);
+
+            Kohana::log("info", "Processing: ".$this->db_file_indicia_data);
+
+            if(true !== ($result = $this->db->query($_db_file_data)))
+            {
+                $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
+                Kohana::log("error", "Setup failed: {$result}");
+                return false;
+            }
+
             // grant all privileges to other users on database items
             //
             if(!empty($this->dbparam['grant_users']))
@@ -370,6 +384,17 @@ class Setup_Controller extends Template_Controller
             $this->view_var['page_title_error'] = ' - Warning';
             $this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$this->db_file_postgis_alterations}";
             Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$this->db_file_postgis_alterations}");
+        }
+
+        // /application/db/indicia_data.sql file must be readable by php scripts
+        //
+        $this->db_file_indicia_data = dirname(dirname(dirname(dirname(__file__ )))) . '/modules/indicia_setup/db/indicia_data.sql';
+
+        if(!is_readable($this->db_file_indicia_data))
+        {
+            $this->view_var['page_title_error'] = ' - Warning';
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_file') . "<br /> {$this->db_file_indicia_data}";
+            Kohana::log("error", "The following indicia setup sql file isnt readable by php scripts: {$this->db_file_indicia_data}");
         }
 
 
