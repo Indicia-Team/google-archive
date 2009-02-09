@@ -10,11 +10,11 @@ if (array_key_exists('id', $_GET)){
   $entity = $entity[0];
   
   // Now grab the list of occurrence comments.
-  $url = 'http://localhost/indicia/index.php/services/data/occurrence_comments';
-  $url .= "?mode=json&view=detail";
-  $session = curl_init($url);
-  curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-  $comments = json_decode(curl_exec($session), true);
+  $url = 'http://localhost/indicia/index.php/services/data/occurrence_comment';
+  $url .= "?mode=json";
+  $csess = curl_init($url);
+  curl_setopt($csess, CURLOPT_RETURNTRANSFER, true);
+  $comments = json_decode(curl_exec($csess), true);
 } else {
   $entity = null;
 }
@@ -22,6 +22,19 @@ if (array_key_exists('id', $_GET)){
 <html>
 <head>
 <link rel='stylesheet' href='../../media/css/viewform.css' />
+<link rel='stylesheet' href='../../media/css/comments.css' />
+<script type="text/javascript" src="../../media/js/jquery-1.3.1.js"></script>
+<script type="text/javascript" src="../../media/js/ui.core.js"></script>
+<script type='text/javascript'>
+(function($){
+$(document).ready(function(){
+  $("div#addComment").hide();
+  $("span#addCommentToggle").click(function(e){
+    $("div#addComment").toggle('slow');
+  });
+});
+})(jQuery);
+</script>
 <title>Occurrence Viewer: Occurrence no <?php echo $entity['id']; ?></title>
 </head>
 <body>
@@ -40,11 +53,39 @@ if (array_key_exists('id', $_GET)){
 <div id='comments'>
 <?php
 foreach ($comments as $comment){
-echo "<div class='comment'>";
-
-echo "</div>";
-}
-?>
-</div>
-</body>
-</html>
+ echo "<div class='comment'>";
+ echo "<div class='header'>";
+ echo "<span class='user'>";
+ echo $comment['username'];
+ echo "</span>";
+ echo "<span class='timestamp'>";
+ echo $comment['updated_on'];
+ echo "</span>";
+ echo "</div>";
+ echo "<div class='commentText'>";
+ echo $comment['comment'];
+ echo "</div>";
+ echo "</div>";
+ }
+ ?>
+ <span id='addCommentToggle'>Add Comment</span>
+ <div id='addComment'>
+ <form>
+ <fieldset>
+ <legend>Add New Comment.</legend>
+ <!-- pointless check here - eventually we replace this with a check of whether a user is logged in -->
+ <?php if (false): ?>
+ <!-- Here we put details of the logged in user -->
+ <?php else: ?>
+ <label for='email_address'>E-mail:</label>
+ <input type='text' name='email_address' value='' />
+ <?php endif; ?>
+ <textarea class='comment' name='comment' rows='5'></textarea>
+ </fieldset>
+ <input type='button' value='Post' />
+ <input type='button' value='Cancel' />
+ </form>
+ </div>
+ </div>
+ </body>
+ </html>
