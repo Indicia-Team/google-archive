@@ -36,7 +36,7 @@ DROP VIEW IF EXISTS gv_term_termlists;
 DROP VIEW IF EXISTS gv_termlists;
 SET check_function_bodies = false;
 --
--- Definition for view gv_termlists (OID = 118986) : 
+-- Definition for view gv_termlists (OID = 118986) :
 --
 CREATE VIEW gv_termlists AS
 SELECT t.id, t.title, t.description, t.website_id, t.parent_id, t.deleted,
@@ -47,7 +47,7 @@ FROM (((termlists t LEFT JOIN websites w ON ((t.website_id = w.id))) JOIN
     p.id)));
 
 --
--- Definition for view gv_term_termlists (OID = 119031) : 
+-- Definition for view gv_term_termlists (OID = 119031) :
 --
 CREATE VIEW gv_term_termlists AS
 SELECT tt.id, tt.termlist_id, tt.term_id, tt.created_on, tt.created_by_id,
@@ -56,7 +56,7 @@ SELECT tt.id, tt.termlist_id, tt.term_id, tt.created_on, tt.created_by_id,
 FROM (termlists_terms tt JOIN termlists t ON ((tt.termlist_id = t.id)));
 
 --
--- Definition for view gv_termlists_terms (OID = 119084) : 
+-- Definition for view gv_termlists_terms (OID = 119084) :
 --
 CREATE VIEW gv_termlists_terms AS
 SELECT tt.id, tt.termlist_id, tt.term_id, tt.created_on, tt.created_by_id,
@@ -66,7 +66,7 @@ FROM ((termlists_terms tt JOIN terms t ON ((tt.term_id = t.id))) JOIN
     languages l ON ((t.language_id = l.id)));
 
 --
--- Definition for view gv_taxon_lists_taxa (OID = 119088) : 
+-- Definition for view gv_taxon_lists_taxa (OID = 119088) :
 --
 CREATE VIEW gv_taxon_lists_taxa AS
 SELECT tt.id, tt.taxon_list_id, tt.taxon_id, tt.created_on,
@@ -78,14 +78,14 @@ FROM ((taxa_taxon_lists tt JOIN taxa t ON ((tt.taxon_id = t.id))) JOIN
     languages l ON ((t.language_id = l.id)));
 
 --
--- Definition for view list_languages (OID = 119102) : 
+-- Definition for view list_languages (OID = 119102) :
 --
 CREATE VIEW list_languages AS
 SELECT l.id, l.language, l.iso
 FROM languages l;
 
 --
--- Definition for view detail_languages (OID = 119106) : 
+-- Definition for view detail_languages (OID = 119106) :
 --
 CREATE VIEW detail_languages AS
 SELECT l.id, l.language, l.iso, l.created_by_id, c.username AS created_by,
@@ -94,7 +94,7 @@ FROM ((languages l JOIN users c ON ((c.id = l.created_by_id))) JOIN users u
     ON ((u.id = l.updated_by_id)));
 
 --
--- Definition for view detail_people (OID = 119124) : 
+-- Definition for view detail_people (OID = 119124) :
 --
 CREATE VIEW detail_people AS
 SELECT p.id, p.first_name, p.surname, p.initials, p.email_address,
@@ -104,7 +104,7 @@ FROM ((people p JOIN users c ON ((c.id = p.created_by_id))) JOIN users u ON
     ((u.id = p.updated_by_id)));
 
 --
--- Definition for view detail_surveys (OID = 119133) : 
+-- Definition for view detail_surveys (OID = 119133) :
 --
 CREATE VIEW detail_surveys AS
 SELECT s.id, s.title, s.owner_id, p.surname AS owner, s.description,
@@ -115,7 +115,7 @@ FROM ((((surveys s JOIN users c ON ((c.id = s.created_by_id))) JOIN users u
     JOIN websites w ON ((w.id = s.website_id)));
 
 --
--- Definition for view detail_taxa_taxon_lists (OID = 119143) : 
+-- Definition for view detail_taxa_taxon_lists (OID = 119143) :
 --
 CREATE VIEW detail_taxa_taxon_lists AS
 SELECT ttl.id, ttl.taxon_id, t.taxon, t.authority, ttl.taxon_list_id,
@@ -130,14 +130,14 @@ FROM ((((((taxa_taxon_lists ttl JOIN taxon_lists tl ON ((tl.id =
 WHERE (ttl.deleted = false);
 
 --
--- Definition for view list_taxon_groups (OID = 119148) : 
+-- Definition for view list_taxon_groups (OID = 119148) :
 --
 CREATE VIEW list_taxon_groups AS
 SELECT t.id, t.title
 FROM taxon_groups t;
 
 --
--- Definition for view detail_taxon_groups (OID = 119152) : 
+-- Definition for view detail_taxon_groups (OID = 119152) :
 --
 CREATE VIEW detail_taxon_groups AS
 SELECT t.id, t.title, t.created_by_id, c.username AS created_by,
@@ -146,7 +146,7 @@ FROM ((taxon_groups t JOIN users c ON ((c.id = t.created_by_id))) JOIN
     users u ON ((u.id = t.updated_by_id)));
 
 --
--- Definition for view detail_taxon_lists (OID = 119161) : 
+-- Definition for view detail_taxon_lists (OID = 119161) :
 --
 CREATE VIEW detail_taxon_lists AS
 SELECT t.id, t.title, t.description, t.website_id, w.title AS website,
@@ -157,14 +157,14 @@ FROM ((((taxon_lists t LEFT JOIN websites w ON ((w.id = t.website_id)))
     ((c.id = t.created_by_id))) JOIN users u ON ((u.id = t.updated_by_id)));
 
 --
--- Definition for view list_terms (OID = 119166) : 
+-- Definition for view list_terms (OID = 119166) :
 --
 CREATE VIEW list_terms AS
 SELECT t.id, t.term, t.language_id, l.language, l.iso
 FROM (terms t JOIN languages l ON ((l.id = t.language_id)));
 
 --
--- Definition for view detail_terms (OID = 119170) : 
+-- Definition for view detail_terms (OID = 119170) :
 --
 CREATE VIEW detail_terms AS
 SELECT t.id, t.term, t.language_id, l.language, l.iso, t.created_by_id,
@@ -173,7 +173,7 @@ FROM (((terms t JOIN languages l ON ((l.id = t.language_id))) JOIN users c
     ON ((c.id = t.created_by_id))) JOIN users u ON ((u.id = t.updated_by_id)));
 
 --
--- Definition for view detail_termlists (OID = 119179) : 
+-- Definition for view detail_termlists (OID = 119179) :
 --
 CREATE VIEW detail_termlists AS
 SELECT t.id, t.title, t.description, t.website_id, w.title AS website,
@@ -185,7 +185,7 @@ FROM ((((termlists t LEFT JOIN websites w ON ((w.id = t.website_id))) LEFT
 WHERE (t.deleted = false);
 
 --
--- Definition for view detail_termlists_terms (OID = 119188) : 
+-- Definition for view detail_termlists_terms (OID = 119188) :
 --
 CREATE VIEW detail_termlists_terms AS
 SELECT tlt.id, tlt.term_id, t.term, tlt.termlist_id, tl.title AS termlist,
@@ -200,14 +200,14 @@ FROM ((((((termlists_terms tlt JOIN termlists tl ON ((tl.id =
 WHERE (tlt.deleted = false);
 
 --
--- Definition for view list_websites (OID = 119193) : 
+-- Definition for view list_websites (OID = 119193) :
 --
 CREATE VIEW list_websites AS
 SELECT w.id, w.title
 FROM websites w;
 
 --
--- Definition for view detail_websites (OID = 119197) : 
+-- Definition for view detail_websites (OID = 119197) :
 --
 CREATE VIEW detail_websites AS
 SELECT w.id, w.title, w.url, w.description, w.created_by_id, c.username AS
@@ -216,7 +216,7 @@ FROM ((websites w JOIN users c ON ((c.id = w.created_by_id))) JOIN users u
     ON ((u.id = w.updated_by_id)));
 
 --
--- Definition for view list_people (OID = 119303) : 
+-- Definition for view list_people (OID = 119303) :
 --
 CREATE VIEW list_people AS
 SELECT p.id, p.first_name, p.surname, p.initials, (((p.first_name)::text ||
@@ -224,14 +224,14 @@ SELECT p.id, p.first_name, p.surname, p.initials, (((p.first_name)::text ||
 FROM people p;
 
 --
--- Definition for view list_surveys (OID = 119404) : 
+-- Definition for view list_surveys (OID = 119404) :
 --
 CREATE VIEW list_surveys AS
 SELECT s.id, s.title, s.website_id
 FROM surveys s;
 
 --
--- Definition for view list_taxa_taxon_lists (OID = 119408) : 
+-- Definition for view list_taxa_taxon_lists (OID = 119408) :
 --
 CREATE VIEW list_taxa_taxon_lists AS
 SELECT ttl.id, ttl.taxon_id, t.taxon, t.authority, ttl.taxon_list_id,
@@ -241,14 +241,14 @@ FROM ((taxa_taxon_lists ttl JOIN taxon_lists tl ON ((tl.id =
 WHERE (ttl.deleted = false);
 
 --
--- Definition for view list_taxon_lists (OID = 119413) : 
+-- Definition for view list_taxon_lists (OID = 119413) :
 --
 CREATE VIEW list_taxon_lists AS
 SELECT t.id, t.title, t.website_id
 FROM taxon_lists t;
 
 --
--- Definition for view list_termlists (OID = 119417) : 
+-- Definition for view list_termlists (OID = 119417) :
 --
 CREATE VIEW list_termlists AS
 SELECT t.id, t.title, t.website_id
@@ -256,7 +256,7 @@ FROM termlists t
 WHERE (t.deleted = false);
 
 --
--- Definition for view list_termlists_terms (OID = 119421) : 
+-- Definition for view list_termlists_terms (OID = 119421) :
 --
 CREATE VIEW list_termlists_terms AS
 SELECT tlt.id, tlt.term_id, t.term, tlt.termlist_id, tl.title AS termlist,
@@ -266,7 +266,7 @@ FROM ((termlists_terms tlt JOIN termlists tl ON ((tl.id =
 WHERE (tlt.deleted = false);
 
 --
--- Definition for view list_occurrence_attributes (OID = 119429) : 
+-- Definition for view list_occurrence_attributes (OID = 119429) :
 --
 CREATE VIEW list_occurrence_attributes AS
 SELECT oa.id, oa.caption, oa.data_type, oa.termlist_id, oa.multi_value,
@@ -276,7 +276,7 @@ FROM (occurrence_attributes oa LEFT JOIN occurrence_attributes_websites oaw
     ON ((oaw.occurrence_attribute_id = oa.id)));
 
 --
--- Definition for view gv_occurrence_attributes (OID = 119440) : 
+-- Definition for view gv_occurrence_attributes (OID = 119440) :
 --
 CREATE VIEW gv_occurrence_attributes AS
 SELECT oaw.id, oaw.website_id, oaw.restrict_to_survey_id AS survey_id,
@@ -287,7 +287,7 @@ FROM (((occurrence_attributes_websites oaw LEFT JOIN occurrence_attributes
     oaw.restrict_to_survey_id)));
 
 --
--- Definition for view gv_location_attributes (OID = 119445) : 
+-- Definition for view gv_location_attributes (OID = 119445) :
 --
 CREATE VIEW gv_location_attributes AS
 SELECT law.id, law.website_id, law.restrict_to_survey_id AS survey_id,
@@ -298,7 +298,7 @@ FROM (((location_attributes_websites law LEFT JOIN location_attributes la
     law.restrict_to_survey_id)));
 
 --
--- Definition for view gv_sample_attributes (OID = 119450) : 
+-- Definition for view gv_sample_attributes (OID = 119450) :
 --
 CREATE VIEW gv_sample_attributes AS
 SELECT saw.id, saw.website_id, saw.restrict_to_survey_id AS survey_id,
@@ -308,7 +308,7 @@ FROM (((sample_attributes_websites saw LEFT JOIN sample_attributes sa ON
     saw.website_id))) LEFT JOIN surveys s ON ((s.id = saw.restrict_to_survey_id)));
 
 --
--- Definition for view detail_locations (OID = 119469) : 
+-- Definition for view detail_locations (OID = 119469) :
 --
 CREATE VIEW detail_locations AS
 SELECT l.id, l.name, l.code, l.parent_id, p.name AS parent,
@@ -319,14 +319,14 @@ FROM (((locations l JOIN users c ON ((c.id = l.created_by_id))) JOIN users
     l.parent_id)));
 
 --
--- Definition for view list_locations (OID = 119474) : 
+-- Definition for view list_locations (OID = 119474) :
 --
 CREATE VIEW list_locations AS
 SELECT l.id, l.name, l.code, l.centroid_sref
 FROM locations l;
 
 --
--- Definition for view detail_occurrences (OID = 119763) : 
+-- Definition for view detail_occurrences (OID = 119763) :
 --
 CREATE VIEW detail_occurrences AS
 SELECT o.id, o.confidential, o.comment, o.taxa_taxon_list_id, t.taxon,
@@ -344,7 +344,7 @@ FROM ((((((((occurrences o JOIN samples s ON ((s.id = o.sample_id))) LEFT
     o.created_by_id))) JOIN users u ON ((u.id = o.updated_by_id)));
 
 --
--- Definition for view list_occurrences (OID = 119768) : 
+-- Definition for view list_occurrences (OID = 119768) :
 --
 CREATE VIEW list_occurrences AS
 SELECT su.title AS survey, l.name AS location, s.date_start, s.date_end,
@@ -355,7 +355,7 @@ FROM (((((occurrences o JOIN samples s ON ((o.sample_id = s.id))) LEFT JOIN
     t.id))) LEFT JOIN surveys su ON ((s.survey_id = su.id)));
 
 --
--- Definition for view detail_samples (OID = 119773) : 
+-- Definition for view detail_samples (OID = 119773) :
 --
 CREATE VIEW detail_samples AS
 SELECT s.id, s.entered_sref, s.entered_sref_system, s.geom,
@@ -368,7 +368,7 @@ FROM ((((samples s LEFT JOIN locations l ON ((l.id = s.location_id))) LEFT
     s.created_by_id))) JOIN users u ON ((u.id = s.updated_by_id)));
 
 --
--- Definition for view list_samples (OID = 119778) : 
+-- Definition for view list_samples (OID = 119778) :
 --
 CREATE VIEW list_samples AS
 SELECT s.id, su.title AS survey, l.name AS location, s.date_start,
@@ -377,14 +377,14 @@ FROM ((samples s LEFT JOIN locations l ON ((s.location_id = l.id))) LEFT
     JOIN surveys su ON ((s.survey_id = su.id)));
 
 --
--- Definition for view gv_surveys (OID = 119783) : 
+-- Definition for view gv_surveys (OID = 119783) :
 --
 CREATE VIEW gv_surveys AS
 SELECT s.id, s.title, s.description, w.title AS website, s.deleted
 FROM (surveys s LEFT JOIN websites w ON ((s.website_id = w.id)));
 
 --
--- Definition for view gv_users (OID = 119787) : 
+-- Definition for view gv_users (OID = 119787) :
 --
 CREATE VIEW gv_users AS
 SELECT p.id AS person_id, (COALESCE(((p.first_name)::text || ' '::text),
@@ -397,5 +397,4 @@ WHERE (p.email_address IS NOT NULL);
 --
 -- Comments
 --
-COMMENT ON SCHEMA public IS 'standard public schema';
 COMMENT ON VIEW gv_term_termlists IS 'View for the terms page - shows the list of termlists that a term belongs to.';

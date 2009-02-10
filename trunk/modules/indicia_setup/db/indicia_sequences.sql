@@ -35,7 +35,7 @@ DROP SEQUENCE IF EXISTS meanings_id_seq;
 DROP SEQUENCE IF EXISTS languages_id_seq;
 SET check_function_bodies = false;
 --
--- Definition for sequence languages_id_seq (OID = 117419) : 
+-- Definition for sequence languages_id_seq (OID = 117419) :
 --
 CREATE SEQUENCE languages_id_seq
     INCREMENT BY 1
@@ -43,7 +43,7 @@ CREATE SEQUENCE languages_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence meanings_id_seq (OID = 117455) : 
+-- Definition for sequence meanings_id_seq (OID = 117455) :
 --
 CREATE SEQUENCE meanings_id_seq
     INCREMENT BY 1
@@ -51,7 +51,7 @@ CREATE SEQUENCE meanings_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence taxa_id_seq (OID = 117526) : 
+-- Definition for sequence taxa_id_seq (OID = 117526) :
 --
 CREATE SEQUENCE taxa_id_seq
     START WITH 1
@@ -60,7 +60,7 @@ CREATE SEQUENCE taxa_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence taxon_lists_id_seq (OID = 117539) : 
+-- Definition for sequence taxon_lists_id_seq (OID = 117539) :
 --
 CREATE SEQUENCE taxon_lists_id_seq
     START WITH 1
@@ -69,7 +69,7 @@ CREATE SEQUENCE taxon_lists_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence termlists_id_seq (OID = 117551) : 
+-- Definition for sequence termlists_id_seq (OID = 117551) :
 --
 CREATE SEQUENCE termlists_id_seq
     INCREMENT BY 1
@@ -77,7 +77,7 @@ CREATE SEQUENCE termlists_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence termlists_terms_id_seq (OID = 117561) : 
+-- Definition for sequence termlists_terms_id_seq (OID = 117561) :
 --
 CREATE SEQUENCE termlists_terms_id_seq
     INCREMENT BY 1
@@ -85,7 +85,7 @@ CREATE SEQUENCE termlists_terms_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence terms_id_seq (OID = 117567) : 
+-- Definition for sequence terms_id_seq (OID = 117567) :
 --
 CREATE SEQUENCE terms_id_seq
     INCREMENT BY 1
@@ -93,7 +93,7 @@ CREATE SEQUENCE terms_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence websites_id_seq (OID = 117591) : 
+-- Definition for sequence websites_id_seq (OID = 117591) :
 --
 CREATE SEQUENCE websites_id_seq
     START WITH 1
@@ -102,7 +102,7 @@ CREATE SEQUENCE websites_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence location_attribute_values_id_seq (OID = 118325) : 
+-- Definition for sequence location_attribute_values_id_seq (OID = 118325) :
 --
 CREATE SEQUENCE location_attribute_values_id_seq
     START WITH 1
@@ -111,7 +111,7 @@ CREATE SEQUENCE location_attribute_values_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence location_attributes_id_seq (OID = 118327) : 
+-- Definition for sequence location_attributes_id_seq (OID = 118327) :
 --
 CREATE SEQUENCE location_attributes_id_seq
     START WITH 1
@@ -120,7 +120,7 @@ CREATE SEQUENCE location_attributes_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence location_attributes_websites_id_seq (OID = 118329) : 
+-- Definition for sequence location_attributes_websites_id_seq (OID = 118329) :
 --
 CREATE SEQUENCE location_attributes_websites_id_seq
     START WITH 1
@@ -129,7 +129,7 @@ CREATE SEQUENCE location_attributes_websites_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence locations_id_seq (OID = 118331) : 
+-- Definition for sequence locations_id_seq (OID = 118331) :
 --
 CREATE SEQUENCE locations_id_seq
     START WITH 1
@@ -138,7 +138,7 @@ CREATE SEQUENCE locations_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence locations_websites_id_seq (OID = 118333) : 
+-- Definition for sequence locations_websites_id_seq (OID = 118333) :
 --
 CREATE SEQUENCE locations_websites_id_seq
     START WITH 1
@@ -147,7 +147,7 @@ CREATE SEQUENCE locations_websites_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence occurrence_attribute_values_id_seq (OID = 118335) : 
+-- Definition for sequence occurrence_attribute_values_id_seq (OID = 118335) :
 --
 CREATE SEQUENCE occurrence_attribute_values_id_seq
     START WITH 1
@@ -156,7 +156,7 @@ CREATE SEQUENCE occurrence_attribute_values_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence occurrence_attributes_id_seq (OID = 118337) : 
+-- Definition for sequence occurrence_attributes_id_seq (OID = 118337) :
 --
 CREATE SEQUENCE occurrence_attributes_id_seq
     INCREMENT BY 1
@@ -164,7 +164,7 @@ CREATE SEQUENCE occurrence_attributes_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence occurrence_attributes_websites_id_seq (OID = 118339) : 
+-- Definition for sequence occurrence_attributes_websites_id_seq (OID = 118339) :
 --
 CREATE SEQUENCE occurrence_attributes_websites_id_seq
     START WITH 1
@@ -173,7 +173,7 @@ CREATE SEQUENCE occurrence_attributes_websites_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence occurrence_images_id_seq (OID = 118341) : 
+-- Definition for sequence occurrence_images_id_seq (OID = 118341) :
 --
 CREATE SEQUENCE occurrence_images_id_seq
     START WITH 1
@@ -182,7 +182,7 @@ CREATE SEQUENCE occurrence_images_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence occurrences_id_seq (OID = 118343) : 
+-- Definition for sequence occurrences_id_seq (OID = 118343) :
 --
 CREATE SEQUENCE occurrences_id_seq
     START WITH 1
@@ -191,7 +191,7 @@ CREATE SEQUENCE occurrences_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence people_id_seq (OID = 118345) : 
+-- Definition for sequence people_id_seq (OID = 118345) :
 --
 CREATE SEQUENCE people_id_seq
     INCREMENT BY 1
@@ -199,7 +199,7 @@ CREATE SEQUENCE people_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence roles_id_seq (OID = 118347) : 
+-- Definition for sequence roles_id_seq (OID = 118347) :
 --
 CREATE SEQUENCE roles_id_seq
     INCREMENT BY 1
@@ -207,7 +207,7 @@ CREATE SEQUENCE roles_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence sample_attribute_values_id_seq (OID = 118349) : 
+-- Definition for sequence sample_attribute_values_id_seq (OID = 118349) :
 --
 CREATE SEQUENCE sample_attribute_values_id_seq
     START WITH 1
@@ -216,7 +216,7 @@ CREATE SEQUENCE sample_attribute_values_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence sample_attributes_id_seq (OID = 118351) : 
+-- Definition for sequence sample_attributes_id_seq (OID = 118351) :
 --
 CREATE SEQUENCE sample_attributes_id_seq
     INCREMENT BY 1
@@ -224,7 +224,7 @@ CREATE SEQUENCE sample_attributes_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence sample_attributes_websites_id_seq (OID = 118353) : 
+-- Definition for sequence sample_attributes_websites_id_seq (OID = 118353) :
 --
 CREATE SEQUENCE sample_attributes_websites_id_seq
     START WITH 1
@@ -233,7 +233,7 @@ CREATE SEQUENCE sample_attributes_websites_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence samples_id_seq (OID = 118355) : 
+-- Definition for sequence samples_id_seq (OID = 118355) :
 --
 CREATE SEQUENCE samples_id_seq
     START WITH 1
@@ -242,7 +242,7 @@ CREATE SEQUENCE samples_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence site_roles_id_seq (OID = 118357) : 
+-- Definition for sequence site_roles_id_seq (OID = 118357) :
 --
 CREATE SEQUENCE site_roles_id_seq
     INCREMENT BY 1
@@ -250,7 +250,7 @@ CREATE SEQUENCE site_roles_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence surveys_id_seq (OID = 118359) : 
+-- Definition for sequence surveys_id_seq (OID = 118359) :
 --
 CREATE SEQUENCE surveys_id_seq
     START WITH 1
@@ -259,7 +259,7 @@ CREATE SEQUENCE surveys_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence taxa_taxon_lists_id_seq (OID = 118361) : 
+-- Definition for sequence taxa_taxon_lists_id_seq (OID = 118361) :
 --
 CREATE SEQUENCE taxa_taxon_lists_id_seq
     START WITH 1
@@ -268,7 +268,7 @@ CREATE SEQUENCE taxa_taxon_lists_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence taxon_groups_id_seq (OID = 118363) : 
+-- Definition for sequence taxon_groups_id_seq (OID = 118363) :
 --
 CREATE SEQUENCE taxon_groups_id_seq
     START WITH 1
@@ -277,7 +277,7 @@ CREATE SEQUENCE taxon_groups_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence taxon_meanings_id_seq (OID = 118365) : 
+-- Definition for sequence taxon_meanings_id_seq (OID = 118365) :
 --
 CREATE SEQUENCE taxon_meanings_id_seq
     START WITH 1
@@ -286,7 +286,7 @@ CREATE SEQUENCE taxon_meanings_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence users_id_seq (OID = 118367) : 
+-- Definition for sequence users_id_seq (OID = 118367) :
 --
 CREATE SEQUENCE users_id_seq
     INCREMENT BY 1
@@ -294,7 +294,7 @@ CREATE SEQUENCE users_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence users_websites_id_seq (OID = 118369) : 
+-- Definition for sequence users_websites_id_seq (OID = 118369) :
 --
 CREATE SEQUENCE users_websites_id_seq
     START WITH 1
@@ -303,7 +303,7 @@ CREATE SEQUENCE users_websites_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence system_id_seq (OID = 119202) : 
+-- Definition for sequence system_id_seq (OID = 119202) :
 --
 CREATE SEQUENCE system_id_seq
     START WITH 1
@@ -312,7 +312,7 @@ CREATE SEQUENCE system_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence occurrence_comments_id_seq (OID = 119213) : 
+-- Definition for sequence occurrence_comments_id_seq (OID = 119213) :
 --
 CREATE SEQUENCE occurrence_comments_id_seq
     START WITH 1
@@ -321,7 +321,7 @@ CREATE SEQUENCE occurrence_comments_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence user_tokens_id_seq (OID = 119245) : 
+-- Definition for sequence user_tokens_id_seq (OID = 119245) :
 --
 CREATE SEQUENCE user_tokens_id_seq
     START WITH 1
@@ -330,7 +330,7 @@ CREATE SEQUENCE user_tokens_id_seq
     NO MINVALUE
     CACHE 1;
 --
--- Definition for sequence titles_id_seq (OID = 119331) : 
+-- Definition for sequence titles_id_seq (OID = 119331) :
 --
 CREATE SEQUENCE titles_id_seq
     START WITH 10
@@ -338,7 +338,3 @@ CREATE SEQUENCE titles_id_seq
     NO MAXVALUE
     NO MINVALUE
     CACHE 1;
---
--- Comments
---
-COMMENT ON SCHEMA public IS 'standard public schema';

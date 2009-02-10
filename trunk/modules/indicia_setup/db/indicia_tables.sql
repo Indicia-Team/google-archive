@@ -64,7 +64,7 @@ DROP TABLE IF EXISTS languages;
 DROP TABLE IF EXISTS core_roles;
 SET check_function_bodies = false;
 --
--- Structure for table core_roles (OID = 117396) : 
+-- Structure for table core_roles (OID = 117396) :
 --
 CREATE TABLE core_roles (
     id integer DEFAULT nextval('roles_id_seq'::regclass) NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE core_roles (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table languages (OID = 117421) : 
+-- Structure for table languages (OID = 117421) :
 --
 CREATE TABLE languages (
     id integer DEFAULT nextval('languages_id_seq'::regclass) NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE languages (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table location_attribute_values (OID = 117425) : 
+-- Structure for table location_attribute_values (OID = 117425) :
 --
 CREATE TABLE location_attribute_values (
     id integer DEFAULT nextval('location_attribute_values_id_seq'::regclass) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE location_attribute_values (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table location_attributes (OID = 117431) : 
+-- Structure for table location_attributes (OID = 117431) :
 --
 CREATE TABLE location_attributes (
     id integer DEFAULT nextval('location_attributes_id_seq'::regclass) NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE location_attributes (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table location_attributes_websites (OID = 117434) : 
+-- Structure for table location_attributes_websites (OID = 117434) :
 --
 CREATE TABLE location_attributes_websites (
     id integer DEFAULT nextval('location_attributes_websites_id_seq'::regclass) NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE location_attributes_websites (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table locations (OID = 117440) : 
+-- Structure for table locations (OID = 117440) :
 --
 CREATE TABLE locations (
     id integer DEFAULT nextval('locations_id_seq'::regclass) NOT NULL,
@@ -163,7 +163,7 @@ CREATE TABLE locations (
     CONSTRAINT enforce_srid_centroid_geom CHECK ((srid(centroid_geom) = 900913))
 ) WITHOUT OIDS;
 --
--- Structure for table locations_websites (OID = 117452) : 
+-- Structure for table locations_websites (OID = 117452) :
 --
 CREATE TABLE locations_websites (
     id integer DEFAULT nextval('locations_websites_id_seq'::regclass) NOT NULL,
@@ -174,13 +174,13 @@ CREATE TABLE locations_websites (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table meanings (OID = 117457) : 
+-- Structure for table meanings (OID = 117457) :
 --
 CREATE TABLE meanings (
     id integer DEFAULT nextval('meanings_id_seq'::regclass) NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table occurrence_attribute_values (OID = 117461) : 
+-- Structure for table occurrence_attribute_values (OID = 117461) :
 --
 CREATE TABLE occurrence_attribute_values (
     id integer DEFAULT nextval('occurrence_attribute_values_id_seq'::regclass) NOT NULL,
@@ -199,7 +199,7 @@ CREATE TABLE occurrence_attribute_values (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table occurrence_attributes (OID = 117467) : 
+-- Structure for table occurrence_attributes (OID = 117467) :
 --
 CREATE TABLE occurrence_attributes (
     id integer DEFAULT nextval('occurrence_attributes_id_seq'::regclass) NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE occurrence_attributes (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table occurrence_attributes_websites (OID = 117470) : 
+-- Structure for table occurrence_attributes_websites (OID = 117470) :
 --
 CREATE TABLE occurrence_attributes_websites (
     id integer DEFAULT nextval('occurrence_attributes_websites_id_seq'::regclass) NOT NULL,
@@ -228,7 +228,7 @@ CREATE TABLE occurrence_attributes_websites (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table occurrence_images (OID = 117473) : 
+-- Structure for table occurrence_images (OID = 117473) :
 --
 CREATE TABLE occurrence_images (
     id integer DEFAULT nextval('occurrence_images_id_seq'::regclass) NOT NULL,
@@ -242,7 +242,7 @@ CREATE TABLE occurrence_images (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table occurrences (OID = 117476) : 
+-- Structure for table occurrences (OID = 117476) :
 --
 CREATE TABLE occurrences (
     id integer DEFAULT nextval('occurrences_id_seq'::regclass) NOT NULL,
@@ -264,7 +264,7 @@ CREATE TABLE occurrences (
     CONSTRAINT occurrences_record_status_check CHECK ((record_status = ANY (ARRAY['I'::bpchar, 'C'::bpchar, 'V'::bpchar])))
 ) WITHOUT OIDS;
 --
--- Structure for table people (OID = 117480) : 
+-- Structure for table people (OID = 117480) :
 --
 CREATE TABLE people (
     id integer DEFAULT nextval('people_id_seq'::regclass) NOT NULL,
@@ -282,7 +282,7 @@ CREATE TABLE people (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table sample_attribute_values (OID = 117486) : 
+-- Structure for table sample_attribute_values (OID = 117486) :
 --
 CREATE TABLE sample_attribute_values (
     id integer DEFAULT nextval('sample_attribute_values_id_seq'::regclass) NOT NULL,
@@ -301,7 +301,7 @@ CREATE TABLE sample_attribute_values (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table sample_attributes (OID = 117492) : 
+-- Structure for table sample_attributes (OID = 117492) :
 --
 CREATE TABLE sample_attributes (
     id integer DEFAULT nextval('sample_attributes_id_seq'::regclass) NOT NULL,
@@ -319,7 +319,7 @@ CREATE TABLE sample_attributes (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table sample_attributes_websites (OID = 117495) : 
+-- Structure for table sample_attributes_websites (OID = 117495) :
 --
 CREATE TABLE sample_attributes_websites (
     id integer DEFAULT nextval('sample_attributes_websites_id_seq'::regclass) NOT NULL,
@@ -331,7 +331,7 @@ CREATE TABLE sample_attributes_websites (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table samples (OID = 117498) : 
+-- Structure for table samples (OID = 117498) :
 --
 CREATE TABLE samples (
     id integer DEFAULT nextval('samples_id_seq'::regclass) NOT NULL,
@@ -357,7 +357,7 @@ CREATE TABLE samples (
     CONSTRAINT enforce_srid_geom CHECK ((srid(geom) = 900913))
 ) WITHOUT OIDS;
 --
--- Structure for table site_roles (OID = 117507) : 
+-- Structure for table site_roles (OID = 117507) :
 --
 CREATE TABLE site_roles (
     id integer DEFAULT nextval('site_roles_id_seq'::regclass) NOT NULL,
@@ -369,7 +369,7 @@ CREATE TABLE site_roles (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table surveys (OID = 117520) : 
+-- Structure for table surveys (OID = 117520) :
 --
 CREATE TABLE surveys (
     id integer DEFAULT nextval('surveys_id_seq'::regclass) NOT NULL,
@@ -384,7 +384,7 @@ CREATE TABLE surveys (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table taxa (OID = 117528) : 
+-- Structure for table taxa (OID = 117528) :
 --
 CREATE TABLE taxa (
     id integer DEFAULT nextval('taxa_id_seq'::regclass) NOT NULL,
@@ -402,7 +402,7 @@ CREATE TABLE taxa (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table taxa_taxon_lists (OID = 117533) : 
+-- Structure for table taxa_taxon_lists (OID = 117533) :
 --
 CREATE TABLE taxa_taxon_lists (
     id integer DEFAULT nextval('taxa_taxon_lists_id_seq'::regclass) NOT NULL,
@@ -419,7 +419,7 @@ CREATE TABLE taxa_taxon_lists (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table taxon_groups (OID = 117536) : 
+-- Structure for table taxon_groups (OID = 117536) :
 --
 CREATE TABLE taxon_groups (
     id integer DEFAULT nextval('taxon_groups_id_seq'::regclass) NOT NULL,
@@ -431,7 +431,7 @@ CREATE TABLE taxon_groups (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table taxon_lists (OID = 117541) : 
+-- Structure for table taxon_lists (OID = 117541) :
 --
 CREATE TABLE taxon_lists (
     id integer DEFAULT nextval('taxon_lists_id_seq'::regclass) NOT NULL,
@@ -446,13 +446,13 @@ CREATE TABLE taxon_lists (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table taxon_meanings (OID = 117548) : 
+-- Structure for table taxon_meanings (OID = 117548) :
 --
 CREATE TABLE taxon_meanings (
     id integer DEFAULT nextval('taxon_meanings_id_seq'::regclass) NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table termlists (OID = 117553) : 
+-- Structure for table termlists (OID = 117553) :
 --
 CREATE TABLE termlists (
     id integer DEFAULT nextval('termlists_id_seq'::regclass) NOT NULL,
@@ -467,7 +467,7 @@ CREATE TABLE termlists (
     updated_by_id integer NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table termlists_terms (OID = 117563) : 
+-- Structure for table termlists_terms (OID = 117563) :
 --
 CREATE TABLE termlists_terms (
     id integer DEFAULT nextval('termlists_terms_id_seq'::regclass) NOT NULL,
@@ -484,7 +484,7 @@ CREATE TABLE termlists_terms (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table terms (OID = 117569) : 
+-- Structure for table terms (OID = 117569) :
 --
 CREATE TABLE terms (
     id integer DEFAULT nextval('terms_id_seq'::regclass) NOT NULL,
@@ -497,7 +497,7 @@ CREATE TABLE terms (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table users (OID = 117574) : 
+-- Structure for table users (OID = 117574) :
 --
 CREATE TABLE users (
     id integer DEFAULT nextval('users_id_seq'::regclass) NOT NULL,
@@ -524,7 +524,7 @@ CREATE TABLE users (
     CONSTRAINT enforce_srid_home_geom CHECK ((srid(home_geom) = (-1)))
 ) WITHOUT OIDS;
 --
--- Structure for table users_websites (OID = 117585) : 
+-- Structure for table users_websites (OID = 117585) :
 --
 CREATE TABLE users_websites (
     id integer DEFAULT nextval('users_websites_id_seq'::regclass) NOT NULL,
@@ -544,7 +544,7 @@ CREATE TABLE users_websites (
     preferred_sref_system character varying(10)
 ) WITHOUT OIDS;
 --
--- Structure for table websites (OID = 117593) : 
+-- Structure for table websites (OID = 117593) :
 --
 CREATE TABLE websites (
     id integer DEFAULT nextval('websites_id_seq'::regclass) NOT NULL,
@@ -560,7 +560,7 @@ CREATE TABLE websites (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table system (OID = 119204) : 
+-- Structure for table system (OID = 119204) :
 --
 CREATE TABLE system (
     id integer DEFAULT nextval('system_id_seq'::regclass) NOT NULL,
@@ -570,7 +570,7 @@ CREATE TABLE system (
     release_date date
 ) WITHOUT OIDS;
 --
--- Structure for table occurrence_comments (OID = 119215) : 
+-- Structure for table occurrence_comments (OID = 119215) :
 --
 CREATE TABLE occurrence_comments (
     id integer DEFAULT nextval('occurrence_comments_id_seq'::regclass) NOT NULL,
@@ -584,7 +584,7 @@ CREATE TABLE occurrence_comments (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table user_tokens (OID = 119247) : 
+-- Structure for table user_tokens (OID = 119247) :
 --
 CREATE TABLE user_tokens (
     id integer DEFAULT nextval('user_tokens_id_seq'::regclass) NOT NULL,
@@ -595,7 +595,7 @@ CREATE TABLE user_tokens (
     token character varying NOT NULL
 ) WITHOUT OIDS;
 --
--- Structure for table titles (OID = 119311) : 
+-- Structure for table titles (OID = 119311) :
 --
 CREATE TABLE titles (
     id integer NOT NULL,
@@ -607,870 +607,869 @@ CREATE TABLE titles (
     deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
 --
--- Definition for index fki_location_attribute_value_location_attribute (OID = 118464) : 
+-- Definition for index fki_location_attribute_value_location_attribute (OID = 118464) :
 --
 CREATE INDEX fki_location_attribute_value_location_attribute ON location_attribute_values USING btree (location_attribute_id);
 --
--- Definition for index fki_location_attribute_values_location (OID = 118465) : 
+-- Definition for index fki_location_attribute_values_location (OID = 118465) :
 --
 CREATE INDEX fki_location_attribute_values_location ON location_attribute_values USING btree (location_id);
 --
--- Definition for index fki_occurrence_attribute_value_occurrence_attribute (OID = 118466) : 
+-- Definition for index fki_occurrence_attribute_value_occurrence_attribute (OID = 118466) :
 --
 CREATE INDEX fki_occurrence_attribute_value_occurrence_attribute ON occurrence_attribute_values USING btree (occurrence_attribute_id);
 --
--- Definition for index fki_occurrence_attribute_values_occurrence (OID = 118467) : 
+-- Definition for index fki_occurrence_attribute_values_occurrence (OID = 118467) :
 --
 CREATE INDEX fki_occurrence_attribute_values_occurrence ON occurrence_attribute_values USING btree (occurrence_id);
 --
--- Definition for index fki_occurrence_determiner (OID = 118468) : 
+-- Definition for index fki_occurrence_determiner (OID = 118468) :
 --
 CREATE INDEX fki_occurrence_determiner ON occurrences USING btree (determiner_id);
 --
--- Definition for index fki_occurrence_sample (OID = 118469) : 
+-- Definition for index fki_occurrence_sample (OID = 118469) :
 --
 CREATE INDEX fki_occurrence_sample ON occurrences USING btree (sample_id);
 --
--- Definition for index fki_parent_termlist (OID = 118471) : 
+-- Definition for index fki_parent_termlist (OID = 118471) :
 --
 CREATE INDEX fki_parent_termlist ON termlists USING btree (parent_id);
 --
--- Definition for index fki_sample_attribute_value_sample_attribute (OID = 118472) : 
+-- Definition for index fki_sample_attribute_value_sample_attribute (OID = 118472) :
 --
 CREATE INDEX fki_sample_attribute_value_sample_attribute ON sample_attribute_values USING btree (sample_attribute_id);
 --
--- Definition for index fki_sample_attribute_values_sample (OID = 118473) : 
+-- Definition for index fki_sample_attribute_values_sample (OID = 118473) :
 --
 CREATE INDEX fki_sample_attribute_values_sample ON sample_attribute_values USING btree (sample_id);
 --
--- Definition for index fki_sample_attributes_websites_sample_attributes (OID = 118474) : 
+-- Definition for index fki_sample_attributes_websites_sample_attributes (OID = 118474) :
 --
 CREATE INDEX fki_sample_attributes_websites_sample_attributes ON sample_attributes_websites USING btree (sample_attribute_id);
 --
--- Definition for index fki_sample_attributes_websites_websites (OID = 118475) : 
+-- Definition for index fki_sample_attributes_websites_websites (OID = 118475) :
 --
 CREATE INDEX fki_sample_attributes_websites_websites ON sample_attributes_websites USING btree (website_id);
 --
--- Definition for index fki_samples_locations (OID = 118476) : 
+-- Definition for index fki_samples_locations (OID = 118476) :
 --
 CREATE INDEX fki_samples_locations ON samples USING btree (location_id);
 --
--- Definition for index fki_samples_surveys (OID = 118477) : 
+-- Definition for index fki_samples_surveys (OID = 118477) :
 --
 CREATE INDEX fki_samples_surveys ON samples USING btree (survey_id);
 --
--- Definition for index fki_survey_website (OID = 118478) : 
+-- Definition for index fki_survey_website (OID = 118478) :
 --
 CREATE INDEX fki_survey_website ON surveys USING btree (website_id);
 --
--- Definition for index fki_taxa_taxon_lists_taxa (OID = 118479) : 
+-- Definition for index fki_taxa_taxon_lists_taxa (OID = 118479) :
 --
 CREATE INDEX fki_taxa_taxon_lists_taxa ON taxa_taxon_lists USING btree (taxon_id);
 --
--- Definition for index fki_taxa_taxon_lists_taxon_lists (OID = 118480) : 
+-- Definition for index fki_taxa_taxon_lists_taxon_lists (OID = 118480) :
 --
 CREATE INDEX fki_taxa_taxon_lists_taxon_lists ON taxa_taxon_lists USING btree (taxon_list_id);
 --
--- Definition for index fki_taxon_language (OID = 118481) : 
+-- Definition for index fki_taxon_language (OID = 118481) :
 --
 CREATE INDEX fki_taxon_language ON taxa USING btree (language_id);
 --
--- Definition for index fki_taxon_list_parent (OID = 118482) : 
+-- Definition for index fki_taxon_list_parent (OID = 118482) :
 --
 CREATE INDEX fki_taxon_list_parent ON taxon_lists USING btree (parent_id);
 --
--- Definition for index fki_taxon_list_website (OID = 118483) : 
+-- Definition for index fki_taxon_list_website (OID = 118483) :
 --
 CREATE INDEX fki_taxon_list_website ON taxon_lists USING btree (website_id);
 --
--- Definition for index fki_taxon_taxon_group (OID = 118485) : 
+-- Definition for index fki_taxon_taxon_group (OID = 118485) :
 --
 CREATE INDEX fki_taxon_taxon_group ON taxa USING btree (taxon_group_id);
 --
--- Definition for index fki_term_language (OID = 118487) : 
+-- Definition for index fki_term_language (OID = 118487) :
 --
 CREATE INDEX fki_term_language ON terms USING btree (language_id);
 --
--- Definition for index fki_user_core_role (OID = 118490) : 
+-- Definition for index fki_user_core_role (OID = 118490) :
 --
 CREATE INDEX fki_user_core_role ON users USING btree (core_role_id);
 --
--- Definition for index fki_user_person (OID = 118491) : 
+-- Definition for index fki_user_person (OID = 118491) :
 --
 CREATE INDEX fki_user_person ON users USING btree (person_id);
 --
--- Definition for index fki_users_websites_site_roles (OID = 118492) : 
+-- Definition for index fki_users_websites_site_roles (OID = 118492) :
 --
 CREATE INDEX fki_users_websites_site_roles ON users_websites USING btree (site_role_id);
 --
--- Definition for index fki_website (OID = 118493) : 
+-- Definition for index fki_website (OID = 118493) :
 --
 CREATE INDEX fki_website ON termlists USING btree (website_id);
 --
--- Definition for index fki_occurrence_taxa_taxon_list (OID = 119302) : 
+-- Definition for index fki_occurrence_taxa_taxon_list (OID = 119302) :
 --
 CREATE INDEX fki_occurrence_taxa_taxon_list ON occurrences USING btree (taxa_taxon_list_id);
 --
--- Definition for index fki_occurrence_attributes_websites_survey (OID = 119380) : 
+-- Definition for index fki_occurrence_attributes_websites_survey (OID = 119380) :
 --
 CREATE INDEX fki_occurrence_attributes_websites_survey ON occurrence_attributes_websites USING btree (restrict_to_survey_id);
 --
--- Definition for index fki_sample_attributes_websites_survey (OID = 119386) : 
+-- Definition for index fki_sample_attributes_websites_survey (OID = 119386) :
 --
 CREATE INDEX fki_sample_attributes_websites_survey ON sample_attributes_websites USING btree (restrict_to_survey_id);
 --
--- Definition for index fki_locationattributes_websites_survey (OID = 119392) : 
+-- Definition for index fki_locationattributes_websites_survey (OID = 119392) :
 --
 CREATE INDEX fki_locationattributes_websites_survey ON location_attributes_websites USING btree (restrict_to_survey_id);
 --
--- Definition for index fk_languages (OID = 118398) : 
+-- Definition for index fk_languages (OID = 118398) :
 --
 ALTER TABLE ONLY languages
     ADD CONSTRAINT fk_languages PRIMARY KEY (id);
 --
--- Definition for index fk_meanings (OID = 118400) : 
+-- Definition for index fk_meanings (OID = 118400) :
 --
 ALTER TABLE ONLY meanings
     ADD CONSTRAINT fk_meanings PRIMARY KEY (id);
 --
--- Definition for index pk_core_roles (OID = 118404) : 
+-- Definition for index pk_core_roles (OID = 118404) :
 --
 ALTER TABLE ONLY core_roles
     ADD CONSTRAINT pk_core_roles PRIMARY KEY (id);
 --
--- Definition for index pk_location_attribute_values (OID = 118406) : 
+-- Definition for index pk_location_attribute_values (OID = 118406) :
 --
 ALTER TABLE ONLY location_attribute_values
     ADD CONSTRAINT pk_location_attribute_values PRIMARY KEY (id);
 --
--- Definition for index pk_location_attributes (OID = 118408) : 
+-- Definition for index pk_location_attributes (OID = 118408) :
 --
 ALTER TABLE ONLY location_attributes
     ADD CONSTRAINT pk_location_attributes PRIMARY KEY (id);
 --
--- Definition for index pk_location_attributes_websites (OID = 118410) : 
+-- Definition for index pk_location_attributes_websites (OID = 118410) :
 --
 ALTER TABLE ONLY location_attributes_websites
     ADD CONSTRAINT pk_location_attributes_websites PRIMARY KEY (id);
 --
--- Definition for index pk_locations (OID = 118412) : 
+-- Definition for index pk_locations (OID = 118412) :
 --
 ALTER TABLE ONLY locations
     ADD CONSTRAINT pk_locations PRIMARY KEY (id);
 --
--- Definition for index pk_locations_websites (OID = 118414) : 
+-- Definition for index pk_locations_websites (OID = 118414) :
 --
 ALTER TABLE ONLY locations_websites
     ADD CONSTRAINT pk_locations_websites PRIMARY KEY (id);
 --
--- Definition for index pk_occurrence_attribute_values (OID = 118416) : 
+-- Definition for index pk_occurrence_attribute_values (OID = 118416) :
 --
 ALTER TABLE ONLY occurrence_attribute_values
     ADD CONSTRAINT pk_occurrence_attribute_values PRIMARY KEY (id);
 --
--- Definition for index pk_occurrence_attributes (OID = 118418) : 
+-- Definition for index pk_occurrence_attributes (OID = 118418) :
 --
 ALTER TABLE ONLY occurrence_attributes
     ADD CONSTRAINT pk_occurrence_attributes PRIMARY KEY (id);
 --
--- Definition for index pk_occurrence_attributes_websites (OID = 118420) : 
+-- Definition for index pk_occurrence_attributes_websites (OID = 118420) :
 --
 ALTER TABLE ONLY occurrence_attributes_websites
     ADD CONSTRAINT pk_occurrence_attributes_websites PRIMARY KEY (id);
 --
--- Definition for index pk_occurrence_images (OID = 118422) : 
+-- Definition for index pk_occurrence_images (OID = 118422) :
 --
 ALTER TABLE ONLY occurrence_images
     ADD CONSTRAINT pk_occurrence_images PRIMARY KEY (id);
 --
--- Definition for index pk_occurrences (OID = 118424) : 
+-- Definition for index pk_occurrences (OID = 118424) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT pk_occurrences PRIMARY KEY (id);
 --
--- Definition for index pk_people (OID = 118426) : 
+-- Definition for index pk_people (OID = 118426) :
 --
 ALTER TABLE ONLY people
     ADD CONSTRAINT pk_people PRIMARY KEY (id);
 --
--- Definition for index pk_sample_attribute_values (OID = 118428) : 
+-- Definition for index pk_sample_attribute_values (OID = 118428) :
 --
 ALTER TABLE ONLY sample_attribute_values
     ADD CONSTRAINT pk_sample_attribute_values PRIMARY KEY (id);
 --
--- Definition for index pk_sample_attributes (OID = 118430) : 
+-- Definition for index pk_sample_attributes (OID = 118430) :
 --
 ALTER TABLE ONLY sample_attributes
     ADD CONSTRAINT pk_sample_attributes PRIMARY KEY (id);
 --
--- Definition for index pk_sample_attributes_websites (OID = 118432) : 
+-- Definition for index pk_sample_attributes_websites (OID = 118432) :
 --
 ALTER TABLE ONLY sample_attributes_websites
     ADD CONSTRAINT pk_sample_attributes_websites PRIMARY KEY (id);
 --
--- Definition for index pk_samples (OID = 118434) : 
+-- Definition for index pk_samples (OID = 118434) :
 --
 ALTER TABLE ONLY samples
     ADD CONSTRAINT pk_samples PRIMARY KEY (id);
 --
--- Definition for index pk_site_roles (OID = 118436) : 
+-- Definition for index pk_site_roles (OID = 118436) :
 --
 ALTER TABLE ONLY site_roles
     ADD CONSTRAINT pk_site_roles PRIMARY KEY (id);
 --
--- Definition for index pk_surveys (OID = 118438) : 
+-- Definition for index pk_surveys (OID = 118438) :
 --
 ALTER TABLE ONLY surveys
     ADD CONSTRAINT pk_surveys PRIMARY KEY (id);
 --
--- Definition for index pk_taxa (OID = 118440) : 
+-- Definition for index pk_taxa (OID = 118440) :
 --
 ALTER TABLE ONLY taxa
     ADD CONSTRAINT pk_taxa PRIMARY KEY (id);
 --
--- Definition for index pk_taxa_taxon_lists (OID = 118442) : 
+-- Definition for index pk_taxa_taxon_lists (OID = 118442) :
 --
 ALTER TABLE ONLY taxa_taxon_lists
     ADD CONSTRAINT pk_taxa_taxon_lists PRIMARY KEY (id);
 --
--- Definition for index pk_taxon_groups (OID = 118444) : 
+-- Definition for index pk_taxon_groups (OID = 118444) :
 --
 ALTER TABLE ONLY taxon_groups
     ADD CONSTRAINT pk_taxon_groups PRIMARY KEY (id);
 --
--- Definition for index pk_taxon_lists (OID = 118446) : 
+-- Definition for index pk_taxon_lists (OID = 118446) :
 --
 ALTER TABLE ONLY taxon_lists
     ADD CONSTRAINT pk_taxon_lists PRIMARY KEY (id);
 --
--- Definition for index pk_taxon_meanings (OID = 118448) : 
+-- Definition for index pk_taxon_meanings (OID = 118448) :
 --
 ALTER TABLE ONLY taxon_meanings
     ADD CONSTRAINT pk_taxon_meanings PRIMARY KEY (id);
 --
--- Definition for index pk_termlists (OID = 118450) : 
+-- Definition for index pk_termlists (OID = 118450) :
 --
 ALTER TABLE ONLY termlists
     ADD CONSTRAINT pk_termlists PRIMARY KEY (id);
 --
--- Definition for index pk_termlists_terms (OID = 118452) : 
+-- Definition for index pk_termlists_terms (OID = 118452) :
 --
 ALTER TABLE ONLY termlists_terms
     ADD CONSTRAINT pk_termlists_terms PRIMARY KEY (id);
 --
--- Definition for index pk_terms (OID = 118454) : 
+-- Definition for index pk_terms (OID = 118454) :
 --
 ALTER TABLE ONLY terms
     ADD CONSTRAINT pk_terms PRIMARY KEY (id);
 --
--- Definition for index pk_users (OID = 118456) : 
+-- Definition for index pk_users (OID = 118456) :
 --
 ALTER TABLE ONLY users
     ADD CONSTRAINT pk_users PRIMARY KEY (id);
 --
--- Definition for index pk_users_websites (OID = 118458) : 
+-- Definition for index pk_users_websites (OID = 118458) :
 --
 ALTER TABLE ONLY users_websites
     ADD CONSTRAINT pk_users_websites PRIMARY KEY (id);
 --
--- Definition for index pk_websites (OID = 118460) : 
+-- Definition for index pk_websites (OID = 118460) :
 --
 ALTER TABLE ONLY websites
     ADD CONSTRAINT pk_websites PRIMARY KEY (id);
 --
--- Definition for index fk_location_attribute_value_location_attribute (OID = 118494) : 
+-- Definition for index fk_location_attribute_value_location_attribute (OID = 118494) :
 --
 ALTER TABLE ONLY location_attribute_values
     ADD CONSTRAINT fk_location_attribute_value_location_attribute FOREIGN KEY (location_attribute_id) REFERENCES location_attributes(id);
 --
--- Definition for index fk_location_attribute_values_location (OID = 118499) : 
+-- Definition for index fk_location_attribute_values_location (OID = 118499) :
 --
 ALTER TABLE ONLY location_attribute_values
     ADD CONSTRAINT fk_location_attribute_values_location FOREIGN KEY (location_id) REFERENCES locations(id);
 --
--- Definition for index fk_location_attributes_websites_location_attributes (OID = 118504) : 
+-- Definition for index fk_location_attributes_websites_location_attributes (OID = 118504) :
 --
 ALTER TABLE ONLY location_attributes_websites
     ADD CONSTRAINT fk_location_attributes_websites_location_attributes FOREIGN KEY (location_attribute_id) REFERENCES location_attributes(id);
 --
--- Definition for index fk_location_attributes_websites_websites (OID = 118509) : 
+-- Definition for index fk_location_attributes_websites_websites (OID = 118509) :
 --
 ALTER TABLE ONLY location_attributes_websites
     ADD CONSTRAINT fk_location_attributes_websites_websites FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_location_parent (OID = 118514) : 
+-- Definition for index fk_location_parent (OID = 118514) :
 --
 ALTER TABLE ONLY locations
     ADD CONSTRAINT fk_location_parent FOREIGN KEY (parent_id) REFERENCES locations(id);
 --
--- Definition for index fk_locations_websites_locations (OID = 118519) : 
+-- Definition for index fk_locations_websites_locations (OID = 118519) :
 --
 ALTER TABLE ONLY locations_websites
     ADD CONSTRAINT fk_locations_websites_locations FOREIGN KEY (location_id) REFERENCES locations(id);
 --
--- Definition for index fk_locations_websites_websites (OID = 118524) : 
+-- Definition for index fk_locations_websites_websites (OID = 118524) :
 --
 ALTER TABLE ONLY locations_websites
     ADD CONSTRAINT fk_locations_websites_websites FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_occurrence_attribute_value_occurrence_attribute (OID = 118529) : 
+-- Definition for index fk_occurrence_attribute_value_occurrence_attribute (OID = 118529) :
 --
 ALTER TABLE ONLY occurrence_attribute_values
     ADD CONSTRAINT fk_occurrence_attribute_value_occurrence_attribute FOREIGN KEY (occurrence_attribute_id) REFERENCES occurrence_attributes(id);
 --
--- Definition for index fk_occurrence_attribute_values_occurrence (OID = 118534) : 
+-- Definition for index fk_occurrence_attribute_values_occurrence (OID = 118534) :
 --
 ALTER TABLE ONLY occurrence_attribute_values
     ADD CONSTRAINT fk_occurrence_attribute_values_occurrence FOREIGN KEY (occurrence_id) REFERENCES occurrences(id);
 --
--- Definition for index fk_occurrence_attributes_websites_occurrence_attributes (OID = 118539) : 
+-- Definition for index fk_occurrence_attributes_websites_occurrence_attributes (OID = 118539) :
 --
 ALTER TABLE ONLY occurrence_attributes_websites
     ADD CONSTRAINT fk_occurrence_attributes_websites_occurrence_attributes FOREIGN KEY (occurrence_attribute_id) REFERENCES occurrence_attributes(id);
 --
--- Definition for index fk_occurrence_attributes_websites_websites (OID = 118544) : 
+-- Definition for index fk_occurrence_attributes_websites_websites (OID = 118544) :
 --
 ALTER TABLE ONLY occurrence_attributes_websites
     ADD CONSTRAINT fk_occurrence_attributes_websites_websites FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_occurrence_determiner (OID = 118549) : 
+-- Definition for index fk_occurrence_determiner (OID = 118549) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT fk_occurrence_determiner FOREIGN KEY (determiner_id) REFERENCES people(id);
 --
--- Definition for index fk_occurrence_sample (OID = 118554) : 
+-- Definition for index fk_occurrence_sample (OID = 118554) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT fk_occurrence_sample FOREIGN KEY (sample_id) REFERENCES samples(id);
 --
--- Definition for index fk_parent_termlist (OID = 118564) : 
+-- Definition for index fk_parent_termlist (OID = 118564) :
 --
 ALTER TABLE ONLY termlists
     ADD CONSTRAINT fk_parent_termlist FOREIGN KEY (parent_id) REFERENCES termlists(id);
 --
--- Definition for index fk_sample_attribute_value_sample_attribute (OID = 118569) : 
+-- Definition for index fk_sample_attribute_value_sample_attribute (OID = 118569) :
 --
 ALTER TABLE ONLY sample_attribute_values
     ADD CONSTRAINT fk_sample_attribute_value_sample_attribute FOREIGN KEY (sample_attribute_id) REFERENCES sample_attributes(id);
 --
--- Definition for index fk_sample_attribute_values_sample (OID = 118574) : 
+-- Definition for index fk_sample_attribute_values_sample (OID = 118574) :
 --
 ALTER TABLE ONLY sample_attribute_values
     ADD CONSTRAINT fk_sample_attribute_values_sample FOREIGN KEY (sample_id) REFERENCES samples(id);
 --
--- Definition for index fk_sample_attributes_websites_sample_attributes (OID = 118579) : 
+-- Definition for index fk_sample_attributes_websites_sample_attributes (OID = 118579) :
 --
 ALTER TABLE ONLY sample_attributes_websites
     ADD CONSTRAINT fk_sample_attributes_websites_sample_attributes FOREIGN KEY (sample_attribute_id) REFERENCES sample_attributes(id);
 --
--- Definition for index fk_sample_attributes_websites_websites (OID = 118584) : 
+-- Definition for index fk_sample_attributes_websites_websites (OID = 118584) :
 --
 ALTER TABLE ONLY sample_attributes_websites
     ADD CONSTRAINT fk_sample_attributes_websites_websites FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_samples_locations (OID = 118589) : 
+-- Definition for index fk_samples_locations (OID = 118589) :
 --
 ALTER TABLE ONLY samples
     ADD CONSTRAINT fk_samples_locations FOREIGN KEY (location_id) REFERENCES locations(id);
 --
--- Definition for index fk_samples_surveys (OID = 118594) : 
+-- Definition for index fk_samples_surveys (OID = 118594) :
 --
 ALTER TABLE ONLY samples
     ADD CONSTRAINT fk_samples_surveys FOREIGN KEY (survey_id) REFERENCES surveys(id);
 --
--- Definition for index fk_survey_website (OID = 118599) : 
+-- Definition for index fk_survey_website (OID = 118599) :
 --
 ALTER TABLE ONLY surveys
     ADD CONSTRAINT fk_survey_website FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_taxa_taxon_lists_taxa (OID = 118604) : 
+-- Definition for index fk_taxa_taxon_lists_taxa (OID = 118604) :
 --
 ALTER TABLE ONLY taxa_taxon_lists
     ADD CONSTRAINT fk_taxa_taxon_lists_taxa FOREIGN KEY (taxon_id) REFERENCES taxa(id);
 --
--- Definition for index fk_taxa_taxon_lists_taxon_lists (OID = 118609) : 
+-- Definition for index fk_taxa_taxon_lists_taxon_lists (OID = 118609) :
 --
 ALTER TABLE ONLY taxa_taxon_lists
     ADD CONSTRAINT fk_taxa_taxon_lists_taxon_lists FOREIGN KEY (taxon_list_id) REFERENCES taxon_lists(id);
 --
--- Definition for index fk_taxon_language (OID = 118614) : 
+-- Definition for index fk_taxon_language (OID = 118614) :
 --
 ALTER TABLE ONLY taxa
     ADD CONSTRAINT fk_taxon_language FOREIGN KEY (language_id) REFERENCES languages(id);
 --
--- Definition for index fk_taxon_list_parent (OID = 118619) : 
+-- Definition for index fk_taxon_list_parent (OID = 118619) :
 --
 ALTER TABLE ONLY taxon_lists
     ADD CONSTRAINT fk_taxon_list_parent FOREIGN KEY (parent_id) REFERENCES taxon_lists(id);
 --
--- Definition for index fk_taxon_list_website (OID = 118624) : 
+-- Definition for index fk_taxon_list_website (OID = 118624) :
 --
 ALTER TABLE ONLY taxon_lists
     ADD CONSTRAINT fk_taxon_list_website FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_taxon_taxon_group (OID = 118634) : 
+-- Definition for index fk_taxon_taxon_group (OID = 118634) :
 --
 ALTER TABLE ONLY taxa
     ADD CONSTRAINT fk_taxon_taxon_group FOREIGN KEY (taxon_group_id) REFERENCES taxon_groups(id);
 --
--- Definition for index fk_term_language (OID = 118644) : 
+-- Definition for index fk_term_language (OID = 118644) :
 --
 ALTER TABLE ONLY terms
     ADD CONSTRAINT fk_term_language FOREIGN KEY (language_id) REFERENCES languages(id);
 --
--- Definition for index fk_termlists_terms_termlists (OID = 118659) : 
+-- Definition for index fk_termlists_terms_termlists (OID = 118659) :
 --
 ALTER TABLE ONLY termlists_terms
     ADD CONSTRAINT fk_termlists_terms_termlists FOREIGN KEY (termlist_id) REFERENCES termlists(id);
 --
--- Definition for index fk_termlists_terms_terms (OID = 118664) : 
+-- Definition for index fk_termlists_terms_terms (OID = 118664) :
 --
 ALTER TABLE ONLY termlists_terms
     ADD CONSTRAINT fk_termlists_terms_terms FOREIGN KEY (term_id) REFERENCES terms(id);
 --
--- Definition for index fk_user_core_role (OID = 118669) : 
+-- Definition for index fk_user_core_role (OID = 118669) :
 --
 ALTER TABLE ONLY users
     ADD CONSTRAINT fk_user_core_role FOREIGN KEY (core_role_id) REFERENCES core_roles(id);
 --
--- Definition for index fk_users_websites_site_roles (OID = 118679) : 
+-- Definition for index fk_users_websites_site_roles (OID = 118679) :
 --
 ALTER TABLE ONLY users_websites
     ADD CONSTRAINT fk_users_websites_site_roles FOREIGN KEY (site_role_id) REFERENCES site_roles(id);
 --
--- Definition for index fk_users_websites_websites (OID = 118689) : 
+-- Definition for index fk_users_websites_websites (OID = 118689) :
 --
 ALTER TABLE ONLY users_websites
     ADD CONSTRAINT fk_users_websites_websites FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_website (OID = 118694) : 
+-- Definition for index fk_website (OID = 118694) :
 --
 ALTER TABLE ONLY termlists
     ADD CONSTRAINT fk_website FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index pk_surveys_owner (OID = 118699) : 
+-- Definition for index pk_surveys_owner (OID = 118699) :
 --
 ALTER TABLE ONLY surveys
     ADD CONSTRAINT pk_surveys_owner FOREIGN KEY (owner_id) REFERENCES people(id);
 --
--- Definition for index fk_core_role_creator (OID = 118704) : 
+-- Definition for index fk_core_role_creator (OID = 118704) :
 --
 ALTER TABLE ONLY core_roles
     ADD CONSTRAINT fk_core_role_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_core_role_updater (OID = 118709) : 
+-- Definition for index fk_core_role_updater (OID = 118709) :
 --
 ALTER TABLE ONLY core_roles
     ADD CONSTRAINT fk_core_role_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_language_creator (OID = 118714) : 
+-- Definition for index fk_language_creator (OID = 118714) :
 --
 ALTER TABLE ONLY languages
     ADD CONSTRAINT fk_language_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_language_updater (OID = 118719) : 
+-- Definition for index fk_language_updater (OID = 118719) :
 --
 ALTER TABLE ONLY languages
     ADD CONSTRAINT fk_language_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_location_attribute_value_creator (OID = 118724) : 
+-- Definition for index fk_location_attribute_value_creator (OID = 118724) :
 --
 ALTER TABLE ONLY location_attribute_values
     ADD CONSTRAINT fk_location_attribute_value_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_location_attribute_value_updater (OID = 118729) : 
+-- Definition for index fk_location_attribute_value_updater (OID = 118729) :
 --
 ALTER TABLE ONLY location_attribute_values
     ADD CONSTRAINT fk_location_attribute_value_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_location_attribute_creator (OID = 118734) : 
+-- Definition for index fk_location_attribute_creator (OID = 118734) :
 --
 ALTER TABLE ONLY location_attributes
     ADD CONSTRAINT fk_location_attribute_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_location_attribute_updater (OID = 118739) : 
+-- Definition for index fk_location_attribute_updater (OID = 118739) :
 --
 ALTER TABLE ONLY location_attributes
     ADD CONSTRAINT fk_location_attribute_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_location_attributes_website_creator (OID = 118744) : 
+-- Definition for index fk_location_attributes_website_creator (OID = 118744) :
 --
 ALTER TABLE ONLY location_attributes_websites
     ADD CONSTRAINT fk_location_attributes_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_location_creator (OID = 118749) : 
+-- Definition for index fk_location_creator (OID = 118749) :
 --
 ALTER TABLE ONLY locations
     ADD CONSTRAINT fk_location_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_location_updater (OID = 118754) : 
+-- Definition for index fk_location_updater (OID = 118754) :
 --
 ALTER TABLE ONLY locations
     ADD CONSTRAINT fk_location_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_locations_website_creator (OID = 118759) : 
+-- Definition for index fk_locations_website_creator (OID = 118759) :
 --
 ALTER TABLE ONLY locations_websites
     ADD CONSTRAINT fk_locations_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_attribute_value_creator (OID = 118764) : 
+-- Definition for index fk_occurrence_attribute_value_creator (OID = 118764) :
 --
 ALTER TABLE ONLY occurrence_attribute_values
     ADD CONSTRAINT fk_occurrence_attribute_value_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_attribute_value_updater (OID = 118769) : 
+-- Definition for index fk_occurrence_attribute_value_updater (OID = 118769) :
 --
 ALTER TABLE ONLY occurrence_attribute_values
     ADD CONSTRAINT fk_occurrence_attribute_value_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_attribute_creator (OID = 118774) : 
+-- Definition for index fk_occurrence_attribute_creator (OID = 118774) :
 --
 ALTER TABLE ONLY occurrence_attributes
     ADD CONSTRAINT fk_occurrence_attribute_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_attribute_updater (OID = 118779) : 
+-- Definition for index fk_occurrence_attribute_updater (OID = 118779) :
 --
 ALTER TABLE ONLY occurrence_attributes
     ADD CONSTRAINT fk_occurrence_attribute_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_attributes_website_creator (OID = 118784) : 
+-- Definition for index fk_occurrence_attributes_website_creator (OID = 118784) :
 --
 ALTER TABLE ONLY occurrence_attributes_websites
     ADD CONSTRAINT fk_occurrence_attributes_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_image_creator (OID = 118789) : 
+-- Definition for index fk_occurrence_image_creator (OID = 118789) :
 --
 ALTER TABLE ONLY occurrence_images
     ADD CONSTRAINT fk_occurrence_image_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_image_updater (OID = 118794) : 
+-- Definition for index fk_occurrence_image_updater (OID = 118794) :
 --
 ALTER TABLE ONLY occurrence_images
     ADD CONSTRAINT fk_occurrence_image_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_creator (OID = 118799) : 
+-- Definition for index fk_occurrence_creator (OID = 118799) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT fk_occurrence_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_updater (OID = 118804) : 
+-- Definition for index fk_occurrence_updater (OID = 118804) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT fk_occurrence_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_person_creator (OID = 118809) : 
+-- Definition for index fk_person_creator (OID = 118809) :
 --
 ALTER TABLE ONLY people
     ADD CONSTRAINT fk_person_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_person_updater (OID = 118814) : 
+-- Definition for index fk_person_updater (OID = 118814) :
 --
 ALTER TABLE ONLY people
     ADD CONSTRAINT fk_person_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_sample_attribute_value_creator (OID = 118819) : 
+-- Definition for index fk_sample_attribute_value_creator (OID = 118819) :
 --
 ALTER TABLE ONLY sample_attribute_values
     ADD CONSTRAINT fk_sample_attribute_value_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_sample_attribute_value_updater (OID = 118824) : 
+-- Definition for index fk_sample_attribute_value_updater (OID = 118824) :
 --
 ALTER TABLE ONLY sample_attribute_values
     ADD CONSTRAINT fk_sample_attribute_value_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_sample_attribute_creator (OID = 118829) : 
+-- Definition for index fk_sample_attribute_creator (OID = 118829) :
 --
 ALTER TABLE ONLY sample_attributes
     ADD CONSTRAINT fk_sample_attribute_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_sample_attribute_updater (OID = 118834) : 
+-- Definition for index fk_sample_attribute_updater (OID = 118834) :
 --
 ALTER TABLE ONLY sample_attributes
     ADD CONSTRAINT fk_sample_attribute_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_sample_attributes_website_creator (OID = 118839) : 
+-- Definition for index fk_sample_attributes_website_creator (OID = 118839) :
 --
 ALTER TABLE ONLY sample_attributes_websites
     ADD CONSTRAINT fk_sample_attributes_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_sample_creator (OID = 118844) : 
+-- Definition for index fk_sample_creator (OID = 118844) :
 --
 ALTER TABLE ONLY samples
     ADD CONSTRAINT fk_sample_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_sample_updater (OID = 118849) : 
+-- Definition for index fk_sample_updater (OID = 118849) :
 --
 ALTER TABLE ONLY samples
     ADD CONSTRAINT fk_sample_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_site_role_creator (OID = 118854) : 
+-- Definition for index fk_site_role_creator (OID = 118854) :
 --
 ALTER TABLE ONLY site_roles
     ADD CONSTRAINT fk_site_role_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_site_role_updater (OID = 118859) : 
+-- Definition for index fk_site_role_updater (OID = 118859) :
 --
 ALTER TABLE ONLY site_roles
     ADD CONSTRAINT fk_site_role_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_survey_creator (OID = 118864) : 
+-- Definition for index fk_survey_creator (OID = 118864) :
 --
 ALTER TABLE ONLY surveys
     ADD CONSTRAINT fk_survey_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_survey_updater (OID = 118869) : 
+-- Definition for index fk_survey_updater (OID = 118869) :
 --
 ALTER TABLE ONLY surveys
     ADD CONSTRAINT fk_survey_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_taxon_creator (OID = 118874) : 
+-- Definition for index fk_taxon_creator (OID = 118874) :
 --
 ALTER TABLE ONLY taxa
     ADD CONSTRAINT fk_taxon_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_taxon_updater (OID = 118879) : 
+-- Definition for index fk_taxon_updater (OID = 118879) :
 --
 ALTER TABLE ONLY taxa
     ADD CONSTRAINT fk_taxon_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_taxa_taxon_list_creator (OID = 118884) : 
+-- Definition for index fk_taxa_taxon_list_creator (OID = 118884) :
 --
 ALTER TABLE ONLY taxa_taxon_lists
     ADD CONSTRAINT fk_taxa_taxon_list_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_taxon_group_creator (OID = 118889) : 
+-- Definition for index fk_taxon_group_creator (OID = 118889) :
 --
 ALTER TABLE ONLY taxon_groups
     ADD CONSTRAINT fk_taxon_group_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_taxon_group_updater (OID = 118894) : 
+-- Definition for index fk_taxon_group_updater (OID = 118894) :
 --
 ALTER TABLE ONLY taxon_groups
     ADD CONSTRAINT fk_taxon_group_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_taxon_list_creator (OID = 118899) : 
+-- Definition for index fk_taxon_list_creator (OID = 118899) :
 --
 ALTER TABLE ONLY taxon_lists
     ADD CONSTRAINT fk_taxon_list_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_taxon_list_updater (OID = 118904) : 
+-- Definition for index fk_taxon_list_updater (OID = 118904) :
 --
 ALTER TABLE ONLY taxon_lists
     ADD CONSTRAINT fk_taxon_list_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_termlist_creator (OID = 118909) : 
+-- Definition for index fk_termlist_creator (OID = 118909) :
 --
 ALTER TABLE ONLY termlists
     ADD CONSTRAINT fk_termlist_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_termlist_updater (OID = 118914) : 
+-- Definition for index fk_termlist_updater (OID = 118914) :
 --
 ALTER TABLE ONLY termlists
     ADD CONSTRAINT fk_termlist_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_termlists_term_creator (OID = 118919) : 
+-- Definition for index fk_termlists_term_creator (OID = 118919) :
 --
 ALTER TABLE ONLY termlists_terms
     ADD CONSTRAINT fk_termlists_term_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_termlists_term_updater (OID = 118924) : 
+-- Definition for index fk_termlists_term_updater (OID = 118924) :
 --
 ALTER TABLE ONLY termlists_terms
     ADD CONSTRAINT fk_termlists_term_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_term_creator (OID = 118929) : 
+-- Definition for index fk_term_creator (OID = 118929) :
 --
 ALTER TABLE ONLY terms
     ADD CONSTRAINT fk_term_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_term_updater (OID = 118934) : 
+-- Definition for index fk_term_updater (OID = 118934) :
 --
 ALTER TABLE ONLY terms
     ADD CONSTRAINT fk_term_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_user_creator (OID = 118939) : 
+-- Definition for index fk_user_creator (OID = 118939) :
 --
 ALTER TABLE ONLY users
     ADD CONSTRAINT fk_user_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_user_updater (OID = 118944) : 
+-- Definition for index fk_user_updater (OID = 118944) :
 --
 ALTER TABLE ONLY users
     ADD CONSTRAINT fk_user_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_users_website_creator (OID = 118949) : 
+-- Definition for index fk_users_website_creator (OID = 118949) :
 --
 ALTER TABLE ONLY users_websites
     ADD CONSTRAINT fk_users_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_users_website_updater (OID = 118954) : 
+-- Definition for index fk_users_website_updater (OID = 118954) :
 --
 ALTER TABLE ONLY users_websites
     ADD CONSTRAINT fk_users_website_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_website_creator (OID = 118959) : 
+-- Definition for index fk_website_creator (OID = 118959) :
 --
 ALTER TABLE ONLY websites
     ADD CONSTRAINT fk_website_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_website_updater (OID = 118964) : 
+-- Definition for index fk_website_updater (OID = 118964) :
 --
 ALTER TABLE ONLY websites
     ADD CONSTRAINT fk_website_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_user_person (OID = 118969) : 
+-- Definition for index fk_user_person (OID = 118969) :
 --
 ALTER TABLE ONLY users
     ADD CONSTRAINT fk_user_person FOREIGN KEY (person_id) REFERENCES people(id);
 --
--- Definition for index fk_termlists_term_parent (OID = 119011) : 
+-- Definition for index fk_termlists_term_parent (OID = 119011) :
 --
 ALTER TABLE ONLY termlists_terms
     ADD CONSTRAINT fk_termlists_term_parent FOREIGN KEY (parent_id) REFERENCES termlists_terms(id);
 --
--- Definition for index fk_termlists_term_meaning (OID = 119016) : 
+-- Definition for index fk_termlists_term_meaning (OID = 119016) :
 --
 ALTER TABLE ONLY termlists_terms
     ADD CONSTRAINT fk_termlists_term_meaning FOREIGN KEY (meaning_id) REFERENCES meanings(id);
 --
--- Definition for index fk_taxon_taxon_meaning (OID = 119049) : 
+-- Definition for index fk_taxon_taxon_meaning (OID = 119049) :
 --
 ALTER TABLE ONLY taxa_taxon_lists
     ADD CONSTRAINT fk_taxon_taxon_meaning FOREIGN KEY (taxon_meaning_id) REFERENCES taxon_meanings(id);
 --
--- Definition for index pk_system (OID = 119211) : 
+-- Definition for index pk_system (OID = 119211) :
 --
 ALTER TABLE ONLY system
     ADD CONSTRAINT pk_system PRIMARY KEY (id);
 --
--- Definition for index pk_occurrence_comments (OID = 119222) : 
+-- Definition for index pk_occurrence_comments (OID = 119222) :
 --
 ALTER TABLE ONLY occurrence_comments
     ADD CONSTRAINT pk_occurrence_comments PRIMARY KEY (id);
 --
--- Definition for index fk_occurrence_comment_creator (OID = 119224) : 
+-- Definition for index fk_occurrence_comment_creator (OID = 119224) :
 --
 ALTER TABLE ONLY occurrence_comments
     ADD CONSTRAINT fk_occurrence_comment_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_comment_occurrence (OID = 119229) : 
+-- Definition for index fk_occurrence_comment_occurrence (OID = 119229) :
 --
 ALTER TABLE ONLY occurrence_comments
     ADD CONSTRAINT fk_occurrence_comment_occurrence FOREIGN KEY (occurrence_id) REFERENCES occurrences(id);
 --
--- Definition for index fk_occurrence_comment_updater (OID = 119234) : 
+-- Definition for index fk_occurrence_comment_updater (OID = 119234) :
 --
 ALTER TABLE ONLY occurrence_comments
     ADD CONSTRAINT fk_occurrence_comment_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index pk_user_tokens (OID = 119254) : 
+-- Definition for index pk_user_tokens (OID = 119254) :
 --
 ALTER TABLE ONLY user_tokens
     ADD CONSTRAINT pk_user_tokens PRIMARY KEY (id);
 --
--- Definition for index fk_user_tokens_user (OID = 119256) : 
+-- Definition for index fk_user_tokens_user (OID = 119256) :
 --
 ALTER TABLE ONLY user_tokens
     ADD CONSTRAINT fk_user_tokens_user FOREIGN KEY (user_id) REFERENCES users(id);
 --
--- Definition for index fk_taxon_parent (OID = 119267) : 
+-- Definition for index fk_taxon_parent (OID = 119267) :
 --
 ALTER TABLE ONLY taxa_taxon_lists
     ADD CONSTRAINT fk_taxon_parent FOREIGN KEY (parent_id) REFERENCES taxa_taxon_lists(id);
 --
--- Definition for index fk_occurrence_website (OID = 119275) : 
+-- Definition for index fk_occurrence_website (OID = 119275) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT fk_occurrence_website FOREIGN KEY (website_id) REFERENCES websites(id);
 --
--- Definition for index fk_website_default_survey (OID = 119287) : 
+-- Definition for index fk_website_default_survey (OID = 119287) :
 --
 ALTER TABLE ONLY websites
     ADD CONSTRAINT fk_website_default_survey FOREIGN KEY (default_survey_id) REFERENCES surveys(id);
 --
--- Definition for index fk_sample_method (OID = 119292) : 
+-- Definition for index fk_sample_method (OID = 119292) :
 --
 ALTER TABLE ONLY samples
     ADD CONSTRAINT fk_sample_method FOREIGN KEY (sample_method_id) REFERENCES termlists_terms(id);
 --
--- Definition for index fk_occurrence_taxa_taxon_list (OID = 119297) : 
+-- Definition for index fk_occurrence_taxa_taxon_list (OID = 119297) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT fk_occurrence_taxa_taxon_list FOREIGN KEY (taxa_taxon_list_id) REFERENCES taxa_taxon_lists(id);
 --
--- Definition for index unique_username (OID = 119307) : 
+-- Definition for index unique_username (OID = 119307) :
 --
 ALTER TABLE ONLY users
     ADD CONSTRAINT unique_username UNIQUE (username);
 --
--- Definition for index unique_email (OID = 119309) : 
+-- Definition for index unique_email (OID = 119309) :
 --
 ALTER TABLE ONLY people
     ADD CONSTRAINT unique_email UNIQUE (email_address);
 --
--- Definition for index pk_titles (OID = 119314) : 
+-- Definition for index pk_titles (OID = 119314) :
 --
 ALTER TABLE ONLY titles
     ADD CONSTRAINT pk_titles PRIMARY KEY (id);
 --
--- Definition for index fk_title_creator (OID = 119316) : 
+-- Definition for index fk_title_creator (OID = 119316) :
 --
 ALTER TABLE ONLY titles
     ADD CONSTRAINT fk_title_creator FOREIGN KEY (created_by_id) REFERENCES users(id);
 --
--- Definition for index fk_title_updater (OID = 119321) : 
+-- Definition for index fk_title_updater (OID = 119321) :
 --
 ALTER TABLE ONLY titles
     ADD CONSTRAINT fk_title_updater FOREIGN KEY (updated_by_id) REFERENCES users(id);
 --
--- Definition for index fk_person_title (OID = 119326) : 
+-- Definition for index fk_person_title (OID = 119326) :
 --
 ALTER TABLE ONLY people
     ADD CONSTRAINT fk_person_title FOREIGN KEY (title_id) REFERENCES titles(id);
 --
--- Definition for index fk_occurrence_attributes_termlists (OID = 119360) : 
+-- Definition for index fk_occurrence_attributes_termlists (OID = 119360) :
 --
 ALTER TABLE ONLY occurrence_attributes
     ADD CONSTRAINT fk_occurrence_attributes_termlists FOREIGN KEY (termlist_id) REFERENCES termlists(id);
 --
--- Definition for index fk_sample_attributes_termlists (OID = 119365) : 
+-- Definition for index fk_sample_attributes_termlists (OID = 119365) :
 --
 ALTER TABLE ONLY sample_attributes
     ADD CONSTRAINT fk_sample_attributes_termlists FOREIGN KEY (termlist_id) REFERENCES termlists(id);
 --
--- Definition for index fk_location_attributes_termlists (OID = 119370) : 
+-- Definition for index fk_location_attributes_termlists (OID = 119370) :
 --
 ALTER TABLE ONLY location_attributes
     ADD CONSTRAINT fk_location_attributes_termlists FOREIGN KEY (termlist_id) REFERENCES termlists(id);
 --
--- Definition for index fk_occurrence_attributes_websites_survey (OID = 119375) : 
+-- Definition for index fk_occurrence_attributes_websites_survey (OID = 119375) :
 --
 ALTER TABLE ONLY occurrence_attributes_websites
     ADD CONSTRAINT fk_occurrence_attributes_websites_survey FOREIGN KEY (restrict_to_survey_id) REFERENCES surveys(id);
 --
--- Definition for index fk_sample_attributes_websites_survey (OID = 119381) : 
+-- Definition for index fk_sample_attributes_websites_survey (OID = 119381) :
 --
 ALTER TABLE ONLY sample_attributes_websites
     ADD CONSTRAINT fk_sample_attributes_websites_survey FOREIGN KEY (restrict_to_survey_id) REFERENCES surveys(id);
 --
--- Definition for index fk_location_attributes_websites_survey (OID = 119387) : 
+-- Definition for index fk_location_attributes_websites_survey (OID = 119387) :
 --
 ALTER TABLE ONLY location_attributes_websites
     ADD CONSTRAINT fk_location_attributes_websites_survey FOREIGN KEY (restrict_to_survey_id) REFERENCES surveys(id);
 --
--- Definition for index fk_users_websites_users (OID = 119505) : 
+-- Definition for index fk_users_websites_users (OID = 119505) :
 --
 ALTER TABLE ONLY users_websites
     ADD CONSTRAINT fk_users_websites_users FOREIGN KEY (user_id) REFERENCES users(id);
 --
--- Definition for index fk_occurrence_verifier (OID = 119809) : 
+-- Definition for index fk_occurrence_verifier (OID = 119809) :
 --
 ALTER TABLE ONLY occurrences
     ADD CONSTRAINT fk_occurrence_verifier FOREIGN KEY (verified_by_id) REFERENCES users(id);
 --
 -- Comments
 --
-COMMENT ON SCHEMA public IS 'standard public schema';
 COMMENT ON TABLE core_roles IS 'List of user roles for the core site, including no access, site admin, core admin.';
 COMMENT ON COLUMN core_roles.title IS 'Title of the role.';
 COMMENT ON COLUMN core_roles.created_on IS 'Date this record was created.';
