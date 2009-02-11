@@ -3,7 +3,7 @@ include '../../client_helpers/data_entry_helper.php';
  $entity = null;
 // If we have POST data, we're posting a comment.
 if ($_POST){
- // syslog(LOG_DEBUG, print_r($_POST, true));
+ syslog(LOG_DEBUG, print_r($_POST, true));
  $comments = data_entry_helper::wrap($_POST, 'occurrence_comment');
  $submission = array('submission' => array('entries' => array(
  array ( 'model' => $comments ))));
@@ -40,6 +40,7 @@ if ($_POST){
  <link rel='stylesheet' href='../../media/css/comments.css' />
  <script type="text/javascript" src="../../media/js/jquery-1.3.1.js"></script>
  <script type="text/javascript" src="../../media/js/ui.core.js"></script>
+  <script type="text/javascript" src="../../media/js/json2.js"></script>
  <script type='text/javascript'>
  (function($){
    $(document).ready(function(){
@@ -48,14 +49,18 @@ if ($_POST){
        $("div#addComment").toggle('slow');
      });
      $("input#submitComment").click(function(e){
+       var postdata = { email_address : $('div#addComment #email_address').val(),
+				     comment : $('div#addComment #comment').val(),
+				     occurrence_id : <?php echo $entity['id']; ?> 
+       };
+       //alert(JSON.stringify(postdata));
        $.ajax({
 	 type: 'POST',
 	      url: '#',
-	      data: { email_address : $('div.addComment #email_address').val(),
-	      comment : $('div.addComment #comment').val(),
-	      occurrence_id : <?php echo $entity['id']; ?> },
-	      success: function(xhr, status){},
-	      error: function(xhr, status, error){}});
+	      dataType: 'json',
+	      data: postdata,
+	      success: function(xhr, status){/*TODO*/},
+	      error: function(xhr, status, error){/*TODO*/}});
      });
    });
  })(jQuery);
@@ -78,19 +83,19 @@ if ($_POST){
  <div id='comments'>
  <?php
  foreach ($comments as $comment){
-   echo "<div class='comment'>";
-   echo "<div class='header'>";
-   echo "<span class='user'>";
-   echo $comment['username'];
-   echo "</span>";
-   echo "<span class='timestamp'>";
-   echo $comment['updated_on'];
-   echo "</span>";
-   echo "</div>";
-   echo "<div class='commentText'>";
-   echo $comment['comment'];
-   echo "</div>";
-   echo "</div>";
+ echo "<div class='comment'>";
+ echo "<div class='header'>";
+ echo "<span class='user'>";
+ echo $comment['username'];
+ echo "</span>";
+ echo "<span class='timestamp'>";
+ echo $comment['updated_on'];
+ echo "</span>";
+ echo "</div>";
+ echo "<div class='commentText'>";
+ echo $comment['comment'];
+ echo "</div>";
+ echo "</div>";
  }
  ?>
  <div id='addCommentToggle'>Add Comment</div>
