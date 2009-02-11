@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS grids_osgb_10k;
 
 CREATE TABLE grids_osgb_10k
 (
-  grid character varying(20) NOT NULL,
+  square character varying(20) NOT NULL,
   CONSTRAINT pk_osgb_10k PRIMARY KEY (grid)
 )
 WITH (OIDS=FALSE);
@@ -20,20 +20,20 @@ DECLARE char2ord INTEGER;
 DECLARE x INTEGER;
 DECLARE y INTEGER;
 BEGIN
-	
+
 	north = 0;
 	east = 0;
 	char1 = substring(square from 1 for 1);
 	IF char1='H' THEN
 		north = north + 1000000;
-	ELSE 
+	ELSE
 		IF char1='N' THEN
 			north=north+500000;
-		ELSE 
+		ELSE
 			IF char1='O' THEN
 				north=north+500000;
 				east = east + 500000;
-			ELSE 
+			ELSE
 				IF char1='T' THEN
 					east = east + 500000;
 				END IF;
@@ -56,7 +56,7 @@ BEGIN
 			VALUES (
 				square || CAST(x AS character varying) || CAST(y AS character varying),
 				ST_GeomFromText(
-					'POLYGON((' || 
+					'POLYGON((' ||
 					CAST(east + x * 10000 AS character varying) || ' ' || CAST(north + y * 10000 AS character varying) || ', ' ||
 					CAST(east + x * 10000 AS character varying) || ' ' || CAST(north + (y+1) * 10000 AS character varying) || ', ' ||
 					CAST(east + (x+1) * 10000 AS character varying) || ' ' || CAST(north + (y+1) * 10000 AS character varying) || ', ' ||
@@ -66,7 +66,7 @@ BEGIN
 			);
 		END LOOP;
 	END LOOP;
-	
+
 
 	RETURN CAST(east AS character varying) || ', ' || CAST(north AS character varying);
 
@@ -131,4 +131,15 @@ SELECT grids_build_osgb_10k('SY');
 SELECT grids_build_osgb_10k('SZ');
 SELECT grids_build_osgb_10k('TV');
 
+-- Index the view using GIST
+CREATE INDEX ix_spatial_grids_osgb_10k ON grids_osgb_10k USING GIST(geom);
 
+-- And a view to intersect the grid with occurrences data
+DROP VIEW IF EXISTS occurrences_osgb_10k;
+
+CREATE VIEW occurrences_osgb_10k AS
+SELECT ttl.taxon, grid.square, grid.geom, o.id as occurrence_id, s.id as sample_id, ttl.id as taxa_taxon_list_id, ttl.taxon_list
+FROM occurrences o
+INNER JOIN samples s on s.id=o.sample_id
+INNER JOIN grids_osgb_10k grid on ST_INTERSECTS(grid.geom,ST_TRANSFORM(s.geom, 27700))
+INNER JOIN list_taxa_taxon_lists ttl on ttl.id=o.taxa_taxon_list_id;
