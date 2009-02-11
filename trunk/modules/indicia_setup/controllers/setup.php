@@ -170,7 +170,7 @@ class Setup_Controller extends Template_Controller
             //
             if(!empty($this->dbparam['grant_users']))
             {
-                if(true !== ($result = $this->db->grant($this->dbparam['grant_users'])))
+                if(true !== ($result = $this->db->grant($this->dbparam['grant_users'], $this->dbparam['schema'])))
                 {
                     $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup') . '<br />' . $result;
                     Kohana::log("error", "Setup failed: {$result}");

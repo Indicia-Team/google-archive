@@ -199,12 +199,24 @@ class Setupdb_Model extends Model
      * grant privileges to additional users
      *
      * @param string $users comma separated if more than one
+     * @param string $schema schema name
      * @return bool
      */
-    public function grant( $users )
+    public function grant( $users, $schema )
     {
         // assign users in array
         $_users = explode(",", $users);
+
+        // grant on schema
+        //
+        foreach($_users as $user)
+        {
+            $user = trim($user);
+            if(false === pg_query($this->dbconn, "GRANT ALL ON SCHEMA \"{$schema}\" TO \"{$user}\"" ))
+            {
+                return pg_last_error($this->dbconn);
+            }
+        }
 
         // grant on tables
         //
