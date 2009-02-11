@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS grids_osgb_10k;
+
 CREATE TABLE grids_osgb_10k
 (
   grid character varying(20) NOT NULL,
@@ -18,7 +20,6 @@ DECLARE char2ord INTEGER;
 DECLARE x INTEGER;
 DECLARE y INTEGER;
 BEGIN
-	DELETE FROM grids_osgb_10k;
 	
 	north = 0;
 	east = 0;
@@ -129,3 +130,5 @@ SELECT grids_build_osgb_10k('SX');
 SELECT grids_build_osgb_10k('SY');
 SELECT grids_build_osgb_10k('SZ');
 SELECT grids_build_osgb_10k('TV');
+
+
