@@ -29,69 +29,70 @@ $('.date').datepicker({dateFormat : 'yy-mm-dd', constrainInput: false});
 // PHP to catch and submit the POST data from the form - we need to wrap
 // some things manually in order to get the supermodel in.
 if ($_POST) {
-	// Replace the site usage array with a comma sep list
-	if (array_key_exists($config['site_usage'], $_POST)) {
-		if (is_array($_POST[$config['site_usage']])){
-			$_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
-		}
-	}
+// Replace the site usage array with a comma sep list
+if (array_key_exists($config['site_usage'], $_POST)) {
+if (is_array($_POST[$config['site_usage']])){
+$_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
+}
+}
 
-	// We have occurrence attributes that we have to wrap
-	$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
-	$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
+// We have occurrence attributes that we have to wrap
+$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
+$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
 
-	$sampleMod = data_entry_helper::wrap($_POST, 'sample');
-	$sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
+$sampleMod = data_entry_helper::wrap($_POST, 'sample');
+$sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
 
-	$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
-	$occurrenceMod['superModels'][] = array(
-		'fkId' => 'sample_id',
-		'model' => $sampleMod
-	);
-	$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
+$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
+$occurrenceMod['superModels'][] = array(
+'fkId' => 'sample_id',
+'model' => $sampleMod
+);
+$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
 
-	// Send the image
-	if ($name = data_entry_helper::handle_media('occurrence_image')) {
-		// Add occurrence image model
-		// TODO Get a caption for the image
-		$oiFields = array(
-			'path' => $name,
-			'caption' => 'An image in need of a caption');
-		$oiMod = data_entry_helper::wrap($oiFields, 'occurrence_image');
-		$occurrenceMod['subModels'][] = array(
-			'fkId' => 'occurrence_id',
-			'model' => $oiMod);
-	}
+// Send the image
+if ($name = data_entry_helper::handle_media('occurrence_image')) {
+// Add occurrence image model
+// TODO Get a caption for the image
+$oiFields = array(
+'path' => $name,
+'caption' => 'An image in need of a caption');
+$oiMod = data_entry_helper::wrap($oiFields, 'occurrence_image');
+$occurrenceMod['subModels'][] = array(
+'fkId' => 'occurrence_id',
+'model' => $oiMod);
+}
 
-	$submission = array('submission' => array('entries' => array(
-		array ( 'model' => $occurrenceMod )
-	)));
-	$response = data_entry_helper::forward_post_to('save', $submission);
-	data_entry_helper::dump_errors($response);
+$submission = array('submission' => array('entries' => array(
+array ( 'model' => $occurrenceMod )
+)));
+$response = data_entry_helper::forward_post_to(
+'save', $submission);
+data_entry_helper::dump_errors($response);
 } else if ($_GET) {
-	if (array_key_exists('id', $_GET)){
-		$url = 'http://localhost/indicia/index.php/services/data/occurrence/'.$_GET['id'];
-		$url .= "?mode=json&view=detail";
-		$session = curl_init($url);
-		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-		$entity = json_decode(curl_exec($session), true);
-		$entity = $entity[0];
-	} else {
-		$entity = null;
-	}
+if (array_key_exists('id', $_GET)){
+  $url = 'http://localhost/indicia/index.php/services/data/occurrence/'.$_GET['id'];
+  $url .= "?mode=json&view=detail";
+  $session = curl_init($url);
+  curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+  $entity = json_decode(curl_exec($session), true);
+  $entity = $entity[0];
+} else {
+  $entity = null;
+}
 }
 
 function field($field){
-	if ($entity != null && array_key_exists($field, $entity)){
-		return $entity[$field];
-	} else {
-		return '';
-	}
+if ($entity != null && array_key_exists($field, $entity)){
+return $entity[$field];
+} else {
+return '';
 }
-
-?>
+}
+ 
+ ?>
  <form method="post" enctype="multipart/form-data" >
-
+ 
  <?php
  // This PHP call demonstrates inserting authorisation into the form, for website ID
  // 1 and password 'password'
@@ -150,3 +151,4 @@ function field($field){
 				   </body>
 				   <?php echo data_entry_helper::dump_javascript(); ?>
 				   </html>
+				   
