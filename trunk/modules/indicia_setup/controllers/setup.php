@@ -119,10 +119,9 @@ class Setup_Controller extends Template_Controller
                 }
             }
 
-            // init table name prefix
-            // currently not used
+            // start transaction
             //
-            $this->prefix = '';
+            $this->db->begin();
 
             // empty or public schema isnt allowed
             //
@@ -133,19 +132,9 @@ class Setup_Controller extends Template_Controller
                 $this->view_var['error_dbschema'] = true;
                 return false;
             }
-            else
-            {
-                $this->schema_and_postfix = $this->dbparam['schema'] . '.';
-            }
-
-            // start transaction
+            // drop existing schema with this name and create a new schema
             //
-            $this->db->begin();
-
-            // set schema search path
-            // if the schema dosent exists we get an error
-            //
-            if( true !== ($result = $this->db->setSearchPath($this->dbparam['schema'])))
+            elseif(true !== ($result = $this->db->createSchema( $this->dbparam['schema'] )))
             {
                 $this->view_var['error_general'][] = Kohana::lang('setup.error_db_schema');
                 Kohana::log("error", "Setup failed: {$result}");
@@ -234,7 +223,7 @@ class Setup_Controller extends Template_Controller
      */
     private function run_script($db_file_name)
     {
-    	$_db_file = file_get_contents($db_file_name);
+        $_db_file = file_get_contents($db_file_name);
 
         Kohana::log("info", "Processing: ".$db_file_name);
 
@@ -254,7 +243,7 @@ class Setup_Controller extends Template_Controller
      */
     private function db_connect()
     {
-        $this->db = new SetupDb_Model;
+        $this->db = new Setupdb_Model;
 
         if( false === $this->db->dbConnect($this->dbparam['host'],
                                            $this->dbparam['port'],
@@ -421,8 +410,8 @@ class Setup_Controller extends Template_Controller
     {
         $tmp_config = file_get_contents(dirname(dirname(__file__ )) . '/config/_database.php');
 
-        $_config = str_replace(array("*host*","*port*","*name*","*user*","*password*","*prefix*","*schema*"),
-                               array($this->dbparam['host'],$this->dbparam['port'],$this->dbparam['name'],$this->dbparam['user'],$this->dbparam['password'],$this->prefix,$this->dbparam['schema']),
+        $_config = str_replace(array("*host*","*port*","*name*","*user*","*password*","*schema*"),
+                               array($this->dbparam['host'],$this->dbparam['port'],$this->dbparam['name'],$this->dbparam['user'],$this->dbparam['password'],$this->dbparam['schema']),
                                $tmp_config);
 
         $database_config = dirname(dirname(dirname(dirname(__file__)))) . "/application/config/database.php";
