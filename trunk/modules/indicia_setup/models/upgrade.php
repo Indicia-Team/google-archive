@@ -20,6 +20,8 @@ class Upgrade_Model extends Model
     public function __construct()
     {
         parent::__construct();
+
+        $this->base_dir = dirname(dirname(dirname(dirname(__file__))));
     }
 
     /**
@@ -137,7 +139,7 @@ class Upgrade_Model extends Model
     private function set_new_version( $new_system )
     {
         $this->db->query("INSERT INTO \"system\"
-                              (\"version\", \"name\", \"repository\", \"release_date\")
+                          (\"version\", \"name\", \"repository\", \"release_date\")
                           VALUES
                           ('{$new_system['version']}',
                            '{$new_system['name']}',
@@ -205,7 +207,7 @@ class Upgrade_Model extends Model
      */
     private function write_config( $config_content )
     {
-        $config_file = dirname(dirname(__file__)) . "/config/indicia.php";
+        $config_file = $this->base_dir . "/application/config/indicia.php";
 
         if( !@is_writeable($config_file) )
         {
@@ -233,7 +235,7 @@ class Upgrade_Model extends Model
     private function execute_sql_scripts( $upgrade_folder )
     {
         $file_name = array();
-        $full_upgrade_folder = dirname(dirname(dirname(__file__))) . "/modules/indicia_setup/db/" . $upgrade_folder;
+        $full_upgrade_folder = $this->base_dir . "/modules/indicia_setup/db/" . $upgrade_folder;
 
         if ( (($handle = @opendir( $full_upgrade_folder ))) != FALSE )
         {
