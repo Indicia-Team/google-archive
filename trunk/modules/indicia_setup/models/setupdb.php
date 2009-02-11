@@ -143,11 +143,12 @@ class Setupdb_Model extends Model
         $new_system = Kohana::config('indicia_dist.system');
 
         if(false === pg_query($this->dbconn, "INSERT INTO \"system\"
-                                                       VALUES (1,
-                                                               '{$new_system['version']}',
-                                                               '{$new_system['name']}',
-                                                               '{$new_system['repository']}',
-                                                               '{$new_system['release_date']}')"))
+                                                    (\"version\", \"name\", \"repository\", \"release_date\")
+                                               VALUES
+                                                   ('{$new_system['version']}',
+                                                    '{$new_system['name']}',
+                                                    '{$new_system['repository']}',
+                                                    '{$new_system['release_date']}')"))
         {
             return pg_last_error($this->dbconn);
         }
