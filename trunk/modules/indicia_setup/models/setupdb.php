@@ -77,21 +77,21 @@ class Setupdb_Model extends Model
     {
         // remove any existing schema with this name
         //
-        if(false === pg_query($this->dbconn, "DROP SCHEMA IF EXISTS '{$schema}' CASCADE"))
+        if(false === pg_query($this->dbconn, "DROP SCHEMA IF EXISTS {$schema} CASCADE"))
         {
             return pg_last_error($this->dbconn);
         }
 
         // create schema
         //
-        if(false === pg_query($this->dbconn, "CREATE SCHEMA '{$schema}'"))
+        if(false === pg_query($this->dbconn, "CREATE SCHEMA {$schema}"))
         {
             return pg_last_error($this->dbconn);
         }
 
         // add schema to search path
         //
-        if(true !== ($result = $this->setSearchPath( $schema ))
+        if(true !== ($result = $this->set_search_path( $schema )))
         {
             return $result;
         }
