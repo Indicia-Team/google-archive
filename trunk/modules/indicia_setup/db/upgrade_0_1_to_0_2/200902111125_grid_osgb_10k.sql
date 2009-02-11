@@ -135,9 +135,9 @@ SELECT grids_build_osgb_10k('TV');
 CREATE INDEX ix_spatial_grids_osgb_10k ON grids_osgb_10k USING GIST(geom);
 
 -- And a view to intersect the grid with occurrences data
-DROP VIEW IF EXISTS occurrences_osgb_10k;
+DROP VIEW IF EXISTS grid_occurrences_osgb_10k;
 
-CREATE VIEW occurrences_osgb_10k AS
+CREATE VIEW grid_occurrences_osgb_10k AS
 SELECT ttl.taxon, grid.square, grid.geom, o.id as occurrence_id, s.id as sample_id, ttl.id as taxa_taxon_list_id, ttl.taxon_list
 FROM occurrences o
 INNER JOIN samples s on s.id=o.sample_id
