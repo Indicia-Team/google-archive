@@ -12,7 +12,7 @@
  * @package Indicia
  * @subpackage Controller
  * @license http://www.gnu.org/licenses/gpl.html GPL
- * @author xxxxxxx <xxx@xxx.net> / $Author$
+ * @author Nicholas Clarke <xxx@xxx.net> / $Author$
  * @copyright xxxx
  * @version $Rev$ / $LastChangedDate$
  */

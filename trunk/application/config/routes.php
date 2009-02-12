@@ -42,4 +42,5 @@ $config['sample_attribute'] = 'sample_attribute/page/1/10';
 $config['location_attribute'] = 'location_attribute/page/1/10';
 // Entered Data
 $config['occurrence'] = 'occurrence/page/1/10';
+$config['occurrence/edit/([0-9]+)'] = 'occurrence/edit/$1/1/10';
 
