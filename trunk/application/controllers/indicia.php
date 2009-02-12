@@ -37,6 +37,9 @@ class Indicia_Controller extends Template_Controller {
                     'Sample Attributes'=>'sample_attribute',
                     'Location Attributes'=>'location_attribute',
                     ),
+		'Entered Data' => array(
+		    'Occurrences' => 'occurrence'
+		    ),
                 'Admin' => array(
                     'Users'=>'user',
                     'Websites'=>'website',
