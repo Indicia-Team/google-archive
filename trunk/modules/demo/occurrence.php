@@ -1,46 +1,68 @@
 <?php
 include '../../client_helpers/data_entry_helper.php';
- $entity = null;
-// If we have POST data, we're posting a comment.
-if ($_POST){
- syslog(LOG_DEBUG, print_r($_POST, true));
- $comments = data_entry_helper::wrap($_POST, 'occurrence_comment');
- $submission = array('submission' => array('entries' => array(
- array ( 'model' => $comments ))));
- $response = data_entry_helper::forward_post_to('save', $submission);
- // We look at the id parameter passed in the get string
- } else if (array_key_exists('id', $_GET)){
-   $url = 'http://localhost/indicia/index.php/services/data/occurrence/'.$_GET['id'];
-   $url .= "?mode=json&view=detail";
-   $session = curl_init($url);
-   curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-   $entity = json_decode(curl_exec($session), true);
-   $entity = $entity[0];
-   
-   // Now grab the list of occurrence comments.
-   $url = 'http://localhost/indicia/index.php/services/data/occurrence_comment';
-   $url .= "?mode=json&occurrence_id=".$_GET['id'];
-   $csess = curl_init($url);
-   curl_setopt($csess, CURLOPT_RETURNTRANSFER, true);
-   $comments = json_decode(curl_exec($csess), true);
- } 
+$entity = null;
+function getField($fname){
+  global $entity;
+  if ($entity != null && array_key_exists($fname, $entity)){
+    return $entity[$fname];
+    } else {
+      return null;
+    }
+    }
+    // If we have POST data, we're posting a comment.
+    if ($_POST){
+      $comments = data_entry_helper::wrap($_POST, 'occurrence_comment');
+      $submission = array('submission' => array('entries' => array(
+      array ( 'model' => $comments ))));
+      $response = data_entry_helper::forward_post_to('save', $submission);
+      echo $response;
+      // We look at the id parameter passed in the get string
+    } else if (array_key_exists('id', $_GET)){
+ $url = 'http://localhost/indicia/index.php/services/data/occurrence/'.$_GET['id'];
+ $url .= "?mode=json&view=detail";
+ $session = curl_init($url);
+ curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+ $entity = json_decode(curl_exec($session), true);
+ $entity = $entity[0];
  
- function getField($fname){
-   global $entity;
-   if ($entity != null && array_key_exists($fname, $entity)){
-     return $entity[$fname];
-   } else {
-     return null;
-   }
+ // Now grab the list of occurrence comments.
+ $url = 'http://localhost/indicia/index.php/services/data/occurrence_comment';
+ $url .= "?mode=json&occurrence_id=".$_GET['id'];
+ $csess = curl_init($url);
+ curl_setopt($csess, CURLOPT_RETURNTRANSFER, true);
+ $comments = json_decode(curl_exec($csess), true);
+ 
+ $commentDivContent = '';
+ 
+ foreach ($comments as $comment){
+ $commentDivContent .= "<div class='comment'>";
+ $commentDivContent .= "<div class='header'>";
+ $commentDivContent .= "<span class='user'>";
+ $commentDivContent .= $comment['username'];
+ $commentDivContent .= "</span>";
+ $commentDivContent .= "<span class='timestamp'>";
+ $commentDivContent .= $comment['updated_on'];
+ $commentDivContent .= "</span>";
+ $commentDivContent .= "</div>";
+ $commentDivContent .= "<div class='commentText'>";
+ $commentDivContent .= $comment['comment'];
+ $commentDivContent .= "</div>";
+ $commentDivContent .= "</div>";
  }
+ 
+ if (array_key_exists('refreshComments', $_GET) && $_GET['refreshComments'] == true):
+ // Just return comments div
+ echo $commentDivContent;
+ else:
  ?>
  <html>
  <head>
  <link rel='stylesheet' href='../../media/css/viewform.css' />
  <link rel='stylesheet' href='../../media/css/comments.css' />
  <script type="text/javascript" src="../../media/js/jquery-1.3.1.js"></script>
+ <script type="text/javascript" src="../../media/js/jquery.form.js"></script>
  <script type="text/javascript" src="../../media/js/ui.core.js"></script>
-  <script type="text/javascript" src="../../media/js/json2.js"></script>
+ <script type="text/javascript" src="../../media/js/json2.js"></script>
  <script type='text/javascript'>
  (function($){
    $(document).ready(function(){
@@ -48,19 +70,14 @@ if ($_POST){
      $("div#addCommentToggle").click(function(e){
        $("div#addComment").toggle('slow');
      });
-     $("input#submitComment").click(function(e){
-       var postdata = { email_address : $('div#addComment #email_address').val(),
-				     comment : $('div#addComment #comment').val(),
-				     occurrence_id : <?php echo $entity['id']; ?> 
-       };
-       //alert(JSON.stringify(postdata));
-       $.ajax({
-	 type: 'POST',
-	      url: '#',
-	      dataType: 'json',
-	      data: postdata,
-	      success: function(xhr, status){/*TODO*/},
-	      error: function(xhr, status, error){/*TODO*/}});
+     $("#commentForm").ajaxForm({type: 'post', clearForm: true, success: function(response){
+       // Close the comments box.
+       $("div#addComment").toggle('slow');
+       // Add the new comment to the thread.
+       $("div#comments").load(window.location + '&refreshComments=true');
+     }});
+     $("#commentForm input#cancelComment").click(function(e){
+       $("#commentForm").resetForm();
      });
    });
  })(jQuery);
@@ -82,25 +99,20 @@ if ($_POST){
  </div>
  <div id='comments'>
  <?php
- foreach ($comments as $comment){
- echo "<div class='comment'>";
- echo "<div class='header'>";
- echo "<span class='user'>";
- echo $comment['username'];
- echo "</span>";
- echo "<span class='timestamp'>";
- echo $comment['updated_on'];
- echo "</span>";
- echo "</div>";
- echo "<div class='commentText'>";
- echo $comment['comment'];
- echo "</div>";
- echo "</div>";
- }
+ // Put comment div
+ echo $commentDivContent;
  ?>
+ </div>
  <div id='addCommentToggle'>Add Comment</div>
  <div id='addComment'>
- <form>
+ <form method='post' id='commentForm'>
+ <?php
+ // This PHP call demonstrates inserting authorisation into the form, for website ID
+ // 1 and password 'password'
+ echo data_entry_helper::get_auth(1,'password');
+ $readAuth = data_entry_helper::get_read_auth(1, 'password');
+ ?>
+ <input type='hidden' name='occurrence_id' value='<?php echo $_GET['id']; ?>' />
  <fieldset>
  <legend>Add New Comment.</legend>
  <!-- pointless check here - eventually we replace this with a check of whether a user is logged in -->
@@ -112,10 +124,10 @@ if ($_POST){
  <?php endif; ?>
  <textarea id='comment' name='comment' rows='5'></textarea>
  </fieldset>
- <input type='button' id='submitComment' value='Post' />
+ <input type='submit' id='submitComment' value='Post' />
  <input type='button' id='cancelComment' value='Cancel' />
  </form>
  </div>
- </div>
  </body>
  </html>
+ <?php endif; } ?>

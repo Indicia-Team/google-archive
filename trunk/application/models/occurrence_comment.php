@@ -8,10 +8,10 @@ class Occurrence_comment_model extends ORM {
 		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
 		$array->pre_filter('trim');
 		$array->add_rules('comment','required', 'length[1,1000]');
+		$array->add_rules('occurrence_id', 'required');
 		
 		// Explicitly add those fields for which we don't do validation
 		$extraFields = array(
-			'occurrence_id',
 			'email_address',
 			'deleted'
 		);

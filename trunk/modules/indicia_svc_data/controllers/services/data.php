@@ -597,6 +597,7 @@ class Data_Controller extends Service_Base_Controller {
 		// Read calls are done using get values, so we merge the two arrays
 		$array = array_merge($_POST, $_GET);
 		$authentic = FALSE; // default
+		Kohana::log('info', "Attempting to authenticate.");
 		if (array_key_exists('nonce', $array) && array_key_exists('auth_token',$array)) {
 			$nonce = $array['nonce'];
 			$this->cache = new Cache;
@@ -605,6 +606,7 @@ class Data_Controller extends Service_Base_Controller {
 				$website_id = $nonces[$nonce];
 				$password = ORM::factory('website', $website_id)->password;
 				if (sha1("$nonce:$password")==$array['auth_token']) {
+					Kohana::log('info', "Authentication successful.");
 					$authentic=TRUE;
 					$this->website_id = $website_id;
 				}
@@ -615,6 +617,7 @@ class Data_Controller extends Service_Base_Controller {
 		}
 
 		if (!$authentic) {
+			Kohana::log('info', "Unable to authenticate.");
 			throw new ServiceError("unauthorised");
 		};
 	}
