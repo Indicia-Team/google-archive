@@ -40,4 +40,6 @@ $config['taxa_taxon_list/edit/([0-9]+)'] = 'taxa_taxon_list/edit/$1/1/10';
 $config['occurrence_attribute'] = 'occurrence_attribute/page/1/10';
 $config['sample_attribute'] = 'sample_attribute/page/1/10';
 $config['location_attribute'] = 'location_attribute/page/1/10';
+// Entered Data
+$config['occurrence'] = 'occurrence/page/1/10';
 
