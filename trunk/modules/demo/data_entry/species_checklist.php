@@ -11,7 +11,7 @@
 <script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script type="text/javascript">
-(function($)
+(function($){
 $(document).ready(function() {
   $('#sampleDate').datepicker({dateFormat : 'yy-mm-dd'});
   $('.date').datepicker({dateFormat : 'yy-mm-dd'});
@@ -20,13 +20,13 @@ $(document).ready(function() {
     .datepicker({ dateFormat : 'yy-mm-dd', minDate : $(this).datepicker('getDate') });
   });
 });
-)(jQuery);
+})(jQuery);
 </script>
 </head>
 <body>
 <h1>Indicia Species Checklist Test</h1>
 <?php
-include 'data_entry_helper.php';
+include '../../../client_helpers/data_entry_helper.php';
 include 'data_entry_config.php';
 $javascript = '';
 // Catch and submit POST data.

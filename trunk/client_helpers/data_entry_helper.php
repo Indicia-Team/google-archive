@@ -584,7 +584,7 @@ class data_entry_helper extends helper_config {
 	 * @param array $systems Associative array of the available spatial reference systems, in form code -> description.
 	 * @param array $opts Associative array of additional options. Possible options are init_value, width, height, instruct, inc_virtual_earth, inc_google, init_lat, init_long, init_zoom.
 	 */
-	public static function map_picker($field_name, $geom_field_name, $systems, $opts) {
+	public static function map_picker($field_name, $geom_field_name, $systems, $opts = Array()) {
 		global $javascript;
 		// Handle the options
 		$init_value = self::option('init_value', $opts, '');
