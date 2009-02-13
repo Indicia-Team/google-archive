@@ -17,9 +17,11 @@ include 'data_entry_config.php';
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo $config['google_api_key'] ?>"
 type="text/javascript"></script>
 <script type="text/javascript">
+(function($){
 $(document).ready(function() {
-$('.date').datepicker({dateFormat : 'yy-mm-dd', constrainInput: false});
+  $('.date').datepicker({dateFormat : 'yy-mm-dd', constrainInput: false});
 });
+})(jQuery);
 </script>
 </head>
 <body>
@@ -29,66 +31,66 @@ $('.date').datepicker({dateFormat : 'yy-mm-dd', constrainInput: false});
 // PHP to catch and submit the POST data from the form - we need to wrap
 // some things manually in order to get the supermodel in.
 if ($_POST) {
-// Replace the site usage array with a comma sep list
-if (array_key_exists($config['site_usage'], $_POST)) {
-if (is_array($_POST[$config['site_usage']])){
-$_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
-}
-}
-
-// We have occurrence attributes that we have to wrap
-$occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
-$smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
-
-$sampleMod = data_entry_helper::wrap($_POST, 'sample');
-$sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
-
-$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
-$occurrenceMod['superModels'][] = array(
-'fkId' => 'sample_id',
-'model' => $sampleMod
-);
-$occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
-
-// Send the image
-if ($name = data_entry_helper::handle_media('occurrence_image')) {
-// Add occurrence image model
-// TODO Get a caption for the image
-$oiFields = array(
-'path' => $name,
-'caption' => 'An image in need of a caption');
-$oiMod = data_entry_helper::wrap($oiFields, 'occurrence_image');
-$occurrenceMod['subModels'][] = array(
-'fkId' => 'occurrence_id',
-'model' => $oiMod);
-}
-
-$submission = array('submission' => array('entries' => array(
-array ( 'model' => $occurrenceMod )
-)));
-$response = data_entry_helper::forward_post_to(
-'save', $submission);
-data_entry_helper::dump_errors($response);
-} else if ($_GET) {
-if (array_key_exists('id', $_GET)){
-  $url = 'http://localhost/indicia/index.php/services/data/occurrence/'.$_GET['id'];
-  $url .= "?mode=json&view=detail";
-  $session = curl_init($url);
-  curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-  $entity = json_decode(curl_exec($session), true);
-  $entity = $entity[0];
-} else {
-  $entity = null;
-}
-}
-
-function field($field){
-if ($entity != null && array_key_exists($field, $entity)){
-return $entity[$field];
-} else {
-return '';
-}
-}
+ // Replace the site usage array with a comma sep list
+ if (array_key_exists($config['site_usage'], $_POST)) {
+   if (is_array($_POST[$config['site_usage']])){
+     $_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
+   }
+ }
+ 
+ // We have occurrence attributes that we have to wrap
+ $occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
+ $smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
+ 
+ $sampleMod = data_entry_helper::wrap($_POST, 'sample');
+ $sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
+ 
+ $occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
+ $occurrenceMod['superModels'][] = array(
+ 'fkId' => 'sample_id',
+					 'model' => $sampleMod
+					 );
+					 $occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
+					 
+					 // Send the image
+					 if ($name = data_entry_helper::handle_media('occurrence_image')) {
+   // Add occurrence image model
+   // TODO Get a caption for the image
+   $oiFields = array(
+   'path' => $name,
+		     'caption' => 'An image in need of a caption');
+		     $oiMod = data_entry_helper::wrap($oiFields, 'occurrence_image');
+		     $occurrenceMod['subModels'][] = array(
+		     'fkId' => 'occurrence_id',
+							   'model' => $oiMod);
+ }
+ 
+ $submission = array('submission' => array('entries' => array(
+ array ( 'model' => $occurrenceMod )
+ )));
+ $response = data_entry_helper::forward_post_to(
+ 'save', $submission);
+ data_entry_helper::dump_errors($response);
+ } else if ($_GET) {
+   if (array_key_exists('id', $_GET)){
+   $url = 'http://localhost/indicia/index.php/services/data/occurrence/'.$_GET['id'];
+   $url .= "?mode=json&view=detail";
+   $session = curl_init($url);
+   curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+   $entity = json_decode(curl_exec($session), true);
+   $entity = $entity[0];
+ } else {
+   $entity = null;
+ }
+ }
+ 
+ function field($field){
+   if ($entity != null && array_key_exists($field, $entity)){
+     return $entity[$field];
+   } else {
+     return '';
+   }
+ }
  
  ?>
  <form method="post" enctype="multipart/form-data" >
@@ -112,43 +114,44 @@ return '';
  <br/>
  <label for="entered_sref">Spatial Reference:</label>
  <?php echo data_entry_helper::map_picker('entered_sref', 'geom',
-					       array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)'),
-				   array('inc_google'=>'true', 'init_layer'=>'Google Physical')); ?>
-				   <br />
-				   <label for="location_name">Locality Description:</label>
-				   <input name="location_name" size="50" /><br />
-				   <label for="survey_id">Survey</label>
-				   <?php echo data_entry_helper::select('survey_id', 'survey', 'title', 'id', $readAuth); ?>
-				   <br />
-				   <label for='acdeterminer_id'>Determiner</label>
-				   <?php echo data_entry_helper::autocomplete('determiner_id', 'person', 'caption', 'id', $readAuth); ?>
-				   <br />
-				   <label for='comment'>Comment</label>
-				   <textarea id='comment' name='comment'></textarea>
-				   <br />
-				   <?php echo data_entry_helper::image_upload('occurrence_image'); ?>
-				   <fieldset>
-				   <legend>Occurrence attributes</legend>
-				   <label for='<?php echo $config['dafor']; ?>'>Abundance DAFOR</label>
-				   <?php echo data_entry_helper::select($config['dafor'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => $config['dafor_termlist'])); ?>
-				   <br />
-				   <label for='<?php echo $config['det_date']; ?>'>Determination Date</label>
-				   <input type='text' name='<?php echo $config['det_date']; ?>' id='<?php echo $config['det_date']; ?>'/><br />
-				   </fieldset>
-				   <fieldset>
-				   <legend>Sample attributes</legend>
-				   <label for='<?php echo $config['weather']; ?>'>Weather</label>
-				   <input type='text' name='<?php echo $config['weather']; ?>' id='<?php echo $config['weather']; ?>'/><br />
-				   <label for='<?php echo $config['temperature']; ?>'>Temperature (Celsius)</label>
-				   <input type='text' name='<?php echo $config['temperature']; ?>' id='<?php echo $config['temperature']; ?>'/><br />
-				   <label for='<?php echo $config['surroundings']; ?>'>Surroundings</label>
-				   <?php echo data_entry_helper::radio_group($config['surroundings'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => $config['surroundings_termlist'])); ?> </br>
-				   <label for='<?php echo $config['site_usage']; ?>[]'>Site Usage</label>
-				   <?php echo data_entry_helper::listbox($config['site_usage'].'[]', 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => $config['site_usage_termlist'])); ?>
-				   </fieldset>
-				   <input type="submit" value="Save" />
-				   </form>
-				   </body>
-				   <?php echo data_entry_helper::dump_javascript(); ?>
-				   </html>
-				   
+ array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)'),
+ array('inc_google'=>'true', 'init_layer'=>'Google Physical')
+ ); ?>
+ <br />
+ <label for="location_name">Locality Description:</label>
+ <input name="location_name" size="50" /><br />
+ <label for="survey_id">Survey</label>
+ <?php echo data_entry_helper::select('survey_id', 'survey', 'title', 'id', $readAuth); ?>
+ <br />
+ <label for='acdeterminer_id'>Determiner</label>
+ <?php echo data_entry_helper::autocomplete('determiner_id', 'person', 'caption', 'id', $readAuth); ?>
+ <br />
+ <label for='comment'>Comment</label>
+ <textarea id='comment' name='comment'></textarea>
+ <br />
+ <?php echo data_entry_helper::image_upload('occurrence_image'); ?>
+ <fieldset>
+ <legend>Occurrence attributes</legend>
+ <label for='<?php echo $config['dafor']; ?>'>Abundance DAFOR</label>
+ <?php echo data_entry_helper::select($config['dafor'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => $config['dafor_termlist'])); ?>
+ <br />
+ <label for='<?php echo $config['det_date']; ?>'>Determination Date</label>
+ <input type='text' name='<?php echo $config['det_date']; ?>' id='<?php echo $config['det_date']; ?>'/><br />
+ </fieldset>
+ <fieldset>
+ <legend>Sample attributes</legend>
+ <label for='<?php echo $config['weather']; ?>'>Weather</label>
+ <input type='text' name='<?php echo $config['weather']; ?>' id='<?php echo $config['weather']; ?>'/><br />
+ <label for='<?php echo $config['temperature']; ?>'>Temperature (Celsius)</label>
+ <input type='text' name='<?php echo $config['temperature']; ?>' id='<?php echo $config['temperature']; ?>'/><br />
+ <label for='<?php echo $config['surroundings']; ?>'>Surroundings</label>
+ <?php echo data_entry_helper::radio_group($config['surroundings'], 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => $config['surroundings_termlist'])); ?> </br>
+ <label for='<?php echo $config['site_usage']; ?>[]'>Site Usage</label>
+ <?php echo data_entry_helper::listbox($config['site_usage'].'[]', 'termlists_term', 'term', 4, true, 'id', $readAuth + array('termlist_id' => $config['site_usage_termlist'])); ?>
+ </fieldset>
+ <input type="submit" value="Save" />
+ </form>
+ </body>
+ <?php echo data_entry_helper::dump_javascript(); ?>
+ </html>
+ 
