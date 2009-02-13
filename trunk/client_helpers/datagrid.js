@@ -12,14 +12,12 @@
 	   cssSortHeader: "headerSort",
 	   cssAsc: "headerSortUp",
 	   cssDesc: "headerSortDown",
-	   sortInitialOrder: "asc",
-	   debug: false,
 	   indiciaSvc: "http://localhost/indicia/index.php/services/data",
 	   dataColumns: null,
-	   actionColumns: Array(),
+	   actionColumns: {},
 	   itemsPerPage: 10,
 	   multiSort: false,
-	   parameters: Array(),
+	   parameters: {},
 	   formatPager: formatPager
       };
       
@@ -76,9 +74,9 @@
 	    }
 	  });
 	  filter += "</select> <input class='filterButton' type='submit' value='Filter' /></form>";
-	  $.each(div.settings.actionColumns, function(i, item){
+	  $.each(div.settings.actionColumns, function(key, value){
 	    headers += "<th class='" + div.settings.cssHeader + "'>";
-	    headers += item[0];
+	    headers += key;
 	    headers += "</th>";
 	  });
 	  $("thead tr", div).html(headers);
@@ -162,9 +160,9 @@
 		body += "<td>"+item+"</td>";
 	      }
 	    });
-	    $.each(div.settings.actionColumns, function(i, item){
+	    $.each(div.settings.actionColumns, function(key, value){
 	      body += "<td>";
-	      body += "<a href='" + item[1].replace(/£([a-zA-Z_\-]+)£/g, function($0, $1){ return record[$1]; }) + "'>"+item[0]+"</a>";
+	      body += "<a href='" + value.replace(/£([a-zA-Z_\-]+)£/g, function($0, $1){ return record[$1]; }) + "'>"+key+"</a>";
 	      body += "</td>";
 	    });
 	    body += "</tr>";
@@ -184,25 +182,25 @@
       function generatePager(div, pagerDiv){
 	var pageNo = div.page;
 	$(pagerDiv).html(div.settings.formatPager(div));
-	$(".first", div).each(function(i){
+	$(".first", pagerDiv).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, 1);
 	  });
 	});
-	$(".previous", div).each(function(i){
+	$(".previous", pagerDiv).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, pageNo - 1);
 	  });
 	});
-	$(".next", div).each(function(i){
+	$(".next", pagerDiv).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, pageNo + 1);
 	  });
 	});
-	$(".last", div).each(function(i){
+	$(".last", pagerDiv).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, totalPages);
@@ -225,8 +223,8 @@
 	if (filterCols.length > 0){
 	  url += "&qfield="+filterCols+"&q="+filterVals;
 	}
-	$.each(div.settings.parameters, function(i, item){
-	  url += "&" + item[0] + "=" + item[1];
+	$.each(div.settings.parameters, function(key, value){
+	  url += "&" + key + "=" + value;
 	});
 	return url;
 	
@@ -241,16 +239,6 @@
 	}
 	return this.recordCount;	
       }
-      
-      function log(s) {
-	if (typeof console != "undefined" && typeof console.debug != "undefined") {
-	  console.log(s);
-	} else {
-	  alert(s);
-	}
-      }
-      
-      
     }
   });
   /**
