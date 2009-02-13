@@ -42,7 +42,7 @@ The datagrid can be attached to any container-level DOM element - typically a di
 $(document).ready(function(){
 $('_identifier_').indiciaDataGrid(_modelname_, _options_);
 });
-})(jQuery)
+})(jQuery);
 }}}
 
 (In order to play nice with other javascript libraries, indicia demo code avoids the use of $ for the jQuery object. In order to avoid typing jQuery all the time, we use a closure to get it back again.)
@@ -131,8 +131,6 @@ $('div#grid').indiciaDataGrid('occurrence', {actionColumns: {view : "occurrence.
 })(jQuery);
 
 }}}
-
-
 
 
 
