@@ -13,6 +13,7 @@ class Occurrence_comment_model extends ORM {
 		// Explicitly add those fields for which we don't do validation
 		$extraFields = array(
 			'email_address',
+			'person_name',
 			'deleted'
 		);
 		foreach ($extraFields as $a) {

@@ -38,7 +38,19 @@ function getField($fname){
  $commentDivContent .= "<div class='comment'>";
  $commentDivContent .= "<div class='header'>";
  $commentDivContent .= "<span class='user'>";
- $commentDivContent .= $comment['username'];
+ if ($comment['username'] != 'Unknown')
+ {
+   $commentDivContent .= $comment['username'];
+ } 
+ else if ($comment['person_name']!='') 
+ {
+   $commentDivContent .= $comment['person_name'];
+   
+ } 
+ else 
+ {
+   $commentDivContent .= "Anonymous";
+ }
  $commentDivContent .= "</span>";
  $commentDivContent .= "<span class='timestamp'>";
  $commentDivContent .= $comment['updated_on'];
@@ -51,83 +63,86 @@ function getField($fname){
  }
  
  if (array_key_exists('refreshComments', $_GET) && $_GET['refreshComments'] == true):
- // Just return comments div
- echo $commentDivContent;
+   // Just return comments div
+   echo $commentDivContent;
  else:
- ?>
- <html>
- <head>
- <link rel='stylesheet' href='../../media/css/viewform.css' />
- <link rel='stylesheet' href='../../media/css/comments.css' />
- <script type="text/javascript" src="../../media/js/jquery-1.3.1.js"></script>
- <script type="text/javascript" src="../../media/js/jquery.form.js"></script>
- <script type="text/javascript" src="../../media/js/ui.core.js"></script>
- <script type="text/javascript" src="../../media/js/json2.js"></script>
- <script type='text/javascript'>
- (function($){
-   $(document).ready(function(){
-     $("div#addComment").hide();
-     $("div#addCommentToggle").click(function(e){
-       $("div#addComment").toggle('slow');
+   ?>
+   <html>
+   <head>
+   <link rel='stylesheet' href='../../media/css/viewform.css' />
+   <link rel='stylesheet' href='../../media/css/comments.css' />
+   <script type="text/javascript" src="../../media/js/jquery-1.3.1.js"></script>
+   <script type="text/javascript" src="../../media/js/jquery.form.js"></script>
+   <script type="text/javascript" src="../../media/js/ui.core.js"></script>
+   <script type="text/javascript" src="../../media/js/json2.js"></script>
+   <script type='text/javascript'>
+   (function($){
+     $(document).ready(function(){
+       $("div#addComment").hide();
+       $("div#addCommentToggle").click(function(e){
+	 $("div#addComment").toggle('slow');
+       });
+       $("#commentForm").ajaxForm({type: 'post', clearForm: true, success: function(response){
+	 // Close the comments box.
+	 $("div#addComment").toggle('slow');
+	 // Add the new comment to the thread.
+	 $("div#comments").load(window.location + '&refreshComments=true');
+       }});
+       $("#commentForm input#cancelComment").click(function(e){
+	 $("#commentForm").resetForm();
+       });
      });
-     $("#commentForm").ajaxForm({type: 'post', clearForm: true, success: function(response){
-       // Close the comments box.
-       $("div#addComment").toggle('slow');
-       // Add the new comment to the thread.
-       $("div#comments").load(window.location + '&refreshComments=true');
-     }});
-     $("#commentForm input#cancelComment").click(function(e){
-       $("#commentForm").resetForm();
-     });
-   });
- })(jQuery);
- </script>
- <title>Occurrence Viewer: Occurrence no <?php echo getField('id'); ?></title>
- </head>
- <body>
- <h1>Occurrence Details.</h1>
- <div class='viewform'>
- <ol>
- <li><span class='label'>Taxon:</span><span class='item'><?php echo getField('taxon'); ?></span></li>
- <li><span class='label'>Date:</span><span class='item'><?php echo getField('date_start').' to '. $entity['date_end']; ?></span></li>
- <li><span class='label'>Date Type:</span><span class='item'><?php echo getField('date_type'); ?></span></li>
- <li><span class='label'>Location:</span><span class='item'><?php echo getField('location'); ?></span></li>
- <li><span class='label'>Determiner:</span><span class='item'><?php echo getField('determiner'); ?></span></li>
- <li><span class='label'>Created By:</span><span class='item'><?php echo getField('created_by'); ?></span></li>
- <li><span class='label'>Created On:</span><span class='item'><?php echo getField('created_on'); ?></span></li>
- </ol>
- </div>
- <div id='comments'>
- <?php
- // Put comment div
- echo $commentDivContent;
- ?>
- </div>
- <div id='addCommentToggle'>Add Comment</div>
- <div id='addComment'>
- <form method='post' id='commentForm'>
- <?php
- // This PHP call demonstrates inserting authorisation into the form, for website ID
- // 1 and password 'password'
- echo data_entry_helper::get_auth(1,'password');
- $readAuth = data_entry_helper::get_read_auth(1, 'password');
- ?>
- <input type='hidden' name='occurrence_id' value='<?php echo $_GET['id']; ?>' />
- <fieldset>
- <legend>Add New Comment.</legend>
- <!-- pointless check here - eventually we replace this with a check of whether a user is logged in -->
- <?php if (false): ?>
- <!-- Here we put details of the logged in user -->
- <?php else: ?>
- <label for='email_address'>E-mail:</label>
- <input type='text' id='email_address' name='email_address' value='' />
- <?php endif; ?>
- <textarea id='comment' name='comment' rows='5'></textarea>
- </fieldset>
- <input type='submit' id='submitComment' value='Post' />
- <input type='button' id='cancelComment' value='Cancel' />
- </form>
- </div>
- </body>
- </html>
- <?php endif; } ?>
+   })(jQuery);
+   </script>
+   <title>Occurrence Viewer: Occurrence no <?php echo getField('id'); ?></title>
+   </head>
+   <body>
+   <h1>Occurrence Details.</h1>
+   <div class='viewform'>
+   <ol>
+   <li><span class='label'>Taxon:</span><span class='item'><?php echo getField('taxon'); ?></span></li>
+   <li><span class='label'>Date:</span><span class='item'><?php echo getField('date_start').' to '. $entity['date_end']; ?></span></li>
+   <li><span class='label'>Date Type:</span><span class='item'><?php echo getField('date_type'); ?></span></li>
+   <li><span class='label'>Location:</span><span class='item'><?php echo getField('location'); ?></span></li>
+   <li><span class='label'>Determiner:</span><span class='item'><?php echo getField('determiner'); ?></span></li>
+   <li><span class='label'>Created By:</span><span class='item'><?php echo getField('created_by'); ?></span></li>
+   <li><span class='label'>Created On:</span><span class='item'><?php echo getField('created_on'); ?></span></li>
+   </ol>
+   </div>
+   <div id='addCommentToggle'>Add Comment</div>
+   <div id='addComment'>
+   <form method='post' id='commentForm'>
+   <?php
+   // This PHP call demonstrates inserting authorisation into the form, for website ID
+   // 1 and password 'password'
+   echo data_entry_helper::get_auth(1,'password');
+   $readAuth = data_entry_helper::get_read_auth(1, 'password');
+   ?>
+   <input type='hidden' name='occurrence_id' value='<?php echo $_GET['id']; ?>' />
+   <fieldset>
+   <legend>Add New Comment.</legend>
+   <!-- pointless check here - eventually we replace this with a check of whether a user is logged in -->
+   <?php if (false): ?>
+   <!-- Here we put details of the logged in user -->
+   <?php else: ?>
+   <label for='email_address'>E-mail:</label>
+   <input type='text' id='email_address' name='email_address' value='' />
+   <br />
+   <label for='person_name'>Name:</label>
+   <input type='text' id='person_name' name='person_name' value='' />
+   <?php endif; ?>
+   <textarea id='comment' name='comment' rows='5'></textarea>
+   </fieldset>
+   <input type='submit' id='submitComment' value='Post' />
+   <input type='button' id='cancelComment' value='Cancel' />
+   </form>
+   </div>
+   <div id='comments'>
+   <?php
+   // Put comment div
+   echo $commentDivContent;
+   ?>
+   </div>
+   </body>
+   </html>
+   <?php endif; } ?>

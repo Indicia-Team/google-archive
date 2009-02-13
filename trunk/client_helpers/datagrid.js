@@ -175,8 +175,8 @@
       function generatePager(div, pagerDiv){
 	var pageNo = div.page;
 	var totalPages = Math.ceil(div.recordCount / div.settings.itemsPerPage);
-	var pagerString = (pageNo == 1) ? "" : "<a href='' class='first'>&lt;&lt;</a> | <a href='' class='previous'>&lt;</a> | ";
-	pagerString += (pageNo == totalPages) ? pageNo : pageNo + " | <a href='' class='next'>&gt;</a> | <a href='' class='last'>&gt;&gt;</a>";
+	var pagerString = (pageNo == 1) ? "<< | < | " : "<a href='' class='first'>&lt;&lt;</a> | <a href='' class='previous'>&lt;</a> | ";
+	pagerString += (pageNo == totalPages) ? pageNo + " | > | >>" : pageNo + " | <a href='' class='next'>&gt;</a> | <a href='' class='last'>&gt;&gt;</a>";
 	$(pagerDiv).html(pagerString);
 	$("a.first", div).each(function(i){
 	  $(this).click(function(e){
