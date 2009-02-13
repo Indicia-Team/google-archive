@@ -6,7 +6,7 @@
 The following extensions are added to the Kohana Validation library through subclassing the valid_core helper class (application/helpers/MY_valid.php).
 
 || *Rule name* || *Description* ||
-||sref_system||Validates that the input field represents an understandable spatial reference system. This can either be an EPSG code recognised by PostGIS, or a notation from the application\config\sref_notations.php file.||
+||sref_system||Validates that the input field represents an understandable spatial reference system. This can either be an EPSG code recognised by PostGIS, or a notation from the application/config/sref_notations.php file.||
 ||sref||Validates that the input field is a valid string for the spatial reference system passed to the rule as a parameter.||
 ||vague_date||Validates that the input field represents a recognisable vague date string.||
 ||valid_term||Validates that the input field is a valid term from the list passed to the validation rule as an ID parameter.||
