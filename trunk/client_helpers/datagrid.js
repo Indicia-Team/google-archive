@@ -19,7 +19,8 @@
 	   actionColumns: Array(),
 	   itemsPerPage: 10,
 	   multiSort: false,
-	   parameters: Array()
+	   parameters: Array(),
+	   formatPager: formatPager
       };
       
       this.construct = function(entity, options){
@@ -172,31 +173,36 @@
 	});
       }
       
-      function generatePager(div, pagerDiv){
+      function formatPager(div){
 	var pageNo = div.page;
 	var totalPages = Math.ceil(div.recordCount / div.settings.itemsPerPage);
 	var pagerString = (pageNo == 1) ? "<< | < | " : "<a href='' class='first'>&lt;&lt;</a> | <a href='' class='previous'>&lt;</a> | ";
 	pagerString += (pageNo == totalPages) ? pageNo + " | > | >>" : pageNo + " | <a href='' class='next'>&gt;</a> | <a href='' class='last'>&gt;&gt;</a>";
-	$(pagerDiv).html(pagerString);
-	$("a.first", div).each(function(i){
+	return pagerString;
+      }
+      
+      function generatePager(div, pagerDiv){
+	var pageNo = div.page;
+	$(pagerDiv).html(div.settings.formatPager(div));
+	$(".first", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, 1);
 	  });
 	});
-	$("a.previous", div).each(function(i){
+	$(".previous", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, pageNo - 1);
 	  });
 	});
-	$("a.next", div).each(function(i){
+	$(".next", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, pageNo + 1);
 	  });
 	});
-	$("a.last", div).each(function(i){
+	$(".last", div).each(function(i){
 	  $(this).click(function(e){
 	    e.preventDefault();
 	    apply_page(div, totalPages);
