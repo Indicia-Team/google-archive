@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS grids_osgb_10k;
 CREATE TABLE grids_osgb_10k
 (
   square character varying(20) NOT NULL,
-  CONSTRAINT pk_osgb_10k PRIMARY KEY (grid)
+  CONSTRAINT pk_osgb_10k PRIMARY KEY (square)
 )
 WITH (OIDS=FALSE);
 ALTER TABLE grids_osgb_10k OWNER TO postgres;
