@@ -23,7 +23,7 @@ class Occurrence_Model extends ORM
   protected $belongs_to=array(
   'determiner',
   'sample',
-  'taxon',
+  'taxa_taxon_list',
   'created_by'=>'user',
   'updated_by'=>'user'
   );

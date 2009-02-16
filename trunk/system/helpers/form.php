@@ -129,6 +129,7 @@ class form_Core {
 			(
 				'type'  => 'hidden',
 				'name'  => $name,
+				'id'  => $name,
 				'value' => $value
 			);
 
