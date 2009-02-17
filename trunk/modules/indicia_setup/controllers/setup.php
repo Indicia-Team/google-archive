@@ -208,6 +208,12 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
+            if(false === $this->write_kohana_config())
+            {
+                $this->db->rollback();
+                return false;
+            }
+
             return true;
         }
 
@@ -461,6 +467,43 @@ class Setup_Controller extends Template_Controller
         header("Cache-Control: post-check=0, pre-check=0", false);
         header("Pragma: no-cache");
         header('P3P: CP="NOI NID ADMa OUR IND UNI COM NAV"');
+    }
+    /**
+     * get the url base path
+     * @return string
+     */
+    private function get_url_base()
+    {
+        return Kohana::config('core.site_domain');
+    }
+
+    /**
+     * Write config.php config file
+     *
+     * @return bool
+     */
+    private function write_kohana_config()
+    {
+        $kohana_source_config = dirname(dirname(dirname(dirname(__file__)))) . "/application/config/config.php.example";
+        $kohana_dest_config = dirname(dirname(dirname(dirname(__file__)))) . "/application/config/config.php";
+
+        if(false === ($_source_content = file_get_contents($kohana_source_config)))
+        {
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+            Kohana::log("error", "Cant read file: ". $kohana_source_config);
+            return false;
+        }
+
+        $_source_content = str_replace("*url_base_path*", $this->get_url_base(), $_source_content);
+        $_source_content = str_replace("rem*/", "  -- autodetect disabled --", $_source_content);
+        $_source_content = str_replace("/**/", "*/", $_source_content);
+
+        if(false === file_put_contents($kohana_dest_config, $_source_content))
+        {
+            $this->view_var['error_general'][] = Kohana::lang('setup.error_db_setup');
+            Kohana::log("error", "Cant write file: ". $kohana_dest_config);
+            return false;
+        }
     }
 }
 
