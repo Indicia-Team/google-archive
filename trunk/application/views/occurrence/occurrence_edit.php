@@ -33,16 +33,45 @@ $(document).ready(function() {
 		}
 	});
 	$("input#determiner").result(function(event, data){
-alert(data.id);
 		$("input#determiner_id").attr('value', data.id);
+	});
+	$("input#taxon").autocomplete("<?php echo url::site() ?>services/data/taxa_taxon_list", {
+		minChars : 1,
+		mustMatch : true,
+		extraParams : {
+			orderby : "taxon",
+			mode : "json",
+			deleted : 'false'
+		},
+		parse: function(data) {
+			var results = [];
+			var obj = JSON.parse(data);
+			$.each(obj, function(i, item) {
+				results[results.length] = {
+					'data' : item,
+					'value' : item.id,
+					'result' : item.taxon };
+			});
+			return results;
+		},
+		formatItem: function(item) {
+			return item.taxon;
+		},
+		formatResult: function(item) {
+			return item.id;
+		}
+	});
+	$("input#taxon").result(function(event, data){
+		$("input#taxa_taxon_list_id").attr('value', data.id);
 	});
 });
 </script>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'occurrence/save' ?>" method="POST">
-<input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
+<?php print form::hidden('id', html::specialchars($model->id)); ?>
+<?php print form::hidden('website_id', $model->website_id); ?>
+<?php print form::hidden('sample_id', $model->sample_id); ?>
 <fieldset>
 <legend>Occurrence Details</legend>
-<?php print form::hidden('website_id'); ?>
 <ol>
 <li>
 <label for='taxon'>Taxon:</label>
@@ -57,12 +86,39 @@ echo html::error_message($model->taxa_taxon_list->taxon->getError('taxon')); ?>
 </li>
 <li>
 <label for='determiner'>Determiner:</label>
-<?php print form::input('determiner');
-print form::hidden('determiner_id');
+<?php print form::input('determiner', $model->determiner->first_name.' '.$model->determiner->surname);
+print form::hidden('determiner_id', $model->determiner_id);
 echo html::error_message($model->getError('determiner_id')); ?>
 </li>
+<li>
+<label for='confidential'>Confidential?:</label>
+<?php 
+print form::checkbox('confidential', 'true', $model->confidential);
+echo html::error_message($model->getError('confidential'));
+?>
+</li>
+<li>
+<label for='external_key'>External Key:</label>
+<?php
+print form::input('external_key', $model->external_key);
+echo html::error_message($model->getError('external_key'));
+?>
+</li>
+<li>
+<label for='record_status'>Verified:</label>
+<?php
+print form::dropdown('record_status', array('I' => 'In Progress', 'C' => 'Completed', 'V' => 'Verified'), $model->record_status);
+echo html::error_message($model->getError('record_status'));
+?>
+</li>
+<?php if ($model->record_status == 'V'): ?>
+<li>
+Verified on <?php echo $model->verified_on; ?> by <?php echo $model->verified_by->username; ?>
+</li>
+<?php endif; ?>
 </ol>
 </fieldset>
 <?php echo $metadata ?>
+<?php echo $comments ?>
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="submit" value="Delete" />

@@ -45,7 +45,7 @@ class Occurrence_controller extends Gridview_Base_Controller {
   * Action for occurrence/edit page
   * Edit website data
   */
-  public function edit($id  = null)
+  public function edit($id  = null, $page_no, $limit)
   {
     if (!$this->page_authorised())
     {
@@ -58,8 +58,23 @@ class Occurrence_controller extends Gridview_Base_Controller {
     else
     {
       $this->model = ORM::factory('occurrence', $id);
-      $this->setView('occurrence/occurrence_edit', 'Occurrence');
+      $gridmodel = ORM::factory('occurrence_comment');
+      $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
+      $grid->base_filter = array('occurrence_id' => $id, 'deleted' => 'f');
+      $grid->columns = array('comment' => '', 'updated_on' => ''); 
+      $vArgs = array('comments' => $grid->display());
+      $this->setView('occurrence/occurrence_edit', 'Occurrence', $vArgs);
     }
   }
   
+  public function edit_gv($id = null, $page_no, $limit)
+  {
+    $this->auto_render = false;
+    $gridmodel = ORM::factory('occurrence_comment');
+    $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
+    $grid->base_filter = array('occurrence_id' => $id, 'deleted' => 'f');
+    $grid->columns = array('comment' => '', 'updated_on' => ''); 
+    
+    return $grid->display();
+  }
 }
