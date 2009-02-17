@@ -146,22 +146,18 @@ CREATE TABLE locations (
     parent_id integer,
     centroid_sref character varying(40) NOT NULL,
     centroid_sref_system character varying(10) NOT NULL,
-    centroid_geom geometry,
-    boundary_geom geometry,
     created_on timestamp without time zone NOT NULL,
     created_by_id integer NOT NULL,
     updated_on timestamp without time zone NOT NULL,
     updated_by_id integer NOT NULL,
     "comment" text,
     external_key character varying(50),
-    deleted boolean DEFAULT false NOT NULL,
-    CONSTRAINT enforce_dims_boundary_geom CHECK ((ndims(boundary_geom) = 2)),
-    CONSTRAINT enforce_dims_centroid_geom CHECK ((ndims(centroid_geom) = 2)),
-    CONSTRAINT enforce_geotype_boundary_geom CHECK (((geometrytype(boundary_geom) = 'LINESTRING'::text) OR (boundary_geom IS NULL))),
-    CONSTRAINT enforce_geotype_centroid_geom CHECK (((geometrytype(centroid_geom) = ANY (ARRAY['POINT'::text, 'POLYGON'::text, 'LINESTRING'::text])) OR (centroid_geom IS NULL))),
-    CONSTRAINT enforce_srid_boundary_geom CHECK ((srid(boundary_geom) = 900913)),
-    CONSTRAINT enforce_srid_centroid_geom CHECK ((srid(centroid_geom) = 900913))
+    deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
+
+SELECT AddGeometryColumn ('locations', 'centroid_geom', 900913, 'GEOMETRY', 2);
+SELECT AddGeometryColumn ('locations', 'boundary_geom', 900913, 'GEOMETRY', 2);
+
 --
 -- Structure for table locations_websites (OID = 117452) :
 --
@@ -342,7 +338,6 @@ CREATE TABLE samples (
     date_type character varying(2),
     entered_sref character varying(40),
     entered_sref_system character varying(10),
-    geom geometry,
     location_name character varying(200),
     created_on timestamp without time zone NOT NULL,
     created_by_id integer NOT NULL,
@@ -351,11 +346,11 @@ CREATE TABLE samples (
     "comment" text,
     external_key character varying(50),
     sample_method_id integer,
-    deleted boolean DEFAULT false NOT NULL,
-    CONSTRAINT enforce_dims_geom CHECK ((ndims(geom) = 2)),
-    CONSTRAINT enforce_geotype_geom CHECK (((geometrytype(geom) = ANY (ARRAY['POINT'::text, 'POLYGON'::text, 'LINESTRING'::text])) OR (geom IS NULL))),
-    CONSTRAINT enforce_srid_geom CHECK ((srid(geom) = 900913))
+    deleted boolean DEFAULT false NOT NULL
 ) WITHOUT OIDS;
+
+SELECT AddGeometryColumn ('samples', 'geom', 900913, 'GEOMETRY', 2);
+
 --
 -- Structure for table site_roles (OID = 117507) :
 --
