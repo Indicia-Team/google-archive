@@ -1,0 +1,11 @@
+#summary Information on the data_entry_helper class.
+
+= Introduction =
+
+The data_entry_helper class is used for building forms on websites powered by Indicia. It provides a number of simple PHP helper methods that wrap the advanved functionality available, such as mapping, auto-complete and date picker controls.
+
+
+= Functions =
+
+== list_in_template ==
+Helper function to list the output from a request against the data services, using an HTML template for each item.
