@@ -29,8 +29,8 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->upload_csv_form->controllerpath = $this->controllerpath;
 		$this->view->upload_csv_form = $this->upload_csv_form;
 		parent::__construct();
-
-		// If not logged in as a Core admin, restrict access to available websites.
+		
+		// If not logged in as a Core admin, restrict access to available websites. 
 		if(!$this->auth->logged_in('CoreAdmin')){
 			$site_role = (new Site_role_Model('Admin'));
 			$websites=ORM::factory('users_website')->where(
@@ -42,14 +42,14 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$website_id_values[] = null;
 			$this->gen_auth_filter = array('field' => 'website_id', 'values' => $website_id_values);
 		}
-
+		
 	}
 
 	protected function page_authorised()
 	{
 		return $this->auth->logged_in();
 	}
-
+		
 	public function page($page_no, $limit) {
 		if ($this->page_authorised() == false) {
 			$this->access_denied();
@@ -68,7 +68,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 		$this->view->table = $grid->display();
 
 		// Templating
-		$this->template->title = $this->pagetitle;
+		$this->template->title = $this->GetEditPageTitle($this->gridmodel, $this->pagetitle);
 		$this->template->content = $this->view;
 	}
 

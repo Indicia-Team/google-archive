@@ -7,8 +7,47 @@ abstract class ORM extends ORM_Core {
 	// The default field that is searchable is called title. Override this when a different field name is used.
 	// Used to match against, for example when importing csv values.
 	protected $search_field='title';
+	
+	/**
+	 * Override load_values to add in a vague date field.
+	 */
+	public function load_values(array $values)
+	{
+	  parent::load_values($values);
+	  // Add in field
+	  if (array_key_exists('date_type', $this->object))
+	  {
+	    $vd = vague_date::vague_date_to_string(array
+	    (
+	    date_create($this->object['date_start']),
+	    date_create($this->object['date_end']),
+	    $this->object['date_type']
+	    ));
+	    
+	    $this->object['vague_date'] = $vd;
+	  }
+	  return $this;
+	}
+	
+	/**
+	 * Override the reload_columns method to add the vague_date virtual field
+	 */
+	public function reload_columns($force = FALSE)
+	{
+		if ($force === TRUE OR empty($this->table_columns))
+		{
+			// Load table columns
+			$this->table_columns = $this->db->list_fields($this->table_name);
+			// Vague date
+			if (array_key_exists('date_type', $this->table_columns))
+			{
+			  $this->table_columns['vague_date'] = 'String';
+			}
+		}
 
-
+		return $this;
+	}
+	
 	/**
 	 * Provide an accessor so that the view helper can retrieve the errors for the model by field name.
 	 */

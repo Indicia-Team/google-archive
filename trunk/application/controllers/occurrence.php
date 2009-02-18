@@ -23,6 +23,13 @@ class Occurrence_controller extends Gridview_Base_Controller {
     parent::__construct('occurrence', 'gv_occurrence', 'occurrence/index');
     $this->pageTitle = 'Occurrences';
     $this->model = ORM::factory('occurrence');
+    $this->columns = array
+    (
+    'taxon' => '',
+    'entered_sref' => '',
+    'entered_sref_system' => '',
+    'vague_date' => ''
+    );
   }
   
   /**
