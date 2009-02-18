@@ -43,7 +43,7 @@ class Language_Controller extends Gridview_Base_Controller {
 		}
 		else
 		{
-	        $this->setView('language/language_edit', 'Website');
+	        $this->setView('language/language_edit', 'Language');
 		}
 	}
 
@@ -67,7 +67,7 @@ class Language_Controller extends Gridview_Base_Controller {
             $this->setView('language/language_edit', 'Website');
         }
 	}
-	
+
 	public function page_authorised ()
 	{
 		return $this->auth->logged_in('CoreAdmin');
