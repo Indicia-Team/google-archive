@@ -3,7 +3,7 @@
 class Taxa_taxon_list_Model extends ORM_Tree {
 
 	protected $belongs_to = array('taxon', 'taxon_list',  'taxon_meaning',
-		'created_by' => 'user', 
+		'created_by' => 'user',
 		'updated_by' => 'user');
 
 	protected $children = 'taxa_taxon_lists';
@@ -20,7 +20,9 @@ class Taxa_taxon_list_Model extends ORM_Tree {
 			'taxonomic_sort_order',
 			'parent_id',
 			'deleted',
-			'preferred'
+			'preferred',
+			'image_path',
+			'description'
 		);
 		foreach ($extraFields as $a) {
 			if (array_key_exists($a, $array->as_array())){
