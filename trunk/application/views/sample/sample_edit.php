@@ -11,26 +11,18 @@
 <legend>Sample Details</legend>
 <ol>
 <li>
-<label for='date_start'>Start Date:</label>
-<?php print form::input('date_start', $model->date_start); 
-print form::hidden('taxa_taxon_list_id', $model->taxa_taxon_list_id); 
-echo html::error_message($model->getError('taxa_taxon_list_id')); ?>
+<label for='vague_date'>Date:</label>
+<?php print form::input('vague_date', $model->vague_date);  ?>
 </li>
 <li>
-<label for='date'>Date:</label>
-<?php print form::input('date');
-echo html::error_message($model->taxa_taxon_list->taxon->getError('taxon')); ?>
+<label for='entered_sref'>Spatial Reference:</label>
+<?php print form::input('entered_sref', $model->entered_sref);
+echo html::error_message($model->getError('entered_sref')); ?>
 </li>
 <li>
-<label for='determiner'>Determiner:</label>
-<?php print form::input('determiner', $model->determiner->first_name.' '.$model->determiner->surname);
-print form::hidden('determiner_id', $model->determiner_id);
-echo html::error_message($model->getError('determiner_id')); ?>
-</li>
-<li>
-<label for='confidential'>Confidential?:</label>
+<label for='location_name'>Location Name:</label>
 <?php 
-print form::checkbox('confidential', 'true', $model->confidential);
+print form::input('location_name', $model->location_name);
 echo html::error_message($model->getError('confidential'));
 ?>
 </li>

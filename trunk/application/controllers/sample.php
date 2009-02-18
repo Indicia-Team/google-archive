@@ -23,6 +23,13 @@ class Sample_Controller extends Gridview_Base_Controller
     parent::__construct('sample', 'gv_sample', 'sample/index');
     $this->pageTitle = 'Samples';
     $this->model = ORM::factory('sample');
+    $this->columns = array
+    (
+    'entered_sref' => '',
+    'entered_sref_system' => '',
+    'location_name' => '',
+    'vague_date' => ''
+    );
   }
   /**
   * Action for sample/create page/
