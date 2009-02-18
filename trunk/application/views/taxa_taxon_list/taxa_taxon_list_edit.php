@@ -77,6 +77,15 @@ $(document).ready(function() {
 <label for="synonomy">Synonyms<br/> (one per line)</label>
 <textarea rows="3" id="synonomy" name="synonomy"><?php echo html::specialchars($synonomy); ?></textarea>
 </li>
+<li>
+<label for="image_path">Image Path</label>
+<input id="image_path" name="image_path" value="<?php echo $model->image_path; ?>"/>
+<?php echo html::error_message($model->getError('image_path')); ?>
+</li>
+<li>
+<label for="description">Description</label>
+<textarea rows="3" id="description" name="description"><?php echo html::specialchars($model->description); ?></textarea>
+</li>
 </ol>
 </fieldset>
 <fieldset>
