@@ -223,6 +223,7 @@ class data_entry_helper extends helper_config {
 
 		return $r;
 	}
+
 	/**
 	 * Helper function to generate a list box from a Indicia core service query.
 	 */
@@ -310,6 +311,49 @@ class data_entry_helper extends helper_config {
 	$r = "<input type='hidden' id='$id' name='$id' />".
 		"<input id='ac$id' name='ac$id' value='' />";
 	return $r;
+	}
+
+	/**
+	 * Helper function to list the output from a request against the data services, using an HTML template
+	 * for each item.
+	 *
+	 * @param string $entity Name of the data entity that is being requested.
+	 * @param array $extraParams Additional parameters passed to the data services in the URL request. For example, this
+	 * can be used to specify the read authorisation, select only entries which match a certain field value, and
+	 * select the details view by specifying: $readAuth + array('field to test' => value,'view' => 'details').
+	 * @param string $template HTML template which will be emitted for each item. Fields from the data are identified
+	 * by wrapping them in ||. For example, <li>|term|</li> would result in the field called term's value being placed inside
+	 * <li> tags.
+	 * @return string HTML code for the list of items.
+	 */
+	public static function list_in_template($entity, $extraParams = null, $template) {
+		$url = parent::$base_url."/index.php/services/data";
+		// Execute a request to the service
+		$request = "$url/$entity?mode=json";
+		foreach ($extraParams as $a => $b){
+			$request .= "&$a=$b";
+		}
+		// Get the curl session object
+		$session = curl_init($request);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($session);
+		$response = json_decode(array_pop(explode("\r\n\r\n",$response)), true);
+		$r = "";
+		if (!array_key_exists('error', $response)){
+			$r .= "<ul>";
+			foreach ($response as $row){
+				$item = $template;
+				foreach ($row as $field => $value) {
+					$item = str_replace("|$field|", $value, $item);
+				}
+				$r .= $item;
+			}
+			$r .= "</ul>";
+		}
+		else
+			echo "Error loading control";
+
+		return $r;
 	}
 
 	/**
