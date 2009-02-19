@@ -8,6 +8,7 @@ ADD description character varying;
 
 
 DROP VIEW grid_occurrences_osgb_10k;
+DROP VIEW grid_occurrences_osgb_100k;
 
 DROP VIEW detail_taxa_taxon_lists;
 
@@ -42,4 +43,11 @@ SELECT ttl.taxon, grid.square, grid.geom, o.id as occurrence_id, s.id as sample_
 FROM occurrences o
 INNER JOIN samples s on s.id=o.sample_id
 INNER JOIN grids_osgb_10k grid on ST_INTERSECTS(grid.geom,ST_TRANSFORM(s.geom, 27700))
+INNER JOIN list_taxa_taxon_lists ttl on ttl.id=o.taxa_taxon_list_id;
+
+CREATE VIEW grid_occurrences_osgb_100k AS
+SELECT ttl.taxon, grid.square, grid.geom, o.id as occurrence_id, s.id as sample_id, ttl.id as taxa_taxon_list_id, ttl.taxon_list
+FROM occurrences o
+INNER JOIN samples s on s.id=o.sample_id
+INNER JOIN grids_osgb_100k grid on ST_INTERSECTS(grid.geom,ST_TRANSFORM(s.geom, 27700))
 INNER JOIN list_taxa_taxon_lists ttl on ttl.id=o.taxa_taxon_list_id;
