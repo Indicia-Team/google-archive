@@ -1,6 +1,6 @@
 -- View: gv_occurrences
 
-DROP VIEW gv_occurrences;
+DROP VIEW IF EXISTS gv_occurrences;
 
 CREATE OR REPLACE VIEW gv_occurrences AS 
  SELECT o.id, o.sample_id, t.taxon, sa.date_start, sa.date_end, sa.date_type, sa.entered_sref, sa.entered_sref_system, sa.location_name, l.name, o.deleted
