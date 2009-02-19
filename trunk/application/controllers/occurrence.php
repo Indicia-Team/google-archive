@@ -89,4 +89,10 @@ class Occurrence_controller extends Gridview_Base_Controller {
     
     return $grid->display();
   }
+  
+  public function save()
+  {
+    $_POST['confidential'] = isset($_POST['confidential']) ? 't' : 'f';
+    parent::save();
+  }
 }

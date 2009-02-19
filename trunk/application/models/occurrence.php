@@ -43,7 +43,8 @@ class Occurrence_Model extends ORM
  'deleted',
  'record_status',
  'verified_by_id',
- 'verified_on'
+ 'verified_on',
+ 'confidential'
  );
  foreach ($extraFields as $a) 
  {
