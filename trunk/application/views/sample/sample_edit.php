@@ -51,10 +51,13 @@ echo html::error_message($model->getError('confidential'));
 ?>
 </li>
 <li>
-<label for='sample_method'>Sample Method:</label>
+<label for='sample_method_id'>Sample Method:</label>
 <?php
-print form::input('external_key', $model->external_key);
-echo html::error_message($model->getError('external_key'));
+$sm = Kohana::config('termlists.sample_methods') || 1;
+$terms = ORM::factory('termlists_term')->where(array('termlist_id' => $sm, 'deleted' => 'f'))->find_all();
+foreach ($terms as $term) { $arr[$term->id] = $term->term->term; }
+print form::dropdown('sample_method_id', $arr, $model->sample_method_id);
+echo html::error_message($model->getError('sample_method_id'));
 ?>
 </li>
 </ol>
