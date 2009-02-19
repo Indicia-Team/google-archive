@@ -23,7 +23,8 @@ class Sample_Model extends ORM
   'survey',
   'location',
   'created_by'=>'user',
-  'updated_by'=>'user'
+  'updated_by'=>'user',
+  'sample_method'=>'termlists_term'
   );
   protected $search_field = 'id';
   
