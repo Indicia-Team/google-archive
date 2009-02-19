@@ -86,7 +86,10 @@ echo html::error_message($model->taxa_taxon_list->taxon->getError('taxon')); ?>
 </li>
 <li>
 <label for='determiner'>Determiner:</label>
-<?php print form::input('determiner', $model->determiner->first_name.' '.$model->determiner->surname);
+<?php 
+$fname = $model->determiner_id ? $model->determiner->first_name : '';
+$sname = $model->determiner_id ? $model->determiner->surname : '';
+print form::input('determiner', $fname.' '.$sname);
 print form::hidden('determiner_id', $model->determiner_id);
 echo html::error_message($model->getError('determiner_id')); ?>
 </li>
