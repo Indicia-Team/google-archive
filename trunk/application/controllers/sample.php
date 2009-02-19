@@ -68,7 +68,8 @@ class Sample_Controller extends Gridview_Base_Controller
       $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
       $grid->base_filter = array('sample_id' => $id, 'deleted' => 'f');
       $grid->columns = array('taxon' => ''); 
-      $vArgs = array('comments' => $grid->display());
+      $grid->actionColumns = array('edit' => 'occurrence/edit/£id£');
+      $vArgs = array('occurrences' => $grid->display());
       $this->setView('sample/sample_edit', 'Sample', $vArgs);
     }
   }
@@ -76,10 +77,10 @@ class Sample_Controller extends Gridview_Base_Controller
   public function edit_gv($id = null, $page_no, $limit)
   {
     $this->auto_render = false;
-    $gridmodel = ORM::factory('sample_comment');
+    $gridmodel = ORM::factory('gv_occurrence');
     $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
     $grid->base_filter = array('sample_id' => $id, 'deleted' => 'f');
-    $grid->columns = array('comment' => '', 'updated_on' => ''); 
+    $grid->columns = array('taxon' => ''); 
     
     return $grid->display();
   }
