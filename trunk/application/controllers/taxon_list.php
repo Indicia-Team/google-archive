@@ -37,6 +37,7 @@ class Taxon_list_Controller extends Gridview_Base_Controller {
 
 		$this->setView('taxon_list/taxon_list_edit', 'Species List', $vArgs);
 	}
+	
 	// Auxilliary function for handling Ajax requests from the edit method gridview component
 	public function edit_gv($id,$page_no,$limit) {
 		$this->auto_render=false;

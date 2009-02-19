@@ -15,26 +15,26 @@ class Taxon_Group_Controller extends Gridview_Base_Controller {
 	 * Displays a page allowing entry of a new taxon group.
 	 */
 	public function create() {
-		$model = ORM::factory('taxon_group');
-		$view = new View('taxon_group/taxon_group_edit');
-		$view->model = $model;
-		$view->metadata = $this->GetMetadataView($model);
-		$this->template->title = $this->GetEditPageTitle($model, 'Taxon Group');
-		$this->template->content = $view;
-	}
-
-	public function edit() {
-		if ($this->uri->total_arguments()==0)
-			print "cannot edit taxon group without an ID";
+		if (!$this->page_authorised())
+		{
+			$this->access_denied();
+		}
 		else
 		{
-			$taxon_group = new Taxon_Group_Model($this->uri->argument(1));
-			$this->template->title = $this->GetEditPageTitle($taxon_group, 'Taxon Group');
-			$view = new View('taxon_group/taxon_group_edit');
-			$view->model = $taxon_group;
-			$view->metadata = $this->GetMetadataView($taxon_group);
-			$this->template->content = $view;
+    		$this->setView('taxon_group/taxon_group_edit', 'Taxon Group');
 		}
+	}
+
+	public function edit($id = null) {
+		if ($id == null)
+        {
+	   		$this->setError('Invocation error: missing argument', 'You cannot call edit a taxon group without an ID');
+        }
+        else
+        {
+            $this->model = new Taxon_Group_Model($id);
+            $this->setView('taxon_group/taxon_group_edit', 'Taxon Group');
+        }
 	}
 
 }
