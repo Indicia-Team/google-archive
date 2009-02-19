@@ -84,12 +84,10 @@ class Indicia_Controller extends Template_Controller {
   {
     if ($this->model->id)
     {
-    	echo "here";
       $metadata = new View('templates/metadata');
       $metadata->model = $model;
       return $metadata;
     } else {
-    	echo "there";
       return '';
     }
   }
