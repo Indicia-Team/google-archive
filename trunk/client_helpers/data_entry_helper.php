@@ -344,6 +344,7 @@ class data_entry_helper extends helper_config {
 			foreach ($response as $row){
 				$item = $template;
 				foreach ($row as $field => $value) {
+					$value = htmlspecialchars($value, ENT_QUOTES);
 					$item = str_replace("|$field|", $value, $item);
 				}
 				$r .= $item;
@@ -359,7 +360,7 @@ class data_entry_helper extends helper_config {
 	/**
 	 * Helper function to generate a radio group from a Indicia core service query.
 	 */
-	public static function radio_group($id, $entity, $nameField, $valueField = null, $extraParams = null) {
+	public static function radio_group($id, $entity, $nameField, $valueField = null, $extraParams = null, $sep='') {
 		$url = parent::$base_url."/index.php/services/data";
 		// If valueField is null, set it to $nameField
 		if ($valueField == null) $valueField = $nameField;
@@ -377,9 +378,9 @@ class data_entry_helper extends helper_config {
 			foreach ($response as $item){
 				if (array_key_exists($nameField, $item) &&
 					array_key_exists($valueField, $item)) {
-						$r .= "<input type='radio' id='$id' name='$id' value='$item[$valueField]' >";
-						$r .= $item[$nameField];
-						$r .= "</input>";
+						$name = htmlspecialchars($item[$nameField], ENT_QUOTES);
+						$r .= "<input type='radio' id='$id' name='$id' value='$item[$valueField]' />";
+						$r .= $name.$sep;
 					}
 			}
 		}
