@@ -27,11 +27,6 @@
 ?>
 <?php echo html::error_message($model->getError('language_id')); ?>
 </li>
-</ol>
-</fieldset>
-<fieldset>
-<legend>Termlist Instance Details</legend>
-<ol>
 <li>
 <input type="hidden" name="parent_id" id="parent_id" value="<?php echo html::specialchars($model->parent_id); ?>" />
 <label for="parent">Parent Term</label>
@@ -41,6 +36,11 @@
 <input type="hidden" name="meaning_id" id="meaning_id" value="<?php echo html::specialchars($model->meaning_id); ?>" />
 <label for="synonomy">Synonomy</label>
 <textarea rows=7 id="synonomy" name="synonomy"><?php echo html::specialchars($synonomy); ?></textarea>
+</li>
+<li>
+<label for="sort_order">Sort Order in List</label>
+<input id="sort_order" name="sort_order" class="narrow" value="<?php echo html::specialchars($model->sort_order); ?>" />
+<?php echo html::error_message($model->getError('sort_order')); ?>
 </li>
 </fieldset>
 <input type="submit" name="submit" value="Submit" />

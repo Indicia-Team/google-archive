@@ -24,7 +24,8 @@ class Termlists_term_Model extends ORM_Tree {
 		$extraFields = array(
 			'parent_id',
 			'preferred',
-			'deleted'
+			'deleted',
+			'sort_order'
 		);
 		foreach ($extraFields as $a) {
 			if (array_key_exists($a, $array->as_array())){
