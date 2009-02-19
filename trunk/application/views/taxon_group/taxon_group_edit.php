@@ -1,6 +1,6 @@
 <p>This page allows you to specify the details of a taxon group..</p>
-<?php echo $metadata ?>
 <form class="cmxform" action="<?php echo url::site().'taxon_group/save'; ?>" method="post">
+<?php echo $metadata ?>
 <input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
 <fieldset>
 <legend>Taxon Group details</legend>

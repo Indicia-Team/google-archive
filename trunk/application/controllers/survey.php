@@ -32,34 +32,10 @@ class Survey_Controller extends Gridview_Base_Controller {
 		}
         else
 		{
-			$survey = new Survey_Model($id);  	    
-			$this->template->title = $this->GetEditPageTitle($survey, 'Survey');
-			$view = new View('survey/survey_edit');
-			$view->model = $survey;
-			$view->metadata = $this->GetMetadataView($survey);
-			$this->template->content = $view;
+			$this->model = new Survey_Model($id);
+            $this->setView('survey/survey_edit', 'Survey');
 		}
 	}
-
-	public function save() {
-		if (! empty($_POST['id']))
-			$survey = new Survey_Model($_POST['id']);
-		else
-			$survey = new Survey_Model();
-		$_POST = new Validation($_POST);
-		if ($survey->validate($_POST, TRUE)) {
-			url::redirect('survey');
-		} else {
-			// errors are now embedded in the model
-		    $this->template->title = $this->GetEditPageTitle($survey, 'Survey');
-			$view = new View('survey/survey_edit');
-			$view->model = $survey;
-			$view->metadata = $this->GetMetadataView($survey);
-			$this->template->content = $view;
-		}
-
-	}
-	
 
     protected function record_authorised ($id)
 	{
@@ -67,9 +43,9 @@ class Survey_Controller extends Gridview_Base_Controller {
 		{
 			$survey = new Survey_Model($id);
 			return (in_array($survey->website_id, $this->auth_filter['values']));
-		}		
+		}
 		return true;
-	} 
+	}
 }
 
 ?>
