@@ -93,7 +93,7 @@ echo html::error_message($model->getError('determiner_id')); ?>
 <li>
 <label for='confidential'>Confidential?:</label>
 <?php 
-print form::checkbox('confidential', 'true', $model->confidential);
+print form::checkbox('confidential', 'true', $model->confidential=='t' ? 1 : 0);
 echo html::error_message($model->getError('confidential'));
 ?>
 </li>
