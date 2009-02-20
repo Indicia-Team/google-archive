@@ -3,13 +3,31 @@
 
 = Installation =
 
-This guide is a quick summary of the steps required to install the Indicia Core for developers. *Work is currently underway on an automated installation procedure but this is not yet complete*.
+This guide is a quick summary of the steps required to install the Indicia Core for developers.
 
 == Install PostgreSQL and PostGIS ==
 
 First, install the PostgreSQL database server and the PostGIS extension for your operating system. For downloads and more information see [http://www.postgresql.org/] and [http://postgis.refractions.net/]. Note that if you are installing on Windows, version 8.3 of PostgreSQL allows you to install PostGIS by using the Stack Builder tool included with PostgreSQL.
 
-Next, create a database on your server. You don't need to put any content in the database yet. You can do this using the pgAdmin tool supplied with PostgreSQL.
+Next, create a PostGIS database on your server. You don't need to put any content in the database yet. You can do this using the pgAdmin tool supplied with PostgreSQL and running the following SQL script against the postgres database, which creates a PostGIS database called *indicia*.
+{{{
+CREATE DATABASE indicia TEMPLATE=template_postgis;
+}}}
+
+You can use the postgres super-user account to run Indicia if you like, which is the easiest but least secure method. Assuming you want to create your own user to run Indicia, run the following script to create the user and add it to the database, changing the username, password and database name as required:
+{{{
+CREATE USER indicia_user WITH PASSWORD 'indicia';
+GRANT ALL PRIVILEGES ON DATABASE indicia TO indicia_user;
+}}}
+
+Now, connect your query tool to the new indicia database, and run the following script which allows the Indicia user just enough rights to access the PostGIS functionality:
+{{{
+GRANT ALL PRIVILEGES ON TABLE geometry_columns TO indicia_user;
+GRANT ALL PRIVILEGES ON TABLE spatial_ref_sys TO indicia_user;
+GRANT EXECUTE ON FUNCTION st_astext(geometry) TO indicia_user;
+GRANT EXECUTE ON FUNCTION st_geomfromtext(text, integer) TO indicia_user;
+GRANT EXECUTE ON FUNCTION st_transform(geometry, integer) TO indicia_user;
+}}}
 
 == Install PHP and a web server ==
 
@@ -40,28 +58,14 @@ To access the source code, you need a SubVersion command-line client installed. 
 First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, run the following command line from this folder to grab the source code:
 `svn checkout http://indicia.googlecode.com/svn/trunk/ indicia-read-only`
 
-== Setup the database ==
+== Run the Setup ==
 
-The source code includes database installation scripts in the folder application/db. 
-Use the following command prompt, changing the file path if necessary (run this from the PostgreSQL\8.3\bin directory if it is not on your path). Change the database name from indicia if your database is named differently. Also ensure the word after the -U parameter is the name of your postgres superuser, and ensure that the word path is replaced by the path to the dbcreate.sql file in your application/db folder:
+The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example //localhost/indicia/index.php, and load the page. This should display the Indicia Setup page. If there are no warnings on this page, then specify the name of the database you have created, plus the username and password of the user you created earlier. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia core on a single PostgreSQL database you can use another name.
 
-psql -f _path_\dbcreate.sql -d _indicia_ -U _postgres_
-
-Once this is run, you need to run the other scripts in the application/db folder which are named with 12 numbers at the start of the file name. To do this, load them one by one in order (so the lowest number comes first) into the PostgreSQL query tool and run them against your database.
-
-== Configuration ==
-
-First, rename the application/config/config.php.example file to application/config/config.php and edit it in a text editor. The change you need to make is to the following entry:
-$config['site_domain'] = '/';
-You need to replace the / with the domain and path of your installation, in our example $config['site_domain'] = 'localhost/indicia/';
-
-Next, rename the application/config/database.php.example file to application/config/database/php and edit it in a text editor. The changes you need to make are:
-  # Change the user to the name of the postgreSQL super user.
-  # Change the password to the user's password.
-  # Change the name of the database to the database you created earlier.
-
-Once you have done this, also rename the file application/config/indicia_dist.php to indicia.php, otherwise accessing the site will initiate the automated setup procedure. Edit this file in a text editor and change the value for `$config['private_key']` to a any value unique to your site copy (it doesn't matter what you use here as long as it is unique).
+Once done, just click the Submit button.
 
 == Test it ==
 
-You should now be able to access the site, for example //localhost/indicia/index.php/website.
+If everything has worked, you will be taken to the login page for the Indicia Core Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password.
+
+That's it!
