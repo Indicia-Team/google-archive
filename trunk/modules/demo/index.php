@@ -4,6 +4,13 @@
 </head>
 <body>
 <h1>Indicia demonstrations</h1>
+<?php
+	// for first time usage, check that the data entry config file exists.
+	if (!file_exists('data_entry/data_entry_config.php')) {
+		rename('data_entry/data_entry_config.php.example', 'data_entry/data_entry_config.php');
+	}
+
+?>
 <p>The following list of demonstration pages illustrate service based Indicia functionality.</p>
 <ol>
 <li><a href="data_entry/test_data_entry.php">Demonstration basic data entry page</a></li>

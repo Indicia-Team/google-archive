@@ -152,3 +152,11 @@ Insert into titles (id, title, created_on, created_by_id, updated_on, updated_by
 -- Create an unknown person
 INSERT INTO people (first_name, surname, created_on, created_by_id, updated_on, updated_by_id)
 VALUES ('','Unknown', now(), 1, now(), 1);
+
+-- Put data in for the demonstration pages
+INSERT INTO websites (title, url, password, created_on, created_by_id, updated_on, updated_by_id)
+VALUES ('Demonstration Website', 'http://localhost/', 'password', now(), 1, now(), 1);
+
+INSERT INTO surveys (title, description, website_id, created_on, created_by_id, updated_on, updated_by_id)
+VALUES ('Demonstration Survey', 'Survey created for the demonstration data capture pages', 1,
+	now(), 1, now(), 1);
