@@ -151,6 +151,9 @@ class Setup_Controller extends Template_Controller
                 return false;
             }
 
+            // postgis alterations
+            if (!$this->run_script($this->db_file_postgis_alterations)) return false;
+
             // create sequences
             if (!$this->run_script($this->db_file_indicia_sequences)) return false;
 
@@ -159,9 +162,6 @@ class Setup_Controller extends Template_Controller
 
             // create views
             if (!$this->run_script($this->db_file_indicia_views)) return false;
-
-            // postgis alterations
-            if (!$this->run_script($this->db_file_postgis_alterations)) return false;
 
             // insert default data
             if (!$this->run_script($this->db_file_indicia_data)) return false;
