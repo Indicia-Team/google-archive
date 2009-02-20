@@ -5,6 +5,8 @@
 
 This guide is a quick summary of the steps required to install the Indicia Core for developers.
 
+Note that if you are installing Indicia onto a hosted shared server, the chances are you will not have the full privileges required to setup the PostGIS database and PHP settings (if required). It may be helpful to ask your web host to perform the steps *Install PostgreSQL and PostGIS* to check that the pgsql and cURL extensions are enabled for PHP as described in the section *Install PHP and a Web Server*.
+
 == Install PostgreSQL and PostGIS ==
 
 First, install the PostgreSQL database server and the PostGIS extension for your operating system. For downloads and more information see [http://www.postgresql.org/] and [http://postgis.refractions.net/]. Note that if you are installing on Windows, version 8.3 of PostgreSQL allows you to install PostGIS by using the Stack Builder tool included with PostgreSQL.
@@ -55,8 +57,10 @@ To access the source code, you need a SubVersion command-line client installed. 
 
 == Grab the source code ==
 
-First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, run the following command line from this folder to grab the source code:
-`svn checkout http://indicia.googlecode.com/svn/trunk/ indicia-read-only`
+First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, run the following command line from the Apache root folder to grab the source code into the folder you created:
+`svn checkout http://indicia.googlecode.com/svn/trunk/ indicia`
+
+If you are running on a hosted server, it may be easiest to grab the code into a local folder then use an FTP tool to upload it into a folder created on your web server account.
 
 == Run the Setup ==
 
