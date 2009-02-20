@@ -6,7 +6,6 @@ CREATE TABLE grids_osgb_100k
   CONSTRAINT pk_osgb_100k PRIMARY KEY (square)
 )
 WITH (OIDS=FALSE);
-ALTER TABLE grids_osgb_100k OWNER TO postgres;
 
 SELECT AddGeometryColumn('', 'grids_osgb_100k','geom',27700,'POLYGON',2);
 
@@ -132,10 +131,10 @@ CREATE INDEX ix_spatial_grids_osgb_100k ON grids_osgb_100k USING GIST(geom);
 DROP VIEW IF EXISTS grid_occurrences_osgb_100k;
 
 CREATE VIEW grid_occurrences_osgb_100k AS
-SELECT ttl.taxon, grid.square, grid.geom, o.id as occurrence_id, s.id as sample_id, ttl.id as taxa_taxon_list_id, ttl.taxon_list
+SELECT t.taxon, grid.square, grid.geom, o.id as occurrence_id, s.id as sample_id, ttl.id as taxa_taxon_list_id, tl.title as taxon_list
 FROM occurrences o
 INNER JOIN samples s on s.id=o.sample_id
 INNER JOIN grids_osgb_100k grid on ST_INTERSECTS(grid.geom,ST_TRANSFORM(s.geom, 27700))
-INNER JOIN list_taxa_taxon_lists ttl on ttl.id=o.taxa_taxon_list_id;
-
-select * from grid_occurrences_osgb_100k;
+INNER JOIN taxa_taxon_lists ttl on ttl.id=o.taxa_taxon_list_id
+INNER JOIN taxa t on t.id=ttl.taxon_id
+INNER JOIN taxon_lists tl on tl.id=ttl.taxon_list_id;
