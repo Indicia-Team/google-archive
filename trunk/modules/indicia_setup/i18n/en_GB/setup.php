@@ -4,9 +4,9 @@ $lang = array
 (
     'title'       => 'Indicia Setup',
     'description' => 'Before you start, please create a PostGIS database using the template, for example using the script: <br />' .
-		'CREATE DATABASE indicia TEMPLATE=template_postgis;<br />'.
-		'Then, create a schema to insert the Indicia tables into, for example by running the following script against your new indicia database: <br />'.
-		'CREATE SCHEMA indicia;',
+        'CREATE DATABASE indicia TEMPLATE=template_postgis;<br />'.
+        'Then, create a schema to insert the Indicia tables into, for example by running the following script against your new indicia database: <br />'.
+        'CREATE SCHEMA indicia;',
     'database'    => 'Database',
     'db_schema'   => 'Schema for Indicia tables',
     'db_host'     => 'Host',
@@ -43,7 +43,8 @@ $lang = array
     'error_wrong_postgis_version'     => 'Required Postgis version >= 1.3',
     'error_wrong_postgres_version'     => 'Required Postgresql version >= 8.2',
     'error_no_postgres_client_extension' => 'No php_pgsql extension found (postgresql). Check your php.ini file.',
-    'error_no_php_curl_extension'        => 'No php_curl extension found. Check your php.ini file.'
+    'error_no_php_curl_extension'        => 'No php_curl extension found. Check your php.ini file.',
+    'error_upgrade_for_end_user' => 'Fatal upgrade error. The system is in an unstable stade. Please consult the error log file and contact the indicia development team: john.vanbreda@biodiverseit.co.uk'
 );
 
 ?>

@@ -29,22 +29,22 @@
     <!-- BEGIN: page level content -->
     <div id="content" role="main">
 
-		<h1><?php echo html::specialchars($error) ?></h1>
+        <h1><?php echo html::specialchars($error) ?></h1>
 
-		<div id="framework_error" style="width:42em;margin:20px auto;">
-			<p><?php echo html::specialchars($description) ?></p>
+        <div id="framework_error" style="width:42em;margin:20px auto;">
+            <pre><?php echo html::specialchars($description) ?></pre>
 
-			<?php if ( ! empty($line) AND ! empty($file)): ?>
-			<p><?php echo Kohana::lang('core.error_file_line', $file, $line) ?></p>
-			<?php endif ?>
+            <?php if ( ! empty($line) AND ! empty($file)): ?>
+            <p><?php echo Kohana::lang('core.error_file_line', $file, $line) ?></p>
+            <?php endif ?>
 
-			<p><?php echo $message ?></p>
+            <pre><?php echo $message ?></pre>
 
-			<?php if ( ! empty($trace)): ?>
-			<h3><?php echo Kohana::lang('core.stack_trace') ?></h3>
-			<?php echo $trace ?>
-			<?php endif ?>
-		</div>
+            <?php if ( ! empty($trace)): ?>
+            <h3><?php echo Kohana::lang('core.stack_trace') ?></h3>
+            <?php echo $trace ?>
+            <?php endif ?>
+        </div>
     </div>
     <!-- END: page level content -->
 

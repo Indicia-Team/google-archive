@@ -17,6 +17,8 @@
 class Upgrade_Model extends Model
 {
 
+    private $upgarde_error = array();
+
     public function __construct()
     {
         parent::__construct();
@@ -37,7 +39,7 @@ class Upgrade_Model extends Model
         //
         if(1 == version_compare($current_version, $new_system['version']) )
         {
-            Kohana::log('error', 'Current script version is lower than the database version. Upgrade not possible.');
+            Kohana::log('error', 'Current script version is lower than the database version. Downgrade not possible.');
             return false;
         }
 
@@ -88,19 +90,12 @@ class Upgrade_Model extends Model
         {
             $this->log($e);
         }
-        catch(Indicia_File_Exception $e)
-        {
-            $this->log($e);
-        }
         catch(Exception $e)
         {
             $this->log($e);
         }
 
-        // rollback transaction
-        $this->db->query("ROLLBACK");
-
-        return false;
+        return $e->getMessage();
     }
 
     /**
@@ -109,12 +104,7 @@ class Upgrade_Model extends Model
      */
     private function upgrade_0_1_to_0_2()
     {
-        if(false === $this->execute_sql_scripts( 'upgrade_0_1_to_0_2' ))
-        {
-            return false;
-        }
-
-        return true;
+        return $this->execute_sql_scripts( 'upgrade_0_1_to_0_2' );
     }
 
     /**
@@ -123,12 +113,7 @@ class Upgrade_Model extends Model
      */
     private function upgrade_0_2_to_0_3()
     {
-        if(false === $this->execute_sql_scripts( 'upgrade_0_2_to_0_3' ))
-        {
-            return false;
-        }
-
-        return true;
+        return $this->execute_sql_scripts( 'upgrade_0_2_to_0_3' );
     }
 
     /**
@@ -190,7 +175,7 @@ class Upgrade_Model extends Model
         $str .= '$config["system"]["repository"]'   . " = '{$new_system['repository']}';\n";
         $str .= '$config["system"]["release_date"]' . " = '{$new_system['release_date']}';\n\n";
 
-        $str .= '$config[\'private_key\']   = \'' . $__config['private_key'] . "'; // Change this to a unique value for each Indicia install\n";
+        $str .= '$config[\'private_key\']     = \'' . $__config['private_key'] . "'; // Change this to a unique value for each Indicia install\n";
         $str .= '$config[\'nonce_life\']      = '   . $__config['nonce_life'] . ";       // life span of an authentication token for services, in seconds\n";
         $str .= '$config[\'maxUploadSize\']   = \''   . $__config['maxUploadSize'] . "'; // Maximum size of an upload\n";
         $str .= '$config[\'defaultPersonId\'] = '   . $__config['defaultPersonId'] . ";\n";
@@ -211,17 +196,17 @@ class Upgrade_Model extends Model
 
         if( !@is_writeable($config_file) )
         {
-            throw new Indicia_File_Exception("Config file indicia.php isnt writeable. Check permission on: ". $config_file);
+            throw new  Exception("Config file indicia.php isnt writeable. Check permission on: ". $config_file);
         }
 
         if(!$fp = @fopen($config_file, 'w'))
         {
-           throw new Indicia_File_Exception("Cant open file to write: ". $config_file);
+           throw new Exception("Cant open file to write: ". $config_file);
         }
 
         if( !@fwrite($fp, $config_content) )
         {
-            throw new Indicia_File_Exception("Cant write file: ". $config_file);
+            throw new Exception("Cant write file: ". $config_file);
         }
 
         @fclose($fp);
@@ -252,21 +237,33 @@ class Upgrade_Model extends Model
         }
         else
         {
-            Kohana::log("error", "Upgrade failed: cant open dir " . $full_upgrade_folder);
-            return false;
+            throw new  Exception("Cant open dir " . $full_upgrade_folder);
         }
 
         sort( $file_name );
 
-        foreach($file_name as $name)
+        try
         {
-            $_db_file = file_get_contents( $full_upgrade_folder . '/' . $name );
 
-            $this->db->query( $_db_file );
+            foreach($file_name as $name)
+            {
+                if(false === ($_db_file = file_get_contents( $full_upgrade_folder . '/' . $name )))
+                {
+                    throw new  Exception("Cant open file " . $full_upgrade_folder . '/' . $name);
+                }
+                $result = $this->db->query( $_db_file );
+            }
+        }
+        catch(Kohana_Database_Exception $e)
+        {
+            $_error = "Error in file: " . $full_upgrade_folder . '/' . $name . "\n\n" . $e->getMessage();
+            throw new Exception($_error);
         }
 
         return true;
     }
+
+
 }
 
 ?>
