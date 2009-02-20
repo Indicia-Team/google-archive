@@ -79,12 +79,12 @@ $(document).ready(function() {
 </li>
 <li>
 <label for="image_path">Image Path</label>
-<input id="image_path" name="image_path" value="<?php echo $model->image_path; ?>"/>
+<input id="image_path" name="image_path" value="<?php echo (($model->taxon_id != null) ? html::specialchars($model->taxon->image_path) : ''); ?>"/>
 <?php echo html::error_message($model->getError('image_path')); ?>
 </li>
 <li>
 <label for="description">Description</label>
-<textarea rows="3" id="description" name="description"><?php echo html::specialchars($model->description); ?></textarea>
+<textarea rows="3" id="description" name="description"><?php echo (($model->taxon_id != null) ? html::specialchars($model->taxon->description) : ''); ?></textarea>
 </li>
 </ol>
 </fieldset>
