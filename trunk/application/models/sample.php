@@ -35,7 +35,8 @@ class Sample_Model extends ORM
   * @todo allow a date string to be passed, which gets mapped to a vague date start, end and type.
   * @todo validate at least a location_name or sref required
   */
-  public function validate(Validation $array, $save = FALSE) {
+  public function validate(Validation $array, $save = FALSE) 
+  {
     $orig_values = $array->as_array();
     
     // uses PHP trim() to remove whitespace from beginning and end of all fields before validation
@@ -46,14 +47,24 @@ class Sample_Model extends ORM
     $array->add_rules('entered_sref_system', 'sref_system');
     
     // Any fields that don't have a validation rule need to be copied into the model manually
-    if (array_key_exists('date_start', $array->as_array()))
-    $this->date_start 	= $array['date_start'];
-    if (array_key_exists('date_end', $array->as_array()))
-    $this->date_end 	= $array['date_end'];
-    if (array_key_exists('geom', $array->as_array()))
-    $this->geom 		= $array['geom'];
-    
-    return parent::validate($array, $save);
+    $extraFields = array
+    (
+    'date_start',
+     'date_end',
+     'geom',
+     'location_name',
+     'survey_id',
+     'deleted'
+     );
+     foreach ($extraFields as $a) 
+     {
+       if (array_key_exists($a, $array->as_array()))
+       {
+	 $this->__set($a, $array[$a]);
+       }
+     }
+     
+     return parent::validate($array, $save);
   }
   
   /**
@@ -76,9 +87,9 @@ class Sample_Model extends ORM
     if (substr($key,-4) == 'geom')
     {
       if ($value) {
- $row = $this->db->query("SELECT ST_GeomFromText('$value', ".kohana::config('sref_notations.internal_srid').") AS geom")->current();
- $value = $row->geom;
- }
+	$row = $this->db->query("SELECT ST_GeomFromText('$value', ".kohana::config('sref_notations.internal_srid').") AS geom")->current();
+	$value = $row->geom;
+      }
     }
     parent::__set($key, $value);
   }
@@ -91,73 +102,73 @@ class Sample_Model extends ORM
     $value = parent::__get($column);
     
     if  (substr($column,-5) == '_geom') {
-   $row = $this->db->query("SELECT ST_asText('$value') AS wkt")->current();
-   $value = $row->wkt;
- }
- return $value;
+      $row = $this->db->query("SELECT ST_asText('$value') AS wkt")->current();
+      $value = $row->wkt;
   }
-  
-  /**
-  * Overrides the postSubmit() function to provide support for adding sample attributes
-  * within the transaction.
-  */
-  protected function postSubmit() {
-    // Occurrences have sample attributes associated, stored in a
-    // metafield.
-    if (array_key_exists('metaFields', $this->submission) &&
-      array_key_exists('smpAttributes', $this->submission['metaFields']))
-      {
-	Kohana::log("info", "About to submit sample attributes.");
-	foreach ($this->submission['metaFields']['smpAttributes']['value'] as
-	  $idx => $attr)
-	{
-	  $value = $attr['fields']['value'];
-	  if ($value['value'] != '') {
-	    $attrId = $attr['fields']['sample_attribute_id']['value'];
-	    $oa = ORM::factory('sample_attribute', $attrId);
-	    $vf = null;
-	    switch ($oa->data_type) {
-	      case 'T':
-		$vf = 'text_value';
-		break;
-	      case 'F':
-		$vf = 'float_value';
-		break;
-	      case 'D':
-		// Date
-		$vd=vague_date::string_to_vague_date($value['value']);
-		$attr['fields']['date_start_value']['value'] = $vd['start'];
-		$attr['fields']['date_end_value']['value'] = $vd['end'];
-		$attr['fields']['date_type_value']['value'] = $vd['type'];
-		break;
-	      case 'V':
-		// Vague Date
-		$vd=vague_date::string_to_vague_date($value['value']);
-		$attr['fields']['date_start_value']['value'] = $vd['start'];
-		$attr['fields']['date_end_value']['value'] = $vd['end'];
-		$attr['fields']['date_type_value']['value'] = $vd['type'];
-		break;
-	      default:
-		// Lookup in list
-		$vf = 'int_value';
-		break;
-	  }
-	  
-	  if ($vf != null) $attr['fields'][$vf] = $value;
-	  $attr['fields']['sample_id']['value'] = $this->id;
-	  
-	  $oam = ORM::factory('sample_attribute_value');
-	  $oam->submission = $attr;
-	  if (!$oam->inner_submit()) {
-	    $this->db->query('ROLLBACK');
-	    return null;
-	  }
-	  }
+  return $value;
+}
+
+/**
+* Overrides the postSubmit() function to provide support for adding sample attributes
+* within the transaction.
+*/
+protected function postSubmit() {
+  // Occurrences have sample attributes associated, stored in a
+  // metafield.
+  if (array_key_exists('metaFields', $this->submission) &&
+    array_key_exists('smpAttributes', $this->submission['metaFields']))
+  {
+    Kohana::log("info", "About to submit sample attributes.");
+    foreach ($this->submission['metaFields']['smpAttributes']['value'] as
+      $idx => $attr)
+    {
+      $value = $attr['fields']['value'];
+      if ($value['value'] != '') {
+	$attrId = $attr['fields']['sample_attribute_id']['value'];
+	$oa = ORM::factory('sample_attribute', $attrId);
+	$vf = null;
+	switch ($oa->data_type) {
+	  case 'T':
+	    $vf = 'text_value';
+	    break;
+	  case 'F':
+	    $vf = 'float_value';
+	    break;
+	  case 'D':
+	    // Date
+	    $vd=vague_date::string_to_vague_date($value['value']);
+	    $attr['fields']['date_start_value']['value'] = $vd['start'];
+	    $attr['fields']['date_end_value']['value'] = $vd['end'];
+	    $attr['fields']['date_type_value']['value'] = $vd['type'];
+	    break;
+	  case 'V':
+	    // Vague Date
+	    $vd=vague_date::string_to_vague_date($value['value']);
+	    $attr['fields']['date_start_value']['value'] = $vd['start'];
+	    $attr['fields']['date_end_value']['value'] = $vd['end'];
+	    $attr['fields']['date_type_value']['value'] = $vd['type'];
+	    break;
+	  default:
+	    // Lookup in list
+	    $vf = 'int_value';
+	    break;
 	}
-	return true;
-      } else {
-	return true;
+	
+	if ($vf != null) $attr['fields'][$vf] = $value;
+	$attr['fields']['sample_id']['value'] = $this->id;
+	
+	$oam = ORM::factory('sample_attribute_value');
+	$oam->submission = $attr;
+	if (!$oam->inner_submit()) {
+	  $this->db->query('ROLLBACK');
+	  return null;
+	}
       }
+    }
+    return true;
+  } else {
+    return true;
   }
+}
 }
 ?>
