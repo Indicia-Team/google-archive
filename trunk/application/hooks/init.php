@@ -2,7 +2,7 @@
 
 class Indicia
 {
-    public function init()
+    public static function init()
     {
         set_error_handler(array('Indicia', 'indicia_exception_handler'));
     }
@@ -12,14 +12,14 @@ class Indicia
      */
     public static function indicia_exception_handler($errno, $errstr, $errfile, $errline)
     {
-    	try
-    	{
-        	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-    	}
+        try
+        {
+            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+        }
         catch (Exception $e)
         {
-        	print get_class($e)." thrown within the exception handler. Message: ".$e->getMessage().
-					" on line ".$e->getLine()." in file ".$e->getFile();
+            print get_class($e)." thrown within the exception handler. Message: ".$e->getMessage().
+                    " on line ".$e->getLine()." in file ".$e->getFile();
         }
     }
 
@@ -27,7 +27,7 @@ class Indicia
      * check if setup wasnt done
      * and continue to set the database schema paths
      */
-    public static function _check_setup()
+    public static function check_setup()
     {
         $uri = URI::instance();
         // we havent to proceed futher if a setup call was made
@@ -64,7 +64,6 @@ class Indicia
 
 }
 
-Event::add('system.routing', array('Indicia', '_check_setup'));
-Event::add('system.ready',   array('Indicia', 'Init'));
-
+Event::add('system.ready',   array('Indicia', 'init'));
+Event::add('system.routing', array('Indicia', 'check_setup'));
 ?>

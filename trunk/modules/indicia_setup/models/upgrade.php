@@ -17,6 +17,7 @@
 class Upgrade_Model extends Model
 {
 
+    public $last_executed_file = '';
     private $upgarde_error = array();
 
     public function __construct()
@@ -44,7 +45,7 @@ class Upgrade_Model extends Model
         }
 
         // start transaction
-        $this->db->query("BEGIN");
+        $this->begin();
 
         try
         {
@@ -82,7 +83,7 @@ class Upgrade_Model extends Model
             $this->update_config_file( $new_system );
 
             // commit transaction
-            $this->db->query("COMMIT");
+            $this->commit();
 
             return true;
         }
@@ -114,6 +115,24 @@ class Upgrade_Model extends Model
     private function upgrade_0_2_to_0_3()
     {
         return $this->execute_sql_scripts( 'upgrade_0_2_to_0_3' );
+    }
+
+    /**
+     * start transaction
+     *
+     */
+    public function begin()
+    {
+        $this->db->query("BEGIN");
+    }
+
+    /**
+     * end transaction
+     *
+     */
+    public function commit()
+    {
+        $this->db->query("COMMIT");
     }
 
     /**
@@ -177,7 +196,7 @@ class Upgrade_Model extends Model
 
         $str .= '$config[\'private_key\']     = \'' . $__config['private_key'] . "'; // Change this to a unique value for each Indicia install\n";
         $str .= '$config[\'nonce_life\']      = '   . $__config['nonce_life'] . ";       // life span of an authentication token for services, in seconds\n";
-        $str .= '$config[\'maxUploadSize\']   = \''   . $__config['maxUploadSize'] . "'; // Maximum size of an upload\n";
+        $str .= '$config[\'maxUploadSize\']   = \'' . $__config['maxUploadSize'] . "'; // Maximum size of an upload\n";
         $str .= '$config[\'defaultPersonId\'] = '   . $__config['defaultPersonId'] . ";\n";
 
         $str .= "\n?>";
@@ -216,8 +235,9 @@ class Upgrade_Model extends Model
      * execute all sql srips from the upgrade folder
      *
      * @param string $upgrade_folder folder name
+     * @param string $last_executed_file last executed sql file name
      */
-    private function execute_sql_scripts( $upgrade_folder )
+    public function execute_sql_scripts( $upgrade_folder, $last_executed_file = false )
     {
         $file_name = array();
         $full_upgrade_folder = $this->base_dir . "/modules/indicia_setup/db/" . $upgrade_folder;
@@ -244,14 +264,36 @@ class Upgrade_Model extends Model
 
         try
         {
+            $_switch = false;
+            if($last_executed_file !== false)
+            {
+                $_switch = true;
+
+                if(strcmp($last_executed_file, '') == 0)
+                {
+                    $_switch = false;
+                }
+            }
 
             foreach($file_name as $name)
             {
+                if(($last_executed_file !== false) && ($_switch === true))
+                {
+                    if($name != $last_executed_file)
+                    {
+                        continue;
+                    }
+
+                    $_switch = false;
+                    continue;
+                }
+
                 if(false === ($_db_file = file_get_contents( $full_upgrade_folder . '/' . $name )))
                 {
                     throw new  Exception("Cant open file " . $full_upgrade_folder . '/' . $name);
                 }
                 $result = $this->db->query( $_db_file );
+                $this->last_executed_file = $name;
             }
         }
         catch(Kohana_Database_Exception $e)
