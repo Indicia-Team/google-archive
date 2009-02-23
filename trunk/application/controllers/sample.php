@@ -21,7 +21,7 @@ class Sample_Controller extends Gridview_Base_Controller
   public function __construct()
   {
     parent::__construct('sample', 'gv_sample', 'sample/index');
-    $this->pageTitle = 'Samples';
+    $this->pagetitle = 'Samples';
     $this->model = ORM::factory('sample');
     $this->columns = array
     (
