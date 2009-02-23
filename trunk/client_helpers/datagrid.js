@@ -181,6 +181,7 @@
       
       function generatePager(div, pagerDiv){
 	var pageNo = div.page;
+	var totalPages = Math.ceil(div.recordCount / div.settings.itemsPerPage);
 	$(pagerDiv).html(div.settings.formatPager(div));
 	$(".first", pagerDiv).each(function(i){
 	  $(this).click(function(e){
