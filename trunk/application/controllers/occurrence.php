@@ -21,7 +21,7 @@ class Occurrence_controller extends Gridview_Base_Controller {
   public function __construct()
   {
     parent::__construct('occurrence', 'gv_occurrence', 'occurrence/index');
-    $this->pageTitle = 'Occurrences';
+    $this->pagetitle = 'Occurrences';
     $this->model = ORM::factory('occurrence');
     $this->actionColumns = array
     (
