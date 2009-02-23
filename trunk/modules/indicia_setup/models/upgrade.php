@@ -165,7 +165,7 @@ class Upgrade_Model extends Model
      *
      * @param object $e
      */
-    private function log($e)
+    public function log($e)
     {
         $message  = "\n\n\n________________________________________________\n";
         $message .= "Upgrade Error - Time: " . date(DATE_RFC822) . "\n";
