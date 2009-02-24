@@ -95,7 +95,7 @@ function show_wkt_feature(wkt) {
 	map.zoomToExtent(bounds);
 	// if showing a point, don't zoom in too far
 	if (dy==0 && dx==0) {
-		map.zoomTo(10);
+		map.zoomTo(11);
 	}
 
 }
@@ -192,7 +192,10 @@ function find_place(pref_area, country)
 	    	// an array to store the responses in the required country, because GeoPlanet will not limit to a country
 	    	var found = { places: [], count: 0 };
 	    	jQuery.each(data.places.place, function(i,place) {
-				if (place.country.toUpperCase()==country.toUpperCase()) {
+	    		// Ingore places outside the chosen country, plus ignore places that were hit because they
+	    		// are similar to the country name we are searching in.
+				if (place.country.toUpperCase()==country.toUpperCase()
+					&& country.toUpperCase().toUpperCase() != place.name.substr(0, country.length).toUpperCase()) {
 					found.places.push(place);
 					found.count++;
 				}
@@ -204,13 +207,13 @@ function find_place(pref_area, country)
 	    		jQuery('<p>Select from the following places that were found matching your search:</p>').appendTo('#place_search_output');
 	    		var ol=jQuery('<ol>');
 		  		jQuery.each(found.places, function(i,place){
-		  			if (place.country==country) {
-			  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
-			  			placename = place.name+' (' + place.placeTypeName + '), '+place.admin1;
-			  			if (place.admin2!=null)
-			  				placename = placename + '\\' + place.admin2;
-						jQuery('<li><a href="#" onclick="show_found_place('+ref+');">' + placename + '</a></li>').appendTo(ol);
-					}
+		  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
+		  			placename = place.name+' (' + place.placeTypeName + ')';
+		  			if (place.admin1!='')
+		  				placename = placename + ', '+place.admin1
+		  			if (place.admin2!='')
+		  				placename = placename + '\\' + place.admin2;
+					jQuery('<li><a href="#" onclick="show_found_place('+ref+');">' + placename + '</a></li>').appendTo(ol);
 		  		});
 		  		ol.appendTo('#place_search_output');
 		  		jQuery('#place_search_box').show("slow");
