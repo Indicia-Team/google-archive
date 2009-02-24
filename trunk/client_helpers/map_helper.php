@@ -130,15 +130,14 @@ Class Map extends helper_config{
 	/**
 	 * <p> Adds a layer from the Indicia Core to the map control.</p>
 	 */
-	public function addIndiciaLayer($title, $type){
+	public function addIndiciaLayer($title, $type, $namespace){
 		$this->addLayer("OpenLayers.Layer.WFS(
 			'$title','".$this->indiciaCore."wfs', 
-	{ request: 'GetFeature1.1',
-	PropertyName: '',
-	TypeName: '$type',
-	format: format,
-	isBaseLayer: false,
-	extractAttributes: true})");
+			{ typename: '$namespace:$type' },
+			{ 
+			  typename: '$type',
+			  extractAttributes: true
+			})");
 	}
 
 	/**
