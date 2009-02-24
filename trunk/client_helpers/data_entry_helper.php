@@ -154,7 +154,7 @@ class data_entry_helper extends helper_config {
        $grid .= "<script type='text/javascript'
        src='./addRowToGrid.js' ></script>";
        $javascript .= "var addRowFn = addRowToGrid('$url', $readAuth);
-       jQuery('#addRowButton').click(addRowFn);";
+       jQuery('#addRowButton').click(addRowFn);\r\n";
 
        // Drop an autocomplete box against the parent termlist
        $grid .= data_entry_helper::autocomplete('addSpeciesBox',
@@ -176,7 +176,7 @@ class data_entry_helper extends helper_config {
  public static function date_picker($id, $default = '') {
    global $javascript;
    $javascript .=
-   'jQuery(\'.'.$id.'\').datepicker({dateFormat : \'yy-mm-dd\', constrainInput: false}); ';
+   "jQuery('.$id').datepicker({dateFormat : 'yy-mm-dd', constrainInput: false});\r\n ";
    $r =
    "<input type='text' size='30' value='click here' class='date' id='$id' name='$id' value='$default'/>" .
    '<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style> ';
@@ -326,7 +326,7 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
  });
  jQuery('input#ac$id').result(function(event, data){
  jQuery('input#$id').attr('value', data.id);
- });";
+ });\r\n";
  $r = "<input type='hidden' id='$id' name='$id' value='$defaultValue' />".
  "<input id='ac$id' name='ac$id' value='$defaultName' />";
  return $r;
@@ -668,7 +668,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
   $r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
   $r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
   $javascript .= "init_map(\"".parent::$base_url."\", null, '$field_name', '$geom_field_name', ".
-  "$inc_virtual_earth, $inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');";
+  "$inc_virtual_earth, $inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');\r\n";
 
   $r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.
   'onblur="exit_sref();" onclick="enter_sref();"/>';
