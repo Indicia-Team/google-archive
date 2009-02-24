@@ -179,32 +179,58 @@ function init_map(base_url, wkt, field_name, geom_name, virtual_earth, google, g
 
 // Method called to find a place using the GeoPlanet API.
 // Pref_area is the text to suffix to location searches to help keep them within the target region, e.g. gb or Dorset.
-function find_place(pref_area)
+function find_place(pref_area, country)
 {
 	jQuery('#place_search_box').hide();
 	jQuery('#place_search_output').empty();
 	var ref;
 	var searchtext = jQuery('#place_search').attr('value');
-	var request = 'http://where.yahooapis.com/v1/places.q("' +
-			searchtext + ' ' + pref_area + ');count=10';
-    jQuery.getJSON(request + "?format=json&appid="+geoplanet_api_key+"&callback=?", function(data){
-    	if (data.places.count==1 && data.places.place[0].name.toLowerCase()==searchtext.toLowerCase()) {
-    		ref=data.places.place[0].centroid.longitude + ', ' + data.places.place[0].centroid.latitude;
-			show_found_place(ref);
-    	} else if (data.places.count!=0) {
-    		jQuery('<p>Select from the following places that were found matching your search:</p>').appendTo('#place_search_output');
-    		var ol=jQuery('<ol>');
-	  		jQuery.each(data.places.place, function(i,place){
-	  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
-				jQuery('<li><a href="#" onclick="show_found_place('+ref+');">'+place.name+' (' + place.placeTypeName + '), '+place.admin1 + '\\' + place.admin2 + '</a></li>').appendTo(ol);
-	  		});
-	  		ol.appendTo('#place_search_output');
-	  		jQuery('#place_search_box').show("slow");
-    	} else {
-    		jQuery('<p>No locations found with that name. Try a nearby town name.</p>').appendTo('#place_search_output');
-			jQuery('#place_search_box').show("slow");
-    	}
-	});
+	if (searchtext != '') {
+		var request = 'http://where.yahooapis.com/v1/places.q("' +
+				searchtext + ' ' + pref_area + '", "' + country + '");count=10';
+	    jQuery.getJSON(request + "?format=json&appid="+geoplanet_api_key+"&callback=?", function(data){
+	    	// an array to store the responses in the required country, because GeoPlanet will not limit to a country
+	    	var found = { places: [], count: 0 };
+	    	jQuery.each(data.places.place, function(i,place) {
+				if (place.country.toUpperCase()==country.toUpperCase()) {
+					found.places.push(place);
+					found.count++;
+				}
+			});
+	    	if (found.count==1 && found.places[0].name.toLowerCase()==searchtext.toLowerCase()) {
+	    		ref=found.places[0].centroid.longitude + ', ' + found.places[0].centroid.latitude;
+				show_found_place(ref);
+	    	} else if (found.count!=0) {
+	    		jQuery('<p>Select from the following places that were found matching your search:</p>').appendTo('#place_search_output');
+	    		var ol=jQuery('<ol>');
+		  		jQuery.each(found.places, function(i,place){
+		  			if (place.country==country) {
+			  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
+						jQuery('<li><a href="#" onclick="show_found_place('+ref+');">'+place.name+' (' + place.placeTypeName + '), '+place.admin1 + '\\' + place.admin2 + '</a></li>').appendTo(ol);
+					}
+		  		});
+		  		ol.appendTo('#place_search_output');
+		  		jQuery('#place_search_box').show("slow");
+	    	} else {
+	    		jQuery('<p>No locations found with that name. Try a nearby town name.</p>').appendTo('#place_search_output');
+				jQuery('#place_search_box').show("slow");
+	    	}
+		});
+	}
+}
+
+// Called from onkeypress on the find place text box. Disables the enter key from form submission, and
+// redirects it to the find_place method (same as clicking the adjacent button).
+function check_find_enter(e, pref_area, country)
+{
+	var key;
+	if(window.event)
+		key = window.event.keyCode; //IE
+	else
+		key = e.which; //firefox
+	if (key == 13)
+		find_place(pref_area, country);
+	return (key != 13);
 }
 
 // Once a place has been found, places the spatial reference as a point on the map.
