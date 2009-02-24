@@ -714,7 +714,8 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
    *
    * @return HTML for the location search box.
    */
-  public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb', $country='United Kingdom') {
+  public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb',
+  		$country='United Kingdom') {
 	$r = '<input name="'.$id.'" id="'.$id.'" onkeypress="return check_find_enter(event, \''.$pref_area.'\', \''.$country.'\')"/>' .
 		'<input type="button" style="margin-top: -2px;" value="find" onclick="find_place(\''.$pref_area.'\', \''.$country.'\');"/>' .
 		'<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
