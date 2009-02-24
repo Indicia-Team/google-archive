@@ -44,7 +44,7 @@ $lang = array
     'error_wrong_postgres_version'     => 'Required Postgresql version >= 8.2',
     'error_no_postgres_client_extension' => 'No php_pgsql extension found (postgresql). Check your php.ini file.',
     'error_no_php_curl_extension'        => 'No php_curl extension found. Check your php.ini file.',
-    'error_upgrade_for_end_user' => 'Fatal upgrade error. The system is in an unstable stade. Please consult the error log file and contact the indicia development team: john.vanbreda@biodiverseit.co.uk'
+    'error_upgrade_for_end_user' => 'Fatal upgrade error. The system may be in an unstable state. Please consult the error log file. For further support, please refer to the <a href="http://forums.nbn.org.uk/viewforum.php?id=19">Indicia Forum</a>.'
 );
 
 ?>
