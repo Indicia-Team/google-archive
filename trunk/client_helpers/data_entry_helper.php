@@ -3,7 +3,7 @@
 include('helper_config.php');
 
 class data_entry_helper extends helper_config {
-  
+
   /**
   * Helper function to collect javascript code in a single location.
   */
@@ -16,18 +16,18 @@ class data_entry_helper extends helper_config {
  </script>";
  return $script;
  }
- 
- 
+
+
  /**
  * Helper function to support image upload
  */
  public static function image_upload($id){
  $r = "<label for='$id'>Image upload</label>";
  $r .= "<input type='file' id='$id' name='$id' accept='png|jpg|gif'/>";
- 
+
  return $r;
  }
- 
+
  /**
  * Helper function to generate a species checklist from a given taxon list.
  *
@@ -67,9 +67,9 @@ class data_entry_helper extends helper_config {
    curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
    $taxalist = curl_exec($session);
    $taxalist = json_decode(array_pop(explode("\r\n\r\n",$taxalist)), true);
-   
+
    // Get the list of occurrence attributes
-   foreach ($occ_attrs as $occAttr) 
+   foreach ($occ_attrs as $occAttr)
    {
      $occAttrRequest = "$url/occurrence_attribute/$occAttr?mode=json";
      $occAttrRequest .= "&$readAuth";
@@ -81,7 +81,7 @@ class data_entry_helper extends helper_config {
        $b = $a[0];
        $occAttrs[$occAttr] = $b['caption'];
        // Build the correct control
-       switch ($b['data_type']) 
+       switch ($b['data_type'])
        {
 	 case 'L':
 	   $tlId = $b['termlist_id'];
@@ -95,16 +95,16 @@ class data_entry_helper extends helper_config {
 	   $occAttrControls[$occAttr] =
 	   "<input type='text' class='date' id='oa:$occAttr' name='oa:$occAttr' value='click here'/>";
 	   break;
-	   
+
 	 default:
 	   $occAttrControls[$occAttr] =
 	   "<input type='text' id='oa:$occAttr' name='oa:$occAttr'/>";
 	   break;
        }
      }
-     
+
    }
-   
+
    // Build the grid
    if (! array_key_exists('error', $taxalist))
    {
@@ -116,7 +116,7 @@ class data_entry_helper extends helper_config {
        $grid .= "<td class='scOccAttrCell'>$oc</td>";
      }
      $grid .= "</tr></tbody></table>";
-     
+
      $grid .= "<table class='speciesCheckList'>";
      $grid .= "<thead><th>Species</th><th>Present (Y/N)</th>";
      foreach ($occAttrs as $a) {
@@ -136,7 +136,7 @@ class data_entry_helper extends helper_config {
        $grid .= "</tr>";
      }
      $grid .= "</tbody></table>";
-     
+
      // Insert an autocomplete box if the termlist has a parent or an alternate
      // termlist has been given in the parameter.
      if ($lookupList == null) {
@@ -148,14 +148,14 @@ class data_entry_helper extends helper_config {
      $lookupList = $tl[0]['parent_id'];
    }
      }
-     
+
      if ($lookupList != null) {
        // Javascript to add further rows to the grid
        $grid .= "<script type='text/javascript'
        src='./addRowToGrid.js' ></script>";
        $javascript .= "var addRowFn = addRowToGrid('$url', $readAuth);
        jQuery('#addRowButton').click(addRowFn);";
-       
+
        // Drop an autocomplete box against the parent termlist
        $grid .= data_entry_helper::autocomplete('addSpeciesBox',
        'taxa_taxon_list', 'taxon', 'id', $readAuth +
@@ -163,13 +163,13 @@ class data_entry_helper extends helper_config {
 	      'taxon_list_id' => $lookupList));
 	      $grid .= "<button type='button' id='addRowButton'>
 	      Add Row</button>";
-	      
+
      }
-     
+
      return $grid;
    }
  }
- 
+
  /**
  * Helper function to insert a date picker control.
  */
@@ -182,8 +182,8 @@ class data_entry_helper extends helper_config {
    '<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style> ';
    return $r;
  }
- 
- 
+
+
  /**
  * Helper function to generate a select control from a Indicia core service query.
  *
@@ -197,7 +197,7 @@ class data_entry_helper extends helper_config {
  *
  * @return string HTML code for a select control.
  */
- public static function select($id, $entity, $nameField, $valueField = null, $extraParams = null, $default = '') 
+ public static function select($id, $entity, $nameField, $valueField = null, $extraParams = null, $default = '')
  {
    $url = parent::$base_url."/index.php/services/data";
    // If valueField is null, set it to $nameField
@@ -217,7 +217,7 @@ class data_entry_helper extends helper_config {
      $r .= "<select name='$id' id='$id' >";
      foreach ($response as $item){
  if (array_key_exists($nameField, $item) &&
-   array_key_exists($valueField, $item)) 
+   array_key_exists($valueField, $item))
    {
      $selected = ($default == $item[$valueField]) ? "selected = 'selected'" : '';
      $r .= "<option value='$item[$valueField]' $selected >";
@@ -229,14 +229,14 @@ class data_entry_helper extends helper_config {
  }
  else
    echo "Error loading control";
- 
+
  return $r;
 }
 
 /**
 * Helper function to generate a list box from a Indicia core service query.
 */
-public static function listbox($id, $entity, $nameField, $size = 3, $multival = false, $valueField = null, $extraParams = null, $default = '') 
+public static function listbox($id, $entity, $nameField, $size = 3, $multival = false, $valueField = null, $extraParams = null, $default = '')
 {
   $url = parent::$base_url."/index.php/services/data";
   // If valueField is null, set it to $nameField
@@ -258,7 +258,7 @@ public static function listbox($id, $entity, $nameField, $size = 3, $multival = 
    foreach ($response as $item)
  {
    if (array_key_exists($nameField, $item) &&
-     array_key_exists($valueField, $item)) 
+     array_key_exists($valueField, $item))
    {
      $selected = ($default == $item[$valueField]) ? 'selected="selected"' : '';
      $r .= "<option value='$item[$valueField]' $selected >";
@@ -288,13 +288,13 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
   }
   // lop the comma off the end
   $sParams = substr($sParams, 0, -1);
-  
+
   // Reference the necessary libraries
-  $javascript .= "jQuery('input#ac$id').autocomplete('$url/$entity', 
+  $javascript .= "jQuery('input#ac$id').autocomplete('$url/$entity',
       {
 	minChars : 1,
       mustMatch : true,
-      extraParams : 
+      extraParams :
       {
 	orderby : '$nameField',
       mode : 'json',
@@ -302,21 +302,21 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
       $sParams
       },
       dataType: 'jsonp',
-      parse: function(data) 
+      parse: function(data)
  {
    var results = [];
-   jQuery.each(data, function(i, item) 
+   jQuery.each(data, function(i, item)
    {
-     results[results.length] = 
+     results[results.length] =
      {
        'data' : item,
        'result' : item.$nameField,
-       'value' : item.$valueField 
+       'value' : item.$valueField
      };
    });
    return results;
  },
- formatItem: function(item) 
+ formatItem: function(item)
  {
    return item.$nameField;
  },
@@ -331,7 +331,7 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
  "<input id='ac$id' name='ac$id' value='$defaultName' />";
  return $r;
  }
- 
+
  /**
  * Helper function to list the output from a request against the data services, using an HTML template
  * for each item.
@@ -372,10 +372,10 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
    }
    else
      echo "Error loading control";
-   
+
    return $r;
  }
- 
+
  /**
  * Helper function to generate a radio group from a Indicia core service query.
  */
@@ -404,10 +404,10 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
 	 }
      }
    }
-   
+
    return $r;
  }
- 
+
  public static function forward_post_to($entity, $array = null) {
    if ($array == null) $array = self::wrap($_POST, $entity);
    $request = parent::$base_url."/index.php/services/data/$entity";
@@ -430,22 +430,22 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
    // The last block of text in the response is the body
    return json_decode(array_pop(explode("\r\n\r\n",$response)), true);
  }
- 
+
  public static function handle_media($media_id = 'imgUpload') {
    syslog(LOG_DEBUG, print_r($_FILES, true));
    if (array_key_exists($media_id, $_FILES)) {
      syslog(LOG_DEBUG, "SITE: Media id $media_id to upload.");
      $uploadpath = parent::$upload_path;
      $target_url = parent::$base_url."/index.php/services/data/handle_media";
-     
+
      $name = $_FILES[$media_id]['name'];
      $fname = $_FILES[$media_id]['tmp_name'];
      $fext = array_pop(explode(".", $name));
      $bname = basename($fname, ".$fext");
-     
+
      // Generate a file id to store the image as
      $destination = time().rand(0,1000).".".$fext;
-     
+
      if (move_uploaded_file($fname, $uploadpath.$destination)) {
        $postargs = array();
        if (array_key_exists('auth_token', $_POST))
@@ -461,17 +461,17 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
        $result=curl_exec ($ch);
        curl_close ($ch);
        return $destination;
-       
+
      } else {
        //TODO error messaging
        return false;
      }
    }
-   
-   
-   
+
+
+
  }
- 
+
  /**
  * Wraps data from a species checklist grid (generated by
  * data_entry_helper::species_checklist) into a suitable format for submission. This will
@@ -514,10 +514,10 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
        'fkId' => 'sample_id',
 	'model' => $occ);
  }
- 
+
  return $subModels;
  }
- 
+
  /**
  * Wraps attribute fields (entered as normal) into a suitable container for submission.
  * Throws an error if $entity is not something for which attributes are known to exist.
@@ -548,14 +548,14 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
        $entity."_attribute_id" => $a[1],
 		      'value' => $value
 		      );
-		      
+
      }
    }
    foreach ($oap as $oa) {
      $occAttrs[] = data_entry_helper::wrap($oa, "$entity"."_attribute");
    }
    return $occAttrs;
-   
+
  }
  public static function wrap( $array, $entity, $fkLink = false) {
    // Initialise the wrapped array
@@ -563,7 +563,7 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
    'id' => $entity,
 	       'fields' => array()
 	       );
-	       
+
 	       // Iterate through the array
 	       foreach ($array as $a => $b) {
 		 // Check whether this is a fk placeholder
@@ -593,7 +593,7 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
 		   // Set the value
 		   'value' => $b);
 	       }
-	       
+
  }
       }
       return $sa;
@@ -669,10 +669,10 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
   $r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
   $javascript .= "init_map(\"".parent::$base_url."\", null, '$field_name', '$geom_field_name', ".
   "$inc_virtual_earth, $inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');";
-  
+
   $r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.
   'onblur="exit_sref();" onclick="enter_sref();"/>';
-  if (count($systems)==1) 
+  if (count($systems)==1)
   {
     $srids = array_keys($systems);
     // only 1 spatial reference system, so put it into a hidden input
@@ -688,7 +688,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
   $r .= '<div id="map" class="smallmap" style="width: '.$width.'px; height: '.$height.'px;"></div>';
   return $r;
   }
-  
+
   /**
   * Private method to find an option from an associative array of options. If not present, returns the default.
   */
@@ -701,25 +701,28 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
     }
     return $r;
   }
-  
+
   /**
-  * Helper function to put a location search box onto the data entry page, linked to a map picker.
-  * The search box uses the GeoPlanet API to find locations.
-  *
-  * @param int $id id attribute for the returned control.
-  * @param string $link_text Text to display for the search link
-  * @param string $pref_area Text to suffix to location searches, to help keep them in the target region. E.g. Dorset.
-  *
-  * @return HTML for the location search box.
-  */
-  public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb') {
-    $r = '<input name="'.$id.'" id="'.$id.'"/><a href="#" onclick="find_place(\''.$pref_area.'\');" />'.$link_text.'</a>' .
-    '<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
-    '<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
-    return $r;
+   * Helper function to put a location search box onto the data entry page, linked to a map picker.
+   * The search box uses the GeoPlanet API to find locations.
+   *
+   * @param int $id id attribute for the returned control.
+   * @param string $link_text Text to display for the search link
+   * @param string $pref_area Text to suffix to location searches, to help keep them in the target region. E.g. Dorset.
+   * @param string $country Text Focus for to location searches, to enforce that they are only returned in the target country.
+   * Set to '' for worldwide searches. Defaults to United Kingdom.
+   *
+   * @return HTML for the location search box.
+   */
+  public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb', $country='United Kingdom') {
+	$r = '<input name="'.$id.'" id="'.$id.'" onkeypress="return check_find_enter(event, \''.$pref_area.'\', \''.$country.'\')"/>' .
+		'<input type="button" style="margin-top: -2px;" value="find" onclick="find_place(\''.$pref_area.'\', \''.$country.'\');"/>' .
+		'<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
+		'<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
+	return $r;
   }
-  
-  
+
+
   /**
   * Retrieves a read token and passes it back as an array suitable to drop into the
   * 'extraParams' options for an Ajax call.
@@ -741,7 +744,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
 		 'nonce' => $nonce
 		 );
   }
-  
+
   /**
   * Retrieves a token and inserts it into a data entry form which authenticates that the
   * form was submitted by this website.
