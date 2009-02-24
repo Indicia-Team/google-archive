@@ -206,7 +206,10 @@ function find_place(pref_area, country)
 		  		jQuery.each(found.places, function(i,place){
 		  			if (place.country==country) {
 			  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
-						jQuery('<li><a href="#" onclick="show_found_place('+ref+');">'+place.name+' (' + place.placeTypeName + '), '+place.admin1 + '\\' + place.admin2 + '</a></li>').appendTo(ol);
+			  			placename = place.name+' (' + place.placeTypeName + '), '+place.admin1;
+			  			if (place.admin2!=null)
+			  				placename = placename + '\\' + place.admin2;
+						jQuery('<li><a href="#" onclick="show_found_place('+ref+');">' + placename + '</a></li>').appendTo(ol);
 					}
 		  		});
 		  		ol.appendTo('#place_search_output');
