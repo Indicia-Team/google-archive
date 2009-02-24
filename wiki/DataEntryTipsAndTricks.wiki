@@ -18,7 +18,8 @@ The mouse wheel is used as a zoom control on an OpenLayers map by default. Howev
 				control.disableZoomWheel();
 			}
 		});
-});
+	});
+</script>
 }}}
 
 Because there is a map global variable that holds the OpenLayers map object, this technique can be used to take full control over the behaviour of the map if required.
