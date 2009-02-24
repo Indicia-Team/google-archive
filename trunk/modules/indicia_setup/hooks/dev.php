@@ -19,96 +19,96 @@
  */
 class Dev
 {
-    public static function __upgrade()
-    {
-        $uri = URI::instance();
-        // we havent to proceed futher if a setup call was made
-        if($uri->segment(1) == 'setup')
-        {
-            return;
-        }
+	public static function __upgrade()
+	{
+		$uri = URI::instance();
+		// we havent to proceed futher if a setup call was made
+		if($uri->segment(1) == 'setup')
+		{
+			return;
+		}
 
-        // get upgrade folder name
-        $dev_version_upgrade_folder = Kohana::config('indicia.devUpgradeFolder', false, false);
+		// get upgrade folder name
+		$dev_version_upgrade_folder = Kohana::config('indicia.devUpgradeFolder', false, false);
 
-        if( (null === $dev_version_upgrade_folder) || (false === $dev_version_upgrade_folder))
-        {
-            return;
-        }
+		if( (null === $dev_version_upgrade_folder) || (false === $dev_version_upgrade_folder))
+		{
+			return;
+		}
 
-        $_full_upgrade_folder_path = dirname(dirname(__file__)) . '/db/' . $dev_version_upgrade_folder;
+		$_full_upgrade_folder_path = dirname(dirname(__file__)) . '/db/' . $dev_version_upgrade_folder;
 
-        try
-        {
-            if(!is_dir($_full_upgrade_folder_path))
-            {
-                throw new  Exception("The folder dosent exists: " . $_full_upgrade_folder_path);
-            }
+		$upgrade = new Upgrade_Model;
+		try
+		{
+			if(!is_dir($_full_upgrade_folder_path))
+			{
+				throw new  Exception("The folder dosent exists: " . $_full_upgrade_folder_path);
+			}
 
-            if(!is_writeable($_full_upgrade_folder_path))
-            {
-                throw new  Exception("The folder isnt writeable: " . $_full_upgrade_folder_path);
-            }
+			if(!is_writeable($_full_upgrade_folder_path))
+			{
+				throw new  Exception("The folder isnt writeable: " . $_full_upgrade_folder_path);
+			}
 
-            // get last executed sql file name
-            $tmp_last_executed_sql_file = Dev::get_last_executed_sql_file_name( $_full_upgrade_folder_path );
+			// get last executed sql file name
+			$tmp_last_executed_sql_file = Dev::get_last_executed_sql_file_name( $_full_upgrade_folder_path );
 
-            $last_executed_sql_file = str_replace("____", "", $tmp_last_executed_sql_file) . '.sql';
+			$last_executed_sql_file = str_replace("____", "", $tmp_last_executed_sql_file) . '.sql';
 
-            $upgrade = new Upgrade_Model;
-            $upgrade->begin();
+			$upgrade->begin();
 
-            $upgrade->execute_sql_scripts( $dev_version_upgrade_folder, $last_executed_sql_file );
+			$upgrade->execute_sql_scripts( $dev_version_upgrade_folder, $last_executed_sql_file );
 
-            // write the new last executed file name
-            if(!empty($upgrade->last_executed_file))
-            {
-                if( false === @file_put_contents( $_full_upgrade_folder_path . '/____' . str_replace(".sql", "", $upgrade->last_executed_file) . '____', 'nop' ))
-                {
-                    throw new  Exception("Couldnt write last executed file name: ". $_full_upgrade_folder_path . '/____' . str_replace(".sql", "", $upgrade->last_executed_file) . '____');
-                }
-            }
+			// write the new last executed file name
+			if(!empty($upgrade->last_executed_file))
+			{
+				if( false === @file_put_contents( $_full_upgrade_folder_path . '/____' . str_replace(".sql", "", $upgrade->last_executed_file) . '____', 'nop' ))
+				{
+					throw new  Exception("Couldnt write last executed file name: ". $_full_upgrade_folder_path . '/____' . str_replace(".sql", "", $upgrade->last_executed_file) . '____');
+				}
+			}
 
-            // remove the previous last executed file name
-            if(file_exists($_full_upgrade_folder_path . '/' . $tmp_last_executed_sql_file))
-            {
-                @unlink($_full_upgrade_folder_path . '/' . $tmp_last_executed_sql_file);
-            }
+			// remove the previous last executed file name
+			if(file_exists($_full_upgrade_folder_path . '/' . $tmp_last_executed_sql_file))
+			{
+				@unlink($_full_upgrade_folder_path . '/' . $tmp_last_executed_sql_file);
+			}
 
-            $upgrade->commit();
-        }
-        catch(Kohana_Database_Exception $e)
-        {
-            $upgrade->log($e);
-        }
-        catch(Exception $e)
-        {
-            $upgrade->log($e);
-        }
-    }
+			$upgrade->commit();
+		}
+		catch(Kohana_Database_Exception $e)
+		{
+			$upgrade->log($e);
+		}
+		catch(Exception $e)
+		{
+			$upgrade->log($e);
+		}
+	}
 
-    private static function get_last_executed_sql_file_name( $_full_upgrade_folder_path )
-    {
-        if ( (($handle = @opendir( $_full_upgrade_folder_path ))) != FALSE )
-        {
-            while ( (( $file = readdir( $handle ) )) != false )
-            {
-                if ( !preg_match("/^____.*____$/", $file) )
-                {
-                    continue;
-                }
+	private static function get_last_executed_sql_file_name( $_full_upgrade_folder_path )
+	{
+		if ( (($handle = @opendir( $_full_upgrade_folder_path ))) != FALSE )
+		{
+			while ( (( $file = readdir( $handle ) )) != false )
+			{
+				if ( !preg_match("/^____.*____$/", $file) )
+				{
+					continue;
+				}
 
-                return $file;
-            }
-            @closedir( $handle );
+				return $file;
+			}
+			@closedir( $handle );
 
-            return '';
-        }
-        else
-        {
-            throw new  Exception("Cant open dir " . $_full_upgrade_folder_path);
-        }
-    }
+			return '';
+		}
+		else
+		{
+			throw new  Exception("Cant open dir " . $_full_upgrade_folder_path);
+		}
+	}
 }
 
 Event::add('system.pre_controller', array('Dev', '__upgrade'));
