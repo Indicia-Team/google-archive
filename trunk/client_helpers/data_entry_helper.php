@@ -764,9 +764,9 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
     list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
     curl_close($session);
     $result = '<input id="auth_token" name="auth_token" type="hidden" ' .
-    'value="'.sha1("$nonce:$password").'">'."\r\n";
+    'value="'.sha1("$nonce:$password").'" />'."\r\n";
     $result .= '<input id="nonce" name="nonce" type="hidden" ' .
-    'value="'.$nonce.'">'."\r\n";
+    'value="'.$nonce.'" />'."\r\n";
     return $result;
   }
 }
