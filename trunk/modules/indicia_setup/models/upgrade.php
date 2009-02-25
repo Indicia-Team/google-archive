@@ -273,6 +273,10 @@ class Upgrade_Model extends Model
                 {
                     $_switch = false;
                 }
+                else
+                {
+                    $last_executed_file = $last_executed_file . '.sql';
+                }
             }
 
             foreach($file_name as $name)

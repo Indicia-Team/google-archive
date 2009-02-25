@@ -55,7 +55,7 @@ class Dev
             // get last executed sql file name
             $tmp_last_executed_sql_file = Dev::get_last_executed_sql_file_name( $_full_upgrade_folder_path );
 
-            $last_executed_sql_file = str_replace("____", "", $tmp_last_executed_sql_file) . '.sql';
+            $last_executed_sql_file = str_replace("____", "", $tmp_last_executed_sql_file);
 
             $upgrade->begin();
 
