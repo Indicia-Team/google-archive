@@ -5,8 +5,8 @@ $lang = array
     'title'       => 'Indicia Setup',
     'description' => 'Before you start, please create a PostGIS database using the template, for example using the script: <br />' .
         'CREATE DATABASE indicia TEMPLATE=template_postgis;<br />'.
-        'Then, create a schema to insert the Indicia tables into, for example by running the following script against your new indicia database: <br />'.
-        'CREATE SCHEMA indicia;',
+        'Then, create a user login with the required access to this database. The schema you define below will be auto-created by the '.
+        'setup procedure. For more information, see <a href="http://code.google.com/p/indicia/wiki/Installation">the Installation Guide</a>.',
     'database'    => 'Database',
     'db_schema'   => 'Schema for Indicia tables',
     'db_host'     => 'Host',
