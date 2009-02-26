@@ -81,8 +81,8 @@ echo html::error_message($model->getError('taxa_taxon_list_id')); ?>
 </li>
 <li>
 <label for='date'>Date:</label>
-<?php print form::input('date');
-echo html::error_message($model->taxa_taxon_list->taxon->getError('taxon')); ?>
+<?php print form::input('date', $model->sample->vague_date);
+echo html::error_message($model->taxa_taxon_list->taxon->getError('date_start')); ?>
 </li>
 <li>
 <label for='determiner'>Determiner:</label>
