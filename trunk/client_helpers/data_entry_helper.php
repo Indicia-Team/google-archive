@@ -652,6 +652,7 @@ else
 */
 public static function map_picker($field_name, $geom_field_name, $systems, $opts = Array(), $default = '') {
   global $javascript;
+  $default = ($default == '') ? 'null' : "'".$default."'";
   // Handle the options
   $init_value = self::option('init_value', $opts, '');
   $width      = self::option('width', $opts, '600');
@@ -667,7 +668,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
   $r = '<script type="text/javascript" src="'.parent::$base_url.'/media/js/OpenLayers.js"></script>';
   $r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
   $r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
-  $javascript .= "init_map(\"".parent::$base_url."\", null, '$field_name', '$geom_field_name', ".
+  $javascript .= "init_map(\"".parent::$base_url."\", $default, '$field_name', '$geom_field_name', ".
   "$inc_virtual_earth, $inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');\r\n";
 
   $r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.

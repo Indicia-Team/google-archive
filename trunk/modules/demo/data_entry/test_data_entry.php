@@ -132,7 +132,8 @@ $readAuth = data_entry_helper::get_read_auth(1, 'password');
 (
 'entered_sref', 'geom',
 array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)'),
-array('inc_google'=>'true', 'init_layer'=>'Google Physical')
+array('inc_google'=>'true', 'init_layer'=>'Google Physical'),
+field('geom')
 ); ?>
 <br />
 <label for="location_name">Locality Description:</label>
