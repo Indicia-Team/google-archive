@@ -65,11 +65,13 @@ Class Map extends helper_config
   {
     $this->indiciaCore = $indiciaCore;
     $google_api_key = parent::$google_api_key;
+    $multimap_api_key = parent::$multimap_api_key;
     $this->library_sources = Array
     (
     'openLayers' => '../../media/js/OpenLayers.js',
     'google' => "http://maps.google.com/maps?file=api&v=2&key=$google_api_key",
-    'virtualearth' => 'http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'
+    'virtualearth' => 'http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1',
+    'multimap' => "http://developer.multimap.com/API/maps/1.2/$multimap_api_key"
     );
     $lta = array();
     $this->addLibrary('openLayers');
@@ -138,7 +140,17 @@ Class Map extends helper_config
 	{'type': VEMapStyle.Aerial, 'sphericalMercator': true})");
 	$this->addLibrary('virtualearth');
 	break;
-  }
+      case self::LAYER_MULTIMAP_DEFAULT:
+	$this->addLayer("OpenLayers.Layer.MultiMap(
+	'MultiMap', {sphericalMercator: true})");
+	$this->addLibrary('multimap');
+	break;
+      case self::LAYER_MULTIMAP_LANDRANGER:
+	$this->addLayer("OpenLayers.Layer.MultiMap(
+	'OS Landranger', {sphericalMercator: true, dataSource: 904})");
+	$this->addLibrary('multimap');
+	break;
+    }
 }
 
 /**
