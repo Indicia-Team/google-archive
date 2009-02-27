@@ -49,6 +49,8 @@ Class Map extends helper_config
   const LAYER_OPENLAYERS_WMS = 4;
   const LAYER_NASA_MOSAIC = 5;
   const LAYER_VIRTUAL_EARTH = 6;
+  const LAYER_MULTIMAP_DEFAULT = 7;
+  const LAYER_MULTIMAP_LANDRANGER = 8;
   
   /**
   * <p>Returns a new map. This will not display the map until the render() method is

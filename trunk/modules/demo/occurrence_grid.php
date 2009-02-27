@@ -7,7 +7,7 @@
 <script type='text/javascript'>
 (function($) {
 $(document).ready(function(){
-$('div#grid').indiciaDataGrid('occurrence', {actionColumns: {view : "occurrence.php?id=£id£"}});
+$('div#grid').indiciaDataGrid('occurrence', {actionColumns: {view : "occurrence.php?id=£id£", edit : "data_entry/test_data_entry.php?id=£id£"}});
 });
 })(jQuery);
 </script>
