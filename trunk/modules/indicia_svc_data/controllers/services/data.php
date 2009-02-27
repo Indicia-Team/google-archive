@@ -547,7 +547,9 @@ class Data_Controller extends Service_Base_Controller {
 	      if (array_key_exists(strtolower($param), $this->view_columns)) 
 	      {
 		// A parameter has been supplied which specifies the field name of a filter field
-		if ($this->view_columns[$param]=='int' || $this->view_columns[$param]=='bool')
+			if ($value == 'NULL')
+				$value = NULL;
+	    if ($this->view_columns[$param]=='int' || $this->view_columns[$param]=='bool')
 		$where[$param]=$value;
 		else
 		  $like[$param]=$value;

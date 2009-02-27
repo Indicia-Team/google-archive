@@ -18,6 +18,7 @@
 <li><a href="map.php">Demonstration distribution map</a></li>
 <li><a href="valid.php">Simple demonstration of validation</a></li>
 <li><a href="occurrence_grid.php">Browse a grid of occurrences captured by this instance of the Core Module.</a></li>
+<li><a href="test_treeview.php">Demonstration of 3 term based treeviews.</a></li>
 <li><a href="../../index.php/services/data/location?mode=xml&view=detail">List the locations as XML by calling the Data service</a></li>
 
 </ol>

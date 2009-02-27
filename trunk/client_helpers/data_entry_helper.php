@@ -170,6 +170,83 @@ class data_entry_helper extends helper_config {
    }
  }
 
+	/**
+	 * Helper function to generate a treeview from a given list
+	 *
+	 * @param string $control_id id attribute for the returned hidden input control.
+	 * NB the tree itself will have an id of "tr$control_id"
+	 * @param string $entity Name (Kohana-style) of the database entity to be queried.
+	 * @param string $nameField Field to draw values to show in the control from.
+	 * @param string $valueField Field to draw values to return from the control from. Defaults
+	 * to the value of $nameField.
+	 * @param string $topField Field used in filter to define top level entries
+	 * @param string $topValue Value of $topField used in filter to define top level entries
+	 * @param string $parentField Field used to indicate parent within tree for a record.
+	 * to the value of $nameField.
+	 * @param string $defaultValue initial value to set the control to (not currently used).
+ 	 * @param string[] extraParams Array of key=>value pairs which will be passed to the service
+	 * as GET parameters. Needs to specify the read authorisation key/value pair, needed for making
+	 * queries to the data services. Can also be used to specify the "view" type e.g. "detail"
+	 * @param string extraClass : main class to be added to UL tag - currently can be treeview, treeview-red,
+	 * treeview_black, treeview-gray. The filetree class although present, does not work properly.
+	 * 
+	 * TO DO
+	 * Need to do initial value.
+	 * Need to look at how the filetree can be implemented.
+	 */
+ 
+	public static function treeview($control_id, $entity,
+				$nameField, $valueField, $topField, $topValue, $parentField,
+				$defaultValue, $extraParams, 
+				$extraClass = 'treeview'){
+		// Reference to the config file.
+		global $javascript;
+		// Declare the data service
+		$url = parent::$base_url."/index.php/services/data";
+		// If valueField is null, set it to $nameField
+		if ($valueField == null) $valueField = $nameField;
+		// Do stuff with extraParams
+		$sParams = '';
+		foreach ($extraParams as $a => $b){
+			$sParams .= "$a : '$b',";
+		}
+		// lop the comma off the end
+		$sParams = substr($sParams, 0, -1);
+		
+		$javascript .= "$('#tr$control_id').treeview(
+			{
+				url: '$url/$entity',
+				extraParams :
+				{
+					orderby : '$nameField',
+					mode : 'json',
+					$sParams
+				},
+				valueControl: '$control_id',
+				nameField: '$nameField',
+				valueField: '$valueField',
+				topField: '$topField',
+				topValue: '$topValue',
+				parentField: '$parentField',
+				dataType: 'jsonp',
+				parse: function(data)
+				{
+					var results =
+								{
+									'data' : data,
+									'caption' : data.$nameField,
+									'value' : data.$valueField
+								};
+					return results;
+				}
+			}
+		);";
+		
+		$tree = '<input type="hidden" id="'.$control_id.'" name="'.$control_id.'" /><ul id="tr'.$control_id.'" class="'.$extraClass.'"></ul>';
+		return $tree;
+	}
+
+ 
  /**
  * Helper function to insert a date picker control.
  */
