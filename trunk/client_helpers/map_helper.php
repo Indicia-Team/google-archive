@@ -20,6 +20,8 @@ Class Map extends helper_config
   public $indiciaCore = 'http://localhost:8080/geoserver/';
   // Proxy host to use for cross-site requests
   public $proxy = 'http://localhost/cgi-bin/proxy.cgi?url=';
+  // Use the proxy?
+  public $useProxy = true;
   // Private array of options - passed in similar style to the javascript
   private $options = Array
   (
@@ -32,8 +34,6 @@ Class Map extends helper_config
   );
   // Map display format
   public $format = 'image/png';
-  // Google API Key
-  private $googleApiKey;
   // Private array of layers
   private $layers = Array();
   // Private array of libraries which may be included 
@@ -57,7 +57,7 @@ Class Map extends helper_config
   * called.</p>
   * 
   * @param String $indiciaCore URL of the Indicia Core geoServer instance.
-  * @param Mixed $layers Indicates layers to load automatically - by default will load
+  * @param Mixed $layers Indicates preset layers to load automatically - by default will load
   * all preset layers (calling true) but may also specify a single layer or array of
   * layers to display. Non-preset layers should be added later.
   */
@@ -161,7 +161,8 @@ public function addIndiciaWMSLayer($title, $layer, $base = true)
   $this->addLayer("OpenLayers.Layer.WMS(
   '$title', '".$this->indiciaCore."wms',
 		   { layers: '$layer',
-		   isBaseLayer: '$base' })");
+		   isBaseLayer: '$base',
+		   sphericalMercator: true})");
 }
 
 /**
@@ -171,7 +172,14 @@ public function addIndiciaWFSLayer($title, $type)
 {
   $this->addLayer("OpenLayers.Layer.WFS(
   '$title', '".$this->indiciaCore."wfs',
-		   { typename: '$type' })");
+		   { 
+		     typename: '$type',
+		     request: 'GetFeature',
+		    },
+		   {
+		     sphericalMercator: true
+		    }
+		    )");
 }
 
 /**
@@ -221,7 +229,7 @@ public function render()
   $r .= "var format = '$this->format';\n"
   ."function init(){\n"
   ."var options = {".implode(",\n", $opt)."};\n";
-  $r .= "OpenLayers.ProxyHost = '".$this->proxy."';\n";
+  if ($this->useProxy) $r .= "OpenLayers.ProxyHost = '".$this->proxy."';\n";
   $r .= "$ion = new OpenLayers.Map('".$this->name."', options);\n";
   foreach ($this->layers as $layer)
   {
@@ -242,7 +250,6 @@ public function render()
   .$this->height.";'></div>\n";
   $r .= "<script type='text/javascript'>init();</script>";
   return $r;
-  }
-  
-  }
-  
+}
+
+}
