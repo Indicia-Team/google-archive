@@ -29,5 +29,15 @@ interface ReportReader_Core
    */
   public function getDescription(){}
   
+  /**
+   * <p> Returns the final query to be executed on the server, with any parameters inserted. </p>
+   */
+  public function getQuery(){}
+  
+  /**
+   * <p> Uses source-specific validation methods to check whether the report query is valid. </p>
+   */
+  public function isValid(){}
+  
   
 }

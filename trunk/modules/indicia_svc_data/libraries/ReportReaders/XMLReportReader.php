@@ -18,6 +18,6 @@
 * @version $Rev$ / $LastChangedDate$
 */
 
-class XMLReportReader implements ReportReader
+class XMLReportReader_Core implements ReportReader
 {
 }
