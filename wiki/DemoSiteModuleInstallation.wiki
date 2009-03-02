@@ -1,0 +1,13 @@
+#summary How to get the demonstration pages up and running.
+
+= Introduction =
+
+Indicia comes with a number of demonstration pages, which showcase some of the features of a site module and give ideas as to how basic data entry/accession features may be built with the helper tools provided. This guide shows how to install and configure the demonstration pages following a fresh install.
+
+= Details =
+
+Should cover:
+
+*config files
+*Geoserver
+*Other options?
