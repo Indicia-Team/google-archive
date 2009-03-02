@@ -40,6 +40,7 @@ Class Map extends helper_config
   private $library_sources = Array();
   private $libraries = Array();
   private $centre = "new OpenLayers.LonLat(-100000,6700000),7";
+  private $haskey = Array('google' => true, 'multimap' => true);
   
   // Constants used to add default layers
   const LAYER_GOOGLE_PHYSICAL = 0;
@@ -65,7 +66,9 @@ Class Map extends helper_config
   {
     $this->indiciaCore = $indiciaCore;
     $google_api_key = parent::$google_api_key;
+    if ($google_api_key == '...') $this->haskey['google'] = false;
     $multimap_api_key = parent::$multimap_api_key;
+    if ($multimap_api_key == '...') $this->haskey['multimap'] = false;
     $this->library_sources = Array
     (
     'openLayers' => '../../media/js/OpenLayers.js',
@@ -99,157 +102,169 @@ Class Map extends helper_config
     switch ($layer)
     {
       case self::LAYER_GOOGLE_PHYSICAL:
-	$this->addLayer("OpenLayers.Layer.Google(
-	'Google Physical',
-		       {type: G_PHYSICAL_MAP, 'sphericalMercator': 'true'})");
-		       $this->addLibrary('google');
-		       break;
+	if ($this->haskey['google'])
+	{
+	  $this->addLayer("OpenLayers.Layer.Google
+	  (
+	  'Google Physical',
+	  {type: G_PHYSICAL_MAP, 'sphericalMercator': 'true'})");
+	  $this->addLibrary('google');
+	}
+	break;
       case self::LAYER_GOOGLE_STREETS:
-	$this->addLayer("OpenLayers.Layer.Google(
-	'Google Streets',
-	{numZoomLevels : 20, 'sphericalMercator': true})");
-	$this->addLibrary('google');
+	if ($this->haskey['google'])
+	{
+	  $this->addLayer("OpenLayers.Layer.Google('Google Streets',
+	  {numZoomLevels : 20, 'sphericalMercator': true})");
+	  $this->addLibrary('google');
+	}
 	break;
       case self::LAYER_GOOGLE_HYBRID:
-	$this->addLayer("OpenLayers.Layer.Google(
-	'Google Hybrid',
-			   {type: G_HYBRID_MAP, numZoomLevels: 20, 'sphericalMercator': true})");
-			   $this->addLibrary('google');
-			   break;
+	if ($this->haskey['google'])
+	{
+	  $this->addLayer("OpenLayers.Layer.Google('Google Hybrid',
+	  {type: G_HYBRID_MAP, numZoomLevels: 20, 'sphericalMercator': true})");
+	  $this->addLibrary('google');
+	}
+	break;
       case self::LAYER_GOOGLE_SATELLITE:
-	$this->addLayer("OpenLayers.Layer.Google(
-	'Google Satellite',
-	{type: G_SATELLITE_MAP, numZoomLevels: 20, 'sphericalMercator': true})");
-	$this->addLibrary('google');
+	if ($this->haskey['google'])
+	{
+	  $this->addLayer("OpenLayers.Layer.Google('Google Satellite',
+	  {type: G_SATELLITE_MAP, numZoomLevels: 20, 'sphericalMercator': true})");
+	  $this->addLibrary('google');
+	}
 	break;
       case self::LAYER_OPENLAYERS_WMS:
-	$this->addLayer("OpenLayers.Layer.WMS(
-	'OpenLayers WMS',
-			   'http://labs.metacarta.com/wms/vmap0',
-			   {layers: 'basic', 'sphericalMercator': true})");
-			   break;
+	$this->addLayer("OpenLayers.Layer.WMS('OpenLayers WMS',
+	'http://labs.metacarta.com/wms/vmap0',
+	{layers: 'basic', 'sphericalMercator': true})");
+	break;
       case self::LAYER_NASA_MOSAIC:
-	$this->addLayer("OpenLayers.Layer.WMS(
-	'NASA Global Mosaic',
+	$this->addLayer("OpenLayers.Layer.WMS('NASA Global Mosaic',
 	'http://t1.hypercube.telascience.org/cgi-bin/landsat7',
 	{layers: 'landsat7', 'sphericalMercator': true})");
 	break;
       case self::LAYER_VIRTUAL_EARTH:
-	$this->addLayer("OpenLayers.Layer.VirtualEarth(
-	'Virtual Earth',
+	$this->addLayer("OpenLayers.Layer.VirtualEarth('Virtual Earth',
 	{'type': VEMapStyle.Aerial, 'sphericalMercator': true})");
 	$this->addLibrary('virtualearth');
 	break;
       case self::LAYER_MULTIMAP_DEFAULT:
-	$this->addLayer("OpenLayers.Layer.MultiMap(
-	'MultiMap', {sphericalMercator: true})");
-	$this->addLibrary('multimap');
+	if ($this->haskey['multimap'])
+	{
+	  $this->addLayer("OpenLayers.Layer.MultiMap(
+	  'MultiMap', {sphericalMercator: true})");
+	  $this->addLibrary('multimap');
+	}
 	break;
       case self::LAYER_MULTIMAP_LANDRANGER:
-	$this->addLayer("OpenLayers.Layer.MultiMap(
-	'OS Landranger', {sphericalMercator: true, dataSource: 904})");
-	$this->addLibrary('multimap');
+	if ($this->haskey['multimap'])
+	{
+	  $this->addLayer("OpenLayers.Layer.MultiMap(
+	  'OS Landranger', {sphericalMercator: true, dataSource: 904})");
+	  $this->addLibrary('multimap');
+	}
 	break;
     }
-}
-
-/**
-* <p> Adds a WMS layer from the Indicia Core to the map. </p>
-*/
-public function addIndiciaWMSLayer($title, $layer, $base = true)
-{
-  $this->addLayer("OpenLayers.Layer.WMS(
-  '$title', '".$this->indiciaCore."wms',
-		   { layers: '$layer',
-		   isBaseLayer: '$base',
-		   sphericalMercator: true})");
-}
-
-/**
-* <p> Adds a layer from the Indicia Core to the map control.</p>
-*/
-public function addIndiciaWFSLayer($title, $type)
-{
-  $this->addLayer("OpenLayers.Layer.WFS(
-  '$title', '".$this->indiciaCore."wfs',
-		   { 
-		     typename: '$type',
-		     request: 'GetFeature',
-		    },
-		   {
-		     sphericalMercator: true
-		    }
-		    )");
-}
-
-/**
-* <p> Adds a layer to the map control.</p>
-*
-* @param String $layerDef Javascript definition (appropriate to the OpenLayers
-* library) for the layer to be added. This will be called as a new object and
-* as such should be parsable in this way.
-*/	
-public function addLayer($layerDef)
-{
-  $this->layers[] = $layerDef;
-}
-
-/**
-* <p> Adds a library to the libraries collection. </p>
-*/
-private function addLibrary($libName)
-{
-  if (! array_key_exists($libName, $this->libraries))
+  }
+  
+  /**
+  * <p> Adds a WMS layer from the Indicia Core to the map. </p>
+  */
+  public function addIndiciaWMSLayer($title, $layer, $base = true)
   {
-    if (array_key_exists($libName, $this->library_sources))
+    $this->addLayer("OpenLayers.Layer.WMS('$title',
+    '".$this->indiciaCore."wms',
+    { layers: '$layer',
+    isBaseLayer: '$base',
+    sphericalMercator: true})");
+  }
+  
+  /**
+  * <p> Adds a layer from the Indicia Core to the map control.</p>
+  */
+  public function addIndiciaWFSLayer($title, $type)
+  {
+    $this->addLayer("OpenLayers.Layer.WFS('$title', '".$this->indiciaCore."wfs',
+    { 
+      typename: '$type',
+      request: 'GetFeature',
+  },
+  {
+    sphericalMercator: true
+  }
+  )");
+  }
+  
+  /**
+  * <p> Adds a layer to the map control.</p>
+  *
+  * @param String $layerDef Javascript definition (appropriate to the OpenLayers
+  * library) for the layer to be added. This will be called as a new object and
+  * as such should be parsable in this way.
+  */	
+  public function addLayer($layerDef)
+  {
+    $this->layers[] = $layerDef;
+  }
+  
+  /**
+  * <p> Adds a library to the libraries collection. </p>
+  */
+  private function addLibrary($libName)
+  {
+    if (! array_key_exists($libName, $this->libraries))
     {
-      $this->libraries[$libName] = $this->library_sources[$libName];
+      if (array_key_exists($libName, $this->library_sources))
+      {
+	$this->libraries[$libName] = $this->library_sources[$libName];
+      }
     }
-  }
-}	
-
-// Renders the control
-public function render()
-{
-  $r = "";
-  $intLayers = array();
-  $ion = $this->internalObjectName;
-  foreach ($this->options as $key => $val) 
+  }	
+  
+  // Renders the control
+  public function render()
   {
-    $opt[] = $key.": ".$val;
+    $r = "";
+    $intLayers = array();
+    $ion = $this->internalObjectName;
+    foreach ($this->options as $key => $val) 
+    {
+      $opt[] = $key.": ".$val;
+    }
+    // Renders the libraries
+    foreach ($this->libraries as $lib)
+    {
+      $r .= "<script type='text/javascript' src='$lib' ></script>\n";
+    }
+    // Render the main javascript 
+    $r .= "<script type='text/javascript'>";
+    $r .= "var map = null;";
+    $r .= "var format = '$this->format';\n"
+    ."function init(){\n"
+    ."var options = {".implode(",\n", $opt)."};\n";
+    if ($this->useProxy) $r .= "OpenLayers.ProxyHost = '".$this->proxy."';\n";
+    $r .= "$ion = new OpenLayers.Map('".$this->name."', options);\n";
+    foreach ($this->layers as $layer)
+    {
+      $a = "layer".rand();
+      $intLayers[] = $a;
+      $r .= "var $a = new $layer;\n";
+    }
+    $r .= "$ion.addLayers([".implode(',', $intLayers)."]);\n";
+    if (count($this->layers) >=2 )
+    {
+      $r .= "$ion.addControl(new OpenLayers.Control.LayerSwitcher());\n";
+    }
+    $r .= "$ion.setCenter(".$this->centre.");";
+    $r .= "}";
+    $r .= "</script>\n";
+    $r .= "<div class='smallmap' id='".$this->name
+    ."' style='width: ".$this->width."; height: "
+    .$this->height.";'></div>\n";
+    $r .= "<script type='text/javascript'>init();</script>";
+    return $r;
   }
-  // Renders the libraries
-  foreach ($this->libraries as $lib)
-  {
-    $r .= "<script type='text/javascript' src='$lib' ></script>\n";
-  }
-  // Render the main javascript 
-  $r .= "<script type='text/javascript'>";
-  $r .= "var map = null;";
-  $r .= "var format = '$this->format';\n"
-  ."function init(){\n"
-  ."var options = {".implode(",\n", $opt)."};\n";
-  if ($this->useProxy) $r .= "OpenLayers.ProxyHost = '".$this->proxy."';\n";
-  $r .= "$ion = new OpenLayers.Map('".$this->name."', options);\n";
-  foreach ($this->layers as $layer)
-  {
-    $a = "layer".rand();
-    $intLayers[] = $a;
-    $r .= "var $a = new $layer;\n";
-  }
-  $r .= "$ion.addLayers([".implode(',', $intLayers)."]);\n";
-  if (count($this->layers) >=2 )
-  {
-    $r .= "$ion.addControl(new OpenLayers.Control.LayerSwitcher());\n";
-  }
-  $r .= "$ion.setCenter(".$this->centre.");";
-  $r .= "}";
-  $r .= "</script>\n";
-  $r .= "<div class='smallmap' id='".$this->name
-  ."' style='width: ".$this->width."; height: "
-  .$this->height.";'></div>\n";
-  $r .= "<script type='text/javascript'>init();</script>";
-  return $r;
-}
-
+  
 }
