@@ -4,7 +4,7 @@ $lang = array (
 	'title' => Array (
 		'required' => 'The title cannot be blank.',
 		'standard_text' => 'Only standard characters are allowed.',
-		'length' => 'The title must be between 1 and 100 letters.',
+		'length' => 'The title supplied is too long.', // note that the title name is used for fields which are of different max lengths, so can't be more specific
 		'default' => 'Invalid Input.',
 	),
 	'description' => Array (
