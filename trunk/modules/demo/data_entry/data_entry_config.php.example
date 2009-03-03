@@ -12,6 +12,5 @@
 	$config['geoplanet_api_key']='...';
 	$config['species_checklist_taxon_list']='2';
 	$config['species_checklist_occ_attributes'] = array(1,2);
-	$config['uploadpath'] = './upload/';
 
 ?>

@@ -66,7 +66,7 @@ Class Map extends helper_config
   {
     $this->indiciaCore = $indiciaCore;
     $google_api_key = parent::$google_api_key;
-    if ($google_api_key == '...') $this->haskey['google'] = false;
+    // if ($google_api_key == '...') $this->haskey['google'] = false;
     $multimap_api_key = parent::$multimap_api_key;
     if ($multimap_api_key == '...') $this->haskey['multimap'] = false;
     $this->library_sources = Array

@@ -30,7 +30,7 @@ interface ReportReader_Core
   public function getDescription(){}
   
   /**
-   * <p> Returns the final query to be executed on the server, with any parameters inserted. </p>
+   * <p> Returns the query specified. </p>
    */
   public function getQuery(){}
   
@@ -38,6 +38,11 @@ interface ReportReader_Core
    * <p> Uses source-specific validation methods to check whether the report query is valid. </p>
    */
   public function isValid(){}
+  
+  /**
+   * <p> Gets a list of parameters (name => type) </p>
+   */
+  public function getParams(){}
   
   
 }
