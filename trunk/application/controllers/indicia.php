@@ -49,7 +49,8 @@ class Indicia_Controller extends Template_Controller {
     (
     'Users'=>'user',
     'Websites'=>'website',
-    'Languages'=>'language'
+    'Languages'=>'language',
+    'Titles'=>'title'
     ),
     'Logged in as '.$_SESSION['auth_user']->username => array
     (

@@ -6,7 +6,7 @@
  */
 
 /**
- * Language page controller
+ * Title page controller
  *
  *
  * @package Indicia
@@ -16,24 +16,24 @@
  * @copyright xxxx
  * @version $Rev$ / $LastChangedDate$
  */
-class Language_Controller extends Gridview_Base_Controller {
+class Title_Controller extends Gridview_Base_Controller {
 
 	/**
      * Constructor
      */
 	public function __construct()
 	{
-		parent::__construct('language', 'language', 'language/index');
+		parent::__construct('title', 'title', 'title/index');
 		$this->columns = array(
-			'iso'=>'',
-			'language'=>'');
-		$this->pagetitle = "Languages";
-		$this->model = ORM::factory('language');
+			'title'=>''
+			);
+		$this->pagetitle = "Titles";
+		$this->model = ORM::factory('title');
 	}
 
 	/**
-	 * Action for language/create page/
-	 * Displays a page allowing entry of a new language.
+	 * Action for title/create page/
+	 * Displays a page allowing entry of a new title.
 	 */
 	public function create()
 	{
@@ -43,13 +43,13 @@ class Language_Controller extends Gridview_Base_Controller {
 		}
 		else
 		{
-	        $this->setView('language/language_edit', 'Language');
+	        $this->setView('title/title_edit', 'Title');
 		}
 	}
 
     /**
-     * Action for language/edit page
-     * Edit website data
+     * Action for title/edit page
+     * Edit person title data
      */
 	public function edit($id  = null)
 	{
@@ -59,12 +59,12 @@ class Language_Controller extends Gridview_Base_Controller {
 		}
 		else if ($id == null)
         {
-	   		$this->setError('Invocation error: missing argument', 'You cannot call edit language without an ID');
+	   		$this->setError('Invocation error: missing argument', 'You cannot call edit a title without an ID');
         }
         else
         {
-            $this->model = new Language_Model($id);
-            $this->setView('language/language_edit', 'language');
+            $this->model = new Title_Model($id);
+            $this->setView('title/title_edit', 'Title');
         }
 	}
 

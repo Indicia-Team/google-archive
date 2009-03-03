@@ -45,4 +45,6 @@ $config['occurrence'] = 'occurrence/page/1/10';
 $config['occurrence/edit/([0-9]+)'] = 'occurrence/edit/$1/1/10';
 $config['sample'] = 'sample/page/1/10';
 $config['sample/edit/([0-9]+)'] = 'sample/edit/$1/1/10';
+// Title
+$config['title'] = 'title/page/1/10';
 
