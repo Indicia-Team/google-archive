@@ -19,10 +19,9 @@
 */
 interface ReportReader_Core 
 {
-  const REPORT_DESCRIPTION_NAME = 0;
-  const REPORT_DESCRIPTION_BRIEF = 1;
-  const REPORT_DESCRIPTION_DEFAULT = 2;
-  const REPORT_DESCRIPTION_FULL = 3;
+  const REPORT_DESCRIPTION_BRIEF = 0;
+  const REPORT_DESCRIPTION_DEFAULT = 1;
+  const REPORT_DESCRIPTION_FULL = 2;
   
   /**
   * <p> Constructs a reader for the specified report. </p>
@@ -53,6 +52,11 @@ interface ReportReader_Core
    * <p> Gets a list of parameters (name => type) </p>
    */
   public function getParams(){}
+  
+  /**
+  * <p> Returns a description of the report appropriate to the level specified. </p>
+  */
+  public function describeReport($descLevel){}
   
   
 }
