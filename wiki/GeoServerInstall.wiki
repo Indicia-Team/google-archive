@@ -1,0 +1,23 @@
+#summary Installing !GeoServer for Indicia.
+
+= Introduction =
+
+!GeoServer is used to expose Indicia geographical information over the web. 
+
+= Installation =
+
+There's a quick guide to installing geoserver [http://geoserver.org/display/GEOSDOC/Quickstart here], and links to more detailed information if you have specific requirements as to how you wish to install it.
+
+= Configuration for Indicia =
+
+== Setting up an Indicia Data Store ==
+
+First, you will need to configure your Indicia database as a data store for geoserver. Geoserver connects natively to Postgis databases, so this should be quite easy. Make sure you have geoserver running and browse to its configuration page (by default, this will probably be http://localhost:8080/geoserver. If you're not using the default, you probably know enough to know where it is.)
+
+Once geoserver has loaded, go to the config section and login. Then go to 'data' and 'dataStores'. Click 'new', and select 'Postgis' from the drop-down. You should give your data store a sensible name like 'Indicia'. On the next screen, configure the database connection and leave the other settings as they are. Click submit, then apply and save on the left.
+
+== Setting up Feature Types ==
+
+Feature types allow you to expose specific data from the indicia data store. Return to 'data' and select 'featureTypes', then new. You should be presented with a list of entities you can expose, including a number from Indicia (or whatever you named your data store). For this tutorial, we set up grids_OSGB_100K.
+
+You may give the feature an alias if you wish, to refer to it by. This may be useful if you exposing features through views and want to call them by the original table name. Then click 'generate bounding box' to generate the bounding box. Then click submit, apply, save as before.
