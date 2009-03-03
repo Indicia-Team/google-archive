@@ -1,4 +1,4 @@
-#summary Installing !GeoServer for Indicia.
+#summary Installing GeoServer for Indicia.
 
 = Introduction =
 
