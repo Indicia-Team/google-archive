@@ -1,4 +1,5 @@
 #summary How to get the demonstration pages up and running.
+#labels Phase-Deploy
 
 = Introduction =
 
@@ -75,11 +76,13 @@ Two methods of proxying are suggested. The first will likely prove more difficul
 
 === Using a proxy script ===
 
-Installing a proxy script is quite simple. You should (if one does not already exist) create a cgi-bin directory under your http root (this will depend on your os/distribution - mine is at /srv/http/) with read and execute permissions for the http user. Then, save [http://indicia.googlecode.com/files/proxy.cgi this script] into this directory. There should be a ScriptAlias directive in your httpd.conf pointing /cgi-bin/ to the cgi-bin directory:
+Installing a proxy script is quite simple. First, check if you have a cgi-bin directory under your http root. If not, you will need to create one with read and execute permissions for the http user. You will also need to add a ScriptAlias directive in your httpd.conf pointing /cgi-bin/ to the cgi-bin directory:
 
 {{{
 ScriptAlias /cgi-bin/ "/srv/http/cgi-bin"
 }}}
+
+Then, save [http://indicia.googlecode.com/files/proxy.cgi this script] into this directory.
 
 If you're installing on a shared host, this should all be configured, and you should simply be able to add the script into your cgi-bin. Check with your hosting provider if you're not sure where this is.
 
