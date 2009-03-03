@@ -73,3 +73,7 @@ Once done, just click the Submit button.
 If everything has worked, you will be taken to the login page for the Indicia Core Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password.
 
 That's it!
+
+== Next Steps ==
+
+In order to get the demonstration pages up and running now that you have installed the Indicia Core, take a look at [DemoSiteModuleInstallation Installing the demonstration site module].
