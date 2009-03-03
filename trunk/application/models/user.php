@@ -24,17 +24,22 @@ class User_Model extends ORM {
 		if (array_key_exists('password', $_POST)) $array->add_rules('password', 'required', 'length[7,30]', 'matches_post[password2]');
 		$this->interests = $array['interests'];
 		$this->location_name = $array['location_name'];
-		$this->core_role_id = (is_numeric ($array['core_role_id']) ? $array['core_role_id'] : NULL);
-		$this->email_visible = (isset($array['email_visible']) ? 't' : 'f');
-		$this->view_common_names = (isset($array['view_common_names']) ? 't' : 'f');
+		$this->core_role_id = $array['core_role_id'];
+		$this->email_visible = $array['email_visible'];
+		$this->view_common_names = $array['view_common_names'];
 		$this->person_id = $array['person_id'];
 
 		return parent::validate($array, $save);
 	}
 
 	public function preSubmit() {
+
 		if (!is_numeric($this->submission['fields']['core_role_id']['value']))
 			$this->submission['fields']['core_role_id']['value'] = NULL;
+
+		$this->submission['fields']['email_visible']	 = array('value' => (isset($this->submission['fields']['email_visible']) ? 't' : 'f'));
+		$this->submission['fields']['view_common_names'] = array('value' => (isset($this->submission['fields']['view_common_names']) ? 't' : 'f'));
+
 		return parent::preSubmit();
 	}
 
