@@ -6,6 +6,51 @@ Indicia comes with a number of demonstration pages, which showcase some of the f
 
 = Details =
 
+== Configuration Files ==
+
+Site-specific details within the demo pages are stored as configuration files, to avoid requiring code changes to be made to adapt to differing installations. There are two config files that concern the demo pages: these are client_helpers/helper_config.php, and modules/demo/data_entry/data_entry_config.php.
+
+=== Distribution ===
+
+To avoid file clashes when working within the RCS, these are distributed as helper_config.php.example and data_entry_config.php.example, with some default settings preconfigured. As such, one must first copy/move these files to the above named ones.
+
+=== helper_config.php ===
+
+This file is required both for the demo pages and for any other pages built using the helper tools data_entry_helper.php and map_helper.php. The settings here are:
+
+{{{
+	static $base_url='http://localhost/indicia';
+	static $geoplanet_api_key='...';
+	static $upload_path = './upload/';
+	static $google_api_key='null';
+	static $multimap_api_key='OA09022716373801224';
+}}}
+
+  * `$base_url` should point to the url of your Indicia core installation. If you are testing Indicia on a single machine, this will probably be `http://localhost/indicia`.
+  * `$geoplanet_api_key` is used for looking up places using the geoplanet service. If you don't have one, don't worry. Everything still works without it.
+
+=== data_entry_config.php ===
+
+This file is used for settings specific to the test_data_entry and species_checklist example pages. It is not strictly necessary that any pages built using the helper tools use this file, but it is probably advisable to use something similar to increase code flexibility for anything that might be redistributed. The settings here are mostly concerned with tuning the data entry pages to your specific database installation. At present, they look like:
+
+{{{
+	$config['dafor']='occAttr:2';
+	$config['dafor_termlist']=1;
+	$config['det_date']='occAttr:1';
+	$config['weather']='smpAttr:1';
+	$config['temperature']='smpAttr:2';
+	$config['surroundings']='smpAttr:3';
+	$config['surroundings_termlist']=2;
+	$config['site_usage']='smpAttr:4';
+	$config['site_usage_termlist']=3;
+	$config['google_api_key']='...';
+	$config['geoplanet_api_key']='...';
+	$config['species_checklist_taxon_list']='2';
+	$config['species_checklist_occ_attributes'] = array(1,2);
+}}}
+
+(As is evident, for some reason two completely different methods of storing the config settings are used. I can't remember if there's a reason why.)
+
 Should cover:
 
 *config files
