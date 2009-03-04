@@ -43,3 +43,23 @@ $config['default'] = array
 	'cache'         => FALSE,
 	'escape'        => TRUE
 );
+$config['report'] = array
+(
+	'benchmark'     => TRUE,
+	'persistent'    => FALSE,
+	'connection'    => array
+	(
+		'type'     => 'pgsql',
+		'user'     => 'postgres',
+		'pass'     => 'password',
+		'host'     => 'localhost',
+		'port'     => FALSE,
+		'socket'   => FALSE,
+		'database' => 'indicia'
+	),
+	'character_set' => 'utf8',
+	'table_prefix'  => '',
+	'object'        => TRUE,
+	'cache'         => FALSE,
+	'escape'        => TRUE
+);
