@@ -189,15 +189,15 @@ class data_entry_helper extends helper_config {
 	 * queries to the data services. Can also be used to specify the "view" type e.g. "detail"
 	 * @param string extraClass : main class to be added to UL tag - currently can be treeview, treeview-red,
 	 * treeview_black, treeview-gray. The filetree class although present, does not work properly.
-	 * 
+	 *
 	 * TO DO
 	 * Need to do initial value.
 	 * Need to look at how the filetree can be implemented.
 	 */
- 
+
 	public static function treeview($control_id, $entity,
 				$nameField, $valueField, $topField, $topValue, $parentField,
-				$defaultValue, $extraParams, 
+				$defaultValue, $extraParams,
 				$extraClass = 'treeview'){
 		// Reference to the config file.
 		global $javascript;
@@ -212,8 +212,8 @@ class data_entry_helper extends helper_config {
 		}
 		// lop the comma off the end
 		$sParams = substr($sParams, 0, -1);
-		
-		$javascript .= "$('#tr$control_id').treeview(
+
+		$javascript .= "jQuery('#tr$control_id').treeview(
 			{
 				url: '$url/$entity',
 				extraParams :
@@ -241,12 +241,12 @@ class data_entry_helper extends helper_config {
 				}
 			}
 		);";
-		
+
 		$tree = '<input type="hidden" id="'.$control_id.'" name="'.$control_id.'" /><ul id="tr'.$control_id.'" class="'.$extraClass.'"></ul>';
 		return $tree;
 	}
 
- 
+
  /**
  * Helper function to insert a date picker control.
  */
