@@ -21,6 +21,7 @@ $config['private_key'] = 'Indicia'; // Change this to a unique value for each In
 $config['nonce_life'] = 1200;       // life span of an authentication token for services, in seconds
 $config['maxUploadSize'] = '1M'; // Maximum size of an upload
 $config['defaultPersonId'] = 1;
+$config['localReportDir'] = 'reports';
 
 // For developers of indicia only!
 // In a production release this var must be set to bool false!!

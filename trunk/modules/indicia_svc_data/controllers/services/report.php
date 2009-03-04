@@ -50,9 +50,11 @@ class Report_Controller extends Service_Base_Controller {
   private $report;
   private $query;
   private $reportReader;
+  // Of the form name => array('type' => type, 'display' => display, 'description' => desc)
   private $expectedParams;
   private $providedParams;
   private $localReportDir;
+  private $cache;
   
   public function __construct()
   {
@@ -109,17 +111,36 @@ class Report_Controller extends Service_Base_Controller {
     }
     
     // Have any parameters been provided?
-    $this->providedParams = json_decode($this->input->post('params'), true);
+    $this->providedParams = json_decode($this->input->post('params', array()), true);
     // What parameters do we expect?
     $this->expectedParams = $this->reportReader->getParams();
     
     // Do we need any more parameters?
     $remPars = array_diff_key($this->expectedParams, $this->providedParams);
     if (!empty($remPars))
-    {}
+    {
+      // We need more parameters, so cache the report (and any existing parameters), get an id for
+      // it and send a request for the others back to the requester.
+      $cachedReport = Array
+      (
+      'reportReader' => $this->reportReader,
+      'providedParams' => $this->providedParams,
+      'expectedParams' => $this->expectedParams
+      );
+      
+      // Set the object in the cache
+      $uid = md5(time().rand());
+      $this->cache = new Cache;
+      $this->cache->set($uid, $cachedReport, array('report'), 3600);      
+      
+      // Send a request for further parameters back to the client
+      return json_encode(array('parameterRequest' => $remPars));
+      
+    }
     else
     {
       // Okay, all the parameters have been provided.
+      $this->mergeParameters();
     }
     
 	
@@ -130,8 +151,35 @@ class Report_Controller extends Service_Base_Controller {
   public function resumeReport($cacheid)
   {}
   
-  public function listLocalReports()
-  {}
+  public function listLocalReports($detail = 1)
+  {
+    if (typeof($detail) != int || $detail < 0 || $detail > 2)
+    {
+      $detail = 1;
+    }
+    
+    $reportList = Array();
+    $handle = opendir($this->localReportDir);
+    while ($file = readdir($handle))
+    {
+      $a = explode('.', $file);
+      $ext = $a[count($a) - 1];
+      switch ($ext)
+      {
+	case 'xml':
+	  $this->reportReader = new XMLReportReader($this->fetchLocalReport($file));
+	  break;
+	default:
+	  continue 2;
+      }
+      
+      $reportList[] = $this->reportReader->describeReport($detail);
+      
+    }
+    
+    return json_encode(array('reportList' => $reportList));
+    
+  }
   
   private function fetchLocalReport($request)
   {}
