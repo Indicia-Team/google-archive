@@ -19,9 +19,9 @@
 */
 interface ReportReader_Core 
 {
-  const REPORT_DESCRIPTION_BRIEF = 0;
-  const REPORT_DESCRIPTION_DEFAULT = 1;
-  const REPORT_DESCRIPTION_FULL = 2;
+  const REPORT_DESCRIPTION_BRIEF = 1;
+  const REPORT_DESCRIPTION_DEFAULT = 2;
+  const REPORT_DESCRIPTION_FULL = 3;
   
   /**
   * <p> Constructs a reader for the specified report. </p>

@@ -48,6 +48,7 @@
 class Report_Controller extends Service_Base_Controller {
   
   private $report;
+  private $response;
   private $query;
   private $reportReader;
   // Of the form name => array('type' => type, 'display' => display, 'description' => desc)
@@ -121,60 +122,110 @@ class Report_Controller extends Service_Base_Controller {
     {
       // We need more parameters, so cache the report (and any existing parameters), get an id for
       // it and send a request for the others back to the requester.
-      $cachedReport = Array
-      (
-      'reportReader' => $this->reportReader,
-      'providedParams' => $this->providedParams,
-      'expectedParams' => $this->expectedParams
-      );
-      
-      // Set the object in the cache
-      $uid = md5(time().rand());
-      $this->cache = new Cache;
-      $this->cache->set($uid, $cachedReport, array('report'), 3600);      
+      $uid = $this->cacheReport();
       
       // Send a request for further parameters back to the client
-      return json_encode(array('parameterRequest' => $remPars));
+      return json_encode(array('parameterRequest' => $remPars, 'uid' => $uid));
       
     }
     else
     {
       // Okay, all the parameters have been provided.
       $this->mergeParameters();
+      $this->executeQuery();
+      $this->formatResponse();
+      
+      return $this->response;
     }
-    
-	
-    
-    
   }
   
   public function resumeReport($cacheid)
-  {}
+  {
+    // Check we have both a uid and a set of parameters given
+    $uid = $this->input->post('uid', null);
+    $params = $this->input->post('params', null);
+    
+    if ($uid == null || $params == null)
+    {
+      // Error here - send some response back
+      // TODO
+    }
+    
+    // Decode params
+    $params = json_decode($params, true);
+    // Retrieve the report from cache
+    if (!$this->retrieveCachedReport($uid))
+    {
+      // Error here - the cached report has expired
+      // TODO
+    }
+    
+    // Merge the new parameters in
+    $this->providedParams = array_merge($this->providedParams, $params);
+    
+    // Do we need any more parameters?
+    $remPars = array_diff_key($this->expectedParams, $this->providedParams);
+    if (!empty($remPars))
+    {
+      // We need more parameters, so cache the report (and any existing parameters), get an id for
+      // it and send a request for the others back to the requester.
+      $uid = $this->cacheReport();
+      
+      // Send a request for further parameters back to the client
+      return json_encode(array('parameterRequest' => $remPars, 'uid' => $uid));
+      
+    }
+    else
+    {
+      // Okay, all the parameters have been provided.
+      $this->mergeParameters();
+      $this->executeQuery();
+      $this->formatResponse();
+      
+      return $this->response;
+    }
+    
+  }
   
-  public function listLocalReports($detail = 1)
+  public function listLocalReports($detail = 2)
   {
     if (typeof($detail) != int || $detail < 0 || $detail > 2)
     {
       $detail = 1;
     }
-    
-    $reportList = Array();
-    $handle = opendir($this->localReportDir);
-    while ($file = readdir($handle))
+    if ($detail = 0)
     {
-      $a = explode('.', $file);
-      $ext = $a[count($a) - 1];
-      switch ($ext)
+      $reportList = Array();
+      // All we do here is return the list of tiles - don't bother interrogating the reports
+      $dh = opendir($this->localReportDir);
+      while ($file = readdir($dh))
       {
-	case 'xml':
-	  $this->reportReader = new XMLReportReader($this->fetchLocalReport($file));
-	  break;
-	default:
-	  continue 2;
+	if ($file != '..' && $file != '.')
+	{
+	  $reportList[] = array('name' => $file);
+	}
       }
-      
-      $reportList[] = $this->reportReader->describeReport($detail);
-      
+    }
+    else
+    {
+      $reportList = Array();
+      $handle = opendir($this->localReportDir);
+      while ($file = readdir($handle))
+      {
+	$a = explode('.', $file);
+	$ext = $a[count($a) - 1];
+	switch ($ext)
+	{
+	  case 'xml':
+	    $this->reportReader = new XMLReportReader($this->fetchLocalReport($file));
+	    break;
+	  default:
+	    continue 2;
+	}
+	
+	$reportList[] = $this->reportReader->describeReport($detail);
+	
+      }
     }
     
     return json_encode(array('reportList' => $reportList));
@@ -182,17 +233,78 @@ class Report_Controller extends Service_Base_Controller {
   }
   
   private function fetchLocalReport($request)
-  {}
+  {
+    if (is_dir($this->localReportDir) ||
+      is_file($this->localReportDir.$request))
+      {
+	$this->report = file_get_contents($this->localReportDir.$request);
+      }
+      else
+      {
+	// Throw an error - something has gone wrong
+	// TODO
+      }
+  }
   
   private function fetchRemoteReport($request)
-  {}
+  {
+    $this->report = file_get_contents($request);
+  }
   
   private function cacheReport()
-  {}
+  {
+    $cachedReport = Array
+    (
+    'reportReader' => $this->reportReader,
+    'providedParams' => $this->providedParams,
+    'expectedParams' => $this->expectedParams
+    );
+    
+    // Set the object in the cache
+    $uid = md5(time().rand());
+    $this->cache = new Cache;
+    $this->cache->set($uid, $cachedReport, array('report'), 3600);      
+  }
   
   private function retrieveCachedReport($cacheid)
-  {}
+  {
+    $this->cache = new Cache;
+    if ($a = $this->cache->get($cacheid))
+    {
+      $this->reportReader = $a['reportReader'];
+      $this->providedParams = $a['providedParams'];
+      $this->expectedParams = $a['expectedParams'];
+      return true;
+    }
+    else
+    {
+      // Cache has timed out / bad UID
+      return false;
+    }
+    
+  }
   
   private function mergeParameters()
-  {}
+  {
+    // Grab the query from the report reader
+    $query = $this->reportReader->getQuery();
+    // Replace each parameter in place
+    foreach ($this->providedParameters as $name => $value)
+    {
+      $query = preg_replace("/#$name#%/", $value, $query);
+    }
+    
+    $this->query = $query;
+  }
+  
+  private function executeQuery()
+  {
+    $db = new Database('report');
+    $this->reponse = $db->query($this->query);
+  }
+  
+  private function formatResponse()
+  {
+    print_r($this->reponse->result_array());
+  }
 }
