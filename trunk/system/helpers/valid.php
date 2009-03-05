@@ -77,7 +77,12 @@ class valid_Core {
 	 */
 	public static function url($url)
 	{
-		return (bool) filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
+		if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED) != false)
+			return true;
+		// only attempt to bolt the http:// on the front if no other schema exists
+		if (strpos($url, '://') === false)
+			return (bool) filter_var('http://'.$url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
+		return false;
 	}
 
 	/**
