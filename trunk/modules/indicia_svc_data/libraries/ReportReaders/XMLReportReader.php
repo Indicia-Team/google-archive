@@ -25,6 +25,7 @@ class XMLReportReader_Core implements ReportReader
   private $query;
   private $order_by;
   private $params;
+  private $columns;
   
   /**
   * <p> Constructs a reader for the specified report. </p>
@@ -53,8 +54,8 @@ class XMLReportReader_Core implements ReportReader
 	     $this->order_by[] = $reader->getValue();
 	     break;
 	   case 'param':
-	     
-	     
+	     $this->mergeParam($reader->getAttribute('name'), $reader->getAttribute('display'), $reader->getAttribute('datatype'), $reader->getAttribute('description'));
+	     break;
 	     
 	 }
 	 break;
@@ -94,5 +95,19 @@ class XMLReportReader_Core implements ReportReader
   * <p> Returns a description of the report appropriate to the level specified. </p>
   */
   public function describeReport($descLevel){}
+  
+  private function mergeParam($name, $display = '', $type = '', $description = '')
+  {
+    if (array_key_exists($name, $this->params))
+    {
+      if ($display != '') $this->params[$name]['display'] = $display;
+      if ($type != '') $this->params[$name]['datatype'] = $type;
+      if ($description != '') $this->params[$name]['description'] = $description;
+    }
+    else
+    {
+      $this->params[$name] = array('datatype'=>$type, 'display'=>$display, 'description'=>$description);
+    }
+  }
   
 }
