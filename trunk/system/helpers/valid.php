@@ -75,12 +75,12 @@ class valid_Core {
 	 * @param   string   URL
 	 * @return  boolean
 	 */
-	public static function url($url)
+	public static function url($url, $lax = false)
 	{
 		if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED) != false)
 			return true;
-		// only attempt to bolt the http:// on the front if no other schema exists
-		if (strpos($url, '://') === false)
+		// only attempt to bolt the http:// on the front if no other schema exists, and lax flag is set
+		if ($lax == true and (strpos($url, '://') === false))
 			return (bool) filter_var('http://'.$url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
 		return false;
 	}
