@@ -48,6 +48,7 @@
 class Report_Controller extends Service_Base_Controller {
   
   private $report;
+  private $reportFormat;
   private $response;
   private $query;
   private $reportReader;
@@ -83,7 +84,7 @@ class Report_Controller extends Service_Base_Controller {
     }
     else if (($a = $this->input->post('localReport', null)) != null)
     {
-     $this->fetchLocalReport($a); 
+      $this->fetchLocalReport($a); 
     }
     else if (($a = $this->input->post('remoteReport', null)) != null)
     {
@@ -91,7 +92,7 @@ class Report_Controller extends Service_Base_Controller {
     }
     else if (($a = $this->input->post('providedReport', null)) != null)
     {
-      $this->report = $a;
+      $this->fetchProvidedReport($a);
     }
     else
     {
@@ -99,9 +100,9 @@ class Report_Controller extends Service_Base_Controller {
       // TODO
     }
     
-    $reportFormat = $this->input->get('reportFormat') || $this->input->post('reportFormat');
+    $this->reportFormat = $this->input->get('reportFormat') || $this->input->post('reportFormat');
     // Now we switch based on the report format.
-    switch ($reportFormat)
+    switch ($this->reportFormat)
     {
       case 'xml':
 	$this->reportReader = new XMLReportReader($this->report);
@@ -237,7 +238,7 @@ class Report_Controller extends Service_Base_Controller {
     if (is_dir($this->localReportDir) ||
       is_file($this->localReportDir.$request))
       {
-	$this->report = file_get_contents($this->localReportDir.$request);
+	$this->report = $this->localReportDir.$request;
       }
       else
       {
@@ -248,7 +249,40 @@ class Report_Controller extends Service_Base_Controller {
   
   private function fetchRemoteReport($request)
   {
-    $this->report = file_get_contents($request);
+    $this->report = $request;
+  }
+  
+  private function fetchProvidedReport($request)
+  {
+    // $request here stores the report itself - we save it to a temporary place.
+    $uploadDir = $this->localReportDir.'/tmp/';
+    if (is_dir($uploadDir))
+    {
+      $fname = time();
+      switch ($this->reportFormat)
+      {
+	case 'xml':
+	  $fname .= '.xml';
+	  break;
+	default:
+	  // Bad stuff
+	  // TODO
+      }
+      
+      if (file_put_contents($uploadDir.$fname, $request))
+      {
+	$this->report = $uploadDir.$fname;
+      }
+      else
+      {
+	// Error - unable to write to temp dir.
+	// TODO
+      }
+    }
+    else
+    {
+      // Unable to cache the report - could try other things, but nah.
+    }
   }
   
   private function cacheReport()
@@ -256,14 +290,14 @@ class Report_Controller extends Service_Base_Controller {
     $cachedReport = Array
     (
     'reportReader' => $this->reportReader,
-    'providedParams' => $this->providedParams,
-    'expectedParams' => $this->expectedParams
-    );
-    
-    // Set the object in the cache
-    $uid = md5(time().rand());
-    $this->cache = new Cache;
-    $this->cache->set($uid, $cachedReport, array('report'), 3600);      
+			       'providedParams' => $this->providedParams,
+			       'expectedParams' => $this->expectedParams
+			       );
+			       
+			       // Set the object in the cache
+			       $uid = md5(time().rand());
+			       $this->cache = new Cache;
+			       $this->cache->set($uid, $cachedReport, array('report'), 3600);      
   }
   
   private function retrieveCachedReport($cacheid)
