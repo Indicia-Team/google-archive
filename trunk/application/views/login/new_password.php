@@ -1,5 +1,5 @@
 <form class="cmxform"  name = "new_password" action="<?php echo url::site(); ?>new_password/save" method="post">
-<input type="hidden" name="id" id="id" value="<?php echo html::specialchars($model->id); ?>" />
+<input type="hidden" name="id" id="id" value="<?php echo html::specialchars($user_model->id); ?>" />
 <fieldset>
 <legend>Set Password</legend>
 <ol>
@@ -10,22 +10,22 @@
 ?>
 <li>
   <label for="username">Username</label>
-  <input tabindex="1" type = "text" name = "username" id = "username" value="<?php echo $username; ?>" disabled="disabled"  class="narrow" >
-  <?php echo html::error_message($model->getError('username')); ?>
+  <input tabindex="1" type = "text" name = "username" id = "username" value="<?php echo $user_model->username; ?>" disabled="disabled"  class="narrow" >
+  <?php echo html::error_message($user_model->getError('username')); ?>
 </li>
 <li>
   <label for="email_address">Email</label>
-  <input tabindex="2" type = "text" name = "email_address" id = "email_address" value="<?php echo $email_address; ?>" disabled="disabled" class="narrow" >
-  <?php echo html::error_message($model->getError('email_address')); ?>
+  <input tabindex="2" type = "text" name = "email_address" id = "email_address" value="<?php echo $person_model->email_address; ?>" class="narrow" >
+  <?php echo html::error_message($person_model->getError('email_address')); ?>
 </li>
 <li>
   <label for="password">Password</label>
-  <input tabindex="3" type = "password" name = "password" id = "password" value="" class="narrow" >
-  <?php echo html::error_message($model->getError('password')); ?>
+  <input tabindex="3" type = "password" name = "password" id = "password" value="<?php echo $user_model->password; ?>" class="narrow" >
+  <?php echo html::error_message($user_model->getError('password')); ?>
 </li>
 <li>
   <label for="password2">Repeat Password</label>
-  <input tabindex="4" type = "password" name = "password2" id = "password2" value="" class="narrow" >
+  <input tabindex="4" type = "password" name = "password2" id = "password2" value="<?php echo $password2; ?>" class="narrow" >
 </li>
 <li>
   <label for="remember_me" >Remember me</label>

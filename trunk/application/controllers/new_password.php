@@ -9,13 +9,14 @@ class New_Password_Controller extends Indicia_Controller {
 		{
 			// Everything is okay so far
 			$user = new User_Model($_SESSION['auth_user']->id);
+			$user->load_values(array('password' => '')); // clear down password.
 			$person = ORM::factory('person', $user->person_id);	
 			$view = new View('login/new_password');
-			$view->model = $user;
-			$view->username = $user->username; // as is disabled doesn't make it through to post, so unavailable in model post validation failure.
-			$view->email_address = $person->email_address;
-			if(is_null($user->password))
-				$view->message = "This is the first login with this user, which has been initialised with an empty password.<br />You must change your password now before you may access the system.";
+			$view->password2 = '';
+			$view->user_model = $user;
+			$view->person_model = $person;
+			if(is_null($user->password) or $user->password == '')
+				$view->message = "This is the first login with this user, which has been initialised with an empty password and email address.<br />You must set both your password and email address now before you may access the system.";
 			$this->template->title = 'Enter New Password';
 			$this->template->content = $view;
 		} else {
@@ -47,11 +48,12 @@ class New_Password_Controller extends Indicia_Controller {
 			return;
 		}
 
-		$person = ORM::factory('person', $user->person_id);	
+		$person = ORM::factory('person', $user->person_id);
+		$user->load_values(array('password' => '')); // clear down password.
 		$view = new View('login/new_password');
-		$view->model = $user;
-		$view->username = $user->username; // as is disabled doesn't make it through to post, so unavailable in model post validation failure.
-		$view->email_address = $person->email_address;
+		$view->password2 = '';
+		$view->user_model = $user;
+		$view->person_model = $person;
 		$this->template->title = 'Enter New Password';
 		$this->template->content = $view;
 		
@@ -61,21 +63,33 @@ class New_Password_Controller extends Indicia_Controller {
 		$user = new User_Model($_POST['id']);
 		$username = $user->username;
 		$password = $_POST['password'];
+		$password2 = $_POST['password2'];
 		$person = ORM::factory('person', $user->person_id);
+
+		$user_validation = new Validation($_POST);
+		$person_validation = new Validation($_POST);
+
+		// override the user_id for person in submission
+		$person_validation['id'] = $user->person_id;
 		
-		$_POST = new Validation($_POST);
-		if ($user->password_validate($_POST, TRUE)) {
-			
+		// Can't just and following together as I want both functions to run
+		$userstatus = $user->password_validate($user_validation, false);
+		$personstatus = $person->email_validate($person_validation, false);
+		
+		if ($userstatus and $personstatus) {
+			$user->save();
+			$person->save();
 			// with the password updated, login and jump to the home page
 			$this->auth->login($user->id, $password);
 			url::redirect(arr::remove('requested_page', $_SESSION));
 						
 		} else {
-	 		// errors are now embedded in the model
+			// errors are now embedded in the model
 			$view = new View('login/new_password');
-			$view->model = $user;
-			$view->username = $username;
-			$view->email_address = $person->email_address;
+			$user->load_values(array('username' => $username)); // repopulate for error condition after validate has removed it (is a disabled field so not present in POST)
+			$view->password2 = $password2;
+			$view->user_model = $user;
+			$view->person_model = $person;
 			$this->template->title = 'Enter New Password';
 			$this->template->content = $view;
 	 		

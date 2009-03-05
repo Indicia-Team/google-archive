@@ -25,11 +25,24 @@ class Person_Model extends ORM {
 		return parent::validate($array, $save);
 	}
 
+	public function email_validate(Validation $array, $save = FALSE) {
+		// this function is used when updating the email address through the new_password screen
+		// This would happen on initial login for the admin user - the setup procedure does not include the email address for the 
+		// the admin user
+		// uses PHP trim() to remove whitespace from beginning and end of all fields before validation
+		$array->pre_filter('trim');
+		$array->add_rules('email_address', 'required', 'email', 'length[1,50]', 'unique[people,email_address,'.$array->id.']');
+
+		return parent::validate($array, $save);
+	}
+	
 	public function preSubmit() {
-		if ($this->submission['fields']['email_address']['value'] == '')
-			$this->submission['fields']['email_address']['value'] = NULL;
-		if (!is_numeric($this->submission['fields']['title_id']['value']))
-			$this->submission['fields']['title_id']['value'] = NULL;
+		if (isset($this->submission['fields']['email_address']))
+			if ($this->submission['fields']['email_address']['value'] == '')
+				$this->submission['fields']['email_address']['value'] = NULL;
+		if (isset($this->submission['fields']['title_id']))
+			if (!is_numeric($this->submission['fields']['title_id']['value']))
+				$this->submission['fields']['title_id']['value'] = NULL;
 		return parent::preSubmit();
 	}
 	
