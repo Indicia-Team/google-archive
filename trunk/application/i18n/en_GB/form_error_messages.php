@@ -38,8 +38,7 @@ $lang = array (
 		'default' => 'Invalid Input.',
 	),
 	'website_url' => Array (
-		'required' => 'The website URL cannot be blank.',
-		'url' => 'This must be a valid URL including the http:// prefix.',
+		'url' => 'This must be a valid URL (if schema not provided, http:// is assumed).',
 		'default' => 'Invalid Input.',
 	),
 	'taxon_id' => array (
