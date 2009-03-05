@@ -16,7 +16,7 @@ class Person_Model extends ORM {
 			$this->email_address = NULL;
 		else
 			$array->add_rules('email_address', 'email', 'length[1,50]', 'unique[people,email_address,'.$array->id.']');
-        $array->add_rules('website_url', 'length[1,500]', 'url');
+        $array->add_rules('website_url', 'length[1,500]', 'url[lax]');
         // Any fields that don't have a validation rule need to be copied into the model manually
 		if (isset($array['title_id'])) $this->title_id = (is_numeric ($array['title_id']) ? $array['title_id'] : NULL);
 		$this->address = $array['address'];
