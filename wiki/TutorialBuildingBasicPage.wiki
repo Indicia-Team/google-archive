@@ -55,8 +55,8 @@ The first two sections of the following tutorial are performed by your Core Serv
   #	Now, create a basic, blank PHP web page using your site template but with no content.
   #	Although you can take full control of the style sheets if you like, for this tutorial we will use some example styles provided. So, insert the following entries into the `<head>` section of of the page:
 {{{
-<link rel="stylesheet" href="<core_url>/media/css/ui.datepicker.css" type="text/css" media="screen">
-<link rel="stylesheet" href="<core_url>/media/css/jquery.autocomplete.css" />
+<link rel="stylesheet" href="<core_url>/media/css/ui.datepicker.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="<core_url>/media/css/jquery.autocomplete.css" type="text/css" media="screen" />
 }}}
   #	You’ll also need to link in some JavaScript files. Paste the following into your page, inside the `<head>` section just beneath the stylesheet links:
 {{{
