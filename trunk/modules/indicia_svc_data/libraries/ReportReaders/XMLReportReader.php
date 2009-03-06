@@ -48,6 +48,7 @@ class XMLReportReader_Core implements ReportReader
 	   case 'query':
 	     $reader->read();
 	     $this->query = $reader->getValue();
+	     $this->inferFromQuery();
 	     break;
 	   case 'order_by':
 	     $reader->read();
@@ -74,12 +75,18 @@ class XMLReportReader_Core implements ReportReader
   /**
    * <p> Returns the description of the report. </p>
    */
-  public function getDescription(){}
+  public function getDescription()
+  {
+    return $this->description;
+  }
   
   /**
    * <p> Returns the query specified. </p>
    */
-  public function getQuery(){}
+  public function getQuery()
+  {
+    return $this->query;
+  }
   
   /**
    * <p> Uses source-specific validation methods to check whether the report query is valid. </p>
@@ -89,7 +96,10 @@ class XMLReportReader_Core implements ReportReader
   /**
    * <p> Gets a list of parameters (name => type) </p>
    */
-  public function getParams(){}
+  public function getParams()
+  {
+    return $this->params;
+  }
   
   /**
   * <p> Returns a description of the report appropriate to the level specified. </p>
@@ -108,6 +118,27 @@ class XMLReportReader_Core implements ReportReader
     {
       $this->params[$name] = array('datatype'=>$type, 'display'=>$display, 'description'=>$description);
     }
+  }
+  
+  private function mergeColumn($name, $display, $style)
+  {
+    if (array_key_exists($name, $this->columns))
+    {
+      if ($display != '') $this->columns[$name]['display'] = $display;
+      if ($style != '') $this->columns[$name]['style'] = $style;
+    }
+    else
+    {
+      $this->columns[$name] = array('display' => $display, 'style' => $style);
+    }
+  }
+  
+  /**
+  * Infers parameters such as column names and parameters from the query string.
+  */
+  private function inferFromQuery()
+  {
+    
   }
   
 }
