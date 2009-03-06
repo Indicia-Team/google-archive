@@ -57,6 +57,10 @@ class XMLReportReader_Core implements ReportReader
 	   case 'param':
 	     $this->mergeParam($reader->getAttribute('name'), $reader->getAttribute('display'), $reader->getAttribute('datatype'), $reader->getAttribute('description'));
 	     break;
+	   case 'column':
+	     $this->mergeColumn($reader->getAttribute('name'), $reader->getAttribute('display'),
+	     $reader->getAttribute('style'));
+	     break;
 	     
 	 }
 	 break;
@@ -104,7 +108,11 @@ class XMLReportReader_Core implements ReportReader
   /**
   * <p> Returns a description of the report appropriate to the level specified. </p>
   */
-  public function describeReport($descLevel){}
+  public function describeReport($descLevel)
+  {
+    // At some point, we describe this better
+    return $this->getDescription();
+  }
   
   private function mergeParam($name, $display = '', $type = '', $description = '')
   {
@@ -138,6 +146,32 @@ class XMLReportReader_Core implements ReportReader
   */
   private function inferFromQuery()
   {
+    // Find the columns we're searching for - nested between a SELECT and a FROM
+    $i0 = strpos(strtolower($this->query), ' select ') + 6;
+    $i1 = strpos(strtolower($this->query), ' from ') - $i0;
+    $cols = explode(',', substr($this->query, $i0, $i1));
+    // We have cols, which may either be of the form 'x' or of the form 'x as y'
+    foreach ($cols as $col)
+    {
+      $a = explode(' as ', strtolower($col));
+      if (count($a) == 2)
+      {
+	// Okay, we have an 'as' clause
+	$this->mergeColumn($a[1]);
+      }
+      else
+      {
+	// Treat this as a single thing
+	$this->mergeColumn($a[0]);
+      }
+    }
+    
+    // Okay, now we need to find parameters, which we do with regex.
+    preg_match_all('/#(\([a-z][0-9]\)+)#%/i', $this->query, $matches);
+    foreach($matches as $match)
+    {
+      $this->mergeParam($match[1]);
+    }
     
   }
   
