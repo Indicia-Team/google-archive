@@ -17,3 +17,6 @@ The language used for the Core Module development is PHP, selected mainly for it
 == JQuery ==
 
 [http://jquery.com/ JQuery] is a powerful !JavaScript library that simplifies the task of writing powerful client side code which runs within the web browser, for example to provide animations and facilitate [http://en.wikipedia.org/wiki/AJAX AJAX] interactions.
+
+== OpenLayers ==
+[http://openlayers.org/ OpenLayers] is an Open Source tool for adding dynamic maps to web pages.
