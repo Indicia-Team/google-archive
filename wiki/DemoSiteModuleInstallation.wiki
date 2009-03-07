@@ -126,4 +126,4 @@ ProxyPassReverse /geoserver/wfs http://localhost:8080/geoserver/wfs
 
 where 'localhost:8080/geoserver' should be the url of the geoserver install you're using (if you're running it directly on your own machine, the above should be correct).
 
-Within the map page, set your `$indiciaCore` location to http://localhost/geoserver, and disable proxying by setting `$usrProxy = false`. Apache should proxy the geoserver requests transparently.
+Within the map page, set your `$indiciaCore` location to http://localhost/geoserver, and disable proxying by setting `$useProxy = false`. Apache should proxy the geoserver requests transparently.
