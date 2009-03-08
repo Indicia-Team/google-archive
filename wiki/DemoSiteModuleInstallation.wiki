@@ -28,7 +28,7 @@ This file is required both for the demo pages and for any other pages built usin
 }}}
 
   * `$base_url` should point to the url of your Indicia core installation. If you are testing Indicia on a single machine, this will probably be `http://localhost/indicia`.
-  * `$geoplanet_api_key` is used for looking up places using the geoplanet service. If you don't have one, don't worry. Everything still works without it.
+  * `$geoplanet_api_key` is used for looking up places using the geoplanet service. If you don't have one, don't worry for now. Everything except for the Find Location on Map control still works without it. To get an API key, follow the Application ID link on this page: [http://developer.yahoo.com/geo/].
   * `$upload_path` should point to a directory on the server where uploaded images should be stored before being sent to the Indicia core. This directory must be writable by the apache user.
   * `$google_api_key` is used for some google mapping services. Things appear to work without it.
   * `$multimap_api_key` is required for the multimap and OS landranger map layers. Multimap layers will not work without this key, and the option to use them will not show up.
@@ -48,7 +48,6 @@ This file is used for settings specific to the test_data_entry and species_check
 	$config['site_usage']='smpAttr:4';
 	$config['site_usage_termlist']=3;
 	$config['google_api_key']='...';
-	$config['geoplanet_api_key']='...';
 	$config['species_checklist_taxon_list']='2';
 	$config['species_checklist_occ_attributes'] = array(1,2);
 }}}
@@ -60,7 +59,7 @@ This file is used for settings specific to the test_data_entry and species_check
 
 Note that if you have installed a fresh copy of Indicia with a new database the above fields should all have the correct values set.
 
-  * `google_api_key` and `geoplanet_api_key` are as helper_config.
+  * `google_api_key` are as helper_config.
   * `species_checklist_taxon_list` specifies the id of the taxon_list to use for the species checklist demo.
   * `species_checklist_occ_attributes` specifies an array of occurrence attributes to show within the species checklist.
 
