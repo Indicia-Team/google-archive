@@ -24,8 +24,8 @@ class XMLReportReader_Core implements ReportReader
   private $description;
   private $query;
   private $order_by;
-  private $params;
-  private $columns;
+  private $params = array();
+  private $columns = array();
   
   /**
   * <p> Constructs a reader for the specified report. </p>
@@ -174,7 +174,8 @@ class XMLReportReader_Core implements ReportReader
     }
     
     // Okay, now we need to find parameters, which we do with regex.
-    preg_match_all('/#(\([a-z][0-9]\)+)#%/i', $this->query, $matches);
+    preg_match_all('/#((?:[a-z][0-9])+)#%/i', $this->query, $matches);
+print_r($matches);
     foreach($matches as $match)
     {
       $this->mergeParam($match[1]);
