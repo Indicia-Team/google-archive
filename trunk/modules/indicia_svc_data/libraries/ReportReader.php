@@ -17,7 +17,7 @@
 * @copyright xxxx
 * @version $Rev$ / $LastChangedDate$
 */
-interface ReportReader_Core 
+interface ReportReader
 {
   const REPORT_DESCRIPTION_BRIEF = 1;
   const REPORT_DESCRIPTION_DEFAULT = 2;
@@ -26,37 +26,37 @@ interface ReportReader_Core
   /**
   * <p> Constructs a reader for the specified report. </p>
   */
-  public function __construct($report){}
+  public function __construct($report);
 
   /**
    * <p> Returns the title of the report. </p>
    */
-  public function getTitle(){}
+  public function getTitle();
   
   /**
    * <p> Returns the description of the report. </p>
    */
-  public function getDescription(){}
+  public function getDescription();
   
   /**
    * <p> Returns the query specified. </p>
    */
-  public function getQuery(){}
+  public function getQuery();
   
   /**
    * <p> Uses source-specific validation methods to check whether the report query is valid. </p>
    */
-  public function isValid(){}
+  public function isValid();
   
   /**
    * <p> Gets a list of parameters (name => type) </p>
    */
-  public function getParams(){}
+  public function getParams();
   
   /**
   * <p> Returns a description of the report appropriate to the level specified. </p>
   */
-  public function describeReport($descLevel){}
+  public function describeReport($descLevel);
   
   
 }
