@@ -32,74 +32,81 @@ class XMLReportReader_Core implements ReportReader
   */
   public function __construct($report)
   {
-    $reader = new XMLReader();
-    $reader->open($report);
-    while($reader->read())
+    Kohana::log('info', "Constructing XMLReportReader for report $report.");
+    try
     {
-     switch($reader->nodeType)
-     {
-       case (XMLREADER::ELEMENT):
-	 switch ($reader->name)
-	 {
-	   case 'report':
-	     $this->title = $reader->getAttribute('title');
-	     $this->description = $reader->getAttribute('description');
-	     break;
-	   case 'query':
-	     $reader->read();
-	     $this->query = $reader->getValue();
-	     $this->inferFromQuery();
-	     break;
-	   case 'order_by':
-	     $reader->read();
-	     $this->order_by[] = $reader->getValue();
-	     break;
-	   case 'param':
-	     $this->mergeParam($reader->getAttribute('name'), $reader->getAttribute('display'), $reader->getAttribute('datatype'), $reader->getAttribute('description'));
-	     break;
-	   case 'column':
-	     $this->mergeColumn($reader->getAttribute('name'), $reader->getAttribute('display'),
-	     $reader->getAttribute('style'));
-	     break;
-	     
-	 }
-	 break;
-     }
+      $reader = new XMLReader();
+      $reader->open($report);
+      while($reader->read())
+      {
+	switch($reader->nodeType)
+	{
+	  case (XMLREADER::ELEMENT):
+	    switch ($reader->name)
+	    {
+	      case 'report':
+		$this->title = $reader->getAttribute('title');
+		$this->description = $reader->getAttribute('description');
+		break;
+	      case 'query':
+		$reader->read();
+		$this->query = $reader->value;
+		$this->inferFromQuery();
+		break;
+	      case 'order_by':
+		$reader->read();
+		$this->order_by[] = $reader->value;
+		break;
+	      case 'param':
+		$this->mergeParam($reader->getAttribute('name'), $reader->getAttribute('display'), $reader->getAttribute('datatype'), $reader->getAttribute('description'));
+		break;
+	      case 'column':
+		$this->mergeColumn($reader->getAttribute('name'), $reader->getAttribute('display'),
+		 $reader->getAttribute('style'));
+		 break;
+	    }
+	    break;
+	}
+      }
+    }
+    catch (Exception $e)
+    {
+      throw new Exception("Report: $report\n".$e->getMessage());
     }
   }
-
+  
   /**
-   * <p> Returns the title of the report. </p>
-   */
+  * <p> Returns the title of the report. </p>
+  */
   public function getTitle()
   {
     return $this->title;
   }
   
   /**
-   * <p> Returns the description of the report. </p>
-   */
+  * <p> Returns the description of the report. </p>
+  */
   public function getDescription()
   {
     return $this->description;
   }
   
   /**
-   * <p> Returns the query specified. </p>
-   */
+  * <p> Returns the query specified. </p>
+  */
   public function getQuery()
   {
     return $this->query;
   }
   
   /**
-   * <p> Uses source-specific validation methods to check whether the report query is valid. </p>
-   */
+  * <p> Uses source-specific validation methods to check whether the report query is valid. </p>
+  */
   public function isValid(){}
   
   /**
-   * <p> Gets a list of parameters (name => type) </p>
-   */
+  * <p> Gets a list of parameters (name => type) </p>
+  */
   public function getParams()
   {
     return $this->params;
@@ -128,7 +135,7 @@ class XMLReportReader_Core implements ReportReader
     }
   }
   
-  private function mergeColumn($name, $display, $style)
+  private function mergeColumn($name, $display = '', $style = '')
   {
     if (array_key_exists($name, $this->columns))
     {
