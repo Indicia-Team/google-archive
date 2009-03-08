@@ -190,7 +190,7 @@ class Report_Controller extends Service_Base_Controller {
   
   public function listLocalReports($detail = 2)
   {
-    if (typeof($detail) != int || $detail < 0 || $detail > 2)
+    if (!is_int($detail) || $detail < 0 || $detail > 2)
     {
       $detail = 1;
     }
