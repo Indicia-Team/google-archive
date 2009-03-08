@@ -15,13 +15,6 @@ include 'data_entry_config.php';
 <script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo $config['google_api_key'] ?>"
 type="text/javascript"></script>
-<script type="text/javascript">
-(function($){
-$(document).ready(function() {
-  $('.date').datepicker({dateFormat : 'yy-mm-dd', constrainInput: false});
-});
-})(jQuery);
-</script>
 </head>
 <body>
 <h1>Indicia Data entry test</h1>
@@ -29,24 +22,24 @@ $(document).ready(function() {
 <?php
 // PHP to catch and submit the POST data from the form - we need to wrap
 // some things manually in order to get the supermodel in.
-if ($_POST) 
+if ($_POST)
 {
   // Replace the site usage array with a comma sep list
-  if (array_key_exists($config['site_usage'], $_POST)) 
+  if (array_key_exists($config['site_usage'], $_POST))
   {
     if (is_array($_POST[$config['site_usage']]))
     {
       $_POST[$config['site_usage']] = implode(',',$_POST[$config['site_usage']]);
     }
   }
-  
+
   // We have occurrence attributes that we have to wrap
   $occAttrs = data_entry_helper::wrap_attributes($_POST, 'occurrence');
   $smpAttrs = data_entry_helper::wrap_attributes($_POST, 'sample');
-  
+
   $sampleMod = data_entry_helper::wrap($_POST, 'sample');
   $sampleMod['metaFields']['smpAttributes']['value'] = $smpAttrs;
-  
+
   $occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
   $occurrenceMod['superModels'][] = array
   (
@@ -54,9 +47,9 @@ if ($_POST)
    'model' => $sampleMod
    );
    $occurrenceMod['metaFields']['occAttributes']['value'] = $occAttrs;
-   
+
    // Send the image
-   if ($name = data_entry_helper::handle_media('occurrence_image')) 
+   if ($name = data_entry_helper::handle_media('occurrence_image'))
    {
      // Add occurrence image model
      // TODO Get a caption for the image
@@ -68,15 +61,15 @@ if ($_POST)
 		       'fkId' => 'occurrence_id',
 							     'model' => $oiMod);
    }
-   
+
    $submission = array('submission' => array('entries' => array(
    array ( 'model' => $occurrenceMod )
    )));
    $response = data_entry_helper::forward_post_to(
    'save', $submission);
    data_entry_helper::dump_errors($response);
-} 
-else if ($_GET) 
+}
+else if ($_GET)
 {
   if (array_key_exists('id', $_GET))
   {
@@ -86,8 +79,8 @@ else if ($_GET)
     curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
     $entity = json_decode(curl_exec($session), true);
     $entity = $entity[0];
-  } 
-  else 
+  }
+  else
   {
     $entity = null;
   }
@@ -99,8 +92,8 @@ function field($field)
   if ($entity != null && array_key_exists($field, $entity))
   {
     return $entity[$field];
-  } 
-  else 
+  }
+  else
   {
     return '';
   }
@@ -117,7 +110,7 @@ $readAuth = data_entry_helper::get_read_auth(1, 'password');
 ?>
 <input type='hidden' id='website_id' name='website_id' value='1' />
 <input type='hidden' id='record_status' name='record_status' value='C' />
-<input type='hidden' id='id' name='id' value='<?php echo field('id'); ?>' /> 
+<input type='hidden' id='id' name='id' value='<?php echo field('id'); ?>' />
 <label for='actaxa_taxon_list_id'>Taxon</label>
 <?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth, field('taxon'), field('taxa_taxon_list_id')); ?>
 <br/>
