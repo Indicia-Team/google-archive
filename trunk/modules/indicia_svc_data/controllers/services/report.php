@@ -196,6 +196,7 @@ class Report_Controller extends Service_Base_Controller {
     }
     if ($detail = 0)
     {
+      Kohana::log('info', "Listing local reports in report directory ".$this->localReportDir.".");
       $reportList = Array();
       // All we do here is return the list of tiles - don't bother interrogating the reports
       $dh = opendir($this->localReportDir);
@@ -209,6 +210,8 @@ class Report_Controller extends Service_Base_Controller {
     }
     else
     {
+      Kohana::log('info', "Listing local reports in report directory ".$this->localReportDir.".");
+      
       $reportList = Array();
       $handle = opendir($this->localReportDir);
       while ($file = readdir($handle))
@@ -218,7 +221,9 @@ class Report_Controller extends Service_Base_Controller {
 	switch ($ext)
 	{
 	  case 'xml':
-	    $this->reportReader = new XMLReportReader($this->fetchLocalReport($file));
+	    Kohana::log('info', "Invoking XMLReportReader to handle $file.");
+	    $this->fetchLocalReport($file);
+	    $this->reportReader = new XMLReportReader($this->report);
 	    break;
 	  default:
 	    continue 2;
@@ -236,12 +241,14 @@ class Report_Controller extends Service_Base_Controller {
   private function fetchLocalReport($request)
   {
     if (is_dir($this->localReportDir) ||
-      is_file($this->localReportDir.$request))
+      is_file($this->localReportDir.'/'.$request))
       {
-	$this->report = $this->localReportDir.$request;
+	$this->report = $this->localReportDir.'/'.$request;
+	Kohana::log('info', "Setting local report ".$this->report.".");
       }
       else
       {
+	Kohana::log('info', "Unable to find report $request in ".$this->localReportDir.".");
 	// Throw an error - something has gone wrong
 	// TODO
       }
@@ -290,14 +297,14 @@ class Report_Controller extends Service_Base_Controller {
     $cachedReport = Array
     (
     'reportReader' => $this->reportReader,
-			       'providedParams' => $this->providedParams,
-			       'expectedParams' => $this->expectedParams
-			       );
-			       
-			       // Set the object in the cache
-			       $uid = md5(time().rand());
-			       $this->cache = new Cache;
-			       $this->cache->set($uid, $cachedReport, array('report'), 3600);      
+    'providedParams' => $this->providedParams,
+    'expectedParams' => $this->expectedParams
+    );
+    
+    // Set the object in the cache
+    $uid = md5(time().rand());
+    $this->cache = new Cache;
+    $this->cache->set($uid, $cachedReport, array('report'), 3600);      
   }
   
   private function retrieveCachedReport($cacheid)
