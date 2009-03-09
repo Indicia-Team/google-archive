@@ -1,21 +1,21 @@
 <?php
 /**
- * INDICIA
- * @link http://code.google.com/p/indicia/
- * @package Indicia
- */
+* INDICIA
+* @link http://code.google.com/p/indicia/
+* @package Indicia
+*/
 
 /**
- * Taxa_taxon_list controller
- *
- *
- * @package Indicia
- * @subpackage Controller
- * @license http://www.gnu.org/licenses/gpl.html GPL
- * @author Nicholas Clarke <nicholas.clarke@gmail.com> / $Author$
- * @copyright xxxx
- * @version $Rev$ / $LastChangedDate$
- */
+* Taxa_taxon_list controller
+*
+*
+* @package Indicia
+* @subpackage Controller
+* @license http://www.gnu.org/licenses/gpl.html GPL
+* @author Nicholas Clarke <nicholas.clarke@gmail.com> / $Author$
+* @copyright xxxx
+* @version $Rev$ / $LastChangedDate$
+*/
 
 class Report_viewer_Controller extends Indicia_Controller
 {
@@ -44,8 +44,38 @@ class Report_viewer_Controller extends Indicia_Controller
     $view = new View('report/index');
     $view->localReports = $localReports;
     
-    
     $this->template->title = "Report Browser";
+    $this->template->content = $view;
+  }
+  
+  
+  public function resume($uid)
+  {
+    $srvResponse = $this->repServ->resumeReport($uid, $_POST);
+    
+    if (array_key_exists('error', $srvResponse))
+    {    
+      $localReports = $this->repServ->listLocalReports(2);
+      
+      $view = new View('report/index');
+      $view->localReports = $localReports;
+      $view->error = $srvResponse;
+      
+      $this->template->title = "Report Browser";
+      $this->template->content = $view;
+    }
+    else if (array_key_exists('parameterRequest', $srvResponse))
+    {
+      $view = new View('report/params');
+      $view->request = $srvResponse;
+      $this->template->title = "Report Parameters";
+    }
+    else
+    {
+      $view = new View('report/view');
+      $view->result = $srvResponse;
+      $this->template->title = "View Report";
+    }
     $this->template->content = $view;
   }
   
@@ -55,7 +85,30 @@ class Report_viewer_Controller extends Indicia_Controller
   public function local($report)
   {
     $srvResponse = $this->repServ->requestReport($report, 'local', 'xml');
+    
+    if (array_key_exists('error', $srvResponse))
+    {    
+      $localReports = $this->repServ->listLocalReports(2);
+      
+      $view = new View('report/index');
+      $view->localReports = $localReports;
+      $view->error = $srvResponse;
+      
+      $this->template->title = "Report Browser";
+      $this->template->content = $view;
+    }
+    else if (array_key_exists('parameterRequest', $srvResponse))
+    {
+      $view = new View('report/params');
+      $view->request = $srvResponse;
+      $this->template->title = "Report Parameters";
+    }
+    else
+    {
+      $view = new View('report/view');
+      $view->result = $srvResponse;
+      $this->template->title = "View Report";
+    }
+    $this->template->content = $view;
   }
-  
-  
 }

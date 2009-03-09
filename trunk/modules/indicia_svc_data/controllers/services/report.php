@@ -63,6 +63,7 @@ class Report_Controller extends Service_Base_Controller {
   {
     $this->localReportDir = Kohana::config('indicia.localReportDir');
     $this->suppress= $suppress;
+    parent::__construct();
   }
   
   /**
@@ -80,10 +81,12 @@ class Report_Controller extends Service_Base_Controller {
   public function requestReport($report = null, $reportSource = null, $reportFormat = null,  $params = null)
   {
     
-    $rep = $report || $this->input->post('report', null);
-    $src = $reportSource || $this->input->post('reportSource', null);
-    $this->reportFormat = $reportFormat || $this->input->post('reportFormat', null);
-    $this->providedParams = $params || json_decode($this->input->post('params', array()), true);
+    $rep = $report ? $report : $this->input->post('report', null);
+    $src = $reportSource ? $reportSource : $this->input->post('reportSource', null);
+    $this->reportFormat = $reportFormat ? $reportFormat : $this->input->post('reportFormat', null);
+    $this->providedParams = $params ? $params : json_decode($this->input->post('params', '{}'), true);
+    
+    Kohana::log('info', "Received request for report: $rep, source: $src");
     
     if ($rep == null || $src == null)
     {
@@ -131,8 +134,8 @@ class Report_Controller extends Service_Base_Controller {
   public function resumeReport($cacheid = null, $params = null)
   {
     // Check we have both a uid and a set of parameters given
-    $uid = $cacheid || $this->input->post('uid', null);
-    $params = $params || $this->input->post('params', null);
+    $uid = $cacheid ? $cacheid : $this->input->post('uid', null);
+    $params = $params ? $params : json_decode($this->input->post('params', '{}'), true);
     
     if ($uid == null || $params == null)
     {
@@ -146,8 +149,6 @@ class Report_Controller extends Service_Base_Controller {
       
     }
     
-    // Decode params
-    $params = json_decode($params, true);
     // Retrieve the report from cache
     if (!$this->retrieveCachedReport($uid))
     {
@@ -319,6 +320,7 @@ class Report_Controller extends Service_Base_Controller {
     $uid = md5(time().rand());
     $this->cache = new Cache;
     $this->cache->set($uid, $cachedReport, array('report'), 3600);      
+    return $uid;
   }
   
   private function retrieveCachedReport($cacheid)
@@ -344,12 +346,12 @@ class Report_Controller extends Service_Base_Controller {
     // Grab the query from the report reader
     $query = $this->reportReader->getQuery();
     // Replace each parameter in place
-    foreach ($this->providedParameters as $name => $value)
+    foreach ($this->providedParams as $name => $value)
     {
       $query = preg_replace("/#$name#%/", $value, $query);
     }
     
-    $query .= ' '.$this->reportReader->getOrderClause();
+    $query .= ' ORDER BY '.$this->reportReader->getOrderClause();
     
     $this->query = $query;
   }

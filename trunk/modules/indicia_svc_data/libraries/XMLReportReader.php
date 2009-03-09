@@ -112,7 +112,7 @@ class XMLReportReader_Core implements ReportReader
   */
   public function getOrderClause()
   {
-    return explode(' ', $this->order_by);
+    return implode(', ', $this->order_by);
   }
   
   /**
