@@ -239,8 +239,7 @@ class Report_Controller extends Service_Base_Controller {
   {
     // Set the correct MIME type
     header("Content-Type: application/json");
-    $response = json_encode($stuff);
-    echo $response;
+    echo json_encode($stuff);
   }
   
   private function fetchLocalReport($request)
