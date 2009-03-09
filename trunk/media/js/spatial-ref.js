@@ -157,7 +157,7 @@ function init_map(base_url, wkt, field_name, geom_name, virtual_earth, google, g
 			{type: G_SATELLITE_MAP, numZoomLevels: 20, 'sphericalMercator': true}
 		);
 
-		map.addLayers([velayer, gphy, gmap, ghyb, gsat]);
+		map.addLayers([gphy, gmap, ghyb, gsat]);
 	}
 
 	map.addLayer(editlayer);

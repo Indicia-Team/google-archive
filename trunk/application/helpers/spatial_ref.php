@@ -90,22 +90,30 @@ class spatial_ref {
 		$result = $db->query("SELECT ST_asText(ST_Transform(ST_GeomFromText(" .
 				"'$wkt',".kohana::config('sref_notations.internal_srid')."),$srid)) AS wkt;")->current();
 		if (is_numeric($system))
-			return self::point_to_lat_lon($result->wkt);
+			return self::point_to_lat_lon($result->wkt, $system);
 		else
 			return call_user_func("$system::wkt_to_sref", $result->wkt, $precision);
 	}
 
 	/**
 	 * Convert a point wkt into a x, y representation.
+	 * @param int $system The SRID of the system, used to determine the rounding that should be applied to the x,y values.
 	 */
-	protected static function point_to_lat_lon($wkt)
+	protected static function point_to_lat_lon($wkt, $system)
 	{
 		$locale=localeconv();
 		if ((bool) preg_match(
-					'/^POINT\([-+]?[0-9]*\\'.$locale['decimal_point'].'?[0-9]+[ ]*[-+]?[0-9]*\\'.$locale['decimal_point'].'?[0-9]+\)$/D', $wkt))
-			return str_replace(' ', Kohana::lang('misc.x_y_separator').' ', substr($wkt, 6, strlen($wkt)-7));
-		else
+					'/^POINT\([-+]?[0-9]*\\'.$locale['decimal_point'].'?[0-9]+[ ]*[-+]?[0-9]*\\'.$locale['decimal_point'].'?[0-9]+\)$/D', $wkt)) {
+			$coords = explode(' ', substr($wkt, 6, strlen($wkt)-7));
+			$roundings = kohana::config('sref_notations.roundings');
+			if (array_key_exists($system, $roundings))
+				$round = $roundings[$system];
+			else
+				$round = 0;
+			return round($coords[0],$round).Kohana::lang('misc.x_y_separator')." ".round($coords[1],$round);
+		} else {
 			throw new Exception('point_to_lat_long passed invalid wkt - '.$wkt);
+		}
 	}
 
 }

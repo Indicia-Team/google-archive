@@ -725,11 +725,12 @@ else
 * @param string $field_name Name of the spatial reference db field.
 * @param string $geom_field_name Name of the geom db field.
 * @param array $systems Associative array of the available spatial reference systems, in form code -> description.
-* @param array $opts Associative array of additional options. Possible options are init_value, width, height, instruct, inc_virtual_earth, inc_google, init_lat, init_long, init_zoom.
+* @param array $opts Associative array of additional options. Possible options are init_value, width, height, instruct, inc_virtual_earth, inc_google, init_lat, init_long, init_zoom, init_layer.
+* @param string $init_wkt Well Known Text for the initial polygon to display, used when redisplaying an edited record.
 */
-public static function map_picker($field_name, $geom_field_name, $systems, $opts = Array(), $default = '') {
+public static function map_picker($field_name, $geom_field_name, $systems, $opts = Array(), $init_wkt = '') {
   global $javascript;
-  $default = ($default == '') ? 'null' : "'".$default."'";
+  $init_wkt = ($init_wkt == '') ? 'null' : "'".$init_wkt."'";
   // Handle the options
   $init_value = self::option('init_value', $opts, '');
   $width      = self::option('width', $opts, '600');
@@ -745,7 +746,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
   $r = '<script type="text/javascript" src="'.parent::$base_url.'/media/js/OpenLayers.js"></script>';
   $r .= '<script type="text/javascript" src="'.parent::$base_url.'/media/js/spatial-ref.js"></script>';
   $r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
-  $javascript .= "init_map(\"".parent::$base_url."\", $default, '$field_name', '$geom_field_name', ".
+  $javascript .= "init_map(\"".parent::$base_url."\", $init_wkt, '$field_name', '$geom_field_name', ".
   "$inc_virtual_earth, $inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');\r\n";
 
   $r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.
@@ -795,7 +796,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
   public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb',
   		$country='United Kingdom') {
 	$r = '<input name="'.$id.'" id="'.$id.'" onkeypress="return check_find_enter(event, \''.$pref_area.'\', \''.$country.'\')"/>' .
-		'<input type="button" style="margin-top: -2px;" value="find" onclick="find_place(\''.$pref_area.'\', \''.$country.'\');"/>' .
+		'<input type="button" id="find_place_button" style="margin-top: -2px;" value="find" onclick="find_place(\''.$pref_area.'\', \''.$country.'\');"/>' .
 		'<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
 		'<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
 	return $r;
