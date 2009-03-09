@@ -11,4 +11,11 @@ $config['sref_notations'] = array
 // Set the internally stored geoms to use spherical mercator projection
 $config['internal_srid']=900913;
 
+// For each known SRID, specify a rounding value to set the number of digits usually given after the decimal place.
+$config['roundings'] = array
+(
+	'4326'=>5,
+	'2169'=>0
+)
+
 ?>
