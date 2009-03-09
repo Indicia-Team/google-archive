@@ -96,7 +96,7 @@ $(document).ready(function() {
 <select id="taxon_group_id" name="taxon_group_id">
 	<option value=''>&lt;Please select&gt;</option>
 <?php
-	$taxon_groups = ORM::factory('taxon_group')->orderby('title','asc')->find_all();
+	$taxon_groups = ORM::factory('taxon_group')->orderby('title','asc')->where('deleted', 'f')->find_all();
 	foreach ($taxon_groups as $lang) {
 		echo '	<option value="'.$lang->id.'" ';
 		if ($model->taxon_id != null && $lang->id==$model->taxon->taxon_group_id) {
