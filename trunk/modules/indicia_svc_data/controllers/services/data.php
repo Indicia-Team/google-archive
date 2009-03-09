@@ -245,6 +245,7 @@ class Data_Controller extends Service_Base_Controller {
     {
       case 'json':
 	$a =  json_encode($records);
+	$this->content_type = 'Content-Type: application/json';
 	if (array_key_exists('callback', $_GET))
 	{
 	  $a = $_GET['callback']."(".$a.")";
