@@ -13,8 +13,10 @@ class osgb {
 		if (!preg_match('(H[L-Z]|J[LMQR]|N[A-HJ-Z]|O[ABFGLMQRVW]|S[A-HJ-Z]|T[ABFGLMQRVW])', $sq100))
 			return FALSE;
 		$eastnorth=substr($sref, 2);
-		// Remaining chars must be all numeric and an equal number, up to 10 digits
-		if (!preg_match('/^[0-9]*$/', $eastnorth) || strlen($eastnorth) % 2 != 0 || strlen($eastnorth)>10)
+		// 2 cases - either remaining chars must be all numeric and an equal number, up to 10 digits
+		// OR for DINTY Tetrads, 2 numbers followed by a letter (Excluding O, including I)
+		if ((!preg_match('/^[0-9]*$/', $eastnorth) || strlen($eastnorth) % 2 != 0 || strlen($eastnorth)>10) AND
+				(!preg_match('/^[0-9][0-9][A-NP-Z]$/', $eastnorth)))
 			return FALSE;
 		return TRUE;
 	}
@@ -28,14 +30,27 @@ class osgb {
 		if (!self::is_valid($sref))
 			throw new Exception('Spatial reference is not a recognisable grid square.');
 		$sq_100 = self::get_100k_square($sref);
-		$coordLen = (strlen($sref)-2)/2;
-  		// extract the easting and northing
-  		$east  = substr($sref, 2, $coordLen);
-  		$north = substr($sref, 2+$coordLen);
-  		// if < 10 figure the easting and northing need to be multiplied up to the power of 10
-  		$sq_size = pow(10, 5-$coordLen);
-  		$east = $east * $sq_size;
-  		$north = $north * $sq_size;
+		if (strlen($sref)==5) {
+			// Assume DINTY Tetrad format 2km squares
+  			// extract the easting and northing
+  			$east  = substr($sref, 2, 1);
+  			$north = substr($sref, 3, 1);
+ 			$sq_code_letter_ord = ord(substr($sref, 4, 1));
+  			if ($sq_code_letter_ord > 79) $sq_code_letter_ord--; // Adjust for no O
+   			$sq_size = 2000;
+  			$east = $east * 10000 + floor(($sq_code_letter_ord - 65) / 5) * 2000;
+  			$north = $north * 10000 + (($sq_code_letter_ord - 65) % 5) * 2000;
+  		} else {
+			// Normal Numeric Format
+			$coordLen = (strlen($sref)-2)/2;
+  			// extract the easting and northing
+  			$east  = substr($sref, 2, $coordLen);
+  			$north = substr($sref, 2+$coordLen);
+  			// if < 10 figure the easting and northing need to be multiplied up to the power of 10
+  			$sq_size = pow(10, 5-$coordLen);
+  			$east = $east * $sq_size;
+  			$north = $north * $sq_size;
+		}
   		$westEdge=$east + $sq_100['x'];
   		$southEdge=$north + $sq_100['y'];
   		$eastEdge=$westEdge+$sq_size;
@@ -70,6 +85,9 @@ class osgb {
 			$point_2 = explode(' ',$points[1]);
 			$accuracy = abs(($point_2[0]-$point[0]) + ($point_2[1]-$point[1]));
 			$precision = 12 - strlen($accuracy)*2;
+		} else if ($precision==3) {
+			// DINTY TETRADS
+			// no action as all fixed.
 		} else
 		    $accuracy = pow(10, (10-$precision)/2);
 
@@ -97,6 +115,15 @@ class osgb {
 	    // Shift index along if letter is greater than I, since I is skipped
 	    if ($index >= 73) $index++;
 	    $secondLetter = chr($index);
+	    if ($precision == 3) {
+			// DINTY TETRADS
+	    	// 2 numbers at start equivalent to precision = 2
+	    	$e = floor(($easting - (100000 * $hundredKmE)) / 10000);
+	    	$n = floor(($northing - (100000 * $hundredKmN)) / 10000);
+	    	$letter = 65 + floor(($northing - (100000 * $hundredKmN) - ($n * 10000)) / 2000) + 5 * floor(($easting - (100000 * $hundredKmE) - ($e * 10000)) / 2000);
+  			if ($letter >= 79) $letter++; // Adjust for no O
+	    	return $firstLetter.$secondLetter.str_pad($e, 1, '0', STR_PAD_LEFT).str_pad($n, 1, '0', STR_PAD_LEFT).chr($letter);
+	    }
 	    $e = floor(($easting - (100000 * $hundredKmE)) / $accuracy);
 	    $n = floor(($northing - (100000 * $hundredKmN)) / $accuracy);
 	    return $firstLetter.$secondLetter.str_pad($e, $precision/2, '0', STR_PAD_LEFT).str_pad($n, $precision/2, '0', STR_PAD_LEFT);
