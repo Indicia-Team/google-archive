@@ -260,14 +260,15 @@ private function check_for_upgrade()
     //
     if(true !== ($result = $upgrade->run($db_system->getVersion(), $new_system)))
     {
+        // fatal error: the system stops here
+        //
         if( false === Kohana::config('core.display_errors'))
         {
-            // fatal error: the system stops here
             die( Kohana::lang('setup.error_upgrade_for_end_user') );
         }
         else
         {
-            throw new Kohana_User_Exception(Kohana::lang('general_errors.upgrade.failure'), 'UPGRADE ERROR: ' . $result );
+            die( 'UPGRADE ERROR: <pre>' . nl2br($result) . '</pre>' );
         }
     }
 

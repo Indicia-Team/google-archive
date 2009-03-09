@@ -32,7 +32,7 @@ class Upgrade_Model extends Model
      *
      * @param string $current_version
      * @param array $new_system
-     * @return bool
+     * @return mixed true if successful else error message
      */
     public function run( $current_version, $new_system )
     {
@@ -41,7 +41,7 @@ class Upgrade_Model extends Model
         if(1 == version_compare($current_version, $new_system['version']) )
         {
             Kohana::log('error', 'Current script version is lower than the database version. Downgrade not possible.');
-            return false;
+            return Kohana::lang('setup.error_downgrade_not_possible');
         }
 
         // start transaction
@@ -55,10 +55,7 @@ class Upgrade_Model extends Model
             if(0 == version_compare('0.1', $current_version) )
             {
                 // upgrade from version 0.1 to 0.2
-                if(false === $this->upgrade_0_1_to_0_2())
-                {
-                    return false;
-                }
+                $this->upgrade_0_1_to_0_2();
                 $current_version = '0.2';
             }
 
@@ -67,10 +64,7 @@ class Upgrade_Model extends Model
             if(0 == version_compare('0.2', $current_version) )
             {
                 // upgrade from version 0.2 to 0.3
-                if(false === $this->upgrade_0_2_to_0_3())
-                {
-                    return false;
-                }
+                $this->upgrade_0_2_to_0_3();
                 $current_version = '0.3';
             }
 
@@ -175,6 +169,8 @@ class Upgrade_Model extends Model
         $message .= "LINE: "     .$e->getLine()."\n";
 
         Kohana::log('error', $message);
+
+        return $message;
     }
 
     /**
