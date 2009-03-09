@@ -20,6 +20,7 @@
 
 class XMLReportReader_Core implements ReportReader
 {
+  private $name;
   private $title;
   private $description;
   private $query;
@@ -35,6 +36,8 @@ class XMLReportReader_Core implements ReportReader
     Kohana::log('info', "Constructing XMLReportReader for report $report.");
     try
     {
+      $a = explode('/', $report);
+      $this->name = $a[count($a)-1];
       $reader = new XMLReader();
       $reader->open($report);
       while($reader->read())
@@ -128,12 +131,13 @@ class XMLReportReader_Core implements ReportReader
     switch ($descLevel)
     {
       case (ReportReader::REPORT_DESCRIPTION_BRIEF):
-	return array('title' => $this->getTitle(), 'description' => $this->getDescription());
+	return array('name' => $this->name, 'title' => $this->getTitle(), 'description' => $this->getDescription());
 	break;
       case (ReportReader::REPORT_DESCRIPTION_FULL):
 	// Everything
 		return array
 	(
+	'name' => $this->name,
 	'title' => $this->getTitle(),
 	'description' => $this->getDescription(),
 	'columnns' => $this->columns,
@@ -147,6 +151,7 @@ class XMLReportReader_Core implements ReportReader
 	// At this report level, we include most of the useful stuff.
 	return array
 	(
+	'name' => $this->name,
 	'title' => $this->getTitle(),
 	'description' => $this->getDescription(),
 	'columnns' => $this->columns,

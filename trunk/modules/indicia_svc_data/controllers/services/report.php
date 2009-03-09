@@ -126,7 +126,7 @@ class Report_Controller extends Service_Base_Controller {
       $uid = $this->cacheReport();
       
       // Send a request for further parameters back to the client
-      return json_encode(array('parameterRequest' => $remPars, 'uid' => $uid));
+      $this->formatJSON(array('parameterRequest' => $remPars, 'uid' => $uid));
       
     }
     else
@@ -135,8 +135,6 @@ class Report_Controller extends Service_Base_Controller {
       $this->mergeQuery();
       $this->executeQuery();
       $this->formatResponse();
-      
-      return $this->response;
     }
   }
   
@@ -173,7 +171,7 @@ class Report_Controller extends Service_Base_Controller {
       $uid = $this->cacheReport();
       
       // Send a request for further parameters back to the client
-      return json_encode(array('parameterRequest' => $remPars, 'uid' => $uid));
+      $this->formatJSON(array('parameterRequest' => $remPars, 'uid' => $uid));
       
     }
     else
@@ -182,10 +180,7 @@ class Report_Controller extends Service_Base_Controller {
       $this->mergeQuery();
       $this->executeQuery();
       $this->formatResponse();
-      
-      return $this->response;
     }
-    
   }
   
   public function listLocalReports($detail = ReportReader::REPORT_DESCRIPTION_DEFAULT)
@@ -236,11 +231,11 @@ class Report_Controller extends Service_Base_Controller {
       }
     }
     
-  $this->jsonResponse(array('reportList' => $reportList));
+  $this->formatJSON(array('reportList' => $reportList));
     
   }
   
-  private function jsonResponse($stuff)
+  private function formatJSON($stuff)
   {
     // Set the correct MIME type
     header("Content-Type: application/json");
