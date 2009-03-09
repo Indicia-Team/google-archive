@@ -25,6 +25,9 @@ class Report_viewer_Controller extends Indicia_Controller
   public function __construct()
   {
     $this->pageTitle = 'Reports';
+    // As we're local, we just call the class report with suppress set to true, which will prevent
+    // it from writing to the screen.
+    $this->repServ = new Report_Controller(true);
     parent::__construct();
   }
   /**
@@ -35,10 +38,6 @@ class Report_viewer_Controller extends Indicia_Controller
   */
   public function index()
   {
-    // As we're local, we just call the class report with suppress set to true, which will prevent
-    // it from writing to the screen.
-    $this->repServ = new Report_Controller(true);
-    
     // Get the list of reports - at the moment we just grab default level
     $localReports = $this->repServ->listLocalReports(2);
     
@@ -49,4 +48,14 @@ class Report_viewer_Controller extends Indicia_Controller
     $this->template->title = "Report Browser";
     $this->template->content = $view;
   }
+  
+  /**
+  * Process and deliver a local report - no parameters
+  */
+  public function local($report)
+  {
+    $srvResponse = $this->repServ->requestReport($report, 'local', 'xml');
+  }
+  
+  
 }

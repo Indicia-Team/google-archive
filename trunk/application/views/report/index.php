@@ -8,7 +8,7 @@
 foreach ($localReports['reportList'] as $lr)
 {
   echo "<tr>";
-  echo "<td>".html::anchor("report/process/".$lr['name'], $lr['title'])."</td>";
+  echo "<td>".html::anchor("report/local/".$lr['name'], $lr['title'])."</td>";
   echo "<td>".$lr['description']."</td>";
   echo "</tr>";
 }

@@ -50,4 +50,4 @@ $config['title'] = 'title/page/1/10';
 
 // Reports
 $config['report'] = 'report_viewer';
-
+$config['report/local/([a-z0-9.]+)'] = 'report_viewer/local/$1';
