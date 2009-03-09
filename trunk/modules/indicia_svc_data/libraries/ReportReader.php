@@ -49,8 +49,13 @@ interface ReportReader
   public function isValid();
   
   /**
-   * <p> Gets a list of parameters (name => type) </p>
-   */
+  * <p> Returns the order by clause for the query. </p>
+  */
+  public function getOrderClause();
+  
+  /**
+  * <p> Gets a list of parameters (name => type) </p>
+  */
   public function getParams();
   
   /**

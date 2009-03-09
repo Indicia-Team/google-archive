@@ -132,7 +132,7 @@ class Report_Controller extends Service_Base_Controller {
     else
     {
       // Okay, all the parameters have been provided.
-      $this->mergeParameters();
+      $this->mergeQuery();
       $this->executeQuery();
       $this->formatResponse();
       
@@ -179,7 +179,7 @@ class Report_Controller extends Service_Base_Controller {
     else
     {
       // Okay, all the parameters have been provided.
-      $this->mergeParameters();
+      $this->mergeQuery();
       $this->executeQuery();
       $this->formatResponse();
       
@@ -188,13 +188,15 @@ class Report_Controller extends Service_Base_Controller {
     
   }
   
-  public function listLocalReports($detail = 2)
+  public function listLocalReports($detail = ReportReader::REPORT_DESCRIPTION_DEFAULT)
   {
-    if (!is_int($detail) || $detail < 0 || $detail > 2)
+    if (!is_int((int)$detail) || $detail < 0 || $detail > 3)
     {
-      $detail = 1;
+    Kohana::log('info', "Invalid reporting level : $detail.");
+      $detail = 2;
     }
-    if ($detail = 0)
+    Kohana::log('info', "Listing reports at level $detail.");
+    if ($detail == 0)
     {
       Kohana::log('info', "Listing local reports in report directory ".$this->localReportDir.".");
       $reportList = Array();
@@ -202,7 +204,7 @@ class Report_Controller extends Service_Base_Controller {
       $dh = opendir($this->localReportDir);
       while ($file = readdir($dh))
       {
-	if ($file != '..' && $file != '.')
+	if ($file != '..' && $file != '.' && is_file($this->localReportDir.'/'.$file))
 	{
 	  $reportList[] = array('name' => $file);
 	}
@@ -234,8 +236,16 @@ class Report_Controller extends Service_Base_Controller {
       }
     }
     
-    return json_encode(array('reportList' => $reportList));
+  $this->jsonResponse(array('reportList' => $reportList));
     
+  }
+  
+  private function jsonResponse($stuff)
+  {
+    // Set the correct MIME type
+    header("Content-Type: application/json");
+    $response = json_encode($stuff);
+    echo $response;
   }
   
   private function fetchLocalReport($request)
@@ -325,7 +335,7 @@ class Report_Controller extends Service_Base_Controller {
     
   }
   
-  private function mergeParameters()
+  private function mergeQuery()
   {
     // Grab the query from the report reader
     $query = $this->reportReader->getQuery();
@@ -334,6 +344,8 @@ class Report_Controller extends Service_Base_Controller {
     {
       $query = preg_replace("/#$name#%/", $value, $query);
     }
+    
+    $query .= ' '.$this->reportReader->getOrderClause();
     
     $this->query = $query;
   }

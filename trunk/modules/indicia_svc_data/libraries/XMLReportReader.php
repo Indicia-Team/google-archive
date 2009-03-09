@@ -105,6 +105,14 @@ class XMLReportReader_Core implements ReportReader
   public function isValid(){}
   
   /**
+  * <p> Returns the order by clause for the query. </p>
+  */
+  public function getOrderClause()
+  {
+    return explode(' ', $this->order_by);
+  }
+  
+  /**
   * <p> Gets a list of parameters (name => type) </p>
   */
   public function getParams()
@@ -117,8 +125,34 @@ class XMLReportReader_Core implements ReportReader
   */
   public function describeReport($descLevel)
   {
-    // At some point, we describe this better
-    return $this->getDescription();
+    switch ($descLevel)
+    {
+      case (ReportReader::REPORT_DESCRIPTION_BRIEF):
+	return array('title' => $this->getTitle(), 'description' => $this->getDescription());
+	break;
+      case (ReportReader::REPORT_DESCRIPTION_FULL):
+	// Everything
+		return array
+	(
+	'title' => $this->getTitle(),
+	'description' => $this->getDescription(),
+	'columnns' => $this->columns,
+	'parameters' => $this->params,
+	'query' => $this->query,
+	'order_by' => $this->order_by
+	);
+	break;
+      case (ReportReader::REPORT_DESCRIPTION_DEFAULT):
+      default:
+	// At this report level, we include most of the useful stuff.
+	return array
+	(
+	'title' => $this->getTitle(),
+	'description' => $this->getDescription(),
+	'columnns' => $this->columns,
+	'parameters' => $this->params
+	);
+    }
   }
   
   private function mergeParam($name, $display = '', $type = '', $description = '')
@@ -154,7 +188,7 @@ class XMLReportReader_Core implements ReportReader
   private function inferFromQuery()
   {
     // Find the columns we're searching for - nested between a SELECT and a FROM
-    $i0 = strpos(strtolower($this->query), ' select ') + 6;
+    $i0 = strpos(strtolower($this->query), ' select ') + 7;
     $i1 = strpos(strtolower($this->query), ' from ') - $i0;
     $cols = explode(',', substr($this->query, $i0, $i1));
     // We have cols, which may either be of the form 'x' or of the form 'x as y'
@@ -164,23 +198,22 @@ class XMLReportReader_Core implements ReportReader
       if (count($a) == 2)
       {
 	// Okay, we have an 'as' clause
-	$this->mergeColumn($a[1]);
+	$this->mergeColumn(trim($a[1]));
       }
       else
       {
 	// Treat this as a single thing
-	$this->mergeColumn($a[0]);
+	$this->mergeColumn(trim($a[0]));
       }
     }
     
     // Okay, now we need to find parameters, which we do with regex.
-    preg_match_all('/#((?:[a-z][0-9])+)#%/i', $this->query, $matches);
-print_r($matches);
-    foreach($matches as $match)
+    preg_match_all('/#((?:[a-z0-9_])+)#%/i', $this->query, $matches);
+    // Here is why I remember (yet again) why I hate PHP...
+    foreach ($matches[1] as $param)
     {
-      $this->mergeParam($match[1]);
-    }
-    
+      $this->mergeParam($param);
+    }   
   }
   
 }
