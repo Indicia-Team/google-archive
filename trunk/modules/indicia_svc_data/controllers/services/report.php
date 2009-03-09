@@ -57,10 +57,12 @@ class Report_Controller extends Service_Base_Controller {
   private $providedParams;
   private $localReportDir;
   private $cache;
+  private $suppress;
   
-  public function __construct()
+  public function __construct($suppress = false)
   {
     $this->localReportDir = Kohana::config('indicia.localReportDir');
+    $this->suppress= $suppress;
   }
   
   /**
@@ -75,32 +77,40 @@ class Report_Controller extends Service_Base_Controller {
   * (this might be fun, given the low level that the reports run at).
   * 
   */
-  public function requestReport()
+  public function requestReport($report = null, $reportSource = null, $reportFormat = null,  $params = null)
   {
-    // First we determine how we're fetching the report
-    if (($a = $this->input->get('uri', null)) != null)
+    
+    $rep = $report || $this->input->post('report', null);
+    $src = $reportSource || $this->input->post('reportSource', null);
+    $this->reportFormat = $reportFormat || $this->input->post('reportFormat', null);
+    $this->providedParams = $params || json_decode($this->input->post('params', array()), true);
+    
+    if ($rep == null || $src == null)
     {
-      $this->fetchRemoteReport($a);
-    }
-    else if (($a = $this->input->post('localReport', null)) != null)
-    {
-      $this->fetchLocalReport($a); 
-    }
-    else if (($a = $this->input->post('remoteReport', null)) != null)
-    {
-      $this->fetchRemoteReport($a);
-    }
-    else if (($a = $this->input->post('providedReport', null)) != null)
-    {
-      $this->fetchProvidedReport($a);
-    }
-    else
-    {
-      // No report provided - die
-      // TODO
+      return $this->formatJSON(array
+      (
+      'error' => 'Either report or report source is null',
+      'report' => $rep,
+      'source' => $src
+      ));
     }
     
-    $this->reportFormat = $this->input->get('reportFormat') || $this->input->post('reportFormat');
+    switch ($src)
+    {
+      case 'local':
+	$this->fetchLocalReport($rep);
+	break;
+      case 'remote':
+	$this->fetchRemoteReport($rep);
+	break;
+      case 'provided':
+	$this->fetchProvidedReport($rep);
+	break;
+      default:
+	// ERROR
+	return $this->formatJSON(array('error' => 'Invalid report source specified'));
+    }
+    
     // Now we switch based on the report format.
     switch ($this->reportFormat)
     {
@@ -112,42 +122,28 @@ class Report_Controller extends Service_Base_Controller {
 	// TODO
     }
     
-    // Have any parameters been provided?
-    $this->providedParams = json_decode($this->input->post('params', array()), true);
     // What parameters do we expect?
     $this->expectedParams = $this->reportReader->getParams();
     
-    // Do we need any more parameters?
-    $remPars = array_diff_key($this->expectedParams, $this->providedParams);
-    if (!empty($remPars))
-    {
-      // We need more parameters, so cache the report (and any existing parameters), get an id for
-      // it and send a request for the others back to the requester.
-      $uid = $this->cacheReport();
-      
-      // Send a request for further parameters back to the client
-      $this->formatJSON(array('parameterRequest' => $remPars, 'uid' => $uid));
-      
-    }
-    else
-    {
-      // Okay, all the parameters have been provided.
-      $this->mergeQuery();
-      $this->executeQuery();
-      $this->formatResponse();
-    }
+    return $this->compileReport();
   }
   
-  public function resumeReport($cacheid)
+  public function resumeReport($cacheid = null, $params = null)
   {
     // Check we have both a uid and a set of parameters given
-    $uid = $this->input->post('uid', null);
-    $params = $this->input->post('params', null);
+    $uid = $cacheid || $this->input->post('uid', null);
+    $params = $params || $this->input->post('params', null);
     
     if ($uid == null || $params == null)
     {
-      // Error here - send some response back
-      // TODO
+      $err = array
+      (
+      'error' => 'Trying to resume a report but one or more of params or uid is null',
+      'uid' => $uid,
+      'params' => $params
+      );
+      return $this->formatJSON($err);
+      
     }
     
     // Decode params
@@ -162,32 +158,14 @@ class Report_Controller extends Service_Base_Controller {
     // Merge the new parameters in
     $this->providedParams = array_merge($this->providedParams, $params);
     
-    // Do we need any more parameters?
-    $remPars = array_diff_key($this->expectedParams, $this->providedParams);
-    if (!empty($remPars))
-    {
-      // We need more parameters, so cache the report (and any existing parameters), get an id for
-      // it and send a request for the others back to the requester.
-      $uid = $this->cacheReport();
-      
-      // Send a request for further parameters back to the client
-      $this->formatJSON(array('parameterRequest' => $remPars, 'uid' => $uid));
-      
-    }
-    else
-    {
-      // Okay, all the parameters have been provided.
-      $this->mergeQuery();
-      $this->executeQuery();
-      $this->formatResponse();
-    }
+    return $this->compileReport();
   }
   
   public function listLocalReports($detail = ReportReader::REPORT_DESCRIPTION_DEFAULT)
   {
     if (!is_int((int)$detail) || $detail < 0 || $detail > 3)
     {
-    Kohana::log('info', "Invalid reporting level : $detail.");
+      Kohana::log('info', "Invalid reporting level : $detail.");
       $detail = 2;
     }
     Kohana::log('info', "Listing reports at level $detail.");
@@ -231,15 +209,47 @@ class Report_Controller extends Service_Base_Controller {
       }
     }
     
-  $this->formatJSON(array('reportList' => $reportList));
+    return $this->formatJSON(array('reportList' => $reportList));
     
+  }
+  
+  /**
+  * Checks parameters and returns request if they're not all there, else compiles the report.
+  */
+  private function compileReport()
+  {
+    // Do we need any more parameters?
+    $remPars = array_diff_key($this->expectedParams, $this->providedParams);
+    if (!empty($remPars))
+    {
+      // We need more parameters, so cache the report (and any existing parameters), get an id for
+      // it and send a request for the others back to the requester.
+      $uid = $this->cacheReport();
+      
+      // Send a request for further parameters back to the client
+      $res = array('parameterRequest' => $remPars, 'uid' => $uid);
+      return $this->formatJSON($res);
+      
+      
+    }
+    else
+    {
+      // Okay, all the parameters have been provided.
+      $this->mergeQuery();
+      $this->executeQuery();
+      return $this->formatResponse();
+    }
   }
   
   private function formatJSON($stuff)
   {
-    // Set the correct MIME type
-    header("Content-Type: application/json");
-    echo json_encode($stuff);
+    if (!$this->suppress)
+    {
+      // Set the correct MIME type
+      header("Content-Type: application/json");
+      echo json_encode($stuff);
+    }
+    return $stuff;
   }
   
   private function fetchLocalReport($request)
@@ -352,6 +362,10 @@ class Report_Controller extends Service_Base_Controller {
   
   private function formatResponse()
   {
-    print_r($this->reponse->result_array());
+    if (!$this->suppress)
+    {
+      print_r($this->reponse->result_array());
+    }
+    return $this->reponse->result_array();
   }
 }

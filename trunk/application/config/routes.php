@@ -48,3 +48,6 @@ $config['sample/edit/([0-9]+)'] = 'sample/edit/$1/1/10';
 // Title
 $config['title'] = 'title/page/1/10';
 
+// Reports
+$config['report'] = 'report_viewer';
+
