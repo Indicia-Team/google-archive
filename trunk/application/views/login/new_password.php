@@ -20,7 +20,7 @@
 </li>
 <li>
   <label for="password">Password</label>
-  <input tabindex="3" type = "password" name = "password" id = "password" value="<?php echo $user_model->password; ?>" class="narrow" >
+  <input tabindex="3" type = "password" name = "password" id = "password" value="<?php echo $password; ?>" class="narrow" >
   <?php echo html::error_message($user_model->getError('password')); ?>
 </li>
 <li>
