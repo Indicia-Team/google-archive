@@ -9,9 +9,11 @@ class New_Password_Controller extends Indicia_Controller {
 		{
 			// Everything is okay so far
 			$user = new User_Model($_SESSION['auth_user']->id);
-			$user->load_values(array('password' => '')); // clear down password.
 			$person = ORM::factory('person', $user->person_id);	
 			$view = new View('login/new_password');
+			// because of encryption of passwords, this must be done outside the model
+			// password is cleared down.
+			$view->password = '';
 			$view->password2 = '';
 			$view->user_model = $user;
 			$view->person_model = $person;
@@ -49,8 +51,10 @@ class New_Password_Controller extends Indicia_Controller {
 		}
 
 		$person = ORM::factory('person', $user->person_id);
-		$user->load_values(array('password' => '')); // clear down password.
 		$view = new View('login/new_password');
+		// because of encryption of passwords, this must be done outside the model
+		// password is cleared down.
+		$view->password = '';
 		$view->password2 = '';
 		$view->user_model = $user;
 		$view->person_model = $person;
@@ -87,6 +91,8 @@ class New_Password_Controller extends Indicia_Controller {
 			// errors are now embedded in the model
 			$view = new View('login/new_password');
 			$user->load_values(array('username' => $username)); // repopulate for error condition after validate has removed it (is a disabled field so not present in POST)
+			// have to reset passord as it gets encrypted
+			$view->password = $password;
 			$view->password2 = $password2;
 			$view->user_model = $user;
 			$view->person_model = $person;
