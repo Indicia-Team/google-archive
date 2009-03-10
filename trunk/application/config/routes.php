@@ -50,5 +50,5 @@ $config['title'] = 'title/page/1/10';
 
 // Reports
 $config['report'] = 'report_viewer';
-$config['report/local/([a-z0-9.]+)'] = 'report_viewer/local/$1';
+$config['report/local/(.+)'] = 'report_viewer/local/$1';
 $config['report/resume/([a-z0-9]+)'] = 'report_viewer/resume/$1';
