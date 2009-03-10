@@ -6,19 +6,11 @@
       JOIN occurrences o ON o.website_id = w.id 
       GROUP BY title
       </query>
-
       <order_bys>
-
             <order_by>title ASC</order_by>
-
       </order_bys>
-
       <columns>
-
             <column name="title" display="Website Name" style="color: #ff0000;" />
-
             <column name="count" display="Total no. of Occurrences" />
-
       </columns>
-
 </report>
