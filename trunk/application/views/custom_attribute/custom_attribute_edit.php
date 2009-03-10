@@ -15,7 +15,50 @@
 </li>
 <li>
 <label for="data_type">Data Type</label>
-<select id="data_type" name="data_type" <?php echo $enabled ?>>
+<script type="text/javascript">
+function toggleOptions(data_type)
+{
+	var enable_list = [];
+	var disable_list = [];
+	$('select#termlist_id').attr('disabled', 'disabled');
+	switch(data_type) {
+		case "T": // text
+			enable_list = ['valid_required','valid_length','valid_length_min','valid_length_max','valid_alpha','valid_email','valid_url','valid_alpha_numeric','valid_numeric','valid_standard_text','valid_decimal','valid_dec_format','valid_regex','valid_regex_format'];
+			disable_list = ['valid_min','valid_min_value','valid_max','valid_max_value'];
+			break;
+		case "L": // Lookup List
+			$('select#termlist_id').attr('disabled', '');
+			enable_list = ['valid_required'];
+			disable_list = ['valid_length','valid_length_min','valid_length_max','valid_alpha','valid_email','valid_url','valid_alpha_numeric','valid_numeric','valid_standard_text','valid_decimal','valid_dec_format','valid_regex','valid_regex_format','valid_min','valid_min_value','valid_max','valid_max_value'];
+			break;
+		case "I": // Integer
+		case "F": // Float
+			enable_list = ['valid_required','valid_numeric','valid_decimal','valid_dec_format','valid_regex','valid_regex_format','valid_min','valid_min_value','valid_max','valid_max_value'];
+			disable_list = ['valid_length','valid_length_min','valid_length_max','valid_alpha','valid_email','valid_url','valid_alpha_numeric','valid_standard_text'];
+			break;
+		case "D": // Specific Date
+		case "V": // Vague Date
+			enable_list = ['valid_required','valid_min','valid_min_value','valid_max','valid_max_value'];
+			disable_list = ['valid_length','valid_length_min','valid_length_max','valid_alpha','valid_email','valid_url','valid_alpha_numeric','valid_numeric','valid_standard_text','valid_decimal','valid_dec_format','valid_regex','valid_regex_format'];
+			break;
+		default:
+			disable_list = ['valid_required','valid_length','valid_length_min','valid_length_max','valid_alpha','valid_email','valid_url','valid_alpha_numeric','valid_numeric','valid_standard_text','valid_decimal','valid_dec_format','valid_regex','valid_regex_format','valid_min','valid_min_value','valid_max','valid_max_value'];
+			break;
+		
+	};
+	for (i in enable_list) {
+		$('input#'+enable_list[i]).attr('disabled', '');
+	};
+	for (i in disable_list) {
+		$('input#'+disable_list[i]).attr('disabled', 'disabled');
+	};
+
+};
+$(document).ready(function() {
+	toggleOptions($('select#data_type').attr('value'));
+});
+</script>
+<select id="data_type" name="data_type" <?php echo $enabled ?> onchange="toggleOptions(this.value);">
 	<option value=''>&lt;Please Select&gt;</option>
 <?php
 $optionlist = array('T' => 'Text'
@@ -35,6 +78,7 @@ $optionlist = array('T' => 'Text'
 </select>
 <?php echo html::error_message($model->getError('data_type')); ?>
 </li>
+
 <li>
 <label for="termlist_id">Termlist</label>
 <select id="termlist_id" name="termlist_id" <?php echo $enabled ?>>
