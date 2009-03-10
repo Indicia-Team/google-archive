@@ -43,7 +43,8 @@ class Indicia_Controller extends Template_Controller {
     'Entered Data' => array
     (
     'Occurrences' => 'occurrence',
-    'Samples' => 'sample'
+    'Samples' => 'sample',
+    'Reports' => 'report'
     ),
     'Admin' => array
     (

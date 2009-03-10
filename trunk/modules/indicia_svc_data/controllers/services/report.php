@@ -359,15 +359,34 @@ class Report_Controller extends Service_Base_Controller {
   private function executeQuery()
   {
     $db = new Database('report');
-    $this->reponse = $db->query($this->query);
+    $this->response = $db->query($this->query);
   }
   
   private function formatResponse()
   {
-    if (!$this->suppress)
+    // We return a formatted response. At some point, perhaps, we might want to return the native
+    // object (JSON encoded)? Think about this...
+    $r = "<table><thead>";
+    foreach ($this->reportReader->getColumns() as $col => $det)
     {
-      print_r($this->reponse->result_array());
+      $display = $det['display'] ? $det['display'] : $col;
+      $style = $det['style'];
+      $r .= "<th>$display</th>";
     }
-    return $this->reponse->result_array();
+    // Results
+    $r .= "</thead><tbody>";
+    foreach ($this->response->result_array(FALSE) as $row)
+    {
+      $r .= "<tr>";
+      foreach ($this->reportReader->getColumns() as $col => $det)
+      {
+	$style = $det['style'];
+	$r .= "<td style='$style'>".$row[$col]."</td>";
+      }
+      $r .= "</tr>";
+    }
+    $r .= "</tbody></table>";
+    
+    return $this->formatJSON(array('formattedReport' => $r));
   }
 }
