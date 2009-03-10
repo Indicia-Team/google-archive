@@ -116,11 +116,19 @@ class XMLReportReader_Core implements ReportReader
   }
   
   /**
-  * <p> Gets a list of parameters (name => type) </p>
+  * <p> Gets a list of parameters (name => array('display' => display, ...)) </p>
   */
   public function getParams()
   {
     return $this->params;
+  }
+  
+  /**
+  * <p> Gets a list of the columns (name => array('display' => display, 'style' => style)) </p>
+  */
+  public function getColumns()
+  {
+    return $this->columns;
   }
   
   /**

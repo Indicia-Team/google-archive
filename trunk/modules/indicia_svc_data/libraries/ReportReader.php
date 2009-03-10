@@ -63,5 +63,8 @@ interface ReportReader
   */
   public function describeReport($descLevel);
   
-  
+  /**
+  * <p> Gets a list of the columns (name => array('display' => display, 'style' => style)) </p>
+  */
+  public function getColumns();
 }
