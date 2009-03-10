@@ -16,6 +16,17 @@ $config['roundings'] = array
 (
 	'4326'=>5,
 	'2169'=>0
-)
+);
 
+// provide a list of systems which translate x,y format into a proper Lat/Long format, and the default ouput format
+// 'default_output' : DMS - Degrees:Minutes:Decimal Seconds, DM - Degrees:Decimal Minutes, D - Decimal Degrees (DEFAULT)
+// 'indicator' :
+// 	PlusMinus - use plus/minus signs prefix to indicate NSEW,
+// 	Minus - use minus sign prefix to indicate SW (N+E don't show plus),
+//  Prefix_NSEW - use NSEW at start of number, (DEFAULT)
+//  Postfix_NSEW - use NSEW at end of number
+$config['lat_long_systems'] = array
+(
+	'4326' => array('default_output' => 'DMS', 'indicator' => 'Postfix_NSEW')
+);
 ?>

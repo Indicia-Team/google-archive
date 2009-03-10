@@ -63,7 +63,7 @@ function exit_sref() {
 	   	// Send an AJAX request for the wkt to draw on the map
 	   	jQuery.getJSON(indicia_url + "/index.php/services/spatial/sref_to_wkt"+
 	   		"?sref=" + document.getElementById(input_field_name).value +
-	   		"&system=osgb"+
+			"&system=" + document.getElementById(input_field_name + "_system").value +
 			"&callback=?",
 			function(data){
 				jQuery("#"+geom_field_name).attr('value', data.wkt);
@@ -201,13 +201,13 @@ function find_place(pref_area, country)
 				}
 			});
 	    	if (found.count==1 && found.places[0].name.toLowerCase()==searchtext.toLowerCase()) {
-	    		ref=found.places[0].centroid.longitude + ', ' + found.places[0].centroid.latitude;
+	    		ref=found.places[0].centroid.latitude + ', ' + found.places[0].centroid.longitude;
 				show_found_place(ref);
 	    	} else if (found.count!=0) {
 	    		jQuery('<p>Select from the following places that were found matching your search:</p>').appendTo('#place_search_output');
 	    		var ol=jQuery('<ol>');
 		  		jQuery.each(found.places, function(i,place){
-		  			ref="'" + place.centroid.longitude + ', ' + place.centroid.latitude + "'";
+		  			ref="'" + place.centroid.latitude + ', ' + place.centroid.longitude + "'";
 		  			placename = place.name+' (' + place.placeTypeName + ')';
 		  			if (place.admin1!='')
 		  				placename = placename + ', '+place.admin1
