@@ -71,6 +71,7 @@ class XMLReportReader_Core implements ReportReader
 	    break;
 	}
       }
+      $reader->close();
     }
     catch (Exception $e)
     {
@@ -216,7 +217,10 @@ class XMLReportReader_Core implements ReportReader
       else
       {
 	// Treat this as a single thing
-	$this->mergeColumn(trim($a[0]));
+	// But it might have a . in it if it's a multi-table query, so look at the last bit
+	$b = explode('.' , $a[0]);
+	$b = $b[count($b) - 1];
+	$this->mergeColumn(trim($b));
       }
     }
     

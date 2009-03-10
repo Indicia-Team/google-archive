@@ -366,7 +366,7 @@ class Report_Controller extends Service_Base_Controller {
   {
     // We return a formatted response. At some point, perhaps, we might want to return the native
     // object (JSON encoded)? Think about this...
-    $r = "<table><thead>";
+    $r = "<table class='report'><thead>";
     foreach ($this->reportReader->getColumns() as $col => $det)
     {
       $display = $det['display'] ? $det['display'] : $col;
