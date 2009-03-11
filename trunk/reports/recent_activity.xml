@@ -14,7 +14,7 @@
 	    <order_by>survey ASC</order_by>
       </order_bys>
       <params>
-	    <param name='date' display='Date' description='Show activity since:' datatype='date' />
+	    <param name='date' display='Since: ' description='Show activity since:' datatype='date' />
       </params>
       <columns>
             <column name="survey" display="Survey Name" />

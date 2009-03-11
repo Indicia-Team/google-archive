@@ -18,7 +18,7 @@
 <?php
     echo html::script(array(
 	    'media/js/json2.js',
-            'media/js/jquery-1.3.1.js',
+            'media/js/jquery.js',
             'media/js/jquery.url.js',
             'media/js/hasharray.js',
             'media/js/superfish.js',
