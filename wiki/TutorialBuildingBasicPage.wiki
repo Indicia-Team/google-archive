@@ -49,8 +49,8 @@ The first two sections of the following tutorial are performed by your Core Serv
 = Build a data entry page =
   #	This part of the tutorial assumes you have access to a webserver that is running PHP 5 and are able to create web pages on the server. You should have a folder ready to contain the web pages on this server. Also, throughout this section of the tutorial, the website running the Indicia Core will be referred to as `<core_url>`. Make sure you replace this with the real URL!
   #	The building of PHP pages using Indicia is simplified by using the supplied Data Entry Helper class. This is a static class (so you don’t have to create an instance of it to use it) which outputs ready made pieces of HTML and JavaScript into your page. To use this, copy the following files from an installation of Indicia into the folder your web page will be accessed from on the server:
-    * modules\demo\data_entry\data_entry_helper.php
-    * modules\demo\data_entry\helper_config.php.example
+    * client_helpers\data_entry_helper.php
+    * client_helpers\data_entry\helper_config.php.example
   #	Remove the .example from the end of the latter file’s filename. Edit the helper_config.php file and change the value for the base_url setting to the URL of the folder which contains your Indicia installation (i.e. the same as you are replacing `<core_url>` with).
   #	Now, create a basic, blank PHP web page using your site template but with no content.
   #	Although you can take full control of the style sheets if you like, for this tutorial we will use some example styles provided. So, insert the following entries into the `<head>` section of of the page:
@@ -60,7 +60,7 @@ The first two sections of the following tutorial are performed by your Core Serv
 }}}
   #	You’ll also need to link in some JavaScript files. Paste the following into your page, inside the `<head>` section just beneath the stylesheet links:
 {{{
-<script type="text/javascript" src="<core_url>/media/js/jquery-1.2.6.js"></script>
+<script type="text/javascript" src="<core_url>/media/js/jquery-1.3.1.js"></script>
 <script type="text/javascript" src="<core_url>/media/js/ui.core.js"></script>
 <script type="text/javascript" src="<core_url>/media/js/ui.datepicker.js"></script>
 <script type="text/javascript" src="<core_url>/media/js/jquery.autocomplete.js"></script>
