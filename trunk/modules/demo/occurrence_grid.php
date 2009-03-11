@@ -1,7 +1,7 @@
 <html>
 <head>
 <link rel='stylesheet' type='text/css' href='../../media/css/datagrid.css' />
-<script type='text/javascript' src='../../media/js/jquery-1.3.1.js' ></script>
+<script type='text/javascript' src='../../media/js/jquery.js' ></script>
 <script type='text/javascript' src='../../media/js/hasharray.js' ></script>
 <script type='text/javascript' src='../../client_helpers/datagrid.js' ></script>
 <script type='text/javascript'>
