@@ -8,7 +8,7 @@
 	'http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'
 ), FALSE); ?>
 <script type='text/javascript'>	
-init_map('<?php echo url::base(); ?>', <?php if ($model->id) echo "'$model->geom'"; else echo 'null'; ?>,
+init_map('<?php echo url::base(); ?>', <?php echo ($model->id) ? "'$model->geom'" : 'null'; ?>,
 		'entered_sref', 'entered_geom', true);
 </script>
 <form class="cmxform"  name='editList' action="<?php echo url::site().'occurrence/save' ?>" method="POST">
@@ -53,7 +53,7 @@ echo html::error_message($model->getError('confidential'));
 <li>
 <label for='sample_method_id'>Sample Method:</label>
 <?php
-$sm = Kohana::config('termlists.sample_methods') || 1;
+$sm = Kohana::config('termlists.sample_methods');
 $terms = ORM::factory('termlists_term')->where(array('termlist_id' => $sm, 'deleted' => 'f'))->find_all();
 foreach ($terms as $term) { $arr[$term->id] = $term->term->term; }
 print form::dropdown('sample_method_id', $arr, $model->sample_method_id);
