@@ -60,13 +60,20 @@ class Auth_ORM_Driver implements Auth_Driver {
 			$user = ORM::factory('user', $user);
 		}
 
-// We assume that for this Indicia CORE module, that anyone who is given a role within
-// the CORE website has to log on to do their duties: this implies a user must have a
-// CORE_ROLE, and can have any CORE_ROLE, in order to log on. Those without CORE roles
-// are restricted to non CORE module activities.
-// If the password in the database is null, then do not check the password
+		// Two types of people have permissions to log in:
+		// 1) Users with a valid core_role_id (There is only one type of core role - CoreAdmin)
+		// 2) Users with Admin rights to at least one subsiduary website.
+		// Users not in either of these groups (which may intersect) can not log into the CORE module
+		// and can only log into the relevant subsiduary websites.
+		
+		$site_role = (new Site_role_Model('Admin'));
+		$websites=ORM::factory('users_website')->where(
+				array('user_id' => $user->id,
+							'site_role_id' => $site_role->id))->find_all();
 
-		if (!is_null($user->core_role_id) AND (is_null($user->password) OR ($user->password === $password)))
+		// If the password in the database is null, then do not check the password
+		if ((!is_null($user->core_role_id) OR ($websites->count() > 0))
+				AND (is_null($user->password) OR ($user->password === $password)))
 		{
 			if ($remember === TRUE)
 			{
