@@ -88,15 +88,17 @@ class User_Controller extends Gridview_Base_Controller {
 	protected function new_username($person)
 	{
 		$minlen=5;
-		$inc=2; // numbers bolted on start at 2 on purpose.
+		$inc=1; 
 		if($person->first_name=='')
 			$base_username = $person->surname;
 		else
 			$base_username = $person->first_name.'.'.$person->surname;
 		if(strlen($base_username) < $minlen)
 			$username = sprintf($base_username.'%0'.($minlen-strlen($base_username)).'d', $inc++);
-		else
+		else {
+			$inc++; // numbers bolted on start at 2 on purpose.
 			$username = $base_username;
+		}
 		// check for uniqueness
 		while(ORM::factory('user', array('username'=>$username))->loaded){
 			if(strlen($base_username) < $minlen)
