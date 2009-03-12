@@ -109,4 +109,30 @@ The reporting engine is included by default in the Indicia core install. Certain
 
 == Core Module Reporting ==
 
-Currently, the only concrete implementation of the reporting is on the core module, and can be accessed through the 'Entered Data' menu. 
+Currently, the only concrete implementation of the reporting is on the core module, and can be accessed through the 'Entered Data' menu. Provided things have been configured correctly, you should see a list of sample reports provided with the system. To test a report, go to 'my report title' and enter the species name '%'. This should return a list of all taxa defined on your core installation.
+
+=== Adding new reports ===
+
+To add new reports as defined in the format above, simply drop them (with extension .xml) into the folder configured as your localReportDir - in most installations this will be $INDICIA_HOME/reports/. They should appear automatically in the report browser screen.
+
+=== Remote reports ===
+
+Whilst support for remotely defined and stored reports is available, an interface to it waits on some security concerns. When these have been resolved, an option should become available below the report browser to specify your own reports or link them from elsewhere.
+
+== Site Module reporting ==
+
+Provided the data services module is enabled within the Indicia core, you should be able to access the reporting services through the url http://localhost/indicia/index.php/services/report. You can test whether this is working by going to http://localhost/indicia/index.php/services/report/listLocalReports. This should return a list of all reports local to the Indicia Core.
+
+=== Functions available through the report service interface ===
+
+The following functions are available through this url:
+
+  * listLocalReports($descriptionLevel) - provides a list of the reports available locally. By changing the $descriptionLevel you can alter the level of detail given on each report, from 0 (just names) to 3 (full detail).
+  * requestReport - requestReport is the principal method used to access reports. This will be covered in detail later.
+  * resumeReport($uid) - resume a report suspended in order to request further parameter details. The $uid will have been provided along with the parameter request.
+
+==== requestReport ====
+
+The requestReport function should be provided with a POST array containing the following details:
+
+
