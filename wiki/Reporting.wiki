@@ -99,6 +99,8 @@ Columns are used to give further specification to how particular fields should b
   * `display` will be displayed as the column header.
   * `style` will be applied to the column (though not the header - obviously implementers of the reporting in a site module may alter this behaviour if they wish).
 
+Note that both columns and parameters will be inferred from the query if they are not provided, but providing them explicitly is recommended as it allows a much greater degree of control over how they are displayed.
+
 == Reporting Engine Configuration ==
 
 The reporting engine is included by default in the Indicia core install. Certain configuration settings must be made to allow it to work. Many of these should happen automatically with a fresh install, but users working with existing installations may have to complete them manually.
@@ -133,6 +135,27 @@ The following functions are available through this url:
 
 ==== requestReport ====
 
-The requestReport function should be provided with a POST array containing the following details:
+The requestReport function should be provided with a POST array containing the following keys:
 
+  * `report`
+  * `reportSource`
+  * `reportFormat`
+  * `params`
 
+`report` can be one of three things:
+ # The filename of a report in localReportDir
+ # The URI of a remote report
+ # The text of a report
+
+`reportSource` identifies the source, so should be one of
+ # 'local' - for local reports
+ # 'remote' - for when a URI is provided
+ # 'provided' - for when the report is provided in the 'report' value.
+
+`reportFormat` specifies the format the report is delivered in. At present, only 'xml' is supported.
+
+`params` may be used when you wish to autocomplete certain parameters rather than being prompted for them. If used, it should be a JSON-encoded array of parameter name pointing to parameter value.
+
+==== parameterRequest ====
+
+If there are unprovided parameters in the report request, the service will respond with a parameter request. This will look like 
