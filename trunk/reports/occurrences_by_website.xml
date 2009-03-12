@@ -2,7 +2,7 @@
 
 <report title="Occurrences by Website" description="Lists websites registered on the core module and the total number of occurrences associated with each.">
       <query>
-      SELECT w.title, COUNT(*) as count FROM websites w 
+      SELECT w.title, COUNT(*) as count FROM report_websites w 
       JOIN occurrences o ON o.website_id = w.id 
       GROUP BY title
       </query>

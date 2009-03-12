@@ -225,7 +225,7 @@ class XMLReportReader_Core implements ReportReader
     }
     
     // Okay, now we need to find parameters, which we do with regex.
-    preg_match_all('/#((?:[a-z0-9_])+)#%/i', $this->query, $matches);
+    preg_match_all('/#([a-z0-9_]+)#%/i', $this->query, $matches);
     // Here is why I remember (yet again) why I hate PHP...
     foreach ($matches[1] as $param)
     {
