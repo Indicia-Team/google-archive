@@ -475,7 +475,7 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
        if (array_key_exists($nameField, $item) &&
 	 array_key_exists($valueField, $item)) {
 	   $name = htmlspecialchars($item[$nameField], ENT_QUOTES);
-	   $selected = ($default == $item[$valueField]) ? 'checked="checked"' : '' ;
+	   $checked = ($default == $item[$valueField]) ? 'checked="checked"' : '' ;
 	   $r .= "<input type='radio' id='$id' name='$id' value='$item[$nameField]' $checked />";
 	   $r .= $name.$sep;
 	 }
