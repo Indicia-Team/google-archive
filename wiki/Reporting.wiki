@@ -156,6 +156,43 @@ The requestReport function should be provided with a POST array containing the f
 
 `params` may be used when you wish to autocomplete certain parameters rather than being prompted for them. If used, it should be a JSON-encoded array of parameter name pointing to parameter value.
 
-==== parameterRequest ====
+==== resumeReport ====
 
-If there are unprovided parameters in the report request, the service will respond with a parameter request. This will look like 
+The resumeReport function takes a POST array which should contain the following keys:
+
+  * `params`
+  * `uid` (optional)
+
+`params` should point to a JSON-encoded array of parameter name to value.
+`uid` should point to the uid given in the parameterRequest. You may omit this key and instead provide it as an argument to the resumeReport function in a RESTful manner, that is: report/resumeReport/6074a1fb2cf7435d6563bba53a8d11b5.
+
+
+=== parameterRequest ===
+
+If there are unprovided parameters in the report request, the service will respond with a parameter request. This will look like
+
+{{{
+{"parameterRequest":{"searchstring":{"datatype":"text","display":"Species Name","description":"Taxon name (any language) to search for."}},"uid":"6074a1fb2cf7435d6563bba53a8d11b5"}
+}}}
+
+The uid is provided to resume processing the report. When you have captured parameter data from the user, this should be send to the `resumeReport` function as described above.
+
+=== Response ===
+
+The final response provided will look like
+
+{{{
+{"formattedReport":"<table class='report'><thead><th>ID<\/th><th>Species Name<\/th><\/thead><tbody><tr><td style=''>4<\/td><td style='color: #ff0000;'>Adonis Blue<\/td><\/tr><tr><td style=''>3<\/td><td style='color: #ff0000;'>Common Blue<\/td><\/tr><tr><td style=''>6<\/td><td style='color: #ff0000;'>Green Hairstreak<\/td><\/tr><tr><td style=''>2<\/td><td style='color: #ff0000;'>Red Admiral<\/td><\/tr><tr><td style=''>1<\/td><td style='color: #ff0000;'>Ringlet<\/td><\/tr><tr><td style=''>5<\/td><td style='color: #ff0000;'>Speckled Wood<\/td><\/tr><\/tbody><\/table>"}
+}}}
+
+and may be dealt with as you please.
+
+=== Error ===
+
+Should an error occur during the processing, a reponse looking like the following shall be given:
+
+{{{
+{"error":"Trying to resume a report but one or more of params or uid is null","uid":"6074a1fb2cf7435d6563bba53a8d11b5","params":null}
+}}}
+
+The error key will always be given in the error response, along with other keys specific to the error.
