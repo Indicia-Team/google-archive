@@ -15,12 +15,15 @@ class Person_Controller extends Gridview_Base_Controller {
 		$this->pagetitle = "People";
 		$this->model = new Person_Model();
 		
+		$this->flag_warning = null;
 		if(!is_null($this->gen_auth_filter)){
 			$users_websites=ORM::factory('users_website')->where('site_role_id IS NOT ', null)->in('website_id', $this->gen_auth_filter['values'])->find_all();
 			$person_id_values = array();
 			foreach($users_websites as $users_website) {
-				$user=ORM::factory('user', $users_website->user_id);
-				$person_id_values[] = $user->person_id;
+				// not that only a Core Admin person can modify a person with Core Admin rights.
+				$user=ORM::factory('user')->where('id', $users_website->user_id)->where('core_role_id IS ', null)->find();
+				if($user->loaded)
+					$person_id_values[] = $user->person_id;
 			}
 			$this->auth_filter = array('field' => 'id', 'values' => $person_id_values);
 		}
@@ -39,6 +42,7 @@ class Person_Controller extends Gridview_Base_Controller {
 	public function create() {
 		$this->setView('person/person_edit', 'Person',
 					array('return_url' => '')); // will jump back to the gridview on submit
+		$this->set_warning();
 	}
 
 	/**
@@ -48,6 +52,7 @@ class Person_Controller extends Gridview_Base_Controller {
 	public function create_from_user() {
 		$this->setView('person/person_edit', 'Person',
 					array('return_url' => $this->return_url('user'))); // will jump back to the user gridview on submit
+		$this->set_warning();
 	}
 	
 	/**
@@ -71,6 +76,7 @@ class Person_Controller extends Gridview_Base_Controller {
 			$this->model = new Person_Model($id);
 			$this->setView('person/person_edit', 'Person',
 					array('return_url' => '')); // will jump back to the gridview on submit
+			$this->set_warning();
 		}
 	}
 
@@ -94,6 +100,7 @@ class Person_Controller extends Gridview_Base_Controller {
         	$this->model = new Person_Model($id);
 			$this->setView('person/person_edit', 'Person',
 					array('return_url' => $this->return_url('user')));
+			$this->set_warning();
 		}
 	}
 
@@ -111,6 +118,7 @@ class Person_Controller extends Gridview_Base_Controller {
 	protected function submit_fail() {
 		$this->setView('person/person_edit', 'Person',
 			array('return_url' => isset($_POST['return_url']) ? $this->return_url($_POST['return_url']) : ''));
+		$this->set_warning();
 	}
 
 	protected function record_authorised ($id)
@@ -122,6 +130,24 @@ class Person_Controller extends Gridview_Base_Controller {
 		return true;
 	}
 	
+	protected function set_warning()
+	{
+		$this->template->content->warning_message='';
+		if($this->model->loaded) {
+			$user=ORM::factory('user', array('person_id' => $this->model->id));
+			if(!is_null($this->gen_auth_filter)){
+				// Non Core Admin user
+				$my_users_websites=ORM::factory('users_website')->where('user_id', $user->id)->where('site_role_id IS NOT ', null)->in('website_id', $this->gen_auth_filter['values'])->find_all();
+				$all_users_websites=ORM::factory('users_website')->where('user_id', $user->id)->where('site_role_id IS NOT ', null)->find_all();
+				if($all_users_websites->count() > 0)
+					$this->template->content->warning_message='<li>Warning: This person is set up as a user on '.$all_users_websites->count().' websites, of which you have the Admin role for '.$my_users_websites->count().' website(s).</li>';
+			} else {
+				// Core Admin user
+				$users_websites=ORM::factory('users_website')->where('user_id', $this->model->id)->where('site_role_id IS NOT ', null)->find_all();
+				$this->template->content->warning_message='<li>Number of websites this person is a user on: '.$users_websites->count().'</li>';
+			}
+		}
+	}
 }
 
 ?>
