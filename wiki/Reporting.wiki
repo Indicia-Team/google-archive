@@ -61,7 +61,7 @@ The report element is the root of the document, and accepts two attributes, titl
 </query>
 }}}
 
-The query element is again self-explanatory for the most part, with only the note that report parameters (see below) are specified in the format `/#([a-z0-9_])+#%/i` (where /i denotes that we are using case-insensitive patterns - thus, `Date` would equally be a valid parameter name).
+The query element is again self-explanatory for the most part, with only the note that report parameters (see below) are specified in the format `/#([a-z0-9_]+)#%/i` (where /i denotes that we are using case-insensitive patterns - thus, `Date` would equally be a valid parameter name).
 
 {{{
       <order_bys>
@@ -98,3 +98,15 @@ Columns are used to give further specification to how particular fields should b
   * `name` should match the name used in the query - SELECT foo FROM websites should have name `foo`, SELECT bar AS baz FROM websites should have name `baz` (not `bar`). SELECT w.foo FROM websites should have name `foo`, not `w.foo`, though where there is ambiguity here renaming your columns with 'AS' is the recommended solution. Failing to match this correctly may leave phantom columns in the report.
   * `display` will be displayed as the column header.
   * `style` will be applied to the column (though not the header - obviously implementers of the reporting in a site module may alter this behaviour if they wish).
+
+== Reporting Engine Configuration ==
+
+The reporting engine is included by default in the Indicia core install. Certain configuration settings must be made to allow it to work. Many of these should happen automatically with a fresh install, but users working with existing installations may have to complete them manually.
+
+  # Local Report Directory. A directory for storage of local reports must be defined in the indicia.php config file. A default setting is stored in indicia_dist.php and will default to 'reports'.
+  # Read-only database user. It is strongly recommended that a second database user is configured for the reporting services with read-only permissions (ability to execute only SELECT statements). This will prevent any use of the open SQL query functions in the reporting services to make changes to your database. Further, the report user should not have access to the websites, users, people, users_websites or user_tokens tables. Access to specific information in these tables where it is required should be done with the report_users, report_people, report_users_websites and report_websites views (there should be no need to access anything in user_tokens). Hopefully a future install procedure will configure this automatically.
+  # Reporting database configuration. Because we want to access the database using a read-only user for security purposes, we need to define a second database connection in Kohana using our new user. In database.php there should be an entry for $config['report'] - if it does not exist, copy the default entry and change the name. You should configure the username and password properties here to use your new, read-only user. The report services will automatically use this connection.
+
+== Core Module Reporting ==
+
+Currently, the only concrete implementation of the reporting is on the core module, and can be accessed through the 'Entered Data' menu. 
