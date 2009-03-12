@@ -60,7 +60,7 @@ The first two sections of the following tutorial are performed by your Core Serv
 }}}
   #	You’ll also need to link in some JavaScript files. Paste the following into your page, inside the `<head>` section just beneath the stylesheet links:
 {{{
-<script type="text/javascript" src="<core_url>/media/js/jquery-1.3.1.js"></script>
+<script type="text/javascript" src="<core_url>/media/js/jquery.js"></script>
 <script type="text/javascript" src="<core_url>/media/js/ui.core.js"></script>
 <script type="text/javascript" src="<core_url>/media/js/ui.datepicker.js"></script>
 <script type="text/javascript" src="<core_url>/media/js/jquery.autocomplete.js"></script>
