@@ -5,6 +5,7 @@
 <fieldset>
 <legend>Person's Details</legend>
 <ol>
+<?php echo html::error_message($warning_message); ?>
 <li>
 <label for="title_id">Title</label>
 <select id="title_id" name="title_id">
