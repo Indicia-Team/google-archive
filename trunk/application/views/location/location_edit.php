@@ -9,11 +9,11 @@
 <script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>
 <script type="text/javascript">
 
-$(document).ready(function() {
+jQuery(document).ready(function() {
 	init_map('<?php echo url::base(); ?>', <?php if ($model->id) echo "'$model->centroid_geom'"; else echo 'null'; ?>,
 		'centroid_sref', 'centroid_geom', true);
 
-	$("input#parent").autocomplete("<?php echo url::site() ?>index.php/services/data/location", {
+	jQuery("input#parent").autocomplete("<?php echo url::site() ?>index.php/services/data/location", {
 		minChars : 1,
 		mustMatch : true,
 		extraParams : {
@@ -23,7 +23,7 @@ $(document).ready(function() {
 		parse: function(data) {
 			var results = [];
 			var obj = JSON.parse(data);
-			$.each(obj, function(i, item) {
+			jQuery.each(obj, function(i, item) {
 				results[results.length] = {
 					'data' : item,
 					'value' : item.id,
@@ -38,8 +38,8 @@ $(document).ready(function() {
 			return item.id;
 		}
 	});
-	$("input#parent").result(function(event, data){
-		$("input#parent_id").attr('value', data.id);
+	jQuery("input#parent").result(function(event, data){
+		jQuery("input#parent_id").attr('value', data.id);
 	});
 });
 </script>

@@ -28,8 +28,8 @@
 <?php echo html::stylesheet(array('media/css/menus',),array('screen',)); ?>
 
 <script type="text/javascript">
-      $(document).ready(function() {
-        $('ul.sf-menu').superfish();
+      jQuery(document).ready(function() {
+        jQuery('ul.sf-menu').superfish();
     });
 </script>
 <!-- END: jquery/superfish init -->
