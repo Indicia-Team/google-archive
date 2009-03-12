@@ -71,7 +71,7 @@ class User_Controller extends Gridview_Base_Controller {
 					$this->setView('user/user_edit', 'User',
 						array('password_field' => $this->password_fields($login_config['default_password'], $login_config['default_password'])));
 					$this->template->content->model->person_id = $id;
-					$this->template->content->model->username = $person->first_name.'.'.$person->surname;
+					$this->template->content->model->username = $this->new_username($person);
 					foreach ($websites as $website)
 						$this->model->users_websites[$website->id]=
 								array(
@@ -85,6 +85,27 @@ class User_Controller extends Gridview_Base_Controller {
 		}
 	}
 
+	protected function new_username($person)
+	{
+		$minlen=5;
+		$inc=2; // numbers bolted on start at 2 on purpose.
+		if($person->first_name=='')
+			$base_username = $person->surname;
+		else
+			$base_username = $person->first_name.'.'.$person->surname;
+		if(strlen($base_username) < $minlen)
+			$username = sprintf($base_username.'%0'.($minlen-strlen($base_username)).'d', $inc++);
+		else
+			$username = $base_username;
+		// check for uniqueness
+		while(ORM::factory('user', array('username'=>$username))->loaded){
+			if(strlen($base_username) < $minlen)
+				$username = sprintf($base_username.'%0'.($minlen-strlen($base_username)).'d', $inc++);
+			else
+				$username = sprintf($base_username.'%d', $inc++);
+		}
+		return $username;
+	}
 	protected function submit($submission){
         $this->model->submission = $submission;
         if (($id = $this->model->submit()) != null) {
