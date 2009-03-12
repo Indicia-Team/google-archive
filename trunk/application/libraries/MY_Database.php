@@ -10,10 +10,10 @@ class Database extends Database_Core {
 	 */
 	public function in($field, $values, $not = FALSE)
 	{
+		$null_value = false;
 		if (is_array($values))
 		{
 			$escaped_values = array();
-			$null_value = false;
 			foreach ($values as $v)
 			{
 				if (is_numeric($v))
@@ -30,8 +30,25 @@ class Database extends Database_Core {
 			}
 			$values = implode(",", $escaped_values);
 		}
-		$this->where('('.$this->driver->escape_column($field).' '.($not === TRUE ? 'NOT ' : '').'IN ('.$values.')'.($null_value ? 'OR '.$this->driver->escape_column($field).' IS NULL)' : ')'));
-
+		if ($not === FALSE){
+			if (!$values =='')
+				// there is a valid list, and a possible null value.
+				$this->where('('.$this->driver->escape_column($field).' IN ('.$values.')'.($null_value ? ' OR '.$this->driver->escape_column($field).' IS NULL)' : ')'));
+			else
+				// List is empty (originally values contained an array of nothing or just entry "null")
+				// If original list was completely empty, need to force nothing returned.
+				$this->where($null_value ? $this->driver->escape_column($field).' IS NULL' : "'t' = 'f'");
+		} else {
+			// not is true
+			if (!$values =='')
+				// there is a valid list, and a possible null value. Note need to use AND rather than OR
+				$this->where('('.$this->driver->escape_column($field).' NOT IN ('.$values.')'.($null_value ? ' AND '.$this->driver->escape_column($field).' IS NOT NULL)' : ')'));
+			else if ($null_value)
+				// Originally values only contained an array of just the entry "null"
+				$this->where($this->driver->escape_column($field).' IS NOT NULL');
+			// If original values list was completely empty, then don't need to add any where clause for NOT IN
+		}
+		
 		return $this;
 	}
 }
