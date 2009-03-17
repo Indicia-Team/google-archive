@@ -101,7 +101,7 @@ class Sample_Model extends ORM
   {
     $value = parent::__get($column);
     
-    if  (substr($column,-5) == '_geom') {
+    if  (substr($column,-4) == 'geom') {
       $row = $this->db->query("SELECT ST_asText('$value') AS wkt")->current();
       $value = $row->wkt;
   }

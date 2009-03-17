@@ -4,9 +4,9 @@
 	'media/js/thickbox-compressd.js',
 	'media/js/jquery.autocomplete.js',
 	'media/js/OpenLayers.js',
-	'media/js/spatial-ref.js',
-	'http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'
+	'media/js/spatial-ref.js'
 ), FALSE); ?>
+<script type='text/javascript' src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
 <script type='text/javascript'>	
 (function($){
   $(document).ready(function() {

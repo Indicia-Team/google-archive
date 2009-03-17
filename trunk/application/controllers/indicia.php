@@ -25,47 +25,47 @@ class Indicia_Controller extends Template_Controller {
       $menu = array
       (
       'Home' => array(),
-       'Lookup Lists' => array
+      'Lookup Lists' => array
+      (
+      'Species Lists'=>'taxon_list',
+       'Taxon Groups'=>'taxon_group',
+       'Term Lists'=>'termlist',
+       'Locations'=>'location',
+       'Surveys'=>'survey',
+       'People'=>'person'
+       ),
+       'Custom Attributes' => array
        (
-       'Species Lists'=>'taxon_list',
-    'Taxon Groups'=>'taxon_group',
-    'Term Lists'=>'termlist',
-    'Locations'=>'location',
-    'Surveys'=>'survey',
-    'People'=>'person'
-    ),
-    'Custom Attributes' => array
-    (
-    'Occurrence Attributes'=>'occurrence_attribute',
-    'Sample Attributes'=>'sample_attribute',
-    'Location Attributes'=>'location_attribute'
-    ),
-    'Entered Data' => array
-    (
-    'Occurrences' => 'occurrence',
-    'Samples' => 'sample',
-    'Reports' => 'report'
-    ),
-    'Admin' => array
-    (
-    'Users'=>'user',
-    'Websites'=>'website',
-    'Languages'=>'language',
-    'Titles'=>'title'
-    ),
-    'Logged in as '.$_SESSION['auth_user']->username => array
-    (
-    'Set New Password' => 'new_password',
-    'Logout'=>'logout'
-    )
-    );
-    if(!$this->auth->logged_in('CoreAdmin'))
-    unset($menu['Admin']);
-    $this->template->menu = $menu;
+       'Occurrence Attributes'=>'occurrence_attribute',
+	'Sample Attributes'=>'sample_attribute',
+	'Location Attributes'=>'location_attribute'
+	),
+	'Entered Data' => array
+	(
+	'Occurrences' => 'occurrence',
+	 'Samples' => 'sample',
+	 'Reports' => 'report'
+	 ),
+	 'Admin' => array
+	 (
+	 'Users'=>'user',
+	  'Websites'=>'website',
+	  'Languages'=>'language',
+	  'Titles'=>'title'
+	  ),
+	  'Logged in as '.$_SESSION['auth_user']->username => array
+	  (
+	  'Set New Password' => 'new_password',
+	   'Logout'=>'logout'
+	   )
+	   );
+	   if(!$this->auth->logged_in('CoreAdmin'))
+	   unset($menu['Admin']);
+	   $this->template->menu = $menu;
     } else
       $this->template->menu = array();
   }
-
+  
   /**
   * Retrieve a suitable title for the edit page, depending on whether it is a new record
   * or an existing one.
@@ -77,7 +77,7 @@ class Indicia_Controller extends Template_Controller {
     else
       return "New $name";
   }
-
+  
   /**
   * Return the metadata sub-template for the edit page of any model. Returns nothing
   * if there is no ID (so no metadata).
@@ -93,7 +93,7 @@ class Indicia_Controller extends Template_Controller {
       return '';
     }
   }
-
+  
   /**
   * set view
   *
@@ -108,13 +108,13 @@ class Indicia_Controller extends Template_Controller {
     $view->metadata          = $this->GetMetadataView(  $this->model );
     $this->template->title   = $this->GetEditPageTitle( $this->model, $pagetitle );
     $view->model             = $this->model;
-
+    
     foreach ($viewArgs as $arg => $val) {
-    $view->set($arg, $val);
-      }
-      $this->template->content = $view;
+	    $view->set($arg, $val);
+	  }
+	  $this->template->content = $view;
   }
-
+  
   /**
   * Wraps a standard $_POST type array into a save array suitable for use in saving
   * records.
@@ -131,46 +131,46 @@ class Indicia_Controller extends Template_Controller {
     $sa = array
     (
     'id' => $id,
-       'fields' => array(),
-       'fkFields' => array(),
-       'superModels' => array(),
-       'subModels' => array()
-       );
-
-       // Iterate through the array
-       foreach ($array as $a => $b)
-       {
-     // Check whether this is a fk placeholder
-     if (substr($a,0,3) == 'fk_'
-       && $fkLink)
-     {
-       // Generate a foreign key instance
-       $sa['fkFields'][$a] = array
-       (
-       // Foreign key id field is table_id
-       'fkIdField' => substr($a,3)."_id",
-       'fkTable' => substr($a,3),
-       'fkSearchField' =>
-       ORM::factory(substr($a,3))->get_search_field(),
-       'fkSearchValue' => $b
-       );
-       // Determine the foreign table name
-       $m = ORM::factory($id);
-       if (array_key_exists(substr($a,3), $m->belongs_to))
-       {
-         $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
-       } else if ($m instanceof ORM_Tree && substr($a,3) == 'parent') {
-         $sa['fkFields'][$a]['fkTable'] = $id;
-     }
-       }
-       else
-       {
-     // This should be a field in the model.
-     // Add a new field to the save array
-     $sa['fields'][$a] = array(
-     // Set the value
-     'value' => $b);
-       }
+    'fields' => array(),
+    'fkFields' => array(),
+    'superModels' => array(),
+    'subModels' => array()
+    );
+    
+    // Iterate through the array
+    foreach ($array as $a => $b)
+    {
+      // Check whether this is a fk placeholder
+      if (substr($a,0,3) == 'fk_'
+	&& $fkLink)
+      {
+	// Generate a foreign key instance
+	$sa['fkFields'][$a] = array
+	(
+	// Foreign key id field is table_id
+	'fkIdField' => substr($a,3)."_id",
+	 'fkTable' => substr($a,3),
+	 'fkSearchField' =>
+	 ORM::factory(substr($a,3))->get_search_field(),
+	 'fkSearchValue' => $b
+	 );
+	 // Determine the foreign table name
+	 $m = ORM::factory($id);
+	 if (array_key_exists(substr($a,3), $m->belongs_to))
+	 {
+	   $sa['fkFields'][$a]['fkTable'] = $m->belongs_to[substr($a,3)];
+	 } else if ($m instanceof ORM_Tree && substr($a,3) == 'parent') {
+	   $sa['fkFields'][$a]['fkTable'] = $id;
+      }
+    }
+    else
+    {
+      // This should be a field in the model.
+      // Add a new field to the save array
+      $sa['fields'][$a] = array(
+      // Set the value
+      'value' => $b);
+    }
   }
   return $sa;
 }
@@ -219,7 +219,7 @@ public function save()
   {
     $this->model = ORM::factory($this->model->object_name, $_POST['id']);
   }
-
+  
   /**
   * Were we instructed to delete the post?
   */
@@ -231,10 +231,10 @@ public function save()
   {
     $_POST['deleted'] = 'f';
   }
-
+  
   // Wrap the post object and then submit it
   $this->submit($this->wrap($_POST));
-
+  
 }
 
 /**
@@ -246,33 +246,33 @@ private function check_for_upgrade()
   // system file which is distributed with every indicia version
   //
   $new_system = Kohana::config('indicia_dist.system');
-
+  
   // get system info with the version number of the database
   $db_system = new System_Model;
-
+  
   // compare the script version against the database version
   // if both arent equal start the upgrade process
   //
   if(0 != version_compare($db_system->getVersion(), $new_system['version'] ))
   {
     $upgrade = new Upgrade_Model;
-
+    
     // upgrade to version $new_system['version']
     //
     if(true !== ($result = $upgrade->run($db_system->getVersion(), $new_system)))
     {
-        // fatal error: the system stops here
-        //
-        if( false === Kohana::config('core.display_errors'))
-        {
-            die( Kohana::lang('setup.error_upgrade_for_end_user') );
-        }
-        else
-        {
-            die( 'UPGRADE ERROR: <pre>' . nl2br($result) . '</pre>' );
-        }
+      // fatal error: the system stops here
+      //
+      if( false === Kohana::config('core.display_errors'))
+    {
+      die( Kohana::lang('setup.error_upgrade_for_end_user') );
     }
-
+    else
+    {
+      die( 'UPGRADE ERROR: <pre>' . nl2br($result) . '</pre>' );
+    }
+    }
+    
     // if successful, reload the system
     //
     url::redirect();

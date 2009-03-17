@@ -136,7 +136,7 @@ class ReportEngine {
       'uid' => $uid,
       'params' => $params
       );
-      return $this->formatJSON($err);
+      return $err;
       
     }
     
