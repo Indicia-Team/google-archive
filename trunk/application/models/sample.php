@@ -101,74 +101,76 @@ class Sample_Model extends ORM
   {
     $value = parent::__get($column);
     
-    if  (substr($column,-4) == 'geom') {
+    if  (substr($column,-4) == 'geom') 
+    {
       $row = $this->db->query("SELECT ST_asText('$value') AS wkt")->current();
       $value = $row->wkt;
-  }
-  return $value;
-}
-
-/**
-* Overrides the postSubmit() function to provide support for adding sample attributes
-* within the transaction.
-*/
-protected function postSubmit() {
-  // Occurrences have sample attributes associated, stored in a
-  // metafield.
-  if (array_key_exists('metaFields', $this->submission) &&
-    array_key_exists('smpAttributes', $this->submission['metaFields']))
-  {
-    Kohana::log("info", "About to submit sample attributes.");
-    foreach ($this->submission['metaFields']['smpAttributes']['value'] as
-      $idx => $attr)
-    {
-      $value = $attr['fields']['value'];
-      if ($value['value'] != '') {
-	$attrId = $attr['fields']['sample_attribute_id']['value'];
-	$oa = ORM::factory('sample_attribute', $attrId);
-	$vf = null;
-	switch ($oa->data_type) {
-	  case 'T':
-	    $vf = 'text_value';
-	    break;
-	  case 'F':
-	    $vf = 'float_value';
-	    break;
-	  case 'D':
-	    // Date
-	    $vd=vague_date::string_to_vague_date($value['value']);
-	    $attr['fields']['date_start_value']['value'] = $vd['start'];
-	    $attr['fields']['date_end_value']['value'] = $vd['end'];
-	    $attr['fields']['date_type_value']['value'] = $vd['type'];
-	    break;
-	  case 'V':
-	    // Vague Date
-	    $vd=vague_date::string_to_vague_date($value['value']);
-	    $attr['fields']['date_start_value']['value'] = $vd['start'];
-	    $attr['fields']['date_end_value']['value'] = $vd['end'];
-	    $attr['fields']['date_type_value']['value'] = $vd['type'];
-	    break;
-	  default:
-	    // Lookup in list
-	    $vf = 'int_value';
-	    break;
-	}
-	
-	if ($vf != null) $attr['fields'][$vf] = $value;
-	$attr['fields']['sample_id']['value'] = $this->id;
-	
-	$oam = ORM::factory('sample_attribute_value');
-	$oam->submission = $attr;
-	if (!$oam->inner_submit()) {
-	  $this->db->query('ROLLBACK');
-	  return null;
-	}
-      }
     }
-    return true;
-  } else {
-    return true;
+    return $value;
   }
+  
+  
+  /**
+  * Overrides the postSubmit() function to provide support for adding sample attributes
+  * within the transaction.
+  */
+  protected function postSubmit() {
+ // Occurrences have sample attributes associated, stored in a
+ // metafield.
+ if (array_key_exists('metaFields', $this->submission) &&
+   array_key_exists('smpAttributes', $this->submission['metaFields']))
+   {
+     Kohana::log("info", "About to submit sample attributes.");
+     foreach ($this->submission['metaFields']['smpAttributes']['value'] as
+       $idx => $attr)
+     {
+       $value = $attr['fields']['value'];
+       if ($value['value'] != '') {
+	 $attrId = $attr['fields']['sample_attribute_id']['value'];
+	 $oa = ORM::factory('sample_attribute', $attrId);
+	 $vf = null;
+	 switch ($oa->data_type) {
+	   case 'T':
+	     $vf = 'text_value';
+	     break;
+	   case 'F':
+	     $vf = 'float_value';
+	     break;
+	   case 'D':
+	     // Date
+	     $vd=vague_date::string_to_vague_date($value['value']);
+	     $attr['fields']['date_start_value']['value'] = $vd['start'];
+	     $attr['fields']['date_end_value']['value'] = $vd['end'];
+	     $attr['fields']['date_type_value']['value'] = $vd['type'];
+	     break;
+	   case 'V':
+	     // Vague Date
+	     $vd=vague_date::string_to_vague_date($value['value']);
+	     $attr['fields']['date_start_value']['value'] = $vd['start'];
+	     $attr['fields']['date_end_value']['value'] = $vd['end'];
+	     $attr['fields']['date_type_value']['value'] = $vd['type'];
+	     break;
+	   default:
+	     // Lookup in list
+	     $vf = 'int_value';
+	     break;
+	 }
+	 
+	 if ($vf != null) $attr['fields'][$vf] = $value;
+	 $attr['fields']['sample_id']['value'] = $this->id;
+	 
+	 $oam = ORM::factory('sample_attribute_value');
+	 $oam->submission = $attr;
+	 if (!$oam->inner_submit()) {
+	   $this->db->query('ROLLBACK');
+	   return null;
+       }
+     }
+   }
+   return true;
+   } else {
+     return true;
+   }
 }
 }
 ?>

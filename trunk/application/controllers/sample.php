@@ -25,9 +25,9 @@ class Sample_Controller extends Gridview_Base_Controller
     $this->model = ORM::factory('sample');
     $this->columns = array
     (
-    'entered_sref' => '',
-    'entered_sref_system' => '',
-    'location_name' => '',
+    'Spatial Ref.' => '',
+    'Location' => '',
+    'Location Name' => '',
     'vague_date' => ''
     );
   }
