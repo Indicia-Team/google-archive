@@ -448,7 +448,7 @@ class Data_Controller extends Service_Base_Controller {
     $this->foreign_keys = array();
     $this->db->from($this->viewname);
     // Select all the table columns from the view
-    $select = '*';
+    $select = implode(', ', array_keys($this->db->list_fields($this->viewname)));
     $this->db->select($select);
     // Make sure that we're only showing items appropriate to the logged-in website
     if ($this->website_id != null &&

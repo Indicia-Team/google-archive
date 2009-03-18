@@ -84,7 +84,7 @@ class Database extends Database_Core {
     }
     
     // Wrap geometry fields - and hope this regex works
-    $sql = preg_replace('/(?<=[ \t])["|`|\']?([\w_]+\.[\w_]+geom)["|`|\']?(?=[ \t])/i', "ST_asText($1)", $sql);
+    $sql = preg_replace('/(?<=[ \t])["|`|\']?([\w_]*\.?[\w_]*geom)["|`|\']?(?=[ \t,])/i', "ST_asText($1)", $sql);
     syslog(LOG_DEBUG, $sql);
     
     // Fetch the result
