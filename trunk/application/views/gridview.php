@@ -9,7 +9,8 @@ $body - gridview_table object.
 Filter for
 <input type='text' name='filters'/>
 in <select name='columns'>
-<?php foreach ($columns as $name => $dbtype) {
+<?php foreach ($columns as $name => $newname) {
+	if ($newname) $name = $newname;
 	echo "<option value='".$name."'>".$name."</option>";
 }
 ?>
@@ -21,7 +22,8 @@ in <select name='columns'>
 <thead>
 <tr class='headingRow'>
 <?php
-foreach ($columns as $name => $dbtype) {
+foreach ($columns as $name => $newname) {
+	if ($newname) $name = $newname;
 	echo "<th class='gvSortable gvCol'>".ucwords($name)."</th>";
 }
 foreach ($actionColumns as $name => $action) {
