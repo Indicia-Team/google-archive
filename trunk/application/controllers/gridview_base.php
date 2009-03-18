@@ -61,7 +61,7 @@ abstract class Gridview_Base_Controller extends Indicia_Controller {
 			$this->pageNoUriSegment);
 		$grid->base_filter = $this->base_filter;
 		$grid->auth_filter = $this->auth_filter;
-		$grid->columns = array_intersect_key($grid->columns, $this->columns);
+		$grid->columns = array_intersect_key($this->columns, $grid->columns);
 		$grid->actionColumns = $this->actionColumns;
 
 		// Add table to view

@@ -7,7 +7,7 @@ class Gridview_Controller extends Controller {
 	public static function factory($model,$page,$limit,$uri_segment){
 		$gridview = new Gridview_Controller();
 		$gridview->model = $model;
-		$gridview->columns = $model->table_columns;
+		$gridview->columns = array_combine(array_keys($model->table_columns), array_pad(array(), count($model->table_columns), null));
 		$gridview->page = $page;
 		$gridview->limit = $limit;
 		$gridview->uri_segment = $uri_segment;
