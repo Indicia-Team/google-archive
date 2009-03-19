@@ -28,8 +28,8 @@ class Sample_Controller extends Gridview_Base_Controller
     'entered_sref' => 'Spatial Ref.',
     'location' => 'Location',
     'location_name' => 'Location Name',
-	'recorder_names' => 'Recorder Names',
-    'vague_date' => 'Date'
+    'vague_date' => 'Date',
+    'recorder_names' => 'Recorder Names',
     );
   }
   /**
