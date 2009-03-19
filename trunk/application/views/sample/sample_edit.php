@@ -7,7 +7,7 @@
 	'media/js/spatial-ref.js'
 ), FALSE); ?>
 <script type='text/javascript' src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
-<script type='text/javascript'>	
+<script type='text/javascript'>
 (function($){
   $(document).ready(function() {
     init_map('<?php echo url::base(); ?>', <?php echo ($model->id) ? "'$model->geom'" : 'null'; ?>, 'entered_sref', 'entered_geom', true);
@@ -48,17 +48,25 @@ onclick="enter_sref();"/>
  </li>
  <li>
  <label for='location_name'>Location Name:</label>
- <?php 
+ <?php
  print form::input('location_name', $model->location_name);
- echo html::error_message($model->getError('confidential'));
+ echo html::error_message($model->getError('location_name'));
  ?>
  </li>
+ <li>
+ <label for="recorder_names">Recorder Names:<br />(one per line)</label>
+ <?php
+ print form::textarea('recorder_names', $model->recorder_names);
+ echo html::error_message($model->getError('recorder_names'));
+ ?>
  <li>
  <label for='sample_method_id'>Sample Method:</label>
  <?php
  $sm = Kohana::config('termlists.sample_methods');
  $terms = ORM::factory('termlists_term')->where(array('termlist_id' => $sm, 'deleted' => 'f'))->find_all();
- foreach ($terms as $term) { $arr[$term->id] = $term->term->term; }
+ foreach ($terms as $term) {
+ 	$arr[$term->id] = $term->term->term;
+ }
  print form::dropdown('sample_method_id', $arr, $model->sample_method_id);
  echo html::error_message($model->getError('sample_method_id'));
  ?>

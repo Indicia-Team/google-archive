@@ -27,7 +27,7 @@ class Sample_Model extends ORM
   'sample_method'=>'termlists_term'
   );
   protected $search_field = 'id';
-  
+
   /**
   * Validate and save the data.
   *
@@ -35,17 +35,17 @@ class Sample_Model extends ORM
   * @todo allow a date string to be passed, which gets mapped to a vague date start, end and type.
   * @todo validate at least a location_name or sref required
   */
-  public function validate(Validation $array, $save = FALSE) 
+  public function validate(Validation $array, $save = FALSE)
   {
     $orig_values = $array->as_array();
-    
+
     // uses PHP trim() to remove whitespace from beginning and end of all fields before validation
     $array->pre_filter('trim');
     $array->add_rules('date_type', 'required', 'length[1,2]');
     $system 	 = $orig_values['entered_sref_system'];
     $array->add_rules('entered_sref', "sref[$system]");
     $array->add_rules('entered_sref_system', 'sref_system');
-    
+
     // Any fields that don't have a validation rule need to be copied into the model manually
     $extraFields = array
     (
@@ -54,19 +54,20 @@ class Sample_Model extends ORM
      'geom',
      'location_name',
      'survey_id',
-     'deleted'
+     'deleted',
+     'recorder_names'
      );
-     foreach ($extraFields as $a) 
+     foreach ($extraFields as $a)
      {
        if (array_key_exists($a, $array->as_array()))
        {
 	 $this->__set($a, $array[$a]);
        }
      }
-     
+
      return parent::validate($array, $save);
   }
-  
+
   /**
   * Before submission, map vague dates to their underlying database fields.
   */
@@ -78,7 +79,7 @@ class Sample_Model extends ORM
     $this->submission['fields']['date_type']['value'] = $vague_date['type'];
     return parent::presubmit();
   }
-  
+
   /**
   * Override set handler to translate WKT to PostGIS internal spatial data.
   */
@@ -93,23 +94,23 @@ class Sample_Model extends ORM
     }
     parent::__set($key, $value);
   }
-  
+
   /**
   * Override get handler to translate PostGIS internal spatial data to WKT.
   */
   public function __get($column)
   {
     $value = parent::__get($column);
-    
-    if  (substr($column,-4) == 'geom') 
+
+    if  (substr($column,-4) == 'geom')
     {
       $row = $this->db->query("SELECT ST_asText('$value') AS wkt")->current();
       $value = $row->wkt;
     }
     return $value;
   }
-  
-  
+
+
   /**
   * Overrides the postSubmit() function to provide support for adding sample attributes
   * within the transaction.
@@ -155,10 +156,10 @@ class Sample_Model extends ORM
 	     $vf = 'int_value';
 	     break;
 	 }
-	 
+
 	 if ($vf != null) $attr['fields'][$vf] = $value;
 	 $attr['fields']['sample_id']['value'] = $this->id;
-	 
+
 	 $oam = ORM::factory('sample_attribute_value');
 	 $oam->submission = $attr;
 	 if (!$oam->inner_submit()) {
