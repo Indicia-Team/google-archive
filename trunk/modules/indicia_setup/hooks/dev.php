@@ -44,12 +44,12 @@ class Dev
         {
             if(!is_dir($_full_upgrade_folder_path))
             {
-                throw new  Exception("The folder dosent exists: " . $_full_upgrade_folder_path);
+                throw new  Exception("The folder does not exist: " . $_full_upgrade_folder_path);
             }
 
             if(!is_writeable($_full_upgrade_folder_path))
             {
-                throw new  Exception("The folder isnt writeable: " . $_full_upgrade_folder_path);
+                throw new  Exception("The folder isn't writeable: " . $_full_upgrade_folder_path);
             }
 
             // get last executed sql file name
