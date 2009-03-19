@@ -16,7 +16,7 @@
 * @copyright xxxx
 * @version $Rev$ / $LastChangedDate$
 */
-class Sample_Controller extends Gridview_Base_Controller 
+class Sample_Controller extends Gridview_Base_Controller
 {
   public function __construct()
   {
@@ -28,6 +28,7 @@ class Sample_Controller extends Gridview_Base_Controller
     'entered_sref' => 'Spatial Ref.',
     'location' => 'Location',
     'location_name' => 'Location Name',
+	'recorder_names' => 'Recorder Names',
     'vague_date' => 'Date'
     );
   }
@@ -46,7 +47,7 @@ class Sample_Controller extends Gridview_Base_Controller
       $this->setView('sample/sample_edit', 'Sample');
     }
   }
-  
+
   /**
   * Action for sample/edit page
   * Edit website data
@@ -67,21 +68,21 @@ class Sample_Controller extends Gridview_Base_Controller
       $gridmodel = ORM::factory('gv_occurrence');
       $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
       $grid->base_filter = array('sample_id' => $id, 'deleted' => 'f');
-      $grid->columns = array('taxon' => ''); 
+      $grid->columns = array('taxon' => '');
       $grid->actionColumns = array('edit' => 'occurrence/edit/£id£');
       $vArgs = array('occurrences' => $grid->display());
       $this->setView('sample/sample_edit', 'Sample', $vArgs);
     }
   }
-  
+
   public function edit_gv($id = null, $page_no, $limit)
   {
     $this->auto_render = false;
     $gridmodel = ORM::factory('gv_occurrence');
     $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
     $grid->base_filter = array('sample_id' => $id, 'deleted' => 'f');
-    $grid->columns = array('taxon' => ''); 
-    
+    $grid->columns = array('taxon' => '');
+
     return $grid->display();
   }
 }
