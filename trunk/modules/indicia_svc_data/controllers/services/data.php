@@ -11,7 +11,17 @@ class Data_Controller extends Service_Base_Controller {
   // if there is an error
   protected $response;
   protected $content_type;
+  
   protected $website_id = null;
+  // default to no updates allowed - must explicity allow updates.
+  protected $allow_updates = array(
+									'location',
+									'occurrence',
+									'occurrence_comment',
+									'person',
+									'sample',
+									'user'
+								  );
 
   /**
   * Provides the /services/data/language service.
@@ -19,7 +29,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function language()
   {
-    $this->handle_call('language');
+	$this->handle_call('language');
   }
 
   /**
@@ -46,7 +56,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function occurrence_attribute()
   {
-    $this->handle_call('occurrence_attribute');
+	$this->handle_call('occurrence_attribute');
   }
 
   /**
@@ -73,7 +83,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function survey()
   {
-    $this->handle_call('survey');
+	$this->handle_call('survey');
   }
 
   /**
@@ -82,7 +92,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function taxon_group()
   {
-    $this->handle_call('taxon_group');
+	$this->handle_call('taxon_group');
   }
 
   /**
@@ -91,7 +101,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function taxon_list()
   {
-    $this->handle_call('taxon_list');
+	$this->handle_call('taxon_list');
   }
 
   /**
@@ -100,7 +110,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function taxa_taxon_list()
   {
-    $this->handle_call('taxa_taxon_list');
+	$this->handle_call('taxa_taxon_list');
   }
 
   /**
@@ -118,7 +128,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function termlist()
   {
-    $this->handle_call('termlist');
+  	$this->handle_call('termlist');
   }
 
   /**
@@ -127,7 +137,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function termlists_term()
   {
-    $this->handle_call('termlists_term');
+  	$this->handle_call('termlists_term');
   }
 
   /**
@@ -145,7 +155,7 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function website()
   {
-    $this->handle_call('website');
+  	$this->handle_call('website');
   }
 
   /**
@@ -167,11 +177,11 @@ class Data_Controller extends Service_Base_Controller {
 
       if (array_key_exists('submission', $_POST))
       {
-	$this->handle_submit();
+			$this->handle_submit();
       }
       else
       {
-	$this->handle_request();
+			$this->handle_request();
       }
       // last thing we do is set the output
       if ($this->content_type)
@@ -207,6 +217,20 @@ class Data_Controller extends Service_Base_Controller {
     }
     else
     {
+    	if (!in_array($this->entity, $this->allow_updates)) {
+			Kohana::log('info', 'Attempt to write to entity '.$this->entity.' by website '.$this->website_id.': no write access allowed through services.');
+      		throw new ServiceError('Attempt to write to entity '.$this->entity.' failed: no write access allowed through services. [1]');
+		}
+    	
+    	if(array_key_exists('id', $s['fields']))
+      	  if (is_numeric($s['fields']['id']['value']))
+	      	// there is an numeric id field so modifying an existing record
+	      	if (!$this->check_record_access($this->entity, $s['fields']['id']['value'], $this->website_id))
+	      	{
+				Kohana::log('info', 'Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$this->entity.' id '.$s['fields']['id']['value']);
+      		    throw new ServiceError('Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$this->entity.' id '.$s['fields']['id']['value']);
+	      	}
+	      	
       $model = ORM::factory($this->entity);
       $model->submission = $s;
       $result = $model->submit();
@@ -232,7 +256,7 @@ class Data_Controller extends Service_Base_Controller {
   protected function handle_request()
   {
     // Authenticate for a 'read' parameter
-    //$this->authenticate('read');
+    $this->authenticate('read');
     // Store the entity in class member, so less recursion overhead when building XML.
     $this->viewname = $this->get_view_name();
     $this->model=ORM::factory($this->entity);
@@ -320,14 +344,26 @@ class Data_Controller extends Service_Base_Controller {
   */
   public function info_table($tablename)
   {
-    // $this->authenticate('read');
+    $this->authenticate('read'); // populates $this->website_id
     $this->entity = $tablename;
     $this->db = new Database();
     $this->viewname = $this->get_view_name();
     $mode = $this->get_output_mode();
+
+    $this->db->from($this->viewname);
+    $select = '*';
+    $this->db->select($select);
+    if(array_key_exists ('website_id', $this->view_columns))
+    {
+		$this->db->in('website_id', array(null, $this->website_id));
+    } else {
+    	Kohana::log('info', $this->viewname.' does not have a website_id - access denied');
+      	throw new ServiceError('No access to entity '.$entity.' allowed.');
+    }
+    
     $return = Array
     (
-    'record_count' => $this->db->count_records($this->viewname),
+    'record_count' => $this->db->get()->count(),
     'columns' => array_keys($this->db->list_fields($this->viewname))
     );
     switch ($mode)
@@ -451,18 +487,24 @@ class Data_Controller extends Service_Base_Controller {
     $select = implode(', ', array_keys($this->db->list_fields($this->viewname)));
     $this->db->select($select);
     // Make sure that we're only showing items appropriate to the logged-in website
-    if ($this->website_id != null &&
-      array_key_exists ('website_id', $this->view_columns))
-      {
-	$this->db->in('website_id', array(
-	null, $this->website_id
-	));
-      }
-      // if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
-      if ($this->uri->total_arguments()==0)
+    if(array_key_exists ('website_id', $this->view_columns))
+    {
+		$this->db->in('website_id', array(null, $this->website_id));
+    } else {
+    	Kohana::log('info', $this->viewname.' does not have a website_id - access denied');
+      	throw new ServiceError('No access to entity '.$this->entity.' allowed through this view.');
+    }
+     // if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
+    if ($this->uri->total_arguments()==0)
       $this->apply_get_parameters_to_db();
-    else
-      $this->db->where($this->viewname.'.id', $this->uri->argument(1));
+    else {
+ 		if (!$this->check_record_access($this->entity, $this->uri->argument(1), $this->website_id))
+	    {
+			Kohana::log('info', 'Attempt to access existing record failed - website_id '.$this->website_id.' does not match website for '.$this->entity.' id '.$this->uri->argument(1));
+      		throw new ServiceError('Attempt to access existing record failed - website_id '.$this->website_id.' does not match website for '.$this->entity.' id '.$this->uri->argument(1));
+	    }
+        $this->db->where($this->viewname.'.id', $this->uri->argument(1));
+    }
     return $this->db->get()->result_array(FALSE);
   }
 
@@ -669,7 +711,21 @@ class Data_Controller extends Service_Base_Controller {
     foreach ($s['submission']['entries'] as $m)
     {
       $m = $m['model'];
-      $model = ORM::factory($m['id']);
+      $model = ORM::factory($m['id']); // id is the entity.
+      if (!in_array($m['id'], $this->allow_updates)) {
+			Kohana::log('info', 'Attempt to write to entity '.$m['id'].' by website '.$this->website_id.': no write access allowed through services.');
+      		throw new ServiceError('Attempt to write to entity '.$m['id'].' failed: no write access allowed through services.[2]');
+	  }
+      
+      if(array_key_exists('id', $m['fields']))
+      	if (is_numeric($m['fields']['id']['value']))
+	      	// there is an numeric id field so modifying an existing record
+	      	if (!$this->check_record_access($m['id'], $m['fields']['id']['value'], $this->website_id))
+	      	{
+				Kohana::log('info', 'Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$m['id'].' id '.$m['fields']['id']['value']);
+      		    throw new ServiceError('Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$m['id'].' id '.$m['fields']['id']['value']);
+	      	}
+
       $model->submission = $m;
       $result = $model->submit();
       $id = $model->id;
@@ -729,6 +785,33 @@ class Data_Controller extends Service_Base_Controller {
     };
   }
 
+	protected function check_record_access($entity, $id, $website_id)
+	{
+		// if $id is null, then we have a new record, so no need to check if we have access to the record	
+		if (is_null($id))
+			return true;
+		$table = inflector::plural($entity);
+    	$viewname='list_'.$table;
+    	$db = new Database;
+    	$fields=$db->list_fields($viewname);
+  		if(empty($fields)) {
+			Kohana::log('info', $viewname.' not present - access denied');
+     		throw new ServiceError('Access to entity '.$entity.' denied.');
+  		}
+    	$db->from($viewname);
+    	$select = 'id';
+    	$db->select($select)->where(array('id' => $id));
+    	if(array_key_exists ('website_id', $this->view_columns))
+    	{
+			$db->in('website_id', array(null, $this->website_id));
+    	} else {
+    		Kohana::log('info', $viewname.' does not have a website_id - access denied');
+      		throw new ServiceError('No access to entity '.$entity.' allowed.');
+    	}
+		$number_rec = $db->find_all()->count();
+		return ($number_rec > 0 ? true : false);
+	}
+	
   /**
   * Cleanup a write once nonce from the cache. Should be called after a call to authenticate.
   */
