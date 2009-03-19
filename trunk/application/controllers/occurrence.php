@@ -17,7 +17,7 @@
 * @version $Rev$ / $LastChangedDate$
 */
 class Occurrence_controller extends Gridview_Base_Controller {
-  
+
   public function __construct()
   {
     parent::__construct('occurrence', 'gv_occurrence', 'occurrence/index');
@@ -30,13 +30,14 @@ class Occurrence_controller extends Gridview_Base_Controller {
     );
     $this->columns = array
     (
-    'taxon' => '',
-    'entered_sref' => '',
-    'entered_sref_system' => '',
-    'vague_date' => ''
+    'taxon' => 'Taxon',
+    'entered_sref' => 'Spatial Ref',
+    'entered_sref_system' => 'System',
+    'recorder_names' => 'Recorder Names',
+    'vague_date' => 'Date'
     );
   }
-  
+
   /**
   * Action for occurrence/create page/
   * Displays a page allowing entry of a new occurrence.
@@ -52,7 +53,7 @@ class Occurrence_controller extends Gridview_Base_Controller {
       $this->setView('occurrence/occurrence_edit', 'Occurrence');
     }
   }
-  
+
   /**
   * Action for occurrence/edit page
   * Edit website data
@@ -73,23 +74,23 @@ class Occurrence_controller extends Gridview_Base_Controller {
       $gridmodel = ORM::factory('occurrence_comment');
       $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
       $grid->base_filter = array('occurrence_id' => $id, 'deleted' => 'f');
-      $grid->columns = array('comment' => '', 'updated_on' => ''); 
+      $grid->columns = array('comment' => '', 'updated_on' => '');
       $vArgs = array('comments' => $grid->display());
       $this->setView('occurrence/occurrence_edit', 'Occurrence', $vArgs);
     }
   }
-  
+
   public function edit_gv($id = null, $page_no, $limit)
   {
     $this->auto_render = false;
     $gridmodel = ORM::factory('occurrence_comment');
     $grid = Gridview_Controller::factory($gridmodel,	$page_no,  $limit, 4);
     $grid->base_filter = array('occurrence_id' => $id, 'deleted' => 'f');
-    $grid->columns = array('comment' => '', 'updated_on' => ''); 
-    
+    $grid->columns = array('comment' => '', 'updated_on' => '');
+
     return $grid->display();
   }
-  
+
   public function save()
   {
     $_POST['confidential'] = isset($_POST['confidential']) ? 't' : 'f';
