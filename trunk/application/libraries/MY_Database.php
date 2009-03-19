@@ -100,4 +100,39 @@ class Database extends Database_Core {
     
     return $result;
   }
+  /**
+  * Chooses which column(s) to order the select query by.
+  * Overridden to handle 'vague_date' fields which don't exist in the db but are presented in the
+  * ORM controller.
+  *
+  * @param   string|array  column(s) to order on, can be an array, single column, or comma seperated list of columns
+  * @param   string        direction of the order
+  * @return  Database_Core        This Database object.
+  */
+  public function orderby($orderby, $direction = NULL)
+  {
+    if ( ! is_array($orderby))
+    {
+      $orderby = array($orderby => $direction);
+    }
+    
+    foreach ($orderby as $column => $direction)
+    {
+      $direction = strtoupper(trim($direction));
+      
+      if ( ! in_array($direction, array('ASC', 'DESC', 'RAND()', 'RANDOM()', 'NULL')))
+      {
+	$direction = 'ASC';
+      }
+      
+      if (strtolower(trim($column)) == 'vague_date')
+      {
+	$column = 'date_start';
+      }
+      
+      $this->orderby[] = $this->driver->escape_column($column).' '.$direction;
+    }
+    
+    return $this;
+  }
 }

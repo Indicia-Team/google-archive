@@ -129,7 +129,7 @@ $(document).ready(function(){
 	$('#pageGrid thead th.gvSortable').each(function(i){
 		$(this).click(function(e){
 			e.preventDefault();
-			var h = $(this).html().toLowerCase();
+			var h = $(this).attr('id').toLowerCase();
 			var a = sort.get(h);
 			if (a != undefined) {
 				if (a == 'asc') {
