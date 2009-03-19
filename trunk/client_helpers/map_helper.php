@@ -39,7 +39,7 @@ Class Map extends helper_config
   // Private array of libraries which may be included
   private $library_sources = Array();
   private $libraries = Array();
-  private $centre = "new OpenLayers.LonLat(-100000,6700000),7";
+  public $centre = "new OpenLayers.LonLat(-100000,6700000),7";
   private $haskey = Array('google' => true, 'multimap' => true);
 
   // Constants used to add default layers
