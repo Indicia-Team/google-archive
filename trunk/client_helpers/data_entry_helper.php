@@ -252,7 +252,7 @@ class data_entry_helper extends helper_config {
 			}
 		);";
 
-		$tree = '<input type="hidden" id="'.$control_id.'" name="'.$control_id.'" /><ul id="tr'.$control_id.'" class="'.$extraClass.'"></ul>';
+		$tree = '<input type="hidden" class="hidden" id="'.$control_id.'" name="'.$control_id.'" /><ul id="tr'.$control_id.'" class="'.$extraClass.'"></ul>';
 		return $tree;
 	}
 
@@ -414,7 +414,7 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
  jQuery('input#ac$id').result(function(event, data){
  jQuery('input#$id').attr('value', data.id);
  });\r\n";
- $r = "<input type='hidden' id='$id' name='$id' value='$defaultValue' />".
+ $r = "<input type='hidden' class='hidden' id='$id' name='$id' value='$defaultValue' />".
  "<input id='ac$id' name='ac$id' value='$defaultName' />";
  return $r;
  }
@@ -765,14 +765,14 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
   {
     $srids = array_keys($systems);
     // only 1 spatial reference system, so put it into a hidden input
-    $r .= '<input id="'.$field_name.'_system" name="'.$field_name.'_system" type="hidden" value="'.$srids[0].'" />';
+    $r .= '<input id="'.$field_name.'_system" name="'.$field_name.'_system" type="hidden" class="hidden" value="'.$srids[0].'" />';
   } else {
     $r .= '<select id="'.$field_name.'_system" name="'.$field_name.'_system">';
     foreach($systems as $srid=>$desc)
       $r .= "<option value=\"$srid\">$desc</option>";
     $r .= '</select>';
   }
-  $r .= "<input type=\"hidden\" id=\"$geom_field_name\" name=\"$geom_field_name\" />";
+  $r .= "<input type=\"hidden\" class=\"hidden\" id=\"$geom_field_name\" name=\"$geom_field_name\" />";
   $r .= '<p class="instruct">'.$instruct.'</p>';
   $r .= '<div id="map" class="smallmap" style="width: '.$width.'px; height: '.$height.'px;"></div>';
   return $r;
@@ -852,9 +852,9 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
     $response = curl_exec($session);
     list($response_headers,$nonce) = explode("\r\n\r\n",$response,2);
     curl_close($session);
-    $result = '<input id="auth_token" name="auth_token" type="hidden" ' .
+    $result = '<input id="auth_token" name="auth_token" type="hidden" class="hidden" ' .
     'value="'.sha1("$nonce:$password").'" />'."\r\n";
-    $result .= '<input id="nonce" name="nonce" type="hidden" ' .
+    $result .= '<input id="nonce" name="nonce" type="hidden" class="hidden" ' .
     'value="'.$nonce.'" />'."\r\n";
     return $result;
   }
