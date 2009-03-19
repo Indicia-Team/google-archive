@@ -53,19 +53,6 @@ The first two sections of the following tutorial are performed by your Core Serv
     * client_helpers\data_entry\helper_config.php.example
   #	Remove the .example from the end of the latter file’s filename. Edit the helper_config.php file and change the value for the base_url setting to the URL of the folder which contains your Indicia installation (i.e. the same as you are replacing `<core_url>` with).
   #	Now, create a basic, blank PHP web page using your site template but with no content.
-  #	Although you can take full control of the style sheets if you like, for this tutorial we will use some example styles provided. So, insert the following entries into the `<head>` section of of the page:
-{{{
-<link rel="stylesheet" href="<core_url>/media/css/ui.datepicker.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="<core_url>/media/css/jquery.autocomplete.css" type="text/css" media="screen" />
-}}}
-  #	You’ll also need to link in some JavaScript files. Paste the following into your page, inside the `<head>` section just beneath the stylesheet links:
-{{{
-<script type="text/javascript" src="<core_url>/media/js/jquery.js"></script>
-<script type="text/javascript" src="<core_url>/media/js/ui.core.js"></script>
-<script type="text/javascript" src="<core_url>/media/js/ui.datepicker.js"></script>
-<script type="text/javascript" src="<core_url>/media/js/jquery.autocomplete.js"></script>
-<script type="text/javascript" src="<core_url>/media/js/json2.js"></script>
-}}}
   #	Now, just inside your `<head>` element, paste in the following:
 {{{
 <?php	include 'data_entry_helper.php'; ?>
