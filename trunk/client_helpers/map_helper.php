@@ -1,13 +1,13 @@
 <?php
 
-include "helper_config.php";
+require_once "helper_config.php";
 /**
-* <p> Class abstracting a mapping component - will support methods to add layers, 
+* <p> Class abstracting a mapping component - will support methods to add layers,
 * controls etc.</p>
 */
 Class Map extends helper_config
 {
-  
+
   // Name of the control
   public $name = 'map';
   // Internal object name
@@ -36,12 +36,12 @@ Class Map extends helper_config
   public $format = 'image/png';
   // Private array of layers
   private $layers = Array();
-  // Private array of libraries which may be included 
+  // Private array of libraries which may be included
   private $library_sources = Array();
   private $libraries = Array();
   private $centre = "new OpenLayers.LonLat(-100000,6700000),7";
   private $haskey = Array('google' => true, 'multimap' => true);
-  
+
   // Constants used to add default layers
   const LAYER_GOOGLE_PHYSICAL = 0;
   const LAYER_GOOGLE_STREETS = 1;
@@ -52,11 +52,11 @@ Class Map extends helper_config
   const LAYER_VIRTUAL_EARTH = 6;
   const LAYER_MULTIMAP_DEFAULT = 7;
   const LAYER_MULTIMAP_LANDRANGER = 8;
-  
+
   /**
   * <p>Returns a new map. This will not display the map until the render() method is
   * called.</p>
-  * 
+  *
   * @param String $indiciaCore URL of the Indicia Core geoServer instance.
   * @param Mixed $layers Indicates preset layers to load automatically - by default will load
   * all preset layers (calling true) but may also specify a single layer or array of
@@ -71,22 +71,22 @@ Class Map extends helper_config
     if ($multimap_api_key == '...') $this->haskey['multimap'] = false;
     $this->library_sources = Array
     (
-    'openLayers' => '../../media/js/OpenLayers.js',
+    'openLayers' => parent::$base_url.'/media/js/OpenLayers.js',
     'google' => "http://maps.google.com/maps?file=api&v=2&key=$google_api_key",
     'virtualearth' => 'http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1',
     'multimap' => "http://developer.multimap.com/API/maps/1.2/$multimap_api_key"
     );
     $lta = array();
     $this->addLibrary('openLayers');
-    if ($layers === true) 
+    if ($layers === true)
     {
       $lta = array(0,1,2,3,4,5,6);
-    } 
+    }
     else if (is_array($layers))
     {
       $lta = $layers;
-    } 
-    else 
+    }
+    else
     {
       $lta = array($layers);
     }
@@ -96,7 +96,7 @@ Class Map extends helper_config
     }
     $this->internalObjectName = "map".rand();
   }
-  
+
   public function addPresetLayer($layer)
   {
     switch ($layer)
@@ -168,26 +168,26 @@ Class Map extends helper_config
 	break;
     }
   }
-  
+
   /**
   * <p> Adds a WMS layer from the Indicia Core to the map. </p>
   */
-  public function addIndiciaWMSLayer($title, $layer, $base = true)
+  public function addIndiciaWMSLayer($title, $layer, $base = false)
   {
     $this->addLayer("OpenLayers.Layer.WMS('$title',
     '".$this->indiciaCore."wms',
-    { layers: '$layer',
-    isBaseLayer: '$base',
+    { layers: '$layer', transparent: true },
+    { isBaseLayer: '$base',
     sphericalMercator: true})");
   }
-  
+
   /**
   * <p> Adds a layer from the Indicia Core to the map control.</p>
   */
   public function addIndiciaWFSLayer($title, $type)
   {
     $this->addLayer("OpenLayers.Layer.WFS('$title', '".$this->indiciaCore."wfs',
-    { 
+    {
       typename: '$type',
       request: 'GetFeature',
   },
@@ -196,19 +196,19 @@ Class Map extends helper_config
   }
   )");
   }
-  
+
   /**
   * <p> Adds a layer to the map control.</p>
   *
   * @param String $layerDef Javascript definition (appropriate to the OpenLayers
   * library) for the layer to be added. This will be called as a new object and
   * as such should be parsable in this way.
-  */	
+  */
   public function addLayer($layerDef)
   {
     $this->layers[] = $layerDef;
   }
-  
+
   /**
   * <p> Adds a library to the libraries collection. </p>
   */
@@ -221,15 +221,15 @@ Class Map extends helper_config
 	$this->libraries[$libName] = $this->library_sources[$libName];
       }
     }
-  }	
-  
+  }
+
   // Renders the control
   public function render()
   {
     $r = "";
     $intLayers = array();
     $ion = $this->internalObjectName;
-    foreach ($this->options as $key => $val) 
+    foreach ($this->options as $key => $val)
     {
       $opt[] = $key.": ".$val;
     }
@@ -238,7 +238,7 @@ Class Map extends helper_config
     {
       $r .= "<script type='text/javascript' src='$lib' ></script>\n";
     }
-    // Render the main javascript 
+    // Render the main javascript
     $r .= "<script type='text/javascript'>";
     $r .= "var map = null;";
     $r .= "var format = '$this->format';\n"
@@ -266,5 +266,5 @@ Class Map extends helper_config
     $r .= "<script type='text/javascript'>init();</script>";
     return $r;
   }
-  
+
 }
