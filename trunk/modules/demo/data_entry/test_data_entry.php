@@ -5,14 +5,7 @@ include '../../../client_helpers/data_entry_helper.php';
 include 'data_entry_config.php';
 ?>
 <title>Indicia external site data entry test page</title>
-<link rel="stylesheet" href="../../../media/css/ui.datepicker.css" type="text/css" media="screen">
 <link rel="stylesheet" href="demo.css" type="text/css" media="screen">
-<link rel="stylesheet" href="../../../media/css/jquery.autocomplete.css" />
-<script type="text/javascript" src="../../../media/js/jquery.js"></script>
-<script type="text/javascript" src="../../../media/js/ui.core.js"></script>
-<script type="text/javascript" src="../../../media/js/ui.datepicker.js"></script>
-<script type="text/javascript" src="../../../media/js/jquery.autocomplete.js"></script>
-<script type="text/javascript" src="../../../media/js/json2.js"></script>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo $config['google_api_key'] ?>"
 type="text/javascript"></script>
 </head>
