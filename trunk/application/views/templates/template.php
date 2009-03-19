@@ -90,8 +90,7 @@
 
     <!-- BEGIN: footer -->
     <div id="footer">
-        <p>Version <?php echo $system['version']; ?> - Release date <?php echo $system['release_date'];
-        echo $tmp_last_executed_sql_file = Dev::get_last_executed_sql_file_name( $_full_upgrade_folder_path ); ?></p>
+        <p>Version <?php echo $system['version']; ?> - Release date <?php echo $system['release_date']; ?></p>
     </div>
     <!-- END: footer -->
 
