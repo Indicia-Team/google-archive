@@ -18,6 +18,7 @@ class data_entry_helper extends helper_config {
   private static function add_resource($resource)
   {
     global $res;
+    if (!isset($res)) $res = array();
     if (array_key_exists($resource, self::$RESOURCES))
     {
       if (!in_array($resource, $res))
