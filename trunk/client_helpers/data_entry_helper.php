@@ -4,7 +4,7 @@ include('helper_config.php');
 
 class data_entry_helper extends helper_config {
   
-  const resources = array
+  public static $RESOURCES = array
   (
   'jquery' => array('deps' => array(), 'stylesheets' => array(), 'javascript' => array('../../media/js/jquery.js')),
   'autocomplete' => array('deps' => array('jquery'), 'stylesheets' => array('../../media/css/jquery.autocomplete.css'), 'javascript' => array('../../../media/js/jquery.autocomplete.js')),
@@ -12,19 +12,48 @@ class data_entry_helper extends helper_config {
   'datepicker' => array('deps' => array('ui_core'), 'stylesheets' => array('../../../media/css/ui.datepicker.css'), 'javascript' => array('../../../media/js/ui.datepicker.js')),
   'json' => array('deps' => array(), 'stylesheets' => array(), 'javascript' => array('../../../media/js/json2.js'))
   );
+  
+  private static function add_resource($resource)
+  {
+    global $res;
+    if (array_key_exists($resource, self::$RESOURCES))
+    {
+      if (!in_array($resource, $res))
+      {
+	foreach (self::$RESOURCES[$resource][$deps] as $dep)
+	{
+	  self::add_resource($dep);
+	}
+	$res[] = $resource;
+      }      
+    }
+  }  
 
   /**
   * Helper function to collect javascript code in a single location.
   */
   public static function dump_javascript() {
  global $javascript;
- global $libraries;
+ global $res;
+ $libraries = '';
+ $stylesheets = '';
+ foreach ($res as $resource)
+ {
+   foreach (self::$RESOURCES[$resource]['stylesheets'] as $s)
+   {
+     $stylesheets .= "<link rel='stylesheet' type='text/css' href='$s' />\n";
+   }
+   foreach (self::$RESOURCES[$resource]['javascript'] as $j)
+   {
+     $javascript .= "<script type='text/javascript' src='$j'></script>\n";
+   }
+ }
  $script = "<script type='text/javascript'>
  jQuery(document).ready(function() {
  $javascript
  });
  </script>";
- return $script;
+ return $stylesheets.$libraries.$script;
  }
 
 
