@@ -45,7 +45,7 @@ FROM ((((locations l
 --
 DROP VIEW IF EXISTS gv_occurrences;
 
-CREATE OR REPLACE VIEW gv_occurrences AS 
+CREATE OR REPLACE VIEW gv_occurrences AS
  SELECT o.id, o.sample_id, t.taxon, sa.date_start, sa.date_end, sa.date_type, sa.entered_sref,
  		sa.entered_sref_system, sa.location_name, l.name, o.deleted, o.website_id
    FROM occurrences o
@@ -56,7 +56,7 @@ CREATE OR REPLACE VIEW gv_occurrences AS
 
 --
 -- list_ and gv_ occurrence_attributes need no alterations. No detail_ view.
--- NB these two views have different primary tables (occurence_attributes and 
+-- NB these two views have different primary tables (occurence_attributes and
 -- occurrence_attribute_websites respectively) so may give different results.
 --
 
@@ -122,12 +122,12 @@ FROM ((((samples s LEFT JOIN locations l ON ((l.id = s.location_id))) LEFT
     JOIN surveys su ON ((s.survey_id = su.id))) JOIN users c ON ((c.id =
     s.created_by_id))) JOIN users u ON ((u.id = s.updated_by_id)));
 
-CREATE OR REPLACE VIEW gv_samples AS 
+CREATE OR REPLACE VIEW gv_samples AS
  SELECT s.id, s.date_start, s.date_end, s.date_type, s.entered_sref, s.entered_sref_system,
  	s.location_name, s.deleted, su.title, l.name as "location", su.website_id
-   FROM indicia.samples s
-   LEFT JOIN indicia.surveys su ON s.survey_id = su.id
-   LEFT JOIN indicia.locations l ON s.location_id = l.id;
+   FROM samples s
+   LEFT JOIN surveys su ON s.survey_id = su.id
+   LEFT JOIN locations l ON s.location_id = l.id;
 
 --
 -- survey views: list_ and detail_ OK as is.
@@ -156,11 +156,11 @@ FROM ((taxon_groups t JOIN users c ON ((c.id = t.created_by_id))) JOIN
 
 
 --
--- list_ and detail_ taxon_lists need no alterations. No gv_ 
+-- list_ and detail_ taxon_lists need no alterations. No gv_
 --
 
 --
--- taxa_taxon_lists views. No gv_ 
+-- taxa_taxon_lists views. No gv_
 --
 DROP VIEW IF EXISTS list_taxa_taxon_lists;
 DROP VIEW IF EXISTS detail_taxa_taxon_lists;
@@ -204,7 +204,7 @@ SELECT t.id, t.term, t.language_id, l.language, l.iso, t.created_by_id,
     c.username AS created_by, t.updated_by_id, u.username AS updated_by, cast (null as integer) as website_id
 FROM (((terms t JOIN languages l ON ((l.id = t.language_id))) JOIN users c
     ON ((c.id = t.created_by_id))) JOIN users u ON ((u.id = t.updated_by_id)));
-    
+
 --
 -- termlists views need no alteration
 --
@@ -216,8 +216,8 @@ FROM (((terms t JOIN languages l ON ((l.id = t.language_id))) JOIN users c
 --
 DROP VIEW IF EXISTS detail_termlists_terms;
 
-CREATE OR REPLACE VIEW detail_termlists_terms AS 
- SELECT tlt.id, tlt.term_id, t.term, tlt.termlist_id, tl.title AS termlist, 
+CREATE OR REPLACE VIEW detail_termlists_terms AS
+ SELECT tlt.id, tlt.term_id, t.term, tlt.termlist_id, tl.title AS termlist,
 	tlt.meaning_id, tlt.preferred, tlt.parent_id, tp.term as parent, tl.website_id,
 	tlt.created_by_id, c.username as created_by, tlt.updated_by_id, u.username as updated_by
  FROM termlists_terms tlt
@@ -258,16 +258,15 @@ SELECT w.id, w.title, w.url, w.description, w.created_by_id, c.username AS
     created_by, w.updated_by_id, u.username AS updated_by, w.id as website_id
 FROM ((websites w JOIN users c ON ((c.id = w.created_by_id))) JOIN users u
     ON ((u.id = w.updated_by_id)));
-    
+
 --
 -- occurence_comments view: list only
 --
 DROP VIEW list_occurrence_comments;
 
-CREATE OR REPLACE VIEW list_occurrence_comments AS 
+CREATE OR REPLACE VIEW list_occurrence_comments AS
  SELECT oc.id, oc.comment, oc.occurrence_id, oc.email_address, oc.updated_on, oc.person_name, u.username, o.website_id
    FROM occurrence_comments oc
 		JOIN occurrences o on (o.id = oc.occurrence_id)
    LEFT JOIN users u ON oc.created_by_id = u.id;
-   
-   
+
