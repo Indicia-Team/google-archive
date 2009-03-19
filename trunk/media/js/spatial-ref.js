@@ -240,6 +240,7 @@ function check_find_enter(e, pref_area, country)
 }
 
 // Once a place has been found, places the spatial reference as a point on the map.
+// The ref param is an x,y coordinate in WGS84 datum.
 function show_found_place(ref) {
 	jQuery.getJSON(indicia_url + "/index.php/services/spatial/sref_to_wkt" +
 		"?sref=" + ref +
