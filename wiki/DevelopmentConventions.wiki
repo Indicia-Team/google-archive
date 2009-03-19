@@ -10,3 +10,9 @@ For each upgrade to the datamodel, a script is added to the trunk\application\db
 *yyyymmddhhmm_description_of_change.sql*
 
 This way scripts can easily be sorted chronologically and applied in sequence.
+
+== Commits to SubVersion ==
+
+When committing a change to SVN, please provide a comment that clearly explains the change you have made. Also, if the commit fixes or relates to an issue, then please include a reference to that issue on the first line of the comment, for example:
+Fixes issue 80.
+Changed params to map_picker method to be compatible with map_helper class.
