@@ -29,6 +29,7 @@ $lang = array (
 	'email_address' => Array (
 		'required' => 'The email address cannot be blank.',
 		'email' => 'This must be a valid email address.',
+		'length' => 'The email address must be a maximum of 50 characters in length.',
 		'unique' => 'This email address must be unique, i.e. not shared with another person.',
 		'default' => 'Invalid Input.',
 	),
@@ -39,6 +40,7 @@ $lang = array (
 	),
 	'website_url' => Array (
 		'url' => 'This must be a valid URL (if schema not provided, http:// is assumed).',
+		'length' => 'The website URL must be a maximum of 1000 characters in length.',
 		'default' => 'Invalid Input.',
 	),
 	'taxon_id' => array (
@@ -74,6 +76,14 @@ $lang = array (
 	'first_name' => Array (
 		'required' => 'The first name cannot be blank.',
 		'length' => 'The first name must be between 1 and 30 letters.',
+		'default' => 'Invalid Input.',
+	),
+	'initials' => Array (
+		'length' => 'The initials must be a maximum of 6 characters in length.',
+		'default' => 'Invalid Input.',
+	),
+	'address' => Array (
+		'length' => 'The address must be a maximum of 200 characters in length.',
 		'default' => 'Invalid Input.',
 	),
 	'determiner_id' => Array (
