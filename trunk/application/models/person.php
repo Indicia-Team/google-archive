@@ -12,15 +12,15 @@ class Person_Model extends ORM {
 		$array->pre_filter('trim');
 		$array->add_rules('first_name', 'required', 'length[1,30]');
 		$array->add_rules('surname', 'required', 'length[1,30]');
+		$array->add_rules('initials', 'length[1,6]');
+		$array->add_rules('address', 'length[1,200]');
 		if($array['email_address'] == NULL)
 			$this->email_address = NULL;
 		else
 			$array->add_rules('email_address', 'email', 'length[1,50]', 'unique[people,email_address,'.$array->id.']');
-        $array->add_rules('website_url', 'length[1,500]', 'url[lax]');
+        $array->add_rules('website_url', 'length[1,1000]', 'url[lax]');
         // Any fields that don't have a validation rule need to be copied into the model manually
 		if (isset($array['title_id'])) $this->title_id = (is_numeric ($array['title_id']) ? $array['title_id'] : NULL);
-		$this->address = $array['address'];
-		$this->initials = $array['initials'];
 
 		return parent::validate($array, $save);
 	}
