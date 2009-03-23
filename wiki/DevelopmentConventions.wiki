@@ -5,7 +5,7 @@
 
 == Database Upgrade Scripts ==
 
-For each upgrade to the datamodel, a script is added to the trunk\application\db folder in SubVersion. The script makes the required alteration to the database and is saved as a file named using the following convention:
+For each upgrade to the datamodel, a script is added to the trunk\modules\indicia_setup\db\upgrade_x_y_to_x_y\db folder in SubVersion, replacing the x & y with the appropriate numbers for the latest upgrade set. The script makes the required alteration to the database and is saved as a file named using the following convention:
 
 *yyyymmddhhmm_description_of_change.sql*
 
@@ -14,5 +14,15 @@ This way scripts can easily be sorted chronologically and applied in sequence.
 == Commits to SubVersion ==
 
 When committing a change to SVN, please provide a comment that clearly explains the change you have made. Also, if the commit fixes or relates to an issue, then please include a reference to that issue on the first line of the comment, for example:
-Fixes issue 80.
-Changed params to map_picker method to be compatible with map_helper class.
+
+ Fixes issue 80.
+ Changed params to map_picker method to be compatible with map_helper class.
+
+
+Then, set the issue status to fixed and provide a comment which mentions the revision, e.g.
+
+ Fixed in r800. 
+ Map_picker and map_helper now compatible.
+
+
+Note that by referring to the revision as r... Google's issue tracker can put a hyperlink to the revision details in automatically which is very handy.
