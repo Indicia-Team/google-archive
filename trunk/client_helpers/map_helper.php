@@ -38,10 +38,12 @@ Class Map extends helper_config
   );
   // Map display format
   public $format = 'image/png';
+  // Javascript map helper - a reference to the name
+  public $jsMapHelper;  
   // Private array of layers
   private $layers = Array();
   // Private array of controls
-  private $controls = Array();
+  private $mapControls = Array();
   // Private array of libraries which may be included
   private $library_sources = Array();
   private $libraries = Array();
@@ -207,6 +209,17 @@ Class Map extends helper_config
   }
   
   /**
+  * <p> Adds a PHP control to the map, either above or below. The control should respond to at least these methods:
+  * <ol><li> registerWithMap(Map map) </li><li> render() </li></ol>
+  * 
+  * @param Object $control Control to be added to the map.
+  * @param int $position
+  */
+  public function addControl($control, $position)
+  {
+  }
+  
+  /**
   * <p> Adds a control to the map.</p>
   *
   * @param String $controlDef Javascript definition for the control to be added. This will be called
@@ -214,7 +227,7 @@ Class Map extends helper_config
   */
   public function addMapControl($controlDef)
   {
-    $this->controls[] = $controlDef;
+    $this->mapControls[] = $controlDef;
   }
   
   /**
@@ -248,9 +261,7 @@ Class Map extends helper_config
     }
     // Render the main javascript
     $r .= "<script type='text/javascript'>";
-    $r .= "var map = null;";
-    $r .= "var format = '$this->format';\n"
-    ."function init(){\n"
+    $r .= "function init(){\n"
     ."var options = {".implode(",\n", $opt)."};\n";
     if ($this->proxy) $r .= "OpenLayers.ProxyHost = '".$this->proxy."';\n";
     $r .= "$ion = new OpenLayers.Map('".$this->name."', options);\n";
@@ -265,7 +276,7 @@ Class Map extends helper_config
     {
       $r .= "$ion.addControl(new OpenLayers.Control.LayerSwitcher());\n";
     }
-    foreach ($this->controls as $control)
+    foreach ($this->mapControls as $control)
     {
       $a = "control".rand();
       $r .= "var $a = new $control;\n";
@@ -284,12 +295,28 @@ Class Map extends helper_config
 
 Class Place_Finder {
   
-  public function __construct()
-  {}
+  public function __construct($id='place_search', $link_text='find on map', $pref_area='gb', $country='United Kingdom')
+  {
+    $this->id = $id;
+    $this->link_text = $link_text;
+    $this->pref_area = $pref_area;
+    $this->country = $country;
+  }
   
-  public function registerWithMap(map)
-  {}
+  public function registerWithMap(Map $map)
+  {
+    $this->map = map;
+  }
   
   public function render()
-  {}
+  {
+    // Variable storing the stuff we want to write out
+    $mapHelper = $this->map->jsMapHelper;
+    
+    $r .= '<input name="'.$this->id.'" id="'.$this->id.'" onkeypress="return check_find_enter(event, \''.$this->pref_area.'\', \''.$this->country.'\')"/>' .
+    '<input type="button" id="find_place_button" style="margin-top: -2px;" value="find" onclick="find_place(\''.$this->pref_area.'\', \''.$this->country.'\');"/>' .
+    '<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
+    '<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
+    return $r;
+  }
 }
