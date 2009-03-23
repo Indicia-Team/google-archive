@@ -270,7 +270,7 @@ public function render()
     $r .= "$ion.addControl(new OpenLayers.Control.LayerSwitcher());\n";
   }
   list ($lat, $long, $zoom) = array($this->latitude, $this->longitude, $this->zoom);
-  $r .= "$ion.setCenter(new OpenLayers.LonLat($lat,$long),$zoom);";
+  $r .= "$ion.setCenter(new OpenLayers.LonLat($long,$lat),$zoom);";
   $r .= "}";
   $r .= "</script>\n";
   $r .= "<div class='smallmap' id='".$this->name
