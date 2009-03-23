@@ -46,7 +46,7 @@ Class Map extends helper_config
   private $library_sources = Array();
   private $libraries = Array();
   private $haskey = Array('google' => true, 'multimap' => true);
-  
+
   // Constants used to add default layers
   const LAYER_GOOGLE_PHYSICAL = 0;
   const LAYER_GOOGLE_STREETS = 1;
@@ -57,7 +57,7 @@ Class Map extends helper_config
   const LAYER_VIRTUAL_EARTH = 6;
   const LAYER_MULTIMAP_DEFAULT = 7;
   const LAYER_MULTIMAP_LANDRANGER = 8;
-  
+
   /**
   * <p>Returns a new map. This will not display the map until the render() method is
   * called.</p>
@@ -102,7 +102,7 @@ Class Map extends helper_config
     }
     $this->internalObjectName = "map".rand();
   }
-  
+
   public function addPresetLayer($layer)
   {
     switch ($layer)
@@ -180,11 +180,11 @@ Class Map extends helper_config
 */
 public function addIndiciaWMSLayer($title, $layer, $base = false)
 {
+  $base = $base ? 'true' : 'false';
   $this->addLayer("OpenLayers.Layer.WMS('$title',
   '".$this->indiciaCore."wms',
   { layers: '$layer', transparent: true },
-  { isBaseLayer: '$base',
-  sphericalMercator: true})");
+  { isBaseLayer: $base, sphericalMercator: true})");
 }
 
 /**
