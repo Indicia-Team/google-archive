@@ -61,6 +61,52 @@ class data_entry_helper extends helper_config {
  return $stylesheets.$libraries.$script;
  }
 
+ 	/**
+	 * Removes any data entry values persisted into the $_SESSION by Indicia.
+	 */
+	public static function clear_session() {
+		foreach ($_SESSION as $name=>$value) {
+			if (substr($name, 0, 8)=='indicia:') {
+				unset($_SESSION[$name]);
+			}
+		}
+	}
+
+	public static function add_post_to_session () {
+		foreach ($_POST as $name=>$value) {
+			$_SESSION['indicia:'.$name]=$value;
+		}
+	}
+
+	public static function extract_session_array () {
+		$result = array();
+		foreach ($_SESSION as $name=>$value) {
+			if (substr($name, 0, 8)=='indicia:') {
+				$result[substr($name, 8)]=$value;
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Retrieves a data value from the Indicia Session data
+	 *
+	 * @param string $name Name of the session value to retrieve
+	 * @param string $default Default value to return if not set or empty
+	 */
+	public static function get_from_session($name, $default='') {
+		$result = '';
+		if (array_key_exists("indicia:$name", $_SESSION)) {
+			$result = $_SESSION["indicia:$name"];
+		}
+		if (!$result) {
+			$result = $default;
+		}
+		return $result;
+	}
+
+
+
 
  /**
  * Helper function to support image upload
