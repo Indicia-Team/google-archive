@@ -40,16 +40,18 @@ class data_entry_helper extends helper_config {
  global $res;
  $libraries = '';
  $stylesheets = '';
- foreach ($res as $resource)
- {
-   foreach (self::$RESOURCES[$resource]['stylesheets'] as $s)
-   {
-     $stylesheets .= "<link rel='stylesheet' type='text/css' href='$s' />\n";
-   }
-   foreach (self::$RESOURCES[$resource]['javascript'] as $j)
-   {
-     $libraries .= "<script type='text/javascript' src='$j'></script>\n";
-   }
+ if (isset($res)) {
+	 foreach ($res as $resource)
+	 {
+	   foreach (self::$RESOURCES[$resource]['stylesheets'] as $s)
+	   {
+	     $stylesheets .= "<link rel='stylesheet' type='text/css' href='$s' />\n";
+	   }
+	   foreach (self::$RESOURCES[$resource]['javascript'] as $j)
+	   {
+	     $libraries .= "<script type='text/javascript' src='$j'></script>\n";
+	   }
+	 }
  }
  $script = "<script type='text/javascript'>
  jQuery(document).ready(function() {
@@ -683,19 +685,19 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
        return $occAttrs;
 
      }
-     public static function wrap( $array, $entity) 
+     public static function wrap( $array, $entity)
      {
        // Initialise the wrapped array
        $sa = array(
        'id' => $entity,
        'fields' => array()
        );
-       
+
        // Iterate through the array
-       foreach ($array as $a => $b) 
+       foreach ($array as $a => $b)
        {
 	 // Don't wrap the authentication tokens
-	 if ($a!='auth_token' && $a!='nonce') 
+	 if ($a!='auth_token' && $a!='nonce')
 	 {
 	   // This should be a field in the model.
 	   // Add a new field to the save array
@@ -704,7 +706,7 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
        }
        return $sa;
      }
-     
+
      /**
      * Takes a response, and outputs any errors from it onto the screen.
      *
@@ -777,7 +779,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
    $r .= '<script type="text/javascript" src="http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1"></script>';
    $javascript .= "init_map(\"".parent::$base_url."\", $init_wkt, '$field_name', '$geom_field_name', ".
    "$inc_virtual_earth, $inc_google, '".parent::$geoplanet_api_key."', $init_lat, $init_long, $init_zoom, '$init_layer');\r\n";
-   
+
    $r .= '<input id="'.$field_name.'" name="'.$field_name.'" value="'.$init_value.'" '.
    'onblur="exit_sref();" onclick="enter_sref();"/>';
    if (count($systems)==1)
@@ -796,7 +798,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
    $r .= '<div id="map" class="smallmap" style="width: '.$width.'px; height: '.$height.'px;"></div>';
    return $r;
  }
- 
+
  /**
  * Private method to find an option from an associative array of options. If not present, returns the default.
  */
@@ -809,7 +811,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
    }
    return $r;
  }
- 
+
  /**
  * Helper function to put a location search box onto the data entry page, linked to a map picker.
  * The search box uses the GeoPlanet API to find locations.
@@ -832,8 +834,8 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
 					    '<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
 					    return $r;
 					  }
-					  
-					  
+
+
 					  /**
 					  * Retrieves a read token and passes it back as an array suitable to drop into the
 					  * 'extraParams' options for an Ajax call.
@@ -855,7 +857,7 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
 							 'nonce' => $nonce
 							 );
 					  }
-					  
+
 					  /**
 					  * Retrieves a token and inserts it into a data entry form which authenticates that the
 					  * form was submitted by this website.
@@ -881,4 +883,3 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
 					    }
 					    }
 					    ?>
-					    
