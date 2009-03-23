@@ -75,12 +75,38 @@
   };
   
   MapMethods.prototype.exit_sref = function(){
+    var map = this.map;
+    var indicia_url = this.settings.indicia_url;
+    var input_field_name = this.settings.input_field_name;
+    var geom_field_name = this.settings.input_field_name;
+    var show_wkt_feature = this.show_wkt_feature();
+    return new function() {
+      if (map.current_sref!=document.getElementById(input_field_name).value) {
+	// Send an AJAX request for the wkt to draw on the map
+	jQuery.getJSON(indicia_url + "/index.php/services/spatial/sref_to_wkt"+
+	"?sref=" + document.getElementById(input_field_name).value +
+	"&system=" + document.getElementById(input_field_name + "_system").value +
+	"&callback=?",
+					      function(data){
+						jQuery("#"+geom_field_name).attr('value', data.wkt);
+						show_wkt_feature(data.wkt);
+					      }
+					      );
+      }
+    }
+    
   };
   
   MapMethods.prototype.enter_sref = function(){
+    var map = this.map;
+    var input_field_name = this.settings.input_field_name;
+    return new function() {
+      map.current_sref = document.getElementById(input_field_name).value;
+    }
   };
   
   MapMethods.prototype.show_wkt_feature = function(){
+    var map = this.map;
     return new function(wkt) {
       var parser = new OpenLayers.Format.WKT();
       var feature = parser.read(wkt);
