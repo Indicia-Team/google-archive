@@ -13,16 +13,45 @@ class Data_Controller extends Service_Base_Controller {
   protected $content_type;
   
   protected $website_id = null;
+  
+  // Read/Write Access to entities: there are several options:
+  // 1) Standard: Restricted read and write access dependant on website id.
+  //    There is a public function with the name of the entity in this file, and the entity appears in $allow_updates.
+  //    The view list_<plural_entity> must exist and have a website_id column on it. If the website_id is null then
+  //    the record may be accessed by all websites.
+  // 2) Standard Read Only: Restricted read access dependant on website id. No write Access.
+  //    There is a public function with the name of the entity in this file, and the entity does not appear in $allow_updates.
+  //    The view list_<plural_entity> must exist and have a website_id column on it. If the website_id is null then
+  //    the record may be accessed by all websites.
+  // 3) Unrestricted Access: All records may be read and updated.
+  //    There is a public function with the name of the entity in this file, and the entity appears in $allow_updates.
+  //    Either the view list_<plural_entity> exists and has a website_id column on it which is forced to null, OR
+  //    the entity appears in $allow_full_access.
+  // 4) Unrestricted Read Only: All records may be read. No write Access.
+  //    There is a public function with the name of the entity in this file, and the entity does not appear in $allow_updates.
+  //    Either the view list_<plural_entity> exists and has a website_id column on it which is forced to null, OR
+  //    the entity appears in $allow_full_access.
+  // 5) Unrestricted Read, Restricted Write:
+  //    Not currently implemented.
+  // 6) No Access: 
+  //    There is no public function with the name of the entity in this file
+  //
   // default to no updates allowed - must explicity allow updates.
   protected $allow_updates = array(
 									'location',
 									'occurrence',
 									'occurrence_comment',
-									'person',
+ 									'person',
 									'sample',
+  									'survey',
 									'user'
 								  );
-
+  // Standard functionality is to use the list_<plural_entity> views to provide a mapping between entity id
+  // and website_id, so that we can work out whether access to a particular record is allowed.
+  // There is a potential issues with this: We may want everyone to have complete access to a particular dataset
+  // So if we wish total access to a given dataset, the entity must appear in the following list.
+  protected $allow_full_access = array();
+  
   /**
   * Provides the /services/data/language service.
   * Retrieves details of a single language.
@@ -206,7 +235,7 @@ class Data_Controller extends Service_Base_Controller {
     switch ($mode)
     {
       case 'json':
-	$s = json_decode($_POST['submission'], true);
+        $s = json_decode($_POST['submission'], true);
     }
 
     if (array_key_exists('submission', $s))
@@ -217,20 +246,7 @@ class Data_Controller extends Service_Base_Controller {
     }
     else
     {
-    	if (!in_array($this->entity, $this->allow_updates)) {
-			Kohana::log('info', 'Attempt to write to entity '.$this->entity.' by website '.$this->website_id.': no write access allowed through services.');
-      		throw new ServiceError('Attempt to write to entity '.$this->entity.' failed: no write access allowed through services. [1]');
-		}
-    	
-    	if(array_key_exists('id', $s['fields']))
-      	  if (is_numeric($s['fields']['id']['value']))
-	      	// there is an numeric id field so modifying an existing record
-	      	if (!$this->check_record_access($this->entity, $s['fields']['id']['value'], $this->website_id))
-	      	{
-				Kohana::log('info', 'Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$this->entity.' id '.$s['fields']['id']['value']);
-      		    throw new ServiceError('Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$this->entity.' id '.$s['fields']['id']['value']);
-	      	}
-	      	
+      $this->check_update_access($this->entity, $s);	      	
       $model = ORM::factory($this->entity);
       $model->submission = $s;
       $result = $model->submit();
@@ -242,7 +258,7 @@ class Data_Controller extends Service_Base_Controller {
       $this->delete_nonce();
     }
     else if (isset($model))
-    Throw new ArrayException($model->getAllErrors());
+      Throw new ArrayException($model->getAllErrors());
     else
       Throw new Exception('Unknown error on submission (to do - get correct error info)');
 
@@ -353,12 +369,14 @@ class Data_Controller extends Service_Base_Controller {
     $this->db->from($this->viewname);
     $select = '*';
     $this->db->select($select);
-    if(array_key_exists ('website_id', $this->view_columns))
-    {
-		$this->db->in('website_id', array(null, $this->website_id));
-    } else {
-    	Kohana::log('info', $this->viewname.' does not have a website_id - access denied');
-      	throw new ServiceError('No access to entity '.$entity.' allowed.');
+    if(!array_key_exists ($this->entity, $this->allow_full_access)) {
+        if(array_key_exists ('website_id', $this->view_columns))
+        {
+		    $this->db->in('website_id', array(null, $this->website_id));
+        } else {
+    	    Kohana::log('info', $this->viewname.' does not have a website_id - access denied');
+      	    throw new ServiceError('No access to '.$this->viewname.' allowed.');
+        }
     }
     
     $return = Array
@@ -487,12 +505,14 @@ class Data_Controller extends Service_Base_Controller {
     $select = implode(', ', array_keys($this->db->list_fields($this->viewname)));
     $this->db->select($select);
     // Make sure that we're only showing items appropriate to the logged-in website
-    if(array_key_exists ('website_id', $this->view_columns))
-    {
-		$this->db->in('website_id', array(null, $this->website_id));
-    } else {
-    	Kohana::log('info', $this->viewname.' does not have a website_id - access denied');
-      	throw new ServiceError('No access to entity '.$this->entity.' allowed through this view.');
+    if(!array_key_exists ($this->entity, $this->allow_full_access)) {
+        if(array_key_exists ('website_id', $this->view_columns))
+        {
+		    $this->db->in('website_id', array(null, $this->website_id));
+        } else {
+            Kohana::log('info', $this->viewname.' does not have a website_id - access denied');
+      	    throw new ServiceError('No access to entity '.$this->entity.' allowed through view '.$this->viewname);
+        }
     }
      // if requesting a single item in the segment, filter for it, otherwise use GET parameters to control the list returned
     if ($this->uri->total_arguments()==0)
@@ -712,37 +732,47 @@ class Data_Controller extends Service_Base_Controller {
     {
       $m = $m['model'];
       $model = ORM::factory($m['id']); // id is the entity.
-      if (!in_array($m['id'], $this->allow_updates)) {
-			Kohana::log('info', 'Attempt to write to entity '.$m['id'].' by website '.$this->website_id.': no write access allowed through services.');
-      		throw new ServiceError('Attempt to write to entity '.$m['id'].' failed: no write access allowed through services.[2]');
-	  }
-      
-      if(array_key_exists('id', $m['fields']))
-      	if (is_numeric($m['fields']['id']['value']))
-	      	// there is an numeric id field so modifying an existing record
-	      	if (!$this->check_record_access($m['id'], $m['fields']['id']['value'], $this->website_id))
-	      	{
-				Kohana::log('info', 'Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$m['id'].' id '.$m['fields']['id']['value']);
-      		    throw new ServiceError('Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$m['id'].' id '.$m['fields']['id']['value']);
-	      	}
-
+      $this->check_update_access($m['id'], $m);
       $model->submission = $m;
       $result = $model->submit();
       $id = $model->id;
       if (!$result)
       {
-	if (isset($model))
-	  Throw new ArrayException('Validation error', $model->getAllErrors());
-	else
-	  Throw new Exception('Unknown error on submission (to do - get correct error info)');
+        if (isset($model))
+          Throw new ArrayException('Validation error', $model->getAllErrors());
+        else
+          Throw new Exception('Unknown error on submission (to do - get correct error info)');
       }
       // return the first model
       if (!isset($this->model))
-	$id=$model->id;
+        $id=$model->id;
     }
     return $id;
   }
 
+ /**
+  * Checks that we have update access to a given entity for a given submission array.
+  * The submission array is checked to see if there is a primary key ('id').
+  * Returns true if access OK, otherwise throws an exception.
+  */
+  protected function check_update_access($entity, $s)
+  {
+      if (!in_array($entity, $this->allow_updates)) {
+			Kohana::log('info', 'Attempt to write to entity '.$entity.' by website '.$this->website_id.': no write access allowed through services.');
+      		throw new ServiceError('Attempt to write to entity '.$entity.' failed: no write access allowed through services.');
+	  }
+      
+      if(array_key_exists('id', $s['fields']))
+      	if (is_numeric($s['fields']['id']['value']))
+	      	// there is an numeric id field so modifying an existing record
+	      	if (!$this->check_record_access($entity, $s['fields']['id']['value'], $this->website_id))
+	      	{
+				Kohana::log('info', 'Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$entity.' id '.$s['fields']['id']['value']);
+      		    throw new ServiceError('Attempt to update existing record failed - website_id '.$this->website_id.' does not match website for '.$entity.' id '.$s['fields']['id']['value']);
+	      	}
+	  return true;
+  }
+  
   /**
   * Before a submission is accepted, this method ensures that the POST data contains the
   * correct digest token so we know the request was from the website.
@@ -801,12 +831,15 @@ class Data_Controller extends Service_Base_Controller {
     	$db->from($viewname);
     	$select = 'id';
     	$db->select($select)->where(array('id' => $id));
-    	if(array_key_exists ('website_id', $this->view_columns))
-    	{
-			$db->in('website_id', array(null, $this->website_id));
-    	} else {
-    		Kohana::log('info', $viewname.' does not have a website_id - access denied');
-      		throw new ServiceError('No access to entity '.$entity.' allowed.');
+    	
+    	if(!array_key_exists ($this->entity, $this->allow_full_access)) {
+            if(array_key_exists ('website_id', $this->view_columns))
+            {
+                $db->in('website_id', array(null, $this->website_id));
+            } else {
+                Kohana::log('info', $viewname.' does not have a website_id - access denied');
+                throw new ServiceError('No access to entity '.$entity.' allowed.');
+            }
     	}
 		$number_rec = $db->find_all()->count();
 		return ($number_rec > 0 ? true : false);
