@@ -1,0 +1,15 @@
+#summary How client websites authenticate using digest authentication
+
+= Introduction =
+
+When a client website makes a read or write request to the core module's data services, it is necessary to authenticate the request. In an ideal world a secure connection would be used so that the password can be passed between the client and server to authenticate. However, in Indicia there is no guarantee that the server will be on a secure socket layer so passing a password across the connection would be insecure.
+
+Therefore, Kohana uses digest authentication, where a public token is generated and passed to the client. The client then hashes this public token with the website's ID (effectively the username) and password to create an authorisation token and passes it back to the server with the request to read or update data. The server then performs the same hash operation to check that the authorisation token was generated with the website ID and password. Note that it is not possible to decode the authorisation token to obtain the password so it is safe to pass this across insecure connections.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
