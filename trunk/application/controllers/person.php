@@ -25,6 +25,13 @@ class Person_Controller extends Gridview_Base_Controller {
 				if($user->loaded)
 					$person_id_values[] = $user->person_id;
 			}
+			$people=ORM::factory('person')->where('created_by_id', $_SESSION['auth_user']->id)->find_all();
+			foreach($people as $person) {
+				// not that only a Core Admin person can modify a person with Core Admin rights.
+				$user=ORM::factory('user')->where('person_id', $person->id)->where('core_role_id IS NOT ', null)->find();
+				if(!$user->loaded)
+					$person_id_values[] = $person->id;
+			}
 			$this->auth_filter = array('field' => 'id', 'values' => $person_id_values);
 		}
 		
