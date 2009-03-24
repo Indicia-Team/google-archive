@@ -93,20 +93,23 @@ abstract class ORM extends ORM_Core {
 	 */
 	public function set_metadata() {
 		$defaultUserId = Kohana::config('indicia.defaultPersonId');
-		// At this point we want to determine the id of the logged in user,
+		$force=false;
+		// At this point we determine the id of the logged in user,
 		// and use this in preference to the default id if possible.
-		//
-		// But at the moment, we just use the default.
-		$userId = $defaultUserId ? $defaultUserId : 1;
+		if (isset($_SESSION['auth_user'])) {
+			$force = true;
+			$userId = $_SESSION['auth_user']->id;
+		} else
+			$userId = ($defaultUserId ? $defaultUserId : 1);
 		// Set up the created and updated metadata for the record
 		if (!$this->id) {
 			$this->created_on = date("Ymd H:i:s");
-			if (!$this->created_by_id) $this->created_by_id = $userId;
+			if ($force or !$this->created_by_id) $this->created_by_id = $userId;
 		}
 		// TODO: Check if updated metadata present in this entity,
 		// and also use correct user.
 		$this->updated_on = date("Ymd H:i:s");
-		if (!$this->updated_by_id) $this->updated_by_id = $userId;
+		if ($force or !$this->updated_by_id) $this->updated_by_id = $userId;
 	}
 
 	/**
