@@ -17,9 +17,9 @@ Class Map extends helper_config
   // Width of the map control
   public $width = '850px';
   // Latitude
-  public $latitude = -100000;
+  public $latitude = 6700000;
   // Longitude
-  public $longitude = 6700000;
+  public $longitude = -100000;
   // Zoom
   public $zoom = 7;
   // Base URL of the Indicia Core GeoServer instance to use - defaults to localhost
@@ -49,6 +49,14 @@ Class Map extends helper_config
   private $libraries = Array();
   private $haskey = Array('google' => true, 'multimap' => true);
   private $editable = false;
+  private $editoptions = array
+  (
+  'indicia_url' => 'http://localhost/indicia',
+  'input_field_id' => 'entered_sref',
+  'geom_field_id' => 'geom',
+  'systems' => array('osgb'=>'British National Grid','4326'=>'Latitude and Longitude (WGS84)'),
+  'init_value' => null
+  );
   
   // Constants used to add default layers
   const LAYER_GOOGLE_PHYSICAL = 0;
@@ -70,7 +78,7 @@ Class Map extends helper_config
   * all preset layers (calling true) but may also specify a single layer or array of
   * layers to display. Non-preset layers should be added later.
   */
-  public function __construct($indiciaCore = null, $layers = true, $editable = false, $options = null)
+  public function __construct($indiciaCore = null, $layers = true, $options = null, $editoptions = false)
   {
     if ($indiciaCore != null) $this->indiciaCore = $indiciaCore;
     if ($options != null) $this->options = array_merge($this->options, $options);
@@ -105,9 +113,10 @@ Class Map extends helper_config
       $this->addPresetLayer($layer);
     }
     // If it's editable, we need to reference the js library, 
-    if ($editable)
+    if ($editoptions)
     {
       $this->editable = true;
+      $this->editoptions = $editoptions;
       $this->addLibrary('mapmethods');
     }
     $this->internalObjectName = "map".rand();
@@ -273,6 +282,41 @@ Class Map extends helper_config
     ."var options = {".implode(",\n", $opt)."};\n";
     if ($this->proxy) $r .= "OpenLayers.ProxyHost = '".$this->proxy."';\n";
     $r .= "$ion = new OpenLayers.Map('".$this->name."', options);\n";
+    if ($this->editable)
+    {
+      foreach ($this->editoptions as $key => $val)
+      {
+	$eopt[] = $key.": ".$val;
+      }
+      $editlayer = "layer".rand();
+      $r .= "var editopts = {".implode(",\n", $eopt)."};\n".
+      "var $editlayer = new OpenLayers.Layer.Vector('Current location boundary', {style: boundary_style, 'sphericalMercator': true});\n";
+      $this->jsMapHelper = "jsMapHelper".rand();
+      $r .= "var ".$this->jsMapHelper." = new MapMethods($ion, $editlayer, editopts);\n";
+      // Other functions we need to create
+      $exit_sref = "exit_sref".rand();
+      $enter_sref = "enter_sref".rand();
+      $r .= "var $exit_sref = ".$this->jsMapHelper.".exit_sref();\n"
+      ."var $enter_sref = ".$this->jsMapHelper.".enter_sref();\n";
+      // Need to place the controls 
+      $field_name = $this->editoptions['input_field_name'];
+      $geom_field_name = $this->editoptions['geom_field_name'];
+      $r .= "<input id='$field_name' name='$field_name' value='".$this->editoptions['init_value']."' ".
+      "onblur='$exit_sref();' onclick='$enter_sref();'/>";
+      if (count($systems)==1)
+      {
+	$srids = array_keys($this->editoptions['systems']);
+	// only 1 spatial reference system, so put it into a hidden input
+	$r .= '<input id="'.$field_name.'_system" name="'.$field_name.'_system" type="hidden" class="hidden" value="'.$srids[0].'" />';
+      } else {
+	$r .= '<select id="'.$field_name.'_system" name="'.$field_name.'_system">';
+	foreach($systems as $srid=>$desc)
+	  $r .= "<option value=\"$srid\">$desc</option>";
+	$r .= '</select>';
+      }
+      $r .= "<input type=\"hidden\" class=\"hidden\" id=\"$geom_field_name\" name=\"$geom_field_name\" />";
+      $r .= '<p class="instruct">'.$instruct.'</p>';
+    }
     foreach ($this->layers as $layer)
     {
       $a = "layer".rand();
@@ -298,7 +342,7 @@ Class Map extends helper_config
     .$this->height.";'></div>\n";
     $r .= "<script type='text/javascript'>init();</script>";
     return $r;
-    }
+  }
 }
 
 Class Place_Finder {
