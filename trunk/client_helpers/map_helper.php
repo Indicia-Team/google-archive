@@ -48,6 +48,7 @@ Class Map extends helper_config
   private $library_sources = Array();
   private $libraries = Array();
   private $haskey = Array('google' => true, 'multimap' => true);
+  private $editable = false;
   
   // Constants used to add default layers
   const LAYER_GOOGLE_PHYSICAL = 0;
@@ -69,7 +70,7 @@ Class Map extends helper_config
   * all preset layers (calling true) but may also specify a single layer or array of
   * layers to display. Non-preset layers should be added later.
   */
-  public function __construct($indiciaCore = null, $layers = true, $options = null)
+  public function __construct($indiciaCore = null, $layers = true, $editable = false, $options = null)
   {
     if ($indiciaCore != null) $this->indiciaCore = $indiciaCore;
     if ($options != null) $this->options = array_merge($this->options, $options);
@@ -79,6 +80,7 @@ Class Map extends helper_config
     if ($multimap_api_key == '...') $this->haskey['multimap'] = false;
     $this->library_sources = Array
     (
+    'mapmethods' => parent::$base_url.'/media/js/map_helper.js',
     'openLayers' => parent::$base_url.'/media/js/OpenLayers.js',
     'google' => "http://maps.google.com/maps?file=api&v=2&key=$google_api_key",
     'virtualearth' => 'http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1',
@@ -101,6 +103,12 @@ Class Map extends helper_config
     foreach ($lta as $layer)
     {
       $this->addPresetLayer($layer);
+    }
+    // If it's editable, we need to reference the js library, 
+    if ($editable)
+    {
+      $this->editable = true;
+      $this->addLibrary('mapmethods');
     }
     $this->internalObjectName = "map".rand();
   }
@@ -312,9 +320,13 @@ Class Place_Finder {
   {
     // Variable storing the stuff we want to write out
     $mapHelper = $this->map->jsMapHelper;
+    $cfe = "check_find_enter".rand();
+    $find_place = "find_place".rand();
+    $r .= "var $cfe = $mapHelper.check_find_enter();\n";
+    $r .= "var $find_place = $mapHelper.find_place('place_search_box', 'place_search_output', 'place_search');\n";
     
-    $r .= '<input name="'.$this->id.'" id="'.$this->id.'" onkeypress="return check_find_enter(event, \''.$this->pref_area.'\', \''.$this->country.'\')"/>' .
-    '<input type="button" id="find_place_button" style="margin-top: -2px;" value="find" onclick="find_place(\''.$this->pref_area.'\', \''.$this->country.'\');"/>' .
+    $r .= '<input name="'.$this->id.'" id="'.$this->id.'" onkeypress="return $cfe(event, \''.$this->pref_area.'\', \''.$this->country.'\')"/>' .
+    '<input type="button" id="find_place_button" style="margin-top: -2px;" value="find" onclick="'.$find_place.'(\''.$this->pref_area.'\', \''.$this->country.'\');"/>' .
     '<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
     '<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
     return $r;
