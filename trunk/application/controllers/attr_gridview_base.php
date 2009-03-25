@@ -54,20 +54,16 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 	public function create() {
 		$website = $this->input->post('website_id', null);
 		$survey = $this->input->post('survey_id', null);
-		if ($website == null)
-	   		$this->setError('Invocation error: missing argument', 'You cannot call create '.$this->model->object_name.' without posting a website ID');
-        else {
-        	$attribute_load = new View('templates/attribute_load', array('website_id' => $website, 'model' => $this->model));
-        	$this->setView('custom_attribute/custom_attribute_edit',
+        $attribute_load = new View('templates/attribute_load', array('website_id' => $website, 'model' => $this->model));
+        $this->setView('custom_attribute/custom_attribute_edit',
         					$this->model->object_name,
-        					array('website_id' => $website,
-        							'survey_id' => $survey,
-        							'enabled'=>'',
+        					array('enabled'=>'',
         							'disabled_input'=>'NO',
         							'attribute_load' => $attribute_load,
         							'name' => $this->name,
-        							'processpath' => $this->processpath));
-         }
+        							'processpath' => $this->processpath,
+        							'webrec_entity' => $this->websitemodelname,
+        							'webrec_key' => $this->model->object_name.'_id'));
 	}
 
 	// edit function is called with id of *_attribute_website record, not the *_attribute
@@ -82,30 +78,28 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 		}
         else
 		{
-			// ID points to id of *_attributes_website record.
-            $attr_web = ORM::factory($this->websitemodelname, $id);
-			$this->model = ORM::factory($this->model->object_name, $attr_web->__get($this->model->object_name.'_id'));
-			$count = ORM::factory($this->websitemodelname)->where($this->model->object_name.'_id',$attr_web->__get($this->model->object_name.'_id'))->find_all()->count();
-			if ($count == 1)
+			$this->model = ORM::factory($this->model->object_name, $id);
+			$count = ORM::factory($this->websitemodelname)->where($this->model->object_name.'_id',$id)->find_all()->count();
+			if ($count <= 1)
 				$this->setView('custom_attribute/custom_attribute_edit',
 								$this->model->object_name,
-								array('website_id' => $attr_web->website_id,
-										'survey_id' => $attr_web->restrict_to_survey_id,
-										'enabled'=>'',
+								array('enabled'=>'',
 										'disabled_input'=>'NO',
 										'attribute_load' => '',
         								'name' => $this->name,
-        								'processpath' => $this->processpath));
+        								'processpath' => $this->processpath,
+        								'webrec_entity' => $this->websitemodelname,
+        								'webrec_key' => $this->model->object_name.'_id'));
 			else
 				$this->setView('custom_attribute/custom_attribute_edit',
 								$this->model->object_name,
-								array('website_id' => $attr_web->website_id,
-										'survey_id' => $attr_web->restrict_to_survey_id,
-										'enabled'=>'disabled="disabled"',
+								array('enabled'=>'disabled="disabled"',
 										'disabled_input'=>'YES',
 										'attribute_load' => '',
         								'name' => $this->name,
-        								'processpath' => $this->processpath));
+        								'processpath' => $this->processpath,
+        								'webrec_entity' => $this->websitemodelname,
+        								'webrec_key' => $this->model->object_name.'_id'));
 			$this->model->populate_validation_rules();
 		}
 	}
@@ -119,13 +113,13 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 				$this->model = ORM::factory($this->model->object_name, $_POST['load_attr_id']);
 	       		$this->setView('custom_attribute/custom_attribute_edit',
 	        				$this->model->object_name,
-	        				array('website_id' => $_POST['website_id'],
-	        						'survey_id' => $_POST['survey_id'],
-	        						'enabled'=>'disabled="disabled"',
+	        				array('enabled'=>'disabled="disabled"',
 	        						'disabled_input'=>'YES',
 	        						'attribute_load' => '',
         							'name' => $this->name,
-        							'processpath' => $this->processpath));
+        							'processpath' => $this->processpath,
+        							'webrec_entity' => $this->websitemodelname,
+        							'webrec_key' => $this->model->object_name.'_id'));
 				$this->model->populate_validation_rules();
 			} else {
 				$website = $this->input->post('website_id', null);
@@ -136,13 +130,13 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
         							'error_message' => 'The attribute must be selected before the Reuse button is pressed'));
         		$this->setView('custom_attribute/custom_attribute_edit',
         					$this->model->object_name,
-        					array('website_id' => $website,
-        							'survey_id' => $survey,
-        							'enabled'=>'',
+        					array('enabled'=>'',
         							'disabled_input'=>'NO',
         							'attribute_load' => $attribute_load,
         							'name' => $this->name,
-        							'processpath' => $this->processpath));
+        							'processpath' => $this->processpath,
+        							'webrec_entity' => $this->websitemodelname,
+        							'webrec_key' => $this->model->object_name.'_id'));
 			}
 		} else
 	   		$this->setError('Invocation error: Invalid Submit', 'Value of Posted submit variable is invalid');
@@ -194,7 +188,7 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 
 	protected function submit($submission){
 		// If the disabled_input field is set to YES, the data is being reused and no changes can have been made to the main record.
-		// In this case submit only the *_websites record.
+		// In this case submit only the *_websites records.
         $this->model->submission = $submission;
 		if ($submission['fields']['disabled_input']['value'] == 'YES') {
 			$id = $submission['fields']['id']['value'];
@@ -204,23 +198,46 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
 	    if ($id != null) {
             // Record has saved correctly or is being reused
             // now save the users_websites records.
-			$survey_id = is_numeric($submission['fields']['survey_id']['value']) ? $submission['fields']['survey_id']['value'] : NULL;
-        	$attributes_websites = ORM::factory($this->websitemodelname,
-						array($this->model->object_name.'_id' => $id
-								, 'website_id' => $submission['fields']['website_id']['value']
-								, 'restrict_to_survey_id' => $survey_id));
-        	$save_array = array(
-	        			'id' => $attributes_websites->object_name
-        				,'fields' => array($this->model->object_name.'_id' => array('value' => $id)
-        									,'website_id' => array('value' => $submission['fields']['website_id']['value'])
-        									,'restrict_to_survey_id' => array('value' => $survey_id)
-         									)
-        				,'fkFields' => array()
-        				,'superModels' => array());
-       		if ($attributes_websites->loaded)
-				$save_array['fields']['id'] = array('value' => $attributes_websites->id);
-			$attributes_websites->submission = $save_array;
-			$attributes_websites->submit();
+//			$survey_id = is_numeric($submission['fields']['survey_id']['value']) ? $submission['fields']['survey_id']['value'] : NULL;
+//        	$attributes_websites = ORM::factory($this->websitemodelname,
+//						array($this->model->object_name.'_id' => $id
+//								, 'website_id' => $submission['fields']['website_id']['value']
+//								, 'restrict_to_survey_id' => $survey_id));
+//       	$save_array = array(
+//	        			'id' => $attributes_websites->object_name
+//        				,'fields' => array($this->model->object_name.'_id' => array('value' => $id)
+//        									,'website_id' => array('value' => $submission['fields']['website_id']['value'])
+//        									,'restrict_to_survey_id' => array('value' => $survey_id)
+//         									)
+//        				,'fkFields' => array()
+//        				,'superModels' => array());
+//       		if ($attributes_websites->loaded)
+//				$save_array['fields']['id'] = array('value' => $attributes_websites->id);
+//			$attributes_websites->submission = $save_array;
+//			$attributes_websites->submit();
+			if(!is_null($this->gen_auth_filter))
+				$websites = ORM::factory('website')->in('id', $this->gen_auth_filter['values'])->find_all();
+			else
+				$websites = ORM::factory('website')->find_all();
+   			foreach ($websites as $website) {
+				// First check for non survey specific checkbox
+				$this->set_attribute_website_record($id, $website->id, null, isset($submission['fields']['website_'.$website->id]));
+//       		$save_array = array(
+//	        			'id' => $users_websites->object_name
+//        				,'fields' => array('user_id' => array('value' => $id)
+//        									,'website_id' => array('value' => $website->id)
+//        									)
+//      				,'fkFields' => array()
+//       				,'superModels' => array());
+//				if ($users_websites->loaded || is_numeric($submission['fields']['website_'.$website->id]['value'])) {
+//					if ($users_websites->loaded)
+//							$save_array['fields']['id'] = array('value' => $users_websites->id);
+//					$save_array['fields']['site_role_id'] = array('value' => (is_numeric($submission['fields']['website_'.$website->id]['value']) ? $submission['fields']['website_'.$website->id]['value'] : null));
+//					$users_websites->submission = $save_array;
+//					$users_websites->submit();
+//				}
+			}
+			
        		$this->submit_succ($id);
         } else {
             // Record has errors - now embedded in model
@@ -228,6 +245,16 @@ abstract class Attr_Gridview_Base_Controller extends Indicia_Controller {
         }
     }
 
+	private function set_attribute_website_record($attr_id, $website_id, $survey_id, $checked)
+	{
+   		$attributes_websites = ORM::factory($this->websitemodelname,
+						array($this->model->object_name.'_id' => $attr_id
+								, 'website_id' => $website_id
+								, 'restrict_to_survey_id' => $survey_id));
+		
+		
+	}
+	
 	/**
      * Returns to the index view for this controller.
      */

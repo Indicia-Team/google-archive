@@ -25,7 +25,25 @@ $body - gridview_table object.
 			}
 ?>
 
-	function website_selection_changed(websitecombo)
+function filter_selection_changed(filtercombo)
+{
+	// 1. get the selected value from websitecombo:
+	var filtercombo_value = filtercombo.value;
+
+	// 2. make sure survey_id combo is empty:
+	if ( filtercombo_value == 1 )
+	{
+		document.forms["Filter"].elements["website_id"].disabled="";
+		document.forms["Filter"].elements["survey_id"].disabled="";
+	}
+	else
+	{
+		document.forms["Filter"].elements["website_id"].disabled="disabled";
+		document.forms["Filter"].elements["survey_id"].disabled="disabled";
+	}
+}
+
+    function website_selection_changed(websitecombo)
 	{
 		// 1. get the selected value from websitecombo:
 		var websitecombo_value = websitecombo.value;
@@ -59,22 +77,28 @@ $body - gridview_table object.
 <div>
 <form id='Filter' action='' method='get'>
 <fieldset>
+<label for="filter_type">Filter Type</label>
+<select id="filter_type" name="filter_type" onchange="filter_selection_changed(this);">
+<option value="1">Filter by Website</option>
+<option value="2">Public Attributes</option>
+<option value="3">Created by me</option>
+<?php
+	if (is_null($this->auth_filter))
+		echo '<option value="4">All Distinct Attributes</option>';
+?>
+</select><br />
 <?php
 	if (!is_null($this->auth_filter))
 		$websites = ORM::factory('website')->in('id',$this->auth_filter['values'])->orderby('title','asc')->find_all();
 	else
 		$websites = ORM::factory('website')->orderby('title','asc')->find_all();
 
-	if ($websites->count() == 0)
-		echo "This user has no associated websites, therefore can not retrieve or set custom attributes";
-	else {
-		echo "<label for=\"website_id\">Website</label>\r\n";
-		echo '<select id="website_id" name="website_id" onchange="website_selection_changed(this);"><option value="-1">&lt;Please select&gt;</option>';
-		foreach ($websites as $website) {
-			echo '	<option value="'.$website->id.'">'.$website->title.'</option>';
-		}
-		echo '</select>';
+	echo "<label for=\"website_id\">Website</label>\r\n";
+	echo '<select id="website_id" name="website_id" onchange="website_selection_changed(this);"><option value="-1">&lt;Please select&gt;</option>';
+	foreach ($websites as $website) {
+		echo '	<option value="'.$website->id.'">'.$website->title.'</option>';
 	}
+	echo '</select>';
 ?>
 <br />
 <label for="survey_id">Survey</label>
@@ -114,9 +138,7 @@ foreach ($actionColumns as $name => $action) {
 <?php if (isset($survey_id)) { ?>
 <input type="hidden" name="survey_id" value="<?php echo html::specialchars($survey_id); ?>" />
 <?php } ?>
-<input type="submit" value="<?php echo $createbuttonname; ?>" class="default"
-<?php if (isset($disable_new_button)) { echo ' disabled="disabled" '; } ?>
-/>
+<input type="submit" value="<?php echo $createbuttonname; ?>" class="default" />
 </fieldset>
 </form>
 <br />

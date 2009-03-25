@@ -27,9 +27,24 @@ class Attr_Gridview_Controller extends Controller {
 
 		# 2 things we could be up to here - filtering or table sort.
 		// Get all the parameters
+		$filter_type = $this->input->get('filter_type',null);
 		$filter_website = $this->input->get('website_id',null);
 		$filter_survey = $this->input->get('survey_id',null);
 
+		// because of the pants way that database connections are handled (ie one at a time)
+		// it is impossible to create a new specific ID model whilst building a where clause on another table.
+		// Do it here, now, rather than in the case statement.
+		if ($filter_website != null AND is_numeric($filter_website) AND $filter_website >= 0){
+			$website= new Website_Model($filter_website);
+			if ($filter_survey != null AND is_numeric($filter_survey) AND $filter_survey >= 0 ){
+				$survey= new Survey_Model($filter_survey);
+			} else {
+				$survey = null;
+			}
+		} else {
+			$website = null;
+		}
+					
 		$orderby = $this->input->get('orderby','id');
 		$direction = $this->input->get('direction','asc');
 
@@ -42,31 +57,53 @@ class Attr_Gridview_Controller extends Controller {
 		}
 		$lists = $this->model->orderby($orderclause);
 
-		// If we are logged on as a site controller, then need to restrict access to those
-		// records on websites we are site controller for.
-		// Core Admins get access to everything - no filter applied.
-		if ($this->auth_filter != null){
-			$filter = $this->auth_filter;
-			$lists = $lists->in($filter['field'], $filter['values']);
-		}
+		// If we are logged on as a site controller, then need to restrict access to:
+		// records on websites we are site controller for. However this is actually done by
+		// the client filtering: no server side stuff is needed.
+		// Core Admins get access to everything - again through a wider client filter selection
+
 		// Are we doing server-side filtering?
 		if ($this->base_filter != null){
 			$filter = $this->base_filter;
 			$lists = $lists->where($filter);
 		}
 		// Are we doing client-side filtering?
-		if ($filter_website != null AND is_numeric($filter_website) AND $filter_website >= 0){
-			$lists = $lists->where(array('website_id' => $filter_website));
-		} else {
-			// if the website is invalid ensure no records are displayed
-			$lists = $lists->where(array('website_id' => -1));
-			$filter_website = null;
+		switch ($filter_type) {
+			case 1: // Filter by Website
+				if (!is_null($website)) {
+					$lists = $lists->where(array('website_id' => $filter_website));
+					$gridview->website_id = $filter_website;
+					$gridview->filter_summary = 'Filter applied: Website = "'.$website->title.'"';
+					if (!is_null($survey)){
+						$lists = $lists->where(array('survey_id' => $filter_survey));
+						$gridview->survey_id = $filter_survey;
+						$gridview->filter_summary = $gridview->filter_summary.' : Survey = "'.$survey->title.'"';
+					} else {
+						$gridview->filter_summary = $gridview->filter_summary.' : Attributes Common to all surveys on the website';
+						$lists = $lists->where(array('survey_id IS' => null));
+					}
+				} else {
+					$lists = $lists->where(array('website_id' => -1));
+					$gridview->filter_summary = 'Filter applied: [Invalid Website]';
+				}
+				break;
+			case 3: // Created by me
+				$lists = $lists->where(array('website_id IS' => null,
+											'created_by_id' => $_SESSION['auth_user']->id));
+				$gridview->filter_summary = "Filter: Created by Me.";
+				break;
+			case 4: // Distinct Attributes: CORE Admin only 
+				$lists = $lists->where(array('website_id IS' => null));
+				$gridview->filter_summary = "Filter: Distinct Attributes.";
+				break;
+			default:
+			case 2: // Public Attributes
+				$lists = $lists->where(array('website_id IS' => null,
+											'public' => 't'));
+				$gridview->filter_summary = "Filter: Public Attributes.";
+				break;
 		}
-
-		if ($filter_survey != null AND is_numeric($filter_survey) AND $filter_survey >= 0 ){
-			$lists = $lists->where(array('survey_id' => $filter_survey));
-		} else
-			$filter_survey = null;
+		
 
 		$offset = ($this->page -1) * $this->limit;
 		$table = $lists->find_all($this->limit, $offset);
@@ -88,22 +125,6 @@ class Attr_Gridview_Controller extends Controller {
 		$gridview->createbuttonname = $this->createbutton;
 		$gridview_body->columns = $this->columns;
 		$gridview_body->actionColumns = $this->actionColumns;
-
-		if (!is_null($filter_website)) {
-			$gridview->website_id = $filter_website;
-			$website= new Website_Model($filter_website);
-			$gridview->filter_summary = 'Filter applied: Website = "'.$website->title.'"';
-			if (!is_null($filter_survey)) {
-				$gridview->survey_id = $filter_survey;
-				$survey= new Survey_Model($filter_survey);
-				$gridview->filter_summary = $gridview->filter_summary.' : Survey = "'.$survey->title.'"';
-			} else{
-				$gridview->filter_summary = $gridview->filter_summary.' : Attributes Common to all surveys on the website';
-			}
-		} else {
-			$gridview->filter_summary = "A filter must be applied in order to display or create records.";
-			$gridview->disable_new_button = true;
-		}
 		$gridview->filter_summary = '<br /><p>'.$gridview->filter_summary.'</p>';
 
 		if(request::is_ajax()){
