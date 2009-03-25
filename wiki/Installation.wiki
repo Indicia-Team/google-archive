@@ -58,7 +58,7 @@ To access the source code, you need a SubVersion command-line client installed. 
 == Grab the source code ==
 
 First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, run the following command line from the Apache root folder to grab the source code into the folder you created:
-`svn checkout http://indicia.googlecode.com/svn/trunk/ indicia`
+`svn checkout http://indicia.googlecode.com/svn/core/trunk/ indicia`
 
 If you are running on a hosted server, it may be easiest to grab the code into a local folder then use an FTP tool to upload it into a folder created on your web server account.
 
