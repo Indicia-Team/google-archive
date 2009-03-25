@@ -175,7 +175,7 @@ The following tables are used by the Indicia Core Module:
       </table>
 
 == Main Entity Relationship Diagram ==
-[http://indicia.googlecode.com/files/main_erd_v0.3.png]
+[http://indicia.googlecode.com/svn/wiki/main%20erd.png]
 
 == Website related tables Entity Relationship Diagram ==
-[http://indicia.googlecode.com/files/website_related_erd_v0.3.png]
+[http://indicia.googlecode.com/svn/wiki/website%20related%20erd.png]
