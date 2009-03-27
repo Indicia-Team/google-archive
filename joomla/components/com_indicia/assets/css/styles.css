@@ -1,0 +1,62 @@
+form.indicia label {
+	width: 125px;
+	display: inline-block;
+	vertical-align: top;
+	padding-top: 0.25em;
+}
+
+form.indicia input, form.indicia select, form.indicia textarea{
+	display: inline-block;
+	width: 200px;
+	margin-bottom: 0.5em;
+	vertical-align: top;
+}
+
+form.indicia #find_place_button, form.indicia .auto, form.indicia .hidden, #auth_token, #nonce {
+	width: auto;
+}
+
+form.indicia .wide, form.indicia textarea {
+	width: 400px;
+}
+
+.error {
+	border: solid red 1px;
+	background-colour: #ffeeee;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.imagelist ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+.image {
+	display: inline-block;
+	border: solid silver 1px;
+	background-color: #ededed;
+	margin-right: 6px;
+	margin-bottom: 6px;
+}
+
+.image img {
+	padding: 2px;
+	border: none;
+}
+
+.image a {
+	padding: 2px;
+	text-align: center;
+	width: 134px;
+	text-decoration: none;
+}
+
+.species_anchor {
+	display: inline-block;
+	padding-top: 6px;
+}
+
+#maincolumn {
+	width: 78%;
+}
