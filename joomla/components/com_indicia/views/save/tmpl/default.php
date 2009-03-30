@@ -15,7 +15,7 @@ $submission = array('submission' => array('entries' => array(
 )));
 $response = data_entry_helper::forward_post_to('save', $submission);
 if (array_key_exists('success', $response)) {
-	$mainframe->redirect( 'index.php?option=com_indicia&view=acknowledge&taxon='.$data['taxon'].'&taxa_taxon_list_id='.$data['taxa_taxon_list_id'].'&Itemid='.JRequest::getCmd('Itemid'),
+	$mainframe->redirect( 'index.php?option=com_indicia&view=acknowledge&taxa_taxon_list_id='.$data['taxa_taxon_list_id'].'&Itemid='.JRequest::getCmd('Itemid'),
 					JText::_($params->get('thank_you')));
 } else {
 	echo '<p class="error">'.data_entry_helper::dump_errors($response).'</p>';
