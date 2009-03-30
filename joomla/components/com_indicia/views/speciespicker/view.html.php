@@ -24,9 +24,9 @@ class IndiciaViewSpeciespicker extends JView {
 				$species_picker = '<div class="imagelist">'.
 					data_entry_helper::list_in_template(
 					'taxa_taxon_list', $readAuth + array('taxon_list_id' => $params->get('taxon_list_id'), 'preferred' => 't', 'view' => 'details'),
-					'<div class="image">
+					'<div class="imagebox">
 					<input id="species|id|" name="taxa_taxon_list_id" type="radio" value="|id|" class="species_radio"/>
-					<a class="species_anchor">
+					<a>
 					<img src="'. $params->get('indicia_url').'upload/|image_path|" width="100" height="150" /><br />
 					<em>|taxon|</em>
 					</a>

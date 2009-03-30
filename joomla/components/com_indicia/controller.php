@@ -18,7 +18,8 @@ class IndiciaController extends JController {
 		}
 		elseif (JRequest::getCmd('view')=='mappicker' || JRequest::getCmd('view')=='otherdata'
 				|| JRequest::getCmd('view')=='save') {
-			// other data entry pages should dump the $_POST data into the Session
+			// other data entry pages should dump the $_POST data into the Session so that it can persist
+			// across pages of the wizard.
 			data_entry_helper::add_post_to_session();
 		}
 

@@ -7,7 +7,7 @@ class data_entry_helper extends helper_config {
   public static $RESOURCES = array
   (
   'jquery' => array('deps' => array(), 'stylesheets' => array(), 'javascript' => array('../../../media/js/jquery.js')),
-  'autocomplete' => array('deps' => array('jquery'), 'stylesheets' => array('../../media/css/jquery.autocomplete.css'), 'javascript' => array('../../../media/js/jquery.autocomplete.js')),
+  'autocomplete' => array('deps' => array('jquery'), 'stylesheets' => array('../../../media/css/jquery.autocomplete.css'), 'javascript' => array('../../../media/js/jquery.autocomplete.js')),
   'ui_core' => array('deps' => array('jquery'), 'stylesheets' => array(), 'javascript' => array('../../../media/js/ui.core.js')),
   'datepicker' => array('deps' => array('ui_core'), 'stylesheets' => array('../../../media/css/ui.datepicker.css'), 'javascript' => array('../../../media/js/ui.datepicker.js')),
   'json' => array('deps' => array(), 'stylesheets' => array(), 'javascript' => array('../../../media/js/json2.js')),
@@ -606,7 +606,6 @@ public static function autocomplete($id, $entity, $nameField, $valueField = null
      }
 
      public static function handle_media($media_id = 'imgUpload') {
-       syslog(LOG_DEBUG, print_r($_FILES, true));
        if (array_key_exists($media_id, $_FILES)) {
 	 syslog(LOG_DEBUG, "SITE: Media id $media_id to upload.");
 	 $uploadpath = parent::$upload_path;
@@ -867,15 +866,16 @@ public static function map_picker($field_name, $geom_field_name, $systems, $opts
  * @param string $pref_area Text to suffix to location searches, to help keep them in the target region. E.g. Dorset.
  * @param string $country Text Focus for to location searches, to enforce that they are only returned in the target country.
  * Set to '' for worldwide searches. Defaults to United Kingdom.
- *
+ * @param string $lang Language code for the preferred output. RFC 4646 code, e.g. en-GB, fr-FR etc.
+ *  *
  * @return HTML for the location search box.
  */
  public static function geoplanet_search($id='place_search', $link_text='find on map', $pref_area='gb',
-					  $country='United Kingdom')
+					  $country='United Kingdom', $lang="en-EN")
 					  {
 					    self::add_resource('jquery');
-					    $r = '<input name="'.$id.'" id="'.$id.'" onkeypress="return check_find_enter(event, \''.$pref_area.'\', \''.$country.'\')"/>' .
-					    '<input type="button" id="find_place_button" style="margin-top: -2px;" value="find" onclick="find_place(\''.$pref_area.'\', \''.$country.'\');"/>' .
+					    $r = "<input name=\"$id\" id=\"$id\" onkeypress=\"return check_find_enter(event, '$pref_area', '$country', '$lang')\"/>" .
+					    "<input type=\"button\" id=\"find_place_button\" style=\"margin-top: -2px;\" value=\"find\" onclick=\"find_place('$pref_area', '$country', '$lang');\"/>" .
 					    '<div id="place_search_box" style="display: none"><div id="place_search_output"></div>' .
 					    '<a href="#" id="place_close_button" onclick="jQuery(\'#place_search_box\').hide(\'fast\');">Close</a></div>';
 					    return $r;

@@ -5,14 +5,17 @@ form.indicia label {
 	padding-top: 0.25em;
 }
 
-form.indicia input, form.indicia select, form.indicia textarea{
+form.indicia input, form.indicia select, form.indicia textarea {
 	display: inline-block;
-	width: 200px;
 	margin-bottom: 0.5em;
 	vertical-align: top;
 }
 
-form.indicia #find_place_button, form.indicia .auto, form.indicia .hidden, #auth_token, #nonce {
+form.indicia input, form.indicia select {
+	width: 200px;
+}
+
+form.indicia #find_place_button, form.indicia .auto, form.indicia .hidden {
 	width: auto;
 }
 
@@ -22,7 +25,7 @@ form.indicia .wide, form.indicia textarea {
 
 .error {
 	border: solid red 1px;
-	background-colour: #ffeeee;
+	background-color: #ffeeee;
 	font-weight: bold;
 	font-size: 14px;
 }
@@ -32,7 +35,7 @@ form.indicia .wide, form.indicia textarea {
 	padding: 0px;
 }
 
-.image {
+.imagebox {
 	display: inline-block;
 	border: solid silver 1px;
 	background-color: #ededed;
@@ -40,23 +43,22 @@ form.indicia .wide, form.indicia textarea {
 	margin-bottom: 6px;
 }
 
-.image img {
+.imagebox img {
 	padding: 2px;
 	border: none;
 }
 
-.image a {
-	padding: 2px;
+.imagebox a {
+	padding: 6px 2px 2px 2px;
 	text-align: center;
 	width: 134px;
 	text-decoration: none;
-}
-
-.species_anchor {
 	display: inline-block;
 	padding-top: 6px;
 }
 
+/* Widen the Joomla main column a little - this may need to be checked as could be specific to the
+default template */
 #maincolumn {
 	width: 78%;
 }

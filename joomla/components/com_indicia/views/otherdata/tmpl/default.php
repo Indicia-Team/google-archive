@@ -1,6 +1,8 @@
 <?php
 require_once(JPATH_COMPONENT.DS.'helpers'.DS.'data_entry_helper.php');
 $params =& $mainframe->getPageParameters('com_indicia');
+JHTML::stylesheet('ui.datepicker.css', $path=$params->get('indicia_url').'/media/css/');
+JHTML::script('ui.datepicker.js', $path=$params->get('indicia_url').'/media/js/');
 $readAuth = data_entry_helper::get_read_auth($params->get('website_id'), $params->get('password'));
 ?>
 <h1><?php echo JText::_('Other Information'); ?></h1>
