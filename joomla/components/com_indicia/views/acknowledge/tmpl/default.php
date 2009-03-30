@@ -21,8 +21,8 @@ if ($params->get('geoserver_url')) {
 	$map->width=400;
 	$map->addIndiciaWMSLayer(JText::_('Wake Up Call Observations'), $params->get('map_feature_type'));
 
-	$map->addLayer("OpenLayers.Layer.WMS('".$taxon['taxon']."', '//localhost:8080/geoserver/wms', " .
-		"{ layers: '.$params->get('map_feature_type').', transparent: true, " .
+	$map->addLayer("OpenLayers.Layer.WMS('".$taxon['taxon']."', '".$params->get('geoserver_url')."wms', " .
+		"{ layers: '".$params->get('map_feature_type')."', transparent: true, " .
 		"styles: 'distribution_point', " .
 		"filter:'<ogc:Filter xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\">" .
 		"<ogc:PropertyIsEqualTo><ogc:PropertyName>taxa_taxon_list_id</ogc:PropertyName><ogc:Literal>".$_GET['taxa_taxon_list_id']."</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter>'".
