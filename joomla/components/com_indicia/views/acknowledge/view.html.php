@@ -7,7 +7,6 @@ class IndiciaViewAcknowledge extends JView {
 
 	function display()
 	{
-		global $mainframe;
 		parent::display();
 	}
 
