@@ -12,8 +12,10 @@ $readAuth = data_entry_helper::get_read_auth($params->get('website_id'), $params
 <label for="location_name"><?php echo JText::_('Description of locality'); ?>:</label>
 <input name="location_name" class="wide" value="<?php echo data_entry_helper::get_from_session('location_name'); ?>" /><br />
 <label for="place_search"><?php echo JText::_('Search for place on map'); ?>:</label>
-<?php echo data_entry_helper::geoplanet_search('place_search', 'find on map',
-		$params->get('pref_area'), $params->get('country')); ?>
+<?php
+	$lang=JFactory::getLanguage();
+	echo data_entry_helper::geoplanet_search('place_search', 'find on map',
+		$params->get('pref_area'), $params->get('country'), $lang->get('tag')); ?>
 <br/>
 <label for="entered_sref"><?php echo JText::_('Spatial Reference'); ?>:</label>
 <?php echo data_entry_helper::map_picker
