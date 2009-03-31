@@ -1,0 +1,6 @@
+#summary Describes the mapping components provided for data entry and distribution mapping.
+#labels Phase-Implementation
+
+= Introduction =
+
+This page is just a stub.
