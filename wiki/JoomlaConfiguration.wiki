@@ -11,6 +11,7 @@ To add the component to a menu item, create a new menu item in one of the menus 
  * *Title* - title displayed on the first page.
  * *Introduction* - introductory text displayed on first page.
  * *Map Introduction* - introductory text on the distribution map displayed after contribution of a record.
+ * *Filtered by taxon text* - additional text appended to the map introduction when the map is filtered by a species. The species name should be denoted in the text by %s.
  * *Thank you for your record* - a thank you message displayed after contribution of a record.
  * *Taxon List ID* - the Indicia ID of the taxon list that data can be entered for.
  * *Method of selecting a species* - select List or Auto-complete. List means that each species will be displayed as a button with a picture if there is one. Auto-complete renders a text box to type the species name, with an auto-complete for the species name.
@@ -34,3 +35,9 @@ To add the component to a menu item, create a new menu item in one of the menus 
  {{{
  Population size|smpAttr:1|radio_group|3
  }}}
+
+Note that for each of the parameters that represent text to display to the user, the actual text displayed is controlled by the language files (intially in the Joomla installation languages\en-GB\en-GB.com_indicia.ini file). For example, you can specify just "Intro Text" in the parameter, then put into the ini file:
+{{{
+INTRO TEXT=Welcome to the wildlife recording page.
+}}}
+For other languages, replace en-GB with the RFC 4646 language tag in the folder and file name.
