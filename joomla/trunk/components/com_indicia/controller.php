@@ -24,7 +24,7 @@ class IndiciaController extends JController {
 		}
 
 		// Perform some basic mandatory field checks on the entered data, and redirect to pages if required data is missing
-		if (JRequest::getCmd('view')!='speciespicker' && JRequest::getCmd('view')!='acknowledge' && !$_SESSION['indicia:taxa_taxon_list_id']) {
+		if (JRequest::getCmd('view')!='speciespicker' && JRequest::getCmd('view')!='map' && !$_SESSION['indicia:taxa_taxon_list_id']) {
 			$mainframe->redirect( 'index.php?option=com_indicia&view=speciespicker&Itemid='.JRequest::getCmd('Itemid'),
 				JText::_('Before proceeding, please specify the species.') );
 		}
