@@ -1,4 +1,6 @@
 <?php
+global $mainframe;
+require_once(JPATH_COMPONENT.DS.'helpers'.DS.'prefix.php');
 require_once(JPATH_COMPONENT.DS.'helpers'.DS.'data_entry_helper.php');
 $params =& $mainframe->getPageParameters('com_indicia');
 $readAuth = data_entry_helper::get_read_auth($params->get('website_id'), $params->get('password'));
@@ -13,9 +15,17 @@ $readAuth = data_entry_helper::get_read_auth($params->get('website_id'), $params
 <input name="location_name" class="wide" value="<?php echo data_entry_helper::get_from_session('location_name'); ?>" /><br />
 <label for="place_search"><?php echo JText::_('Search for place on map'); ?>:</label>
 <?php
-	$lang=JFactory::getLanguage();
+	$user = JFactory::getUser();
+	if ($user->id==0) {
+		$lang=JFactory::getLanguage();
+		$lang_id=$lang->get('tag');
+	} else {
+		// Not logged in, so use default in component parameters
+		$lang_id = $params->get('language_id');
+	}
+	echo $params->get('language_id');
 	echo data_entry_helper::geoplanet_search('place_search', 'find on map',
-		$params->get('pref_area'), $params->get('country'), $lang->get('tag')); ?>
+		$params->get('pref_area'), $params->get('country'), $lang_id); ?>
 <br/>
 <label for="entered_sref"><?php echo JText::_('Spatial Reference'); ?>:</label>
 <?php echo data_entry_helper::map_picker
@@ -30,3 +40,7 @@ data_entry_helper::get_from_session('geom')
 <input class="auto" type="submit" value="<?php echo JText::_('Next'); ?>" />
 </fieldset>
 </form>
+<?php
+require_once(JPATH_COMPONENT.DS.'helpers'.DS.'suffix.php');
+require_once(JPATH_COMPONENT.DS.'helpers'.DS.'disable_map_scroll_wheel.php');
+?>
