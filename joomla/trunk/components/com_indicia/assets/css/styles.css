@@ -62,3 +62,7 @@ default template */
 #maincolumn {
 	width: 78%;
 }
+
+#place_search_button, #entered_sref_system {
+	width: auto;
+}

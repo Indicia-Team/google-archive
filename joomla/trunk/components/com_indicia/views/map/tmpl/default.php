@@ -33,8 +33,6 @@ if ($params->get('geoserver_url')) {
 ?>
 <script type="text/javascript" language="javascript">
 
-
-
 jQuery(document).ready(function() {
 	<?php if ($params->get('google_map_key')) : ?>
 	var base_layers = [ 'google_physical', 'google_satellite' ];
@@ -43,20 +41,36 @@ jQuery(document).ready(function() {
 	<?php endif; ?>
 	var vector = new OpenLayers.Layer.Vector('Drawing Layer');
 	<?php if (array_key_exists('taxa_taxon_list_id', $_GET)) : ?>
-		var filteredLayer = new OpenLayers.Layer.WMS(
-		  	'Occurrences of <?php echo $taxon['taxon']; ?>',
+		var otherSpecies = new OpenLayers.Layer.WMS(
+		  	'Occurrences',
 		  	'<?php echo $params->get('geoserver_url'); ?>wms',
 			{
 				layers: '<?php echo $params->get('map_feature_type'); ?>', transparent: true,
 				styles: 'distribution_point',
 				filter: '<ogc:Filter xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\">' +
+					'<ogc:PropertyIsNotEqualTo><ogc:PropertyName>taxa_taxon_list_id</ogc:PropertyName>' +
+					'<ogc:Literal><?php echo $_GET['taxa_taxon_list_id']; ?></ogc:Literal>' +
+					'</ogc:PropertyIsNotEqualTo></ogc:Filter>'
+			}, { isBaseLayer: false, sphericalMercator: true});
+		var thisSpecies = new OpenLayers.Layer.WMS(
+		  	'Occurrences of <?php echo $taxon['taxon']; ?>',
+		  	'<?php echo $params->get('geoserver_url'); ?>wms',
+			{
+				layers: '<?php echo $params->get('map_feature_type'); ?>', transparent: true,
+				filter: '<ogc:Filter xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\">' +
 					'<ogc:PropertyIsEqualTo><ogc:PropertyName>taxa_taxon_list_id</ogc:PropertyName>' +
 					'<ogc:Literal><?php echo $_GET['taxa_taxon_list_id']; ?></ogc:Literal>' +
 					'</ogc:PropertyIsEqualTo></ogc:Filter>'
 			}, { isBaseLayer: false, sphericalMercator: true});
-		var customLayers = [vector, filteredLayer];
+		var customLayers = [vector, otherSpecies, thisSpecies];
 	<?php else : ?>
-		var customLayers = [vector];
+		var allSpecies = new OpenLayers.Layer.WMS(
+		  	'Occurrences',
+		  	'<?php echo $params->get('geoserver_url'); ?>wms',
+			{
+				layers: '<?php echo $params->get('map_feature_type'); ?>', transparent: true
+			}, { isBaseLayer: false, sphericalMercator: true});
+		var customLayers = [vector, allSpecies];
 	<?php endif; ?>
 	var drawControl = new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Polygon);
 	jQuery('#map').indiciaMap({
@@ -68,7 +82,6 @@ jQuery(document).ready(function() {
 		initial_lat: <?php echo $params->get('init_y'); ?>,
 		width: "600px",
 		height: "600px",
-		indiciaWMSLayers: {'All occurrences': '<?php echo $params->get('map_feature_type'); ?>'},
 		layers: customLayers,
 		controls: []
 	});
