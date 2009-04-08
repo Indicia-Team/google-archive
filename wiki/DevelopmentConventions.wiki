@@ -26,3 +26,9 @@ Then, set the issue status to fixed and provide a comment which mentions the rev
 
 
 Note that by referring to the revision as r... Google's issue tracker can put a hyperlink to the revision details in automatically which is very handy.
+
+== Coding Style ==
+
+ * Keep your methods short - each method should be visible on one screen. Break down into several methods if necessary.
+ * Indent all code blocks with 2 spaces.
+ * Comment your code using comments recognised by [http://www.phpdoc.org/ phpDocumentor].
