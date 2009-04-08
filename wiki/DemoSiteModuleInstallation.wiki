@@ -9,7 +9,7 @@ Indicia comes with a number of demonstration pages, which showcase some of the f
 
 == Configuration Files ==
 
-Site-specific details within the demo pages are stored as configuration files, to avoid requiring code changes to be made to adapt to differing installations. There are two config files that concern the demo pages: these are client_helpers/helper_config.php, and modules/demo/data_entry/data_entry_config.php.
+Site-specific details within the demo pages are stored as configuration files, to avoid requiring code changes to be made to adapt to differing installations. There are two config files that concern the demo pages: these are client_helpers/helper_config.php, and modules/demo/data_entry_config.php.
 
 === Distribution ===
 
