@@ -49,6 +49,7 @@ Helper function to generate a treeview from a given list with hierarchical relat
 === wrap_species_checklist ===
 
 == Session ==
+For information on using the session functions to generate a wizard style data entry system, see [TutorialDataEntryWizard Converting a data entry page to a wizard].
 === clear_session ===
 === add_post_to_session ===
 === extract_session_array ===
