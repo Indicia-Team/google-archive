@@ -7,5 +7,48 @@ The data_entry_helper class is used for building forms on websites powered by In
 
 = Functions =
 
-== list_in_template ==
+== Miscellaneous ==
+=== dump_errors ===
+=== dump_javascript ===
+=== get_auth ===
+=== get_read_auth ===
+=== handle_media ===
+=== forward_post_to ===
+=== wrap_species_checklist ===
+
+== Session ==
+=== clear_session ===
+=== add_post_to_session ===
+=== extract_session_array ===
+=== get_from_session ===
+
+== Data entry controls ==
+=== autocomplete ===
+Helper function to generate an autocomplete box from an Indicia core service query.
+=== checkbox_group ===
+Helper function to generate a checkbox group from a Indicia core service query.
+=== date_picker ===
+Helper function to insert a date picker control.
+=== image_upload ===
+Helper function to support image upload by inserting a file path upload control.
+=== listbox ===
+Helper function to generate a list box from a Indicia core service query.
+=== list_in_template ===
 Helper function to list the output from a request against the data services, using an HTML template for each item.
+=== map ===
+Generates a map control, with optional data entry fields and location finder powered by the Yahoo! geoservices API.
+=== radio_group ===
+Helper function to generate a radio group from a Indicia core service query.
+=== species_checklist ===
+Helper function to generate a species checklist from a given taxon list.
+
+This function will generate a flexible grid control with one row for each species
+in the specified list. For each row, the control will display the list preferred term
+for that species, a checkbox to indicate its presence, and a series of cells for a set
+of occurrence attributes passed to the control.</p>
+
+Further, the control will incorporate the functionality to add extra terms to the
+control from the parent list of the one given. This will take the form of an autocomplete
+box against the parent list which will add an extra row to the control upon selection.
+=== treeview ===
+Helper function to generate a treeview from a given list with hierarchical relationships.
