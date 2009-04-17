@@ -8,7 +8,7 @@
 
 == PHP ==
 
-The language used for the Core Module development is PHP, selected mainly for its ubiquitous nature and therefore easy of finding developers, getting support and hosting.
+The language used for the Core Module development is PHP, selected mainly for its ubiquitous nature and therefore ease of finding developers, getting support and hosting.
 
 == Kohana ==
 
