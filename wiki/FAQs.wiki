@@ -8,6 +8,10 @@
 
 Well, Indicia is now functional and can indeed be used to build online recording websites. However, it is still early days for the project so if you adopt Indicia right now you will probably find some bugs and areas of functionality that could do with improving. Hopefully nothing that will prevent you from developing your site though. 
 
+*How do I report a bug?*
+
+First, you need to have a Google account. Once you have that set up, go to [http://code.google.com/p/indicia/issues/list] and click the New Issue link near the top. Please take care to fill in all the details you can about how to reproduce the bug.
+
 == Installation Requirements ==
 
 *Indicia requires PostgreSQL to run - our Hosting only offers support for MySQL, is there any way of running Indicia under MySQL?*
