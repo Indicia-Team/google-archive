@@ -1,0 +1,8 @@
+#summary A few screenshots of Indicia in operation.
+
+= Screenshots =
+
+This page shows you some screenshots of Indicia.
+
+* Screenshot of a simple data entry page *
+[http://indicia.googlecode.com/svn/wiki/simple_data_entry.jpg]
