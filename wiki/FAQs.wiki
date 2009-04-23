@@ -4,6 +4,10 @@
 
 == General ==
 
+*How much does Indicia cost*
+
+Indicia is Open Source software and there are no costs for the software itself. However, before implementing a project using Indicia please take into account the cost of web-hosting and also developing your Indicia powered site, although the latter should be considerably cheaper using Indicia than if starting from scratch.
+
 *Is Indicia ready for me to use now?*
 
 Well, Indicia is now functional and can indeed be used to build online recording websites. However, it is still early days for the project so if you adopt Indicia right now you will probably find some bugs and areas of functionality that could do with improving. Hopefully nothing that will prevent you from developing your site though. 
