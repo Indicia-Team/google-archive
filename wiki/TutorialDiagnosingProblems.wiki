@@ -25,6 +25,10 @@ This will place an information box onto your page with a summary of checks made 
 
 [http://indicia.googlecode.com/svn/wiki/system_check.png]
 
-If not, hopefully this information should help you know where to look.
+If not, you might see warnings like in the following example:
+
+[http://indicia.googlecode.com/svn/wiki/system_check_failed.png]
+
+Hopefully this information should help you know where to look.
 
 If you have followed this procedure and are still not sure why it does not work, please post a message on the [http://forums.nbn.org.uk/viewforum.php?id=19 Indicia forum].
