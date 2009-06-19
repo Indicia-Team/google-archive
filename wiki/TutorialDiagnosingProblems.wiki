@@ -1,7 +1,7 @@
 #summary Techniques for diagnosing problems with your data entry forms.
 #labels Phase-Implementation
 
-= Introduction =
+= Diagnosing Data Entry Page Problems =
 
 If you have followed a tutorial or placed Indicia data entry code onto your website and it is not working, this page includes some tips on how to diagnose problems.
 
@@ -23,4 +23,4 @@ echo data_entry_helper::system_check();
 
 This will place an information box onto your page with a summary of checks made against your server regarding it's ability to run the Indicia code. Now, load your page and check that all the tests are listed as successful. If not, hopefully this information should help you know where to look.
 
-If you have followed this procedure and are still not sure why it does not work, please post a message on the Indicia forum.
+If you have followed this procedure and are still not sure why it does not work, please post a message on the [http://forums.nbn.org.uk/viewforum.php?id=19 Indicia forum].
