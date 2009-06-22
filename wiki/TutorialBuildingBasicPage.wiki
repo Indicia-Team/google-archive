@@ -77,8 +77,7 @@ The first two sections of the following tutorial are performed by your Core Serv
 <?php echo data_entry_helper::autocomplete('occurrence:taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth + array('taxon_list_id' => '<ID>'); ?>
 <br />
 }}}
-  #	Now, try loading your page to check it works. With any luck you have a handy little auto-complete control for your species list, from just the lines of code above. Ours looks like the following:
-[http://indicia.googlecode.com/svn/wiki/bde_tutorial_species_autocomplete.png]
+  #	Now, try loading your page to check it works. With any luck you have a handy little auto-complete control for your species list, from just the lines of code above. Ours looks like the following: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_species_autocomplete.png]
   #	Next, add the following code for a date picker, then save and test it:
 {{{
 <label for="date">Date:</label>
@@ -93,11 +92,11 @@ z-index: 1000;
 }
 </style>
 }}}
-  #	Just to be sure, save your PHP file and reload the page in the web browser to check it works. It should look something like the following:
-[http://indicia.googlecode.com/svn/wiki/bde_tutorial_datepicker.png]
+  #	Just to be sure, save your PHP file and reload the page in the web browser to check it works. It should look something like the following: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_datepicker.png]
   #	Now, add the following code to your page under the date picker code. This will add a map for picking spatial references in either British National Grid, or Lat Long format, a Select control for the survey to post data into, and a Comment text box.
 {{{
-<?php echo data_entry_helper::map('map', array('virtual_earth'), true, true, null, true); ?>
+<?php echo data_entry_helper::map('map', array('google_physical'), true, true, null, true); ?>
+<br/>
 <label for="survey_id">Survey</label>
 <?php echo data_entry_helper::select(
 	'survey_id', 'survey', 'title', 'id', $readAuth); ?>
@@ -110,6 +109,7 @@ z-index: 1000;
 {{{
 <input type="submit" value="Save" />
 }}}
+  # The data entry form is complete now as far as the controls are concerned. Loaded into a browser, it should look something like this: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_page.png]
   #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place:
 {{{
 <?php
