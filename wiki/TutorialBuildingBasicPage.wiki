@@ -55,9 +55,9 @@ The first two sections of the following tutorial are performed by your Core Serv
   #	Now, create a basic, blank PHP web page using your site template but with no content.
   #	Now, just inside your `<head>` element, paste in the following:
 {{{
-<?php	include 'data_entry_helper.php'; ?>
+<?php	require 'data_entry_helper.php'; ?>
 }}}
-  #	You will need an HTML form in which to place the data entry controls. Paste this into your web page to create the basic form container. You need to replace websiteID with the ID of the website you created earlier, and websitePassword with its password. Make sure you use the website password, not your user password! The record_status field sets the status of the entered occurrence to 'Completed'.
+  #	You will need an HTML form in which to place the data entry controls. Paste this into your web page to create the basic form container. You need to replace websiteID with the ID of the website you created earlier, and websitePassword with its password. Make sure you use the website password, not your user password! The record_status field sets the default status of the entered occurrence to 'Completed'.
 {{{
 <form method="post">
 <?php
@@ -71,13 +71,14 @@ The first two sections of the following tutorial are performed by your Core Serv
 </form>
 <?php echo data_entry_helper::dump_javascript(); ?>
 }}}
-  #	Ok, you’ve now got a form “Indicia enabled” and ready to put controls into. Note the last call, to dump_javascript? That is because the data entry helper will dynamically build the required script for your page. Rather than inserting it higgledy piggledy into the html, it keeps things tidier if it is all kept in one place. The next task is to add a simple text box to allow selection of a species from your species list. Remember the ID of the species list we created earlier? Paste the following code into your page, just above the `</form>`, and replace ID with your ID.
+  #	Ok, you’ve now got a form “Indicia enabled” and ready to put controls into. Note the last call, to dump_javascript? That is because the data entry helper will dynamically build the required script for your page. Rather than inserting it higgledy piggledy into the html, it keeps things tidier if it is all kept in one place. The next task is to add a simple text box to allow selection of a species from your species list. Remember the ID of the species list we created earlier? Paste the following code into your page, just above the `</form>`, and replace `<ID>` with your ID.
 {{{
-<label for='actaxa_taxon_list_id'>Species</label>
-<?php echo data_entry_helper::autocomplete('taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth + array('taxon_list_id' => 'ID')); ?>
+<label for='occurrence:taxa_taxon_list_id:taxon'>Species:</label>
+<?php echo data_entry_helper::autocomplete('occurrence:taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth + array('taxon_list_id' => '<ID>'); ?>
 <br />
 }}}
-  #	Now, try loading your page to check it works. With any luck you have a handy little auto-complete control for your species list, from just the lines of code above.
+  #	Now, try loading your page to check it works. With any luck you have a handy little auto-complete control for your species list, from just the lines of code above. Ours looks like the following:
+[http://indicia.googlecode.com/svn/wiki/bde_tutorial_species_autocomplete.png]
   #	Next, add the following code for a date picker, then save and test it:
 {{{
 <label for="date">Date:</label>
