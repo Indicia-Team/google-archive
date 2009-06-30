@@ -34,12 +34,20 @@ Relationships should be defined as outlined [http://docs.kohanaphp.com/libraries
 
 ===Mandatory methods===
 
-_validate_ should take a Validation array, add required rules and then call the parent method.
+_validate_ should take a Validation array, add required rules and then call the parent method. Any fields that are not referred to by the validation rules must be passed to the parent validation method in an $extraFields array. For example:
 
 {{{
 
 public function validate(Validation $array, $save = false) {
-return parent::validate($array, $save);
+  // uses PHP trim() to remove whitespace from beginning and end of all fields before validation
+  $array->pre_filter('trim');
+  $array->add_rules('title', 'required', 'length[1,100]');
+  // Explicitly add those fields for which we don't do validation
+  $extraFields = array(
+    'description',
+    'deleted'
+  );
+  return parent::validate($array, $save, $extraFields);
 }
 
 }}}
