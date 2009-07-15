@@ -56,7 +56,7 @@ Now scroll to the bottom and save the page. With any luck your menu will appear 
 [http://indicia.googlecode.com/svn/wiki/drupal_test_success.png]
 
 
-Great, if that worked then the setup is done and we just need to write some code for the data entry page. As this tutorial isn't about writing the code – that is covered elsewhere – here is “one I prepared earlier”. Just click the Edit link at the top of your page, then page this code in and change the configuration at the top to specify the website ID, password and survey ID you are using:
+If that worked then the setup is done and we just need to write some code for the data entry page. As this tutorial isn't about writing the code – that is covered elsewhere – here is “one I prepared earlier”. Just click the Edit link at the top of your page, then page this code in and change the configuration at the top to specify the website ID, password and survey ID you are using:
 {{{
 <?php 
 $config['website_id']=1;
@@ -102,3 +102,25 @@ $readAuth = data_entry_helper::get_read_auth($config['website_id'], $config['pas
 }}}
 
 Press the Save button and if all is well, you should see something like this:
+
+[http://indicia.googlecode.com/svn/wiki/drupal_example_unstyled.png]
+
+
+Great! You can give it a try and save a test record now if you like. The only thing is the form layout is not very tidy. You can either add your own CSS file to the theme in Drupal, or a quick way to tidy things up is to ask Indicia to include it's default stylesheet on the page. Edit the page, then insert a call to the data entry helper’s link_default_stylehsheet method following code beneath the line which requires the data_entry_helper.php file. It should look like:
+{{{
+<?php 
+$config['website_id']=1;
+$config['password']='password';
+$config['survey_id']=1;
+
+require "client_helpers/data_entry_helper.php";
+data_entry_helper::link_default_stylesheet();
+etc...
+}}}
+
+Now, save the page and the layout should be a bit tidier. Here’s a final screenshot showing the webpage in action:
+
+[http://indicia.googlecode.com/svn/wiki/drupal_example_styled.png]
+
+
+*Tip*: When editing PHP in Drupal using this technique, it is easy to make mistakes so when you save the page you just see the PHP error and nothing else – no link back to the edit page to fix it! Fortunately the fix is easy – just append /edit to the URL in the browser's address bar then reload the page to get back into edit mode, allowing you to fix the error.
