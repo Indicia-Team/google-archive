@@ -1,0 +1,27 @@
+#summary Tutorial explaining how to integrate Indicia with the Drupal Content Management System.
+
+= Integrating Indicia and Drupal Tutorial =
+
+The Drupal content management system is one of the most popular and powerful content management systems available. This tutorial explains how to get Drupal to host an Indicia data entry page.
+
+This tutorial assumes that:
+  * You have already installed [http://www.drupal.org Drupal]
+  * You have administration rights to the Drupal website
+  * You are able to copy files into the Drupal website installation folder (e.g. using the CPanel File Manager for hosted websites)
+  * You have a website and survey registered on an Indicia Warehouse server.
+
+It is also recommended that you complete the tutoral [TutorialBuildingBasicPage Building a basic PHP data entry page] first.
+
+= Steps =
+
+By default, Drupal does not allow you to run your own PHP code embedded into its pages, but this is what you need to be able to do to drop in the Indicia components. So, the first step is enable support for PHP pages as content. To do this, log in to your Drupal site and in the admin menu select Administer >> Site Building >> Modules. About half way down the list of modules, tick the module called PHP Filter then click the Save Configuration button at the bottom.
+
+[http://indicia.googlecode.com/svn/wiki/enable_drupal_php_filter.png]
+
+Embedding PHP code into your content pages has risks, because if you had a malicious editor of the website they could break the site. As a result of this the default behaviour is for the PHP filter to be only enabled for administrators of the website. If you want to change this, for example to allow a programmer to create PHP pages, then the menu option you need is Administer >> Site Building >> Input formats. Then, click the configure link beside the PHP code row.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_input_formats.png]
+
+The page that follows allows you to select which roles can use the PHP filter.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_php_config.png]
