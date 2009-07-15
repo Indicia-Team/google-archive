@@ -1,8 +1,9 @@
 #summary Tutorial explaining how to integrate Indicia with the Drupal Content Management System.
+#labels Phase-Implementation
 
-= Integrating Indicia and Drupal Tutorial =
+= [http://indicia.googlecode.com/svn/wiki/druplicon.small.png] Integrating Indicia and Drupal Tutorial =
 
-<img src="http://indicia.googlecode.com/svn/wiki/druplicon.small.png" style="float: right" alt="Drupal Logo">The Drupal content management system is one of the most popular and powerful content management systems available. This tutorial explains how to get Drupal to host an Indicia data entry page. The tutorial is based on Drupal 6 but the principles should apply to earlier versions as well.
+The Drupal content management system is one of the most popular and powerful content management systems available. This tutorial explains how to get Drupal to host an Indicia data entry page. The tutorial is based on Drupal 6 but the principles should apply to earlier versions as well. It is recommended that you complete the tutoral [TutorialBuildingBasicPage Building a basic PHP data entry page] first.
 
 This tutorial assumes that:
   * You have already installed [http://www.drupal.org Drupal]
@@ -10,7 +11,6 @@ This tutorial assumes that:
   * You are able to copy files into the Drupal website installation folder (e.g. using the CPanel File Manager for hosted websites)
   * You have a website and survey registered on an Indicia Warehouse server.
 
-It is also recommended that you complete the tutoral [TutorialBuildingBasicPage Building a basic PHP data entry page] first.
 
 = Steps =
 
