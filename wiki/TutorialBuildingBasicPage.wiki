@@ -108,7 +108,7 @@ z-index: 1000;
 <input type="submit" value="Save" />
 }}}
   # The data entry form is complete now as far as the controls are concerned. Loaded into a browser, it should look something like this: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_page.png]
-  #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place. This code grabs the data from the form's post array, and structures it into a submission which the Indicia Warehouse can understand before forwarding it on to the Warehouse. Finally, it retrieves any errors in the response.
+  #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place. This code grabs the data from the form's post array, and structures it into a submission which the Indicia Warehouse can understand before forwarding it on to the Warehouse. Finally, it retrieves any errors in the response, or displays a success message if appropriate.
 {{{
 <?php
 if ($_POST) {
@@ -118,6 +118,5 @@ if ($_POST) {
 }
 ?>
 }}}
-That code uses the data entry helper’s wrap method to convert your form’s post data into JSON, a handy notation used to send object data from JavaScript. It then joins the occurrence and sample together using the sample_id field, since the data on the form actually represents data from 2 database tables, not one. Finally, it forwards the wrapped and joined JSON data to Indicia for storage, and displays a success message or any errors that come back.
 
 That’s it! You’ve built a basic data entry form using Indicia.
