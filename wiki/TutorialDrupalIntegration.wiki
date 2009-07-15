@@ -2,7 +2,7 @@
 
 = Integrating Indicia and Drupal Tutorial =
 
-The Drupal content management system is one of the most popular and powerful content management systems available. This tutorial explains how to get Drupal to host an Indicia data entry page. The tutorial is based on Drupal 6 but the principles should apply to earlier versions as well.
+<img src="http://indicia.googlecode.com/svn/wiki/druplicon.small.png" style="float: right" alt="Drupal Logo">The Drupal content management system is one of the most popular and powerful content management systems available. This tutorial explains how to get Drupal to host an Indicia data entry page. The tutorial is based on Drupal 6 but the principles should apply to earlier versions as well.
 
 This tutorial assumes that:
   * You have already installed [http://www.drupal.org Drupal]
