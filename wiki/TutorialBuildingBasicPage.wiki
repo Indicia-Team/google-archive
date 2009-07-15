@@ -108,19 +108,11 @@ z-index: 1000;
 <input type="submit" value="Save" />
 }}}
   # The data entry form is complete now as far as the controls are concerned. Loaded into a browser, it should look something like this: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_page.png]
-  #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place:
+  #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place. This code grabs the data from the form's post array, and structures it into a submission which the Indicia Warehouse can understand before forwarding it on to the Warehouse. Finally, it retrieves any errors in the response.
 {{{
 <?php
 if ($_POST) {
-	$sampleMod = data_entry_helper::wrap($_POST, 'sample');
-	$occurrenceMod = data_entry_helper::wrap($_POST, 'occurrence');
-	$occurrenceMod['superModels'][] = array(
-				'fkId' => 'sample_id',
-				'model' => $sampleMod
-			);
-	$submission = array('submission' => array('entries' => array(
-		array ( 'model' => $occurrenceMod )
-	)));
+	$submission = data_entry_helper::build_sample_occurrence_submission($_POST);
 	$response = data_entry_helper::forward_post_to('save', $submission);
 	data_entry_helper::dump_errors($response);
 }
