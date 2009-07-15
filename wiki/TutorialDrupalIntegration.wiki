@@ -103,7 +103,7 @@ $readAuth = data_entry_helper::get_read_auth($config['website_id'], $config['pas
 
 Press the Save button and if all is well, you should see something like this:
 
-[http://indicia.googlecode.com/svn/wiki/drupal_example_unstyled.png]
+[http://indicia.googlecode.com/svn/wiki/drupal_example_unstyled.jpg]
 
 
 Great! You can give it a try and save a test record now if you like. The only thing is the form layout is not very tidy. You can either add your own CSS file to the theme in Drupal, or a quick way to tidy things up is to ask Indicia to include it's default stylesheet on the page. Edit the page, then insert a call to the data entry helper’s link_default_stylehsheet method following code beneath the line which requires the data_entry_helper.php file. It should look like:
@@ -120,7 +120,7 @@ etc...
 
 Now, save the page and the layout should be a bit tidier. Here’s a final screenshot showing the webpage in action:
 
-[http://indicia.googlecode.com/svn/wiki/drupal_example_styled.png]
+[http://indicia.googlecode.com/svn/wiki/drupal_example_styled.jpg]
 
 
 *Tip*: When editing PHP in Drupal using this technique, it is easy to make mistakes so when you save the page you just see the PHP error and nothing else – no link back to the edit page to fix it! Fortunately the fix is easy – just append /edit to the URL in the browser's address bar then reload the page to get back into edit mode, allowing you to fix the error.
