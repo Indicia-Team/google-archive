@@ -82,7 +82,7 @@ The first two sections of the following tutorial are performed by your Warehouse
 <?php echo data_entry_helper::date_picker('sample:date'); ?> 
 <br />
 }}}
-  #	If you don’t have a CSS file, you can paste the following into your HTML page directly, just above the line that reads `</head>`. Note that although this approach works, having an external CSS file for your styling information is good practice.
+  #	The datepicker drop-down panel can get stuck behind other controls, such as maps, which also try to appear in the foreground. To fix this, you need the following code in your web page's stylesheet. If you don’t have a CSS file in your web-page template, you can paste the following into your HTML page directly, just above the line that reads `</head>`. Note that although this approach works, having an external CSS file for your styling information is good practice.
 {{{
 <style type="text/css">
 #ui-datepicker-div {
