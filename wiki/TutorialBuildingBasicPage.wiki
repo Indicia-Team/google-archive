@@ -82,13 +82,12 @@ The first two sections of the following tutorial are performed by your Warehouse
 <?php echo data_entry_helper::date_picker('sample:date'); ?> 
 <br />
 }}}
-  #	The datepicker drop-down panel can get stuck behind other controls, such as maps, which also try to appear in the foreground. To fix this, you need the following code in your web page's stylesheet. 
+  #	The datepicker drop-down panel can get stuck behind other controls, such as maps, which also try to appear in the foreground. To fix this, you need the following code in your web page's stylesheet. If you don’t have a CSS file in your web-page template, you can paste the this code into your HTML page directly, just above the line that reads `</head>`. You also need to prefix it with `<style type="text/css">` and suffix it with `</style>` to mark out that it contains styling information. Note that although this approach works, having an external CSS file for your styling information is good practice.
 {{{
 #ui-datepicker-div {
 z-index: 1000;
 }
 }}}
-If you don’t have a CSS file in your web-page template, you can paste the this code into your HTML page directly, just above the line that reads `</head>`. You also need to prefix it with `<style type="text/css">` and suffix it with `</style>` to mark out that it contains styling information. Note that although this approach works, having an external CSS file for your styling information is good practice.
   #	Just to be sure, save your PHP file and reload the page in the web browser to check it works. It should look something like the following: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_datepicker.png]
   #	Now, add the following code to your page under the date picker code. This will add a map for picking spatial references in either British National Grid, or Lat Long format, a Select control for the survey to post data into, and a Comment text box.
 {{{
