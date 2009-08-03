@@ -64,7 +64,9 @@ If you are running on a hosted server, it may be easiest to grab the code into a
 
 == Run the Setup ==
 
-The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example //localhost/indicia/index.php, and load the page. This should display the Indicia Setup page. If there are no warnings on this page, then specify the name of the database you have created, plus the username and password of the user you created earlier. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia warehouse on a single PostgreSQL database you can use another name.
+The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example //localhost/indicia/index.php, and load the page. This should display the Indicia Setup page:
+[http://indicia.googlecode.com/svn/wiki/setup_db.png]
+If there are no warnings on this page, then specify the name of the database you have created, plus the username and password of the user you created earlier. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia warehouse on a single PostgreSQL database you can use another name.
 
 Once done, just click the Submit button.
 
