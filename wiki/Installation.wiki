@@ -1,9 +1,9 @@
-#summary Quick guide to installing the Indicia Core for developers
+#summary Quick guide to installing the Indicia Warehouse
 #labels Phase-Deploy
 
 = Installation =
 
-This guide is a quick summary of the steps required to install the Indicia Core for developers.
+This guide is a quick summary of the steps required to install the Indicia Warehouse.
 
 Note that if you are installing Indicia onto a hosted shared server, the chances are you will not have the full privileges required to setup the PostGIS database and PHP settings (if required). It may be helpful to ask your web host to perform the steps *Install PostgreSQL and PostGIS* to check that the pgsql and cURL extensions are enabled for PHP as described in the section *Install PHP and a Web Server*.
 
@@ -33,7 +33,7 @@ GRANT EXECUTE ON FUNCTION st_transform(geometry, integer) TO indicia_user;
 
 == Install PHP and a web server ==
 
-There are many tutorials on the web on how to install PHP and a webserver such as Apache. PHP version 5 is required. For example, the following guide explains installation of PHP, Apache and MySQL on Windows: [http://www.php-mysql-tutorial.com/install-apache-php-mysql.php]. MySQL is not required by the Indicia Core.
+There are many tutorials on the web on how to install PHP and a webserver such as Apache. PHP version 5 is required. For example, the following guide explains installation of PHP, Apache and MySQL on Windows: [http://www.php-mysql-tutorial.com/install-apache-php-mysql.php]. MySQL is not required by the Indicia Warehouse.
 
 After installing PHP, edit your php.ini file and uncomment the following two lines by removing the semi-colon at the start. This enables the pgsql module required for PHP to access the PostgreSQL database, and the cURL module which the demonstration site pages use to access the web services. After you've changed and saved the file, restart your Apache web server.
 {{{
@@ -64,16 +64,16 @@ If you are running on a hosted server, it may be easiest to grab the code into a
 
 == Run the Setup ==
 
-The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example //localhost/indicia/index.php, and load the page. This should display the Indicia Setup page. If there are no warnings on this page, then specify the name of the database you have created, plus the username and password of the user you created earlier. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia core on a single PostgreSQL database you can use another name.
+The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example //localhost/indicia/index.php, and load the page. This should display the Indicia Setup page. If there are no warnings on this page, then specify the name of the database you have created, plus the username and password of the user you created earlier. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia warehouse on a single PostgreSQL database you can use another name.
 
 Once done, just click the Submit button.
 
 == Test it ==
 
-If everything has worked, you will be taken to the login page for the Indicia Core Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password.
+If everything has worked, you will be taken to the login page for the Indicia Warehouse Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password.
 
 That's it!
 
 == Next Steps ==
 
-In order to get the demonstration pages up and running now that you have installed the Indicia Core, take a look at [DemoSiteModuleInstallation Installing the demonstration site module].
+In order to get the demonstration pages up and running now that you have installed the Indicia Warehouse, take a look at [DemoSiteModuleInstallation Installing the demonstration site module].
