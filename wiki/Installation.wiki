@@ -76,7 +76,23 @@ If your server is a production server then you should ensure that each folder ha
 
 If you are installing a server for development purposes and want to ignore this, click the Acknowledge button and confirm this on the next screen to allow you to proceed with the installation.
 
-===Data Entry Helper configuration===
+===Demo configuration===
+
+Click the Configure Demo Pages button, then you will be presented with the Demo Configuration page:
+
+http://indicia.googlecode.com/svn/wiki/setup_demo.png
+
+This page allows you to provide a link to a [http://geoserver.org GeoServer] installation on your server which can provide access to the spatial data in your Warehouse. If you don't have one, don't worry as this is only required for some distribution mapping functionality and can be added later. 
+
+In addition, this page allows you to specify API keys for various web services used by the Indicia demo pages. If you don't specify them now, they can be entered later by editing the file client_helpers/helper_config.php.
+
+===Email Configuration===
+
+Click the Configure email button, then you will be presented with the Email Configuration page:
+
+http://indicia.googlecode.com/svn/wiki/setup_email.png
+
+On this page, you need to provide the information Indicia needs to connect to a mail server in order to send forgotten password reminder emails. If you are running a development server or don't need this functionality, you can click the Skip email configuration button.
 
 ===Database Configuration===
 
@@ -90,21 +106,13 @@ The Host and Port can be left at their default settings if PostgreSQL is running
 
 Once done, just click the Submit button. It will take a few seconds to return to the Setup Check page now because the database itself is being installed and prepared for use.
 
-===Email Configuration===
-
-Click the Configure email button, then you will be presented with the Email Configuration page:
-
-http://indicia.googlecode.com/svn/wiki/setup_email.png
-
-On this page, you need to provide the information Indicia needs to connect to a mail server in order to send forgotten password reminder emails. If you are running a development server or don't need this functionality, you can click the Skip email configuration button.
-
-Hopefully, once you have done all the setup tasks required, you will see the following:
+Once you have done all the setup tasks required, you will see the following:
 
 http://indicia.googlecode.com/svn/wiki/setup_complete.png
 
 == Test it ==
 
-If everything has worked, you will be taken to the login page for the Indicia Warehouse Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password.
+If everything has worked, clicking the button on the message will take you to the login page for the Indicia Warehouse Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password.
 
 That's it!
 
