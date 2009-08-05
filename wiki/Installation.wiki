@@ -65,6 +65,7 @@ If you are running on a hosted server, it may be easiest to grab the code into a
 == Run the Setup ==
 
 The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example //localhost/indicia/index.php, and load the page. This should display the Indicia Setup Check page, which with any luck will show the following information:
+
 http://indicia.googlecode.com/svn/wiki/setup_check.png
 
 Each of the tasks that the Indicia Warehouse has identified still needs your attention are listed on this page in a warning box. Assuming that you have enabled the cUrl and PostgreSQL PHP extensions earlier in this guide and that an appropriate version of PHP is installed (at least 5.2), then the things you will need to attend to are as follows:
@@ -80,13 +81,26 @@ If you are installing a server for development purposes and want to ignore this,
 ===Database Configuration===
 
 Click the Configure database button, then you will be presented with the Database Configuration page:
+
 http://indicia.googlecode.com/svn/wiki/setup_db.png
 
 Specify the name of the database you have created, plus the username and password of the user you created earlier. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia warehouse on a single PostgreSQL database you can use another name.
 
 The Host and Port can be left at their default settings if PostgreSQL is running on the local machine on the default port.
 
-Once done, just click the Submit button.
+Once done, just click the Submit button. It will take a few seconds to return to the Setup Check page now because the database itself is being installed and prepared for use.
+
+===Email Configuration===
+
+Click the Configure email button, then you will be presented with the Email Configuration page:
+
+http://indicia.googlecode.com/svn/wiki/setup_email.png
+
+On this page, you need to provide the information Indicia needs to connect to a mail server in order to send forgotten password reminder emails. If you are running a development server or don't need this functionality, you can click the Skip email configuration button.
+
+Hopefully, once you have done all the setup tasks required, you will see the following:
+
+http://indicia.googlecode.com/svn/wiki/setup_complete.png
 
 == Test it ==
 
