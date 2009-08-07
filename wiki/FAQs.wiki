@@ -16,6 +16,20 @@ Well, Indicia is now functional and can indeed be used to build online recording
 
 First, you need to have a Google account. Once you have that set up, go to [http://code.google.com/p/indicia/issues/list] and click the New Issue link near the top. Please take care to fill in all the details you can about how to reproduce the bug.
 
+*What are the hosting options for the Indicia Warehouse*
+
+Firstly, most popular web-hosting packages support just MySQL as a database platform. Unfortunately MySQL is excellent at what it does, but is currently very limited in its capability to store and process spatial data - in particular it does not properly handle reports which request the occurrences falling inside a polygon. It also has weak support for "procedural" code embedded in the database itself. PostgreSQL on the other hand has a very rich support for spatial data and is free and Open Source, which in turn makes it well supported by other mapping tools (it's pretty easy to draw PostgreSQL data onto a Google Map or a desktop GIS for example).
+So, our approach to this dilemma has been to split an Indicia based website into 2 parts. The "Warehouse" is where we put the PostgreSQL database. This part provides an administration website plus a set of web services providing access to the data and validation tools. The second part is the bit you get to write - a website that allows your participants to enter their observations, report and map them. It's completely up to you how you go about this, but we are providing PHP classes to make the task extremely simple, and will also be providing reference implementations in the Drupal Content Management System so you can get going without writing any code. Now the good thing is that all of this will run easily on the vast majority of web-hosting packages.
+
+So, whilst the actual online-recording websites will run pretty much anywhere, the options for running the Warehouse are as follows:
+1) Host your own web server. The good news here is that all the software required on the server is free and Open Source. Indicia's bandwidth requirements are also not likely to be very high by today's standards.
+2) Use a web-hosting package. Whilst the packages that support PostgreSQL are limited, there are some, for example http://www.nethosted.co.uk/uk-web-hosting.php and http://www.devisland.net/, though I can't vouch for either of these. The former in particular does seem to have good feedback though, but devisland also seem to offer Java hosting - I'll come back to this later. For the ultimate in power and flexibility most hosts will provide a Virtual Private Server - effectively your own virtual machine which you have a lot more freedom over, though it is quite a lot more expensive.
+3) Share a server with a partner organisation that is willing and capable of hosting the Warehouse on your behalf. At this time the only organisation planning to do this on behalf of other organisations is BRC, but that does not mean there won't be more.
+
+Remember with options 1 and 2 there is an overhead of installation and administration of the warehouse - for example you will need to setup an appropriate backup strategy and so forth.
+
+One of the things you may want to think about when selecting a host is whether you want to expose your data as "spatial web services". The way we are doing this is to install a package called GeoServer. This runs alongside the PostgreSQL database and allows GIS and web-mapping packages to request maps and map data directly from the database using a standardised method. So, for example, it is easy to dump data onto a web-map, Google Earth or your GIS. To do this requires the ability to run Java on the server and it would be worth asking a potential web host if they can support GeoServer before going down this route (unless of course you don't need to expose the data spatially).
+
 == Installation Requirements ==
 
 *Indicia requires PostgreSQL to run - our Hosting only offers support for MySQL, is there any way of running Indicia under MySQL?*
