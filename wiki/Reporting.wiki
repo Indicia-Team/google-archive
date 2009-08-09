@@ -152,8 +152,6 @@ The requestReport function should be provided with a POST array containing the f
  # 'remote' - for when a URI is provided
  # 'provided' - for when the report is provided in the 'report' value.
 
-`reportFormat` specifies the format the report is delivered in. At present, only 'xml' is supported.
-
 `params` may be used when you wish to autocomplete certain parameters rather than being prompted for them. If used, it should be a JSON-encoded array of parameter name pointing to parameter value.
 
 ==== resumeReport ====
