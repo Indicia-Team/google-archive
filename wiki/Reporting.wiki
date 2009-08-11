@@ -21,7 +21,7 @@ An XML defined report might look something like this:
       JOIN occurrences o ON o.website_id = w.id
       JOIN samples s ON o.sample_id = s.id
       JOIN surveys su ON s.survey_id = su.id
-      WHERE o.created_on > '#date#%'::date
+      WHERE o.created_on > '#date#'::date
       GROUP BY survey, website
       </query>
       <order_bys>
@@ -55,12 +55,12 @@ The report element is the root of the document, and accepts two attributes, titl
       JOIN occurrences o ON o.website_id = w.id
       JOIN samples s ON o.sample_id = s.id
       JOIN surveys su ON s.survey_id = su.id
-      WHERE o.created_on > '#date#%'::date
+      WHERE o.created_on > '#date#'::date
       GROUP BY survey, website
 </query>
 }}}
 
-The query element is again self-explanatory for the most part, with only the note that report parameters (see below) are specified in the format `/#([a-z0-9_]+)#%/i` (where /i denotes that we are using case-insensitive patterns - thus, `Date` would equally be a valid parameter name).
+The query element is again self-explanatory for the most part, with only the note that report parameters (see below) are specified in the format `/#([a-z0-9_]+)#/i` (where /i denotes that we are using case-insensitive patterns - thus, `Date` would equally be a valid parameter name).
 
 {{{
       <order_bys>
@@ -77,7 +77,7 @@ The order_bys are appended to the end of the query in the obvious way, and can b
       JOIN occurrences o ON o.website_id = w.id
       JOIN samples s ON o.sample_id = s.id
       JOIN surveys su ON s.survey_id = su.id
-      WHERE o.created_on > '#date#%'::date
+      WHERE o.created_on > '#date#'::date
       GROUP BY survey, website
       #order_by#
       LIMIT 10
@@ -92,7 +92,7 @@ The order_bys are appended to the end of the query in the obvious way, and can b
 
 Parameters may be specified to allow the report requester to specify information at compile-time. In the example above, the report requester will receive a prompt to enter a date, which will then be used in the query. Parameters take four attributes and have no child elements:
 
-  * `name` should match the name given in the query, excluding the # and #% terminators. Thus, in the example above, the parameter name 'date' matches the pattern '#date#%' in the query.
+  * `name` should match the name given in the query, excluding the # and # terminators. Thus, in the example above, the parameter name 'date' matches the pattern '#date#' in the query.
   * `display` is the text used to label the parameter in the parameter request screen.
   * `description` gives a further description, and may be used in describing reports/parameters.
   * `datatype` is used in determining the type of control to show when requesting the parameter. Currently, the core module report interface supports datatypes 'text' and 'date', with all other values defaulting to text. Date will show a datepicker control. Those implementing reporting on a site module may of course extend this to support whatever datatypes they wish to allow, and further types such as geometry and lookup lists are likely to be implemented within the core module - obviously lookup lists may require an extension of the report format, which will be documented as and when.
