@@ -1,5 +1,4 @@
 #summary A description of the reporting facilities within Indicia
-#labels Phase-Deploy
 
 = Introduction =
 
@@ -70,7 +69,20 @@ The query element is again self-explanatory for the most part, with only the not
       </order_bys>
 }}}
 
-The order_bys are appended to the end of the query in the obvious way, and can be permuted to change the ordering.
+The order_bys are appended to the end of the query in the obvious way, and can be permuted to change the ordering. If you need the order_by to appear in the middle of the query rather than at the end, you can place a marker in your query as in the following example. This is useful when you need something in the query after the ORDER BY, such as a LIMIT. 
+
+{{{      
+<query>
+      SELECT su.title as survey, w.title as website, COUNT(*) as count FROM websites w 
+      JOIN occurrences o ON o.website_id = w.id
+      JOIN samples s ON o.sample_id = s.id
+      JOIN surveys su ON s.survey_id = su.id
+      WHERE o.created_on > '#date#%'::date
+      GROUP BY survey, website
+      #order_by#
+      LIMIT 10
+</query>
+}}}
 
 {{{
       <params>
