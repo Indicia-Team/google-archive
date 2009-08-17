@@ -26,7 +26,6 @@ The first two sections of the following tutorial are performed by your Warehouse
   #	Find the person record you just created, then click Edit User Details in that row.
   #	In the User’s Details, enter a password for the user and confirm it in the Repeat Password control. 
   #	Note the Username that has been generated or change it if required.
-  #	In the Role within Warehouse box, select SiteController which allows them to log in to the Warehouse.
   #	In the Website Roles list, select Admin in the drop down box next to the Website you created.
   #	Save the page then select Me\Logout from the menu.
 
