@@ -32,3 +32,8 @@ Note that by referring to the revision as r... Google's issue tracker can put a 
  * Keep your methods short - each method should be visible on one screen. Break down into several methods if necessary.
  * Indent all code blocks with 2 spaces.
  * Comment your code using comments recognised by [http://www.phpdoc.org/ phpDocumentor].
+
+== JavaScript ==
+
+ * The preferred JavaScript library for Indicia development is JQuery.
+ * Before checking in any JavaScript code, please check the code using the [http://www.jslint.com/ JSLint] tool.
