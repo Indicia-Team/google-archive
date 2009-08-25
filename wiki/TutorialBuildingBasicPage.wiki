@@ -117,9 +117,9 @@ echo data_entry_helper::textarea(array(
 }}}
   #	You might be wondering why we are using the data_entry_helper methods to output simple HTML controls like textarea and text inputs. This is because behind the scenes Indicia can output code that displays validation errors against each control and also to populate controls with their values when reloading a record. The data entry controls we need for a very basic form are done now, but you will also need to provide a method of submitting this data to the Indicia services where it will be stored. First, add a simple Submit button to your form (just above the `</form>` close tag). This button will post the data back to the same page – of course you could easily modify this to post the data to a different PHP page and process it from there.
 {{{
-<input type="submit" value="Save" />
+<input type="submit" value="Save" class="ui-state-default ui-corner-all" />
 }}}
-  # The data entry form is complete now as far as the controls are concerned. Loaded into a browser, it should look something like this: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_page.png]
+  # The class attribute in the button code above sets the button to use the same theme as the HTML output by the data entry helper to keep it looking consistent. The data entry form is complete now as far as the controls are concerned. Loaded into a browser, it should look something like this: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_page.png]
   #	We now need some code to capture the data posted from the data entry form and send it to Indicia. Here’s the code you need to paste in, just beneath the opening `<body>` element is a good place. This code grabs the data from the form's post array, and structures it into a submission which the Indicia Warehouse can understand before forwarding it on to the Warehouse. Finally, it retrieves any errors in the response, or displays a success message if appropriate.
 {{{
 <?php
