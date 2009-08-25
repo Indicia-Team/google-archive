@@ -109,7 +109,8 @@ echo data_entry_helper::select(array(
 )); 
 echo data_entry_helper::textarea(array(
     'label'=>'Comment',
-    'fieldname'=>'sample:comment'
+    'fieldname'=>'sample:comment',
+    'class'=>'wide',
 ));
 ?>
 <br />
