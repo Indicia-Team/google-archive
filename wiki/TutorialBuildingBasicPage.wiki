@@ -98,7 +98,7 @@ z-index: 1000;
   #	Just to be sure, save your PHP file and reload the page in the web browser to check it works. It should look something like the following: <br/>[http://indicia.googlecode.com/svn/wiki/bde_tutorial_datepicker.png]
   #	Now, add the following code to your page under the date picker code inside the PHP block. This will add a map for picking spatial references in either British National Grid, or Lat Long format, a Select control for the survey to post data into, and a Comment text box.
 {{{
-echo data_entry_helper::map(); ?>
+echo data_entry_helper::map(); 
 echo data_entry_helper::select(array(
     'label'=>'Survey',
     'fieldname'=>'sample:survey_id',
