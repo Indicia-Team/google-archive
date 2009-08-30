@@ -1,10 +1,12 @@
-#summary Improving the loading performance for data entry pages
+#summary Information on Data Caching within Indicia
 
 = Introduction =
 
-This page lists some ideas for improving the performance of your data entry pages. Before starting, you should have a working Indicia data entry page, for example by following the [TutorialBuildingBasicPage Building a basic PHP data entry page] tutorial.
+This page details some of the functionality used to improve the performance of your data entry pages. Before starting, you should have a working Indicia data entry page, for example by following the [TutorialBuildingBasicPage Building a basic PHP data entry page] tutorial.
 
-== Reducing database access by caching control data ==
+<STRONG>NB</STRONG> As detailed below, caching of data is switched <STRONG>ON</STRONG> by default.
+
+== Caching of control data ==
 When you create a control on your web page which interacts with Indicia's data, this requires your website to issue a request to the Indicia Warehouse using a web service. Indicia then queries the warehouse and returns the results to you. An example might be a select box populated from a termlist such as DAFOR abundance codes. Although this is normally nearly instantaneous, when your web page has many controls, or when there are lots of users loading the pages simultaneously, this approach can slow things down. 
 
 In order to speed things up and also reduce loading on the Indicia Warehouse, a facility is provided to cache the data calls made for the following controls: listbox, select, location_select, species_checklist, list_in_template, checkbox group and radio group. This data caching can be set at a website level, or this global setting may be overridden at an individual control level.
