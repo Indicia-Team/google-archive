@@ -15,6 +15,7 @@ Next, create a PostGIS database on your server. You don't need to put any conten
 {{{
 CREATE DATABASE indicia TEMPLATE=template_postgis;
 }}}
+A word of warning. After choosing the 'Server' from the left hand pane within pgAdmin, a list of existing databases will be displayed for that server, including the 'template_postgis'. One of these databases will be opened by default - unfortunately for a blank installation this will be the 'template_postgis' database as there are no others. In order for the above statement to work, this must not be active (i.e. it must have a red cross over its icon) - pgAdmin will complain that another user (in this case itself) has the template database open. In this case, the problem may be circumvented by creating a blank database with no template (e.g. called 'X'), shutting down pgAdmin, and then restarting it. On reopening the relevant server, the dummy database should be active, and the 'template_postgis' one not. The above statement should now be able to be run without issue. The dummy database may then be deleted.
 
 You can use the postgres super-user account to run Indicia if you like, which is the easiest but least secure method. Assuming you want to create your own user to run Indicia, run the following script to create the user and add it to the database, changing the username, password and database name as required:
 {{{
