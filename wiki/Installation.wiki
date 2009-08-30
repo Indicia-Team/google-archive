@@ -120,3 +120,5 @@ That's it!
 == Next Steps ==
 
 In order to get the demonstration pages up and running now that you have installed the Indicia Warehouse, take a look at [DemoSiteModuleInstallation Installing the demonstration site module].
+
+To secure your Indicia installation, you need to prevent directory access to each of the folders. In addition you should block all access to the application\cache folder since this is where requested authentication details from data entry pages are stored. To do this on Apache, assuming that .htaccess is supported on your server and mod_rewrite is installed, rename the file example.htaccess in the root of the indicia installation folder to just .htaccess.
