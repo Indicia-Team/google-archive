@@ -27,6 +27,6 @@ In its initial phase, Indicia’s development is being led by Biodiverse IT, is 
 
 == When will it be ready? ==
 
-Although it is very early days for the project, there is a working set of code now. The project is moving forward very quickly so there are still some bugs here and there, but it is already possible to build data entry, browsing and reporting pages using Indicia.
+Although it is early days for the project, we have now released version 0.2. The project is moving forward very quickly so there are still some bugs here and there, but it is already possible to build data entry, browsing and reporting pages using Indicia.
 
 [http://forums.nbn.org.uk/ Get involved on the online development tool discussions on the NBN Forum.]
