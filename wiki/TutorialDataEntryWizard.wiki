@@ -26,6 +26,6 @@ $occurrenceMod = data_entry_helper::wrap($data, 'occurrence');
 if (array_key_exists('success', $response)) {
 	// Code here to redirect to a success page
 } else {
-	echo '<p class="error">'.data_entry_helper::dump_errors($response).'</p>';
+	echo data_entry_helper::dump_errors($response);
 }
 }}}
