@@ -1,7 +1,0 @@
-#summary Using the JavaScript classes for advanced mapping.
-
-= Introduction =
-
-This is just a placeholder for a tutorial that needs to be written.
-
-Until it's ready, your best bet is to look at the demo pages, via the link on your Core Module installation's home page.
