@@ -131,4 +131,4 @@ if ($_POST) {
 ?>
 }}}
 
-That’s it! You’ve built a basic data entry form using Indicia.
+That’s it! You’ve built a basic data entry form using Indicia. If you want to learn more, there are some other tutorials on this Wiki or you can browse the [http://www.biodiverseit.co.uk/indicia/dev/docs/Client/Config/data_entry_helper.html developer documentation for the Data Entry Helper class].
