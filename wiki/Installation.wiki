@@ -52,16 +52,11 @@ http://localhost/phpinfo.php). The page you see should detail your PHP configura
 
 _Tip: If you have installed PHP 5.2.6 and the pgsql library won't load, this may be because of a bug in this release of PHP making it incompatible with the version of PostgreSQL you have installed. To fix this, you will need to replace the file php_pgsql.dll in your PHP installation with the version from the PHP 5.2.5 download, and also replace the file libpq.dll from your PostgreSQL install folder with the one from this download._
 
-== Install subversion ==
+== Get the Warehouse code ==
 
-To access the source code, you need a SubVersion command-line client installed. See [http://subversion.tigris.org/].
+First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, download the [http://indicia.googlecode.com/files/indicia_0.2.zip Indicia Warehouse code] and unzip it. Inside the zip file you will find a file called Indicia. Copy the contents of this folder into the folder you have just created on your webserver.
 
-== Grab the source code ==
-
-First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, run the following command line from the Apache root folder to grab the source code into the folder you created:
-`svn checkout http://indicia.googlecode.com/svn/core/trunk/ indicia`
-
-If you are running on a hosted server, it may be easiest to grab the code into a local folder then use an FTP tool to upload it into a folder created on your web server account.
+If you are running on a hosted server, it may be easiest to download and unzip the code into a local folder then use an FTP tool to upload it into a folder created on your web server account.
 
 == Run the Setup ==
 
