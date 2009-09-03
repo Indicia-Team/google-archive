@@ -3,7 +3,7 @@
 
 = [http://indicia.googlecode.com/svn/wiki/druplicon.small.png] Writing your own code to integrate Indicia and Drupal =
 
-The Drupal content management system is one of the most popular and powerful content management systems available. This tutorial explains how to get Drupal to host a custom Indicia data entry page. As an alternative, if you are willing to stick to one of the prebuilt forms, you can use the [UsingDrupalIForm Drupal IForm Module]. The tutorial is based on Drupal 6 but the principles should apply to earlier versions as well. It is recommended that you complete the tutoral [TutorialBuildingBasicPage Building a basic PHP data entry page] first.
+The Drupal content management system is one of the most popular and powerful content management systems available. This tutorial explains how to get Drupal to host a custom Indicia data entry page. As an alternative, if you are willing to stick to one of the [PrebuiltIForms prebuilt IForms], you can use the [UsingDrupalIForm Drupal IForm Module]. The tutorial is based on Drupal 6 but the principles should apply to earlier versions as well. It is recommended that you complete the tutoral [TutorialBuildingBasicPage Building a basic PHP data entry page] first.
 
 This tutorial assumes that:
   * You have already installed [http://www.drupal.org Drupal]
