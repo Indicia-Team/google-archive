@@ -1,0 +1,104 @@
+#summary Describes the idea behind the library of prebuilt IForms.
+
+= The prebuilt IForm library =
+
+Indicia includes a prebuilt library of data entry forms, known as IForms. These are general purpose forms which are great for getting started with Indicia when you don't have the resources to build your own form in PHP. IForms can also be integrated into Content Management Systems such as Drupal, so when you select an IForm to add to a page you will be asked to enter parameters appropriate to the form, such as the species checklist ID you want to allow species entry for.
+
+== Structure ==
+
+IForms are held in the `client_helpers/prebuilt_forms` folder. Each IForm is represented by a single PHP file with a unique name. To help explain it we can imagine a file called myform.php. Within the PHP file there is a single class, called `iform_formname`, for example `iform_myform`.
+
+This class needs to do a few things. Firstly, it needs to declare a title, so we can add a method like:
+{{{
+  /** 
+   * Return the form title.
+   * @return string The title of the form.
+   */
+  public static function get_title() {
+    return 'My data entry form';  
+  }
+}}}
+
+Next, we need a method to declare the parameters for the data entry form. Parameters are things you want the editor of the website to set up when they add your data entry form to their website. Typically this will include the website id and password as a very minimum, but often it will also include other options such as the species list ID to use, or whether to use a tabbed interface or not. So, we can add a method like:
+
+{{{
+  /**
+   * Get the list of parameters for this form.
+   * @return array List of parameters that this form requires.
+   */
+  public static function get_parameters() {   
+    return array(      
+      array(
+      	'name'=>'species_ctrl',
+        'caption'=>'Species Control Type',
+        'description'=>'The type of control that will be available to select a species.',
+        'type'=>'select',
+        'options' => array(
+          'autocomplete' => 'Autocomplete',
+          'select' => 'Select',
+          'listbox' => 'List box',
+          'radio_group' => 'Radio group',
+          'species_checklist' => 'Checkbox grid'         
+        )
+      ),
+      array(
+      	'name'=>'website_id',
+        'caption'=>'Website ID',
+        'description'=>'The ID of the website that data will be posted into.',
+        'type'=>'int'
+      ),
+      array(
+      	'name'=>'password',
+        'caption'=>'Website Password',
+        'description'=>'The Password of the website that data will be posted into.',
+        'type'=>'string'
+      ),
+      array(
+      	'name'=>'list_id',
+        'caption'=>'Species List ID',
+        'description'=>'The Indicia ID for the species list that species can be selected from.',
+        'type'=>'string'
+      )
+    );
+  }
+}}}
+
+The list of parameters is returned as an array, with each parameter being an _associative_ array describing the name, caption, description and type (data type) of the parameter. The name is the internal name for the parameter, which will be used by your code later, as opposed to the caption which is the display label for the caption that the website editor will see. The type can be one of int, string, boolean or select. If select is used then the options that will appear in the select list should be defined in an array called options as illustrated above.
+
+Next we need to return the actual form content. This is achieved using a method called get_form which will receive the actual values for each parameter in the $args parameter as an associative array. The following example illustrates a typical template which can be adapted to your own form content:
+
+{{{
+  /**
+   * Return the generated form output.
+   * @return Form HTML.
+   */
+  public static function get_form($args) {
+    $r = "<form method=\"post\">\n";
+    // Get authorisation tokens to update and read from the Warehouse.
+    $r .= data_entry_helper::get_auth($args['website_id'], $args['password']);
+    $readAuth = data_entry_helper::get_read_auth($args['website_id'], $args['password']);
+    $r .= "<input type=\"hidden\" id=\"website_id\" name=\"website_id\" value=\"".$args['website_id']."\" />\n";
+
+    /* Your form content must be added to the $r variable here */
+
+    $r .= "<input type=\"submit\" class=\"ui-state-default ui-corner-all\" value=\"Save\" />\n";    
+    $r .= "</form>";
+        
+    return $r;
+  }
+}}}
+
+Finally, there needs to be a method which tells Indicia how to construct a "submission" from the content of the form when the user presses Save. Here is an example which can be used for any form that creates a single occurrence within a single sample:
+
+{{{
+  /**
+   * Handles the construction of a submission array from a set of form values.
+   * @param array $values Associative array of form data values. 
+   * @param array $args iform parameters. 
+   * @return array Submission structure.
+   */
+  public static function get_submission($values, $args) {
+    return data_entry_helper::build_sample_occurrence_submission($values);     
+  }  
+}}}
+
