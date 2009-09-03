@@ -1,4 +1,5 @@
 #summary Overview of installing the Joomla component
+#labels CMS-Joomla
 
 = Introduction =
 
