@@ -4,9 +4,9 @@
 
 The Indicia data entry helper library has built in support for tabbed interfaces in your data entry forms. Enabling this can be achieved with the following steps.
 
-First, place all the controls in your form inside a single <div> element and set the id to 'tabs'.
+First, place all the controls in your form inside a single `<div>` element and set the id to 'tabs'.
 
-Then, divide the contents of this wrapper div up into separate <div> elements giving each a unique id. Your form might now look like:
+Then, divide the contents of this wrapper div up into separate `<div>` elements giving each a unique id. Your form might now look like:
 {{{
 <form method="post">
 <?php
@@ -56,7 +56,7 @@ echo data_entry_helper::map();
 </form>
 }}}
 
-Next, insert the following code beneath the <div='tabs'> element to setup the tabs, changing the array to contain the id for each 'tab div' as the key, and the caption to display as the value for each array entry:
+Next, insert the following code beneath the `<div='tabs'>` element to setup the tabs, changing the array to contain the id for each 'tab div' as the key, and the caption to display as the value for each array entry:
 {{{
 <div id="tabs">
 <?php
