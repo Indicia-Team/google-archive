@@ -48,6 +48,6 @@ If you provide this entry, but if the value is not numeric, or if the value is l
 === Notes ===
 The data is cached at a request level: if several controls (e.g. on different pages) request the same data, then they will use the same cached data.
 
-The cache files are currently stored in the upload directory.
+The cache files are currently stored in the upload directory. *You must make sure that the upload directory exists or caching is disabled. By default, the location for the upload directory is in the same folder as the client_helpers folder which you are loading data_entry_helper.php from.*
 
 The autocomplete and treeview controls are excluded from the list of controls for which data may be cached, as they request their data dynamically.
