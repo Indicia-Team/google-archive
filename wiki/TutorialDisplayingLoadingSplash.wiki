@@ -61,7 +61,7 @@ echo data_entry_helper::textarea(array(
 </form>
 <?php
 /************************************************************************/
-/* Define the end of the block that is hidden until the page is ready */
+/* Define the end of the block that is hidden until the page is ready   */
 /************************************************************************/
 echo data_entry_helper::loading_block_end(); 
 echo data_entry_helper::dump_javascript(); 
