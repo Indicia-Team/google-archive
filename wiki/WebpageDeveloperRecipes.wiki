@@ -1,4 +1,5 @@
 #summary A list of recipes for developing Indicia data entry pages.
+#labels Featured
 
 = Webpage Developer Recipes =
 
