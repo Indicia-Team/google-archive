@@ -1,0 +1,4 @@
+#summary A list of recipes for developing Indicia data entry pages.
+
+= Webpage Developer Recipes =
+
