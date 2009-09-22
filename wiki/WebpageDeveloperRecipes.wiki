@@ -2,10 +2,6 @@
 
 = Webpage Developer Recipes =
 
-* [TutorialDiagnosingProblems Diagnosing problems] ==
-
-Some techniques to help you diagnose problems with your data entry pages.
-
 * [TutorialThemingAndTemplating Theming and Templating]
 
 How to change the theme and HTML templates used by data entry controls.
@@ -23,3 +19,11 @@ How to convert an existing data entry page into a tabbed style interface.
 * [TutorialImprovingPageLoadPerformance Improving the loading performance for data entry pages]
 
 Performance considerations for loading your data entry pages.
+
+* [TutorialDiagnosingProblems Diagnosing problems] 
+
+Some techniques to help you diagnose problems with your data entry pages.
+
+* [TutorialDisplayingLoadingSplash Displaying Loading message]
+
+Displaying a loading message 'splash' whilst your data entry form loads.
