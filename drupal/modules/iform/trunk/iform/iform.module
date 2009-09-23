@@ -131,8 +131,9 @@ function iform_form(&$node, $form_state) {
     $iform_list['-1']="Please select";
   }
   if ($dir = opendir('client_helpers/prebuilt_forms/')) {
-   while (false !== ($file = readdir($dir))) {
-      if ($file != "." && $file != "..") {
+    while (false !== ($file = readdir($dir))) {
+      $parts=explode('.', $file);
+      if ($file != "." && $file != ".." && strtolower($parts[1])=='php') {
         require_once 'client_helpers/prebuilt_forms/'.$file;
         $file_tokens=explode('.', $file);
         ob_start();    
