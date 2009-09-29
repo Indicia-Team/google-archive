@@ -48,11 +48,10 @@ The first two sections of the following tutorial are performed by your Warehouse
 = Build a data entry page =
   #	This part of the tutorial assumes you have access to a webserver that is running PHP 5 and are able to create web pages on the server. You should have a folder ready to contain the web pages on this server. Also, throughout this section of the tutorial, the website running the Indicia Warehouse will be referred to as `<warehouse_url>`. Make sure you replace this with the real URL!
   #	The building of PHP pages using Indicia is simplified by using the supplied Data Entry Helper class. This is a static class (so you don’t have to create an instance of it to use it) which outputs ready made pieces of HTML and JavaScript into your page. To use this, copy the client_helpers folder from an installation of Indicia into the folder your web page will be accessed from on the server.
-  #	In the folder you have copied there is a file called helper_config.php.example. Remove the .example from the end of the filename. Edit the helper_config.php file and change the value for the base_url setting to the URL of the folder which contains your Indicia installation (i.e. the same as you are replacing `<warehouse_url>` with).
   #	Now, create a basic, blank PHP web page using your site template but with no content.
   #	Now, just inside your `<head>` element, paste in the following:
 {{{
-<?php	require 'data_entry_helper.php'; ?>
+<?php	require 'client_helpers/data_entry_helper.php'; ?>
 }}}
   #	You will need an HTML form in which to place the data entry controls. Paste this into your web page to create the basic form container. You need to replace websiteID with the ID of the website you created earlier, and websitePassword with its password. Make sure you use the website password, not your user password! The record_status field sets the default status of the entered occurrence to 'Completed'.
 {{{
