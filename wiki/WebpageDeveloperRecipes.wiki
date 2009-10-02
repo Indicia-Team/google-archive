@@ -28,3 +28,7 @@ Some techniques to help you diagnose problems with your data entry pages.
 * [TutorialDisplayingLoadingSplash Displaying Loading message]
 
 Displaying a loading message 'splash' whilst your data entry form loads.
+
+* [TutorialConfiguringValidationMessageDisplay Configuring the display of validation messages]
+
+How to control the way that Indicia displays validation messages for your controls.
