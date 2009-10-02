@@ -4,6 +4,12 @@
 
 == General ==
 
+*Is Indicia only suitable for public surveys?*
+
+Indicia is targetted building web pages which are focused on capturing wildlife records. It is obviously suitable for building fairly simple forms to capture records from members of the public who would not want to install a desktop biological recording package. However, there are many more experienced recorders who follow strict methodologies but also do not have a need to install a fully fledged recording package and Indicia is suitable for making data entry forms for this purpose as well. 
+
+Because Indicia gives you full control over the attributes, terminology, form layout and validation rules it is ideal for creating web forms which closely match existing paper-based record cards.
+
 *How much does Indicia cost*
 
 Indicia is Open Source software and there are no costs for the software itself. However, before implementing a project using Indicia please take into account the cost of web-hosting and also developing your Indicia powered site, although the latter should be considerably cheaper using Indicia than if starting from scratch.
