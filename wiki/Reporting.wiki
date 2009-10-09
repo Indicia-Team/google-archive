@@ -153,8 +153,10 @@ The requestReport function should be provided with a POST array containing the f
 
   * `report`
   * `reportSource`
-  * `reportFormat`
+  * `mode`
   * `params`
+  * `auth_token`
+  * `nonce`
 
 `report` can be one of three things:
  # The filename of a report in localReportDir
@@ -166,7 +168,16 @@ The requestReport function should be provided with a POST array containing the f
  # 'remote' - for when a URI is provided
  # 'provided' - for when the report is provided in the 'report' value.
 
+`mode` dictates the format of the response in the same fashion as the data service. Select from:
+ # 'xml'
+ # 'json'
+ # 'csv'
+
 `params` may be used when you wish to autocomplete certain parameters rather than being prompted for them. If used, it should be a JSON-encoded array of parameter name pointing to parameter value.
+
+`auth_token` and `nonce` are the constituent parts of the response from a call to data_entry_helper::getReadAuth which authenticates your web service call onto the Indicia Warehouse.
+
+For an example of how to call the service, see the <your warehouse URL>/modules/demo/index.php page and look at the Report Service example.
 
 ==== resumeReport ====
 
