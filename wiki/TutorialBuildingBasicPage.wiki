@@ -47,7 +47,8 @@ The first two sections of the following tutorial are performed by your Warehouse
 
 = Build a data entry page =
   #	This part of the tutorial assumes you have access to a webserver that is running PHP 5 and are able to create web pages on the server. You should have a folder ready to contain the web pages on this server. Also, throughout this section of the tutorial, the website running the Indicia Warehouse will be referred to as `<warehouse_url>`. Make sure you replace this with the real URL!
-  #	The building of PHP pages using Indicia is simplified by using the supplied Data Entry Helper class. This is a static class (so you don’t have to create an instance of it to use it) which outputs ready made pieces of HTML and JavaScript into your page. To use this, copy the client_helpers folder from an installation of Indicia into the folder your web page will be accessed from on the server.
+  #	The building of PHP pages using Indicia is simplified by using the supplied Data Entry Helper class. This is a static class (so you don’t have to create an instance of it to use it) which outputs ready made pieces of HTML and JavaScript into your page. To use this, download the client_helpers folder from the downloads section of this website and unzip it into the folder your web page will be accessed from on the server. This will give you a folder called client_helpers.
+  #     If you are using an account on the testwarehouse.indicia.org.uk and you are developing on a webserver on your local machine, then the client helpers are already configured sufficiently for you to complete this tutorial. If this is not the case though, please use the information in [SetupHelperConfig Setting up the Helper Configuration File] to configure your client helpers before proceeding with the rest of this tutorial.
   #	Now, create a basic, blank PHP web page using your site template but with no content.
   #	Now, just inside your `<head>` element, paste in the following:
 {{{
