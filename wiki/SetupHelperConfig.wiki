@@ -1,6 +1,7 @@
 #summary How to setup the data entry helper configuration file
+#labels Phase-Implementation
 
-= Introduction =
+= Setting up the Helper Configuration File =
 
 Developing data entry forms using Indicia normally requires you to write PHP code which calls the ready made library of controls supplied with Indicia. In order to use the full feature set of this library of controls (called the client helpers) there is a small amount of configuration required. 
 
