@@ -17,9 +17,16 @@ Before starting your survey, you should have registered a website and survey on 
  # Press Save. Now click the edit link beside your new attribute, then click the Show/Hide Metadata link and make a note of the ID of your attribute.
  # Ok, you now have a termlist with controlled terminology, plus a custom occurrence attribute for the Weather. To add this into your PHP data entry form, insert the following code, replacing <<Attribute ID>> and <<Termlist ID>> with the values you noted earlier:
 {{{
-<label for='occAttr:<<Attribute ID>>'>Approximate population size:</label>
-<?php echo data_entry_helper::radio_group('occAttr:<<Attribute ID>>', 'termlists_term', 'term', 'id', $readAuth + array('termlist_id' => '<<Termlist ID>>')); ?>
-<br />
+<?php
+echo data_entry_helper::radio_group(array(
+  'label' => 'Weather',
+  'fieldname'=>'occAttr:<<Attribute ID>>',
+  'table'=>'termlists_term',
+  'captionField'=>'term',
+  'valueField'=>'id',
+  'extraParams'=>$readAuth + array('termlist_id' => <<Termlist ID)
+));
+?>
 }}}
 
 That's it! Save your PHP file and view it in a web browser to check the new attribute. The code given here adds a group of radio buttons, but of course you may like to use a select control, a list box, or even a custom block of HTML for each item. Have a look at the code in the demo module's test_data_entry.php for demonstrations of the relevant select, listbox and list_in_template methods in the data entry helper class.
