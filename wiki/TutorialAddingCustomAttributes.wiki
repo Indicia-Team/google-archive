@@ -2,7 +2,7 @@
 
 = Introduction =
 
-This tutorial guides you through the process of adding a custom attribute and controlling the contents of the attribute using a termlist. The example we will use is a Weather attribute. There are examples of custom attributes added to a data entry form in the Data Entry 2 example on the demo page ([http://testwarehouse@indicia.org.uk/modules/demo/index.php]).
+This tutorial guides you through the process of adding a custom attribute and controlling the contents of the attribute using a termlist. The example we will use is a Weather attribute. There are examples of custom attributes added to a data entry form in the Data Entry 2 example on the demo page ([http://testwarehouse.indicia.org.uk/modules/demo/index.php]).
 
 Before starting your survey, you should have registered a website and survey on the Core Module, and have built a basic data entry page.
 
