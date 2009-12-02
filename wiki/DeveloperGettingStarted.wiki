@@ -18,6 +18,6 @@ Thirdly, when writing SQL directly against the database, please avoid using SELE
 
 == Handy Tutorials ==
 
-[http://workshops.opengeo.org/openlayers/intro/doc/en/ Introduction to OpenLayers]
+[http://workshops.opengeo.org/openlayers-intro/ Introduction to OpenLayers Workshop]
 
 [http://2tbsp.com/node/40 Installing Eclipse PDT for PHP development]
