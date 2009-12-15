@@ -63,7 +63,7 @@ $config['website_id']=1;
 $config['password']='password';
 $config['survey_id']=1;
 
-require "client_helpers/data_entry_helper.php";
+require "../../client_helpers/data_entry_helper.php";
 
 // Catch a submission to the form and send it to Indicia
 if ($_POST)
@@ -86,14 +86,26 @@ $readAuth = data_entry_helper::get_read_auth($config['website_id'], $config['pas
 <input type='hidden' id='website_id' name='website_id' value='<?php echo $config['website_id']; ?>' />
 <input type='hidden' id='survey_id' name='survey_id' value='<?php echo $config['survey_id']; ?>' />
 <input type='hidden' id='record_status' name='occurrence:record_status' value='C' />
-<label for='occurrence:taxa_taxon_list_id:taxon'>Taxon:</label>
-<?php echo data_entry_helper::autocomplete('occurrence:taxa_taxon_list_id', 'taxa_taxon_list', 'taxon', 'id', $readAuth); ?>
-<br/>
-<label for="date">Date:</label>
-<?php echo data_entry_helper::date_picker('sample:date'); ?>
-<br />
-<?php echo data_entry_helper::map('map', array('virtual_earth'), true, false, null, true); ?>
-<br />
+<?php echo data_entry_helper::autocomplete(array(
+  'label' => 'Taxon',
+  'fieldname' => 'occurrence:taxa_taxon_list_id', 
+  'tablename' => 'taxa_taxon_list', 
+  'captionField' => 'taxon',
+  'valueField' => 'id',
+  'extraParams' => $readAuth
+));
+echo data_entry_helper::date_picker(array(
+  'label' => 'Date',
+  'fieldname' => 'sample:date'
+)); 
+echo data_entry_helper::sref_and_system(array(
+    'label'=>'Spatial Reference'
+));
+echo data_entry_helper::map_panel(array(
+  'presetLayers' => array('virtual_earth')  
+)); 
+?>
+
 <input type="submit" value="Save" />
 </fieldset>
 
