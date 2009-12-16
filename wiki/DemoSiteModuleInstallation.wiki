@@ -17,21 +17,7 @@ To avoid file clashes when working within the RCS, these are distributed as help
 
 === helper_config.php ===
 
-This file is required both for the demo pages and for any other pages built using the helper tools data_entry_helper.php and map_helper.php. The settings here are:
-
-{{{
-	static $base_url='http://localhost/indicia';
-	static $geoplanet_api_key='...';
-	static $upload_path = './upload/';
-	static $google_api_key='...';
-	static $multimap_api_key='...';
-}}}
-
-  * `$base_url` should point to the url of your Indicia core installation. If you are testing Indicia on a single machine, this will probably be `http://localhost/indicia`.
-  * `$geoplanet_api_key` is used for looking up places using the geoplanet service. If you don't have one, don't worry for now. Everything except for the Find Location on Map control still works without it. To get an API key, follow the Application ID link on this page: [http://developer.yahoo.com/geo/].
-  * `$upload_path` should point to a directory on the server where uploaded images should be stored before being sent to the Indicia core. This directory must be writable by the apache user.
-  * `$google_api_key` is used for access to Google Maps layers such as the Google Physical or Satellite layers. You can obtain an API key at [http://code.google.com/apis/maps/signup.html].
-  * `$multimap_api_key` is required for the multimap and OS landranger map layers. Multimap layers will not work without this key, and the option to use them will not show up. You can obtain an API key at [http://www.multimap.com/openapi/].
+This file is required both for the demo pages and for any other pages built using the helper tools in data_entry_helper.php. See [SetupHelperConfig Setting up the Helper Configuration] for more information on how to edit this file so that it works with the demo pages.
 
 === data_entry_config.php ===
 
