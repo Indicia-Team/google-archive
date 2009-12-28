@@ -25,6 +25,11 @@ Because Indicia does not include any specification for how the logged in user se
 <?php
 // Use the Drupal language global var
 global $language;
-require 'client_helpers\lang\custom.'.$language->language.'.php';
+if (file_exists('client_helpers\lang\custom.'.$language->language.'.php') {
+  include 'client_helpers\lang\custom.'.$language->language.'.php';
+} else {
+  include 'client_helpers\lang\custom.en.php';
+}
 ?>
 }}}
+Note that, in this example, if the user has selected an unsupported language the form will revert to using the English translation file.
