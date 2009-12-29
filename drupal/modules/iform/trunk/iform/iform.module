@@ -402,9 +402,14 @@ function handle_resources() {
       {        
         // We must not add jQuery twice. So for this file, add Drupal's own version if not already done.
         if (strcasecmp(substr($j, -9), 'jQuery.js')==0)
-          drupal_add_js('misc/jquery.js', 'core'); 
-        else
+          drupal_add_js('misc/jquery.js', 'core');          
+        else if (substr($j, 0, 4)=='http') {          
+          // JS file external to Drupal. add_js will not work, so insert it into the head manually.
+          drupal_set_html_head("<script type='text/javascript' src='$j'></script>\n");
+        } else {
+          // CSS file within Drupal structure
           drupal_add_js($j, 'module');
+        }
       }    
     }
   }
