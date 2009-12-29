@@ -386,7 +386,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
 }
 
 function handle_resources() {
-  global $indicia_resources;  
+  global $indicia_resources, $indicia_theme_path;
+  $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';  
   if (isset($indicia_resources)) {
     data_entry_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
     data_entry_helper::$css_path = drupal_get_path('module', 'iform').'/media/css/';
@@ -394,8 +395,7 @@ function handle_resources() {
     foreach ($indicia_resources as $resource)
     {       
       foreach ($resourceList[$resource]['stylesheets'] as $s)
-      {
-        throw new Exception($s);
+      {        
         drupal_add_css($s);
       }
       foreach ($resourceList[$resource]['javascript'] as $j)
