@@ -25,7 +25,7 @@ function iform_schema() {
       'params' => array(
         'description' => 'JSON structure containing parameters passed to the form on instantiation.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 2000,
         'not null' => TRUE,
         'default' => ''
       ),
