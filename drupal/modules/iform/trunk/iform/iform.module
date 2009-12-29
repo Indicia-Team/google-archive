@@ -154,8 +154,7 @@ function iform_form(&$node, $form_state) {
     '#default_value' => $node->iform,
     '#required' => TRUE,
 	  '#options' => $iform_list,
-    '#description' => t('Please choose an Indicia form to use on this page then click Get Parameters to load the '. 
-        'set of parameters required.'),
+    '#description' => t('Please choose an Indicia form to use on this page.'),
     '#ahah' => array(
       'path' => 'iform_parameters/js/0',
       'wrapper' => 'iform-parameters',
@@ -372,13 +371,15 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     }       
   }
   $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args);  
-  ob_end_clean();
-  header('Location: ' + $args['redirect_on_success']);
   // link in the default stylesheet for Indicia forms
-  drupal_set_html_head('<link type="text/css" rel="stylesheet" media="all" href="'.data_entry_helper::$base_url.'media/css/default_site.css" />');
-  // and also add all the css and javascript required by the form to the HTML head
-  drupal_set_html_head(data_entry_helper::dump_javascript());
-  //drupal_set_html_head(theme('stylesheet_import', data_entry_helper::$base_url.'media/css/default_site.css'));
+  data_entry_helper::link_default_stylesheet();
+  // and also add all the css and javascript required by the form to the HTML head. Note that any ad-hoc JS
+  // is inserted at the bottom of the page, otherwise we can't guarantee that any plugins created won't
+  // be overwritten by subsequent references to the jQuery js file added to the header by other parts of Drupal.
+  global $indicia_resources;
+  drupal_set_html_head(data_entry_helper::dump_header($indicia_resources));
+  $r .= data_entry_helper::dump_javascript();
+  ob_end_clean();
 	$node->content['myfield']=array(
     '#value' => $r,
 		'#weight' => 1
