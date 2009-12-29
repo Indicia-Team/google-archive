@@ -376,18 +376,43 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   // and also add all the css and javascript required by the form to the HTML head. Note that any ad-hoc JS
   // is inserted at the later in the head, otherwise we can't guarantee that any plugins created won't
   // be overwritten by subsequent references to the jQuery js file added to the header by other parts of Drupal.
-  global $indicia_resources;
-  $js = data_entry_helper::$javascript;
-  $late_js = data_entry_helper::$late_javascript;
-  data_entry_helper::$javascript='';
-  data_entry_helper::$late_javascript='';
-  drupal_set_html_head(data_entry_helper::dump_javascript());
-  drupal_add_js($js, 'inline');
-  drupal_add_js($late_js, 'inline');
+  handle_resources();
   ob_end_clean();
 	$node->content['myfield']=array(
     '#value' => $r,
 		'#weight' => 1
   );
   return $node;
+}
+
+function handle_resources() {
+  global $indicia_resources;  
+  if (isset($indicia_resources)) {
+    data_entry_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
+    data_entry_helper::$css_path = drupal_get_path('module', 'iform').'/media/css/';
+    $resourceList = data_entry_helper::_RESOURCES();    
+    foreach ($indicia_resources as $resource)
+    {       
+      foreach ($resourceList[$resource]['stylesheets'] as $s)
+      {
+        throw new Exception($s);
+        drupal_add_css($s);
+      }
+      foreach ($resourceList[$resource]['javascript'] as $j)
+      {        
+        // We must not add jQuery twice. So for this file, add Drupal's own version if not already done.
+        if (strcasecmp(substr($j, -9), 'jQuery.js')==0)
+          drupal_add_js('misc/jquery.js', 'core'); 
+        else
+          drupal_add_js($j, 'module');
+      }    
+    }
+  }
+  if (!empty(data_entry_helper::$javascript) || !empty(data_entry_helper::$late_javascript)) {
+    $script = "jQuery(document).ready(function() {\n".
+      data_entry_helper::$javascript."\n".
+      data_entry_helper::$late_javascript."\n".
+      "});";
+    drupal_add_js($script, 'inline');
+  }     
 }
