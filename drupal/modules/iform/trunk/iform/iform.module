@@ -130,11 +130,11 @@ function iform_form(&$node, $form_state) {
   if (!$node->iform) {
     $iform_list['-1']="Please select";
   }
-  if ($dir = opendir('client_helpers/prebuilt_forms/')) {
+  if ($dir = opendir(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/')) {
     while (false !== ($file = readdir($dir))) {
       $parts=explode('.', $file);
       if ($file != "." && $file != ".." && strtolower($parts[1])=='php') {
-        require_once 'client_helpers/prebuilt_forms/'.$file;
+        require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$file;
         $file_tokens=explode('.', $file);
         ob_start();    
         $title = call_user_func(array('iform_'.$file_tokens[0], 'get_title'));
@@ -182,7 +182,7 @@ function iform_form(&$node, $form_state) {
   
   // Get the selected form's parameters  
   if ($node->iform && $node->iform!=-1) {
-    require_once 'client_helpers/prebuilt_forms/'.$node->iform.'.php';
+    require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
     ob_start();    
     $params = get_form_parameters($node);
     ob_end_clean();
@@ -234,7 +234,7 @@ function map_type($type) {
  */
 function get_custom_param_values($node) {
   // We need to grab the parameter values for the custom parameters that were defined by the form.
-  require_once 'client_helpers/prebuilt_forms/'.$node->iform.'.php';
+  require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
   ob_start();    
   $params = get_form_parameters($node);
   ob_end_clean();
@@ -347,8 +347,8 @@ function get_parameters_js() {
  */
 function iform_view($node, $teaser = FALSE, $page = FALSE) { 
   $node = node_prepare($node, $teaser);
-  require_once 'client_helpers/data_entry_helper.php';
-  require_once 'client_helpers/prebuilt_forms/'.$node->iform.'.php';
+  require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+  require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
   ob_start();
   // we need to grab each requested parameter from the node to pass to the form
   $params = get_form_parameters($node);
@@ -374,11 +374,16 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   // link in the default stylesheet for Indicia forms
   data_entry_helper::link_default_stylesheet();
   // and also add all the css and javascript required by the form to the HTML head. Note that any ad-hoc JS
-  // is inserted at the bottom of the page, otherwise we can't guarantee that any plugins created won't
+  // is inserted at the later in the head, otherwise we can't guarantee that any plugins created won't
   // be overwritten by subsequent references to the jQuery js file added to the header by other parts of Drupal.
   global $indicia_resources;
-  drupal_set_html_head(data_entry_helper::dump_header($indicia_resources));
-  $r .= data_entry_helper::dump_javascript();
+  $js = data_entry_helper::$javascript;
+  $late_js = data_entry_helper::$late_javascript;
+  data_entry_helper::$javascript='';
+  data_entry_helper::$late_javascript='';
+  drupal_set_html_head(data_entry_helper::dump_javascript());
+  drupal_add_js($js, 'inline');
+  drupal_add_js($late_js, 'inline');
   ob_end_clean();
 	$node->content['myfield']=array(
     '#value' => $r,
