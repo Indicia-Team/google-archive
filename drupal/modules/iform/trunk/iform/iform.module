@@ -370,13 +370,30 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       $r .= data_entry_helper::dump_errors($response);
     }       
   }
-  $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args);  
   // link in the default stylesheet for Indicia forms
   data_entry_helper::link_default_stylesheet();
+  
+  // Ask the form if it wants a custom language file or use the default
+  if (method_exists('iform_'.$node->iform, 'get_lang_file'))
+    $langFile = call_user_func(array('iform_'.$node->iform, 'get_lang_file'));
+  else
+    $langFile = 'default';
+  // Now localise the file
+  global $language;  
+  $localFile = $langFile.'.'.$language->language.'.php';  
+  if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile")) 
+    require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
+  else
+    // no file for the user's selected language, so revert to the English file
+    require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$langFile.en.php";
+  
+  // Now retrieve the form content
+  $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args);
   // and also add all the css and javascript required by the form to the HTML head. Note that any ad-hoc JS
   // is inserted at the later in the head, otherwise we can't guarantee that any plugins created won't
   // be overwritten by subsequent references to the jQuery js file added to the header by other parts of Drupal.
-  handle_resources();
+  handle_resources($node);
+  
   ob_end_clean();
 	$node->content['myfield']=array(
     '#value' => $r,
@@ -385,7 +402,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   return $node;
 }
 
-function handle_resources() {
+function handle_resources($node) {
   global $indicia_resources, $indicia_theme_path;
   $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';  
   if (isset($indicia_resources)) {
@@ -403,15 +420,22 @@ function handle_resources() {
         // We must not add jQuery twice. So for this file, add Drupal's own version if not already done.
         if (strcasecmp(substr($j, -9), 'jQuery.js')==0)
           drupal_add_js('misc/jquery.js', 'core');          
+        else if (strcasecmp(substr($j, -23), 'jquery-ui.custom.min.js')==0)
+          jquery_ui_add(array('jquery-ui'));
         else if (substr($j, 0, 4)=='http') {          
           // JS file external to Drupal. add_js will not work, so insert it into the head manually.
           drupal_set_html_head("<script type='text/javascript' src='$j'></script>\n");
-        } else {
+        } else if (strcasecmp(substr($j, -20), 'jquery-ui.effects.js')!=0) {
           // CSS file within Drupal structure
           drupal_add_js($j, 'module');
         }
       }    
     }
+  }
+  // Also add css specified by the form  
+  $files = call_user_func(array('iform_'.$node->iform, 'get_css'));
+  foreach ($files as $css) {
+    drupal_add_css(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/css/$css");
   }
   if (!empty(data_entry_helper::$javascript) || !empty(data_entry_helper::$late_javascript)) {
     $script = "jQuery(document).ready(function() {\n".
