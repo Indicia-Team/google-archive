@@ -372,20 +372,17 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   }
   // link in the default stylesheet for Indicia forms
   data_entry_helper::link_default_stylesheet();
-  
-  // Ask the form if it wants a custom language file or use the default
-  if (method_exists('iform_'.$node->iform, 'get_lang_file'))
-    $langFile = call_user_func(array('iform_'.$node->iform, 'get_lang_file'));
-  else
-    $langFile = 'default';
+
   // Now localise the file
   global $language;  
-  $localFile = $langFile.'.'.$language->language.'.php';  
+  $localFile = $node->iform.'.'.$language->language.'.php';  
   if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile")) 
     require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
-  else
-    // no file for the user's selected language, so revert to the English file
-    require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$langFile.en.php";
+  else {
+    // If no file available in the correct language, revert to English if the file is present.
+    $localFile = $node->iform.'.en.php';
+    include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
+  }
   
   // Now retrieve the form content
   $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args);
@@ -403,7 +400,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
 }
 
 function handle_resources($node) {
-  global $indicia_resources, $indicia_theme_path;
+  global $indicia_resources, $indicia_theme_path, $indicia_templates;
   $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';  
   if (isset($indicia_resources)) {
     data_entry_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
@@ -437,11 +434,33 @@ function handle_resources($node) {
   foreach ($files as $css) {
     drupal_add_css(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/css/$css");
   }
+  // If required, setup jQuery validation. We can't prep this JavaScript earlier since we would 
+  // not know all the control messages. 
+  // In the following block, we set the validation plugin's error class to our template.
+  // We also define the error label to be wrapped in a <p> if it is on a newline.
+  if (data_entry_helper::$validated_form_id) {
+    data_entry_helper::$javascript .= "$('#".data_entry_helper::$validated_form_id."').validate({ 
+      errorClass: \"".$indicia_templates['error_class']."\",
+      ". (in_array('inline', data_entry_helper::$validation_mode) ? "\n      " : "errorElement: 'p',\n      ").
+      "highlight: function(element, errorClass) {
+         // Don't highlight the actual control, as it could be hidden anyway
+      },
+      messages: ".json_encode(data_entry_helper::$validation_messages)."
+    });\n";
+  }
+  $script = '';
   if (!empty(data_entry_helper::$javascript) || !empty(data_entry_helper::$late_javascript)) {
     $script = "jQuery(document).ready(function() {\n".
       data_entry_helper::$javascript."\n".
       data_entry_helper::$late_javascript."\n".
-      "});";
+      "});\n";
+  }
+  if (!empty(data_entry_helper::$onload_javascript)) {
+    $script .= "window.onload = function() {\n".
+      data_entry_helper::$onload_javascript."\n".
+      "};\n"; 
+  }
+  if ($script) {
     drupal_add_js($script, 'inline');
   }     
 }
