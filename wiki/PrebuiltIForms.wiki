@@ -88,6 +88,10 @@ Next we need to return the actual form content. This is achieved using a method 
   }
 }}}
 
+If the form requires its own custom css file, then place the file in the css sub-folder of the prebuilt_forms directory. The css file should have the same filename as your form's PHP file, but with the extension css instead of php.
+
+If the form requires its own language file, then copy the file from client_helpers/lang/custom_example.php into the client_helpers/prebuilt_forms/lang directory, and rename it to have the same file name as your form's PHP file, with the extension .en.php. For example `myform.en.php`. You can create multiple copies of this file, changing `en` to the language code for each language you want to support. Inside this file, create the list of language strings your form needs, and then access them using the code `lang::get('key')` where key is the array key for the required entry.
+
 Finally, there needs to be a method which tells Indicia how to construct a "submission" from the content of the form when the user presses Save. Here is an example which can be used for any form that creates a single occurrence within a single sample:
 
 {{{
@@ -101,4 +105,3 @@ Finally, there needs to be a method which tells Indicia how to construct a "subm
     return data_entry_helper::build_sample_occurrence_submission($values);     
   }  
 }}}
-
