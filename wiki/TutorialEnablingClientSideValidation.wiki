@@ -15,7 +15,7 @@ To enable support for client-side validation in your form, the first thing to do
 {{{
 data_entry_helper::enable_validation('form_name');
 }}}
-The single parameter must be a string which matches the HTML id of the <form> element containing the controls to validate.
+The single parameter must be a string which matches the HTML id of the form element containing the controls to validate.
 
 Some default rules will be applied to the controls which you attach to fields in the core data model, for example sample:date will always be required. If you need to override these defaults, they are defined in data_entry_helper::$default_validation_rules.
 
