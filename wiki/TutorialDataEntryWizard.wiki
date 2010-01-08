@@ -3,7 +3,7 @@
 
 = Introduction =
 
-The [TutorialBuildingBasicPage Building a basic PHP data entry page] demonstrates how to construct a single web page used for entering an occurrence. However, to keep things simple it is often beneficial to construct a "wizard" style of interface for data entry.
+The [TutorialBuildingBasicPage Building a basic PHP data entry page] demonstrates how to construct a single web page used for entering an occurrence. However, to keep things simple it is often beneficial to construct a "wizard" style of interface for data entry. There are 2 methods of doing this, firstly where the wizard pages are each individual HTML pages. The second method involves putting each wizard page on hidden panels which are shown only as required. This tutorial describes the first method, for the hidden panels method see the tutorial [TutorialTabs Converting a data entry page to a tabbed interface].
 
 Before starting, you should have a working data entry page which you would like to split into several pages.
 
