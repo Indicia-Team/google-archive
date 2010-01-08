@@ -29,6 +29,10 @@ Some techniques to help you diagnose problems with your data entry pages.
 
 Displaying a loading message 'splash' whilst your data entry form loads.
 
+* [TutorialEnablingClientSideValidation Enabling client side validation]
+
+How to use validation in the web-browser to validate your forms without posting back to the server.
+
 * [TutorialConfiguringValidationMessageDisplay Configuring the display of validation messages]
 
 How to control the way that Indicia displays validation messages for your controls.
