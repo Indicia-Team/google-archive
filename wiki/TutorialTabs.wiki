@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The Indicia data entry helper library has built in support for tabbed interfaces in your data entry forms. Enabling this can be achieved with the following steps.
+The Indicia data entry helper library has built in support for tabbed and wizard interfaces in your data entry forms. Both interface styles can be achieved in a very similar way, since wizards can be created by using a tabbed interface with hidden tabs and buttons to navigate between 'pages'. Enabling either style can be achieved with the following steps.
 
 First, place all the controls in your form inside a single `<div>` element and set the id to 'tabs'.
 
@@ -67,3 +67,20 @@ echo data_entry_helper::tab_header(array('tabs'=>array(
 )));
 ?>
 }}}
+
+If you want this to be a wizard interface with hidden tabs, change the enable tabs call to: 
+{{{
+data_entry_helper::enable_tabs(array(
+  'divId'=>'tabs'
+  'style'=>'wizard'
+)); 
+}}}
+
+This hides the tab strip at the top of the panel, but you also need to create some buttons to navigate each page. Inside each div representing the individual pages, insert the following code:
+{{{
+echo data_entry_helper::wizard_buttons(array(
+  'divId'=>'...',
+  'page'=>'...'
+));
+}}}
+For the page parameter, you need to specify a value of _first_ for the first page, _last_ for the last page, and _middle_ for the other pages. The divId must be the ID of the div you have tabified, in our case tabs.
