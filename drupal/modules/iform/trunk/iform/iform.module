@@ -384,7 +384,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   else {
     // If no file available in the correct language, revert to English if the file is present.
     $localFile = $node->iform.'.en.php';
-    include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
+    if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
+      include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
   }
   
   // Now retrieve the form content
