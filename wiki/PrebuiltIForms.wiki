@@ -38,32 +38,24 @@ Next, we need a method to declare the parameters for the data entry form. Parame
           'select' => 'Select',
           'listbox' => 'List box',
           'radio_group' => 'Radio group',
-          'species_checklist' => 'Checkbox grid'         
+          'species_checklist' => 'Checkbox grid',
+          'group' => 'Species'
         )
-      ),
-      array(
-      	'name'=>'website_id',
-        'caption'=>'Website ID',
-        'description'=>'The ID of the website that data will be posted into.',
-        'type'=>'int'
-      ),
-      array(
-      	'name'=>'password',
-        'caption'=>'Website Password',
-        'description'=>'The Password of the website that data will be posted into.',
-        'type'=>'string'
       ),
       array(
       	'name'=>'list_id',
         'caption'=>'Species List ID',
         'description'=>'The Indicia ID for the species list that species can be selected from.',
-        'type'=>'string'
+        'type'=>'string',
+        'group' => 'Species'
       )
     );
   }
 }}}
 
-The list of parameters is returned as an array, with each parameter being an _associative_ array describing the name, caption, description and type (data type) of the parameter. The name is the internal name for the parameter, which will be used by your code later, as opposed to the caption which is the display label for the caption that the website editor will see. The type can be one of int, string, boolean or select. If select is used then the options that will appear in the select list should be defined in an array called options as illustrated above.
+The list of parameters is returned as an array, with each parameter being an _associative_ array describing the name, caption, description, group and type (data type) of the parameter. The name is the internal name for the parameter, which will be used by your code later, as opposed to the caption which is the display label for the caption that the website editor will see. The type can be one of int, string, boolean or select. If select is used then the options that will appear in the select list should be defined in an array called options as illustrated above. The group allows you to group the controls together into logical sets. How this actually gets interpreted depends on the system you are using the prebuilt forms within, but as an example the Drupal IForm module places controls together into fieldsets within the form administrators use to set up the recording forms.
+
+Note that there will automatically be parameters for the website_id and passsword and you don't need to declare these, since they are required by all prebuilt forms.
 
 Next we need to return the actual form content. This is achieved using a method called get_form which will receive the actual values for each parameter in the $args parameter as an associative array. The following example illustrates a typical template which can be adapted to your own form content:
 
