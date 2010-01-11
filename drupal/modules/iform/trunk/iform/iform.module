@@ -77,7 +77,25 @@ function iform_access($op, $node, $account) {
  * @return array List of parameter definitions.
  */
 function get_form_parameters($node) {
-  $params = call_user_func(array('iform_'.$node->iform, 'get_parameters'));
+  // First some parameters that are always required to configure the website
+  $params = array(
+      array(
+        'name'=>'website_id',
+        'caption'=>'Website ID',
+        'description'=>'The ID of the website that data will be posted into.',
+        'type'=>'textfield',
+        'group' => 'Website'
+      ),
+      array(
+        'name'=>'password',
+        'caption'=>'Website Password',
+        'description'=>'The Password of the website that data will be posted into.',
+        'type'=>'password',
+        'group' => 'Website'
+      )
+  );
+  // Now get the specific parameters from the form
+  $params = array_merge($params, call_user_func(array('iform_'.$node->iform, 'get_parameters')));
   // Add in a standard parameter for specifying a redirection.
   array_push($params, 
     array(
@@ -187,21 +205,11 @@ function iform_form(&$node, $form_state) {
     $params = get_form_parameters($node);
     ob_end_clean();
     $idx=0;
-    foreach ($params as $param) {
-      $type = map_type($param['type']);
-      $form['iform_params']['iform_params_wrapper'][$param['name']] = array(
-        '#type' => $type,
-        '#title' => check_plain($param['caption']),
-        '#description' => check_plain($param['description']),        
-        '#required' => (!array_key_exists('required', $param) || $param['required']),
-        '#default_value' => $node->{$param['name']},
-        '#weight' => $idx
-      );
-      if ($type=='select') {
-        $form['iform_params']['iform_params_wrapper'][$param['name']]['#options']=$param['options'];
-      }
-      $idx++;
-    }    
+    // Convert the list of parameters into a form suitable for Drupal
+    $form['iform_params']['iform_params_wrapper'] = array_merge(
+      $form['iform_params']['iform_params_wrapper'],
+      convert_params_array($params, $node)
+    );
   } else {
     $form['iform_params']['iform_params_wrapper']['dummy'] = array(
       '#type' => 'item',
@@ -210,6 +218,62 @@ function iform_form(&$node, $form_state) {
   }
 
   return $form;
+}
+
+/**
+ * Convert the array of parameters for Drupal from the list of parameters configured
+ * for this Indicia form.
+ * @return array Converted array.
+ */
+function convert_params_array($params, $node) {
+  $r = array();
+  $groups = array();
+  foreach ($params as $param) {
+    // Create an array describing the parameter to Drupal
+    $type = map_type($param['type']);
+    $param_def=array(
+      '#type' => $type,
+      '#title' => check_plain($param['caption']),
+      '#description' => check_plain($param['description']),        
+      '#required' => (!array_key_exists('required', $param) || $param['required']),
+      '#default_value' => $node->{$param['name']},
+      '#weight' => $idx
+    );
+    if ($type=='select') {
+      $param_def['#options']=$param['options'];
+    }
+    // Now, place the param in the correct form fieldset
+    if (array_key_exists('group', $param)) {
+      // Get the group name without whitespace
+      $group = str_replace(' ', '_', $param['group']);
+      // Have we already created a fieldset for this group?
+      if (!array_key_exists("fieldset_$group", $r)) {
+        // Create a fieldset in the Drupal form for this group
+        $r["fieldset_$group"] = array(
+          '#type' => 'fieldset',
+          '#title' => $param['group'],
+          '#tree' => FALSE,
+          '#weight' => 0,
+          '#collapsible' => true
+        );    
+        // Define a wrapper in which to place just the list of parameters inside this fieldset
+        $r["fieldset_$group"]['fieldset_wrapper'] = array(
+          '#tree' => FALSE,
+          '#weight' => 5,
+          '#prefix' => '<div class="clear-block">',
+          '#suffix' => '</div>',
+          '#weight' => 1
+        );
+      }
+      // Put the control in the group fieldset
+      $r["fieldset_$group"]['fieldset_wrapper'][$param['name']]=$param_def;
+    } else {
+      // param has no group, so put it inside the outer form fieldset
+      $r[$param['name']] = $param_def;
+    }
+    $idx++;
+  }
+  return $r;
 }
 
 /**
