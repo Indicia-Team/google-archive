@@ -22,7 +22,21 @@ function iform_help($path, $arg) {
 * @return array An array of valid permissions for the iform module
 */
 function iform_perm() {
-  return array('access iform', 'create iform', 'edit iform', 'edit own iform');
+  $retVal = array('access iform', 'create iform', 'edit iform', 'edit own iform');
+  // Go through every IForm node.
+  //   Get the particular iform, check if it has a perms method.
+  //   if yes, call it and add to the return list
+  $results = db_query('SELECT n.nid, i.iform FROM {iform} i, {node} n WHERE i.nid = n.nid');
+  while($result = db_fetch_object($results)) {
+	require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+	require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$result->iform.'.php';
+	if(method_exists('iform_'.$result->iform, 'get_perms')) {
+	  $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
+	  $retVal = array_merge($retVal, $perms);
+	}
+  }
+  return $retVal;
+
 } // function iform_perm()
 
 /**
@@ -420,7 +434,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   foreach ($params as $param) {
     $args[$param['name']] = $node->{$param['name']};
   }
-  $r = '';  
+  $r = '';
   if ($_POST and (array_key_exists('website_id', $_POST))) {
     // Ask the form to submit itself
     $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
@@ -453,7 +467,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   }
   
   // Now retrieve the form content
-  $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args);
+  $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node);
   // and also add all the javascript required by the form to the HTML head. Note that any ad-hoc JS
   // is inserted at the later in the head, otherwise we can't guarantee that any plugins created won't
   // be overwritten by subsequent references to the jQuery js file added to the header by other parts of Drupal.
