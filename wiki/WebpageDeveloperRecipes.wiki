@@ -17,6 +17,8 @@ How to convert an existing data entry page into a tabbed style interface.
 
 * [TutorialModularMapping Mapping functionality using the modular mapping controls]
 
+An introduction to putting together mapping controls for data entry and distribution maps.
+
 * [TutorialImprovingPageLoadPerformance Improving the loading performance for data entry pages]
 
 Performance considerations for loading your data entry pages.
