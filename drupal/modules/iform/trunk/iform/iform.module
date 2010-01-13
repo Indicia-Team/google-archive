@@ -104,7 +104,7 @@ function get_form_parameters($node) {
         'name'=>'password',
         'caption'=>'Website Password',
         'description'=>'The Password of the website that data will be posted into.',
-        'type'=>'password',
+        'type'=>'textfield',
         'group' => 'Website'
       )
   );
@@ -254,6 +254,7 @@ function convert_params_array($params, $node) {
       '#weight' => $idx
     );
     if ($type=='select') {
+      // Use the specified options for the select box
       $param_def['#options']=$param['options'];
     }
     // Now, place the param in the correct form fieldset
@@ -298,6 +299,8 @@ function map_type($type) {
   $mapping = array(
       'string'=>'textfield',
       'int'=>'textfield',
+      'smpAttr'=>'textfield',
+      'termlist'=>'textfield',
       'boolean'=>'checkbox'
   );
   return array_key_exists($type, $mapping) ? $mapping[$type] : $type;
@@ -445,7 +448,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       drupal_goto($args['redirect_on_success']);            
     } else {
       // This dumps errors, and/or a success message if no redirection.
-      $r .= data_entry_helper::dump_errors($response);
+      $r .= data_entry_helper::dump_errors($response);      
     }       
   }
   // link in the default stylesheet for Indicia forms
@@ -454,7 +457,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   // Link in the custom css file if present. Drupal skips it if missing.
   drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/'.$node->iform.'.css');
     
-  // Now localise the file
+  // Localise the file
   global $language;  
   $localFile = $node->iform.'.'.$language->language.'.php';  
   if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile")) 
@@ -466,13 +469,14 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
   }
   
-  // Now retrieve the form content
+  // Now retrieve the form content    
   $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node);
+  
   // and also add all the javascript required by the form to the HTML head. Note that any ad-hoc JS
   // is inserted at the later in the head, otherwise we can't guarantee that any plugins created won't
   // be overwritten by subsequent references to the jQuery js file added to the header by other parts of Drupal.
   handle_resources($node);
-  
+    
   ob_end_clean();
 	$node->content['myfield']=array(
     '#value' => $r,
