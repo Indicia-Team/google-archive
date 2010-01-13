@@ -15,7 +15,7 @@ How to convert an existing data entry page into a wizard style interface.
 
 How to convert an existing data entry page into a tabbed style interface.
 
-* [TutorialAdvancedMapping Advanced mapping functionality]
+* [TutorialModularMapping Mapping functionality using the modular mapping controls]
 
 * [TutorialImprovingPageLoadPerformance Improving the loading performance for data entry pages]
 
