@@ -15,6 +15,10 @@ How to convert an existing data entry page into a wizard style interface.
 
 How to convert an existing data entry page into a tabbed style interface.
 
+* [TutorialUsingGeoServer]
+
+An introduction to using GeoServer with Indicia.
+
 * [TutorialModularMapping Mapping functionality using the modular mapping controls]
 
 An introduction to putting together mapping controls for data entry and distribution maps.
