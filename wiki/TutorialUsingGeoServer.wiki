@@ -7,7 +7,7 @@ This tutorial will describe how to setup GeoServer to provide spatial access to 
 
 = Notes =
 
-  # Set up a domain
+  # Set up a namespace
   # Set up the data store against PostGIS.
   # Expose the detail_occurrences table as a feature type.
   # Do we need to intersect this with UK 1km data to create a new 1km feature type? Also 10km?
