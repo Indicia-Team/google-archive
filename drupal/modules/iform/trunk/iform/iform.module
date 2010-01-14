@@ -253,6 +253,7 @@ function convert_params_array($params, $node) {
       '#default_value' => $node->{$param['name']},
       '#weight' => $idx
     );
+    if($param['maxlength']) $param_def['#maxlength'] = $param['maxlength'];
     if ($type=='select') {
       // Use the specified options for the select box
       $param_def['#options']=$param['options'];
