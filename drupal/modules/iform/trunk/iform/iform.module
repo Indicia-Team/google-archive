@@ -165,7 +165,7 @@ function iform_form(&$node, $form_state) {
   if ($dir = opendir(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/')) {
     while (false !== ($file = readdir($dir))) {
       $parts=explode('.', $file);
-      if ($file != "." && $file != ".." && strtolower($parts[1])=='php') {
+      if ($file != "." && $file != ".." && strtolower($parts[count($parts)-1])=='php') {
         require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$file;
         $file_tokens=explode('.', $file);
         ob_start();    
@@ -202,15 +202,6 @@ function iform_form(&$node, $form_state) {
     '#tree' => FALSE,
     '#weight' => 6
   );
-    
-  // Define a wrapper in which to place just the list of parameters
-  $form['iform_params']['iform_params_wrapper'] = array(
-    '#tree' => FALSE,
-    '#weight' => 5,
-    '#prefix' => '<div class="clear-block" id="iform-parameters">',
-    '#suffix' => '</div>',
-    '#weight' => 1
-  );
   
   // Get the selected form's parameters  
   if ($node->iform && $node->iform!=-1) {
@@ -220,12 +211,12 @@ function iform_form(&$node, $form_state) {
     ob_end_clean();
     $idx=0;
     // Convert the list of parameters into a form suitable for Drupal
-    $form['iform_params']['iform_params_wrapper'] = array_merge(
-      $form['iform_params']['iform_params_wrapper'],
+    $form['iform_params'] = array_merge(
+      $form['iform_params'],
       convert_params_array($params, $node)
     );
   } else {
-    $form['iform_params']['iform_params_wrapper']['dummy'] = array(
+    $form['iform_params']['dummy'] = array(
       '#type' => 'item',
       '#value' => t('<em>Please select a form before defining parameters.</em>')
     );
@@ -242,6 +233,8 @@ function iform_form(&$node, $form_state) {
 function convert_params_array($params, $node) {
   $r = array();
   $groups = array();
+  $idx = 0;
+  $fieldsetIdx = 0;
   foreach ($params as $param) {
     // Create an array describing the parameter to Drupal
     $type = map_type($param['type']);
@@ -250,14 +243,15 @@ function convert_params_array($params, $node) {
       '#title' => check_plain($param['caption']),
       '#description' => check_plain($param['description']),        
       '#required' => (!array_key_exists('required', $param) || $param['required']),
-      '#default_value' => $node->{$param['name']},
+      '#default_value' => $node->{$param['name']} ? $node->{$param['name']} : (array_key_exists('default', $param) ? $param['default'] : null),
       '#weight' => $idx
     );
     if($param['maxlength']) $param_def['#maxlength'] = $param['maxlength'];
-    if ($type=='select') {
-      // Use the specified options for the select box
+    // Use the specified options for the select box
+    if (array_key_exists('options', $param)) {
       $param_def['#options']=$param['options'];
     }
+        
     // Now, place the param in the correct form fieldset
     if (array_key_exists('group', $param)) {
       // Get the group name without whitespace
@@ -269,20 +263,14 @@ function convert_params_array($params, $node) {
           '#type' => 'fieldset',
           '#title' => $param['group'],
           '#tree' => FALSE,
-          '#weight' => 0,
-          '#collapsible' => true
-        );    
-        // Define a wrapper in which to place just the list of parameters inside this fieldset
-        $r["fieldset_$group"]['fieldset_wrapper'] = array(
-          '#tree' => FALSE,
-          '#weight' => 5,
-          '#prefix' => '<div class="clear-block">',
-          '#suffix' => '</div>',
-          '#weight' => 1
+          '#weight' => $fieldsetIdx,
+          '#collapsible' => true,          
+          '#collapsed' => true
         );
+        $fieldsetIdx++;
       }
       // Put the control in the group fieldset
-      $r["fieldset_$group"]['fieldset_wrapper'][$param['name']]=$param_def;
+      $r["fieldset_$group"][$param['name']]=$param_def;
     } else {
       // param has no group, so put it inside the outer form fieldset
       $r[$param['name']] = $param_def;
@@ -302,7 +290,8 @@ function map_type($type) {
       'int'=>'textfield',
       'smpAttr'=>'textfield',
       'termlist'=>'textfield',
-      'boolean'=>'checkbox'
+      'boolean'=>'checkbox',
+      'list'=>'checkboxes'
   );
   return array_key_exists($type, $mapping) ? $mapping[$type] : $type;
 }
@@ -443,10 +432,10 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     // Ask the form to submit itself
     $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
     $response = data_entry_helper::forward_post_to('save', $s);
-    // Does the form redirect after success?
+    // Does the form redirect after success?    
     if (is_array($response) && array_key_exists('success', $response) && 
-        array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {      
-      drupal_goto($args['redirect_on_success']);            
+        array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {            
+      drupal_goto($args['redirect_on_success'].'&table='.$response['outer_table'].'&id='.$response['outer_id']);            
     } else {
       // This dumps errors, and/or a success message if no redirection.
       $r .= data_entry_helper::dump_errors($response);      
@@ -514,7 +503,7 @@ function handle_resources($node) {
           drupal_add_js($j, 'module');
         }
       }    
-    }
+    }    
   }
   // If required, setup jQuery validation. We can't prep this JavaScript earlier since we would 
   // not know all the control messages. 
