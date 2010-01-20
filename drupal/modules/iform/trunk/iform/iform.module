@@ -203,6 +203,15 @@ function iform_form(&$node, $form_state) {
     '#weight' => 6
   );
   
+  // Define a wrapper in which to place just the list of parameters
+  $form['iform_params']['iform_params_wrapper'] = array(
+    '#tree' => FALSE,
+    '#weight' => 5,
+    '#prefix' => '<div class="clear-block" id="iform-parameters">',
+    '#suffix' => '</div>',
+    '#weight' => 1
+  );
+  
   // Get the selected form's parameters  
   if ($node->iform && $node->iform!=-1) {
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
@@ -211,12 +220,12 @@ function iform_form(&$node, $form_state) {
     ob_end_clean();
     $idx=0;
     // Convert the list of parameters into a form suitable for Drupal
-    $form['iform_params'] = array_merge(
-      $form['iform_params'],
+    $form['iform_params']['iform_params_wrapper'] = array_merge(
+      $form['iform_params']['iform_params_wrapper'],
       convert_params_array($params, $node)
     );
   } else {
-    $form['iform_params']['dummy'] = array(
+    $form['iform_params']['iform_params_wrapper']['dummy'] = array(
       '#type' => 'item',
       '#value' => t('<em>Please select a form before defining parameters.</em>')
     );
