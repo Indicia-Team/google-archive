@@ -1,0 +1,18 @@
+#summary How to upgrade an existing Indicia Warehouse Server
+
+= Upgrading an Indicia Warehouse Server =
+
+If you have an existing Indicia Warehouse which needs to be upgraded, the following steps are required.
+
+  # Make a backup of your existing Indicia installation folder and database for safe keeping.
+  # Download the new version from the downloads page.
+  # Now, unzip the files and copy the contents directly over the contents of your existing installation folder.
+  # Next, log into your Indicia Warehouse and visit the home page. You should see a notification that an upgrade needs to be run. Click the button to upgrade your warehouse.
+
+That's it!
+
+== Developer Notes ==
+
+If you are maintaining an Indicia Warehouse which is being kept up to date from the Subversion repository rather than downloaded releases, you can enable a facility to automatically run any new script files which appear in the latest scripts folder (modules/indicia_setup/db/version_x_x_x). This may have a small affect on performance though it should not be too significant. To do this, copy the file modules/indicia_setup/config/upgrade.php.example and name the new file upgrade.php.
+
+The upgrade process places each set of scripts required for upgrade in a folder called modules/indicia_setup/db/version_x_x_x, where x_x_x reflects the version number. In addition, any code that is required for an upgrade can be placed in a method called version_x_x_x placed in the Upgrade_Model class, in modules/indicia_setup/models/upgrade.php.
