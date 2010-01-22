@@ -217,8 +217,7 @@ function iform_form(&$node, $form_state) {
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
     ob_start();    
     $params = get_form_parameters($node);
-    ob_end_clean();
-    $idx=0;
+    ob_end_clean();    
     // Convert the list of parameters into a form suitable for Drupal
     $form['iform_params']['iform_params_wrapper'] = array_merge(
       $form['iform_params']['iform_params_wrapper'],
