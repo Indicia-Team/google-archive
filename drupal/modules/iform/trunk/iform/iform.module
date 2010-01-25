@@ -466,7 +466,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
       include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
   }
-  $args['language'] = $language;
+  $args['language'] = $language->language;
   
   // Now retrieve the form content    
   $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node);
