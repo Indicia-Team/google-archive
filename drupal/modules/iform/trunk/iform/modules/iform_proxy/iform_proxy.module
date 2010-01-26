@@ -95,11 +95,10 @@ function iform_proxy_admin_settings() {
 function iform_proxy_url($url, $options = array()) {
   
   // Build URL     
-  $u = url(IFORM_PROXY_PATH, array('absolute' => TRUE)) 
-    . '?url=' . $url
-    . '&referer=' . request_uri()
-    . (!empty($options) ? '&' . drupal_query_string_encode((array) $options) : '');
-     
+  $u = url(IFORM_PROXY_PATH, array('absolute' => TRUE,
+  		query => array('url' => $url,
+						'referer' => request_uri())));
+  $u .= (!empty($options) ? '&' . drupal_query_string_encode((array) $options) : '');   
   return $u; 
 }
 
