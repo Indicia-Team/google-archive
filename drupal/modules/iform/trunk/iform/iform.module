@@ -118,8 +118,8 @@ function get_form_parameters($node) {
       'description'=>'The URL of the page that will be navigated to after a successful data entry. '. 
           'Leave blank to just display a success message on the same page so further records can be entered. If the site is internationalised, '.
           'make sure that the page you want to go to has a URL specified that is the same for all language versions. Also ensure your site uses '.
-          'a path prefix for the language negotiation (Administer > Site Configuration > Languages > Configure). Then, specify the language prefix '.
-          'in the URL as <lang>, for example <lang>/thankyou. Then the page generated will replace this with the language prefix.',
+          'a path prefix for the language negotiation (Administer > Site Configuration > Languages > Configure). Then, specify the URL that you attached to the node '.
+          'so that the language prefix is not included.',
       'type'=>'string',
       'required'=>false
     )
@@ -447,9 +447,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     // Does the form redirect after success?    
     if (is_array($response) && array_key_exists('success', $response) && 
         array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
-      $url = $args['redirect_on_success'];
-      $url = str_replace('<lang>', $language->language, $url);
-      drupal_goto($url.'&table='.$response['outer_table'].'&id='.$response['outer_id']);            
+      $url = $args['redirect_on_success'];      
+      drupal_goto($url, 'table='.$response['outer_table'].'&id='.$response['outer_id']);            
     } else {
       // This dumps errors, and/or a success message if no redirection.
       $r .= data_entry_helper::dump_errors($response);      
