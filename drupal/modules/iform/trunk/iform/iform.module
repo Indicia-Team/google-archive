@@ -116,7 +116,10 @@ function get_form_parameters($node) {
     	'name'=>'redirect_on_success',
       'caption'=>'Redirect to page after successful data entry',
       'description'=>'The URL of the page that will be navigated to after a successful data entry. '. 
-          'Leave blank to just display a success message on the same page so further records can be entered.',
+          'Leave blank to just display a success message on the same page so further records can be entered. If the site is internationalised, '.
+          'make sure that the page you want to go to has a URL specified that is the same for all language versions. Also ensure your site uses '.
+          'a path prefix for the language negotiation (Administer > Site Configuration > Languages > Configure). Then, specify the language prefix '.
+          'in the URL as <lang>, for example <lang>/thankyou. Then the page generated will replace this with the language prefix.',
       'type'=>'string',
       'required'=>false
     )
@@ -424,7 +427,8 @@ function get_parameters_js() {
  * @param $page
  * @return unknown_type
  */
-function iform_view($node, $teaser = FALSE, $page = FALSE) { 
+function iform_view($node, $teaser = FALSE, $page = FALSE) {
+  global $language; 
   $node = node_prepare($node, $teaser);
   require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
   require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
@@ -442,8 +446,10 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     $response = data_entry_helper::forward_post_to('save', $s);
     // Does the form redirect after success?    
     if (is_array($response) && array_key_exists('success', $response) && 
-        array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {            
-      drupal_goto($args['redirect_on_success'].'&table='.$response['outer_table'].'&id='.$response['outer_id']);            
+        array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
+      $url = $args['redirect_on_success'];
+      $url = str_replace('<lang>', $language->language, $url);
+      drupal_goto($url.'&table='.$response['outer_table'].'&id='.$response['outer_id']);            
     } else {
       // This dumps errors, and/or a success message if no redirection.
       $r .= data_entry_helper::dump_errors($response);      
@@ -455,8 +461,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   // Link in the custom css file if present. Drupal skips it if missing.
   drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/'.$node->iform.'.css');
     
-  // Localise the file
-  global $language;
+  // Localise the file  
   $localFile = $node->iform.'.'.$language->language.'.php';  
   if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile")) 
     require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
@@ -540,7 +545,7 @@ function handle_resources($node) {
       data_entry_helper::$onload_javascript."\n".
       "};\n"; 
   }
-  if ($script) {
-    drupal_add_js($script, 'inline');
-  }     
+  if ($script) {    
+    drupal_add_js($script, 'inline');    
+  }
 }
