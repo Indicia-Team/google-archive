@@ -114,6 +114,19 @@ That's it!
 
 == Next Steps ==
 
+=== Demonstration Pages ===
 In order to get the demonstration pages up and running now that you have installed the Indicia Warehouse, take a look at [DemoSiteModuleInstallation Installing the demonstration site module].
 
+=== Security ===
 To secure your Indicia installation, you need to prevent directory access to each of the folders. In addition you should block all access to the application\cache folder since this is where requested authentication details from data entry pages are stored. To do this on Apache, assuming that .htaccess is supported on your server and mod_rewrite is installed, rename the file example.htaccess in the root of the indicia installation folder to just .htaccess.
+
+== Optimisation ===
+If you are able to set the default search path for your indicia user that accesses the database, then it is possible to implement a performance improvement. To do this, run the following script replacing indicia_user with your username:
+{{{
+ALTER USER indicia_user SET search_path = indicia, public, pg_catalog;
+}}}
+
+Now, open the indicia.php file in the application/config folder using a text editor. Find the entry called apply_schema and set it to false. You can create the entry if it is not already present:
+{{{
+$config['apply_schema']=false;
+}}}
