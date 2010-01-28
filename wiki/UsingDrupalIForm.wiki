@@ -25,6 +25,7 @@ The jquery_ui plugin also needs you to download the latest stable version of the
 Now you need to install the modules into Drupal. In the Drupal front-end, select Administer->Site building->Modules. Scroll down the list of modules and tick the Indicia forms module, jQuery UI and jQuery Update modules.
 
 You also need to configure the Indicia "client helper". In your sites/modules/all/iform/client_helpers folder, create a file called helper_config.php and paste the following content into it, replacing the url in the first entry with your Indicia site, including the trailing slash:
+{{{
 <?php
 class helper_config {
   static $base_url='http://www.mysite.com/indicia/';
@@ -38,6 +39,7 @@ class helper_config {
   static $flickr_api_secret='';
 }
 ?>
+}}}
 There is more information on the configuration settings in this file at http://code.google.com/p/indicia/wiki/SetupHelperConfig, but just the $base_url is enough for a minimal usage.
 
 To create forms, you first need to set up at least a website, survey and species list in the Indicia Warehouse. Then, use the Create content link in Drupal and select Indicia Forms as the type of content. 
