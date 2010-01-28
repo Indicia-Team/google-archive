@@ -45,14 +45,20 @@ To create forms, you first need to set up at least a website, survey and species
 http://indicia.googlecode.com/svn/wiki/drupal_select_content_type.png
 
 You will be asked for a page title and the usual Drupal page configuration, but also to select an Indicia Form. Start by selecting the Basic 1 - species, date, place, survey and comment form. When you select this, the Drupal page will load the parameters you need to fill in before using the form, which vary depending on the form you selected. In this case, specify the following parameters:
-*Species Control Type* - what type of data entry control to use for picking a species.
-*Website ID* - the ID of your website registration in Indicia.
-*Website Password* - the Password of your website registration in Indicia.
-*Species List ID* - the ID of the species list on the Warehouse which the users are allowed pick from.
-*Preferred Species Only* - whether to limit the selection of species to preferred names.
-*Use Tabbed Interface* - tick this box to split the entry form up into tabs.
-*Redirect to page after successful data entry* - leave blank for now, but can be used to specify a page to go to after successfully entering a record.
 
+*Species Control Type* - what type of data entry control to use for picking a species.
+
+*Website ID* - the ID of your website registration in Indicia.
+
+*Website Password* - the Password of your website registration in Indicia.
+
+*Species List ID* - the ID of the species list on the Warehouse which the users are allowed pick from.
+
+*Preferred Species Only* - whether to limit the selection of species to preferred names.
+
+*Use Tabbed Interface* - tick this box to split the entry form up into tabs.
+
+*Redirect to page after successful data entry* - leave blank for now, but can be used to specify a page to go to after successfully entering a record.
 
 http://indicia.googlecode.com/svn/wiki/drupal_form_parameters.png
 
