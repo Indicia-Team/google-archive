@@ -54,7 +54,7 @@ _Tip: If you have installed PHP 5.2.6 and the pgsql library won't load, this may
 
 == Get the Warehouse code ==
 
-First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, download the [http://indicia.googlecode.com/files/indicia_0.2.zip Indicia Warehouse code] and unzip it. Inside the zip file you will find a file called Indicia. Copy the contents of this folder into the folder you have just created on your webserver.
+First, create yourself a folder inside your Apache root (htdocs) folder, for example htdocs\indicia. Now, download the [http://indicia.googlecode.com/files/indicia_0.2.zip Indicia Warehouse code] and unzip it. Inside the zip file you will find a file called Indicia. Copy the contents of this folder into the folder you have just created on your webserver. Please note, if you are re-installing the Indicia Warehouse for whatever reason, always remove the contents of the previous installation from the folder completely before copying over the new files. Simply copying the new files on top of an existing installation does not work for reinstallations.
 
 If you are running on a hosted server, it may be easiest to download and unzip the code into a local folder then use an FTP tool to upload it into a folder created on your web server account.
 
