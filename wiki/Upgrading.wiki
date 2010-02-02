@@ -4,10 +4,14 @@
 
 If you have an existing Indicia Warehouse which needs to be upgraded, the following steps are required.
 
+  # Endeavour to notify users that you are upgrading the warehouse and that it will be temporarily unavailable.
+  # Stop your web server to prevent changes being made to the database by users or, better still, keep it running but deny access to users.
   # Make a backup of your existing Indicia installation folder and database for safe keeping.
   # Download the new version from the downloads page.
   # Now, unzip the files and copy the contents directly over the contents of your existing installation folder.
+  # Restart your web server if you stopped it.
   # Next, log into your Indicia Warehouse and visit the home page. You should see a notification that an upgrade needs to be run. Click the button to upgrade your warehouse.
+  # Re-enable access to the warehouse if you had denied it.
 
 That's it!
 
