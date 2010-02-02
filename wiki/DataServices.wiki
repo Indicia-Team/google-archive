@@ -16,7 +16,7 @@ To retrieve a single item of data with a known id, append a forward slash then t
 
 Retrieving a list of data can be achieved by ommitting the id from the URL. In this case, a number of GET parameters are available to control the output as follows:
 
-||_fieldname_||If a parameter is provided which matches a field in the output data, then the value provided is used to filter on that field. Text attributes are filtered using a "contains" search.||
+||_fieldname_||If a parameter is provided which matches a field in the output data, then the value provided is used to filter on that field. When filtering against a text attribute, use an asterisk character to represent a wildcard if an inexact match is required.||
 ||orderby||Allows the field that the results are to be sorted by to be specified.||
 ||sortdir||Specifies the sort direction. Options are ASC or DESC.||
 ||limit||Limits the returned results to _n_ items.||
