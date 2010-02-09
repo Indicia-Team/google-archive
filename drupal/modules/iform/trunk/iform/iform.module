@@ -566,11 +566,13 @@ function handle_resources($node) {
 * parameter controls.
 */
 function iform_form_alter(&$form, $form_state, $form_id) {
-  // Set the right #action
-  if (!empty($form['nid']['#value'])) {
-    $form['#action'] = url('node/'.$form['nid']['#value'].'/edit');
-  }
-  else {
-    $form['#action'] = url('node/add/iform');
+  if ($form['#type']=='iform') {
+    // Set the right #action
+    if (!empty($form['nid']['#value'])) {
+      $form['#action'] = url('node/'.$form['nid']['#value'].'/edit');
+    }
+    else {
+      $form['#action'] = url('node/add/iform');
+    }
   }
 }
