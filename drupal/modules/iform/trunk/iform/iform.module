@@ -254,9 +254,12 @@ function convert_params_array($params, $node) {
       '#title' => check_plain($param['caption']),
       '#description' => check_plain($param['description']),        
       '#required' => (!array_key_exists('required', $param) || $param['required']),
-      '#default_value' => $node->{$param['name']} ? $node->{$param['name']} : (array_key_exists('default', $param) ? $param['default'] : null),
       '#weight' => $idx
     );
+    // Only set the default_value if we have something, otherwise it can trigger an error in the checkboxes control (line 1206 of form.inc)    
+    $default = $node->{$param['name']} ? $node->{$param['name']} : (array_key_exists('default', $param) ? $param['default'] : null);
+    if ($default)
+      $param_def['#default_value'] = $default;
     if($param['maxlength']) $param_def['#maxlength'] = $param['maxlength'];
     // Use the specified options for the select box
     if (array_key_exists('options', $param)) {
@@ -267,25 +270,26 @@ function convert_params_array($params, $node) {
     if (array_key_exists('group', $param)) {
       // Get the group name without whitespace
       $group = str_replace(' ', '_', $param['group']);
-      // Have we already created a fieldset for this group?
-      if (!array_key_exists("fieldset_$group", $r)) {
-        // Create a fieldset in the Drupal form for this group
-        $r["fieldset_$group"] = array(
-          '#type' => 'fieldset',
-          '#title' => $param['group'],
-          '#tree' => FALSE,
-          '#weight' => $fieldsetIdx,
-          '#collapsible' => true,          
-          '#collapsed' => true
-        );
-        $fieldsetIdx++;
-      }
-      // Put the control in the group fieldset
-      $r["fieldset_$group"][$param['name']]=$param_def;
+      $group_title=$param['group'];
     } else {
-      // param has no group, so put it inside the outer form fieldset
-      $r[$param['name']] = $param_def;
+      $group = 'other';
+      $group_title = t('Other IForm Parameters');
     }
+    // Have we already created a fieldset for this group?
+    if (!array_key_exists("fieldset_$group", $r)) {
+      // Create a fieldset in the Drupal form for this group
+      $r["fieldset_$group"] = array(
+        '#type' => 'fieldset',
+        '#title' => $group_title,
+        '#tree' => FALSE,
+        '#weight' => $fieldsetIdx,
+        '#collapsible' => true,          
+        '#collapsed' => true
+      );
+      $fieldsetIdx++;
+    }
+    // Put the control in the group fieldset
+    $r["fieldset_$group"][$param['name']]=$param_def;
     $idx++;
   }
   return $r;
@@ -300,6 +304,7 @@ function map_type($type) {
       'string'=>'textfield',
       'int'=>'textfield',
       'smpAttr'=>'textfield',
+      'occAttr'=>'textfield',
       'termlist'=>'textfield',
       'boolean'=>'checkbox',
       'list'=>'checkboxes'
@@ -566,7 +571,7 @@ function handle_resources($node) {
 * parameter controls.
 */
 function iform_form_alter(&$form, $form_state, $form_id) {
-  if ($form['#type']=='iform') {
+  if ($form['type']['#value']=='iform') {
     // Set the right #action
     if (!empty($form['nid']['#value'])) {
       $form['#action'] = url('node/'.$form['nid']['#value'].'/edit');
