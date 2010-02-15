@@ -42,7 +42,7 @@ class helper_config {
 }
 ?>
 }}}
-There is more information on the configuration settings in this file at http://code.google.com/p/indicia/wiki/SetupHelperConfig, but just the $base_url is enough for a minimal usage.
+There is more information on the configuration settings in this file at http://code.google.com/p/indicia/wiki/SetupHelperConfig, but just the $base_url is enough for setting up the form in this tutorial.
 
 To create forms, you first need to set up at least a website, survey and species list in the Indicia Warehouse. Then, use the Create content link in Drupal and select Indicia Forms as the type of content. 
 
