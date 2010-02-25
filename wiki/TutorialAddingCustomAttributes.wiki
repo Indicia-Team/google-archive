@@ -24,9 +24,11 @@ echo data_entry_helper::radio_group(array(
   'table'=>'termlists_term',
   'captionField'=>'term',
   'valueField'=>'id',
-  'extraParams'=>$readAuth + array('termlist_id' => <<Termlist ID)
+  'extraParams'=>$readAuth + array('termlist_id' => <<Termlist ID>>)
 ));
 ?>
 }}}
 
 That's it! Save your PHP file and view it in a web browser to check the new attribute. The code given here adds a group of radio buttons, but of course you may like to use a select control, a list box, or even a custom block of HTML for each item. Have a look at the code in the demo module's test_data_entry.php for demonstrations of the relevant select, listbox and list_in_template methods in the data entry helper class.
+
+When you want to add a custom sample attribute, follow a similar procedure but, in the code, replace "occAttr" with "smpAttr".
