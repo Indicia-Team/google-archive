@@ -136,10 +136,11 @@ function iform_proxy_redirect($url, $options = array()) {
 				$url=$url.(strstr($url, "?") ? "&" : "?").$key."=".$value;
 		}
 	}
+	watchdog('iform_proxy', $url);
     $session = curl_init($url);
     // Set the POST options.
     $httpHeader = array();
-    curl_setopt($session, CURLOPT_POST, 1);
+    //curl_setopt($session, CURLOPT_POST, 1);
     if ($user != null && strlen($user)>0 && $password != null && strlen($password)>0) {
       $httpHeader[]='Authorization: Basic '.base64_encode($user.':'.$password);
     }
