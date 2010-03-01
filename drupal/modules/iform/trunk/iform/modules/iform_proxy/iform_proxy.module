@@ -136,7 +136,6 @@ function iform_proxy_redirect($url, $options = array()) {
 				$url=$url.(strstr($url, "?") ? "&" : "?").$key."=".$value;
 		}
 	}
-	watchdog('iform_proxy', $url);
     $session = curl_init($url);
     // Set the POST options.
     $httpHeader = array();
