@@ -455,6 +455,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       $args[$param['name']] = $node->{$param['name']};
     }
     $r = '';
+    $response = null;
     if ($_POST and (array_key_exists('website_id', $_POST))) {
       // Ask the form to submit itself
       $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
@@ -488,7 +489,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     $args['language'] = $language->language;
     
     // Now retrieve the form content    
-    $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node);
+    $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node, $response);
     
     // and also add all the javascript required by the form to the HTML head. Note that any ad-hoc JS
     // is inserted at the later in the head, otherwise we can't guarantee that any plugins created won't
