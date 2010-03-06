@@ -19,6 +19,10 @@ How to convert an existing data entry page into a tabbed style interface.
 
 An introduction to using GeoServer with Indicia.
 
+* [MapPanelOptions Map Panel Options]
+
+Options available when adding a data_entry_helper::map_panel.
+
 * [TutorialModularMapping Mapping functionality using the modular mapping controls]
 
 An introduction to putting together mapping controls for data entry and distribution maps.
