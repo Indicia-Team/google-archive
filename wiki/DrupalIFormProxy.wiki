@@ -1,0 +1,15 @@
+#summary A summary of the IForm Proxy module
+
+The IForm proxy module has 2 purposes:
+  # To allow AJAX access to a webservice on a different web server, without cross-domain authentication problems. The proxy sits on the Drupal server so the client thinks it is on the same server the web page was requested from, but acts as a conduit to the remote server.
+  # Where the web-service requires HTTP basic authentication, it may not be appropriate to embed the username and password in the JavaScript. So the proxy allows the authentication details to be added to the request only when it reaches the server.
+
+The IForm proxy module takes a GET request of the form:
+`www.mydrupalsite.com/proxy?url=http://www.somewhere.com&param=x`
+
+Note this URL would actually have characters such as : converted to URL safe equivalents (%3A etc) but I left it as it is for readability.
+
+It then forwards the request to the url parameter, and attaches any other GET parameters to the request:
+`http://www.somewhere.com&param=x`
+
+It also attaches the configured username and password to the request, using HTTP basic authentication.
