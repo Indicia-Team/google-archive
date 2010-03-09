@@ -4,6 +4,8 @@
 
 Indicia's Data Services provide a programmatic interface to information held in the Indicia core database. The Data Services are a RESTful web service, with each entity represented by a URL.
 
+All calls to the web services require a read nonce and auth_token to be attached as described under [DigestAuthentication Digest Authentication]. 
+
 == Constructing the service URL ==
 
 The Data Services are accessed via the URL of the site root + /index.php/services/data/ + the name of the required data entity, which is the singular version of the required table name, for example `http://www.mysite.com/index.php/services/data/termlist`
@@ -16,7 +18,7 @@ To retrieve a single item of data with a known id, append a forward slash then t
 
 Retrieving a list of data can be achieved by ommitting the id from the URL. In this case, a number of GET parameters are available to control the output as follows:
 
-||_fieldname_||If a parameter is provided which matches a field in the output data, then the value provided is used to filter on that field. When filtering against a text attribute, use an asterisk character to represent a wildcard if an inexact match is required.||
+||_fieldname_||If a parameter is provided which matches a field in the output data, then the value provided is used to filter on that field. When filtering against a text attribute, use an asterisk character to represent a wildcard if an inexact match is required. Use NULL to filter for null values.||
 ||orderby||Allows the field that the results are to be sorted by to be specified.||
 ||sortdir||Specifies the sort direction. Options are ASC or DESC.||
 ||limit||Limits the returned results to _n_ items.||
