@@ -30,7 +30,7 @@ When building your own templates it is highly advisable to take a copy of the ex
 The date picker control is a good example of a themed control, where the drop down calendar has a definable appearance. The Indicia Warehouse uses the same theming system for its own user interface, which is based on the [http://jqueryui.com/docs/Theming/API JQuery UI theming] system. In the standard installation of the Warehouse there is an alternative theme available called redmond. You can switch to this theme by setting a global variable, placing this code in a PHP block:
 {{{
 global $indicia_theme;
-$theme='redmond';
+$indicia_theme='redmond';
 }}}
 
 There are a couple of nifty things about this theming system you should be aware of. Firstly, making your own theme is a piece of cake since there is a tool to do this called [http://jqueryui.com/themeroller/ Themeroller]. You can either download an existing theme, or tweak and create your own to download. Having built or selected a theme, click on the Download your theme link then click the Deselect all components option, then click the Download button near the bottom right. This will give you a zip file, containing a folder called css (plus one or two others you don't need). You need to unzip the folder inside this css folder to a location on your webserver, and give the folder a sensible name. For example, the folder could be visible from http:\\www.mysite.com\media\themes\my-new-theme.
