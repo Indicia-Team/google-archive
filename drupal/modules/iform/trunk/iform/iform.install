@@ -24,8 +24,7 @@ function iform_schema() {
       ),
       'params' => array(
         'description' => 'JSON structure containing parameters passed to the form on instantiation.',
-        'type' => 'varchar',
-        'length' => 2000,
+        'type' => 'text',        
         'not null' => TRUE,
         'default' => ''
       ),
@@ -41,4 +40,13 @@ function iform_install() {
 
 function iform_uninstall() {
   drupal_uninstall_schema('iform');
+}
+
+/**
+* Implementation of hook_update_N for version 6.x-1.0. 
+*/
+function iform_update_6100() {
+  $ret = array();
+  db_change_field($ret, 'iform', 'iform', 'iform', array('type' => 'text', 'not null' => FALSE));
+  return $ret;
 }

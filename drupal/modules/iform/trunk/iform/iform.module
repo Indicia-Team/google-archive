@@ -395,6 +395,14 @@ function iform_menu() {
     'access arguments' => array('access content'),
     'type ' => MENU_CALLBACK,
   );
+  // Create an admin entry to display the diagnostics panel.
+  $items['admin/settings/iform_diagnostics'] = array(
+    'title' => 'IForm Diagnostics',
+    'description' => 'Run a configuration check for the IForm module.',
+    'page callback' => 'iform_diagnostics',
+	'access arguments' => array('create iform'),
+    'type' => MENU_NORMAL_ITEM
+  );
   return $items;
 }
 
@@ -584,4 +592,9 @@ function iform_form_alter(&$form, $form_state, $form_id) {
       $form['#action'] = url('node/add/iform');
     }
   }
+}
+
+function iform_diagnostics() {
+  require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+  return data_entry_helper::system_check();
 }
