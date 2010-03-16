@@ -474,8 +474,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     data_entry_helper::link_default_stylesheet();
     
     // Localise the file  
-    $localFile = $node->iform.'.'.$language->language.'.php';  
-    if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile")) 
+    $localFile = $node->iform.'.'.$language->language.'.php';
+    if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
       require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
     else {
       // If no file available in the correct language, revert to English if the file is present.
