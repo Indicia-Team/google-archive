@@ -142,10 +142,9 @@ function iform_ajaxproxy_proxy() {
         // hardcode the auth into the $_Post array
     	$_POST['auth_token'] = sha1($nonce.":".$node->password);
 		$_POST['nonce'] = $nonce;    	
+        // The response from handle_media has been updated to be json encoded.
         $response = data_entry_helper::handle_media('upload_file');
-        // TODO the error handling is non existant as response is not json encoded.
-		$response = json_encode(array('filename' => $response));			
-		echo $response;
+        echo json_encode($response);
         return;
     case "occurrence":
         $Model = data_entry_helper::wrap_with_attrs($_POST, 'occurrence');
