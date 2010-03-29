@@ -478,8 +478,6 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
         $r .= data_entry_helper::dump_errors($response);      
       }       
     }
-    // link in the default stylesheet for Indicia forms. All the css is added later during the call to handle_resources
-    data_entry_helper::link_default_stylesheet();
     
     // Localise the file  
     $localFile = $node->iform.'.'.$language->language.'.php';
@@ -501,12 +499,12 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     // be overwritten by subsequent references to the jQuery js file added to the header by other parts of Drupal.
     handle_resources($node);
     
-    // Link in the custom css file if present. Drupal skips it if missing.
-    drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/'.$node->iform.'.css');
+    // Link in the default site css
+    drupal_add_css(drupal_get_path('module', 'iform').'/media/css/default_site.css');
     
     // Link in the custom css file if present. Drupal skips it if missing.
     drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/'.$node->iform.'.css');
-      
+    
     ob_end_clean();
     $node->content['myfield']=array(
       '#value' => $r,
