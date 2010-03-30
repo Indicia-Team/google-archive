@@ -149,6 +149,12 @@ function iform_ajaxproxy_proxy() {
     case "occurrence":
         $Model = data_entry_helper::wrap_with_attrs($_POST, 'occurrence');
     	break;
+    case "occ-comment":
+        $Model = data_entry_helper::wrap($_POST, 'occurrence_comment');
+    	break;
+    case "determination":
+        $Model = data_entry_helper::wrap($_POST, 'determination');
+    	break;
     default:
     	var_dump($_POST);
     	var_dump($_FILES);
