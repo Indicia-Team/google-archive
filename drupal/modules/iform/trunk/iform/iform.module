@@ -491,6 +491,15 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     }
     $args['language'] = $language->language;
     
+    // Make buttons have a hover effect
+    data_entry_helper::$javascript .= "
+$('.ui-state-default').live('mouseover', function() {
+  $(this).addClass('ui-state-hover');
+});
+$('.ui-state-default').live('mouseout', function() {
+  $(this).removeClass('ui-state-hover');
+});\n";
+    
     // Now retrieve the form content    
     $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node, $response);
     
