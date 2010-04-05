@@ -106,9 +106,9 @@ Once you have done all the setup tasks required, you will see the following:
 
 http://indicia.googlecode.com/svn/wiki/setup_complete.png
 
-== Test it ==
+If everything has worked, clicking the button on the message will take you to the login page for the Indicia Warehouse Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password and setup other details of the admin login.
 
-If everything has worked, clicking the button on the message will take you to the login page for the Indicia Warehouse Module. The initial login username is admin, with no password, but after logging in you will be immediately taken to the page that requests you to change your password.
+Finally, after setting up the login account you will be redirected to the Home page, where you will see a message indicating that you need to upgrade the database to the latest version. Click the upgrade button to complete the installation process.
 
 That's it!
 
