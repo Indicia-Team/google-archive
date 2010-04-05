@@ -96,7 +96,7 @@ Click the Configure database button, then you will be presented with the Databas
 
 http://indicia.googlecode.com/svn/wiki/setup_db.png
 
-Specify the name of the database you have created, plus the username and password of the user you created earlier. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia warehouse on a single PostgreSQL database you can use another name.
+Specify the name of the database you have created, plus the username and password of the user you created earlier. Additionally, there is an option to enter a second username and password for the user that reports will be run with. For ultimate security this should be a separate user account with access to select from appropriate tables only, though for a test installation it is fine to use the same username and password as the main user. You will also be asked to enter a schema name - typically you can enter "indicia" as the schema name but if you need to run more than one Indicia warehouse on a single PostgreSQL database you can use another name.
 
 The Host and Port can be left at their default settings if PostgreSQL is running on the local machine on the default port.
 
