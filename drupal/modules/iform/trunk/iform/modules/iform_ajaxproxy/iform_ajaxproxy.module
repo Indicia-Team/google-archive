@@ -136,6 +136,10 @@ function iform_ajaxproxy_proxy() {
 	        )
 	    );
 	    $Model = data_entry_helper::build_submission($_POST, $structure);
+	    $Model['subModels'][0]['model']['subModels'][] = array(
+			'fkId' => 'occurrence_id',
+			'model' => data_entry_helper::wrap($_POST, 'determination', 'determination')
+	    );
         break;
     case "media":
     	// media handled differently. Submission is handled by the handle_media function.
@@ -147,7 +151,13 @@ function iform_ajaxproxy_proxy() {
         echo json_encode($response);
         return;
     case "occurrence":
-        $Model = data_entry_helper::wrap_with_attrs($_POST, 'occurrence');
+        $structure = array(
+        	'model' => 'occurrence',
+        	'subModels' => array(
+          		'determination' => array('fk' => 'occurrence_id')
+	        )
+	    );
+	    $Model = data_entry_helper::build_submission($_POST, $structure);
     	break;
     case "occ-comment":
         $Model = data_entry_helper::wrap($_POST, 'occurrence_comment');
