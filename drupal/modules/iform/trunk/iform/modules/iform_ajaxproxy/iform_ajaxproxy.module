@@ -147,7 +147,7 @@ function iform_ajaxproxy_proxy() {
     	$_POST['auth_token'] = sha1($nonce.":".$node->password);
 		$_POST['nonce'] = $nonce;    	
         // The response from handle_media has been updated to be json encoded.
-        $response = data_entry_helper::handle_media('upload_file');
+        $response = submission_builder::handle_media('upload_file');
         echo json_encode($response);
         return;
     case "occurrence":
