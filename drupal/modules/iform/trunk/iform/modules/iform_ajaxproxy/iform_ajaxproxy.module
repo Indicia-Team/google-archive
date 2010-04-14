@@ -151,12 +151,14 @@ function iform_ajaxproxy_proxy() {
         echo json_encode($response);
         return;
     case "occurrence":
-        $structure = array(
-        	'model' => 'occurrence',
-        	'subModels' => array(
-          		'determination' => array('fk' => 'occurrence_id')
-	        )
-	    );
+        $structure = array('model' => 'occurrence');
+	    // Only include determination record if determination in post
+	    foreach($_POST as $key=>$value){
+	    	if(substr($key,0,14) == 'determination:'){
+	    		$structure['subModels'] = array('determination' => array('fk' => 'occurrence_id'));
+	    		break;
+	    	}
+	    }
 	    $Model = data_entry_helper::build_submission($_POST, $structure);
     	break;
     case "occ-comment":
