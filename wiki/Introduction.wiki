@@ -29,8 +29,8 @@ You can consider Indicia as coming in two parts; a user interface and a data sto
 
 In its initial phase, Indicia’s development is being led by Biodiverse IT, is funded by the [http://www.OPALexplorenature.org OPAL] Network and managed by the [http://www.ceh.ac.uk/ Centre for Ecology and Hydrology] (CEH). The project is Open Source, which means you can have the code for free, and has a high level of community involvement.
 
-== When will it be ready? ==
+== Is Indicia ready to use? ==
 
-Although it is early days for the project, we have now released version 0.2. The project is moving forward very quickly so there are still some bugs here and there, but it is already possible to build data entry, browsing and reporting pages using Indicia.
+Although it is early days for the project, we have now released version 0.2.5. The project is moving forward very quickly so there are still some bugs here and there, but several online recording projects are already using Indicia successfully.
 
 [http://forums.nbn.org.uk/ Get involved on the online development tool discussions on the NBN Forum.]
