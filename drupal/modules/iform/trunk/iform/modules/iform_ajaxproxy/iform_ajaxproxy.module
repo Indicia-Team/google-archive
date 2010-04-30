@@ -136,10 +136,15 @@ function iform_ajaxproxy_proxy() {
 	        )
 	    );
 	    $Model = data_entry_helper::build_submission($_POST, $structure);
-	    $Model['subModels'][0]['model']['subModels'][] = array(
-			'fkId' => 'occurrence_id',
-			'model' => data_entry_helper::wrap($_POST, 'determination', 'determination')
-	    );
+	    foreach($_POST as $key=>$value){
+	    	if(substr($key,0,14) == 'determination:'){
+			    $Model['subModels'][0]['model']['subModels'][] = array(
+					'fkId' => 'occurrence_id',
+					'model' => data_entry_helper::wrap($_POST, 'determination', 'determination')
+			    );
+ 	    		break;
+	    	}
+	    }
         break;
     case "media":
     	// media handled differently. Submission is handled by the handle_media function.
