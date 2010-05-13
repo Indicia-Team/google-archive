@@ -169,6 +169,9 @@ function iform_ajaxproxy_proxy() {
     case "occ-comment":
         $Model = data_entry_helper::wrap($_POST, 'occurrence_comment');
     	break;
+    case "smp-comment":
+        $Model = data_entry_helper::wrap($_POST, 'sample_comment');
+    	break;
     case "determination":
         $Model = data_entry_helper::wrap($_POST, 'determination');
     	break;
