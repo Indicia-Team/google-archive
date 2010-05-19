@@ -107,13 +107,14 @@ Parameters may be specified to allow the report requester to specify information
       </columns>
 }}}
 
-Columns are used to give further specification to how particular fields should be displayed. They take three attributes and have no child elements:
+Columns are used to give further specification to how particular fields should be displayed. They take these attributes and have no child elements:
 
   * `name` should match the name used in the query - SELECT foo FROM websites should have name `foo`, SELECT bar AS baz FROM websites should have name `baz` (not `bar`). SELECT w.foo FROM websites should have name `foo`, not `w.foo`, though where there is ambiguity here renaming your columns with 'AS' is the recommended solution. Failing to match this correctly may leave phantom columns in the report.
   * `display` will be displayed as the column header.
   * `style` will be applied to the column (though not the header - obviously implementers of the reporting in a site module may alter this behaviour if they wish).
   * `class` defines a css class that will be applied to the cells in the column (though not the header). For example, in a species column you can specify "sci binomial" to define that this is the name part of the row. This can then be detected as a Species Microformat.
   * `visible` can be set to false to hide a column, or to force a vague date column to appear that is being replaced by a standard date column.
+  * `img` can be set to true for a field that contains the filename of an image uploaded to the Warehouse. This will then be replaced by a thumbnail of the image, with support for FancyBox image popups to show the full image size.
 
 Note that both columns and parameters will be inferred from the query if they are not provided, but providing them explicitly is recommended as it allows a much greater degree of control over how they are displayed.
 
