@@ -50,7 +50,7 @@ The first two sections of the following tutorial are performed by your Warehouse
   #	The building of PHP pages using Indicia is simplified by using the supplied Data Entry Helper class. This is a static class (so you don’t have to create an instance of it to use it) which outputs ready made pieces of HTML and JavaScript into your page. To use this, download the client_helpers folder from the downloads section of this website and unzip it into the folder your web page will be accessed from on the server. This will give you a folder called client_helpers.
   #     If you are using an account on the testwarehouse.indicia.org.uk and you are developing on a webserver on your local machine, then the client helpers are already configured sufficiently for you to complete this tutorial. If this is not the case though, please use the information in [SetupHelperConfig Setting up the Helper Configuration File] to configure your client helpers before proceeding with the rest of this tutorial.
   #	Now, create a basic, blank PHP web page using your site template but with no content.
-  #	Now, just inside your `<head>` element, paste in the following:
+  #	Just inside your `<head>` element, paste in the following:
 {{{
 <?php	require 'client_helpers/data_entry_helper.php'; ?>
 }}}
@@ -132,3 +132,9 @@ if ($_POST) {
 }}}
 
 That’s it! You’ve built a basic data entry form using Indicia. If you want to learn more, there are some other tutorials on this Wiki or you can browse the [http://www.biodiverseit.co.uk/indicia/dev/docs/Client/Config/data_entry_helper.html developer documentation for the Data Entry Helper class].
+
+== Additional Tips ==
+Indicia allows you to store extended characters such as those with diacritic marks, or even from international character sets in your data. It does this by encoding the data using _utf8_ encoding. So, if you want these characters to display correctly on your web pages, include the following in your template's `<head>` section:
+{{{
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+}}}
