@@ -475,8 +475,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
         drupal_goto($url, 'table='.$response['outer_table'].'&id='.$response['outer_id']);            
       } else {
         // This dumps errors, and/or a success message if no redirection.
-        $r .= data_entry_helper::dump_errors($response);      
-      }       
+        $r .= data_entry_helper::dump_errors($response);
+      }
     }
     
     // Localise the file  
