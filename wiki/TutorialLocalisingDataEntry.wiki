@@ -1,9 +1,9 @@
-#summary How to localise the output of the data_entry_helper class.
+#summary How to localise your Indicia forms.
 #labels Phase-Implementation
 
 = Introduction =
 
-When writing data entry pages with Indicia, for the most part you are responsible for defining the captions displayed in the labels and elsewhere on the page. However, in some cases, the data_entry_helper class outputs captions for you. This tutorial shows you how to customise these texts, either to change the terminology, or to translate to another language.
+When writing data entry pages with Indicia, for the most part you are responsible for defining the captions displayed in the labels and elsewhere on the page. However, in some cases, the data_entry_helper class outputs captions for you. This tutorial shows you how to customise these texts, either to change the terminology, or to translate to another language. You can also access the internationalisation functionality from your own PHP code.
 
 = Details =
 
@@ -33,3 +33,19 @@ if (file_exists('client_helpers\lang\custom.'.$language->language.'.php') {
 ?>
 }}}
 Note that, in this example, if the user has selected an unsupported language the form will revert to using the English translation file.
+
+= Using the lang class =
+
+If you want to internationalise your own PHP code language strings, you can simply require the lang.php file (in the same place as data_entry_helper.php). This will allow you to call 
+{{{
+lang::get('language key');
+}}}
+which will obtain the localised version of the string called 'language key' for you. Then you can simply include these strings in the custom.*.php language files. It is also possible to specify replacements in the text, using replacement tokens {1}, {2} and so on, and passing the replacement values as additional arguments to the lang::get method. For example, you could declare a language key:
+{{{
+'confirm action' => 'Are you sure you want to {1} the {2}?'
+}}}
+Then you could call the get method with 2 extra arguments:
+{{{
+echo lang::get('confirm action','delete','location');
+}}}
+The output would then be "Are you sure you want to delete the location?". This allows you to be more flexible about the way language strings are used without compromising how the strings are formed in different languages, for example it may be more natural to change the order of the replacement tokens in certain languages. Note that any text passed to the lang::get method as replacements should be already UTF8 encoded, which it will be if it was obtained from the database.
