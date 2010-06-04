@@ -26,7 +26,6 @@ function iform_schema() {
         'description' => 'JSON structure containing parameters passed to the form on instantiation.',
         'type' => 'text',        
         'not null' => TRUE,
-        'default' => ''
       ),
     ),
     'primary key' => array('nid')
