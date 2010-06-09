@@ -450,12 +450,18 @@ function get_parameters_js() {
  * @return unknown_type
  */
 function iform_view($node, $teaser = FALSE, $page = FALSE) {
-  global $language; 
+  global $language;
   $node = node_prepare($node, $teaser);
   if ($node->iform && $node->iform!=-1) {
     require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
     ob_start();
+    // force the path of js and css files to be relative to Drupal, not from the Warehouse
+    data_entry_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
+    data_entry_helper::$css_path = drupal_get_path('module', 'iform').'/media/css/';
+    // also force the theme path to be local
+    global $indicia_theme_path;
+    $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';
     // we need to grab each requested parameter from the node to pass to the form
     $params = get_form_parameters($node);
     $args = array();
@@ -524,34 +530,32 @@ $('.ui-state-default').live('mouseout', function() {
 }
 
 function handle_resources($node) {
-  global $indicia_resources, $indicia_theme_path, $indicia_templates;
-  $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';  
-  if (isset($indicia_resources)) {
-    data_entry_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
-    data_entry_helper::$css_path = drupal_get_path('module', 'iform').'/media/css/';
-    $resourceList = data_entry_helper::_RESOURCES();    
-    foreach ($indicia_resources as $resource)
-    {       
-      foreach ($resourceList[$resource]['stylesheets'] as $s)
-      {        
-        drupal_add_css($s);
+  global $indicia_templates;  
+  if (isset(data_entry_helper::$required_resources)) {
+    $resourceList = data_entry_helper::get_resources();
+    foreach (data_entry_helper::$required_resources as $resource)
+    {
+      if (isset($resourceList[$resource]['stylesheets'])) {
+        foreach ($resourceList[$resource]['stylesheets'] as $s)
+          drupal_add_css($s);
       }
-      foreach ($resourceList[$resource]['javascript'] as $j)
-      {        
-        // We must not add jQuery twice. So for this file, add Drupal's own version if not already done.
-        if (strcasecmp(substr($j, -9), 'jQuery.js')==0)
-          drupal_add_js('misc/jquery.js', 'core');          
-        else if (strcasecmp(substr($j, -23), 'jquery-ui.custom.min.js')==0)
-          jquery_ui_add(array('jquery-ui'));
-        else if (substr($j, 0, 4)=='http') {          
-          // JS file external to Drupal. add_js will not work, so insert it into the head manually.
-          drupal_set_html_head("<script type='text/javascript' src='$j'></script>\n");
-        } else if (strcasecmp(substr($j, -20), 'jquery-ui.effects.js')!=0) {
-          // JS file within Drupal structure
-          drupal_add_js($j, 'module');
+      if (isset($resourceList[$resource]['javascript'])) {
+        foreach ($resourceList[$resource]['javascript'] as $j) {
+          // We must not add jQuery twice. So for this file, add Drupal's own version if not already done.
+          if (strcasecmp(substr($j, -9), 'jQuery.js')==0)
+            drupal_add_js('misc/jquery.js', 'core');
+          else if (strcasecmp(substr($j, -23), 'jquery-ui.custom.min.js')==0)
+            jquery_ui_add(array('jquery-ui'));
+          else if (substr($j, 0, 4)=='http') {
+            // JS file external to Drupal. add_js will not work, so insert it into the head manually.
+            drupal_set_html_head("<script type='text/javascript' src='$j'></script>");
+          } else if (strcasecmp(substr($j, -20), 'jquery-ui.effects.js')!=0) {
+            // JS file within Drupal structure
+            drupal_add_js($j, 'module');
+          }
         }
-      }    
-    }    
+      }
+    }
   }
   // If required, setup jQuery validation. We can't prep this JavaScript earlier since we would 
   // not know all the control messages. 
