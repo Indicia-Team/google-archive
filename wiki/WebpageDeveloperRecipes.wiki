@@ -47,6 +47,6 @@ How to use validation in the web-browser to validate your forms without posting 
 
 How to control the way that Indicia displays validation messages for your controls.
 
-* [RememberingFieldValues] Remembering field values
+* [RememberingFieldValues Remembering field values]
 
 How to make certain controls on your forms remember their values between data entry sessions.
