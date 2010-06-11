@@ -27,10 +27,40 @@ Retrieving a list of data can be achieved by ommitting the id from the URL. In t
 ||wantColumns||Defaults to 0. If 1, then the returned data includes the column definitions.||
 ||auth_token||Used to provide the read authorisation token.||
 ||nonce||Used to provide the read authorisation nonce.||
+||query||For advanced query building letting you pass a JSON object describing filters to apply to the query. Further details are given below || 
 
 If both wantColumns and wantRecords are 1, then the returned object is divided into a records and a columns part at the top level.
 
 An example illustrating a service call is `http://www.mysite.com/index.php/services/data/termlists_term?termlist=sample&term=quad&orderby=term&sortdir=desc&limit=10&offset=10&xsl=default.xsl&auth_token=x&nonce=y`. This returns an XML document formatted using default.xsl, which lists all termlist terms from termlists that contain sample in their title, where the term contains quad. The results start at the 10th item in the list, are limited to a maximum of 10 entries, and are ordered by term descending.
+
+== Using the query parameter ==
+
+Where a simple field filter is not sufficient, you can use the query parameter to build more advanced queries against the data. This is achieved by passing a JSON object in the query parameter. The top level of the object is an associative array of the filter type name, each containing a set of the parameters required for the filter type. So, for a simple example of a WHERE clause definition, you might pass the following using PHP which generates the SQL given:
+{{{
+'query' => urlencode(json_encode(array('where'=>array('survey_id', 5))))
+WHERE survey_id=5
+}}}
+In the case where you need 2 where clauses, you can do 
+{{{
+'query' => urlencode(json_encode(array(
+    'where'=>array('survey_id', 5),
+    'where'=>array('entered_sref_system', 'OSGB')
+)))
+OR
+'query' => urlencode(json_encode(array(
+    'where'=>array(array('survey_id'=>5, 'entered_sref_system'=>'OSGB'))
+)))
+WHERE survey_id=5 AND entered_sref_system='OSGB'
+}}}
+
+The supported filter type names are as follows:
+||where||Takes either 2 parameters, the fieldname and the value, or an associative
+array of fieldnames and values. Conditions are joined using an AND.||
+||orwhere||Identical to the where filter type, but conditions are joined using an OR.||
+||in||Takes 2 parameters, a fieldname and an array of values to generate an IN (...) SQL clause.||
+||notin||Identical to in but generates a NOT IN clause.||
+
+More may be added in future.
 
 == Output Attributes ==
 
