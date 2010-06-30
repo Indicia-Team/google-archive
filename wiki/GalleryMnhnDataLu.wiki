@@ -1,0 +1,7 @@
+#summary About the data.mnhn.lu website.
+
+== MNHNL Data Portal ==
+
+The MNHNL Data Portal ([http://data.mnhn.lu]) provides a focal point for citizen science biodiversity projects in Luxembourg. Currently several "Take Part" projects are running as well as the COBIMO project for monitoring bird populations based on transect walking. In the near future the site will be enhanced to feature online recording for museum collaborators.
+
+The Take Part surveys use the mnhnl_citizen_science_1 prebuilt form and the COBIMO project uses the mnhnl_bird_transect_walks form. 
