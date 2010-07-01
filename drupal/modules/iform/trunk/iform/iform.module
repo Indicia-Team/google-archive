@@ -35,6 +35,11 @@ function iform_perm() {
 	  $retVal = array_merge($retVal, $perms);
 	}
   }
+  // Also look for then generic IForm module setting to have custom permissions for this form
+  $results = db_query("SELECT n.nid, n.title FROM {iform} i, {node} n WHERE n.nid=i.nid AND i.params like '%\"view_access_control\":1%'");
+  while($result = db_fetch_object($results)) {
+    $retVal[] = 'access iform '.$result->nid;
+  }
   return $retVal;
 
 } // function iform_perm()
@@ -64,15 +69,21 @@ function iform_node_info() {
  * @param $account
  * @return unknown_type
  */
-function iform_access($op, $node, $account) {
+function iform_access($op, $node, $account) {  
   if ($op == 'create') {
     // Only users with permission to do so may create this node type.
     return user_access('create iform', $account);
   }
   
   if ($op == 'view') {
-    // Only users with permission to do so may create this node type.
-    return user_access('access iform', $account);
+    // check if this form has per-node view access control
+    $results = db_query("SELECT nid FROM {iform} WHERE nid=".$node->nid." AND params LIKE '%\"view_access_control\":1%'");    
+    if ($results->num_rows>0) 
+      // Use a per node setting to control access
+      return user_access('access iform '.$node->nid, $account);
+    else
+      // Use the generic setting for Indicia forms to control access.
+      return user_access('access iform', $account);
   }
 
   // Users may have access to edit (update/delete) their own forms, or any form.
@@ -106,6 +117,13 @@ function get_form_parameters($node) {
         'description'=>'The Password of the website that data will be posted into.',
         'type'=>'textfield',
         'group' => 'Website'
+      ), 
+      array(
+        'name'=>'view_access_control',
+        'caption'=>'View Access Control',
+        'description'=>'If ticked, then a Drupal permission is created for this form to allow you to specify which '.
+            'roles are able to view the form.',
+        'type'=>'boolean'
       )
   );
   // Now get the specific parameters from the form
@@ -337,7 +355,7 @@ function get_custom_param_values($node) {
     return '';
   }
 }
-
+ 
 /**
 * Implementation of hook_insert, which saves iform-specific information
 * into the iform table
@@ -375,11 +393,11 @@ function iform_delete($node) {
 */
 function iform_load($node) {
   $t = db_fetch_object(db_query('SELECT iform, params FROM {iform} WHERE nid = %d', $node->nid));
-  $params=json_decode($t->params);
+  $params=json_decode($t->params);  
   unset($t->params);
   // Merge the params into the loaded object
   foreach($params as $k => $v) $t->$k = $v;
-  return $t;
+  return $t;  
 }
 
 /**
