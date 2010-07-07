@@ -15,8 +15,8 @@ Download the IForm module (accessible from the featured downloads section at [ht
 http://indicia.googlecode.com/svn/wiki/drupal_folder_layout.png
 
 Download the following modules:
-  * Jquery_update version 6.x-2.x-dev which supports jQuery 1.3, from http://drupal.org/project/jquery_update. Note the currently recommended release 6.x-1.1 will not work because it is for jQuery 1.2.
-  * Jquery_ui (I downloaded the 6.x-1.3 version)
+  * Jquery_update version 6.x-2.x-dev which supports jQuery 1.3, from [http://drupal.org/project/jquery_update]. Note the currently recommended release 6.x-1.1 will not work because it is for jQuery 1.2.
+  * Jquery_ui version 6.x-1.3 from [http://drupal.org/project/jquery_ui].
 
 To extract the files from the archives you have downloaded, right click the downloaded tar.gz file then select 7-Zip->Open archive. Now, in 7-zip itself, right click the .tar file and select Open Inside. Now you can drag the folder you see into the sites/all/modules alongside the iform module.
 
