@@ -44,10 +44,13 @@ class helper_config {
 }}}
 There is more information on the configuration settings in this file at http://code.google.com/p/indicia/wiki/SetupHelperConfig, but just the $base_url is enough for setting up the form in this tutorial.
 
-You can now run a quick diagnostic check on the IForm module setup. To do this, select Administer > Site configuration > IForm Diagnostics from the menu in Drupal. At the very least you should see something like
+You can now run a quick diagnostic check on the IForm module setup. To do this, select Administer > Site configuration > IForm Diagnostics from the menu in Drupal. You should see something like
   * Success: PHP version is 5.2.10.
   * Success: The cUrl PHP library is installed.
   * Success: Indicia Warehouse URL responded to a POST request.
+  * Warning: The following configuration entries are not specified in helper_config.php : $geoserver_url, $geoplanet_api_key, $google_search_api_key, $google_api_key, $multimap_api_key, $flickr_api_key, $flickr_api_secret. This means the respective areas of functionality will not be available.
+  * Success: Cache directory is present and writeable.
+
 Depending on whether you set up all the API keys or not you may get some warnings, that is OK as long as they are not API keys for parts of the system you plan to use.
 
 To create forms, you first need to set up at least a website, survey and species list in the Indicia Warehouse. Then, use the Create content link in Drupal and select Indicia Forms as the type of content. 
