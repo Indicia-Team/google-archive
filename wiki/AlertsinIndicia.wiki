@@ -1,0 +1,31 @@
+#summary An overview of the notifications system built into Indicia.
+
+= Alerts in Indicia = 
+
+== Overview == 
+
+Indicia has the facility to alert users when records matching certain criteria are submitted to the system. This system is achieved by setting up triggers which detect changes to the data, subscribing to the triggers which defines who wants to know about the results of the trigger and how often, and notifications which are the result of the triggers firing with associated subscriptions. The standard way of alerting users is to send an email.
+
+== Creating triggers ==
+
+Anyone with a login on the Warehouse can define a trigger. The triggers are available from the Admin -> Triggers & Notifications menu item. The list shown includes all triggers that are marked as public or that were created by the logged in user. To create a trigger:
+
+  # Click New trigger to access the Trigger details screen.
+
+  # Enter the name of your trigger, for example "Detect new records in the demo survey" and a description.
+
+  # Select the trigger template from the drop down to define the query that will be run when the trigger is tested. The template called test is provided for you to try and simply detects any new records in a selected survey. Leave the public checkbox unchecked for now, but this can be used to declare a trigger which multiple users can subscribe to. For now this test trigger will be for us only.
+
+  # Click the Next button. Depending on the trigger template you selected, the next page will ask you for any other input parameters required. In the case of the test template, it will ask you to select the survey which you want to detect new records in. Select the demonstration survey and click Save.
+
+== Subscribing to the trigger ==
+
+The triggers you have rights to subscribe to are listed on the Triggers page. Click subscribe in the Task column next to the trigger you want to subscribe to. You can now specify the email digest frequency from the options No emails, Immediate, Daily, Weekly. Currently the no emails option can be used to temporarily disable notifications, but without losing the information. When you switch to one of the other modes you will be notified of all the data changes you missed. In the near future there will be a new feature added to let you view a grid listing all the notifications you have not been emailed about.
+
+== Running the triggers ==
+
+Triggers are not fired immediately each time a record is entered in Indicia, as that would slow down performance during data entry. In order to periodically test all the triggers that have been set up, it is necessary to access the page /index.php/scheduled_tasks. This can either be done manually, using your web browser, or more likely you will want to schedule this to happen automatically at a specified interval, e.g. every hour. On a Linux Apache server, the best way to do this is using [http://en.wikipedia.org/wiki/Cron Cron] whereas on Windows you may like to consider using the [http://en.wikipedia.org/wiki/Task_Scheduler Task Scheduler]. 
+
+== Defining your own trigger templates ==
+
+Trigger templates are exactly the same as XML report files, except they must be placed in the reports/trigger_templates directory. They must have a parameter called date, which filters the output by the date the record being tested was entered or updated. They must also have an output attribute called website_id to allow authorisation to be applied (so people cannot subscribe see to records they are not allowed to see).
