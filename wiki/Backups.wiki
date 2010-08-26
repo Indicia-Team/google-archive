@@ -1,0 +1,15 @@
+#summary How to ensure that your regular backups are capturing database content.
+
+= Introduction =
+You may be performing regular backups of your server but you can't be sure that you are getting a consistent snapshot of database contents if the database is active, with files open and being modified during the backup.
+To overcome this, both PostGres and MySql can perform scheduled dumps to file which are guaranteed to be consistent. These files can then be copied as part of your routine backup, ensuring your data is kept safe.
+This article gives guidance on what you need to do to set this up.
+
+= Details =
+
+== PostGres ==
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
