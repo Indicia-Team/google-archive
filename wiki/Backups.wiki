@@ -2,14 +2,61 @@
 
 = Introduction =
 You may be performing regular backups of your server but you can't be sure that you are getting a consistent snapshot of database contents if the database is active, with files open and being modified during the backup.
-To overcome this, both PostGres and MySql can perform scheduled dumps to file which are guaranteed to be consistent. These files can then be copied as part of your routine backup, ensuring your data is kept safe.
+To overcome this, both PostgreSQL and MySql can perform scheduled dumps to file which are guaranteed to be consistent. These files can then be copied as part of your routine backup, ensuring your data is kept safe.
 This article gives guidance on what you need to do to set this up.
 
 = Details =
 
-== PostGres ==
+== PostgreSQL ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+First of all, [http://www.postgresonline.com/journal/index.php?/archives/19-Setting-up-PgAgent-and-Doing-Scheduled-Backups.html  read the following article]! We're going to install PgAgent, following the three steps in the article.
+
+Step 1 can be carried out by starting pgAdmin, selecting the postgres database, and selecting the Tools > Query tool menu item to open a window in which the sql command can be copied and run.
+
+Step 2 can be carried out in the same query window used in step 1 by using File > Open on the script. I found it in C:\Program Files\PostgreSQL\8.3\pgAdmin III\scripts.
+
+Step 3 is executed at the operating system command prompt. You will want to check the path of your posstgreSQL installation first. Check also for the existance of an operating system user called postgres. Add an extra option on the command line, -l2, (minus el two) to enable some error logging which may come in handy.
+
+
+
+
+
+CONTINUE EDITING FROM HERE
+
+
+The pgAgent service runs with the priviliges of the operating system user you specify. On our servers there is a user called postgres. This user had to be given write access to the folder where the backups are made.
+
+A hostname in pgpass.conf of localhost worked but 127.0.0.1 did not.
+
+I put pgpass.conf in %APPDATA%\postgresql\pgpass.conf but the APPDATA environment variable was not defined for user postgres.
+
+To define this environment variable I went to Start>Run… runas /user:postgres cmd and then at the command prompt executed set APPDATA=C:\Documents and Settings\postgres\Application Data
+
+
+
+
+
+== MySql ==
+Login to server as administrator
+
+Create a new user. We will give them the name mysql in this example, but use what you like.
+If you administer your server remotely, add the user to the group, Remote Desktop Users.
+
+Create a folder to store your backup files.
+Give mysql read, write and modify permissions to the folder.
+
+In a command prompt execute the following command to give mysql rights to create scheduled tasks.
+cacls c:\windows\tasks /e /g mysql:c
+
+Login to MySql Administrator as root
+Create a new user which we will call backup in this example.
+Give backup select, show view and lock_tables privileges on each schemata you want to backup.
+
+Now log in to the server as mysql
+Start MySql Administrator and create a stored connection, enabling password storage in the general options category first. The connection is for user backup.
+Now login using this stored connection.
+If you don't want backups to accumulate, go to Tools > Options and, in the administrator category, deselect Add Date/Time to Backup Files. Successive backups will overwrite previous ones if you do this. Apply and close the dialog.
+Select the backup view. All the schemata you granted permissions to will be in the list. You can either create one backup project for everything or a number of smaller projects. If you create one big backup you can still select to restore individual tables within schemata but it just takes longer to analyse the file.
+Create a new backup project, select backup content and define a schedule. When you save the project you will have to give the credentials of the user mysyl under whose login the backup will run.
+
+If you want to test your configuration, you can go to Control Panel > Scheduled Tasks and run your task.
