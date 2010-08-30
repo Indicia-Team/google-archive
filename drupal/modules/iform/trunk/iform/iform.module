@@ -471,6 +471,18 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   global $language;
   $node = node_prepare($node, $teaser);
   if ($node->iform && $node->iform!=-1) {
+    // Localise the file ; has to be done before the data entry helper is loaded, as templates are localisable.
+    $localFile = $node->iform.'.'.$language->language.'.php';
+    if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
+      require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
+    else {
+      // If no file available in the correct language, revert to English if the file is present.
+      $localFile = $node->iform.'.en.php';
+      if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
+        include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
+    }
+    $args['language'] = $language->language;
+    
     require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
     ob_start();
@@ -507,18 +519,6 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
         $r .= data_entry_helper::dump_errors($response);
       }
     }
-    
-    // Localise the file  
-    $localFile = $node->iform.'.'.$language->language.'.php';
-    if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
-      require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
-    else {
-      // If no file available in the correct language, revert to English if the file is present.
-      $localFile = $node->iform.'.en.php';
-      if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
-        include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
-    }
-    $args['language'] = $language->language;
     
     // Make buttons have a hover effect
     data_entry_helper::$javascript .= "
