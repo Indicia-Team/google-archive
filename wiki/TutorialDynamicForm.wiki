@@ -38,7 +38,7 @@ First, select the CMS User ID attribute from the existing attribute list, then c
 
 http://indicia.googlecode.com/svn/wiki/edit_attributes_showing_new.png
 
-Now, add the First Name, Last Name and Email attributes to the survey as before. These are also special attributes, in that they are only displayed when the user is not logged in, since if they are logged into the Drupal Content Management System the user will not want to type in these details repeatedly for each record. Finally, press Save.
+Now, add the First Name, Last Name and Email attributes to the survey as before. These are also special attributes, in that they are only displayed when the user is not logged in, since if they are logged into the Drupal Content Management System the user will not want to type in these details repeatedly for each record. Also add the Weather and Site Usage attributes, which are standard attributes that will appear on the form whether or not you are logged in. Finally, press Save.
 Next, select Occurrences in the “Display Attributes For” drop down at the top, and click the Go button. You will see the blank placeholders again, just like before we started adding sample attributes, but this time the view is showing the custom attributes attached to each occurrence rather than each sample. Select Abundance in the Existing attribute box at the bottom and click Add existing attribute, then press Save.
 
 = Setup the form in Drupal =
