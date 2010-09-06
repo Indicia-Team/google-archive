@@ -43,11 +43,6 @@ WHERE survey_id=5
 In the case where you need 2 where clauses, you can do 
 {{{
 'query' => urlencode(json_encode(array(
-    'where'=>array('survey_id', 5),
-    'where'=>array('entered_sref_system', 'OSGB')
-)))
-OR
-'query' => urlencode(json_encode(array(
     'where'=>array(array('survey_id'=>5, 'entered_sref_system'=>'OSGB'))
 )))
 WHERE survey_id=5 AND entered_sref_system='OSGB'
