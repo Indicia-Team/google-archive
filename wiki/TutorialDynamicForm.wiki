@@ -1,0 +1,79 @@
+#summary Creating a survey using the dynamic form
+
+= Introduction =
+
+The MNHNL Dynamic Form 1 prebuilt form is able to automatically build a form for you entirely from the configuration of a survey on the Indicia Warehouse, therefore reducing not only the configuration but also the programming required for a new survey setup. This tutorial introduces you to the steps required for setting up this form.
+
+Before starting, you should have a working Warehouse installation available and also a working installation of Drupal with the IForm module installed. You should also have a website setup on the Warehouse, and know the ID and password for that website.
+
+For this tutorial we will create a new survey with a custom attribute to store the occurrence abundance as free text, and the sample has the recorder’s details as attributes.
+
+= Create a new Survey in the Indicia Warehouse =
+
+First log in to the Warehouse, then select Lookup Lists -> Surveys from the menu. Click the New Survey button, enter a title, description and select the website this survey is being set up for. Finally, click Save, then take a note of the ID of the survey which is shown in the list of surveys.
+
+= Create any custom attributes that don’t already exist =
+
+If your survey needs any attributes that are not already registered in the Warehouse, they need to be created now. In our case we will use existing attributes for the recorder details, but will create a new attribute for the occurrence abundance free text. 
+
+Select Custom Attributes -> Occurrence Attributes from the menu.
+
+http://indicia.googlecode.com/svn/wiki/occurrence_attributes_list.png
+
+Click the New Occurrence Attribute button. Set the Caption to Abundance, data type to Text, check the Available to other websites option and leave the other controls as they are. For other attributes you can try the different data types available here, such as terms from a lookup list defined by a termlist. Each data type has a different set of validation rules that you can apply, but note that at this stage you are defining the validation rules that apply to ALL websites and surveys that use this attribute. For example, if you make abundance required, then it would be required in all surveys that share the same attribute which may not be the desired effect! Press Save at the bottom to store the new occurrence custom attribute.
+
+http://indicia.googlecode.com/svn/wiki/occurrence_attribute_detail.png
+
+= Configure the attributes on the form =
+
+Now you need to associate the attributes with the survey and configure them so they appear in the correct place on the form. Select Lookup Lists -> Surveys from the menu. Click the Setup Attributes link in the row for your new survey.
+
+http://indicia.googlecode.com/svn/wiki/survey_list.png
+
+You will now see the screen that allows you to link attributes to your survey, position them within the form, and configure them for specific use within that survey. The screen has a selector to let you choose the kind of attributes to configure (1), some blank placeholders where the various attributes will appear (2), a control allowing you to create blocks which can be used to group controls together to make things like tabs (3) and a control allowing you to add an existing attribute to the survey (4).
+
+http://indicia.googlecode.com/svn/wiki/blank_survey_edit_attributes.png
+
+First, select the CMS User ID attribute from the existing attribute list, then click Add existing attribute and repeat this for the CMS Username attribute. Note that the attributes appear in the placeholders above, but are outlined in red indicating that the changes have not yet been saved. Also, note that these attributes are special attributes in that they will automatically capture the user ID and username of the user in Drupal if they are logged in without actually appearing on the screen. If the user is not logged into Drupal, then these attributes will be ignored and will not appear on the form, unlike the other attributes available.
+
+http://indicia.googlecode.com/svn/wiki/edit_attributes_showing_new.png
+
+Now, add the First Name, Last Name and Email attributes to the survey as before. These are also special attributes, in that they are only displayed when the user is not logged in, since if they are logged into the Drupal Content Management System the user will not want to type in these details repeatedly for each record. Finally, press Save.
+Next, select Occurrences in the “Display Attributes For” drop down at the top, and click the Go button. You will see the blank placeholders again, just like before we started adding sample attributes, but this time the view is showing the custom attributes attached to each occurrence rather than each sample. Select Abundance in the Existing attribute box at the bottom and click Add existing attribute, then press Save.
+
+= Setup the form in Drupal =
+
+Login to Drupal with a user who has permissions to create Indicia Form content (e.g. as the administrator).
+Select Create Content -> Indicia Forms from the navigation menu in Drupal. If you cannot see this menu item (as it depends on your site configuration) try going to the URL /node/add/iform within your site.
+Enter a page title, e.g. Test dynamic form. Select MNHNL Dynamic 1 from the indicia form drop down list, and the web page will update with the list of parameters required to set up the form you selected.
+Setup_dynamic_form.png
+
+First, expand the website section, and specify the website ID and password, then click the section title to collapse it again. 
+
+http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_website.png
+
+Next, expand the Other Iform Attributes section and specify at least the Survey ID and Initial Species List IDs which you noted earlier. The other options available provide further configuration and help text is provided beside each one, but you can leave them in their default state for now.
+
+http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_other.png
+
+Expand the Initial Map View section and specify the latitude and longitude of the centre of the map area you want to gather records for. Also specify a map zoom level, typically a number in the range of around 8-12 depending the size of the area to be covered. You may need to experiment to get these settings right.
+
+http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_initial_map.png
+
+Expand the Base Map Layers section and tick Google Hybrid. Again you can experiment with these settings or even provide your own web mapping service (WMS) details.
+
+Expand the Georeferencing section to specify how the place search control works. Leave the default settings for a general purpose search of UK place names.
+
+http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_georef.png
+
+Expand the Map section to specify the format of the spatial references that the form will accept. This is a comma separated list of systems which might include OSGB (=British National Grid), or the 4 digit code of a projection defined by the European Petroleum Survey Group, e.g. 4326 for GPS lat long references using the WGS84 projection, or 2169 for Gauss-Lux references.
+
+http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_georef.png
+
+Finally the User Interface section lets you choose from Tabs, Wizard or all-in-one form styles, whether the place search control is present, and whether a control for picking from the list of existing controls is present. You can leave these at the default settings.
+
+http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_interface.png
+
+Last but not least, click the Save button at the bottom of the page. This should load the form into Drupal, showing an empty list of occurrences as non have been created yet. 
+
+http://indicia.googlecode.com/svn/wiki/dynamic_form_created.png
