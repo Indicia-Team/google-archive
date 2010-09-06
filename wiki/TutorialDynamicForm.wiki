@@ -38,7 +38,7 @@ First, select the CMS User ID attribute from the existing attribute list, then c
 
 http://indicia.googlecode.com/svn/wiki/edit_attributes_showing_new.png
 
-Now, add the First Name, Last Name and Email attributes to the survey as before. These are also special attributes, in that they are only displayed when the user is not logged in, since if they are logged into the Drupal Content Management System the user will not want to type in these details repeatedly for each record. Also add the Weather and Site Usage attributes, which are standard attributes that will appear on the form whether or not you are logged in. Finally, press Save.
+Now, add the First Name, Last Name and Email attributes to the survey as before. These are also special attributes, in that they are only displayed when the user is not logged in, since if they are logged into the Drupal Content Management System the user will not want to type in these details repeatedly for each record. Also add the Weather and Happy for Contact attributes, which are standard attributes that will appear on the form whether or not you are logged in. Finally, press Save.
 Next, select Occurrences in the “Display Attributes For” drop down at the top, and click the Go button. You will see the blank placeholders again, just like before we started adding sample attributes, but this time the view is showing the custom attributes attached to each occurrence rather than each sample. Select Abundance in the Existing attribute box at the bottom and click Add existing attribute, then press Save.
 
 = Setup the form in Drupal =
@@ -77,3 +77,11 @@ http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_interface.png
 Last but not least, click the Save button at the bottom of the page. This should load the form into Drupal, showing an empty list of occurrences as non have been created yet. 
 
 http://indicia.googlecode.com/svn/wiki/dynamic_form_created.png
+
+If you click the Add New Sample button, you will see the basic form we have designed, with 3 tabs. The grid on the first Species tab shows our list of species and includes a column called Abundance since this is the attribute we defined for occurrences in this survey. Don't forget that the first name, surname and email addresses are not going to be visible since they are not necessary when you are logged in. but you can see the Weather and Happy for Contact attributes on the Other Information tab.
+
+Ok, we have made a start and got a working form, so let's try some configuration options:
+
+  # On the Drupal form, click the Edit link at the top. Expand the User Interface section and change Interface Style Option to Wizard. Press Save, then click the Add New Sample button to view the form again. This time you have a Wizard with Next and Previous buttons instead of a tabbed interface.
+
+  # Click the Edit link again, and this time try checking some different layers in the Base Map Layers section. Note, if you specify more than one, then there will be a + icon in the top right of the map allowing the user to choose the layer. Click Save then Add New Sample to check your form again.
