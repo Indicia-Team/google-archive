@@ -85,3 +85,27 @@ Ok, we have made a start and got a working form, so let's try some configuration
   # On the Drupal form, click the Edit link at the top. Expand the User Interface section and change Interface Style Option to Wizard. Press Save, then click the Add New Sample button to view the form again. This time you have a Wizard with Next and Previous buttons instead of a tabbed interface.
 
   # Click the Edit link again, and this time try checking some different layers in the Base Map Layers section. Note, if you specify more than one, then there will be a + icon in the top right of the map allowing the user to choose the layer. Click Save then Add New Sample to check your form again.
+
+The Indicia Warehouse also lets you re-order the controls, move them to different tabs and place them inside "fieldsets". Here's how.
+
+In the Warehouse, select Lookup Lists -> Surveys from the menu, then click edit attributes in the row for your survey. First we'll try grouping our attributes into a fieldset called My Stuff, so we can separate them from the built-in attributes. To do this, in the Block name input box near the bottom, enter "My Stuff" then click Add Block. This will create a "block" at the top of the page called My Stuff, with placeholders into which you can drag other blocks and controls.
+
+http://indicia.googlecode.com/svn/wiki/edit_attributes_new_block.png
+
+Now, lets drop our controls into this block. To do this, click and hold the move (+) icon to the left of the Happy for Contact? and Weather attributes and drag them to the placeholders in our new block. You can see when they are dragged over the right place as the placeholder will go yellow.
+
+http://indicia.googlecode.com/svn/wiki/edit_attributes_drag_control_to_block.png
+
+You can simply drag and drop the controls to the placeholders in the lists to re-order them at any time. Now, press Save, and re-load the input form. Notice anything? Has anything changed? If your Indicia installation is set up correctly with data caching enabled, then nothing will have changed since the form will be loading itself from the cache. Great for performance, but not so great when you are trying to design a form...
+
+Fortunately there are a couple of solutions for this. You can find the cache folder (which by default will be in your Drupal installation, under sites/all/modules/iform/client_helpers/cache) and delete all the files in it. But this can be laborious after each change to the form you want to review. A better way is to add &nocache to the URL, so that Indicia is instructed to ignore its cached files. For example, I can use this URL to access the latest version of my form: http://localhost/drupal/node/6?newSample&nocache.
+
+Next, try creating another block called My Tab, but this time drag the whole My Stuff block inside the My Tab block, creating 2 nested blocks. The outer block will be rendered as a tab or wizard page, and the inner block will be rendered as a fieldset. The blocks should look like this:
+
+http://indicia.googlecode.com/svn/wiki/edit_attributes_nested_blocks.png
+
+Now save it and reload the form with the &nocache parameter. You should find a new tab has appeared on your form containing your custom attributes:
+
+http://indicia.googlecode.com/svn/wiki/edit_attributes_my_tab.png
+
+If you want to add controls to the existing tabs that can be done as well. As we have seen, controls inside a single level block will be added to a fieldset created on the Other Information tab. So, if you rename your outer block from My Tab to Other Information (by clicking the rename link to the right of the block name in the attribute editor, entering the new name, clicking Apply then Save), and reload the form, you will find your controls are back on the Other Information tab. More usefully, you can create an outer block called 'species' or 'place' to add your controls to the other 2 tabs as well.
