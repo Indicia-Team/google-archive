@@ -146,6 +146,15 @@ function iform_ajaxproxy_proxy() {
 	    	}
 	    }
         break;
+    case "smp-occ":
+        $structure = array(
+        	'model' => 'sample',
+        	'subModels' => array(
+          		'occurrence' => array('fk' => 'sample_id')
+	        )
+	    );
+	    $Model = data_entry_helper::build_submission($_POST, $structure);
+        break;
     case "media":
     	// media handled differently. Submission is handled by the handle_media function.
         // hardcode the auth into the $_Post array
