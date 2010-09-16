@@ -553,7 +553,6 @@ $('.ui-state-default').live('mouseout', function() {
 }
 
 function handle_resources($node) {
-  global $indicia_templates;  
   if (isset(data_entry_helper::$required_resources)) {
     $resourceList = data_entry_helper::get_resources();
     foreach (data_entry_helper::$required_resources as $resource)
@@ -580,20 +579,7 @@ function handle_resources($node) {
       }
     }
   }
-  // If required, setup jQuery validation. We can't prep this JavaScript earlier since we would 
-  // not know all the control messages. 
-  // In the following block, we set the validation plugin's error class to our template.
-  // We also define the error label to be wrapped in a <p> if it is on a newline.
-  if (data_entry_helper::$validated_form_id) {
-    data_entry_helper::$javascript .= "$('#".data_entry_helper::$validated_form_id."').validate({ 
-      errorClass: \"".$indicia_templates['error_class']."\",
-      ". (in_array('inline', data_entry_helper::$validation_mode) ? "\n      " : "errorElement: 'p',\n      ").
-      "highlight: function(element, errorClass) {
-         // Don't highlight the actual control, as it could be hidden anyway
-      },
-      messages: ".json_encode(data_entry_helper::$validation_messages)."
-    });\n";
-  }
+  data_entry_helper::setup_jquery_validation_js();
   $script = '';
   if (!empty(data_entry_helper::$javascript) || !empty(data_entry_helper::$late_javascript)) {
     $script = "jQuery(document).ready(function() {\n".
