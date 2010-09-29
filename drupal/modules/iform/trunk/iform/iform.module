@@ -270,7 +270,7 @@ function convert_params_array($params, $node) {
     $param_def=array(
       '#type' => $type,
       '#title' => check_plain($param['caption']),
-      '#description' => check_plain($param['description']),        
+      '#description' => $param['description'],        
       '#required' => (!array_key_exists('required', $param) || $param['required']),
       '#weight' => $idx
     );
