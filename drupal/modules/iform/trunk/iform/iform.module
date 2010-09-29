@@ -54,9 +54,9 @@ function iform_node_info() {
     'iform' => array(
       'name' => t('Indicia forms'),
       'module' => 'iform',
-      'description' => "Create Indicia powered data entry forms.",
-      'title_label' => "Page title",
-      'body_label' => "Page introductory text",
+      'description' => t("Create Indicia powered data entry forms."),
+      'title_label' => t("Page title"),
+      'body_label' => t("Page introductory text"),
     )
   );
 } // function iform_node_info
@@ -173,7 +173,8 @@ function iform_form(&$node, $form_state) {
     '#type' => 'textarea',
     '#title' => check_plain($type->body_label),
     '#default_value' => $node->body,
-    '#required' => FALSE
+    '#rows' => 10,
+    '#required' => FALSE    
   );
   $form['body_filter']['filter'] = filter_form($node->format);
   
