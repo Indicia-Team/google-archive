@@ -505,7 +505,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     // indicia so it can have access to the arguments
     if (method_exists('iform_'.$node->iform, 'indicia_define_remembered_fields')) {
       call_user_func(array('iform_'.$node->iform, 'indicia_define_remembered_fields'),$args);
-    }
+    }    
     if ($_POST and (array_key_exists('website_id', $_POST))) {
       // Ask the form to submit itself
       $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
