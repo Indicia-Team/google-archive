@@ -473,15 +473,25 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   $node = node_prepare($node, $teaser);
   if ($node->iform && $node->iform!=-1) {
     // Localise the file ; has to be done before the data entry helper is loaded, as templates are localisable.
-    $localFile = $node->iform.'.'.$language->language.'.php';
-    if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
-      require drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
+    $localFileName = $node->iform.'.'.$language->language.'.php';
+    $localFilePath = drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/";
+    $localFile = $localFilePath . $localFileName;
+    if (file_exists($localFile))
+      require $localFile;
     else {
       // If no file available in the correct language, revert to English if the file is present.
-      $localFile = $node->iform.'.en.php';
-      if (file_exists(drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile"))
-        include drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/$localFile";
+      $localFileName = $node->iform.'.en.php';
+      $localFile = $localFilePath . $localFileName;
+      if (file_exists($localFile))
+        include $localFile;
     }
+
+    // Override the module file with a site specific one if it exists.
+    $localFilePath = file_create_path("iform/client_helpers/prebuilt_forms/lang/");
+    $localFile = $localFilePath . $localFileName;
+     if (file_exists($localFile))
+      require $localFile;
+
     $args['language'] = $language->language;
     
     require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
