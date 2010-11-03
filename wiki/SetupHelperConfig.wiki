@@ -40,6 +40,8 @@ This setting is the path of the upload folder, required by the Indicia client he
 == $geoserver_url ==
 GeoServer is an open source application which allows you to expose your data using several standard web services. It's not a requirement of Indicia to install GeoServer, but if you want to present distribution maps, link your data to Google Maps, Google Earth or even desktop GIS systems then this is a really useful tool to achieve that. By installing GeoServer and specifying the root URL in this setting you can then take advantage of the ability to add your GeoServer feature types (datasets and layers) to your Indicia maps.
 
+Note, if you have GeoServer running on a local development server (localhost), make sure that you include the http protocol in this setting or some parts of mapping functionality may not work.
+
 == $geoplanet_api_key ==
 The Yahoo! GeoPlanet API is used to lookup place names when you use the place search control. It references a global database of places and returns the list of possibilities with their spatial references to Indicia. To obtain your own API key for GeoPlanet, please visit [http://developer.yahoo.com/geo/geoplanet/] and follow the link to get an Application ID.
 
