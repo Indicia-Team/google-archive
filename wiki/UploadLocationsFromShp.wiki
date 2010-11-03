@@ -2,15 +2,15 @@
 
 = Introduction =
 
-The Indicia Warehouse allows you to upload a list of locations from an ESRI Shape File (*.shp) which is a widely available GIS file format. This includes setting the boundaries of those locations and it can either create new locations or update existing ones.
+The Indicia Warehouse allows you to upload a list of locations from an ESRI Shape File (.shp) which is a widely available GIS file format. This includes setting the boundaries of those locations and it can either create new locations or update existing ones.
 
 = Steps =
 
-  # First you need a suitable SHP file. The SHP file must contain a list of objects to be imported as locations in Indicia, as well as at least one attribute for the name of each location. You will therefore have a file called *.shp and also a file called *.dbf containing the attribute values.
+  # First you need a suitable SHP file. The SHP file must contain a list of objects to be imported as locations in Indicia, as well as at least one attribute for the name of each location. You will therefore have a file called _myfile_.shp and also a file called _myfile_.dbf containing the attribute values.
   # Zip these 2 files into a single zip file with the same name, ready for upload.
   # Log into the Warehouse.
   # Select Lookup Lists > Locations from the menu.
-  # Click the Browse button next to the input at the bottom called "Upload a Zipped up SHP fileset into this list" and select your *.zip file. Click the Upload Zip File button.
+  # Click the Browse button next to the input at the bottom called "Upload a Zipped up SHP fileset into this list" and select your _myfile_.zip file. Click the Upload Zip File button.
   # On the next page are various options for specifying how the upload is handled. You can choose the following things:
     # Whether to import the polygon into the location's centroid or boundary geometry.
     # Whether the locations have a parent location.
@@ -22,4 +22,3 @@ The Indicia Warehouse allows you to upload a list of locations from an ESRI Shap
 Note, if there are existing locations with the same name and website, then they are updated rather than new locations created.
 
 When you are ready to import, click the Upload Data button.
-
