@@ -132,10 +132,11 @@ function iform_proxy_redirect($url, $options = array()) {
   }  
 
 	if(!user_access('IForm Proxy passthrough')) {
+    watchdog('IForm Proxy', 'Access blocked because of permissions');
 		return;
 	}
-    $user = check_plain(variable_get('iform_proxy_username', ''));
-    $password = check_plain(variable_get('iform_proxy_password', ''));
+  $user = check_plain(variable_get('iform_proxy_username', ''));
+  $password = check_plain(variable_get('iform_proxy_password', ''));
 	foreach($options as $key => $value){
 		switch($key) {
 			case 'referer' :
@@ -156,20 +157,19 @@ function iform_proxy_redirect($url, $options = array()) {
       curl_setopt($session, CURLOPT_HTTPHEADER, $httpHeader);
     }
 
-    curl_setopt($session, CURLOPT_HEADER, true);
+    curl_setopt($session, CURLOPT_HEADER, false);
     curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 
-    // Do the POST and then close the session
-    $response = curl_exec($session);
-    if (curl_errno($session) || strpos($response, 'HTTP/1.1 200 OK')===false) {
+    // Do the POST and then close the session    
+    $response = curl_exec($session);    
+    $headers = curl_getinfo($session);
+    if (curl_errno($session) || $headers['http_code']!==200) {
       echo 'cUrl request failed. Please check cUrl is installed on the server.';
       if (curl_errno($session))
         echo 'Error number: '.curl_errno($session).'';
       echo "Server response ";
       echo $response;
     } else {
-      $offset = strpos($response, "\r\n\r\n");
-      $headers = curl_getinfo($session);
 // TODO COPY OVER HEADERS
 //      if (strpos($headers['content_type'], '/')!==false) {
 //        $fileType = array_pop(explode('/',$headers['content_type']));
@@ -181,8 +181,7 @@ function iform_proxy_redirect($url, $options = array()) {
 //      } else {
 //        $document->setCharset(null);
 //      }
-      // last part of response is the actual data
-      echo array_pop(explode("\r\n\r\n", $response));
+      echo $response;
     }
     curl_close($session);
   
