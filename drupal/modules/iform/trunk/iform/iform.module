@@ -207,7 +207,7 @@ function iform_form(&$node, $form_state) {
     '#title' => check_plain('indicia form'),
     '#default_value' => $node->iform,
     '#required' => TRUE,
-	  '#options' => $iform_list,
+    '#options' => $iform_list,
     '#description' => t('Please choose an Indicia form to use on this page.'),
     '#ahah' => array(
       'path' => 'iform_parameters/js/0',
