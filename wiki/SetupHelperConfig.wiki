@@ -19,7 +19,7 @@ The downloaded copy of the client_helpers folder contains a helper_config.php fi
 class helper_config {
   static $base_url='http://testwarehouse.indicia.org.uk/';
   static $interim_image_folder = './upload/';
-  static $move_images_to_warehouse = true;
+  static $final_image_folder = 'warehouse';
   static $cache_folder = './upload/';
   static $geoserver_url = '';
   static $geoplanet_api_key='PvEFj2rV34FRB4EdRJ8P9WCVq6RgzcRF.xovJZ3fGLGQYwj2ntLoqVB0t5FdPVPvA_wY2w--';
@@ -39,8 +39,8 @@ This setting is for the URL of the Indicia warehouse you are connecting to, incl
 == $interim_image_folder ==
 This setting is the path of the upload folder, required by the Indicia client helpers as a temporary location for image files being uploaded (e.g. photos of occurrence records). 
 
-== $move_images_to_warehouse ==
-Defaults to true, in which case images uploaded to the interim image folder are uploaded to the Warehouse on final record submission. If set to false, then images are left in the interim image folder.
+== $final_image_folder ==
+Defaults to warehouse, in which case images uploaded to the interim image folder are uploaded to the Warehouse on final record submission. If set to a folder path, then images are moved to this folder on the local server.
 
 == $cache_folder ==
 This folder acts as a storage location for cached data. If the folder does not exist, then the client helpers will not be able to cache the data used to populate controls such as select boxes, so the form will load more slowly. You can normally leave this setting as it is.
