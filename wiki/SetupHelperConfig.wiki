@@ -18,7 +18,9 @@ The downloaded copy of the client_helpers folder contains a helper_config.php fi
 {{{
 class helper_config {
   static $base_url='http://testwarehouse.indicia.org.uk/';
-  static $upload_path = './upload/';
+  static $interim_image_folder = './upload/';
+  static $move_images_to_warehouse = true;
+  static $cache_folder = './upload/';
   static $geoserver_url = '';
   static $geoplanet_api_key='PvEFj2rV34FRB4EdRJ8P9WCVq6RgzcRF.xovJZ3fGLGQYwj2ntLoqVB0t5FdPVPvA_wY2w--';
   static $google_search_api_key='ABQIAAAA7HA6ddfArSVixiSlTHrS1RT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRGj3r9a4qCJPaGOYXIsi8AfXFPzQ';
@@ -34,8 +36,14 @@ This content is already pre-configured to some extent, so if you are developing 
 == $base_url ==
 This setting is for the URL of the Indicia warehouse you are connecting to, including the trailing slash.
 
-== $upload_path ==
-This setting is the path of the upload folder, required by the Indicia client helpers as a temporary location for image files being uploaded (e.g. photos of occurrence records). This folder also acts as a storage location for cached data. If the folder does not exist, then the client helpers will not be able to cache the data used to populate controls such as select boxes, so the form will load more slowly. You can normally leave this setting as it is, and simply create a folder called upload in the same folder as the the client_helpers folder to enable caching and image upload support.
+== $interim_image_folder ==
+This setting is the path of the upload folder, required by the Indicia client helpers as a temporary location for image files being uploaded (e.g. photos of occurrence records). 
+
+== $move_images_to_warehouse ==
+Defaults to true, in which case images uploaded to the interim image folder are uploaded to the Warehouse on final record submission. If set to false, then images are left in the interim image folder.
+
+== $cache_folder ==
+This folder acts as a storage location for cached data. If the folder does not exist, then the client helpers will not be able to cache the data used to populate controls such as select boxes, so the form will load more slowly. You can normally leave this setting as it is.
 
 == $geoserver_url ==
 GeoServer is an open source application which allows you to expose your data using several standard web services. It's not a requirement of Indicia to install GeoServer, but if you want to present distribution maps, link your data to Google Maps, Google Earth or even desktop GIS systems then this is a really useful tool to achieve that. By installing GeoServer and specifying the root URL in this setting you can then take advantage of the ability to add your GeoServer feature types (datasets and layers) to your Indicia maps.
