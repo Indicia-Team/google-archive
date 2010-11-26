@@ -248,7 +248,7 @@ function iform_form(&$node, $form_state) {
   } else {
     $form['iform_params']['iform_params_wrapper']['dummy'] = array(
       '#type' => 'item',
-      '#value' => t('<em>Please select a form before defining parameters.</em>')
+      '#value' => '<em>'.t('Please select a form before defining parameters.').'</em>'
     );
   }
 
@@ -275,7 +275,8 @@ function convert_params_array($params, $node) {
       '#required' => (!array_key_exists('required', $param) || $param['required']),
       '#weight' => $idx
     );
-    if (isset($param['allowHtml']) && !$param['allowHtml']) {
+    // allowHtml param disables the wysiwyg module.
+    if (!isset($param['allowHtml']) && !$param['allowHtml']) {
       $param_def['#wysiwyg']==false;
     }
     // Only set the default_value if we have something, otherwise it can trigger an error in the checkboxes control (line 1206 of form.inc)    
