@@ -96,11 +96,25 @@ function iform_loctools_listusers($node) {
 }
 
 /**
-* @param node object to return locations IDs for.
-* @return array of location IDs or 'all'
+* @param node object to return user ID for
+* @param location id to return user ID for.
+* @return array of user IDs
+*/
+function iform_loctools_getusers($node, $lid) {
+  $retVal = array();
+  $results = db_query('SELECT uid FROM {iform_loctools} WHERE nid = %d and lid = %d', $node->nid, $lid);
+  while($result = db_fetch_object($results)){
+    $retVal[] = $result->uid;
+  }
+  return $retVal;
+}
+
+/**
+* @param node object to return user ID for
+* @param location id to return user ID for.
+* @return user ID (singular) or -1
 */
 function iform_loctools_getuser($node, $lid) {
-  $retVal = array();
   $results = db_fetch_object(db_query('SELECT uid FROM {iform_loctools} WHERE nid = %d and lid = %d', $node->nid, $lid));
   if(!is_null($results)){
   	return $results->uid;
