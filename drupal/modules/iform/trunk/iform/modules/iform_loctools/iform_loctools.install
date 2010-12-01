@@ -28,7 +28,7 @@ function iform_loctools_schema() {
         'not null' => TRUE
       ),
     ),
-    'primary key' => array('nid','lid')
+    'primary key' => array('nid','lid','uid')
   );
   return $schema;
 }
