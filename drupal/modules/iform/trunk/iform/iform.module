@@ -28,12 +28,12 @@ function iform_perm() {
   //   if yes, call it and add to the return list
   $results = db_query('SELECT n.nid, i.iform FROM {iform} i, {node} n WHERE i.nid = n.nid');
   while($result = db_fetch_object($results)) {
-	require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
-	require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$result->iform.'.php';
-	if(method_exists('iform_'.$result->iform, 'get_perms')) {
-	  $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
-	  $retVal = array_merge($retVal, $perms);
-	}
+    require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+    require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$result->iform.'.php';
+    if(method_exists('iform_'.$result->iform, 'get_perms')) {
+      $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
+      $retVal = array_merge($retVal, $perms);
+    }
   }
   // Also look for then generic IForm module setting to have custom permissions for this form
   $results = db_query("SELECT n.nid, n.title FROM {iform} i, {node} n WHERE n.nid=i.nid AND i.params like '%\"view_access_control\":1%'");
@@ -557,6 +557,13 @@ $('.ui-state-default').live('mouseout', function() {
     
     // Link in the custom css file if present. Drupal skips it if missing.
     drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/'.$node->iform.'.css');
+    
+    // Link in the form's custom js file if present.
+    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/'.$node->iform.'.js'))
+      drupal_add_js(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/'.$node->iform.'.js');
+    // Link in the specific node's custom js file if present.
+    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/node.'.$node->nid.'.js'))
+      drupal_add_js(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/node.'.$node->nid.'.js');
     
     ob_end_clean();
     $node->content['myfield']=array(
