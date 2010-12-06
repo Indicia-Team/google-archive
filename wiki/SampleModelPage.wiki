@@ -18,21 +18,22 @@ Where parent/child relationships exist, the model should extend ORM_Tree in plac
 
 ==Class variables==
 
-_search_field_ should define the default field to search when querying this model.
+_$search_field_ should define the default field to search when querying this model.
 
 {{{
-
 	protected $search_field='title';
+}}}
 
+_$additional_csv_fields_ defines any special fields which can be uploaded for this model from a CSV file, with the key of each item being the field name and the value being the caption. For an example of this, refer to the occurrence model which declares up to 3 images that can be uploaded from a CSV file.
+
+{{{
+	protected $additional_csv_fields=array('fieldname'=>'caption');
 }}}
 
 ===Relationships===
 
 Relationships should be defined as outlined [http://docs.kohanaphp.com/libraries/orm#defining_relationships_in_orm here].
 
-===Additional uploadable fields===
-
-If there are any special fields which can be uploaded for this model from a CSV file, then an protected array is declared $additionalCsvFields, with the key of each item being the field name and the value being the caption. For an example of this, refer to the occurrence model which declares up to 3 images that can be uploaded from a CSV file.
 
 ==Class Methods==
 
