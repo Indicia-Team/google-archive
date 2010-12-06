@@ -30,6 +30,10 @@ _search_field_ should define the default field to search when querying this mode
 
 Relationships should be defined as outlined [http://docs.kohanaphp.com/libraries/orm#defining_relationships_in_orm here].
 
+===Additional uploadable fields===
+
+If there are any special fields which can be uploaded for this model from a CSV file, then an protected array is declared $additionalCsvFields, with the key of each item being the field name and the value being the caption. For an example of this, refer to the occurrence model which declares up to 3 images that can be uploaded from a CSV file.
+
 ==Class Methods==
 
 ===Mandatory methods===
@@ -69,10 +73,10 @@ _caption_ should return a 'caption' for this model - for example, a caption for 
 
 }}}
 
-_getSubmittableFields_ should return a list of fields that this model will accept and save into the database. Keys that should be used to link to foreign models should be prefixed with fk_. This method will default to:
+_getSubmittableFields_ should return a list of fields that this model will accept and save into the database. Keys that should be used to link to foreign models should be prefixed with `fk_`. This method will default to:
 
 {{{
-/**
+        /**
 	 * Returns an array of fields that this model will take when submitting. By default, this
 	 * will return the fields of the underlying table, but where submodels are involved this
 	 * may be overridden to include those also.
