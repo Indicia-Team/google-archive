@@ -130,7 +130,6 @@ function iform_proxy_redirect($url, $options = array()) {
   if (strpos($url, 'http://') !== 0){
     $url = 'http://' . $url;
   }  
-
 	if(!user_access('IForm Proxy passthrough')) {
     watchdog('IForm Proxy', 'Access blocked because of permissions');
 		return;
@@ -149,7 +148,18 @@ function iform_proxy_redirect($url, $options = array()) {
     $session = curl_init($url);
     // Set the POST options.
     $httpHeader = array();
-    //curl_setopt($session, CURLOPT_POST, 1);
+    
+    $postData = file_get_contents( "php://input" );
+    // Set the POST options.
+    if (!empty($postData)) {
+      curl_setopt($session, CURLOPT_POST, 1);
+      curl_setopt($session, CURLOPT_POSTFIELDS, $postData);
+      // post contains a raw XML document?
+      if (substr($postData, 0, 1)=='<') {
+        $httpHeader[]='Content-Type: text/xml';
+      }
+    }
+
     if ($user != null && strlen($user)>0 && $password != null && strlen($password)>0) {
       $httpHeader[]='Authorization: Basic '.base64_encode($user.':'.$password);
     }
@@ -201,8 +211,8 @@ function iform_proxy_proxy() {
   
   // Build url, options, and module from path
   $url = isset($_GET['url']) ? $_GET['url'] : NULL;
-  $options = $_GET;    
-                              
+  $options = $_GET;
+
   // Sanity check
   if (empty($url)){      
     watchdog('iform_proxy', 'Failed to redirect user.');
@@ -212,7 +222,6 @@ function iform_proxy_proxy() {
   }
   
   unset($options['q'], $options['url']);
-  
   // Redirect and resume the processing phase
   iform_proxy_redirect($url, $options);
 }
