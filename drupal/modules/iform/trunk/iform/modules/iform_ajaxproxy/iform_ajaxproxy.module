@@ -159,10 +159,53 @@ function iform_ajaxproxy_proxy() {
     	// media handled differently. Submission is handled by the handle_media function.
         // hardcode the auth into the $_Post array
     	$_POST['auth_token'] = sha1($nonce.":".$node->password);
-		$_POST['nonce'] = $nonce;    	
-        // The response from handle_media has been updated to be json encoded.
-        $response = submission_builder::handle_media('upload_file');
-        echo json_encode($response);
+		$_POST['nonce'] = $nonce;
+		$media_id = 'upload_file';
+        // At the moment this only needs to handle a single media file at a time
+        $file = array();
+        if (array_key_exists($media_id, $_FILES)) { //there is a single upload field
+          if($_FILES[$media_id]['name'] != '') { //that field has a file
+            $file = $_FILES[$media_id];
+            $return = array();
+            $uploadpath = helper_config::$upload_path;
+            $target_url = helper_config::$base_url."/index.php/services/data/handle_media";
+            $name = $file['name'];
+            $fname = $file['tmp_name'];
+            $parts = explode(".",$name);
+            $fext = array_pop($parts);
+            // Generate a file id to store the image as
+            $destination = time().rand(0,1000).".".$fext;
+            if (move_uploaded_file($fname, $uploadpath.$destination)) { //successfully stored locally - send to the warehouse
+              $postargs = array();
+              if (array_key_exists('auth_token', $_POST)) $postargs['auth_token'] = $_POST['auth_token'];
+              if (array_key_exists('nonce', $_POST)) $postargs['nonce'] = $_POST['nonce'];
+              $file_to_upload = array('media_upload'=>'@'.realpath($uploadpath.$destination));          
+              $response = data_entry_helper::http_post($target_url, $file_to_upload + $postargs);
+              $output = json_decode($response['output'], true);
+              if (is_array($output)) { //an array signals an error - attach the errors to the control that caused them
+                if (array_key_exists('error', $output)) {
+                  $return['error'] = $output['error'];
+                  if (array_key_exists('errors', $output)) $return['errors'][$media_id] = $output['errors']['media_upload'];
+                }
+              } else { //filenames are returned without structure - the output of json_decode may not be valid.
+                $return['files'][] = $response['output'];
+              }
+              unlink($uploadpath.$destination); //remove local copy
+            } else { //attach the errors to the control that caused them
+              $return['error'] = 'Upload error';
+              $return['errors'][$media_id] = 'Sorry, there was a problem uploading this file - move failed.';
+            }
+          } else { //attach the errors to the control that caused them
+            $return['error'] = 'Upload error';
+            $return['errors'][$media_id] = 'Sorry, no file present for "'.$media_id.'".';
+          }
+        } else {
+          $return['error'] = 'Upload error';
+          $return['errors'][$media_id] = 'Sorry, "'.$media_id.'" not present in _FILES.';
+        }
+        //If no errors in the response array, all went well.
+        $return['success'] = !(array_key_exists('error', $return) || array_key_exists('errors', $return));
+        echo json_encode($return);
         return;
     case "occurrence":
         $structure = array('model' => 'occurrence');
