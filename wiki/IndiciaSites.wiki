@@ -14,3 +14,7 @@ The MNHNL Data Portal provides a place for Luxembourgish Citizens to learn about
 == [GalleryYellowMayDun Riverfly Recording Scheme Yellow May Dun] ==
 
 This survey captures records of the Yellow May Dun using a custom Indicia form.
+
+== [http://www.spipoll.org/ SPIPOLL] ==
+
+Engaging citizen scientists across France, SPIPOLL involves recording and photographing pollinators visiting flowers and includes tight integration into an existing Drupal site, advanced search gallery and a highly customised data entry system.
