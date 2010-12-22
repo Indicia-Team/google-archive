@@ -1,0 +1,29 @@
+#summary A list of prebuilt forms and associated documentation
+
+= Prebuilt Forms =
+
+Here is a list of the prebuilt forms available in Indicia.
+
+==Ad-hoc cetacean records==
+|| File || ad_hoc_cetaceans.php ||
+|| Description || A simple form for entering ad-hoc cetacean sightings. This differs from other forms in the usage of a map to enter the lat long only when the sighting is from the shore, whereas boat records must be entered using the GPS coordinate. ||
+
+==Basic 1 - species, date, place, survey and comment==
+|| File || basic_1.php ||
+|| Description || A minimal form to illustrate how dynamic forms work. ||
+
+==Basic 2 - species, date, place==
+|| File || basic_2.php ||
+|| Description || A second minimal form to illustrate how dynamic forms work. ||
+
+==Distribution map 1==
+|| File || distribution_map_1.php ||
+|| Description || Displays a distribution map. The map features data for any species, an entire survey, or can be filtered using a URL parameter. It also supports click on points to view details. ||
+|| Documentation || [distribution_map_1_standalone Example of using a distribution map in standalone PHP] ||
+
+==MNHNL Dynamic 1==
+|| File || mnhnl_dynamic_1.php ||
+|| Description || Advanced form which uses the attributes associated with a survey to dynamically build a form. Flexible and powerful, should be considered as the starting point for any new surveys. ||
+|| Documentation || [TutorialDynamicForm Creating a survey using the dynamic form] ||
+
+
