@@ -102,4 +102,4 @@ Finally, there needs to be a method which tells Indicia how to construct a "subm
 
 Each prebuilt form can automatically include a custom JavaScript file by creating a file with the same file name as the form PHP file, replacing the php extension with .js. The file should then be placed in the folder iform/client_helpers/prebuilt_forms/js. 
 
-Also it is possible to create a custom JavaScript file for a single Drupal iform node, by calling the file node.<node-id>.js and placing it in the same folder.
+Also it is possible to create a custom JavaScript file for a single Drupal iform node, by calling the file node._node-id_.js and placing it in the same folder.
