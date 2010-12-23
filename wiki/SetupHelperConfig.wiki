@@ -42,6 +42,9 @@ This setting is the path of the upload folder, required by the Indicia client he
 == $final_image_folder ==
 Defaults to warehouse, in which case images uploaded to the interim image folder are uploaded to the Warehouse on final record submission. If set to a folder path, then images are moved to this folder on the local server.
 
+== $final_image_folder_thumgs ==
+If using an image store outside Indicia, then the thumbnail images may be stored in a different folder or with a different prefix to the fullsize images. Note that the creation of thumbnails is then the responsibility of the image store you are using rather than Indicia. This optional configuration allows the folder to be set and any characters following the trailing slash are used as a file name prefix. 
+
 == $cache_folder ==
 This folder acts as a storage location for cached data. If the folder does not exist, then the client helpers will not be able to cache the data used to populate controls such as select boxes, so the form will load more slowly. You can normally leave this setting as it is.
 
