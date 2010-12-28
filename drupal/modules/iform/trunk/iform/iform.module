@@ -94,7 +94,7 @@ function iform_access($op, $node, $account) {
       return user_access('edit iform', $account);
     } 
   }
-} 
+}
 
 /** 
  * Retrieve the parameters for an iform. This is defined by each iform individually.
@@ -123,7 +123,8 @@ function get_form_parameters($node) {
         'caption'=>'View Access Control',
         'description'=>'If ticked, then a Drupal permission is created for this form to allow you to specify which '.
             'roles are able to view the form.',
-        'type'=>'boolean'
+        'type'=>'boolean',
+        'required'=>false
       )
   );
   // Now get the specific parameters from the form
@@ -476,30 +477,12 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   global $language;
   $node = node_prepare($node, $teaser);
   if ($node->iform && $node->iform!=-1) {
-    // Localise the file ; has to be done before the data entry helper is loaded, as templates are localisable.
-    $localFileName = $node->iform.'.'.$language->language.'.php';
-    $localFilePath = drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/";
-    $localFile = $localFilePath . $localFileName;
-    if (file_exists($localFile))
-      require $localFile;
-    else {
-      // If no file available in the correct language, revert to English if the file is present.
-      $localFileName = $node->iform.'.en.php';
-      $localFile = $localFilePath . $localFileName;
-      if (file_exists($localFile))
-        include $localFile;
-    }
-
-    // Override the module file with a site specific one if it exists.
-    $localFilePath = file_create_path("iform/client_helpers/prebuilt_forms/lang/");
-    $localFile = $localFilePath . $localFileName;
-     if (file_exists($localFile))
-      require $localFile;
-
+    iform_load_language_files($node);
+   
     $args['language'] = $language->language;
     
     require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
-    require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
+    require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';    
     ob_start();
     // force the path of js and css files to be relative to Drupal, not from the Warehouse
     data_entry_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
@@ -557,6 +540,7 @@ $('.ui-state-default').live('mouseout', function() {
     
     // Link in the custom css file if present. Drupal skips it if missing.
     drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/'.$node->iform.'.css');
+    drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/node.'.$node->nid.'.css');
     
     // Link in the form's custom js file if present.
     if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/'.$node->iform.'.js'))
@@ -639,4 +623,46 @@ function iform_form_alter(&$form, $form_state, $form_id) {
 function iform_diagnostics() {
   require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
   return data_entry_helper::system_check();
+}
+
+/**  
+ * Loads language files defined for the form. This includes language files defined in the module folder or in the site specific
+ * Drupal folders, and also includes files named with the form name or node nid. 
+ */
+function iform_load_language_files($node) {
+  global $language, $custom_terms, $custom_term_overrides;
+  $moduleLangFilePath = drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/";
+  $siteSpecificLangFilePath = file_create_path("iform/client_helpers/prebuilt_forms/lang/");
+  $formLangFileName = $node->iform.'.'.$language->language.'.php';
+  $nodeLangFileName = 'node.'.$node->nid.'.'.$language->language.'.php';
+  $formFallbackFileName = $node->iform.'.en.php';
+  // Define a priority ordered list of file names that could contain the custom terms list.
+  if ($siteSpecificLangFilePath)
+    $langFiles = array(
+      $siteSpecificLangFilePath . $nodeLangFileName,
+      $siteSpecificLangFilePath . $formLangFileName,      
+      $siteSpecificLangFilePath . $formFallbackFileName
+    );
+  else 
+    $langFiles=array();
+  $langFiles = array_merge($langFiles, array(
+    $moduleLangFilePath       . $nodeLangFileName,
+    $moduleLangFilePath       . $formLangFileName,
+    $moduleLangFilePath       . $formFallbackFileName
+  ));
+  $custom_terms=array(); // this is an array of key value pairs
+  $custom_term_overrides=array(); // this is an array with each item a subarray of key value pairs.
+  // start at the highest priority possible language file name and loop through until we find one that defines the set of custom terms.    
+  foreach ($langFiles as $langFile) {      
+    if (file_exists($langFile))
+      // Found a file to include. It might define custom_terms, or might define an entry in the custom_term_overrides array
+      require $langFile;
+    // finish when we have loaded an array of custom terms. 
+    if (count($custom_terms)>0) break;
+  }
+  // if there are any custom term overrides, they need to be merged into custom terms in reverse priority order.
+  $custom_term_overrides = array_reverse($custom_term_overrides);
+  foreach ($custom_term_overrides as $override_list) {
+    $custom_terms=array_merge($custom_terms, $override_list);
+  }
 }
