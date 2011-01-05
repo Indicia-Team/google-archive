@@ -490,6 +490,13 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     // also force the theme path to be local
     global $indicia_theme_path;
     $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';
+    // if there is a template override file, include it
+    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/'.$node->iform.'.php')) {
+      require(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/'.$node->iform.'.php');
+    }
+    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php')) {
+      require(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php');
+    }
     // we need to grab each requested parameter from the node to pass to the form
     $params = get_form_parameters($node);
     $args = array();
