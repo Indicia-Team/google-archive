@@ -180,17 +180,9 @@ function iform_proxy_redirect($url, $options = array()) {
       echo "Server response ";
       echo $response;
     } else {
-// TODO COPY OVER HEADERS
-//      if (strpos($headers['content_type'], '/')!==false) {
-//        $fileType = array_pop(explode('/',$headers['content_type']));
-//        JResponse::setHeader( 'Content-Disposition', 'attachment; filename=download.'.$fileType );
-//      }
-//      $document->setMimeEncoding($headers['content_type']);
-//      if (array_key_exists('charset', $headers)) {
-//        $document->setCharset($headers['charset']);
-//      } else {
-//        $document->setCharset(null);
-//      }
+      if (strpos($headers['content_type'], '/')!==false) 
+        header('Content-type: '.$headers['content_type']);
+      // @todo Check for charset and file download headers      
       echo $response;
     }
     curl_close($session);
