@@ -176,7 +176,9 @@ function iform_proxy_redirect($url, $options = array()) {
     if (curl_errno($session) || $headers['http_code']!==200) {
       echo 'cUrl request failed. Please check cUrl is installed on the server.';
       if (curl_errno($session))
-        echo 'Error number: '.curl_errno($session).'';
+        echo 'Error number: '.curl_errno($session)."\n";
+      else 
+        echo 'Headers returned HTTP '.$headers['http_code']."\n";
       echo "Server response ";
       echo $response;
     } else {
