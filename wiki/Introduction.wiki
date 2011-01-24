@@ -3,17 +3,17 @@
 
 = Introduction =
 
-Welcome to the Indicia Wiki, where you will find information, documentation and tutorials on this project. Indicia is the online biological recording toolkit developed as part of the [http://www.OPALexplorenature.org Open Air Laboratories] Network (OPAL).
+Welcome to the Indicia Wiki, where you will find information, documentation and tutorials on this project. Indicia is the online biological recording toolkit conceived as part of the [http://www.OPALexplorenature.org Open Air Laboratories] Network (OPAL).
 
 == Online Recording ==
 
-So, what do we mean by online biological recording? At least for our purposes, we are talking about a website that lets users contribute their wildlife observations, or _records_, to a database. The project is entirely focused on data capture rather than subsequent analysis. For example, the mapping and reporting facilities in Indicia are targeted at making the websites more interesting for users, so they come back and contribute more records. 
+So, what do we mean by online biological recording? At least for our purposes, we are talking about a website that lets users contribute their wildlife observations, or _records_, to a database. The project is focused on data capture rather than subsequent analysis. For example, the mapping and reporting facilities in Indicia are primarily targeted at making the websites more interesting for people submitting records, so they come back and contribute more records. 
 
 == Who will use Indicia? ==
 
-There are 3 types of user predicted for Indicia. Firstly, the people who contribute wildlife observations. This includes anyone from members of the general public or schoolchildren through to professional surveyors and scheme members.
+There are 3 types of user predicted for Indicia. Firstly, the people who contribute wildlife observations. This includes anyone from members of the general public or schoolchildren through to professional surveyors and  recording scheme members.
 
-The next set of users are the people who will host the websites used for data capture. These include national recording schemes, local record centres and wildlife charities. Fundamentally, these are organisations that want to build up their store of biodiversity information by making it simpler to contribute wildlife observations.
+The next set of users are the people who provide the websites used for data capture. These include national recording schemes, local record centres and wildlife charities. Fundamentally, these are organisations that want to build up their store of biodiversity information by making it simpler to contribute wildlife observations.
 
 Finally there is the team of people who provide the core services required by an online recording website. Things like managing the lists of species that are available to record, storing the actual data that is captured and so forth.
 
@@ -27,10 +27,10 @@ You can consider Indicia as coming in two parts; a user interface and a data sto
 
 == Who is developing Indicia? ==
 
-In its initial phase, Indicia’s development is being led by Biodiverse IT, is funded by the [http://www.OPALexplorenature.org OPAL] Network and managed by the [http://www.ceh.ac.uk/ Centre for Ecology and Hydrology] (CEH). The project is Open Source, which means you can have the code for free, and has a high level of community involvement.
+In its initial phase, Indicia’s development is being led by Biodiverse IT, is funded by the [http://www.OPALexplorenature.org OPAL] Network and managed by the [http://www.ceh.ac.uk/ Centre for Ecology and Hydrology] (CEH). The project is open source, which means you can have the code for free, and it has a high level of community involvement.
 
 == Is Indicia ready to use? ==
 
-Although it is early days for the project, we have now released version 0.2.5. The project is moving forward very quickly so there are still some bugs here and there, but several online recording projects are already using Indicia successfully.
+Yes, definitely. Although still considered a beta version because there are lots of features we still want to add, Indicia has been successfully used for online recording on a number of websites in the UK, Luxembourg and France.
 
 [http://forums.nbn.org.uk/ Get involved on the online development tool discussions on the NBN Forum.]
