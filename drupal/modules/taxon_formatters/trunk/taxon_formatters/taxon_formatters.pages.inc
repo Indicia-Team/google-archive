@@ -52,25 +52,32 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
   $formatTypes = module_invoke_all('taxon_formatter_types');
   $formatters = array(''=>'<Please Select>');
   foreach ($formatTypes as $type=>$config) {
-    $formatters[$type] = $config['title'];
+    $formatters[$type] = t($config['title']);
   }
-  watchdog('formatters', print_r($formatters, true));
-  $form['type'] = array(
-    '#type' => 'select',
-    '#title' => t('Formatter'),
-    '#options' => $formatters,
-    '#description' => t('Select the type of output you want for this preset'),
-    '#required' => true,
-    '#default_value' => $preset['type'],
-    '#ahah' => array(
-      'path' => 'taxon_formatter_settings/js/0',
-      'wrapper' => 'taxon-formatter-settings',
-      'method' => 'replace',
-      'effect' => 'fade',
-      'event' => 'change'
-    )
-  );
-   $form['taxon_formatter_params'] = array(
+  if (empty($preset['type'])) {
+    $form['type'] = array(
+      '#type' => 'select',
+      '#title' => t('Formatter'),
+      '#options' => $formatters,
+      '#description' => t('Select the type of output you want for this preset'),
+      '#required' => true,
+      '#default_value' => $preset['type'],
+      '#ahah' => array(
+        'path' => 'taxon_formatter_settings/js/0',
+        'wrapper' => 'taxon-formatter-settings',
+        'method' => 'replace',
+        'effect' => 'fade',
+        'event' => 'change'
+      )
+    );
+  } else {
+    $form['type'] = array(
+      '#title' => t('Formatter'),
+      '#type' => 'item',
+      '#value' => t($formatTypes[$preset['type']]['title'])
+    );
+  }
+  $form['taxon_formatter_params'] = array(
     '#type' => 'fieldset',
     '#title' => t('Formatter settings'),
     '#tree' => FALSE
