@@ -81,10 +81,10 @@ function taxon_identifier_field_settings($op, $field) {
 function taxon_identifier_field($op, &$node, $field, &$items, $teaser, $page) {
   switch ($op) {
     case 'sanitize':
-      taxon_identifier_sanitize(&$node, $field, &$items, $teaser, $page);
+      taxon_identifier_sanitize($node, $field, $items, $teaser, $page);
       break;
     case 'validate':
-      taxon_identifier_validate(&$node, $field, &$items, $teaser, $page);
+      taxon_identifier_validate($node, $field, $items, $teaser, $page);
       break;
   }
 }
