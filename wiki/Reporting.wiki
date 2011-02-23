@@ -118,6 +118,7 @@ Columns are used to give further specification to how particular fields should b
   * `class` defines a css class that will be applied to the cells in the column (though not the header). For example, in a species column you can specify "sci binomial" to define that this is the name part of the row. This can then be detected as a Species Microformat.
   * `visible` can be set to false to hide a column, or to force a vague date column to appear that is being replaced by a standard date column.
   * `img` can be set to true for a field that contains the filename of an image uploaded to the Warehouse. This will then be replaced by a thumbnail of the image, with support for FancyBox image popups to show the full image size.
+  * `mappable` can be set to true to declare a column which can then be output using the report_helper::report_map method available from Indicia version 0.6. The column must output a WKT definition of the geometry to be mapped, e.g. the column definition in the SQL might be `st_astext(geom)`.
 
 Note that both columns and parameters will be inferred from the query if they are not provided, but providing them explicitly is recommended as it allows a much greater degree of control over how they are displayed.
 
