@@ -537,8 +537,14 @@ $('.ui-state-default').live('mouseout', function() {
   $(this).removeClass('ui-state-hover');
 });\n";
     
-    // Now retrieve the form content    
-    $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node, $response);
+    // Now retrieve the form content
+    try {
+      $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node, $response);
+    } catch (Exception $e) {
+      watchdog('debug', 'Error occurred loading form');
+      watchdog('debug', $e->getMessage());
+      $r =  $e->getMessage();
+    }
     
     // and also add all the javascript required by the form to the HTML head. Note that any ad-hoc JS
     // is inserted at the later in the head, otherwise we can't guarantee that any plugins created won't
