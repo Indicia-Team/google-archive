@@ -1,10 +1,10 @@
-#summary How to use your own JavaScript, CSS, language strings and indicia templates with the IForm module
+#summary How to use your own PHP, JavaScript, CSS, language strings and indicia templates with the IForm module
 
 = Introduction =
 
 Note that this applies to version 0.6 of Indicia and later. 
 
-When using the data_entry_helper class directly, you can easily take control over many aspects of the system to finely control the page output. For example, it is simple to add your own CSS and JavaScript files to the page, to control the output HTML by changing entries in the $indicia_templates global, or to change the language strings used by linking in your own language file. However when using the IForm module you cannot do this in the same way, but there is a mechanism for overridding all these aspects by creating files which are named according to defined patterns. 
+When using the data_entry_helper class directly, you can easily take control over many aspects of the system to finely control the page output. For example, it is simple to write custom validation code, add your own CSS and JavaScript files to the page, to control the output HTML by changing entries in the $indicia_templates global, or to change the language strings used by linking in your own language file. However when using the IForm module you cannot do this in the same way, but there is a mechanism for overridding all these aspects by creating files which are named according to defined patterns. 
 
 
 == Adding your own CSS to an Indicia form ==
@@ -67,4 +67,18 @@ If you need to override language strings in a Drupal multisite setup then you ca
 _Why don't we use Drupal i18n?_
 A good question - Drupal has mechanisms for internationalisation which are mature and robust. We don't use them in Indicia though, for 2 good reasons. Firstly, Indicia is not a Drupal specific project so needs its own mechanisms for localisation. Secondly and more importantly, Drupal allows you to localise into different languages but does not provide a mechanism for overriding a string in the default language (other than hacking around with theme functions or template files etc). So, in the example above we change the English place tab title, even though the form developer had already provided a suitable string. Drupal does not do this.
 
+== Providing custom validation code ==
 
+When the form submission has been built, ready to send to the warehouse, it is possible to run custom PHP to validation the form POST data and return an array of errors. To do this, create a folder within your iform module `iform\client_helpers\prebuilt_forms\validation`. Inside this folder, create a file called `validate.nid.php` where the nid is replaced by your page's Drupal node ID. This file will be automatically loaded by the iform module at the appropriate point. Inside the PHP file, create a single function called iform_custom_validation which recieves a $post parameter containing the $_POST array and returns an an associative array of control names with error messages. It can of course return an empty array if there are no problems found. Here's an example:
+{{{
+<?php
+
+function iform_custom_validation($post) {
+  $errors = array();
+  if (substr($post['sample:entered_sref'], 0, 2)!=='SU')
+    $errors['sample:entered_sref']=lang::get('This survey only accepts data in the SU grid square.');
+  return $errors;
+}
+
+?>
+}}}
