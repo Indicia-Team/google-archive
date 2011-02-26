@@ -92,6 +92,21 @@ _caption_ should return a 'caption' for this model - for example, a caption for 
 
 }}}
 
+_get_submission_structure_ is used when the submission of a model record typically involves submitting other associated model data at the same time. For example this will make the associated model fields available during CSV file upload into the model. The occurrence model provides a good example allowing a sample parent to be uploaded with the occurrences:
+{{{
+ /**
+  * Defines a submission structure for occurrences that lets samples be submitted at the same time, e.g. during CSV upload.
+  */
+  public function get_submission_structure() {
+    return array(
+        'model'=>$this->object_name,
+        'superModels'=>array(
+          'sample'=>array('fk' => 'sample_id')
+        )     
+    );
+  }
+}}}
+
 _getSubmittableFields_ should return a list of fields that this model will accept and save into the database. Keys that should be used to link to foreign models should be prefixed with `fk_`. This method will default to:
 
 {{{
