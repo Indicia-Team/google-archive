@@ -138,7 +138,7 @@ _preSubmit_ is called before any data is saved to the database and should tidy u
 
 {{{
 
-/**
+        /**
 	 * Ensures that the save array is validated before submission. Classes overriding
 	 * this method should call this parent method after their changes to perform necessary
 	 * checks unless they really want to skip them.
@@ -164,4 +164,40 @@ _preSubmit_ is called before any data is saved to the database and should tidy u
 					}
 			}
 		}
+}}}
+
+_fixed_values_form_ allows a model to declare a form that is displayed before an import of data into the model. The form specifies controls which allow the user to specify values which will apply for every single imported record. For example, when importing a list of samples it is highly likely that the list will relate to a single survey, so the fixed values form could declare a control allowing selection of sample:survey_id. This method returns an array with each entry being a control keyed by the field name the control is for. The definition of a control is identical in structure to the definition of parameters in XML reports, and therefore is an array with the following values:
+
+*display* provides the display caption for the control.
+
+*description* provides the control description which will be displayed alongside the control as help text.
+
+*datatype* provides the type of data the control accepts, e.g. text, lookup.
+
+*population_call* allows a lookup control to specify the data contained in the list, obtained via a web service call.
+
+*lookup_values* is an alternative to population_call and provides an associative array of values available for selection in the lookup control.
+
+*linked_to* is used for lookups which has a set of available options that are linked to another lookup's selected value. The linked_to value is set to the name of the other lookup.
+
+*linked_filter_field* is used in conjunction with *linked_to* and allows a field to be specified as a filter in the lookup's web service population call, with the value of the field being set to the other lookup's selected value. For example, the following sets a survey ID selection control populated with the list of surveys for the website ID selected in the first control.
+{{{
+public function fixed_values_form() {
+  return array(
+    'website_id' => array( 
+      'display'=>'Website', 
+      'description'=>'Select the website to import records into.', 
+      'datatype'=>'lookup',
+      'population_call'=>'direct:website:id:title' 
+    ),
+    'survey_id' => array(
+      'display'=>'Survey', 
+      'description'=>'Select the survey to import records into.', 
+      'datatype'=>'lookup',
+      'population_call'=>'direct:survey:id:title',
+      'linked_to'=>'website_id',
+      'linked_filter_field'=>'website_id'
+    )
+  );
+}
 }}}
