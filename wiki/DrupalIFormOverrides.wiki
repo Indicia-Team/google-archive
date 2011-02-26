@@ -69,7 +69,7 @@ A good question - Drupal has mechanisms for internationalisation which are matur
 
 == Providing custom validation code ==
 
-When the form submission has been built, ready to send to the warehouse, it is possible to run custom PHP to validation the form POST data and return an array of errors. To do this, create a folder within your iform module `iform\client_helpers\prebuilt_forms\validation`. Inside this folder, create a file called `validate.nid.php` where the nid is replaced by your page's Drupal node ID. This file will be automatically loaded by the iform module at the appropriate point. Inside the PHP file, create a single function called iform_custom_validation which recieves a $post parameter containing the $_POST array and returns an an associative array of control names with error messages. It can of course return an empty array if there are no problems found. Here's an example:
+When the form submission has been built, ready to send to the warehouse, it is possible to run custom PHP to validation the form POST data and return an array of errors. To do this, create a folder within your iform module `iform\client_helpers\prebuilt_forms\validation`. Inside this folder, create a file called `validate.nid.php` where the nid is replaced by your page's Drupal node ID. This file will be automatically loaded by the iform module at the appropriate point. Inside the PHP file, create a single function called iform_custom_validation which recieves a $post parameter containing form post array and returns an an associative array of control names with error messages. It can of course return an empty array if there are no problems found. Here's an example:
 {{{
 <?php
 
