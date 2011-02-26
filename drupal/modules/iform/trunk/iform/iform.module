@@ -513,17 +513,26 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     if ($_POST && (array_key_exists('website_id', $_POST)) && method_exists('iform_'.$node->iform, 'get_submission')) {
       // Ask the form to submit itself
       $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
-      // if for some reason the iform gives back an empty submission, ignocre it
+      // if for some reason the iform gives back an empty submission, ignore it
       if($s){
-        $response = data_entry_helper::forward_post_to('save', $s);
-        // Does the form redirect after success?    
-        if (is_array($response) && array_key_exists('success', $response) && 
-            array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
-          $url = $args['redirect_on_success'];      
-          drupal_goto($url, 'table='.$response['outer_table'].'&id='.$response['outer_id']);
-        } else {
-          // This dumps errors, and/or a success message if no redirection.
-          $r .= data_entry_helper::dump_errors($response);
+        // does this Drupal node have any custom validation code?        
+        if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/validation/validate.'.$node->nid.'.php')) {
+          require_once(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/validation/validate.'.$node->nid.'.php');
+          $errors = iform_custom_validation($_POST);
+          if (!empty($errors)) {
+            $r .= data_entry_helper::dump_errors(array('errors'=>$errors));
+          }
+        }
+        if (empty($errors)) {
+          // Does the form redirect after success?    
+          if (is_array($response) && array_key_exists('success', $response) && 
+              array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
+            $url = $args['redirect_on_success'];      
+            drupal_goto($url, 'table='.$response['outer_table'].'&id='.$response['outer_id']);
+          } else {
+            // This dumps errors, and/or a success message if no redirection.
+            $r .= data_entry_helper::dump_errors($response);
+          }
         }
       }
     }
