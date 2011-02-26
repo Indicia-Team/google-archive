@@ -21,13 +21,31 @@ Where parent/child relationships exist, the model should extend ORM_Tree in plac
 _$search_field_ should define the default field to search when querying this model.
 
 {{{
-	protected $search_field='title';
+protected $search_field='title';
 }}}
 
 _$additional_csv_fields_ defines any special fields which can be uploaded for this model from a CSV file, with the key of each item being the field name and the value being the caption. For an example of this, refer to the occurrence model which declares up to 3 images that can be uploaded from a CSV file.
 
 {{{
-	protected $additional_csv_fields=array('fieldname'=>'caption');
+protected $additional_csv_fields=array('fieldname'=>'caption');
+}}}
+
+_$has_attributes_ is set to true in any model which supports custom attributes.
+
+{{{
+protected $has_attributes=true;
+}}}
+
+_$attrs_submission_name_ is set for any model that supports custom attributes. This gives the name of a metafield that can be included in submission data to list the custom attribute values for the submission. However, note that this method of passing custom attributes is now deprecated in favour of passing a field in the normal fields list of the submission.
+
+{{{
+protected $attrs_submission_name='locAttributes';
+}}}
+
+_$attrs_field_prefix_ gives the text that is combined with the custom attribute ID to form the name of the custom attribute item. This forms the name of the HTML control in a form which refers to the custom attribute and therefore provides the name of the data value in the submission fields data. For example, a sample attribute ID 3 would be called smpAttr:3 on the form.
+
+{{{
+protected $attrs_field_prefix='locAttr';
 }}}
 
 ===Relationships===
