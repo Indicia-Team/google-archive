@@ -23,8 +23,8 @@ Here is a list of the prebuilt forms available in Indicia.
 
 ==Importer==
 || File || importer.php ||
-|| Description || ||
-|| Documentation || prebuilt_importer Configuring the Importer prebuilt form. ||
+|| Description || A wizard for importing data into Indicia. ||
+|| Documentation || [prebuilt_importer Configuring the Importer prebuilt form.] ||
 
 ==MNHNL Dynamic 1==
 || File || mnhnl_dynamic_1.php ||
