@@ -524,7 +524,9 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
           }
         }
         if (empty($errors)) {
-          // Does the form redirect after success?    
+          watchdog('validation', 'no errors');
+          $response = data_entry_helper::forward_post_to('save', $s);
+          // Does the form redirect after success?
           if (is_array($response) && array_key_exists('success', $response) && 
               array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
             $url = $args['redirect_on_success'];      
