@@ -261,7 +261,8 @@ function nbn_map_build_query($element, $preset) {
     $vc = '<map:ViceCounty>' . ereg_replace("[^0-9]", "", $preset['settings']['vice_county']) . '</map:ViceCounty>';
   else
     $vc = '';
-  $query = '<map:GridMapRequest registrationKey="'.$preset['settings']['registration'].'" xmlns:tax="http://www.nbnws.net/Taxon" xmlns:dat="http://www.nbnws.net/Dataset" xmlns:map="http://www.nbnws.net/Map">'.
+  $query = '<map:GridMapRequest registrationKey="'.$preset['settings']['registration'].'" xmlns:tax="http://www.nbnws.net/Taxon" '.
+      'xmlns:dat="http://www.nbnws.net/Dataset" xmlns:map="http://www.nbnws.net/Map">'.
       '<tax:TaxonVersionKey>' . $element['#item']['safe_value'] . '</tax:TaxonVersionKey>'.
       '<map:Resolution>_' . $preset['settings']['resolution'] . '</map:Resolution>'.
       '<map:GridMapSettings>'.
