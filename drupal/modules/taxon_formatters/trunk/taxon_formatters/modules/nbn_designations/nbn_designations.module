@@ -47,14 +47,14 @@ function nbn_designations_taxon_formatter_settings_form($settings, $type, $args)
  */
 function theme_nbn_designations_taxon_formatter_output($element, $preset) {
   $list = nbn_designations_get_designations($element['#item']['safe_value'], $preset);
-  if ($list) {
+  if (is_array($list)) {
     $items = array();
     foreach ($list as $designation) {
       $items[] = theme('nbn_designations_format_item', $designation);
     }
     return theme('item_list', $items, null, 'ul', array('class'=>'designations-list')); 
   } else 
-    return t('No designations found.');
+    return t("No designations found.<br/>$list");
 }
 
 /**
@@ -90,10 +90,13 @@ function nbn_designations_get_designations($tvk, $preset) {
     drupal_set_message(t('The NBN Gateway designations could not be displayed. More information is in the log.'), 'error');
     return array();
   }
-  if ($preset['settings']['caching']) {
+  if ($preset['settings']['caching'] && isset($response['Taxa']['Taxon'])) {    
     cache_set("nbn_designations:$tvk", $response['Taxa']['Taxon']['TaxonDesignations']['TaxonDesignation']);
   }
-  return $response['Taxa']['Taxon']['TaxonDesignations']['TaxonDesignation'];
+  if (isset($response['Taxa']['Taxon']))
+    return $response['Taxa']['Taxon']['TaxonDesignations']['TaxonDesignation'];
+  else 
+    return t("The species designation information could not be retrieved.");
 }
 
 /**
