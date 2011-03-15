@@ -63,7 +63,8 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
       '#title' => t('Datasets'),
       '#description' => t('List the keys of the datasets to restrict the query to one per line, or leave blank for no dataset filter.'),
       '#required' => FALSE,
-      '#default_value' => $settings['datasets']
+      '#default_value' => $settings['datasets'],
+      '#wysiwyg' => FALSE
     );
     $form['bands'] = array(
       '#type' => 'textarea',
@@ -72,7 +73,8 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
           'Each band line consists of a comma separated list of the settings (from, to, fill and border). The from and to values are 4 digit years, the fill and border '.
           'values are RGB colour codes. For example "from=1980,to=1990,fill=FF0000,border=000000".'),
       '#required' => FALSE,
-      '#default_value' => $settings['bands']
+      '#default_value' => $settings['bands'],
+      '#wysiwyg' => FALSE
     );
     $form['region'] = array(
       '#type' => 'select',

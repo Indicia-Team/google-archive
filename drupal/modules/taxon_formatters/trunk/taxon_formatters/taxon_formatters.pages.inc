@@ -71,6 +71,7 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
       )
     );
   } else {
+    // for an existing formatter, set this as a fixed value on the form - the user cannot change the fundamental type of an existing formatter.
     $form['type'] = array(
       '#title' => t('Formatter'),
       '#type' => 'item',
