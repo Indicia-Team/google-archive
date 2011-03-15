@@ -128,16 +128,20 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
  * @todo caching option
  */
 function theme_nbn_map_taxon_formatter_output($element, $preset) {
+  // return nothing if no TVK.
+  $tvk = trim($element['#item']['safe_value']);
+  if (empty($tvk))
+    return '';
   require_once(drupal_get_path('module','taxon_formatters').'/lib/nusoap.php');
   if ($preset['settings']['caching']) {
     $base_path = file_directory_path()."/nbn_maps";
     if (!file_exists($base_path)) {
       mkdir($base_path, 0777);
     }
-    $image_name = $element['#item']['safe_value'].'-'.$preset['presetid'].'.jpg';
+    $image_name = "$tvk-".$preset['presetid'].'.jpg';
     $image_path = $base_path."/".$image_name;
   }
-  if ($preset['settings']['caching'] && $cache = cache_get('nbn_map:'.$element['#item']['safe_value']) && file_exists($image_path)) {
+  if ($preset['settings']['caching'] && $cache = cache_get("nbn_map:$tvk") && file_exists($image_path)) {
     // everything we need is in the cache and images folder
     return theme('nbn_map_output', base_path().$image_path, $cache->data, $preset);
   }
@@ -172,7 +176,7 @@ function theme_nbn_map_taxon_formatter_output($element, $preset) {
   $map = $response['Map'];
   if ($preset['settings']['caching']) {
     // cache the whole response
-    cache_set('nbn_map:'.$element['#item']['safe_value'], $response);
+    cache_set("nbn_map:$tvk", $response);
     // Now we have a remote image URL, copy it locally
     $remote_image = file_get_contents($map['Url']) or die('Could not grab the file');
     $local_image  = fopen($image_path, 'w+') or die('Could not create the file');
