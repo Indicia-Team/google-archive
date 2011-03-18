@@ -12,9 +12,9 @@ This hook allows your module to declare extensions to the user interface of exis
 function my_module_extend_ui() {
   return array(array(
     'view'=>'location/location_edit', 
-    'type'='tab',
+    'type'=>'tab',
     'controller'=>'site_management_overview', 
-    'title'=.'Site Management'
+    'title'=>'Site Management'
   ));
 }
 }}}
