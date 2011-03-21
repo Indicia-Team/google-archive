@@ -383,9 +383,9 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     }
     // we need to grab each requested parameter from the node to pass to the form
     $params = form_helper::get_form_parameters($node->iform);
-    $args = array();
+        $args = array();
     foreach ($params as $param) {
-      $args[$param['name']] = $node->{$param['name']};
+      $args[$param['name']] = $node->params[$param['name']];
     }
     $r = '';
     $response = null;
