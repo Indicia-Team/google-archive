@@ -40,3 +40,16 @@ function log_browser_alter_menu($menu) {
 }}}
 
 In this example, there is a controller file browse_server_logs.php, containing the class Browse_server_logs_Controller which declares a public index method (since the path in the above menu item does not specify the action, so the default index is used).
+
+== extend_orm hook ==
+The Kohana ORM implementation allows objects to understand how they relate to other objects in the data model. For example, if a _sample has_many occurrences_ then when a sample ORM object is instantiated, it is possible to access the occurrences via sample->occurrences. These relationships are declared as part of the ORM class definitions and are documented at [http://docs.kohanaphp.com/libraries/orm/starting]. 
+
+In order to add new tables and ORM entities to the data model properly, you will need to declare relationships from your new ORM model class (which you can do direct in the class definition) as well as in the existing ORM model class which you are relating to. However, you don't want to change the existing Warehouse model. For example, if you wanted to add a plugin module which declares a new entity for site land parcels. You would declare a new model for land_parcels in your plugin module's models folder and this model would declare that it belongs_to location. However, the location model already exists in the main application/models folder and you don't want to touch that to extend it. So, you can write a method in your plugins file such as:
+{{{
+function land_parcels_extend_orm() {
+  return array('location'=>array(
+    'has_many'=>array('land_parcels')
+  ));
+}
+}}}
+You can use the following predicates to declare relationships: has_one, has_many, belongs_to, has_and_belongs_to_many. These are described in the Kohana ORM documentation.
