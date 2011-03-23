@@ -89,7 +89,15 @@ Click the Configure email button, then you will be presented with the Email Conf
 
 http://indicia.googlecode.com/svn/wiki/setup_email.png
 
-On this page, you need to provide the information Indicia needs to connect to a mail server in order to send forgotten password reminder emails. If you are running a development server or don't need this functionality, you can click the Skip email configuration button.
+On this page, you need to provide the information Indicia needs to connect to a mail server in order to send forgotten password reminder emails. If you are running a development server or don't need this functionality, you can click the Skip email configuration button. Here are some notes on the setup options:
+
+*Outgoing mail server* is the address you use to send mail out to from this account. This would be the smtp address given by your email provider, e.g. smtp.domain.com.
+
+*Username for email connection* is the username used by your email application to connect to your email account. 
+
+*Password for email connection* is the password used by your email application to connect to your email account. 
+
+You should normall be able to leave the other settings as they are, though you can configure the port if using a non-standard port, as well as the title used and server name given in forgotten password emails. Note that if you want to change these settings at a later date, they are stored in the Warehouse's email configuration file in application/config/email.php.
 
 ===Database Configuration===
 
