@@ -7,7 +7,7 @@ The Indicia Warehouse has a set of core functions which are defined in the appli
 To create a plugin module, you need to create a folder for your module in the modules folder. Don't forget to enable your module in the application/config.php file as well or the module content will be ignored. Within this folder, you can create views, controllers and models folders for the MVC code your plugin requires. This should give you a new URL displaying some output where the URL path is defined by the controller class name and the methods it exposes. You can also create a db folder, containing a folder with the scripts for each version of your module. You need to follow the naming conventions given here for this to work:
 
   # A script folder for a given version of the module must be called version_x_x_x and placed in the db folder in your module folder. The versioning must increment logically (e.g. you could have folders version_0_1_0 then version_0_2_0 or version_0_1_1 but not version_0_1_3). 
-  # Inside the versioned scripts folder, create scripts using the date and time as the first part of the file name, using the format yyyymmddhhmm_file_name.sql. This ensures the scripts are run in the correct order.
+  # Inside the versioned scripts folder, create scripts using the date and time as the first part of the file name, using the format yyyymmddhhmm_file_name.sql. This ensures the scripts are run in the correct order. When you create scripts from pgAdmin, it is important to ensure that you remove all schema prefixes from the queries. For example if your schema is called indicia, then a query might read `select * from indicia.taxa` but you will need to remove the `indicia.` since another installation may use a different schema name. You should also remove any statements which change the ownership of the objects you create, because the users created for Indicia to access the data can also vary between installations.
 
 Now, you need to create a plugins folder within your module's folder, alongside the models, views and controllers folders. This is the extension to the module architecture developed specifically for Indicia. Within this folder, create a PHP file with the same name as your module folder. Inside this you need to write hook methods which follow a certain naming convention, allowing Indicia to ask your module about how it wants to plug in to the Warehouse. 
 
@@ -53,3 +53,14 @@ function land_parcels_extend_orm() {
 }
 }}}
 You can use the following predicates to declare relationships: has_one, has_many, belongs_to, has_and_belongs_to_many. These are described in the Kohana ORM documentation.
+
+==extend_data_services hook==
+If a plugin adds entities to the data model, it is possible to extend the data services module to allow the new entities to be accessible externally. Of course it is always possible to expose the data via report files, but if you want to allow record level access then it is necessary to extend the data services. To do this:
+  # you first need to create a view called list_myrecords where myrecords changed to is the plural version of your model name. Create an upgrade script for this in your module as described above. This view should contain the minimum details required to provide the basic information for the record.
+  # you also need to create a view called list_myrecords where myrecords is changed to the plural version of your model name. Create an upgrade script for this in your module as described above. This view should expose comprehensive information for each record, joining in other parts of the data model as required.
+  # Add a hook method to your plugins file called mymodule_extend_data_services. The method returns an array of the table names you are exposing (plural) with a sub-array of options. The only option currently available is readOnly which can be set to true to prevent write access to an entity via data services. For example
+{{{
+function taxon_designations_extend_data_services() {
+  return array('taxon_designations'=>array('readOnly'=>true));
+}
+}}}
