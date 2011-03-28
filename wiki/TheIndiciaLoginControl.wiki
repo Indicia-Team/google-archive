@@ -1,0 +1,286 @@
+# Explains how to use the Indicia Login Control which allows client web site users to authenticate against their credentials on the indicia core warehouse.
+
+= A Guide to the Indicia Login Control =
+
+== What it is for ==
+
+The Login Control allows a client website to authenticate a user against the user details held on the indicia core/warehouse. This is most suited to a website which does not have an existing user authentication mechanism and which wishes to obtain the correct indicia user_id for the current user so that any submissions by that user can be correctly attributed in the indicia warehouse.
+
+== The demo page ==
+
+There is a demonstration page giving an example of how this control can be used. The page can be accessed from the demo page index at http://<your-host>/<your-indicia>/modules/demo/ in the 'Web-site User Control Demonstrations' section. The code for the demo page can also be viewed there.
+
+In case you don't have access to a working indicia installation, here is a screen shot.
+
+http://code.google.com/p/indicia/wiki/login_control_demo.jpg
+
+== What it does precisely ==
+
+To login with this control, a user must exist on indicia core, not be flagged as deleted, have a site role on the website they are logging-in from and not be banned. They must also supply the correct password. The login control provides a login 'widget' which you can put on your welcome page so that your users can enter their user-name and password. If you prefer, it can be set for email address and password instead. It can also show options to remember the user, register a new user, or send a 'forgotten password' email. If the 'remember me' option is allowed, this request will be passed to your website code, but it is up to your local website to implement this function using the mechenism of your choice. 
+
+If the user credentials are successfully authenticated, the control returns the indicia internal user id to the calling web site so that any submissions can be made using that user id. Optionally, you can also ask the login process to return an array of user profile data which includes names, the site role and much else, assuming it has been recorded on core. A full list of profile items is included in the interface documentation section below.
+
+The forgotten password email function is also available and this link is functional on the demo. The user registration function is planned but not yet implemented. The 'widget' appearance can be styled using CSS to suit your site requirements.  
+
+The user credentials are encrypted when sent from your site to indicia core, so the password is kept secure. Of course, if you are using http between your site and the user's browser, the password will be sent over that link in plain text and is not secure. If security is important, you should use https for your login page.
+
+The control has been designed to implement the 'Login Control' requirements on page 25 of the 'OPAL Online Recording Tool Requirements document' which can be downloaded from http://code.google.com/p/indicia/downloads/detail?name=requirements_specification_v2.0.doc&can=2&q=
+
+The main text of these requirements is listed below:-
+
+ The Login Control is a panel which provides a standardisation of the following controls:
+  * A label and text entry box for the username. The site administrator is able to configure this to accept the user’s email address as an alternative.
+  * A label and text entry box for the password, with obscured characters.
+  * A login button which authenticates the user on the site when they log in or displays a message if the login is unsuccessful.
+  * An optional link to a page allowing the user to register on the site. Note that on sites where registration is by invite only, this link is removed.
+  * An optional “Request Forgotten Password” link to a page allowing the user to request their forgotten password.
+  * An optional checkbox that allows the user to select the option to remember them the next time they visit the website, so there is no need to log in again.
+
+== How to use it ==
+
+=== Prerequisites ===
+
+Before using this control, you need 
+;
+ # a client indicia website which can access an instance of the indicia core/warehouse. 
+ # some users set up on the indicia core and associated with your client site with at least the 'User' role.
+
+=== The Login Control widget ===
+
+This provides a standard login form which can be configured by CSS to match your site style. Using this saves the effort of laying out your own login form, but you don't have to use this widget, you can always produce your own web UI if you prefer to. There are examples of using this control on the demo page. 
+
+Using the control involves the following steps;
+
+ # require 'client_helpers/user_helper.php' (you may have to amend the relative path).
+ # include the indicia login control in your page where you want the HTML to be output (see following).
+ # style the control to match your site using your choice of CSS.
+
+{{{
+        <?php // the login control using user name (the default)
+          echo user_helper::login_control(array(
+            'action_url' => '',
+            'login_text' => 'Please enter your username and password.<br />'
+              .'Remember the password is case sensitive.',
+            'show_fieldset' => true,
+            'legend_label' => 'Login to MyDemoSite',
+            'show_rememberme' => true,
+            'register_uri' => $base_url.'modules/demo/register_user_control.php',
+            'forgotten_uri' => $base_url.'modules/demo/forgotten_password_control.php',
+          ));
+        ?>
+
+}}}
+
+This example renders the following HTML output on your page.
+
+{{{
+<form id="indicia-login-control" method="post" action="">
+<fieldset>
+<legend>Login to MyDemoSite</legend>
+<p>Please enter your username and password.<br />Remember the password is case sensitive.</p>
+<label for="username">Username:</label>
+<input type="text" id="username" name="username" class=" "  value=""  />
+<br/>
+<label for="password">Password:</label>
+<input type="password" id="password" name="password" class=" "  value=""  />
+<br/>
+<label for="remember_me">Remember me:</label>
+<input type="hidden" name="remember_me" value="0"/><input type="checkbox" id="remember_me" name="remember_me" value="1" class=" "  />
+<br/>
+<a href="http://localhost/indicia/modules/demo/register_user_control.php">Register to use this site.</a>&nbsp;
+<a href="http://localhost/indicia/modules/demo/forgotten_password_control.php">Request forgotten password.</a>
+</fieldset>
+<input type="submit" name="login_submit" id="login_submit" value="Login" />
+</form>
+}}}
+
+=== Calling Indicia core to authenticate the user ===
+
+The Login Control form above will post the user input to the page specified by the action attribute on the <form> element. You need to set this to match the page that will process the login request. 
+
+On your processing page you need to make 2 calls to indicia core, one to get the standard authority tokens for calling indicia services, and the second to authenticate the user. You can set option to if the user is identified by name or email, if the name should be treated as case sensitive or not, and whether to return profile data. These are documented on the interface specification below.
+
+The following shows example code.
+
+{{{
+              // ask core whether the credentials are good for this website.
+              $readAuth = user_helper::get_read_auth($website_id, $website_password);
+              // set options for case insensitive name comparison and to request the user profile data
+              $options = array('namecase' => false, 'getprofile' => true);
+              // make the call to indicia core to authenticate the user. This call is encrypted.
+              $response = user_helper::authenticate_user($_POST['username'], $_POST['password'],
+                $readAuth, $website_password, $options);
+              // act on the result
+              $user_id = $response['user_id'];
+              if ($user_id > 0) { // authenticated successfully
+                // continue to logged in part of site, getting profile data if wanted
+                $profile = $response['profile'];
+                // or if we hadn't got profile on login, we could make the call on the next line.
+                // $profile = user_helper::get_user_profile($user_id, $readAuth);
+              } else { // not authenticated
+                // display an error and return to the login page;
+              }
+}}}
+
+
+== Interface documentation. ==
+
+The following is the documentation generated from code comments using phpDocumentor.
+
+=== static method login_control [line 134] ===
+static string login_control( [array $options = array()])
+
+Helper function to output the HTML for a login form widget.
+
+This is a composite control which presents a configurable collection of input and display controls to support a login interface on a web page. The control is wrapped with a <form> element but you need to specify where the login credentials should be sent for processing.
+
+All the elements in the control are wrapped within a <form> with an id of indicia-login-control so if you don't wish to specify classes on all the sub elements you can style them using CSS selectors such as #indicia-login-control input[type="checkbox"] or #indicia-login-control a:link
+
+Tags:
+return:  	HTML to insert into the page for the login control.
+access:  	public
+
+
+Parameters:
+array   	$options   	Options array with the following possibilities:
+
+    * action_url
+      Required. String defining the URL which the login data will be sent to for processing.
+    * control_method
+      Optional. String defining the http method (either post or get) to be used to send the data for processing. 'post' is strongly recommended as it avoids showing the password in the browser address box. Default is 'post'.
+    * control_id
+      Optional. String defining the id for the enclosing <form>. Default is 'indicia-login-control'.
+    * show_fieldset
+      Optional. Boolean defining if the login fields will be contained in a fieldset. Default is false.
+    * fieldset_class
+      Optional. Only relevant if show_fieldset is true. CSS class names to use on the fieldset element. Default is to omit class attribute.
+    * legend_label
+      Optional. Only relevant if show_fieldset is true. The text to show on the fieldset legend. Default is 'Login details'. Todo: make this default language aware?
+    * login_text
+      Optional. Explainatory text to be shown before the login fields. If 'show_fieldset' is true, the text will be inside the fieldset. Default is no text.
+    * name_label
+      Optional. Text for the username field label. Defaults to 'Username'. Todo: make this default language aware?
+    * name_field
+      Optional. Name for the username HTML input field. Defaults to 'username'.
+    * name_class
+      Optional. CSS class names to use on the username HTML text input element. Default is an empty class attribute.
+    * password_label
+      Optional. Text for the password field label. Defaults to 'Password'. Todo: make this default language aware?
+    * password_field
+      Optional. Name for the password HTML input field. Defaults to 'password'.
+    * password_class
+      Optional. CSS class names to use on the password HTML password input element. Default is an empty class attribute.
+    * show_rememberme
+      Optional. Boolean defining if the 'remember me' checkbox will be displayed. Default is false.
+    * rememberme_label
+      Optional. Text for the 'remember me' field label. Defaults to 'Remember me'. Todo: make this default language aware?
+    * rememberme_field
+      Optional. Name for the 'remember me' HTML checkbox field. Defaults to 'remember_me'.
+    * rememberme_class
+      Optional. CSS class names to use on the 'remember me' HTML checkbox element. Default is an empty class attribute.
+    * register_uri
+      a Optional. URI for the optional page for user self-registration. If supplied, a registration link will be shown. Default is not to display a registration link.
+    * register_label
+      Optional. Text to display on the optional link to a page for user self-registration. Ignored unless the register_uri is supplied. Defaults to 'Register to use this site.'. Todo: make this default language aware?
+    * forgotten_uri
+      a Optional. URI for the optional page for forgotten password recovery. If supplied, a forgotten password link will be shown. Default is not to display a forgotten password link.
+    * forgotten_label
+      Optional. Text to display on the optional link to a page for forgotten password recovery. Ignored unless the forgotten_uri is supplied. Defaults to 'Request forgotten password.'. Todo: make this default language aware?
+    * links_class
+      Optional. CSS class names to use on the optional register and forgotten links if required. Default is to omit the class attribute.
+    * button_label
+      Optional. Text to show on the login submit button. Defaults to 'Login'. Todo: make this default language aware?
+    * button_field
+      Optional. Name for the submit button field. Defaults to 'login'.
+    * button_class
+      Optional. CSS class names to use on the login submit button. Default is to omit the class attribute.
+
+-----
+=== static method authenticate_user [line 372] ===
+
+static array authenticate_user( string $username, string $password, array $readAuth, string $website_password, [array $options = array()])
+
+Sends a request to the indicia core module to ask if the login credentials are valid for this website.
+
+Tags:
+return:  	containing:
+
+    * The 'user_id' key hold the user_id for the authenticated user, or '0' if the login credentials are not valid for this website.
+    * The 'profile' as an array containing:-
+          * title
+          * first_name
+          * surname
+          * initials
+          * email_address
+          * website_url
+          * address
+          * home_entered_sref
+          * home_entered_sref_system
+          * interests
+          * location_name
+          * email_visible
+          * view_common_names
+          * username
+          * default_digest_mode
+          * activated
+          * banned
+          * site_role
+          * registration_datetime
+          * last_login_datetime
+          * preferred_sref_system
+      This is only returned if the 'getprofile' option is true in the request options.
+
+access:  	public
+
+Parameters:
+string   	$username   	Required. The username value entered by the authenticating user.
+string   	$password   	Required. The password value entered by the authenticating user.
+array   	$readAuth   	Required. Array containing service authentication data obtained from get_read_auth().
+string   	$website_password   	Required. The client website password value to be supplied by the site administrator.
+array   	$options   	Optional. Options array with the following possibilities:
+
+    * namecase
+      Optional. Boolean defining if the username value should be treated as case sensitive when looking the user up on indicia core. Defaults to true.
+    * nameormail
+      Optional. String defining if the username value represents the user's name or their e-mail address when looking the user up on indicia core. Allowed values are 'name' or 'mail'. Defaults to 'name'.
+    * getprofile
+      Optional. Boolean for whether to retrieve the profile for this user if successfully authenticated. If true, the profile will be returned in the 'profile' key on the response array. Defaults to false.
+
+-----
+=== static method get_user_profile [line 461] ===
+
+static array get_user_profile( integer $user_id, array $readAuth)
+
+Sends a request to the indicia core module to get profile data for supplied user on requesting website.
+
+Tags:
+return:  	containing:
+
+    * title
+    * first_name
+    * surname
+    * initials
+    * email_address
+    * website_url
+    * address
+    * home_entered_sref
+    * home_entered_sref_system
+    * interests
+    * location_name
+    * email_visible
+    * view_common_names
+    * username
+    * default_digest_mode
+    * activated
+    * banned
+    * site_role
+    * registration_datetime
+    * last_login_datetime
+    * preferred_sref_system
+
+access:  	public
+
+Parameters:
+integer   	$user_id   	Required. The numeric user_id of web site user.
+array   	$readAuth   	Required. Array containing service authentication data obtained from get_read_auth().
+
