@@ -4,6 +4,8 @@
 
 == What it is for ==
 
+Indicia does not impose a method of user authentication onto the websites that you build with it. Often you will be integrating Indicia into an existing system with an existing login mechanism, or you may even want to allow guest users to use the recording facilities. However it is possible to use Indicia's own user management facilities to control access to your website when this is appropriate.
+
 The Login Control allows a client website to authenticate a user against the user details held on the indicia core/warehouse. This is most suited to a website which does not have an existing user authentication mechanism and which wishes to obtain the correct indicia user_id for the current user so that any submissions by that user can be correctly attributed in the indicia warehouse.
 
 == The demo page ==
