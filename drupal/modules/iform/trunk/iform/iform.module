@@ -152,7 +152,7 @@ function iform_form(&$node, $form_state) {
       '#value' => $details,
       '#prefix' => '<div id="form-def">',
       '#suffix' => '</div>'
-    );   
+    );
     $form['iform_forms']['form-params'] = array(
       '#value' => form_helper::prebuilt_form_params_form(array(
         'form' => $node->iform,
@@ -513,6 +513,10 @@ function handle_resources() {
   if ($script) {    
     drupal_add_js($script, 'inline');    
   }
+  // clear the scripts incase we load 2 iform nodes onto 1 page.
+  data_entry_helper::$javascript = '';
+  data_entry_helper::$late_javascript = '';
+  data_entry_helper::$onload_javascript = '';
 }
 
 /**
