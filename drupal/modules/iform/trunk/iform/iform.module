@@ -140,32 +140,25 @@ function iform_form(&$node, $form_state) {
     '#tree' => FALSE,
     '#weight' => 6
   );
-  
   $form['iform_forms']['picker'] = array(
     '#value' => form_helper::prebuilt_form_picker(array(
-      'default' => $node->iform
+      'form' => $node->iform,
+      'website_id' => isset($node->params['website_id']) ? $node->params['website_id'] : '',
+      'password' => isset($node->params['password']) ? $node->params['password'] : ''
     ))
   ); 
   if ($node->iform) {
     $details = get_iform_details_panel($node->iform);
-    $form['iform_forms']['form-def'] = array(
-      '#value' => $details,
-      '#prefix' => '<div id="form-def">',
-      '#suffix' => '</div>'
-    );
     $form['iform_forms']['form-params'] = array(
       '#value' => form_helper::prebuilt_form_params_form(array(
         'form' => $node->iform,
-        'currentSettings' => $node->params
+        'currentSettings' => $node->params,
+        'readAuth' => form_helper::get_read_auth($node->params['website_id'], $node->params['password'])
       )),
       '#prefix' => '<div id="form-params">',
       '#suffix' => '</div>'
     );
-  } else {
-    // As we have no form to display yet, create placeholders for the output which can be populated by AJAX.
-    $form['iform_forms']['output-divs'] = array(
-      '#value' => "<div id=\"form-def\"></div>\n<div id=\"form-params\"></div>"        
-    );
+    form_helper::enable_validation('node-form');
   }
   form_helper::add_resource('defaultStylesheet');
   handle_resources();
@@ -203,15 +196,19 @@ function get_iform_details_panel($form) {
  */
 function get_custom_param_values($node) {
   // We need to grab the parameter values for the custom parameters that were defined by the form.
-  if ($_POST['iform'] && $_POST['iform']!=-1) {  
+  if ($_POST['iform'] && $_POST['iform']!=-1) {
     require_once drupal_get_path('module', 'iform').'/client_helpers/form_helper.php';
     ob_start();
     $params = form_helper::get_form_parameters($_POST['iform']);
     ob_end_clean();
     $idx=0;
     $values = array();
+    // always want the website id and password
+    $values['website_id']=$_POST['website_id'];
+    $values['password']=$_POST['password'];
+    // now get the rest of the parameters
     foreach ($params as $param) {
-      $values[$param['name']] = $_POST[$param['name']];
+      $values[$param['fieldname']] = $_POST[$param['fieldname']];
     }
     // Json encode the parameters to store them in the Drupal database.
     return json_encode($values);
@@ -270,22 +267,6 @@ function iform_load($node) {
 */
 function iform_menu() {
   $items = array();
-  // Register an ajax path which retrieves the page parameters appropriate to the selected iForm. 
-  // This allows the form to dynamically generate when selecting the iForm in the drop down menu.
-  $items['iform_parameters/js/%'] = array(
-    'page callback' => 'get_parameters_js',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'type ' => MENU_CALLBACK,
-  );
-  // Register an ajax path which retrieves the list of forms for a selected category.
-  // This allows the form list to dynamically generate when selecting the category in the drop down menu.
-  $items['iform_forms/js/%'] = array(
-    'page callback' => 'get_forms_js',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'type ' => MENU_CALLBACK,
-  );
   // Create an admin entry to display the diagnostics panel.
   $items['admin/settings/iform_diagnostics'] = array(
     'title' => 'IForm Diagnostics',
@@ -295,58 +276,6 @@ function iform_menu() {
     'type' => MENU_NORMAL_ITEM
   );
   return $items;
-}
-
-/**
- * The AHAH callback function which receieves AJAX requests for updates to the 
- * parameters for the selected Indicia form.
- * @return unknown_type
- */
-function get_parameters_js() {
-  $form = _iform_rebuild_form();
-  $params_form = $form['iform_params']['iform_params_wrapper'];
-  unset($params_form['#prefix'], $params_form['#suffix']);
-  $output = theme('status_messages') . drupal_render($params_form);
-  // Final rendering callback.
-  drupal_json(array('status' => TRUE, 'data' => $output));
-}
-
-/**
- * The AHAH callback function which receieves AJAX requests for updates to the 
- * forms in the selected category.
- * @return unknown_type
- */
-function get_forms_js() {  
-  $form = _iform_rebuild_form();
-  $forms_form = $form['iform_forms']['iform_forms_wrapper'];
-  $output = theme('status_messages') . drupal_render($forms_form);
-  // Final rendering callback.
-  drupal_json(array('status' => TRUE, 'data' => $output));
-}
-
-function _iform_rebuild_form() {
-  // The form is generated in an include file which we need to include manually.
-  include_once 'modules/node/node.pages.inc';
-  $form_state = array('storage' => NULL, 'submitted' => FALSE);
-  $form_build_id = $_POST['form_build_id'];
-
-  // Get the form from the cache.
-  $form = form_get_cache($form_build_id, $form_state);
-  
-  $args = $form['#parameters'];
-  $form_id = array_shift($args);
-
-  // We need to process the form, prepare for that by setting a few internals.
-  $form_state['post'] = $form['#post'] = $_POST;  
-  unset($form['#post']['form_id']);  
-  $form['#programmed'] = $form['#redirect'] = FALSE;
-
-  // Build, validate and if possible, submit the form.
-  drupal_process_form($form_id, $form, $form_state);  
-  
-  // This call recreates the form relying solely on the form_state that the
-  // drupal_process_form set up.  
-  return drupal_rebuild_form($form_id, $form_state, $args, $form_build_id);
 }
 
 /**
@@ -363,7 +292,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   if ($node->iform && $node->iform!=-1) {
     iform_load_language_files($node);
    
-    $args['language'] = $language->language;
+    $args = array('language' => $language->language);
     
     require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
@@ -381,11 +310,14 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php')) {
       require(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php');
     }
+    // The form will always need to know the website id and password
+    $args['website_id']=$node->params['website_id'];
+    $args['password']=$node->params['password'];
     // we need to grab each requested parameter from the node to pass to the form
     $params = form_helper::get_form_parameters($node->iform);
-        $args = array();
+    
     foreach ($params as $param) {
-      $args[$param['name']] = $node->params[$param['name']];
+      $args[$param['fieldname']] = $node->params[$param['fieldname']];
     }
     $r = '';
     $response = null;
@@ -408,7 +340,6 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
           }
         }
         if (empty($errors)) {
-          watchdog('validation', 'no errors');
           $response = data_entry_helper::forward_post_to('save', $s);
           // Does the form redirect after success?
           if (is_array($response) && array_key_exists('success', $response) && 
