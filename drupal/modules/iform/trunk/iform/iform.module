@@ -159,6 +159,12 @@ function iform_form(&$node, $form_state) {
       '#suffix' => '</div>'
     );
     form_helper::enable_validation('node-form');
+  } else {
+    $form['iform_forms']['form-params'] = array(
+      '#value' => ' ', // must be a space or Drupal drops the div
+      '#prefix' => '<div id="form-params">',
+      '#suffix' => '</div>'
+    );
   }
   form_helper::add_resource('defaultStylesheet');
   handle_resources();
