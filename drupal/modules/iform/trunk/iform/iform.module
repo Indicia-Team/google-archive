@@ -146,7 +146,7 @@ function iform_form(&$node, $form_state) {
       'website_id' => isset($node->params['website_id']) ? $node->params['website_id'] : '',
       'password' => isset($node->params['password']) ? $node->params['password'] : ''
     ))
-  ); 
+  );
   if ($node->iform) {
     $details = get_iform_details_panel($node->iform);
     $form['iform_forms']['form-params'] = array(
@@ -260,7 +260,7 @@ function iform_delete($node) {
 */
 function iform_load($node) {
   $t = db_fetch_object(db_query('SELECT iform, params FROM {iform} WHERE nid = %d', $node->nid));
-  $params=json_decode($t->params);  
+  $params=json_decode($t->params, true);
   unset($t->params);
   $t->params = array();
   // Merge the params into the loaded object
