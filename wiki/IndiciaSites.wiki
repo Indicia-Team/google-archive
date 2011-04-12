@@ -4,6 +4,9 @@
 
 The following is a list of some of the online recording websites that have been built using Indicia.
 
+== [http://www.british-dragonflies.org.uk/ British Dragonfly Society] ==
+The British Dragonfly Society have recently launched a new website using Indicia to replace their previous online recording facilities. Benefits over their previous system include the built in verification systems and immediate storage of all data in the Warehouse's database for reporting and further analysis.
+
 == [http://www.bbc.co.uk/breathingplaces/ladybird-survey/ BBC Breathing Places Ladybird Survey] ==
 The BBC Breathing Places ladybird survey was set up to engage both schools and members of the public in ladybird recording. There is also a survey of ladybird parasites to participate in. You can find out about some of the results on the [http://www.bbc.co.uk/blogs/natureuk/2010/09/ladybird-survey-results.shtml BBC - Nature UK Blog].
 
