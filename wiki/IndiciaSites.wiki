@@ -4,6 +4,9 @@
 
 The following is a list of some of the online recording websites that have been built using Indicia.
 
+== [http://www.bbc.co.uk/breathingplaces/ladybird-survey/ BBC Breathing Places Ladybird Survey] ==
+The BBC Breathing Places ladybird survey was set up to engage both schools and members of the public in ladybird recording. There is also a survey of ladybird parasites to participate in. You can find out about some of the results on the [http://www.bbc.co.uk/blogs/natureuk/2010/09/ladybird-survey-results.shtml BBC - Nature UK Blog].
+
 == [https://secure.fera.defra.gov.uk/nonnativespecies/index.cfm?sectionid=81 Recording Invasive Species Counts] ==
 The Recording Invasive Species Counts (RISC) project is a way to find out more and to contribute to our understanding of the distribution and ecology of ten invasive non-native species.  It is co-ordinated by the NBN and BRC (part of the Centre for Ecology & Hydrology), in partnership with recording schemes for the animals and plants.  The project is funded by Defra. Indicia online recording forms are used to allow recording of 10 selected invasive species.
 
