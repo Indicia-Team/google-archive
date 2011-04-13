@@ -104,8 +104,8 @@ function iform_access($op, $node, $account) {
  */
 function iform_form(&$node, $form_state) {
   require_once drupal_get_path('module', 'iform').'/client_helpers/form_helper.php';
-  form_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
-  form_helper::$css_path = drupal_get_path('module', 'iform').'/media/css/';
+  form_helper::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
+  form_helper::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
   form_helper::enable_validation('node-form');
   if (isset($form_state['post'])) {
     $node = (object)($form_state['post'] + (array)$node);
@@ -280,8 +280,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
     ob_start();
     // force the path of js and css files to be relative to Drupal, not from the Warehouse
-    data_entry_helper::$js_path = drupal_get_path('module', 'iform').'/media/js/';
-    data_entry_helper::$css_path = drupal_get_path('module', 'iform').'/media/css/';
+    data_entry_helper::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
+    data_entry_helper::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
     // also force the theme path to be local
     global $indicia_theme_path;
     $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';
@@ -403,7 +403,8 @@ function handle_resources() {
             // JS file external to Drupal. add_js will not work, so insert it into the head manually.
             drupal_set_html_head("<script type='text/javascript' src='$j'></script>");
           } else if (strcasecmp(substr($j, -20), 'jquery-ui.effects.js')!=0) {
-            // JS file within Drupal structure
+            // JS file within Drupal structure. Drupal will add base_path() to the beginning as it expects a relative path not absolute
+            $j = preg_replace('/^'.str_replace('/', '\/', base_path()).'/', '', $j);
             drupal_add_js($j, 'module');
           }
         }
