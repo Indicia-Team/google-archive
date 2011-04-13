@@ -389,6 +389,7 @@ function handle_resources() {
     {
       if (isset($resourceList[$resource]['stylesheets'])) {
         foreach ($resourceList[$resource]['stylesheets'] as $s) {
+          $s = preg_replace('/^'.str_replace('/', '\/', base_path()).'/', '', $s);
           drupal_add_css($s);
         }
       }
