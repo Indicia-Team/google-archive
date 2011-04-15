@@ -1,0 +1,37 @@
+#summary A quick overview of Indicia reporting possibilities.
+=Indicia Reporting Introduction=
+
+==Introduction==
+This document is intended to provide a quick introduction into what can be achieved with Indicia’s reporting facilities. In Indicia, all data is stored in a PostgreSQL database on the Warehouse server. This includes tables of occurrences, samples, locations and so forth. When extracting the data it is possible to combine these data in various ways, e.g. you can include location and sample data in a single output, or apply statistical functions to the output.
+
+There are several kinds of output available from Indicia data which include:
+  * grids of data viewable in a web browser
+  * downloadable files containing the data, e.g. for loading into a spreadsheet application
+  * charts viewable in a web browser
+  * maps viewable in a web browser
+  * maps viewable in a GIS system or Google Earth
+
+==Reporting components==
+The following components are used in Indicia for reporting:
+
+===Warehouse Data & Reporting Services===
+The data & reporting services on the warehouse are web services which provide a way of getting data out of the Warehouse in a format which is usable by another application or web page to present the data to you, but not necessarily in a format which you would expect to read yourself. 
+
+If you are interested, the data is typically output in JSON format but XML and CSV formats are also supported. The services can either respond with data in a predefined structure using the Data Services or with a completely flexible selection of data and columns using the Reporting Services. For example, if you want to access the data from a single table on the Warehouse you would use Data Services, but to obtain a view of data combining information from multiple tables you would use the Reporting Services. For the Reporting Services to work, the query that will be used to extract the data must be prepared in a special format and saved on the Warehouse. For more information see [http://code.google.com/p/indicia/wiki/Reporting Reporting]. Although preparing report files is an advanced task, generally you will be able to reuse the files which already exist rather than regularly have to write new files.
+
+===Client helpers===
+The client helpers are a library of code components, ready to be plugged together to build an Indicia powered website. The client helpers include components for displaying report output in a grid, on a map or chart embedded into your web pages. In addition there are facilities in the client helpers to make accessing the data on the warehouse easy from your own code. You can these controls and facilities either directly in your own PHP code or by using one of the available prebuilt forms, e.g. from within Drupal.
+
+The report_helper class is part of the client helpers library and contains methods such as report_grid for easily outputting a grid of report data, report_chart for outputting charts and report_map for outputting data on a map. When a report requires the user to provide some input parameters such as a date ranges, these methods can output the parameters input form automatically. One interesting possibility in the client helpers is to use the option to share a single parameters entry form for several grids, charts or maps. This makes it possible to request a single input from the user such as a species selection then display multiple pieces of information about that species, e.g. a distribution map, grid of occurrences and a phenology chart.
+
+===GeoServer===
+GeoServer is a server process which provides access to spatial data in a number of standard formats. GeoServer isn’t actually part of Indicia, but is another open source project which significantly improves the ability to map Indicia data. Although GeoServer is best suited to providing spatial data to draw on maps, it can also be used as a way of accessing text based data such as the details of occurrences or species. A couple of key things to note about GeoServer are:
+  # It supports the WMS spatial data standard, which makes it possible to map large numbers of occurrences using images very quickly and efficiently when compared with text based methods.
+  # It supports several formats for the request (e.g. WFS, CQL) and a large number of output formats, including image formats such as JPEG and PNG as well as text based formats such as CSV, GML, KML (for getting data into Google Earth). It can do all this on-the-fly meaning you can browse and view live data in applications such as GIS or Google Earth.
+
+The client helpers library contains a map_helper class, with a map_panel method. This creates a map in your web page using the [http://openlayers.org OpenLayers] mapping library. You can embed data loaded from your database via GeoServer onto these maps and this can also be achieved using the distribution_map_1 prebuilt form if you are not using PHP directly.
+
+===Statistics===
+One feature of PostgreSQL (the database used to store the Warehouse data) is the ability to install optional components. One component used by Indicia all the time is the PostGIS extension which enhances PostgreSQL to be a fully featured and powerful spatial database, allowing it to store and process polygon data. 
+
+If statistical functions are required in reports, then one option is to install the [http://www.joeconway.com/plr/ PL/R - R Procedural Language for PostgreSQL]. This enhances PostgreSQL to support the powerful statistical functions of the R stats package.
