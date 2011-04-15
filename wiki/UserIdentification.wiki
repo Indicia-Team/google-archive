@@ -1,0 +1,23 @@
+#summary An overview of user identification on client websites
+
+= Indicia Website Logins =
+
+Indicia does not stipulate how your users should log in to the website on which data entry is performed, mainly because you might want to integrate Indicia into an existing website with its own login system, or even to allow guests to enter records. However, there are a number of patterns which can be selected from depending on your scenario. The following list describes each suggested pattern though of course you may need to adapt these to your own requirements.
+
+==No login==
+In this pattern the user is not required to log in to the client website or Warehouse. The client website code possesses the website ID and password required to authenticate onto the Warehouse and sends the authentication information required with each communication with the Warehouse, though the user does not have to be aware of this. In this approach, typically the survey will have custom attributes set up for the user's contact details (e.g. recorder’s name and email address as a minimum) and they will be entered with each record, though this is not mandatory. It’s up to you to design the survey as you see fit. Although the scientific value of a record with no contact information is questionable it is perfectly reasonable to design a survey with the intention of inspiring new recorders or training whilst accepting that the data it produces may be of limited value.
+
+The Warehouse keeps metadata for each database record to keep track of the user who entered the record and also who last changed it. This approach results in the database level metadata for each record storing a dummy value of 1 for the created by user ID, since the user is not authenticated on the Warehouse so the default admin user is used. However the user information is available in the custom attribute values data associated with each sample.
+
+Note that in this scenario it can be useful to set the data entry form so that it remembers the recorder’s contact details each time the form is loaded on a single machine. To do this, use the indicia_define_remembered_fields hook functionality to specify a list of the fields which are remembered from the last values each time the form is loaded. This is described in the documentation for data_entry_helper::get_remembered_fields.
+
+==Use existing website login==
+
+In this scenario the user logs into your existing website using the authentication system of that website, for example the user registration and login provided by Drupal or any other content management system.  Obviously you do not want the user to have to authenticate again onto the Indicia Warehouse. The suggested approach is to use the custom attribute called CMS User ID and in the data entry form code, store a hidden input which sets the CMS User ID attribute value to the user ID from the website authentication system. Note that if you use one of the dynamic prebuilt forms, then the CMS User ID is automatically populated for you from the Drupal user, as well as populating attributes called CMS Username and Email if they are present in the survey’s sample attributes. This gives you a basic amount of contact details for each record with the ability to store full contact details in the user’s profile on your website (e.g. using the Drupal Profile module). Furthermore this approach allows you to have a form which requests the recorder’s contact information only to be entered if they are not logged into the website. So, a recorder can contribute an incidental record without having to register on the site, whilst more regular recorders can login and therefore not need to enter their contact details with every submission.
+
+==Using user_helper to authenticate onto the Warehouse==
+This approach is not fully implemented yet as user registration currently has to occur on the warehouse.
+In this approach, the website uses the user_helper class to provide user registration facilities (when available) and a [http://code.google.com/p/indicia/wiki/TheIndiciaLoginControl login control]. User registration requires the user to enter at least their full name, username and email address as well as select a password. A login form is provided which authenticates the user against the details stored on the Warehouse and a logout link removes the authentication details from the session. A [http://code.google.com/p/indicia/wiki/TheIndiciaForgottenPasswordControl Forgotten password] control is also available.
+
+==Using OpenID to share logins between the website and Warehouse==
+_This approach is not implemented yet. TBD._
