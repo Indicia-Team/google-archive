@@ -9,7 +9,7 @@ $config['release_date']  = '2011-04-19';
 $config['repository'] = 'https://indicia.googlecode.com/svn/core/tags/version 0.6.1';
 }}}
 
-2.	Commit the changes to version.php to the SVN repository.
+2.	Ensure that there is a folder in the setup matching the version you have created in indicia\modules\indicia_setup\db, _even if there are no database scripts to release_. Commit the changes to version.php and the new folder to the SVN repository.
 
 3.	Update your indicia SVN checkout folder to the latest (HEAD) version from the repository.
 
