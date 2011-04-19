@@ -1,0 +1,42 @@
+#summary A description of how to release a version of Indicia.
+
+= Preparing a release of Indicia =
+
+1.	Edit the application/config/version.php file and set the version, release_date and repository settings. For example:
+{{{
+$config['version'] = '0.6.1';
+$config['release_date']  = '2011-04-19';
+$config['repository'] = 'https://indicia.googlecode.com/svn/core/tags/version 0.6.1';
+}}}
+
+2.	Commit the changes to version.php to the SVN repository.
+
+3.	Update your indicia SVN checkout folder to the latest (HEAD) version from the repository.
+
+4.	Use the SVN export facility to create an export of https://indicia.googlecode.com/svn/core/trunk into a local temporary folder. To do this I normally use the TortoiseSVN Export option available when right clicking on my updated indicia SVN checkout folder.
+
+[http://indicia.googlecode.com/svn/wiki/tortoise_svn_export.png]
+ 
+5.	At this stage it’s a good idea to try copying the indicia export folder into a webserver folder and installing it to check nothing major is broken. Note this step should become unnecessary when continuous integration testing is operational.
+
+6.	Zip the indicia folder created.
+
+7.	Rename the zip file to indicia-x.x.x.zip replacing the x’s with the version number.
+
+8.	Upload the file to the Downloads page on Google code http://code.google.com/p/indicia/downloads/list and deprecate all previous versions of the file by replacing the Featured label on the file with Deprecated. Label the upload Type-Installer, OpSys-All and Featured.
+
+9.	In the Subversion repository, create a folder for the version called “version x.x.x” under https://indicia.googlecode.com/svn/core/tags and copy the contents of https://indicia.googlecode.com/svn/core/trunk into it. 
+
+10.	Download a copy of the previous version of the Client Helpers folder. 
+
+11.	Unzip this download and find the helper_config.php file. Copy it to the client_helpers folder in your exported indicia/client_helpers folder (in my example this is c:\localsource\indicia\client_helpers).
+ 
+12.	Zip the indicia/client_helpers folder containing this copied across file and rename the resulting zip file to client_helpers-x.x.x.zip. This file can then be uploaded to the Downloads page as before setting the labels to Featured and OpSys-All. Finally deprecate the previous download for the client_helpers-x.x.x.zip file.
+
+13.	Use the SVN export facility to create an export of https://indicia.googlecode.com/svn/drupal/modules/iform/trunk/iform into a local temporary folder.
+
+14.	Zip the exported folder and name it iform-x.x.x.zip.
+
+15.	Upload the zip file to the download page and set the labels to Featured and OpSys-All. Deprecate the previous version of this file.
+
+16.	Review the changes at http://code.google.com/p/indicia/source/list. Write a list of the key changes and post this onto the forum with a note that the new version is ready.
