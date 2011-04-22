@@ -1,4 +1,5 @@
 #summary Structure and explanation for a Controller structure within Indicia Core.
+#labels In-Progress
 
 = Introduction =
 
