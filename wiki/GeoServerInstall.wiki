@@ -78,4 +78,43 @@ The next section is *Bounding boxes* - The bounding box is determines the extent
 
 7. Now move over to the *Publishing tab* and select a style from the drop-down list. Select *point* for now.
 
-8. You can define a *custom style* which you can use for your Indicia layer. The easiest way to do this is to edit an existing style (which is essentially an XML file ) and save it under a new name. To do this go to Styles under the Data menu. This will bring up the Style Editor. Enter a name for your new style and then from the drop-down list under "Copy from style" choose an existing style to act as your template. Edit this as required, click validate to check all is well and then submit. Next time you need a style for a layer your new style will appear in the drop-down list.
+8. You can define a *custom style* which you can use for your Indicia layer. The easiest way to do this is to edit an existing style (which is essentially an XML file ) and save it under a new name. To do this go to Styles under the Data menu. This will bring up the Style Editor. Enter a name for your new style and then from the drop-down list under "Copy from style" choose an existing style to act as your template. Edit this as required, click validate to check all is well and then submit. Next time you need a style for a layer your new style will appear in the drop-down list. The following style gives an example which draws both a point and, if the reference is a grid square, a square. This works well because when zoomed out so the grid square is tiny, it is drawn as a larger 6 pixel circle. When you zoom in the square's actual shape becomes visible.
+{{{
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+  <NamedLayer>
+    <Name>Default Polygon</Name>
+    <UserStyle>
+      <Title>Default polygon style</Title>
+      <Abstract>A sample style that just draws out a solid gray interior with a black 1px outline</Abstract>
+      <FeatureTypeStyle>
+        <Rule>
+          <Title>Polygon</Title>
+          <PointSymbolizer>
+            <Graphic>
+              <Mark>
+                <WellKnownName>circle</WellKnownName>
+                <Fill>
+                  <CssParameter name="fill">#00FF00</CssParameter>
+                </Fill>
+              </Mark>
+              <Size>6</Size>
+            </Graphic>
+          </PointSymbolizer>
+          <PolygonSymbolizer>
+            <Fill>
+              <CssParameter name="fill">#00FF00</CssParameter>
+            </Fill>
+            <Stroke>
+              <CssParameter name="stroke">#000000</CssParameter>
+              <CssParameter name="stroke-width">1</CssParameter>
+            </Stroke>
+          </PolygonSymbolizer>          
+        </Rule>
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>
+}}}
