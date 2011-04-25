@@ -1,0 +1,88 @@
+#summary A page providing an introductory orientation to Indicia
+
+=Indicia Orientation=
+
+If you are reading this page, you are probably interested in how to set up your own biological recording website using Indicia and want to know more about the project. If so, read on, otherwise you can get an [Introduction introduction to Indicia].
+
+==What does open source mean to the Indicia project?==
+
+By now you will probably have seen the words “open source” banded around relating to Indicia. If you are a die hard open source aficionado then feel free to skip to the next section. However if you are unsure what this means or worried about the result this will have on project quality then this section explains what open source means to the Indicia project. Open source can mean a variety of things but in the context of Indicia we have adopted a licence called GNU Public License or GPL. To summarise:
+
+  # You can easily access all the source code
+  # You can use Indicia with no license costs. Not only is Indicia itself free to use, but so are all the other components it depends on. Don’t forget though, that you must allow for the costs of having a website built using Indicia and ay assistance required.
+  # You can distribute copies of Indicia for free as long as you include the license and access to the source code.
+  # You can modify your copy of the source code
+  # If you build a commercial product based on Indicia then this is OK only if Indicia is included as a standalone part. If your product is an extension of Indicia itself then you cannot sell it commercially.
+
+Although these are the only significant stipulations, in practice being involved in an open source GPL project like Indicia can feel quite different to buying a license for a commercial project. 
+
+  # It is easy for you to get involved and help the project, whether this is as a coder, tester or to provide new ideas.
+  # The project can be quite fluid and reactive, with releases being fairly frequent and new releases for critical bugs being released within a matter of hours in some cases.
+  # If you find a bug then potentially you can dig around in the code and fix it yourself or maybe find a programmer to help you do this. There is no need to wait a year or two in some cases for a new release which may not even fix the bug.
+  # You can dialog with the actual developers on the forum, not sales representatives.
+
+Many people will express concerns about open source projects having a lack of quality control. Of course it is possible for an open source project to have very little concern for quality and be full of bugs, but this is also possible in the commercial world. In both cases the project is likely to eventually fail, either because people will not join the project and contribute in one case or because of lack of sales in the other. In fact developers on open source projects often write better quality code simply because they know they are “being watched” by the community and won’t get away with poor quality code! It is probably fair to say that a well-run commercial project is a much better bet than a badly run open source project, but also that a well run open source project is a much better bet than a badly run commercial one.
+
+Indicia is a rapidly developing project with a disparate community of developers so of course it is essential that care is taken to ensure code quality. One way this is happening is through the setup of a *continuous integration and testing* environment.  Every time code changes are made to the repository, an automated tool retrieves the changes and performs an automatic complete installation of Indicia followed by some tests to ensure key areas of functionality still work. Whilst this is still work in progress it already means that we instantly know if a code change breaks the installation and in future the tests will be expanded to cover more areas of the system. This is yet another example of open source in action as the skills required to do this were brought to the project by a voluntary contributor who was looking at using Indicia for his own bird group (thanks, you know who you are!).
+
+These are not hard and fast rules and there are some commercial projects which share these characteristics, but open source projects _are_ generally very different to commercial ones. 
+
+==Indicia Components==
+
+In order to understand how to setup your own online recording using Indicia you first need to understand the key components that go together to build the system. 
+
+The main “guts” of Indicia are provided in the *Warehouse* component. This is the bit which stores the data, including observations, species data, sites, people and lists of terms used in the data. Because the database is fully *spatially enabled* you can link the data easily to a GIS (Geographical Information System) application, Google Earth or online map. However this does mean that the technology used on the Warehouse will not run on a typical low-cost hosted website account. Don’t worry though as Indicia was designed with this in mind. The Warehouse can run on a different web server to your recording website so it can be hosted completely separately to your online recording website. A single Warehouse installation can support multiple online recording websites making it possible for organisations that do have the capacity to host a Warehouse to share this resource with other organisations which don’t. For example in the following diagram the Warehouse supports 3 online recording websites for various schemes and societies (it could be many more).
+
+[http://indicia.googlecode.com/svn/wiki/WarehouseClientWebsites.png]
+
+In the UK, the [http://www.brc.ac.uk/ Biological Records Centre] host a Warehouse that is available for appropriate organisations to use. 
+
+The second component required of course is the online recording website itself. This is the part you will definitely need to build but Indicia is designed to make this as simple as possible. It is also designed to run on the vast majority of web servers including very cheap hosted accounts on shared servers. Because most of the hard work is done by the Warehouse, Indicia does not place a huge burden on the server hosting the online recording website.
+
+==Building your website==
+
+To set up an Indicia based online recording website, there are key things that need to be in place. Firstly, you need a website to add your recording web pages to. Indicia isn't designed to provide the whole website, so you might need a home page, species account pages, help pages and so on as well. Indicia provides the online recording forms, maps and reports to integrate into your site. This could be a site which already exists if you are looking to add recording functionality to the site or it could be a site which you are building from scratch. At the very least, the server your website is running on needs to support *PHP version 5.2 or higher*, which fortunately is supported by most low cost shared server web hosts. 
+There are several possible scenarios regarding the website development:
+You are starting from scratch to build a new website.
+You already have a website which uses a Content Management System
+You already have a website with static HTML pages.
+
+===Starting from scratch===
+
+If you are starting from scratch you might like to consider the [http://drupal.org Drupal] content management system as a tool to build your website. Like Indicia it is free, open source and based on the PHP programming language. There is good integration between Drupal and Indicia, plus there are a number of other sites using this combination of technology so you won't be on your own. Drupal not only provides a system for building and publishing the content of the website, but it can be extended with a choice of many thousands of available modules. For example you can add a forum, online shopping and many other features just by using the modules. With Drupal installed, it is possible to setup Indicia forms as a site editor without needing to understand any PHP code, though if you do have PHP skills available then more possibilities will be available to you.
+Another option when starting from scratch would be to develop a site using hand coded PHP. This approach is useful if you have good PHP programming skills available and want to be able to finely control the forms produced using Indicia or prefer to avoid the overhead of running a system such as Drupal. Don’t forget though that even within Drupal you are not restricted to using particular forms and can still write your own customised forms using PHP directly. 
+
+===Existing website using a content management system===
+
+There are hundreds, if not thousands of different content management systems based on a variety of different technologies. Unless the content management system is Drupal (the only one which we provide an Indicia module for) you will need to find out if it is possible to embed your own PHP code into the web pages. This will depend both on the web server and the selected content management system. Fortunately all web servers are capable of running PHP as long as it is installed and many content management systems are able to embed PHP into their web pages. If this is not possible then another option is to have the Indicia web pages running in PHP files in a separate folder to the rest of the website. This is not a perfect solution though as you then cannot easily use the content management system login to control access to the web pages and will have to craft your Indicia pages to look like they are part of the same site.
+
+===Existing website with static HTML pages===
+
+If you have an existing website with static HTML pages then first, you need to check that your server has PHP installed so you can embed PHP code into your web pages. To test this, create a file called phpinfo.php in a folder on your website and add the following:
+{{{
+<?php echo phpinfo(); ?>
+}}}
+Save this file and load it using a web browser, e.g. at http://www.example.com/phpinfo.php. If PHP is enabled then you should see a dump summarising information about your PHP configuration. You should also check that the PHP version described on this page is at least PHP 5.2. If PHP is not installed or the PHP version is older then you will need to check with your web host to see if they can install PHP 5.2 or higher for you.
+
+Something you should also consider if you have an existing website is whether it is worth converting into a content management system. This allows you to manage the site and create new content without having to create new HTML files and can be much more efficient for larger sites. For example you can have site editors who work on content without being coders. Of course there is a lot of effort required in the initial conversion but it may be worth it in the longer term.
+
+==About the Indicia Warehouse==
+
+The second component that needs to be in place is the Indicia Warehouse. This will normally run on a second web server and it provides both an interface for you to administer your website and also allows the Indicia components on your website to store and access data including species lists, sites, recorders and the observation records themselves. If you have your own web hosting capability you may like to install your own Warehouse. Don't worry if this is not possible, a single Warehouse is designed to be able to support multiple recording websites so the overheads of running a Warehouse can be shared. For example, in the UK the Biological Records Centre host a Warehouse which is available to recording schemes or other small organisation in the UK subject to agreement. 
+
+The Warehouse itself consists of several components summarised in the 
+following diagram:
+
+[http://indicia.googlecode.com/svn/wiki/WarehouseArchitectureOverview.png]
+
+Here is a quick overview of the components:
+
+*PostgreSQL* is the database component responsible for storing the data required for your website. It is a very powerful open source database comparable to many of the proprietary commercial offerings such as Oracle or SQL Server. 
+
+*PostGIS* is an extension for PostgreSQL which allows support for _spatial_ data. This means that when you store a sample’s grid reference, the actual polygon of the grid square is stored in the database using an internal format. This polygon can then be used for plotting the data on a map or GIS as well as performing _spatial queries_, e.g. get me a list of all designated species occurrences within 100m or a river. That’s hugely powerful when analysing biological data! Although not part of Indicia, it is also possible to install other extensions to PostgreSQL such as the [http://www.joeconway.com/plr/ PL/R Procedural Language for PostgreSQL] which enables use of statistical functions on the database. 
+
+*The Warehouse Admin Interface* provides a web-based interface for administrators of Indicia and the online recording websites. This is the tool you use to set up things like lists of species to record, lists of sites or terms used in drop-downs on your website or the types of attributes you want to capture in your survey, e.g. do you want to record the temperature, abundance, wind speed, etc.?
+
+*The Warehouse Web Services* provide the “behind the scenes” access to your data required by your website. For example when the data entry form loads, a drop-down box containing a list of habitat types to choose from will load these options via the web services. When you start typing a species name into a text box, the drop down list of suggestions is loaded from the web services. Finally, when you press the button to submit the form content the data is sent into the PostgreSQL database via the web services.
+
+*GeoServer* is actually a separate product and an optional component of Indicia. Rather like the Warehouse web services GeoServer provides behind the scenes access to the data. However, GeoServer is optimised for geographical data like grid references and site boundaries. It supports a number of widely used standards for this type of data and therefore is ideal for plotting data onto maps or exposing data for use in a GIS tool or even Google Earth.
