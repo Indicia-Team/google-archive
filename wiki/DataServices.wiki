@@ -54,6 +54,8 @@ The supported filter type names are as follows:
 ||orwhere||Identical to the where filter type, but conditions are joined using an OR.||
 ||in||Takes 2 parameters, a fieldname and an array of values to generate an IN (...) SQL clause.||
 ||notin||Identical to in but generates a NOT IN clause.||
+||like||Takes 2 parameters, a fieldname and a value to generate a LIKE SQL statement.||
+||orlike||Identical to the like filter type, but conditions are joined using an OR.||
 
 More may be added in future.
 
