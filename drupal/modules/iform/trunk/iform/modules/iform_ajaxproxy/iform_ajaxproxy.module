@@ -113,6 +113,9 @@ function iform_ajaxproxy_proxy() {
     case "sample":
         $Model = data_entry_helper::wrap_with_attrs($_POST, 'sample');
         break;
+    case "location":
+        $Model = data_entry_helper::wrap_with_attrs($_POST, 'location');
+        break;
     case "loc-sample":
         $structure = array(
         	'model' => 'location',
