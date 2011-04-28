@@ -1,0 +1,50 @@
+#summary How to release updates for the database schema.
+
+= Updating the Indicia Database schema =
+
+As a developer, you may occasionally need to release a change which affects the database schema. To do this, you need to follow these guidelines.
+
+First, write an SQL script which makes the changes to the database. One way you can do this is to edit the properties of the object you are changing in pgAdmin, make the required changes then copy the SQL from the SQL tab. Or, if you are creating a complete new object such as a table or view, use pgAdmin to create it, then select it and copy the SQL from the SQL pane. In this fictitious example we issuing a script to install the list_languages view.
+
+{{{
+-- View: indicia.list_languages
+
+-- DROP VIEW indicia.list_languages;
+
+CREATE OR REPLACE VIEW indicia.list_languages AS 
+ SELECT l.id, l.language, l.iso, NULL::integer AS website_id
+   FROM indicia.languages l;
+
+ALTER TABLE indicia.list_languages OWNER TO indicia_user;
+}}}
+
+Create a new text file and paste the SQL into it. Then make the following modifications. First remove all references to the schema (e.g. indicia.) since it will run in the context of the current schema so this is unnecessary, and the schema name may not be indicia anyway. Second, remove any statements which assign the ownership of the objects. Again, the statements will run in the context of the indicia user so they will be owned by the indicia user without you needing to explicitly set ownership. So, our example SQL becomes:
+{{{
+-- View: indicia.list_languages
+
+-- DROP VIEW indicia.list_languages;
+
+CREATE OR REPLACE VIEW list_languages AS 
+ SELECT l.id, l.language, l.iso, NULL::integer AS website_id
+   FROM languages l;
+}}}
+
+One more thing - Indicia does not actually delete records from the database when you delete them in the Warehouse - it simply sets the deleted field to true. Therefore your views should exclude deleted records, making our SQL change to:
+{{{
+-- View: indicia.list_languages
+
+-- DROP VIEW indicia.list_languages;
+
+CREATE OR REPLACE VIEW list_languages AS 
+ SELECT l.id, l.language, l.iso, NULL::integer AS website_id
+   FROM languages l
+   WHERE l.deleted=false;
+}}}
+
+Don’t forget to include checks for deleted on any joined tables as well.
+
+Now, save the SQL statement file. If the update is for the Indicia core, then save it to modules/indicia_setup/db/version_x_x_x where x_x_x is the next version of Indicia that this script will be included in. If the update is for a specific module which extends the database schema, then the equivalent folder is found by replacing indicia_setup with the module name and using the version of the _module_ you are planning to release the script in. The filename should be of the form yyyymmddhhmm_script_name.sql, so that the scripts are sorted and run in date order with the script name explaining our change. Given the earlier example, we might end up with a file called modules/indicia_setup/db/version_0_7_0/201104281720_list_languages_view.sql.
+
+The next step is to test the file works correctly. To do this, revert any changes you made to the database when preparing the script, then visit the index.php/home/upgrade page to force Indicia’s Warehouse to upgrade. You may need to update the application version in application/config/version.php if you are creating a script for a version that has not yet been created. If this reports that the upgrade was successful then check that your changes have been applied to the database. If not then the Kohana log files should contain full error information.
+
+Once you are happy that the statement works correclty, add it to SVN and commit it with a comment explaining the change.
