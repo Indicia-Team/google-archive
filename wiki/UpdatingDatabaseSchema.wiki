@@ -43,6 +43,12 @@ CREATE OR REPLACE VIEW list_languages AS
 
 Don’t forget to include checks for deleted on any joined tables as well.
 
+If you are creating new tables or adding columns, please ensure to provide documentation for the objects using the PostgreSQL comment facility. An example is:
+{{{
+COMMENT ON TABLE indicia.control_types IS 'List of user interface control types available, which can be associated with custom attributes in a survey.';
+COMMENT ON COLUMN indicia.control_types.control IS 'Type of user interface control';
+}}}
+
 Now, save the SQL statement file. If the update is for the Indicia core, then save it to modules/indicia_setup/db/version_x_x_x where x_x_x is the next version of Indicia that this script will be included in. If the update is for a specific module which extends the database schema, then the equivalent folder is found by replacing indicia_setup with the module name and using the version of the _module_ you are planning to release the script in. The filename should be of the form yyyymmddhhmm_script_name.sql, so that the scripts are sorted and run in date order with the script name explaining our change. Given the earlier example, we might end up with a file called modules/indicia_setup/db/version_0_7_0/201104281720_list_languages_view.sql.
 
 The next step is to test the file works correctly. To do this, revert any changes you made to the database when preparing the script, then visit the index.php/home/upgrade page to force Indicia’s Warehouse to upgrade. You may need to update the application version in application/config/version.php if you are creating a script for a version that has not yet been created. If this reports that the upgrade was successful then check that your changes have been applied to the database. If not then the Kohana log files should contain full error information.
