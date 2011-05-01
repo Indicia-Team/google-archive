@@ -1,0 +1,30 @@
+#summary Details on how to use the Report Grid prebuilt form.
+#labels CMS-Drupal
+
+= Using the report_grid prebuilt form =
+
+The report grid form is used to output a grid showing the results of a report. It can also display an auto-generated parameters input form for the report depending on the report selected.
+
+To use this prebuilt form from Drupal, select Create Content then Indicia Forms from the menu as for any other prebuilt form. Specify a title for the page then a little down the page enter your website ID and password. The Report Grid form is available from the Select Form drop-down after choosing the Reporting category first.
+
+Once you have selected the Report Grid form click the Load Settings Form button. Drupal will load the settings form for the report grid which contains a number of options, each with help text explaining what they are for. Here are a list of the important ones:
+
+*Report Name*: Enter the name of the report you want to load. These are the report file names from the reports directory in the Indicia installation directory, with forward slashes used to separate directory names. Don’t include the .xml file extension at the end of the filename. Some example report names you could try include occurrences_by_survey, occurrences_by_taxon_group, survey_details or reports_for_prebuilt_forms/verification_1/basic_verification_grid.
+
+*Preset Parameter Values*: If you want to provide a parameter value for a report without the user knowing about it, you can specify them in this box. For example if you have a report which outputs data for several surveys you might specify survey_id=4 to restrict the data to survey 4. The user would not see this parameter on the form.
+
+*Default Parameter Values*: This is similar to Preset Parameter Values except that you are providing a default which the user of the report will see in the parameters input form and will be able to change if they want. The advantage of providing defaults in this way is that if you provide a value for all the report parameters, then the report can run immediately when the page is accessed. A good example might be a verification report which loads the data awaiting verification (record_status=C) when first loaded, but allows the user to change the report to show rejected records (record_status=R) if they need to correct a previous rejection.
+
+*Columns Configuration JSON*: This allows you to take fine control over the column positioning, titles, output template and so forth. This parameter is a bit more complex to use, simply because Indicia’s reports are extremely flexible in how you configure the column output and it would take quite a lot of effort to write a configuration interface so it has not been done yet. Therefore at the moment you need to provide the columns configuration in the JSON format which Indicia can understand. The following list describes the different bits of information you can provide for each column:
+    # fieldname: name of the field to output in this column. Does not need to be specified when using the template option.
+    # display: caption of the column, which defaults to the fieldname if not specified
+    # actions: list of action buttons to add to each grid row. Each button is defined by a sub-array containing values for caption, url, urlParams, class and javascript. The javascript, url and urlParams values can all use the field names from the report in braces as substitutions, for example {id} is replaced by the value of the field called id in the respective row. In addition, the url can use {currentUrl} to represent the current page's URL, {rootFolder} to represent the folder on the server that the current PHP page is running from, and {imageFolder} for the image upload folder.
+    # visible: true or false, defaults to true
+    # template: allows you to create columns that contain dynamic content using a template, rather than just the output of a field. The template text can contain fieldnames in braces, which will be replaced by the respective field values. Note that template columns cannot be sorted by clicking grid headers.
+
+JSON is a relatively easy format to learn but here are some examples to get you started. The list of fields needs to be provided in a JSON array, indicated by wrapping the list in square brackets. Each field is provided in output order, with the fields described by JSON objects wrapped in braces. So, to describe a report that hides the ID by displays a name field with a custom caption you might write:
+[{“fieldname”:”id”,”visible”:false}, {“fieldname”,”name”,”display”:”my custom caption”}]
+
+*Gallery Column Count*: This setting allows you to make the grid repeat the records in 2 or more columns. So, if your report outputs 2 fields but Gallery Column Count is set to 2, then you will actually get 4 columns with 2 records being displayed side by side. A great way to use this is to output a single column containing an image, then set Gallery Column Count to something like 4 to display a gallery of photos.
+
+When you have finished with the settings save your page and test the report. It should show a parameters entry form if required plus a grid when the parameters have been specified.
