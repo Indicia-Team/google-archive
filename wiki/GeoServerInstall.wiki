@@ -2,7 +2,7 @@
 
 = Introduction =
 
-!GeoServer is used to expose Indicia geographical information over the web. 
+Indicia uses the PostGIS spatial database to store occurrence and site geospatial data. This makes it relatively simple to use the data in mapping applications or to perform spatial queries (e.g. tell me all the designated species occurrences within 100m of a site). Whilst Indicia exposes the spatial data via its own data services making it relatively easy for "Indicia Aware" applications to use the data, other spatial applications do not understand the format. There are a number of standards for exchanging and querying spatial data over the web, provided by the [http://www.opengeospatial.org Open Geospatial Consortium]. GeoServer is a web-server application which connects spatial data in a variety of formats to the web, by supporting the OGC standards. Fortunately GeoServer has built in support for PostGIS data. This makes it easy to link Indicia data to GIS applications, Google Earth or other similar maps. 
 
 = Installation =
 
