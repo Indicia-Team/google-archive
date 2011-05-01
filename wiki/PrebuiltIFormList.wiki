@@ -30,3 +30,8 @@ Here is a list of the prebuilt forms available in Indicia.
 || File || mnhnl_dynamic_1.php ||
 || Description || Advanced form which uses the attributes associated with a survey to dynamically build a form. Flexible and powerful, should be considered as the starting point for any new surveys. ||
 || Documentation || [TutorialDynamicForm Creating a survey using the dynamic form] ||
+
+==Report Grid==
+|| File || report_grid.php ||
+|| Description || A form for outputting the results of a report in a grid. ||
+|| Documentation || [PrebuiltFormReportGrid Using the Report Grid prebuilt form] ||
