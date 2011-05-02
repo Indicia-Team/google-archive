@@ -35,3 +35,8 @@ Here is a list of the prebuilt forms available in Indicia.
 || File || report_grid.php ||
 || Description || A form for outputting the results of a report in a grid. ||
 || Documentation || [PrebuiltFormReportGrid Using the Report Grid prebuilt form] ||
+
+==Report Map==
+|| File || report_map.php ||
+|| Description || A form for outputting the results of a report on a map. ||
+|| Documentation || [PrebuiltFormReportMap Using the Report Map prebuilt form] ||
