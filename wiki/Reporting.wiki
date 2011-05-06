@@ -124,7 +124,7 @@ Note that both columns and parameters will be inferred from the query if they ar
 
 == Supporting advanced pagination ==
 
-By default report files only support a very simple paginator in the grid with next and previous links. This is because to do a full paginator requires a count of the records and although this is possible with a standard query (by running the query with no limit then counting the records in the response) it is quite inefficient. To support counting more efficiently, you need to markup your query so that the field list can be swapped for a count(*) statement. To do this, replace the list of fields in the SELECT statement with #field_sql# and add an additional XML element field_sql containing the field list. Here is an example:
+By default report files only support a very simple paginator in the grid with next and previous links. This is because to do a full paginator requires a count of the records and although this is possible with a standard query (by running the query with no limit then counting the records in the response) it is quite inefficient. To support counting more efficiently, you need to markup your query so that the field list can be swapped for a count() statement. To do this, replace the list of fields in the SELECT statement with #field_sql# and add an additional XML element field_sql containing the field list. Here is an example:
 
 {{{
 <report
