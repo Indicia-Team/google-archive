@@ -77,4 +77,6 @@ Fortunately CQL is very similar and in fact a bit simpler as it does not require
 INTERSECTS(geom, #searchArea#) AND survey_id=#survey#
 }}}
 
-Enter this into the CQL Filter Template field on the form configuration and save the report map form. You should find it continues to work though a bit faster and the default style for the report output may be different. Changing the output style is described on the [GeoServerInstall Installing GeoServer for Indicia] page.
+Enter this into the CQL Filter Template field on the form configuration and save the report map form. You should find it continues to work though faster and the default style for the report output may be different. If you want to learn more about CQL filters for GeoServer a good starting point is [http://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html CQL and ECQL]
+
+Changing the output style is described on the [GeoServerInstall Installing GeoServer for Indicia] page.
