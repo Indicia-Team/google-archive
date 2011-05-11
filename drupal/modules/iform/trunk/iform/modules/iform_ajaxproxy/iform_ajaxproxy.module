@@ -191,7 +191,15 @@ function iform_ajaxproxy_proxy() {
                   if (array_key_exists('errors', $output)) $return['errors'][$media_id] = $output['errors']['media_upload'];
                 }
               } else { //filenames are returned without structure - the output of json_decode may not be valid.
-                $return['files'][] = $response['output'];
+                $exif = exif_read_data($uploadpath.$destination, 0, true);
+                if(!is_array($exif) || !isset($exif["IFD0"]) || !is_array($exif["IFD0"]))
+                	$exif = array("IFD0" => array());
+                if(!isset($exif["IFD0"]["Make"])) $exif["IFD0"]["Make"] = '';
+                if(!isset($exif["IFD0"]["Model"])) $exif["IFD0"]["Model"] = '';
+                if(!isset($exif["IFD0"]["DateTime"])) $exif["IFD0"]["DateTime"] = '';
+                $return['files'][] = array('filename' => $response['output'],
+                                           'EXIF_Camera_Make' => $exif["IFD0"]["Make"].' '.$exif["IFD0"]["Model"],
+                                           'EXIF_DateTime' => $exif["IFD0"]["DateTime"]);
               }
               unlink($uploadpath.$destination); //remove local copy
             } else { //attach the errors to the control that caused them
