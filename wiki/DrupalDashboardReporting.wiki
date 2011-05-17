@@ -1,0 +1,121 @@
+#summary Building dashboard reporting pages in Drupal
+
+=Advanced Dashboard Reporting=
+
+==Introduction==
+
+This tutorial introduces the idea of building a single web page which shows the output of several *reports*, *charts* and *maps* dashboard style. Using Indicia’s built in facilities you can control the output of all the reports, charts and maps using a single parameter input form. This is an advanced topic but the possibilities hopefully make the effort worthwhile. The tutorial uses Drupal’s Panels module to layout the different components of the page though you could equally use your own PHP code to do this.
+
+==Before you start==
+
+Before starting, please ensure that:
+
+  # You have access to an Indicia Warehouse running at least version 0.6.0 with some data on it that you can report against.
+
+  # You have your own installation of Drupal 6 updated to the latest version.
+
+  # The [UsingDrupalIForm Indicia IForm module] is installed with API Keys setup correctly for any map layers you plan to use.
+
+  # The following Drupal modules are installed: [http://drupal.org/project/panels Panels 3], [http://drupal.org/project/ctools CTools], Page Manager (which is a submodule of CTools), [http://drupal.org/project/tabs Tabs] & [http://drupal.org/project/panels_tabs Panels Tabs]. For the Tabs module ensure you select the 6.x-1.x-dev download as this is the version which is compatible with the version of jQuery which Indicia uses.
+
+  # It is also recommended that you follow the tutorials on using the [PrebuiltFormReportGrid Report Grid] and [PrebuiltFormReportMap Report Map] prebuilt form tutorials to give you an introduction to reporting from within Drupal, since this tutorial is an extension of the techniques you will learn in those tutorials.
+
+==Building the nodes==
+
+The technique we are going to use is to setup Drupal nodes for the parameters input form and each of the report outputs, be they grids, charts or maps. Then we will use the Page Manager and Panels modules in Drupal to create a custom page with a panel layout, with each node’s output being directed into a panel. We can then use the Tabs and Panels Tabs modules to put different report outputs onto different tabs or page areas. When the parameters input form is submitted, the page reloads and all the different grids, maps and charts on the page will detect and use the input parameters to filter their output.
+
+We are first going to build a parameters form node, then a report map and report grid nodes. 
+
+===Creating a parameters form===
+
+From the Content Management menu in Drupal, select Create Content then choose Indicia Forms. 
+
+Enter a page title, e.g. Dashboard Report Parameters.
+
+In the Form Selection box a little further down the screen, enter the website ID and password for the website you are reporting on the data from so that Indicia can authenticate your requests for report data sent to the Warehouse. Select Reporting then choose the Report Grid form and click the Load Settings Form button. This will dynamically load the other configuration options you need to fill in for the Report Grid form type:
+
+[http://indicia.googlecode.com/svn/wiki/drupal_select_report_form.png]
+
+Expand the Report Settings section of the form which displays the main controls available for configuration of the report. Enter map_occurrences_for_survey into the *Report Name* control as this is a demonstration report that shows the map as well as grid report output capability of Indicia.
+
+Change the *Output Mode* option to “Parameters form only – the output will be displayed elsewhere.” since we are just building the node for the parameters form at present and don’t want the output grid on this node. Another option to consider is the *Download Link* - as this is just a parameters form the link is not relevant so it is best to turn it off by unchecking the box. There are quite a few other options in the report configuration form which can be ignored for now. However you may like to disable Drupal commenting in the section near the bottom, then save the node using the button at the bottom of the page.
+
+You should now have a form which looks like the following – not very impressive so far but note that the form has dynamically picked up the parameters from the report. Copy the URL of the current page and keep it somewhere to hand.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_basic_report_parameters_panel.png]
+
+===Creating a map output node===
+
+Next we need to build a node to output the map of this report’s output. The steps are the same as for creating the parameters input form node but set the page title to Dashboard map and choose Report Map instead of Report Grid in the Select Form drop down.
+
+Under Report Settings, set the Report Name parameter to map_occurrences_for_survey as before. This time, set the *Output Mode* to “Output only – the params form will be output elsewhere”. In the *Report Map Settings* section You can also set the *Include Layer Picker* option to “Include the layer picker after the map”, though this is of course optional. 
+
+Now, collapse the *Report Settings* section by clicking on the title and expand *Initial Map View*. This section lets you set up the map itself. You can set the settings in this section how you like, but for now here are some defaults to start with:
+
+  * *Centre of Map Latitude*: 54
+  * *Centre of Map Longitude*: -2
+  * *Map Zoom Level*: 5
+
+Expand the *Base Map Layers* section. Tick a couple of the offered layers which you have setup API keys for (e.g. Google Physical and Google Hybrid).
+ 
+The other settings can be left as they are for now so save the node using the button at the bottom of the page.
+
+This should give you a page with a map, legend and layer picker, but no report output because we opted not to include the parameters entry form on this node. We need to integrate the map output node onto the same page as the parameters form we previously created. 
+
+===Creating a page which combines the form and map output===
+
+From the Drupal menu, select _Site Building > Pages > Add Custom Page_. Set the *administrative title* to Dashboard Demo and the *machine name* to dashboard_demo. Further down, set the *path* to dashboard-demo. You can tick the Visible Menu Item optional feature near the bottom if you want this page to appear in your Drupal menu. Your form should look like the following.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_creating_the_page.png]
+
+Click the Continue button. On the next step, select Normal menu entry in the set of radio options, then set the menu item’s title to Dashboard Demo. Select the Primary Links menu in the menu drop down so that your page is not lost in the administrative menu.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_page_menu.png]
+
+Click the Continue button. The next step is to choose the layout. You can easily change this later but for the demo we can select the Builders Flexible layout since that lets you design your own layout. There are other types of layout available in the Category drop-down. Select the radio button for the Flexible layout option.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_set_layout.png]
+
+Click the Continue button. You can skip through the panel settings page, so click Continue again.
+
+Finally you are at the *Panel content* page which lets you build the page layout. Your layout starts with just a Center region:
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_panel_content_1.png] 
+
+We want to create a layout with a parameters panel at the top, followed by a set of tabs with the map on the first tab and the grid on the second. We’ll worry about the tabs later so for now we can just create 2 panels one above the other for the parameters and map. Click the *Show layout designer* button. In Drupal panels pages, the outermost box is called the *canvas*. Inside the canvas you can have *columns* and columns can contain *rows*. Finally rows can contain *regions* or more *columns*, so you can build quite complex layouts. We have a column containing 1 row but we need 2, so drop down the menu for the column and select *Add row to bottom*. This pops up a config form for the new row but we can accept the default settings for now and just click Save.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_layout_with_2_rows.png]
+
+The new row needs a region to drop the content into. So, from the new bottom row’s drop down menu select *Add region*, then set the region title to Report Output and click Save.
+
+The layout is now ready for the content and should look something like the following:
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_layout_with_2_rows_region.png]
+
+Click *Hide layout designer* to return to the content editing view of the layout. To add the report parameters node into the top region, click the “gears” icon in the top-left corner of the Center region. Select *Add content*. On the left of the popup window is a menu allowing you to select from a variety of things to add, including an “existing node” link so click that. At the top of the next page is a control for entering the title or NID (node ID) of the node. You should be able to type Dashboard Report Parameters to lookup the node you created earlier and tick the *Override Title* checkbox but leave the title blank to remove the title from the panel (since our page has a title already). Also untick the *Include node links...* checkbox further down then click Finish.
+
+Repeat this, but adding the Dashboard map page to the Report Output region. 
+
+Finally click *Update and Save*. This will save your page layout and create the menu option but because Drupal caches the menu rather than building it every time a page is displayed, you need to clear the cache. Select Site configuration > Performance from the Drupal menu then click the Clear cached data button near the bottom. After a few seconds the page will reload with your menu item added to the primary links area near the top.
+
+Now, select the Dashboard Demo menu item then try selecting your survey in the Survey drop down. Use the drag polygon tool to draw a polygon in a region of the map where you known you have data (double click to finish drawing the shape) and click Run Report.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_map_results.png]
+
+If you are finding that the performance of your report_map is not as good as you would like, then you may want to consider using an alternative way of drawing the distribution points on the map called WMS (Web Mapping Services). This technique is described at [http://code.google.com/p/indicia/wiki/PrebuiltFormReportMap#Advanced_high_performance_mapping Advanced high speed mapping].
+
+===Adding a report grid to your dashboard===
+
+Assuming you would like to output a grid of the report data as well as a map, you can follow the [PrebuiltFormReportGrid Report Grid tutorial] to create a page which shows a grid of the map_occurrences_for_survey report. Remember that you can actually output the results of any report you like as long as it shares the same set of input parameters as the report chosen for map output - otherwise it cannot be driven from the same parameters form. Once you have created the page for this report, change the *Output Mode* to *Output only* so that the page excludes the parameters input form. 
+
+Now you need to add the grid output to your dashboard page. On the administration menu of Drupal, browse to _Administer > Site Building > Pages_  and select the edit link to the right of your dashboard demo page. A shortcut to this is to select the *Edit Panel* link at the top of your dashboard page. In the menu to the left of the panel designer select the *Content* option (it will already be selected if you used the Edit Panel link). Click the gears icon in the top left corner of the Report Output region and select *Add content* from the popup menu. This time, choose the *Existing node* option but type in the title of the report grid page you just created. As before check the *Override title* checkbox and uncheck the *Include node links...* checkbox, then click Finish to close the popup and finally click *Update and Save* to save the updated panel layout. Load up your dashboard page (it should be in the primary links menu) and try the report out to check it works. You should find a grid of data loads below the map.
+
+===Tabbing the report output===
+
+The layout you have produced is a fairly simple linear affair with the parameters entry form, the map and the grid all presented one after the other. Of course you can use the Drupal Panels module to create any layout you like, but one other approach you might like to consider is presenting the grid and map on separate tabs. Make sure you have installed the Tabs and Tabs panel style modules before you go any further.
+
+To setup tabs return to the page content editor by clicking the *Edit Panel* link at the top of the page. Click the gears icon in the top left of the Report Outpu region but this time select the *change* option in the style section. A popup will appear with a list of styles to choose, so select the *tabs* option and click Next. On the next page of the popup just click the Save button though you can of course return to explore these options later. 
+
+Before trying your new tabbed dashboard out, you need to set titles for the tabs which we had removed from each panel before. Click the gears icon in the right of the Report Map panel and select *settings* from the menu. Either uncheck the *Override title* checkbox to use the default title you specified for the node eariler, or type in a custom title whilst leaving the checkbox checked. Click the *finish* button to close the popup then repeat this for the Report Grid panel. Click *Update and save* then return to your dashboard report page and test it again.
+
+[http://indicia.googlecode.com/svn/wiki/drupal_dashboard_grid.png]
