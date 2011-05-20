@@ -36,7 +36,8 @@ function iform_perm() {
     }
   }
   // Also look for then generic IForm module setting to have custom permissions for this form
-  $results = db_query("SELECT n.nid, n.title FROM {iform} i, {node} n WHERE n.nid=i.nid AND i.params like '%\"view_access_control\":1%'");
+  $results = db_query("SELECT n.nid, n.title FROM {iform} i, {node} n WHERE n.nid=i.nid AND (i.params like '%\"view_access_control\":1%' ".
+          "OR  i.params like '%\"view_access_control\":\"1\"%')");
   while($result = db_fetch_object($results)) {
     $retVal[] = 'access iform '.$result->nid;
   }
