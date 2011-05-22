@@ -78,7 +78,8 @@ function iform_access($op, $node, $account) {
 
   if ($op == 'view') {
     // check if this form has per-node view access control
-    $results = db_query("SELECT nid FROM {iform} WHERE nid=".$node->nid." AND params LIKE '%\"view_access_control\":1%'");
+    $results = db_query("SELECT nid FROM {iform} WHERE nid=".$node->nid." AND (params like '%\"view_access_control\":1%' ".
+          "OR params like '%\"view_access_control\":\"1\"%')");
     if ($results->num_rows>0)
       // Use a per node setting to control access
       return user_access('access iform '.$node->nid, $account);
