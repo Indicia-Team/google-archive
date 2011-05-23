@@ -22,7 +22,7 @@ The basic steps are:
 
 3. Enter an appropriate name for the Workspace (which can contain spaces) and also enter a URI (Uniform Resource Identifier). A URI is nothing more than a string of characters that uniquely identify a resource on the Internet (see [http://en.wikipedia.org/wiki/Uniform_Resource_Identifier this Wikipedia article] for more details). Typically it could be the Web address of a domain that you control, followed by a string unique to that domain. This should guarantee that the URI is completely unique on the Internet. An example might be http://www.alanhale.co.uk/mystuff. (Note that a folder called "mystuff" does not actually have to exist on the domain www.alanhale.co.uk). The Workspace name translates to a Namespace for XML-based files produced by Geoserver.
 
-4. Go to *Data>Workspaces* and click on the *Add New Workspace* link. You will be offered a range of data source types to choose from, both vector and raster  - choose "PostGIS - PostGIS database".
+4. Go to *Data>Stores* and click on the *Add New Store* link. You will be offered a range of data source types to choose from, both vector and raster  - choose "PostGIS - PostGIS database".
 
 Add the following information to the form that then appears:
 
