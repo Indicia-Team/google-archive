@@ -418,7 +418,8 @@ function handle_resources() {
   data_entry_helper::setup_jquery_validation_js();
   $script = '';
   if (!empty(data_entry_helper::$javascript) || !empty(data_entry_helper::$late_javascript)) {
-    $script = "jQuery(document).ready(function() {\n".
+    $script = "indiciaData = {windowLoaded:false};\n";
+    $script .= "jQuery(document).ready(function() {\n".
       data_entry_helper::$javascript."\n".
       data_entry_helper::$late_javascript."\n".
       "});\n";
@@ -426,6 +427,7 @@ function handle_resources() {
   if (!empty(data_entry_helper::$onload_javascript)) {
     $script .= "window.onload = function() {\n".
       data_entry_helper::$onload_javascript."\n".
+      "indiciaData.windowLoaded=true;\n".
       "};\n";
   }
   if ($script) {
