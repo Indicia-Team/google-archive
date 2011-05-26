@@ -70,7 +70,14 @@ function iform_node_info() {
  * @param $account
  * @return unknown_type
  */
-function iform_access($op, $node, $account) {
+function iform_access($op, $node, $account=NULL) {
+  global $user;
+  
+  // If no user object is supplied, the access check is for the current user.
+  if (empty($account)) {
+    $account = $user;
+  }
+  
   if ($op == 'create') {
     // Only users with permission to do so may create this node type.
     return user_access('create iform', $account);
