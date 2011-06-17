@@ -259,15 +259,70 @@ function iform_load($node) {
 */
 function iform_menu() {
   $items = array();
-  // Create an admin entry to display the diagnostics panel.
-  $items['admin/settings/iform_diagnostics'] = array(
+  $items['admin/settings/iform'] = array(
+    'title' => 'IForm',
+    'description' => 'Configuration for the IForm module.',
+    'page callback' => 'iform_settings',
+    'access arguments' => array('create iform'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  $items['admin/settings/iform/settings'] = array(
+    'title' => 'Settings',
+    'description' => 'Settings page for the IForm module.',
+    'page callback' => 'iform_settings',
+    'access arguments' => array('create iform'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0
+  );
+  // Create a tab to display the diagnostics panel.
+  $items['admin/settings/iform/diagnostics'] = array(
     'title' => 'IForm Diagnostics',
     'description' => 'Run a configuration check for the IForm module.',
     'page callback' => 'iform_diagnostics',
     'access arguments' => array('create iform'),
-    'type' => MENU_NORMAL_ITEM
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1
   );
   return $items;
+}
+
+/** 
+ * Menu callback that generates a page which allows iform settings to be specified.
+ */
+function iform_settings() {
+  require_once drupal_get_path('module', 'iform').'/client_helpers/form_helper.php';
+  require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+  data_entry_helper::enable_validation('settings-form');
+  $r = '';
+  if (isset($_POST['website_id'])) {
+    variable_set('indicia_website_id', $_POST['website_id']);
+    if (!empty($_POST['password'])) 
+      variable_set('indicia_password', $_POST['password']);
+    drupal_set_message(t('Indicia settings saved'));
+  }
+  
+  $r .= "<form id=\"settings-form\" action=\"".base_path()."admin/settings/iform/settings\" method=\"post\">\n";
+  $r .= data_entry_helper::text_input(array(
+    'label' => 'Website ID',
+    'fieldname' => 'website_id',
+    'class' => 'required',
+    'default' => variable_get('indicia_website_id', ''),
+    'helpText' => 'Please enter the ID given to your website record when your website was registered on the Indicia Warehouse.'
+  ));
+  $r .= data_entry_helper::password_input(array(
+    'label' => 'Password',
+    'fieldname' => 'password',
+    'helpText' => 'Please enter the password specified when your website was registered on the Indicia Warehouse.'
+    // no default as a password field
+  ));
+  if (isset($_POST['website_id'])) {
+    $r .= print_r($_POST, true);
+  }
+  $r .= "<input type=\"submit\" value=\"Save\" />\n";
+  $r .= "</form>\n";
+  $r .= data_entry_helper::dump_javascript();
+  return $r;
+  
 }
 
 /**
@@ -463,6 +518,9 @@ function iform_form_alter(&$form, $form_state, $form_id) {
   }
 }
 
+/**
+ * Menu callback that generates a page which outputs a diagnostics check for the IForm module.
+ */
 function iform_diagnostics() {
   require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
   return data_entry_helper::system_check();
