@@ -53,7 +53,23 @@ Next, we need a method to declare the parameters for the data entry form. Parame
   }
 }}}
 
-The list of parameters is returned as an array, with each parameter being an _associative_ array describing the name, caption, description, group and type (data type) of the parameter. The name is the internal name for the parameter, which will be used by your code later, as opposed to the caption which is the display label for the caption that the website editor will see. The type can be one of int, string, boolean or select. If select is used then the options that will appear in the select list should be defined in an array called options as illustrated above. The group allows you to group the controls together into logical sets. How this actually gets interpreted depends on the system you are using the prebuilt forms within, but as an example the Drupal IForm module places controls together into fieldsets within the form administrators use to set up the recording forms.
+The list of parameters is returned as an array, with each parameter being an _associative_ array describing the name, caption, description, group and type (data type) of the parameter. The name is the internal name for the parameter, which will be used by your code later, as opposed to the caption which is the display label for the caption that the website editor will see. 
+
+The type can be one of int, string, boolean or select, or alternatively can specify one of the control names from the data_entry_helper or report_helper class to use that control in the configuration form.  If using a report_helper control then the control name must be prefixed with 'report_helper::'. For example, the following array specifies the use of the report_helper class' report_picker control: 
+
+{{{
+array(
+      'name'=>'report_name',
+      'caption'=>'Report Name',
+      'description'=>'The name of the report file to load into the verification grid, excluding the .xml suffix.',
+      'type'=>'report_helper::report_picker',
+      'group'=>'Report Settings'
+    )
+}}}
+
+When using a data_entry_helper or report_helper control, additional parameters for the control can be supplied in the array. If select is used then the options that will appear in the select list should be defined in an array called options as illustrated above. 
+
+The group option allows you to group the controls together into logical sets. How this actually gets interpreted depends on the system you are using the prebuilt forms within, but as an example the Drupal IForm module places controls together into fieldsets within the form administrators use to set up the recording forms.
 
 Note that there will automatically be parameters for the website_id and passsword and you don't need to declare these, since they are required by all prebuilt forms.
 
