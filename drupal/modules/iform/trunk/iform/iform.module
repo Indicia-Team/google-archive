@@ -567,3 +567,14 @@ function iform_load_language_files($node) {
     $custom_terms=array_merge($custom_terms, $override_list);
   }
 }
+
+/**
+ * Implementation of hook_init.
+ * Disable Drupal caching for iforms, since this prevents authorisation tokens being refreshed required for Warehouse access.
+ */
+function iform_init() {
+  $node = menu_get_object(); 
+  if ($node->type == 'iform') {
+    $GLOBALS['conf']['cache'] = FALSE;
+  }
+}
