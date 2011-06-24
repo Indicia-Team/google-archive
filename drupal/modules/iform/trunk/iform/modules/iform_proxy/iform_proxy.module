@@ -2,16 +2,16 @@
 // $Id$
 
 /**
- * @file 
+ * @file
  * Adds username/password to map accesses.
  * @package iform_proxy
  */
- 
+
 define('IFORM_PROXY_PATH', variable_get('iform_proxy_path', 'proxy'));
- 
+
 /* -----------------------------------------------------------------
 
- Hook Implementations 
+ Hook Implementations
 
 ------------------------------------------------------------------ */
 
@@ -21,19 +21,19 @@ define('IFORM_PROXY_PATH', variable_get('iform_proxy_path', 'proxy'));
 function iform_proxy_perm() {
   return array('IForm Proxy admin', 'IForm Proxy passthrough');
 }
-                                 
+
 /**
  * Implementation of hook_menu().
- */  
+ */
 function iform_proxy_menu(){
  $items = array();
- 
+
   $items[IFORM_PROXY_PATH] = array(
      'title' => 'Redirecting to your destination',
      'page callback' => 'iform_proxy_proxy',
      'access arguments' => array('access content'),
      'type' => MENU_CALLBACK,
-  );  
+  );
   $items['admin/settings/iform_proxy'] = array(
     'title' => 'IForm Proxy',
     'description' => 'Main settings for IForm Proxy.',
@@ -82,73 +82,74 @@ function iform_proxy_admin_settings() {
   // Make a system setting form and return
   return system_settings_form($form);
 }
- 
+
 /* -----------------------------------------------------------------
 
- Public API 
+ Public API
 
 ------------------------------------------------------------------ */
- 
+
 /**
  * Proxy the URL passed.
- * 
+ *
  * @param string $url
- * 
+ *
  * @param array $options
- * 
+ *
  * @return string
  *   A re-built URL ready to be used in place of the provided url.
- * 
+ *
  * @see iform_proxy_redirect()
  */
 function iform_proxy_url($url, $options = array()) {
-  
-  // Build URL     
+
+  // Build URL
   $u = url(IFORM_PROXY_PATH, array('absolute' => TRUE,
-  		query => array('url' => $url,
-						'referer' => request_uri())));
-  $u .= (!empty($options) ? '&' . drupal_query_string_encode((array) $options) : '');   
-  return $u; 
+      query => array('url' => $url,
+            'referer' => request_uri())));
+  $u .= (!empty($options) ? '&' . drupal_query_string_encode((array) $options) : '');
+  return $u;
 }
 
 /**
  * Redirect to the URL passed.
- * 
+ *
  * Generally you would not call this function, simply use
  * iform_proxy_url() to create the proxied URLs. However if you must
  * you can also programatically invoke the proxies via this function.
- * 
+ *
  * @param string $url
- * 
+ *
  * @param array $options
- * 
- * @see iform_proxy_url() 
+ *
+ * @see iform_proxy_url()
  */
 function iform_proxy_redirect($url, $options = array()) {
   // Fix scheme if needed
   // Currently supports http only
   if (strpos($url, 'http://') !== 0){
     $url = 'http://' . $url;
-  }  
-	if(!user_access('IForm Proxy passthrough')) {
+  }
+
+  if(!user_access('IForm Proxy passthrough')) {
     watchdog('IForm Proxy', 'Access blocked because of permissions');
-		return;
-	}
+    return;
+  }
   $user = check_plain(variable_get('iform_proxy_username', ''));
   $password = check_plain(variable_get('iform_proxy_password', ''));
-	foreach($options as $key => $value){
-		switch($key) {
-			case 'referer' :
-			case 'url' :
-				break;
-			default :
-				$url=$url.(strstr($url, "?") ? "&" : "?").$key."=".$value;
-		}
-	}
+  foreach($options as $key => $value){
+    switch($key) {
+      case 'referer' :
+      case 'url' :
+        break;
+      default :
+        $url=$url.(strstr($url, "?") ? "&" : "?").urlencode($key)."=".urlencode($value);
+    }
+  }
     $session = curl_init($url);
     // Set the POST options.
     $httpHeader = array();
-    
+
     $postData = file_get_contents( "php://input" );
     // Set the POST options.
     if (!empty($postData)) {
@@ -170,31 +171,31 @@ function iform_proxy_redirect($url, $options = array()) {
     curl_setopt($session, CURLOPT_HEADER, false);
     curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 
-    // Do the POST and then close the session    
-    $response = curl_exec($session);    
+    // Do the POST and then close the session
+    $response = curl_exec($session);
     $headers = curl_getinfo($session);
     if (curl_errno($session) || $headers['http_code']!==200) {
       echo 'cUrl request failed. Please check cUrl is installed on the server.';
       if (curl_errno($session))
         echo 'Error number: '.curl_errno($session)."\n";
-      else 
+      else
         echo 'Headers returned HTTP '.$headers['http_code']."\n";
       echo "Server response ";
       echo $response;
     } else {
-      if (strpos($headers['content_type'], '/')!==false) 
+      if (strpos($headers['content_type'], '/')!==false)
         header('Content-type: '.$headers['content_type']);
-      // @todo Check for charset and file download headers      
+      // @todo Check for charset and file download headers
       echo $response;
     }
     curl_close($session);
-  
+
 }
 
 /**
  * Constructs proxy redirection based on the current path.
  * this is the function called when a request comes through the proxy.
- * 
+ *
  * @see iform_proxy_redirect()
  */
 function iform_proxy_proxy() {
@@ -202,19 +203,19 @@ function iform_proxy_proxy() {
   if (arg(0) != IFORM_PROXY_PATH){
     return;
   }
-  
+
   // Build url, options, and module from path
   $url = isset($_GET['url']) ? $_GET['url'] : NULL;
   $options = $_GET;
 
   // Sanity check
-  if (empty($url)){      
+  if (empty($url)){
     watchdog('iform_proxy', 'Failed to redirect user.');
     drupal_set_message(t('URL redirection is currently unavailable, please contact an administrator.'));
-    // If they tampered with referer... thats just to bad for them 
+    // If they tampered with referer... thats just to bad for them
     drupal_goto($_GET['referer']);
   }
-  
+
   unset($options['q'], $options['url']);
   // Redirect and resume the processing phase
   iform_proxy_redirect($url, $options);
