@@ -28,7 +28,7 @@ function iform_perm() {
   //   if yes, call it and add to the return list
   $results = db_query('SELECT n.nid, i.iform FROM {iform} i, {node} n WHERE i.nid = n.nid');
   while($result = db_fetch_object($results)) {
-    require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+    iform_load_helpers(array('data_entry_helper'));
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$result->iform.'.php';
     if(method_exists('iform_'.$result->iform, 'get_perms')) {
       $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
@@ -113,9 +113,7 @@ function iform_access($op, $node, $account=NULL) {
  * @return unknown_type
  */
 function iform_form(&$node, $form_state) {
-  require_once drupal_get_path('module', 'iform').'/client_helpers/form_helper.php';
-  form_helper::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
-  form_helper::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
+  iform_load_helpers(array('form_helper'));
   form_helper::enable_validation('node-form');
   if (isset($form_state['post'])) {
     $node = (object)($form_state['post'] + (array)$node);
@@ -150,11 +148,19 @@ function iform_form(&$node, $form_state) {
     '#tree' => FALSE,
     '#weight' => 6
   );
+  $website_id=variable_get('indicia_website_id','');
+  $password=variable_get('indicia_password','');
+  $needWebsiteInputs = empty($website_id) || empty($password);
+  if (empty($website_id))
+    $website_id = isset($node->params['website_id']) ? $node->params['website_id'] : '';
+  if (empty($password))
+    $website_id = isset($node->params['password']) ? $node->params['password'] : '';
   $form['iform_forms']['picker'] = array(
     '#value' => form_helper::prebuilt_form_picker(array(
       'form' => $node->iform,
-      'website_id' => isset($node->params['website_id']) ? $node->params['website_id'] : '',
-      'password' => isset($node->params['password']) ? $node->params['password'] : ''
+      'website_id' => $website_id,
+      'password' => $password,
+      'needWebsiteInputs' => $needWebsiteInputs
     ))
   );
   if ($node->iform) {
@@ -189,7 +195,7 @@ function iform_form(&$node, $form_state) {
 function get_custom_param_values($node) {
   // We need to grab the parameter values for the custom parameters that were defined by the form.
   if ($_POST['iform'] && $_POST['iform']!=-1) {
-    require_once drupal_get_path('module', 'iform').'/client_helpers/form_helper.php';
+    iform_load_helpers(array('form_helper'));
     ob_start();
     $params = form_helper::get_form_parameters($_POST['iform']);
     ob_end_clean();
@@ -290,37 +296,83 @@ function iform_menu() {
  * Menu callback that generates a page which allows iform settings to be specified.
  */
 function iform_settings() {
-  require_once drupal_get_path('module', 'iform').'/client_helpers/form_helper.php';
-  require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+  iform_load_helpers(array('form_helper', 'data_entry_helper'));
   data_entry_helper::enable_validation('settings-form');
   $r = '';
   if (isset($_POST['website_id'])) {
     variable_set('indicia_website_id', $_POST['website_id']);
+    // if the password is empty we leave it as it was
     if (!empty($_POST['password'])) 
       variable_set('indicia_password', $_POST['password']);
+    variable_set('indicia_base_url', $_POST['base_url']);
+    variable_set('indicia_geoserver_url', $_POST['geoserver_url']);
+    variable_set('indicia_geoplanet_api_key', $_POST['geoplanet_api_key']);
+    variable_set('indicia_google_search_api_key', $_POST['google_search_api_key']);
+    // load the new values for this page access
+    helper_config::$base_url = $_POST['base_url'];
+    helper_config::$geoserver_url = $_POST['geoserver_url'];
+    helper_config::$geoplanet_api_key = $_POST['geoplanet_api_key'];
+    helper_config::$google_search_api_key = $_POST['search_api_key'];
     drupal_set_message(t('Indicia settings saved'));
   }
   
-  $r .= "<form id=\"settings-form\" action=\"".base_path()."admin/settings/iform/settings\" method=\"post\">\n";
+  $r .= "<form id=\"settings-form\"  method=\"post\">\n";
   $r .= data_entry_helper::text_input(array(
-    'label' => 'Website ID',
+    'label' => t('Website ID'),
     'fieldname' => 'website_id',
     'class' => 'required',
     'default' => variable_get('indicia_website_id', ''),
-    'helpText' => 'Please enter the ID given to your website record when your website was registered on the Indicia Warehouse.'
+    'helpText' => t('Please enter the ID given to your website record when your website was registered on the Indicia Warehouse. This '.
+            'will be used for all the Indicia forms on your website.')
   ));
   $r .= data_entry_helper::password_input(array(
-    'label' => 'Password',
+    'label' => t('Password'),
     'fieldname' => 'password',
-    'helpText' => 'Please enter the password specified when your website was registered on the Indicia Warehouse.'
+    'helpText' => t('Please enter the password specified when your website was registered on the Indicia Warehouse. This '.
+            'will be used for all the Indicia forms on your website.')
     // no default as a password field
   ));
-  if (isset($_POST['website_id'])) {
-    $r .= print_r($_POST, true);
-  }
+  $r .= data_entry_helper::text_input(array(
+    'label' => t('Warehouse URL'),
+    'fieldname' => 'base_url',
+    'class' => 'required control-width-6',
+    'helpText' => t('Please enter the url of the warehouse instance you are connecting to, up to but excluding the index.php part.'),
+    'default' => helper_config::$base_url
+  ));
+  $r .= data_entry_helper::text_input(array(
+    'label' => t('GeoServer URL'),
+    'fieldname' => 'geoserver_url',
+    'class' => 'required control-width-6',
+    'helpText' => t('Please enter the url of the GeoServer instance you are connecting to for mapping services, for '.
+        'example, http://localhost:8080/geoserver/ . This is optional and need not be set if you are not using '.
+        'the mapping facilities provided by GeoServer. See <a href="http://code.google.com/p/indicia/wiki/GeoServerInstall">'.
+        'Installing GeoServer for Indicia</a>.'),
+    'default' => data_entry_helper::$geoserver_url
+  ));
+  $r .= data_entry_helper::text_input(array(
+    'label' => t('GeoPlanet API Key'),
+    'fieldname' => 'geoplanet_api_key',
+    'class' => 'required control-width-6',
+    'helpText' => t('The Yahoo! GeoPlanet API is one option to lookup place names when you use the place search control. '.
+        'It references a global database of places and returns the list of possibilities with their spatial references '.
+        'to Indicia. To obtain your own API key for GeoPlanet, please visit <a href="http://developer.yahoo.com/geo/geoplanet/">'.
+        'Yahoo! GeoPlanet</a>and follow the link to get an Application ID. '),
+    'default' => helper_config::$geoplanet_api_key
+  ));
+  $r .= data_entry_helper::text_input(array(
+    'label' => t('Google Search API Key'),
+    'fieldname' => 'google_search_api_key',
+    'class' => 'required control-width-6',
+    'helpText' => t('The Google Search API is a second option to lookup place names when you use the place search control. '.
+        'It is also used by the Postcode textbox control to georeference postcodes you input. To obtain your own API key '.
+        'for the Google Search API, please visit <a href="http://code.google.com/apis/loader/signup.html">'.
+        'Google Search API</a>and follow the instructions to get an Application ID. '),
+    'default' => helper_config::$google_search_api_key
+  ));
   $r .= "<input type=\"submit\" value=\"Save\" />\n";
   $r .= "</form>\n";
-  $r .= data_entry_helper::dump_javascript();
+  data_entry_helper::add_resource('defaultStylesheet');
+  handle_resources();
   return $r;
   
 }
@@ -333,7 +385,7 @@ function iform_settings() {
  * @return unknown_type
  */
 function iform_view($node, $teaser = FALSE, $page = FALSE) {
-  require_once drupal_get_path('module', 'iform').'/client_helpers/form_helper.php';
+  iform_load_helpers(array('form_helper'));
   global $language;
   $node = node_prepare($node, $teaser);
   if ($node->iform && $node->iform!=-1) {
@@ -341,12 +393,9 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
 
     $args = array('language' => $language->language);
 
-    require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+    iform_load_helpers(array('data_entry_helper'));
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
     ob_start();
-    // force the path of js and css files to be relative to Drupal, not from the Warehouse
-    data_entry_helper::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
-    data_entry_helper::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
     // also force the theme path to be local
     global $indicia_theme_path;
     $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';
@@ -522,7 +571,7 @@ function iform_form_alter(&$form, $form_state, $form_id) {
  * Menu callback that generates a page which outputs a diagnostics check for the IForm module.
  */
 function iform_diagnostics() {
-  require_once drupal_get_path('module', 'iform').'/client_helpers/data_entry_helper.php';
+  iform_load_helpers(array('data_entry_helper'));
   return data_entry_helper::system_check();
 }
 
@@ -566,6 +615,40 @@ function iform_load_language_files($node) {
   foreach ($custom_term_overrides as $override_list) {
     $custom_terms=array_merge($custom_terms, $override_list);
   }
+}
+
+/**
+ * Method to load an array of helper classes. Also overrides any helper config settings
+ * for those classes from drupal variable settings.
+ * @param array $files List of helper class names to load.
+ */
+function iform_load_helpers(array $files) {
+  $path = drupal_get_path('module', 'iform').'/client_helpers';
+  // we always need the helper_config file
+  if (!class_exists('helper_config')) {
+    require_once("$path/helper_config.php");
+    // now we have an opportunity to load settings into helper_config from the drupal variables.
+    helper_config::$base_url = variable_get('indicia_base_url',helper_config::$base_url);
+    helper_config::$geoserver_url = variable_get('indicia_geoserver_url',helper_config::$geoserver_url);
+    // upload_path
+    // cache_folder
+    // interim_image_folder
+    // final_image_folder
+    // indicia_upload_path
+    // max_upload_size
+    helper_config::$geoplanet_api_key = variable_get('indicia_geoplanet_api_key',helper_config::$geoplanet_api_key);
+    helper_config::$google_search_api_key = variable_get('indicia_google_search_api_key',helper_config::$google_search_api_key);
+    // $google_api_key ignored because won't be required in v3.
+    // $multimap_api_key ignored because layers are deprecated in favour of Bing.
+    // $bing_api_key to be added
+    helper_config::$flickr_api_key = variable_get('indicia_flickr_api_key',helper_config::$flickr_api_key);
+    helper_config::$flickr_api_secret = variable_get('indicia_flickr_api_secret',helper_config::$flickr_api_secret);
+  }
+  foreach ($files as $file)
+    require_once "$path/$file.php";
+  // ensure css and js is loaded locally
+  helper_base::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
+  helper_base::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
 }
 
 /**
