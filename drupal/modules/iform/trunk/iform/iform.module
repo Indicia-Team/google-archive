@@ -300,8 +300,21 @@ function iform_settings() {
   data_entry_helper::enable_validation('settings-form');
   $r = '';
   if (isset($_POST['website_id'])) {
+    $extraInfo = '';
+    $type = 'status';
+    $old_website_id=variable_get('indicia_website_id', '');
+    $old_password=variable_get('indicia_password', '');
+    $old_base_url=variable_get('indicia_base_url', '');
+    // if any key settings have changed, invalidate the indicia cache to force new webservice calls.
+    if ($old_website_id!=$_POST['website_id'] || ($old_password!=$_POST['password'] && !empty($_POST['password'])) || $old_base_url!=$_POST['base_url']) {
+      data_entry_helper::clear_cache();
+      $extraInfo .= t('As you have changed the information used to connect to the Indicia Warehouse, you may need to edit and reconfigure '.
+          'each of your Indicia forms before they can be used again.');
+      // elevate the info message
+      $type = 'warning';
+    }
     variable_set('indicia_website_id', $_POST['website_id']);
-    // if the password is empty we leave it as it was
+    // if the password is empty we leave it as it was, so we don't have to pass the password to the form.
     if (!empty($_POST['password'])) 
       variable_set('indicia_password', $_POST['password']);
     variable_set('indicia_base_url', $_POST['base_url']);
@@ -313,7 +326,7 @@ function iform_settings() {
     helper_config::$geoserver_url = $_POST['geoserver_url'];
     helper_config::$geoplanet_api_key = $_POST['geoplanet_api_key'];
     helper_config::$google_search_api_key = $_POST['search_api_key'];
-    drupal_set_message(t('Indicia settings saved'));
+    drupal_set_message(t('Indicia settings saved. ').$extraInfo, $type);
   }
   
   $r .= "<form id=\"settings-form\"  method=\"post\">\n";
@@ -342,7 +355,7 @@ function iform_settings() {
   $r .= data_entry_helper::text_input(array(
     'label' => t('GeoServer URL'),
     'fieldname' => 'geoserver_url',
-    'class' => 'required control-width-6',
+    'class' => 'control-width-6',
     'helpText' => t('Please enter the url of the GeoServer instance you are connecting to for mapping services, for '.
         'example, http://localhost:8080/geoserver/ . This is optional and need not be set if you are not using '.
         'the mapping facilities provided by GeoServer. See <a href="http://code.google.com/p/indicia/wiki/GeoServerInstall">'.
@@ -352,7 +365,7 @@ function iform_settings() {
   $r .= data_entry_helper::text_input(array(
     'label' => t('GeoPlanet API Key'),
     'fieldname' => 'geoplanet_api_key',
-    'class' => 'required control-width-6',
+    'class' => 'control-width-6',
     'helpText' => t('The Yahoo! GeoPlanet API is one option to lookup place names when you use the place search control. '.
         'It references a global database of places and returns the list of possibilities with their spatial references '.
         'to Indicia. To obtain your own API key for GeoPlanet, please visit <a href="http://developer.yahoo.com/geo/geoplanet/">'.
@@ -362,7 +375,7 @@ function iform_settings() {
   $r .= data_entry_helper::text_input(array(
     'label' => t('Google Search API Key'),
     'fieldname' => 'google_search_api_key',
-    'class' => 'required control-width-6',
+    'class' => 'control-width-6',
     'helpText' => t('The Google Search API is a second option to lookup place names when you use the place search control. '.
         'It is also used by the Postcode textbox control to georeference postcodes you input. To obtain your own API key '.
         'for the Google Search API, please visit <a href="http://code.google.com/apis/loader/signup.html">'.
@@ -407,8 +420,11 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       require(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php');
     }
     // The form will always need to know the website id and password
-    $args['website_id']=$node->params['website_id'];
-    $args['password']=$node->params['password'];
+    $settings_website_id=variable_get('indicia_website_id','');
+    $settings_password=variable_get('indicia_password','');
+    // For backward compatibility, the website ID and password can be loaded from the node params.
+    $args['website_id']=empty($settings_website_id) ? $node->params['website_id'] : $settings_website_id;
+    $args['password']=empty($settings_website_id) ? $node->params['password'] : $settings_password;
     // we need to grab each requested parameter from the node to pass to the form
     $params = form_helper::get_form_parameters($node->iform);
 
