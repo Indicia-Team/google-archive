@@ -11,13 +11,9 @@ This tutorial introduces the idea of building a single web page which shows the 
 Before starting, please ensure that:
 
   # You have access to an Indicia Warehouse running at least version 0.6.0 with some data on it that you can report against.
-
   # You have your own installation of Drupal 6 updated to the latest version.
-
   # The [UsingDrupalIForm Indicia IForm module] is installed with API Keys setup correctly for any map layers you plan to use.
-
   # The following Drupal modules are installed: [http://drupal.org/project/panels Panels 3], [http://drupal.org/project/ctools CTools], Page Manager (which is a submodule of CTools), [http://drupal.org/project/tabs Tabs] & [http://drupal.org/project/panels_tabs Panels Tabs]. For the Tabs module ensure you select the 6.x-1.x-dev download as this is the version which is compatible with the version of jQuery which Indicia uses.
-
   # It is also recommended that you follow the tutorials on using the [PrebuiltFormReportGrid Report Grid] and [PrebuiltFormReportMap Report Map] prebuilt form tutorials to give you an introduction to reporting from within Drupal, since this tutorial is an extension of the techniques you will learn in those tutorials.
 
 ==Building the nodes==
