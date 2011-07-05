@@ -145,7 +145,7 @@ function iform_proxy_redirect($url, $options = array()) {
     // load any previously cached long parameter values which are identified by CACHE_ID
     if (isset($options['CACHE_ID'])) {
       $cache = cache_get($options['CACHE_ID']);
-      $options = array_merge($cache['data'], $options);
+      $options = array_merge($cache->data, $options);
     }
     foreach($options as $key => $value){
       switch($key) {
