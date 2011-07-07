@@ -7,7 +7,7 @@ A common requirement is to remember certain field values between data entry sess
 To do this, you need to write a method called indicia_define_remembered_fields, which itself calls the data_entry_helper::set_remembered_fields method, passing an array of the fieldnames of each field to remember. This method should then be included on your PHP page for the form. Here's an example:
 
 {{{
-  function indicia_define_remembered_fields($) {
+  function indicia_define_remembered_fields() {
     data_entry_helper::set_remembered_fields(array(
       'smpAttr:4',
       'smpAttr:5',
@@ -33,4 +33,16 @@ class iform_myform {
     ));
   }
 }
+}}}
+
+==Privacy==
+Remember that, while it can be helpful, users may not wish their personal information to be stored in a cookie, especially if they are working on a shared computer. For this reason, the use of a cookie should be enabled by an optin checkbox. A standard control has been added in to the client helpers in version 0.7.0 for this purpose. You can include it in your form as shown in the example below.
+
+{{{
+<?php
+  echo data_entry_helper::remembered_fields_optin(array(
+    'label' => 'Remember me',
+    'helpText' => 'Tick this box to store your details for next time.',
+  ));
+?>
 }}}
