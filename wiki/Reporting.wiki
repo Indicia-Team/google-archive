@@ -235,7 +235,7 @@ The following functions are available through this url:
 
 ==== requestReport ====
 
-The requestReport function should be provided with a POST array containing the following keys:
+The requestReport function should be provided with a GET or POST array containing the following keys:
 
   * `report`
   * `reportSource`
@@ -243,6 +243,8 @@ The requestReport function should be provided with a POST array containing the f
   * `params`
   * `auth_token`
   * `nonce`
+
+POST will be required if you need to support long report parameter values such as complex polygons due to the limitations of URL length on browsers and web-servers.
 
 `report` can be one of three things:
  # The filename of a report in localReportDir
