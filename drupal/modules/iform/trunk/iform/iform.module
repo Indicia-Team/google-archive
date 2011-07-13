@@ -28,11 +28,13 @@ function iform_perm() {
   //   if yes, call it and add to the return list
   $results = db_query('SELECT n.nid, i.iform FROM {iform} i, {node} n WHERE i.nid = n.nid');
   while($result = db_fetch_object($results)) {
-    iform_load_helpers(array('data_entry_helper'));
-    require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$result->iform.'.php';
-    if(method_exists('iform_'.$result->iform, 'get_perms')) {
-      $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
-      $retVal = array_merge($retVal, $perms);
+    if ($result->iform) {
+      iform_load_helpers(array('data_entry_helper'));
+      require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$result->iform.'.php';
+      if(method_exists('iform_'.$result->iform, 'get_perms')) {
+        $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
+        $retVal = array_merge($retVal, $perms);
+      }
     }
   }
   // Also look for then generic IForm module setting to have custom permissions for this form
@@ -53,9 +55,10 @@ function iform_perm() {
 function iform_node_info() {
   return array(
     'iform' => array(
-      'name' => t('Indicia forms'),
+      'name' => t('Indicia pages'),
       'module' => 'iform',
-      'description' => t("Create Indicia powered data entry forms."),
+      'description' => t("Create Indicia powered web pages, including online recording data entry forms, ".
+          "reports, charts, maps and  administration pages."),
       'title_label' => t("Page title"),
       'body_label' => t("Page introductory text"),
     )
@@ -72,12 +75,12 @@ function iform_node_info() {
  */
 function iform_access($op, $node, $account=NULL) {
   global $user;
-  
+
   // If no user object is supplied, the access check is for the current user.
   if (empty($account)) {
     $account = $user;
   }
-  
+
   if ($op == 'create') {
     // Only users with permission to do so may create this node type.
     return user_access('create iform', $account);
@@ -114,7 +117,6 @@ function iform_access($op, $node, $account=NULL) {
  */
 function iform_form(&$node, $form_state) {
   iform_load_helpers(array('form_helper'));
-  form_helper::enable_validation('node-form');
   if (isset($form_state['post'])) {
     $node = (object)($form_state['post'] + (array)$node);
   }
@@ -188,7 +190,8 @@ function iform_form(&$node, $form_state) {
 
 /**
  * Retrieves the parameters required by an iform and creates a JSON string to store
- * them in the database. The iform data must be in the $_POST array.
+ * them in the database. The iform data must be in the $_POST array or in the node if
+ * not in the $_POST.
  *
  * @return string JSON encoded string containing the parameter values.
  */
@@ -211,7 +214,7 @@ function get_custom_param_values($node) {
     // Json encode the parameters to store them in the Drupal database.
     return json_encode($values);
   } else {
-    return '';
+    return json_encode($node->params);
   }
 }
 
@@ -222,8 +225,13 @@ function get_custom_param_values($node) {
 */
 function iform_insert($node) {
   $params=get_custom_param_values($node);
-  db_query("INSERT INTO {iform} (nid, iform, params) VALUES (%d, '%s', '%s')",
-      $node->nid, $_POST['iform'], $params);
+  if (isset($_POST['iform']))
+    $iform = $_POST['iform'];
+  else
+    $iform = $node->iform;
+  $needs_review = isset($node->needs_review) ? $node->needs_review : 0;
+  db_query("INSERT INTO {iform} (nid, iform, params, needs_review) VALUES (%d, '%s', '%s', %d)",
+      $node->nid, $iform, $params, $needs_review);
 }
 
 /**
@@ -233,7 +241,13 @@ function iform_insert($node) {
 */
 function iform_update($node) {
   $params=get_custom_param_values($node);
-  db_query("UPDATE {iform} SET iform='%s', params='%s' WHERE nid=%d", $_POST['iform'], $params, $node->nid);
+  if (isset($_POST['iform']))
+    $iform = $_POST['iform'];
+  else
+    $iform = $node->iform;
+  $needs_review = isset($node->needs_review) ? $node->needs_review : 0;
+  db_query("UPDATE {iform} SET iform='%s', params='%s', needs_review=%d WHERE nid=%d",
+      $iform, $params, $needs_review, $node->nid);
 }
 
 /**
@@ -251,7 +265,7 @@ function iform_delete($node) {
 * @return object with iform fields
 */
 function iform_load($node) {
-  $t = db_fetch_object(db_query('SELECT iform, params FROM {iform} WHERE nid = %d', $node->nid));
+  $t = db_fetch_object(db_query('SELECT iform, params, needs_review FROM {iform} WHERE nid = %d', $node->nid));
   $params=json_decode($t->params, true);
   unset($t->params);
   $t->params = array();
@@ -289,10 +303,91 @@ function iform_menu() {
     'type' => MENU_LOCAL_TASK,
     'weight' => 1
   );
+  $items['indicia-features-review'] = array(
+    'title' => t('Review IForm Features'),
+    'description' => t('After installing a feature containing Indicia forms, use this page to configure any '.
+        'site specific settings for the forms.'),
+    'page callback' => 'iform_features_review',
+    'access arguments' => array('create iform'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1
+  );
   return $items;
 }
 
-/** 
+/**
+ * Menu callback for a page which lists any site specific parameters from forms which need review.
+ * @return string Form content
+ */
+function iform_features_review() {
+  drupal_set_title(t('Review Indicia Features'));
+  if (isset($_POST['form-works'])) {
+    // acknowledging a form that needs review, but there are no settings to review
+    db_query('UPDATE {iform} SET needs_review=1 WHERE nid=%d', $_POST['form-works']);
+  } else if (isset($_POST['form-settings'])) {
+    // saving site specific settings for a form. Merge the new params into the existing ones
+    // and resave the node
+    $node = node_load($_POST['form-settings']);
+    unset($_POST['form-settings']);
+    $node->params = array_merge($node->params, $_POST);
+    // set node to indicate initial review done, just needs final check
+    $node->needs_review=2;
+    node_save($node);
+  }
+  iform_load_helpers(array('form_helper'));
+  $forms = db_query('SELECT DISTINCT n.nid, i.iform, n.title, i.needs_review FROM {iform} i '.
+      'JOIN {node} n ON n.nid=i.nid '.
+      'WHERE i.needs_review>1');
+  $website_id=variable_get('indicia_website_id', '');
+  $password=variable_get('indicia_password', '');
+  $readAuth = form_helper::get_read_auth($website_id, $password);
+  $gotForms = false;
+  $gotSomething = false;
+  while ($row=db_fetch_array($forms)) {
+    $gotSomething = true;
+    $r .= '<h3>Settings for '.$row['title'].' ('.$row['iform']   .')</h3>';
+    unset($form);
+    // no need to do the params form if needs review < 3 - it has already been done
+    if ($row['needs_review']==3)
+      $form .= form_helper::prebuilt_form_params_form(array(
+          'form' => $row['iform'],
+          'currentSettings' => array(),
+          'readAuth' => $readAuth,
+          'siteSpecific' => true
+      ));
+    if ($form) {
+      $r .= '<p>'.t('This form has site specific settings which you must check before using the form.').'</p>';
+      $r .= '<form method="post" id="iform-'.$row['nid'].'">'.
+          '<input type="hidden" name="form-settings" value="'.$row['nid'].'" />'.
+          $form
+          .'<input type="submit" value="'.t('Save Form Settings').'" /></form>';
+      form_helper::enable_validation('iform-'.$row['nid']);
+      $gotForms = true;
+    } else {
+      $r .= '<p>'.t('This form is ready to use and does not require further review. You can <a href="!pathedit" target="_blank">edit the form\'s '.
+          'configuration</a> if you require advanced configuration options or <a href="!pathview" target="_blank">view the form</a> to '.
+          'check if behaves as expected. Click the button below when you are happy to confirm that this form is working. '.
+          'These links open in a new tab.',
+          array('!pathedit' => url('node/'.$row['nid'].'/edit'), '!pathview' => url('node/'.$row['nid'].''))).'</p>';
+      $r .= '<form method="post">'.
+          '<input type="hidden" name="form-works" value="'.$row['nid'].'" />'.
+          '<input type="submit" value="'.t('Form OK!').'" /></form>';
+    }
+  }
+  $r .= "</form>";
+  if ($gotSomething) {
+    drupal_add_js('misc/collapse.js');
+    if ($gotForms) {
+      form_helper::add_resource('defaultStylesheet');
+      handle_resources();
+    }
+    return $r;
+  } else {
+    return '<p>'.t('There are no Indicia Features pages which need review.').'</p>';
+  }
+}
+
+/**
  * Menu callback that generates a page which allows iform settings to be specified.
  */
 function iform_settings() {
@@ -315,7 +410,7 @@ function iform_settings() {
     }
     variable_set('indicia_website_id', $_POST['website_id']);
     // if the password is empty we leave it as it was, so we don't have to pass the password to the form.
-    if (!empty($_POST['password'])) 
+    if (!empty($_POST['password']))
       variable_set('indicia_password', $_POST['password']);
     variable_set('indicia_base_url', $_POST['base_url']);
     variable_set('indicia_geoserver_url', $_POST['geoserver_url']);
@@ -328,7 +423,7 @@ function iform_settings() {
     helper_config::$google_search_api_key = $_POST['search_api_key'];
     drupal_set_message(t('Indicia settings saved. ').$extraInfo, $type);
   }
-  
+
   $r .= "<form id=\"settings-form\"  method=\"post\">\n";
   $r .= data_entry_helper::text_input(array(
     'label' => t('Website ID'),
@@ -387,7 +482,7 @@ function iform_settings() {
   data_entry_helper::add_resource('defaultStylesheet');
   handle_resources();
   return $r;
-  
+
 }
 
 /**
@@ -673,8 +768,19 @@ function iform_load_helpers(array $files) {
  * Disable Drupal caching for iforms, since this prevents authorisation tokens being refreshed required for Warehouse access.
  */
 function iform_init() {
-  $node = menu_get_object(); 
+  $node = menu_get_object();
   if ($node->type == 'iform') {
     $GLOBALS['conf']['cache'] = FALSE;
+  }
+}
+
+/**
+ * Hook for rendering an exported node into a feature. By setting needs_review we flag
+ * the node up so the user knows to check the node configuration.
+ */
+function iform_uuid_node_features_export_render_alter(&$export, $node, $module) {
+  watchdog('export', 'in export renderd alter');
+  if ($node->type=='iform') {
+    $export->needs_review = 3;
   }
 }
