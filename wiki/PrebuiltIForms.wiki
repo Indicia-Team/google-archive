@@ -47,7 +47,8 @@ Next, we need a method to declare the parameters for the data entry form. Parame
         'caption'=>'Species List ID',
         'description'=>'The Indicia ID for the species list that species can be selected from.',
         'type'=>'string',
-        'group' => 'Species'
+        'group' => 'Species',
+        'siteSpecific'=>true
       )
     );
   }
@@ -70,6 +71,8 @@ array(
 When using a data_entry_helper or report_helper control, additional parameters for the control can be supplied in the array. If select is used then the options that will appear in the select list should be defined in an array called options as illustrated above. 
 
 The group option allows you to group the controls together into logical sets. How this actually gets interpreted depends on the system you are using the prebuilt forms within, but as an example the Drupal IForm module places controls together into fieldsets within the form administrators use to set up the recording forms.
+
+Finally, there is a siteSpecific option which must be set to true for parameters that would need re-configuring when migrating a form between 2 sites. For example any IDs referring to the database such as the list ID in this example might change and therefore should be re-configured when a copy of a form is moved from one site to another.
 
 Note that there will automatically be parameters for the website_id and passsword and you don't need to declare these, since they are required by all prebuilt forms.
 
