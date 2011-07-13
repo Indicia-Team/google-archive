@@ -27,6 +27,16 @@ function iform_schema() {
         'type' => 'text',        
         'not null' => TRUE,
       ),
+      'needs_review' => array(
+        'description' => 'Review state after node import. 0 indicates the node is not imported. '.
+            '1 indicates a node that is imported but has been reviewed. 2 indicates that the node '.
+            'is imported and site specific settings have been set - it just '.
+            'needs a final review. 3 indicates that this is a freshly imported form which may have some '.
+            'configuration parameters that are site specific and need review.',
+        'type' => 'int',
+        'not null' => true,
+        'default' => 0
+      )
     ),
     'primary key' => array('nid')
   );
@@ -39,13 +49,33 @@ function iform_install() {
 
 function iform_uninstall() {
   drupal_uninstall_schema('iform');
+  variable_del('indicia_password');
+  variable_del('indicia_base_url');
+  variable_del('indicia_website_id');
+  variable_del('indicia_geoserver_url');
+  variable_del('indicia_geoplanet_api_key');
+  variable_del('indicia_google_search_api_key');
 }
 
 /**
-* Implementation of hook_update_N for version 6.x-1.0. 
+* Implementation of hook_update_N for version 6.x-1.0.
+* @return array Defines the results of the updates.
 */
 function iform_update_6100() {
   $ret = array();
   db_change_field($ret, 'iform', 'iform', 'iform', array('type' => 'text', 'not null' => FALSE));
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update_N for version 6.x-1.0.
+ * Adds the needs_review flag.
+ * @return array Defines the results of the updates.
+ */
+function iform_update_6110() {
+  $ret = array();
+  $schema = iform_schema();
+  $spec = $schema['iform']['fields']['needs_review'];
+  db_add_field($ret, 'iform', 'needs_review', $spec);
   return $ret;
 }
