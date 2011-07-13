@@ -493,6 +493,15 @@ function iform_settings() {
  * @return unknown_type
  */
 function iform_view($node, $teaser = FALSE, $page = FALSE) {
+  if ($node->needs_review>2) {
+    $r = t('This form has been added by enabling an Indicia Feature but its configuration needs to be reviewed before use. '.
+        'Please contact the site administrator. '.$node->needs_review);
+    $node->content['myfield']=array(
+      '#value' => $r,
+      '#weight' => 1
+    );
+    return $node;
+  }
   iform_load_helpers(array('form_helper'));
   global $language;
   $node = node_prepare($node, $teaser);
@@ -779,7 +788,6 @@ function iform_init() {
  * the node up so the user knows to check the node configuration.
  */
 function iform_uuid_node_features_export_render_alter(&$export, $node, $module) {
-  watchdog('export', 'in export renderd alter');
   if ($node->type=='iform') {
     $export->needs_review = 3;
   }
