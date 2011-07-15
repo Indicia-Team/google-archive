@@ -303,7 +303,7 @@ function iform_menu() {
     'type' => MENU_LOCAL_TASK,
     'weight' => 1
   );
-  $items['indicia-features-review'] = array(
+  $items['admin/build/features/indicia'] = array(
     'title' => t('Review IForm Features'),
     'description' => t('After installing a feature containing Indicia forms, use this page to configure any '.
         'site specific settings for the forms.'),
