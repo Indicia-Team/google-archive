@@ -156,7 +156,7 @@ function iform_form(&$node, $form_state) {
   if (empty($website_id))
     $website_id = isset($node->params['website_id']) ? $node->params['website_id'] : '';
   if (empty($password))
-    $website_id = isset($node->params['password']) ? $node->params['password'] : '';
+    $password = isset($node->params['password']) ? $node->params['password'] : '';
   $form['iform_forms']['picker'] = array(
     '#value' => form_helper::prebuilt_form_picker(array(
       'form' => $node->iform,
@@ -170,7 +170,7 @@ function iform_form(&$node, $form_state) {
       '#value' => form_helper::prebuilt_form_params_form(array(
         'form' => $node->iform,
         'currentSettings' => $node->params,
-        'readAuth' => form_helper::get_read_auth($node->params['website_id'], $node->params['password'])
+        'readAuth' => form_helper::get_read_auth($website_id, $password)
       )),
       '#prefix' => '<div id="form-params">',
       '#suffix' => '</div>'
