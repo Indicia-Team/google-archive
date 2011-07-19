@@ -24,9 +24,10 @@ function indicia_welcome_uuid_features_default_content() {
   'body' => 'Welcome to your new Instant Indicia website. This website is ready for you to setup online recording. This home page is a temporary page '.
       "designed to help you get started and can be replaced when your site is ready.\n".
       'Instant Indicia lets you choose from a number of ready made <em>features</em> to enable on your site, ranging from simple reports or data input forms to '.
-      'complete site modules. You also need to provide a few <em>configuration settings</em> for things like links to the Indicia Warehouse you are using.'.
-      '<ul><li><a href="admin/settings/iform/settings">Provide Indicia configuration settings for your website.</a></li>'.
-      '<li><a href="admin/build/features">Select which features you want on your website.</a></li></ul>',
+      'complete site modules.'.
+      '<ul><li><a href="admin/build/features">Select which features you want on your website.</a></li>',
+      '<li><a href="admin/settings/iform/settings">Provide Indicia configuration settings for your website.</a></li>'.
+      '<li><a href="admin/settings/iform/diagnostics">Perform some diagnostic tests to ensure your connection to the Warehouse works.</a></li></ul>'.
   'teaser' => 'Welcome to your new Instant Indicia website. This website is ready for you to setup online recording.',
   'log' => '',
   'revision_timestamp' => '1310571974',
