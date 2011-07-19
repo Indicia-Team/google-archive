@@ -45,6 +45,14 @@ function iform_schema() {
 
 function iform_install() {
   drupal_install_schema('iform');
+  // don't promote iforms to front page by default
+  variable_set('iform_options_page', array('status'));
+  // and default to no comments
+  variable_set('iform_page', COMMENT_NODE_DISABLED);
+  // Don't display date and author information for page nodes by default.
+  $theme_settings = variable_get('theme_settings', array());
+  $theme_settings['toggle_node_info_iform'] = FALSE;
+  variable_set('theme_settings', $theme_settings);
 }
 
 function iform_uninstall() {

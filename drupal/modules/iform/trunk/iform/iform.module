@@ -391,98 +391,8 @@ function iform_features_review() {
  * Menu callback that generates a page which allows iform settings to be specified.
  */
 function iform_settings() {
-  iform_load_helpers(array('form_helper', 'data_entry_helper'));
-  data_entry_helper::enable_validation('settings-form');
-  $r = '';
-  if (isset($_POST['website_id'])) {
-    $extraInfo = '';
-    $type = 'status';
-    $old_website_id=variable_get('indicia_website_id', '');
-    $old_password=variable_get('indicia_password', '');
-    $old_base_url=variable_get('indicia_base_url', '');
-    // if any key settings have changed, invalidate the indicia cache to force new webservice calls.
-    if ($old_website_id!=$_POST['website_id'] || ($old_password!=$_POST['password'] && !empty($_POST['password'])) || $old_base_url!=$_POST['base_url']) {
-      data_entry_helper::clear_cache();
-      $extraInfo .= t('As you have changed the information used to connect to the Indicia Warehouse, you may need to edit and reconfigure '.
-          'each of your Indicia forms before they can be used again.');
-      // elevate the info message
-      $type = 'warning';
-    }
-    variable_set('indicia_website_id', $_POST['website_id']);
-    // if the password is empty we leave it as it was, so we don't have to pass the password to the form.
-    if (!empty($_POST['password']))
-      variable_set('indicia_password', $_POST['password']);
-    variable_set('indicia_base_url', $_POST['base_url']);
-    variable_set('indicia_geoserver_url', $_POST['geoserver_url']);
-    variable_set('indicia_geoplanet_api_key', $_POST['geoplanet_api_key']);
-    variable_set('indicia_google_search_api_key', $_POST['google_search_api_key']);
-    // load the new values for this page access
-    helper_config::$base_url = $_POST['base_url'];
-    helper_config::$geoserver_url = $_POST['geoserver_url'];
-    helper_config::$geoplanet_api_key = $_POST['geoplanet_api_key'];
-    helper_config::$google_search_api_key = $_POST['search_api_key'];
-    drupal_set_message(t('Indicia settings saved. ').$extraInfo, $type);
-  }
-
-  $r .= "<form id=\"settings-form\"  method=\"post\">\n";
-  $r .= data_entry_helper::text_input(array(
-    'label' => t('Website ID'),
-    'fieldname' => 'website_id',
-    'class' => 'required',
-    'default' => variable_get('indicia_website_id', ''),
-    'helpText' => t('Please enter the ID given to your website record when your website was registered on the Indicia Warehouse. This '.
-            'will be used for all the Indicia forms on your website.')
-  ));
-  $r .= data_entry_helper::password_input(array(
-    'label' => t('Password'),
-    'fieldname' => 'password',
-    'helpText' => t('Please enter the password specified when your website was registered on the Indicia Warehouse. This '.
-            'will be used for all the Indicia forms on your website.')
-    // no default as a password field
-  ));
-  $r .= data_entry_helper::text_input(array(
-    'label' => t('Warehouse URL'),
-    'fieldname' => 'base_url',
-    'class' => 'required control-width-6',
-    'helpText' => t('Please enter the url of the warehouse instance you are connecting to, up to but excluding the index.php part.'),
-    'default' => helper_config::$base_url
-  ));
-  $r .= data_entry_helper::text_input(array(
-    'label' => t('GeoServer URL'),
-    'fieldname' => 'geoserver_url',
-    'class' => 'control-width-6',
-    'helpText' => t('Please enter the url of the GeoServer instance you are connecting to for mapping services, for '.
-        'example, http://localhost:8080/geoserver/ . This is optional and need not be set if you are not using '.
-        'the mapping facilities provided by GeoServer. See <a href="http://code.google.com/p/indicia/wiki/GeoServerInstall">'.
-        'Installing GeoServer for Indicia</a>.'),
-    'default' => data_entry_helper::$geoserver_url
-  ));
-  $r .= data_entry_helper::text_input(array(
-    'label' => t('GeoPlanet API Key'),
-    'fieldname' => 'geoplanet_api_key',
-    'class' => 'control-width-6',
-    'helpText' => t('The Yahoo! GeoPlanet API is one option to lookup place names when you use the place search control. '.
-        'It references a global database of places and returns the list of possibilities with their spatial references '.
-        'to Indicia. To obtain your own API key for GeoPlanet, please visit <a href="http://developer.yahoo.com/geo/geoplanet/">'.
-        'Yahoo! GeoPlanet</a>and follow the link to get an Application ID. '),
-    'default' => helper_config::$geoplanet_api_key
-  ));
-  $r .= data_entry_helper::text_input(array(
-    'label' => t('Google Search API Key'),
-    'fieldname' => 'google_search_api_key',
-    'class' => 'control-width-6',
-    'helpText' => t('The Google Search API is a second option to lookup place names when you use the place search control. '.
-        'It is also used by the Postcode textbox control to georeference postcodes you input. To obtain your own API key '.
-        'for the Google Search API, please visit <a href="http://code.google.com/apis/loader/signup.html">'.
-        'Google Search API</a>and follow the instructions to get an Application ID. '),
-    'default' => helper_config::$google_search_api_key
-  ));
-  $r .= "<input type=\"submit\" value=\"Save\" />\n";
-  $r .= "</form>\n";
-  data_entry_helper::add_resource('defaultStylesheet');
-  handle_resources();
-  return $r;
-
+  require_once('iform.admin.inc');
+  return drupal_get_form('iform_configuration_form');
 }
 
 /**
@@ -495,7 +405,7 @@ function iform_settings() {
 function iform_view($node, $teaser = FALSE, $page = FALSE) {
   if ($node->needs_review>2) {
     $r = t('This form has been added by enabling an Indicia Feature but its configuration needs to be reviewed before use. '.
-        'Please contact the site administrator. '.$node->needs_review);
+        'Please contact the site administrator. ');
     $node->content['myfield']=array(
       '#value' => $r,
       '#weight' => 1
