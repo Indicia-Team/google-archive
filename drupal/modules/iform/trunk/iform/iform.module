@@ -66,6 +66,38 @@ function iform_node_info() {
 } // function iform_node_info
 
 /**
+ * Implements hook_menu_link_alter.
+ * The Iform module allows custom node access rights. However, hook_access prevents the unauthorised user from
+ * accessing a node, but not viewing its menu item. So, we need to intervene. This hook marks up all menu items
+ * that point to iform nodes as alterable, allowing us to define per-node menu view access rights in hook_translated_menu_link_alter.
+ */
+function iform_menu_link_alter(&$item, $menu) {
+  // look for pattern node/%.
+  preg_match('/^node\/(?<nid>\d+)/', $item['link_path'], $matches);
+  if (count($matches)) {
+    // is the found nid an iform?
+    $node = node_load($matches['nid']);
+    // if an iform, mark the menu item as alterable, so we can hide it if the user does not have permissions.
+    if ($node->type=='iform')
+      $item['options']['alter'] = TRUE;
+  }
+}
+
+/*
+ * Implements hook_translated_menu_link_alter.
+ * This is called when building the menu. Checks if the user can access the menu.
+ */
+function iform_translated_menu_link_alter(&$item, $map) {
+  //$item['access'] = FALSE;
+  // look for pattern node/%.
+  preg_match('/^node\/(?<nid>\d+)/', $item['link_path'], $matches);
+  if (count($matches)) {
+    $node = node_load($matches['nid']);
+    $item['access'] = node_access('view', $node);
+  }
+}
+
+/**
  * Implements hook_access.
  * Authentication for access to create, view and delete indicia form pages.
  * @param $op
