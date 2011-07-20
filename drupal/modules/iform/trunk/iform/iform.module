@@ -182,19 +182,13 @@ function iform_form(&$node, $form_state) {
     '#tree' => FALSE,
     '#weight' => 6
   );
-  $website_id=variable_get('indicia_website_id','');
-  $password=variable_get('indicia_password','');
-  $needWebsiteInputs = empty($website_id) || empty($password);
-  if (empty($website_id))
-    $website_id = isset($node->params['website_id']) ? $node->params['website_id'] : '';
-  if (empty($password))
-    $password = isset($node->params['password']) ? $node->params['password'] : '';
+  $connection = iform_get_connection_details($node);
   $form['iform_forms']['picker'] = array(
     '#value' => form_helper::prebuilt_form_picker(array(
       'form' => $node->iform,
-      'website_id' => $website_id,
-      'password' => $password,
-      'needWebsiteInputs' => $needWebsiteInputs
+      'website_id' => $connection['website_id'],
+      'password' => $connection['password'],
+      'needWebsiteInputs' => !$connection['using_drupal_vars']
     ))
   );
   if ($node->iform) {
@@ -202,7 +196,7 @@ function iform_form(&$node, $form_state) {
       '#value' => form_helper::prebuilt_form_params_form(array(
         'form' => $node->iform,
         'currentSettings' => $node->params,
-        'readAuth' => form_helper::get_read_auth($website_id, $password)
+        'readAuth' => form_helper::get_read_auth($connection['website_id'], $connection['password'])
       )),
       '#prefix' => '<div id="form-params">',
       '#suffix' => '</div>'
@@ -370,12 +364,14 @@ function iform_features_review() {
   $forms = db_query('SELECT DISTINCT n.nid, i.iform, n.title, i.needs_review FROM {iform} i '.
       'JOIN {node} n ON n.nid=i.nid '.
       'WHERE i.needs_review>1');
-  $website_id=variable_get('indicia_website_id', '');
-  $password=variable_get('indicia_password', '');
-  $readAuth = form_helper::get_read_auth($website_id, $password);
   $gotForms = false;
   $gotSomething = false;
   while ($row=db_fetch_array($forms)) {
+    if (!isset($readAuth)) {
+      // we only need the connection details for 1 node, since any readAuth will do here
+      $connection = iform_get_connection_details($row['nid']);
+      $readAuth = form_helper::get_read_auth($connection['website_id'], $connection['password']);
+    }
     $gotSomething = true;
     $r .= '<h3>Settings for '.$row['title'].' ('.$row['iform']   .')</h3>';
     unset($form);
@@ -415,8 +411,23 @@ function iform_features_review() {
     }
     return $r;
   } else {
-    return '<p>'.t('There are no Indicia Features pages which need review.').'</p>';
+    return '<p>'.t('There are no Indicia Features pages which need to be reviewed.').'</p>';
   }
+}
+
+function iform_get_connection_details($node) {
+  $r = array();
+  // convert a nid to a node
+  if (!is_object($node))
+    $node = node_load($node);
+  $r['website_id']=variable_get('indicia_website_id','');
+  $r['password']=variable_get('indicia_password','');
+  $r['using_drupal_vars'] = !empty($website_id) && !empty($password);
+  if (empty($r['website_id']))
+    $r['website_id'] = isset($node->params['website_id']) ? $node->params['website_id'] : '';
+  if (empty($r['password']))
+    $r['password'] = isset($node->params['password']) ? $node->params['password'] : '';
+  return $r;
 }
 
 /**
@@ -435,7 +446,8 @@ function iform_settings() {
  * @return unknown_type
  */
 function iform_view($node, $teaser = FALSE, $page = FALSE) {
-  if ($node->needs_review>2) {
+  iform_load_helpers(array('data_entry_helper','form_helper'));
+  if (iform_check_needs_review($node)) {
     $r = t('This form has been added by enabling an Indicia Feature but its configuration needs to be reviewed before use. '.
         'Please contact the site administrator. ');
     $node->content['myfield']=array(
@@ -444,15 +456,12 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     );
     return $node;
   }
-  iform_load_helpers(array('form_helper'));
+    
   global $language;
   $node = node_prepare($node, $teaser);
   if ($node->iform && $node->iform!=-1) {
     iform_load_language_files($node);
-
     $args = array('language' => $language->language);
-
-    iform_load_helpers(array('data_entry_helper'));
     require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
     ob_start();
     // also force the theme path to be local
@@ -465,12 +474,9 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php')) {
       require(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php');
     }
-    // The form will always need to know the website id and password
-    $settings_website_id=variable_get('indicia_website_id','');
-    $settings_password=variable_get('indicia_password','');
-    // For backward compatibility, the website ID and password can be loaded from the node params.
-    $args['website_id']=empty($settings_website_id) ? $node->params['website_id'] : $settings_website_id;
-    $args['password']=empty($settings_website_id) ? $node->params['password'] : $settings_password;
+    $connection = iform_get_connection_details($node);
+    $args['website_id']=$connection['website_id'];
+    $args['password']=$connection['password'];
     // we need to grab each requested parameter from the node to pass to the form
     $params = form_helper::get_form_parameters($node->iform);
 
@@ -556,6 +562,38 @@ $('.ui-state-default').live('mouseout', function() {
     );
   }
   return $node;
+}
+
+/**
+ * Tests if a given iform node needs review after import. If it does, checks that
+ * there is something to review - if not sets the flag so it does not need review
+ * in future.
+ * @param node $node The node to check
+ * @return boolean True if the node cannot be displayed because it needs review
+ */
+function iform_check_needs_review($node) {
+  if ($node->needs_review>2) {
+    iform_load_helpers(array('form_helper', 'data_entry_helper'));
+    // node needs review. Check if there are any settings to review.
+    if ($node->iform && $node->iform!=-1)
+      $connection = iform_get_connection_details($node);
+      $readAuth = form_helper::get_read_auth($connection['website_id'], $connection['password']);
+      $form .= form_helper::prebuilt_form_params_form(array(
+        'form' => $node->iform,
+        'currentSettings' => array(),
+        'readAuth' => $readAuth,
+        'siteSpecific' => true
+      ));
+    if ($form) {
+      return true;
+    } else {
+      // mark node as imported but no need for review
+      $node->needs_review=1;
+      node_save($node);
+    }
+
+  }
+  return false;
 }
 
 function handle_resources() {
