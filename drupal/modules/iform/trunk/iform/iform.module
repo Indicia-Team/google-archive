@@ -38,10 +38,14 @@ function iform_perm() {
     }
   }
   // Also look for then generic IForm module setting to have custom permissions for this form
-  $results = db_query("SELECT n.nid, n.title FROM {iform} i, {node} n WHERE n.nid=i.nid AND (i.params like '%\"view_access_control\":1%' ".
+  $results = db_query("SELECT n.nid, n.title, i.params FROM {iform} i, {node} n WHERE n.nid=i.nid AND (i.params like '%\"view_access_control\":1%' ".
           "OR  i.params like '%\"view_access_control\":\"1\"%')");
   while($result = db_fetch_object($results)) {
-    $retVal[] = 'access iform '.$result->nid;
+    $params = json_decode($result->params, true);
+    if (!empty($params['permission_name'])) 
+      $retVal[] = $params['permission_name'];
+    else
+      $retVal[] = 'access iform '.$result->nid;
   }
   return $retVal;
 
@@ -123,8 +127,11 @@ function iform_access($op, $node, $account=NULL) {
     $results = db_query("SELECT nid FROM {iform} WHERE nid=".$node->nid." AND (params like '%\"view_access_control\":1%' ".
           "OR params like '%\"view_access_control\":\"1\"%')");
     if (db_affected_rows($results)>0) {
-      // Use a per node setting to control access
-      return user_access('access iform '.$node->nid, $account);
+      // Use a per node setting to control access. Use default permission name iform access <nid>, or specified one from params if available
+      if (!empty($node->params['permission_name']))
+        return user_access($node->params['permission_name']);
+      else
+        return user_access('access iform '.$node->nid, $account);
     } else {
       // Use the generic setting for Indicia forms to control access.
       return user_access('access iform', $account);
@@ -492,7 +499,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     }
     if ($_POST && (array_key_exists('website_id', $_POST)) && method_exists('iform_'.$node->iform, 'get_submission')) {
       // Ask the form to submit itself
-      $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
+      $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, &$args);
       // if for some reason the iform gives back an empty submission, ignore it
       if($s){
         // does this Drupal node have any custom validation code?
@@ -508,8 +515,14 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
           // Does the form redirect after success?
           if (is_array($response) && array_key_exists('success', $response) &&
               array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
-            $url = $args['redirect_on_success'];
-            drupal_goto($url, 'table='.$response['outer_table'].'&id='.$response['outer_id']);
+            $url = explode('?', $args['redirect_on_success']);
+            if (isset($args['message_after_redirect']) && $args['message_after_redirect']) {
+              drupal_set_message(t('Information saved to the database'));
+            }
+            $params = 'table='.$response['outer_table'].'&id='.$response['outer_id'];
+            if (count($url)>0) 
+              $params .= '&' . $url[1];
+            drupal_goto($url[0], $params);
           } else {
             // This dumps errors, and/or a success message if no redirection.
             $r .= data_entry_helper::dump_errors($response);
