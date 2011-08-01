@@ -25,6 +25,7 @@ Retrieving a list of data can be achieved by ommitting the id from the URL. In t
 ||offset||Starts the returned results offsetted by _n_ records.||
 ||wantRecords||Defaults to 1. If 1, then the returned data includes the records.||
 ||wantColumns||Defaults to 0. If 1, then the returned data includes the column definitions.||
+||wantCount||Defaults to 0. If 1, then the returned data a count of the records in the results set.||
 ||auth_token||Used to provide the read authorisation token.||
 ||nonce||Used to provide the read authorisation nonce.||
 ||query||For advanced query building letting you pass a JSON object describing filters to apply to the query. Further details are given below || 
