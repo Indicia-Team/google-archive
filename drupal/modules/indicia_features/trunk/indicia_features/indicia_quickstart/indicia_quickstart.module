@@ -1,3 +1,22 @@
 <?php
 
-// Drupal needs this blank file.
+/**
+* Implementation of hook_perm.
+* Declare an online recording permission. 
+* @return array An array of valid permissions for the iform module
+*/
+function indicia_quickstart_perm() {
+  $retVal = array('online recording');
+}
+
+/**
+* Implementation of hook_link_alter
+* Remove add comment link from teaser
+**/
+function indicia_quickstart_link_alter(&$links, $node){
+  if( arg(0) == 'node' && is_numeric(arg(1)) ){
+    return; // halt if full page view
+  }elseif( ! empty($links['comment_add']) ){
+    unset($links['comment_add']);
+  }
+}

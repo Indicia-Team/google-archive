@@ -3,31 +3,30 @@
 /**
  * Implementation of hook_menu_default_menu_links().
  */
-function my_records_menu_default_menu_links() {
+function single_multi_record_entry_system_menu_default_menu_links() {
   $menu_links = array();
 
-  // Exported menu link: primary-links:390b070b-b175-11e0-8f78-c5fda54158f2
-  $menu_links['primary-links:390b070b-b175-11e0-8f78-c5fda54158f2'] = array(
+  // Exported menu link: primary-links:5955430e-b90f-11e0-9f01-deef1494ab9e
+  $menu_links['primary-links:5955430e-b90f-11e0-9f01-deef1494ab9e'] = array(
     'menu_name' => 'primary-links',
     'router_path' => 'node/%',
-    'link_title' => 'My Records',
+    'link_title' => 'Recording',
     'options' => array(
       'attributes' => array(
-        'title' => 'My Records',
+        'title' => 'Recording',
       ),
-      'alter' => TRUE,
     ),
     'module' => 'menu',
     'hidden' => '0',
     'external' => '0',
     'has_children' => '0',
     'expanded' => '0',
-    'weight' => '10',
-    'uuid' => '390b070b-b175-11e0-8f78-c5fda54158f2',
+    'weight' => '0',
+    'uuid' => '5955430e-b90f-11e0-9f01-deef1494ab9e',
   );
   // Translatables
   // Included for use with string extractors like potx.
-  t('My Records');
+  t('Recording');
 
 
   return $menu_links;

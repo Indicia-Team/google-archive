@@ -346,6 +346,14 @@ function indicia_quickstart_user_default_permissions() {
       '0' => 'admin user',
     ),
   );
+  
+  // Exported permission: online recording
+  $permissions['online recording'] = array(
+    'name' => 'online recording',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
 
   // Exported permission: post comments
   $permissions['post comments'] = array(

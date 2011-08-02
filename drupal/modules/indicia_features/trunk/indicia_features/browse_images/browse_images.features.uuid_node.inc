@@ -3,7 +3,7 @@
 /**
  * Implementation of hook_uuid_features_default_content().
  */
-function my_records_uuid_features_default_content() {
+function browse_images_uuid_features_default_content() {
   $nodes = array();
 
   $nodes[] = array(
@@ -17,7 +17,7 @@ function my_records_uuid_features_default_content() {
   'sticky' => '0',
   'tnid' => '0',
   'translate' => '0',
-  'title' => 'My Records',
+  'title' => 'Browse Images',
   'body' => '',
   'teaser' => '',
   'log' => '',
@@ -30,9 +30,8 @@ function my_records_uuid_features_default_content() {
   'params' => array(
     'view_access_control' => '1',
     'permission_name' => 'online recording',
-    'report_name' => 'library/occurrences/occurrences_list_for_cms_user',
-    'param_presets' => 'survey_id=
-user_id={user_id}',
+    'report_name' => 'library/occurrence_images/occurrence_image_list',
+    'param_presets' => 'survey_id=',
     'param_defaults' => 'date_from=
 date_to=
 taxon_group_id=',
@@ -42,18 +41,41 @@ taxon_group_id=',
     'refresh_timer' => '',
     'load_on_refresh' => '',
     'columns_config' => '[
-
+  {
+    "fieldname":"testing",
+    "template":"<div class=\'gallery-img\'><a href=\'{imageFolder}{path}\' class=\'fancybox\'><img src=\'{imageFolder}thumb-{path}\'/><br/>\\n<em>{taxon}</em><br/>\\n{common}</a></div>"
+  },
+  {
+    "fieldname":"path",
+    "visible":false
+  },
+  {
+    "fieldname":"caption",
+    "visible":false
+  },
+  {
+    "fieldname":"taxon",
+    "visible":false
+  },
+  {
+    "fieldname":"common",
+    "visible":false
+  },
+  {
+    "fieldname":"taxon_group",
+    "visible":false
+  }
 ]',
-    'gallery_col_count' => '1',
+    'gallery_col_count' => '5',
     'items_per_page' => '20',
     'download_link' => '1',
     'footer' => '',
     'redirect_on_success' => '',
     'message_after_redirect' => '0',
   ),
-  'path' => 'my-records',
+  'path' => 'browse-images',
   'taxonomy' => array(),
-  'uuid' => '390b070b-b175-11e0-8f78-c5fda54158f2'
+  'uuid' => '53a7e393-bc3f-11e0-a701-430b6d02c0c0'
 );
   return $nodes;
 }
