@@ -12,6 +12,7 @@ function tabbed_data_entry_form_menu_default_menu_links() {
     'router_path' => 'node/%',
     'link_title' => 'Submit Sightings',
     'options' => array(
+      'alter' => TRUE,
       'attributes' => array(
         'title' => 'Submit Sightings',
       ),

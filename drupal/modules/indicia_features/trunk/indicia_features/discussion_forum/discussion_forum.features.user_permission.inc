@@ -6,11 +6,11 @@
 function discussion_forum_user_default_permissions() {
   $permissions = array();
 
-    // Exported permission: administer advanced forum
+  // Exported permission: administer advanced forum
   $permissions['administer advanced forum'] = array(
     'name' => 'administer advanced forum',
     'roles' => array('admin user'),
-  );
+  );  
 
   // Exported permission: administer forums
   $permissions['administer forums'] = array(
@@ -64,7 +64,6 @@ function discussion_forum_user_default_permissions() {
       '1' => 'authenticated user',
     ),
   );
-
 
   // Exported permission: view forum statistics
   $permissions['view forum statistics'] = array(
