@@ -6,11 +6,15 @@
  */
 function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
   require_once('client_helpers/helper_config.php');
+  require_once('client_helpers/map_helper.php');
+  drupal_add_js(drupal_get_path('module', 'iform').'/iform.admin.js');
+  helper_base::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
+  helper_base::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
   global $indicia_warehouses;
   iform_load_warehouse_array();
   foreach($indicia_warehouses as $warehouse=>$def) 
     $warehouses[$warehouse] = $def['title'];
-  $warehouses[] = t('Other');
+  $warehouses['other'] = t('Other');
   $form['indicia_warehouse'] = array(
     '#type' => 'radios',
     '#title' => t('Indicia Warehouse'),
@@ -21,6 +25,9 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
   );
   $form['other_warehouse'] = array(
     '#type' => 'fieldset',
+    '#attributes' => array('id' => 'warehouse_details'),
+    '#collapsible' => true,
+    '#collapsed' => variable_get('indicia_warehouse', '')!='other',
     '#title' => t('Other Warehouse Details')
   );
   $form['other_warehouse']['indicia_base_url'] = array(
@@ -93,12 +100,73 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     '#required' => FALSE,
     '#default_value' => variable_get('indicia_google_search_api_key', helper_config::$google_search_api_key),
   );
+  $form['map'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Map Settings')
+  );
+  $form['map']['instruct'] = array(
+    '#value' => '<p>'.t('Pan and zoom this map to set the default map position for your survey input and mapping pages.').'</p>'
+  );
+  $form['map']['panel'] = array(
+    '#value' => map_helper::map_panel(array(
+      'width' => 500,
+      'height' => 500,
+      'readAuth' => $readAuth,
+      'presetLayers' => array('google_hybrid'),
+      'editLayer' => false,
+      'layers' => array(),
+      'initial_lat'=>variable_get('indicia_map_centroid_lat', 55),
+      'initial_long'=>variable_get('indicia_map_centroid_long', -1),
+      'initial_zoom'=>variable_get('indicia_map_zoom', 5),
+      'standardControls'=>array('panZoomBar')    
+    ))
+  );
+  $form['map']['indicia_map_centroid_lat'] = array(
+    '#type' => 'hidden',
+    '#default_value' => variable_get('indicia_map_centroid_lat', 55),
+  );
+  $form['map']['indicia_map_centroid_long'] = array(
+    '#type' => 'hidden',
+    '#default_value' => variable_get('indicia_map_centroid_long', -1),
+  );
+  $form['map']['indicia_map_zoom'] = array(
+    '#type' => 'hidden',
+    '#default_value' => variable_get('indicia_map_zoom', 6),
+  );
+  $form['map']['spatial_ref_systems'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('List of spatial or grid reference systems'),
+    '#description' => 'Please tick off each spatial or grid reference system you wish to enable for input when using this website.',
+    '#tree' => true
+  );
+  $systems = array(
+      'OSGB'=>t('British National Grid'),
+      'OSIE'=>t('Irish National Grid'),
+      '4326'=>t('GPS Latitude and Longitude (WGS84)'),
+      'guernsey'=>t('Guernsey Grid'),
+      'jersey'=>t('Jersey Grid'),
+      'utm30n_ed50'=>t('UTM 30N (ED50)'),
+      'utm30n_wgs84'=>t('UTM 30N (WGS84)'),
+      '2169'=>t('LUREF Luxembourg')
+  );
+  $selectedSystems = _indicia_form_values_from_sref_systems($systems);
+  $form['map']['spatial_ref_systems']['spatial_ref_systems_list'] = array(
+    '#type' => 'checkboxes',
+    '#default_value' => $selectedSystems['list'],
+    '#options' => $systems
+  );
+  $form['map']['spatial_ref_systems']['spatial_ref_systems_other'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Other'),
+    '#default_value' => $selectedSystems['other'],
+    '#description' => t('For any system not in this list, you can enter a comma separated list of EPSG codes or other system names as long as they are '.
+        'recognised by the Indicia Warehouse you are using.')
+  );
   $form['continue'] = array(
     '#type' => 'submit', 
     '#value' => t('Save'),
+    '#validate' => array('indicia_configuration_form_validate'),
   );
-  
-  // @todo show a map to set the default zoom level and centre.
   
   // Note that #action is set to the url passed through from
   // installer, ensuring that it points to the same page, and
@@ -112,16 +180,70 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     $form['#submit'][] = 'indicia_configuration_form_submit';
   else
     $form['#submit'][] = $submit_handler;
+    
+  // need some js to trap moving the map, and store the centre + zoom in hidden controls
+  map_helper::$javascript .= "
+mapInitialisationHooks.push(function(div) {
+  div.map.events.on({
+    'moveend' : function(evt) {
+      var centre = div.map.center.clone();
+      centre.transform(div.map.projection, new OpenLayers.Projection('EPSG:4326'));
+      $('#edit-indicia-map-centroid-lat').val(centre.lat);
+      $('#edit-indicia-map-centroid-long').val(centre.lon);
+      $('#edit-indicia-map-zoom').val(div.map.zoom);
+    }
+  });
+});
+";
   return $form;
 }
 
 function indicia_configuration_form_validate($form, &$form_state) {
-  if ($form_state['values']['indicia_warehouse']==t('Other') && empty($form_state['values']['indicia_base_url']))
+  if ($form_state['values']['indicia_warehouse']=='other' && empty($form_state['values']['indicia_base_url']))
     form_set_error('indicia_website_id', t('Please supply a warehouse URL for connection to Indicia, or select a pre-configured connection.')); 
-  if (empty($form_state['values']['indicia_website_id']))
-    form_set_error('indicia_website_id', t('Please supply a website ID for connection to Indicia.'));
-  if (empty($form_state['values']['indicia_password']))
-    form_set_error('indicia_password', t('Please supply a password for connection to Indicia.'));
+  $systems = _indicia_sref_systems_from_form($form_state['values']);
+  if (empty($systems)) {
+    form_set_error('spatial_ref_systems', t('Please enable at least one spatial or grid reference system.'));
+  }
+}
+
+/**
+ * Convert the values in the form array for spatial reference systems into the correct comma separated format for Indicia.
+ */
+function _indicia_sref_systems_from_form($values) {
+  $arr = array();
+  // convert the form value array into a simple array of enabled items
+  foreach($values['spatial_ref_systems']['spatial_ref_systems_list'] as $sys=>$enabled) {
+    if ($enabled) {
+      $arr[] = $sys;
+    }
+  }
+  $other = trim($values['spatial_ref_systems']['spatial_ref_systems_other']);
+  if (!empty($other))
+    $arr[] = $other;
+  return implode(',', $arr);
+}
+
+/** 
+ * Convert the stored value for indicia_spatial_systems into values to use as defaults for controls on the form.
+ * @param array $systems The list of spatial systems to map to. Any others go into the array['other'] part of the response.
+ */
+function _indicia_form_values_from_sref_systems($systems) {
+  $r = array(
+    'list' => array(),
+    'other' => array()
+  );
+  $var = explode(',', variable_get('indicia_spatial_systems', 'OSGB'));
+  foreach ($var as $sys) {
+    // check if this is one on the list, or should go in other
+    if (isset($systems[$sys]))
+      $r['list'][] = $sys;
+    else
+      $r['other'][] = $sys;
+  }
+  // implode the other systems into a comma separated list.
+  $r['other'] = implode(',', $r['other']);
+  return $r;
 }
 
 
@@ -146,6 +268,11 @@ function indicia_configuration_form_submit($form, &$form_state) {
     variable_set('indicia_password', $form_state['values']['indicia_password']);
   variable_set('indicia_geoplanet_api_key', $form_state['values']['indicia_geoplanet_api_key']);
   variable_set('indicia_google_search_api_key', $form_state['values']['indicia_google_search_api_key']);
+  variable_set('indicia_map_centroid_lat', $form_state['values']['indicia_map_centroid_lat']);
+  variable_set('indicia_map_centroid_long', $form_state['values']['indicia_map_centroid_long']);
+  variable_set('indicia_map_zoom', $form_state['values']['indicia_map_zoom']);
+  $systems = _indicia_sref_systems_from_form($form_state['values']);
+  variable_set('indicia_spatial_systems', $systems);
   drupal_set_message(t('Indicia settings saved.'));
 }
 

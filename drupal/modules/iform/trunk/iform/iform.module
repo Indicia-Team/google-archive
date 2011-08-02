@@ -18,6 +18,7 @@ function iform_help($path, $arg) {
 } // function iform_help
 
 /**
+* Implementation of hook_perm.
 * Valid permissions for this module
 * @return array An array of valid permissions for the iform module
 */
@@ -442,7 +443,10 @@ function iform_get_connection_details($node) {
  */
 function iform_settings() {
   require_once('iform.admin.inc');
-  return drupal_get_form('iform_configuration_form');
+  $form = drupal_get_form('iform_configuration_form');
+  require_once('client_helpers/data_entry_helper.php');
+  handle_resources();
+  return $form;
 }
 
 /**
@@ -539,7 +543,7 @@ $('.ui-state-default').live('mouseover', function() {
 $('.ui-state-default').live('mouseout', function() {
   $(this).removeClass('ui-state-hover');
 });\n";
-
+    _iform_apply_variables_to_args($args);
     // Now retrieve the form content
     try {
       $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node, $response);
@@ -577,6 +581,19 @@ $('.ui-state-default').live('mouseout', function() {
   return $node;
 }
 
+function _iform_apply_variables_to_args(&$args) {
+  _iform_apply_variable_to_args('map_centroid_lat', $args);
+  _iform_apply_variable_to_args('map_centroid_long', $args);
+  _iform_apply_variable_to_args('map_zoom', $args);
+  _iform_apply_variable_to_args('spatial_systems', $args);
+}
+
+function _iform_apply_variable_to_args($variable, &$args) {
+  $default=variable_get("indicia_$variable", '');
+  if (isset($args[$variable]) && ($args[$variable]==t('default') || $args[$variable]=='')  && !empty($default))
+    $args[$variable]=$default;
+}
+
 /**
  * Tests if a given iform node needs review after import. If it does, checks that
  * there is something to review - if not sets the flag so it does not need review
@@ -610,6 +627,7 @@ function iform_check_needs_review($node) {
 }
 
 function handle_resources() {
+  require_once('client_helpers/data_entry_helper.php');
   if (isset(data_entry_helper::$required_resources)) {
     $resourceList = data_entry_helper::get_resources();
     foreach (data_entry_helper::$required_resources as $resource)
@@ -621,12 +639,15 @@ function handle_resources() {
         }
       }
       if (isset($resourceList[$resource]['javascript'])) {
+      
         foreach ($resourceList[$resource]['javascript'] as $j) {
           // We must not add jQuery twice. So for this file, add Drupal's own version if not already done.
-          if (strcasecmp(substr($j, -9), 'jQuery.js')==0)
+          if (strcasecmp(substr($j, -9), 'jQuery.js')==0) {
             drupal_add_js('misc/jquery.js', 'core');
-          else if (strcasecmp(substr($j, -23), 'jquery-ui.custom.min.js')==0)
+          }  
+          else if (strcasecmp(substr($j, -23), 'jquery-ui.custom.min.js')==0) {
             jquery_ui_add(array('jquery-ui'));
+          }
           else if (substr($j, 0, 4)=='http') {
             // JS file external to Drupal. add_js will not work, so insert it into the head manually.
             drupal_set_html_head("<script type='text/javascript' src='$j'></script>");
@@ -640,24 +661,19 @@ function handle_resources() {
     }
   }
   data_entry_helper::setup_jquery_validation_js();
-  $script = '';
+  $script = "if (typeof indiciaData==='undefined') { indiciaData = {}; }\n";
+  $script .= "indiciaData.windowLoaded=false;\n";
   if (!empty(data_entry_helper::$javascript) || !empty(data_entry_helper::$late_javascript)) {
-    $script = "if (typeof indiciaData==='undefined') { indiciaData = {}; }\n";
-    $script .= "indiciaData.windowLoaded=false;\n";
     $script .= "jQuery(document).ready(function() {\n".
       data_entry_helper::$javascript."\n".
       data_entry_helper::$late_javascript."\n".
       "});\n";
   }
-  if (!empty(data_entry_helper::$onload_javascript)) {
-    $script .= "window.onload = function() {\n".
-      data_entry_helper::$onload_javascript."\n".
-      "indiciaData.windowLoaded=true;\n".
-      "};\n";
-  }
-  if ($script) {
-    drupal_add_js($script, 'inline');
-  }
+  $script .= "window.onload = function() {\n";
+  if (!empty(data_entry_helper::$onload_javascript))
+    $script .= data_entry_helper::$onload_javascript."\n";
+  $script .= "indiciaData.windowLoaded=true;\n};\n";
+  drupal_add_js($script, 'inline');
   // clear the scripts incase we load 2 iform nodes onto 1 page.
   data_entry_helper::$javascript = '';
   data_entry_helper::$late_javascript = '';
@@ -783,5 +799,28 @@ function iform_init() {
 function iform_uuid_node_features_export_render_alter(&$export, $node, $module) {
   if ($node->type=='iform') {
     $export->needs_review = 3;
+  }
+  // remove some stuff from the export so that the Overridden status of the feature is not sensitive to the change metadata.
+  unset($export->created);
+  unset($export->date);
+  unset($export->changed);
+  unset($export->revision_timestamp);
+  unset($export->revision_uid);
+  unset($export->revision_uuid);
+  unset($export->last_comment_timestamp);
+  unset($export->last_comment_name);
+  unset($export->comment_count);
+  // also remove any params that are specific to the site, so that changing them does not mark it as overridden.
+  if (isset($node->iform)) {
+    $form = $node->iform;
+    require_once "client_helpers/prebuilt_forms/$form.php";
+    $params = call_user_func(array('iform_'.$form, 'get_parameters'));
+    foreach ($params as $param) {
+      if (isset($param['siteSpecific']) && $param['siteSpecific']) 
+        unset($export->params[$param['name']]);
+    }
+    // also remove the warehouse login settings
+    unset($export->params['website_id']);
+    unset($export->params['password']);
   }
 }
