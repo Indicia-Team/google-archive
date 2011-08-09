@@ -338,6 +338,14 @@ function indicia_quickstart_user_default_permissions() {
       '0' => 'admin user',
     ),
   );
+  
+  // Exported permission: indicia data admin
+  $permissions['indicia data admin'] = array(
+    'name' => 'indicia data admin',
+    'roles' => array(
+      '0' => 'admin user',
+    ),
+  );
 
   // Exported permission: manage features
   $permissions['manage features'] = array(

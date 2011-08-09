@@ -2,16 +2,16 @@
 
 /**
 * Implementation of hook_perm.
-* Declare an online recording permission. 
-* @return array An array of valid permissions for the iform module
+* Declare an online recording permission and a data admin permission. 
+* @return array An array of valid permissions for the module
 */
 function indicia_quickstart_perm() {
-  $retVal = array('online recording');
+  $retVal = array('online recording', 'indicia data admin');
 }
 
 /**
 * Implementation of hook_link_alter
-* Remove add comment link from teaser
+* Remove add comment link from teaser, so it doesn't appear in node views.
 **/
 function indicia_quickstart_link_alter(&$links, $node){
   if( arg(0) == 'node' && is_numeric(arg(1)) ){
