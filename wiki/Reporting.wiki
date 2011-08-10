@@ -84,6 +84,8 @@ The order_bys are appended to the end of the query in the obvious way, and can b
 </query>
 }}}
 
+===Parameters===
+
 {{{
       <params>
 	    <param name='date' display='Since: ' description='Show activity since:' datatype='date' />
@@ -95,20 +97,12 @@ Parameters may be specified to allow the report requester to specify information
   * `name` should match the name given in the query, excluding the # and # terminators. Thus, in the example above, the parameter name 'date' matches the pattern '#date#' in the query.
   * `display` is the text used to label the parameter in the parameter request screen.
   * `description` gives a further description, and may be used in describing reports/parameters.
-  * `datatype` is used in determining the type of control to show when requesting the parameter. Currently, the core module report interface supports datatypes 'text', 'lookup', 'date', 'geometry', 'polygon', 'line', 'point' and 'idlist' with all other values defaulting to text. Date will show a datepicker control. Lookup will show a select box. Geometry, Polygon, Line and Point all require a map for the user to draw the input parameter shape onto. Finally, idlist is a special datatype that is described below. When viewing the parameters form in the Warehouse interface, the contents of the lookup are populated using the query in the query attribute. When using the report_grid control in the data_entry_helper class, the contents of the lookup are populated using the population_call attribute. Alternatively a fixed set of values can be specified by using the lookup_values attribute.  Those implementing reporting on a site module may of course extend this to support whatever datatypes they wish to allow, and further types such as geometry and lookup lists are likely to be implemented within the core module - obviously lookup lists may require an extension of the report format, which will be documented as and when.
+  * `datatype` is used in determining the type of control to show when requesting the parameter. Currently, the core module report interface supports datatypes 'text', 'lookup', 'date', 'geometry', 'polygon', 'line', 'point', 'idlist', 'smpattrs', 'occattrs', 'locattrs'. All other values default to text. Date will show a datepicker control. Lookup will show a select box. Geometry, Polygon, Line and Point all require a map for the user to draw the input parameter shape onto. Finally, idlist, smpattrs, occattrs and locattrs are special datatypes that are described below. When viewing the parameters form in the Warehouse interface, the contents of the lookup are populated using the query in the query attribute. When using the report_grid control in the data_entry_helper class, the contents of the lookup are populated using the population_call attribute. Alternatively a fixed set of values can be specified by using the lookup_values attribute.  Those implementing reporting on a site module may of course extend this to support whatever datatypes they wish to allow, and further types such as geometry and lookup lists are likely to be implemented within the core module - obviously lookup lists may require an extension of the report format, which will be documented as and when.
   * `query` is used to provide an SQL query used to populate the select box for lookup parameters. The query should return 2 fields, the key and display value. This does not work for reports run from client websites, since they cannot directly issue SQL queries, so the population_call attribute must also be specified.
   * `population_call` allows report parameter forms on client websites to populate the select boxes when the datatype is lookup, for example when using the report_grid control. The format is direct|report:singular table|report name|id field|display caption field, e.g. "direct:survey:id:title". At the moment additional parameters cannot be provided.
   * `linked_to` is available only for select parameters and allows another select to be specified as the parent. In this case, the values in this select are filtered using the value in the parent select. For example, a select for survey might be linked to a select for website, meaning that selecting a website repopulates the list of available surveys.
   * `linked_filter_field` applies when using linked_to, and allows the filtered field in the entity accessed by the population_call to be specified. In the above example of a survey lookup linked to a website lookup, the survey lookup would specify this as website_id.
   * `emptyvalue` allows a special value to be used when the parameter is left blank by the user. As an example, take an integer parameter, with SQL syntax `WHERE id=#id#`. If the user leaves this parameter blank, then invalid SQL is generated (`WHERE id=`). But, if `emptyvalue='0'` is specified in the parameter definition, then the SQL generated will be WHERE id=0, which is valid and in most cases will return no records. Consider replacing the SQL with `WHERE (id=#id# OR #id#=0)` to create a filter that will return all records when left blank.
-
-{{{
-      <columns>
-            <column name="survey" display="Survey Name" style="color: #ff0000;"/>
-            <column name="website" display="Website Name" />
-            <column name="count" display="Total no. of Occurrences" />
-      </columns>
-}}}
 
 The _idlist_ is a special datatype that will not add a control to the input form. Instead it provides a hidden input in the form which other code on the page can use to filter the report. An example of the use of this field is when using the report_map control linked with a report_grid so that clicking on the map passes a comma separated list of occurrence IDs into the hidden input, then reloads the report grid. In order for this to work it is necessary to provide 2 additional attributes of the parameter alongside the datatype="idlist". These are _fieldname_ which defines the name of the field in the SQL (including table alias if necessary) and _alias_ which is the aliased fieldname that is output by the query. The former is used when constructing the SQL report query, the latter is used when retrieving the ids to filter against from the report output. So, in a simplified report example which includes this SQL:
 {{{
@@ -120,6 +114,24 @@ you would expect a parameter defined like:
 {{{
 <param name='idlist' display='List of IDs' description='Comma separated list of occurrence IDs to filter to.' datatype='idlist' fieldname='o.id' alias='occurrence_id' />
 }}}
+
+{{{
+      <columns>
+            <column name="survey" display="Survey Name" style="color: #ff0000;"/>
+            <column name="website" display="Website Name" />
+            <column name="count" display="Total no. of Occurrences" />
+      </columns>
+}}}
+
+The parameter datatypes _smpattrs_, _occattrs_ and _locattrs_ are special types used to allow the input of a comma separated list of custom attributes to be added to the report output. Attributes can be sample attributes, occurrence attributes and location attributes respectively. To use parameters of these types it is necessary to fulfill several requirements in the way your report is specified:
+  # The report must use the _field_sql_ element to separate the field list from the SQL statement, so that additional fields can be added to the list as required.
+  # The report query must contain a tag _#joins#_ in the SQL in a position where additional joins can be inserted. 
+  # The query must include a table which contains the ID attribute that the attribute values are linked to, for example the sample ID, occurrence ID or location ID.
+  # If the ID fields can be referred to in the SQL using _s.id_, _o.id_ and _l.id_ then no further changes are required. You can override these defaults, for example if you have a query listing occurrences which does not join in the samples table but need to be able to add sample attribute values. In this case, the _query_ element needs an attribute _samples_id_field_ which identifies the field reference that can be used in the SQL to join to the sample, in this case _o.sample_id_. 
+
+For an example of writing reports that are extensible by custom attributes, refer to library/occurrences/occurrences_list_for_cmd_user.xml.
+
+===Columns===
 
 Columns are used to give further specification to how particular fields should be displayed. They take these attributes and have no child elements:
 
