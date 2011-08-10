@@ -75,22 +75,32 @@ function iform_ajaxproxy_proxy() {
   require_once drupal_get_path('module', 'iform') .'/client_helpers/data_entry_helper.php';
 
   // Not a proxied path
-  if (arg(0) != IFORM_AJAXPROXY_PATH || !user_access('IForm AJAX Proxy passthrough') || !$_POST) {
-    echo "{error:\"Code 1\"}";
+  if (arg(0) != IFORM_AJAXPROXY_PATH) {
+    echo "{error:\"iform_ajaxproxy Error: proxy path mismatches expected\"}";
+	return;
+  }
+  if (!user_access('IForm AJAX Proxy passthrough')) {
+    echo "{error:\"iform_ajaxproxy Error: user does not have permission to use the proxy\"}";
+	return;
+  }
+  if (!$_POST) {
+    echo "{error:\"iform_ajaxproxy Error: no POST data\"}";
 	return;
   }
   $nid = isset($_GET['node']) ? $_GET['node'] : NULL;
   $index = isset($_GET['index']) ? $_GET['index'] : NULL;                           
   // Sanity check
-  if (empty($nid) || empty($index)){
-    // TODO? echo a failure response: invocation format invalid
-    echo "{error:\"Code 2\"}";
+  if (empty($nid)){
+    echo "{error:\"iform_ajaxproxy Error: invocation format problem - no node.\"}";
+    return;
+  }  
+  if (empty($index)){
+    echo "{error:\"iform_ajaxproxy Error: invocation format problem - no data format indicator.\"}";
     return;
   }  
   $node = node_load($nid);
   if($node->type != 'iform') {
-    // TODO? echo a failure response: invalid node type
-    echo "{error:\"Code 3\"}";
+    echo "{error:\"iform_ajaxproxy Error: Drupal node is not an iform node.\"}";
     return;
   }
   // form type is held in $node->iform, but not relevant at this point.
@@ -100,13 +110,11 @@ function iform_ajaxproxy_proxy() {
   $response = data_entry_helper::http_post(data_entry_helper::$base_url.'/index.php/services/security/get_nonce', $postargs, false);
   $nonce = $response['output'];
   if(!array_key_exists('website_id', $_POST)){
-    // TODO? echo a failure response: website id not provided in POST
-    echo "{error:\"Code 4\"}";
+    echo "{error:\"iform_ajaxproxy Error: Indicia website_id not provided in POST.\"}";
     return;
   }
   if($_POST['website_id'] != $node->params['website_id']){
-    // TODO? echo a failure response: website id mismatch
-    echo "{error:\"Code 5 ".$_POST['website_id']." ".print_r($node->params['website_id'],true)."\"}";
+    echo "{error:\"iform_ajaxproxy Error: Indicia website_id in POST ".$_POST['website_id']." does not match that stored for node ".$nid."\"}";
     return;
   }
   switch ($index) {
@@ -203,15 +211,15 @@ function iform_ajaxproxy_proxy() {
               }
               unlink($uploadpath.$destination); //remove local copy
             } else { //attach the errors to the control that caused them
-              $return['error'] = 'Upload error';
+              $return['error'] = 'iform_ajaxproxy Error: Upload error';
               $return['errors'][$media_id] = 'Sorry, there was a problem uploading this file - move failed.';
             }
           } else { //attach the errors to the control that caused them
-            $return['error'] = 'Upload error';
+            $return['error'] = 'iform_ajaxproxy Error: Upload error';
             $return['errors'][$media_id] = 'Sorry, no file present for "'.$media_id.'".';
           }
         } else {
-          $return['error'] = 'Upload error';
+          $return['error'] = 'iform_ajaxproxy Error: Upload error';
           $return['errors'][$media_id] = 'Sorry, "'.$media_id.'" not present in _FILES.';
         }
         //If no errors in the response array, all went well.
