@@ -90,3 +90,13 @@ URL at .../index.php/services/data/save as a POST parameter called submission. I
 }
 
 }}}
+
+== Using a transaction ID for async posting ==
+
+If you are writing a form which uses AJAX to do form posting, you may wish to do asynchronous posts so that the user interface does not lock up during the save operation. An example might be a grid of occurrences which save automatically when the input focus leaves a row. The [http://jquery.malsup.com/form/ jQuery Form plugin] is available in Indicia and supports both synchronous and asynchronous posting of forms. However, you must be aware that your JavaScript cannot post the form straight to the Warehouse for security reasons and must first format the form into a submission anyway. Indicia provides a Drupal AJAX Proxy module which allows forms to be posted to a proxy script; this script then attaches write authentication tokens to the form and formats it as a submission, then sends it to the Warehouse.
+
+One problem you will face if you elect to use asynchronous posting is how to identify the row that is being referred to in the response from the Warehouse. For example, if there is a validation error, then how can the code know which row that error relates to? The answer is to use a transaction_id field in your form. So, in this case you might include the following:
+{{{
+<input id="transaction_id" name="transaction_id" value="row-id"/>
+}}}
+The JavaScript code will change the value of this input to a unique identifier for the row being posted. Then, the response from the Warehouse will include a transaction_id element which can be used to identify the row to attach the error to.
