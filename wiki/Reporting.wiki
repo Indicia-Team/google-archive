@@ -153,6 +153,27 @@ This column then has a definition:
 
 Note that both columns and parameters will be inferred from the query if they are not provided, but providing them explicitly is recommended as it allows a much greater degree of control over how they are displayed.
 
+== Other Settings ==
+
+=== Vague Date ===
+
+By default, reports will automatically process their output columns to hide date_start, date_end and date_type columns whilst adding an extra date column containing the processed vague date string. For example your query might output the following table:
+
+|| *sample_date_start* || *sample_date_end* || *sample_date_type* ||
+|| 2011-12-14 || 2011-12-14 || D ||
+|| 2010-01-01 || 2011-12-31 || Y ||
+
+This would be output as:
+
+|| *_sample_date_start_* || *_sample_date_end_* || *_sample_date_type_* || *sample_date* ||
+|| _2011-12-14_ || 2011-12-14_ || _D_ || 14/12/2011 ||
+|| _2010-01-01_ || 2010-12-31_ || _Y_ || 2010 ||
+
+Note that the columns in italics are not visible in the output grid (though the data is returned in the dataset so is accessible). It is possible to override this behaviour and leave the original columns in place, by adding the following element to the _report_ element in the xml:
+{{{
+<vagueDate enableProcessing='true' />
+}}}
+
 == Supporting advanced pagination ==
 
 By default report files only support a very simple paginator in the grid with next and previous links. This is because to do a full paginator requires a count of the records and although this is possible with a standard query (by running the query with no limit then counting the records in the response) it is quite inefficient. To support counting more efficiently, you need to markup your query so that the field list can be swapped for a count() statement. To do this, replace the list of fields in the SELECT statement with #field_sql# and add an additional XML element field_sql containing the field list. Here is an example:
