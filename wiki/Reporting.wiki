@@ -166,12 +166,12 @@ By default, reports will automatically process their output columns to hide date
 This would be output as:
 
 || *_sample_date_start_* || *_sample_date_end_* || *_sample_date_type_* || *sample_date* ||
-|| _2011-12-14_ || 2011-12-14_ || _D_ || 14/12/2011 ||
-|| _2010-01-01_ || 2010-12-31_ || _Y_ || 2010 ||
+|| _2011-12-14_ || _2011-12-14_ || _D_ || 14/12/2011 ||
+|| _2010-01-01_ || _2010-12-31_ || _Y_ || 2010 ||
 
 Note that the columns in italics are not visible in the output grid (though the data is returned in the dataset so is accessible). It is possible to override this behaviour and leave the original columns in place, by adding the following element to the _report_ element in the xml:
 {{{
-<vagueDate enableProcessing='true' />
+<vagueDate enableProcessing="false" />
 }}}
 
 == Supporting advanced pagination ==
