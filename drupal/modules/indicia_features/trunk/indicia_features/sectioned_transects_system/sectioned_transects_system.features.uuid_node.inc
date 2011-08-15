@@ -1,0 +1,261 @@
+<?php
+
+/**
+ * Implementation of hook_uuid_features_default_content().
+ */
+function sectioned_transects_system_uuid_features_default_content() {
+  $nodes = array();
+
+  $nodes[] = array(
+  'type' => 'iform',
+  'language' => '',
+  'uid' => '1',
+  'status' => '1',
+  'comment' => '0',
+  'promote' => '0',
+  'moderate' => '0',
+  'sticky' => '0',
+  'tnid' => '0',
+  'translate' => '0',
+  'title' => 'Sites List',
+  'body' => '',
+  'teaser' => '',
+  'log' => '',
+  'format' => '1',
+  'name' => 'admin',
+  'picture' => '',
+  'data' => 'a:0:{}',
+  'iform' => 'report_grid',
+  'needs_review' => 3,
+  'params' => array(
+    'view_access_control' => '0',
+    'permission_name' => '',
+    'report_name' => 'library/locations/species_and_occurrence_counts',
+    'param_presets' => 'date_from=
+date_to=
+survey_id=
+location_type_id=Transect',
+    'param_defaults' => '',
+    'output' => 'default',
+    'report_group' => 'report',
+    'params_in_map_toolbar' => '0',
+    'refresh_timer' => '',
+    'load_on_refresh' => '',
+    'columns_config' => '[
+  {
+    "display":"Actions",
+    "actions":
+    [
+      {
+        "caption":"edit",
+        "url":"{rootFolder}site-details?site={id}"
+      }
+    ]
+  }
+]',
+    'gallery_col_count' => '1',
+    'items_per_page' => '20',
+    'download_link' => '1',
+    'footer' => '<a href="{rootFolder}site-details" class="pager-button">Add Site</a>',
+    'redirect_on_success' => '',
+    'message_after_redirect' => '0',
+  ),
+  'path' => 'site-list',
+  'taxonomy' => array(),
+  'uuid' => '84ffb1b0-c4ee-11e0-9708-e2fa3c3d7fc6',
+  'pathauto_perform_alias' => FALSE,
+);
+  $nodes[] = array(
+  'type' => 'iform',
+  'language' => '',
+  'uid' => '1',
+  'status' => '1',
+  'comment' => '0',
+  'promote' => '0',
+  'moderate' => '0',
+  'sticky' => '0',
+  'tnid' => '0',
+  'translate' => '0',
+  'title' => 'Site Details',
+  'body' => '',
+  'teaser' => '',
+  'log' => '',
+  'format' => '1',
+  'name' => 'admin',
+  'picture' => '',
+  'data' => 'a:0:{}',
+  'iform' => 'sectioned_transects_edit_transect',
+  'needs_review' => 3,
+  'params' => array(
+    'view_access_control' => '1',
+    'permission_name' => 'online recording',
+    'map_centroid_lat' => '52',
+    'map_centroid_long' => '-2',
+    'map_zoom' => '7',
+    'map_width' => '500',
+    'map_height' => '500',
+    'remember_pos' => '0',
+    'preset_layers' => array(
+      '0' => 'google_hybrid',
+    ),
+    'wms_base_title' => '',
+    'wms_base_url' => '',
+    'wms_base_layer' => '',
+    'tile_cache_layers' => '',
+    'openlayers_options' => '',
+    'indicia_wms_layers' => '',
+    'standard_controls' => 'layerSwitcher
+panZoom',
+    'maxSectionCount' => '12',
+    'sites_list_path' => 'site-list',
+    'section_edit_path' => 'section-details',
+    'spatial_systems' => 'OSGB',
+    'redirect_on_success' => 'site-list',
+    'message_after_redirect' => '1',
+  ),
+  'path' => 'site-details',
+  'taxonomy' => array(),
+  'uuid' => '84ffc99c-c4ee-11e0-9708-e2fa3c3d7fc6',
+  'pathauto_perform_alias' => FALSE,
+);
+  $nodes[] = array(
+  'type' => 'iform',
+  'language' => '',
+  'uid' => '1',
+  'status' => '1',
+  'comment' => '0',
+  'promote' => '0',
+  'moderate' => '0',
+  'sticky' => '0',
+  'tnid' => '0',
+  'translate' => '0',
+  'title' => 'Section Details',
+  'body' => '',
+  'teaser' => '',
+  'log' => '',
+  'format' => '1',
+  'name' => 'admin',
+  'picture' => '',
+  'data' => 'a:0:{}',
+  'iform' => 'sectioned_transects_edit_section',
+  'needs_review' => 3,
+  'params' => array(
+    'view_access_control' => '0',
+    'map_centroid_lat' => '52',
+    'map_centroid_long' => '-2',
+    'map_zoom' => '8',
+    'map_width' => '500',
+    'map_height' => '600',
+    'remember_pos' => '0',
+    'preset_layers' => array(
+      '0' => 'google_hybrid',
+    ),
+    'wms_base_title' => '',
+    'wms_base_url' => '',
+    'wms_base_layer' => '',
+    'tile_cache_layers' => '',
+    'openlayers_options' => '',
+    'indicia_wms_layers' => '',
+    'standard_controls' => 'layerSwitcher
+panZoom',
+    'sites_list_path' => 'site-list',
+    'transect_edit_path' => 'site-details',
+    'redirect_on_success' => '',
+    'message_after_redirect' => '1',
+  ),
+  'path' => 'section-details',
+  'taxonomy' => array(),
+  'uuid' => '84ffd295-c4ee-11e0-9708-e2fa3c3d7fc6',
+  'pathauto_perform_alias' => FALSE,
+);
+  $nodes[] = array(
+  'type' => 'iform',
+  'language' => '',
+  'uid' => '1',
+  'status' => '1',
+  'comment' => '0',
+  'promote' => '0',
+  'moderate' => '0',
+  'sticky' => '0',
+  'tnid' => '0',
+  'translate' => '0',
+  'title' => 'Walk Data Entry',
+  'body' => '',
+  'teaser' => '',
+  'log' => '',
+  'format' => '1',
+  'name' => 'admin',
+  'picture' => '',
+  'data' => 'a:0:{}',
+  'iform' => 'sectioned_transects_input_sample',
+  'needs_review' => 3,
+  'params' => array(
+    'view_access_control' => '0',
+    'permission_name' => '',
+    'redirect_on_success' => '',
+    'message_after_redirect' => '0',
+  ),
+  'path' => 'input_data',
+  'taxonomy' => array(),
+  'uuid' => '84ffede9-c4ee-11e0-9708-e2fa3c3d7fc6',
+  'pathauto_perform_alias' => FALSE,
+);
+  $nodes[] = array(
+  'type' => 'iform',
+  'language' => '',
+  'uid' => '1',
+  'status' => '1',
+  'comment' => '0',
+  'promote' => '0',
+  'moderate' => '0',
+  'sticky' => '0',
+  'tnid' => '0',
+  'translate' => '0',
+  'title' => 'My Walks',
+  'body' => '',
+  'teaser' => '',
+  'log' => '',
+  'format' => '1',
+  'name' => 'admin',
+  'picture' => '',
+  'data' => 'a:0:{}',
+  'iform' => 'report_grid',
+  'needs_review' => 3,
+  'params' => array(
+    'view_access_control' => '0',
+    'permission_name' => '',
+    'report_name' => 'library/samples/samples_list',
+    'param_presets' => 'date_from=
+date_to=
+survey_id=
+smpattrs=
+sample_method_id=Transect',
+    'param_defaults' => '',
+    'output' => 'default',
+    'report_group' => 'report',
+    'params_in_map_toolbar' => '0',
+    'refresh_timer' => '',
+    'load_on_refresh' => '',
+    'columns_config' => '[
+  {
+    "actions":
+    [
+      {
+        "caption":"edit",
+        "url":"{rootFolder}input_data?sample_id={sample_id}"
+      }
+    ]
+  }
+]',
+    'gallery_col_count' => '1',
+    'items_per_page' => '20',
+    'download_link' => '1',
+    'footer' => '',
+    'redirect_on_success' => '',
+    'message_after_redirect' => '0',
+  ),
+  'taxonomy' => array(),
+  'uuid' => '84fffa3b-c4ee-11e0-9708-e2fa3c3d7fc6',
+);
+  return $nodes;
+}
