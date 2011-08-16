@@ -1,6 +1,14 @@
 <?php
 // $Id$
 
+// PHP_VERSION_ID is available as of PHP 5.2.7, if our 
+// version is lower than that, then emulate it
+if (!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+
 /**
 * Display help and module information
 * @param path which path of the site we're displaying help
@@ -502,8 +510,15 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       call_user_func(array('iform_'.$node->iform, 'indicia_define_remembered_fields'),$args);
     }
     if ($_POST && (array_key_exists('website_id', $_POST)) && method_exists('iform_'.$node->iform, 'get_submission')) {
-      // Ask the form to submit itself
-      $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, &$args);
+      // Ask the form to submit itself. We want to allow the $args to be modified, e.g. if the destination depends on the submission, but
+      // PHP 5.3.1 does not support reference args when called using call_user_func, and PHP 5.2.x does not support $var::func(). So some
+      // nasty version dependent code is required...
+      if (PHP_VERSION_ID < 50300) {
+        $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
+      } else {
+        $class='iform_'.$node->iform;
+        $s = $class::get_submission($_POST, $args);
+      }
       // if for some reason the iform gives back an empty submission, ignore it
       if($s){
         // does this Drupal node have any custom validation code?
