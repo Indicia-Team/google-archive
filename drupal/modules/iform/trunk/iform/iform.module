@@ -510,17 +510,16 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       call_user_func(array('iform_'.$node->iform, 'indicia_define_remembered_fields'),$args);
     }
     if ($_POST && (array_key_exists('website_id', $_POST)) && method_exists('iform_'.$node->iform, 'get_submission')) {
-      // Ask the form to submit itself. We want to allow the $args to be modified, e.g. if the destination depends on the submission, but
-      // PHP 5.3.1 does not support reference args when called using call_user_func, and PHP 5.2.x does not support $var::func(). So some
-      // nasty version dependent code is required...
-      if (PHP_VERSION_ID < 50300) {
-        $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
-      } else {
-        $class='iform_'.$node->iform;
-        $s = $class::get_submission($_POST, $args);
+      // Ask the form to submit itself.      
+      $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
+      // And allow the form to dynamically set the destination after post
+      if (method_exists('iform_'.$node->iform, 'get_redirect_on_success')) {
+        $redirect = call_user_func(array('iform_'.$node->iform, 'get_redirect_on_success'), $_POST, $args);
+        if (!empty($redirect)) 
+          $args['redirect_on_success'] = $redirect;
       }
       // if for some reason the iform gives back an empty submission, ignore it
-      if($s){
+      if ($s){
         // does this Drupal node have any custom validation code?
         if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/validation/validate.'.$node->nid.'.php')) {
           require_once(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/validation/validate.'.$node->nid.'.php');
