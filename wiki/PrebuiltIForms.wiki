@@ -8,7 +8,27 @@ Indicia includes a prebuilt library of data entry forms, known as IForms. These 
 
 IForms are held in the `client_helpers/prebuilt_forms` folder. Each IForm is represented by a single PHP file with a unique name. To help explain it we can imagine a file called myform.php. Within the PHP file there is a single class, called `iform_formname`, for example `iform_myform`.
 
-This class needs to do a few things. Firstly, it needs to declare a title, so we can add a method like:
+This class needs to do a few things by implementing a number of methods as follows.
+
+=== get_form_name_definition ===
+
+This method returns an array which defines the form's title, category, description and an optional link to a help URL page. The form_name part of the method name must be replaced with the name of the form's class. For example:
+{{{
+public static function get_mnhnl_dynamic_1_definition() {
+  return array(
+      'title'=>'MNHNL Dynamic 1 - dynamically generated data entry form',
+      'category' => 'General Purpose Data Entry Forms',
+      'helpLink'=>'http://code.google.com/p/indicia/wiki/TutorialDynamicForm',
+      'description'=>'A data entry form with an optional grid listing the user\'s records so forms can be reloaded for editing. Can be used for '.
+          'entry of a single occurrence, ticking species off a checklist, or entering species into a grid. The attributes on the form are dynamically '.
+          'generated from the survey setup on the Indicia Warehouse.'
+  );
+}
+}}}
+
+=== get_title ===
+
+This method allows a form to declare a title, but is kept for backwards compatibility as the title can now be returned by get_form_name_definition.
 {{{
   /** 
    * Return the form title.
@@ -18,6 +38,8 @@ This class needs to do a few things. Firstly, it needs to declare a title, so we
     return 'My data entry form';  
   }
 }}}
+
+=== get_parameters ===
 
 Next, we need a method to declare the parameters for the data entry form. Parameters are things you want the editor of the website to set up when they add your data entry form to their website. Typically this will include the website id and password as a very minimum, but often it will also include other options such as the species list ID to use, or whether to use a tabbed interface or not. So, we can add a method like:
 
@@ -76,6 +98,8 @@ Finally, there is a siteSpecific option which must be set to true for parameters
 
 Note that there will automatically be parameters for the website_id and passsword and you don't need to declare these, since they are required by all prebuilt forms.
 
+=== get_form ===
+
 Next we need to return the actual form content. This is achieved using a method called get_form which will receive the actual values for each parameter in the $args parameter as an associative array. The following example illustrates a typical template which can be adapted to your own form content:
 
 {{{
@@ -99,11 +123,9 @@ Next we need to return the actual form content. This is achieved using a method 
   }
 }}}
 
-If the form requires its own custom css file, then place the file in the css sub-folder of the prebuilt_forms directory. The css file should have the same filename as your form's PHP file, but with the extension css instead of php.
+=== get_submission ===
 
-If the form requires its own language file, then copy the file from client_helpers/lang/custom_example.php into the client_helpers/prebuilt_forms/lang directory, and rename it to have the same file name as your form's PHP file, with the extension .en.php. For example `myform.en.php`. You can create multiple copies of this file, changing `en` to the language code for each language you want to support. Inside this file, create the list of language strings your form needs, and then access them using the code `lang::get('key')` where key is the array key for the required entry.
-
-Finally, there needs to be a method which tells Indicia how to construct a "submission" from the content of the form when the user presses Save. Here is an example which can be used for any form that creates a single occurrence within a single sample:
+For forms which submit data via a normal form post, there needs to be a method which tells Indicia how to construct a "submission" from the content of the form when the user presses Save. Here is an example which can be used for any form that creates a single occurrence within a single sample:
 
 {{{
   /**
@@ -116,6 +138,29 @@ Finally, there needs to be a method which tells Indicia how to construct a "subm
     return data_entry_helper::build_sample_occurrence_submission($values);     
   }  
 }}}
+
+=== get_redirect_on_success ===
+
+When a form needs to dynamically redirect after submission, this method can be implemented to select the URL which is redirected to depending on the form post data. When the URL is static there is no need to implement this method as the redirect URL can be specified as part of the form's configuration. For example: 
+
+{{{
+  /** 
+   * Dynamically redirect after a successful save. This lets us redirect back to the parent transect.
+   */
+  public static function get_redirect_on_success($values, $args) {
+    if (!empty($values['from']) && $values['from']=='transect' && !empty($args['transect_edit_path']))
+      return $args['transect_edit_path'] . '?site='.$values['location:parent_id'];
+  }
+
+}}}
+
+== Custom CSS ==
+
+If the form requires its own custom css file, then place the file in the css sub-folder of the prebuilt_forms directory. The css file should have the same filename as your form's PHP file, but with the extension css instead of php.
+
+== Custom Language Files ==
+
+If the form requires its own language file, then copy the file from client_helpers/lang/custom_example.php into the client_helpers/prebuilt_forms/lang directory, and rename it to have the same file name as your form's PHP file, with the extension .en.php. For example `myform.en.php`. You can create multiple copies of this file, changing `en` to the language code for each language you want to support. Inside this file, create the list of language strings your form needs, and then access them using the code `lang::get('key')` where key is the array key for the required entry.
 
 == Custom JavaScript ==
 
