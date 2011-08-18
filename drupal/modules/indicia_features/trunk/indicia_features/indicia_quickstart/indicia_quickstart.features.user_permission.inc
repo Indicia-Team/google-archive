@@ -56,6 +56,7 @@ function indicia_quickstart_user_default_permissions() {
     'name' => 'access iform',
     'roles' => array(
       '0' => 'admin user',
+      '1' => 'authenticated user',
     ),
   );
 
