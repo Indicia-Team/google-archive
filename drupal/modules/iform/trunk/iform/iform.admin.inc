@@ -5,8 +5,8 @@
  * profile as an install task, and provided on the admin menu.
  */
 function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
-  require_once('client_helpers/helper_config.php');
-  require_once('client_helpers/map_helper.php');
+  require_once './' . drupal_get_path('module', iform).'/client_helpers/helper_config.php';
+  require_once './' . drupal_get_path('module', iform).'/client_helpers/map_helper.php';
   drupal_add_js(drupal_get_path('module', 'iform').'/iform.admin.js');
   helper_base::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
   helper_base::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
@@ -112,7 +112,7 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
       'width' => 500,
       'height' => 500,
       'readAuth' => $readAuth,
-      'presetLayers' => array('google_hybrid'),
+      'presetLayers' => array('virtual_earth'), // VE works without an API key, until we go to Google v3.
       'editLayer' => false,
       'layers' => array(),
       'initial_lat'=>variable_get('indicia_map_centroid_lat', 55),
@@ -249,7 +249,7 @@ function _indicia_form_values_from_sref_systems($systems) {
 
 function indicia_configuration_form_submit($form, &$form_state) {
   variable_set('indicia_warehouse', $form_state['values']['indicia_warehouse']);
-  if ($form_state['values']['indicia_warehouse']==t('Other')) {
+  if (strcasecmp($form_state['values']['indicia_warehouse'], t('Other'))===0) {
     variable_set('indicia_base_url', $form_state['values']['indicia_base_url']);
     variable_set('indicia_geoserver_url', $form_state['values']['indicia_geoserver_url']);
   } else {

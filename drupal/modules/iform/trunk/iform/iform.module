@@ -39,7 +39,7 @@ function iform_perm() {
   while($result = db_fetch_object($results)) {
     if ($result->iform) {
       iform_load_helpers(array('data_entry_helper'));
-      require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$result->iform.'.php';
+      require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/' . $result->iform . '.php';
       if(method_exists('iform_'.$result->iform, 'get_perms')) {
         $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
         $retVal = array_merge($retVal, $perms);
@@ -450,9 +450,9 @@ function iform_get_connection_details($node) {
  * Menu callback that generates a page which allows iform settings to be specified.
  */
 function iform_settings() {
-  require_once('iform.admin.inc');
+  module_load_include('inc', 'iform', 'iform.admin');
   $form = drupal_get_form('iform_configuration_form');
-  require_once('client_helpers/data_entry_helper.php');
+  require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/data_entry_helper.php';
   handle_resources();
   return $form;
 }
@@ -481,17 +481,17 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   if ($node->iform && $node->iform!=-1) {
     iform_load_language_files($node);
     $args = array('language' => $language->language);
-    require_once drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/'.$node->iform.'.php';
+    require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/' . $node->iform . '.php';
     ob_start();
     // also force the theme path to be local
     global $indicia_theme_path;
     $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';
     // if there is a template override file, include it
     if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/'.$node->iform.'.php')) {
-      require(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/'.$node->iform.'.php');
+      require './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/templates/' . $node->iform . '.php';
     }
     if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php')) {
-      require(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php');
+      require './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/templates/node.' . $node->nid . '.php';
     }
     $connection = iform_get_connection_details($node);
     $args['website_id']=$connection['website_id'];
@@ -522,7 +522,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       if ($s){
         // does this Drupal node have any custom validation code?
         if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/validation/validate.'.$node->nid.'.php')) {
-          require_once(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/validation/validate.'.$node->nid.'.php');
+          require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/validation/validate.' . $node->nid . '.php';
           $errors = iform_custom_validation($_POST);
           if (!empty($errors)) {
             $r .= data_entry_helper::dump_errors(array('errors'=>$errors));
@@ -641,7 +641,7 @@ function iform_check_needs_review($node) {
 }
 
 function handle_resources() {
-  require_once('client_helpers/data_entry_helper.php');
+  require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/data_entry_helper.php';
   if (isset(data_entry_helper::$required_resources)) {
     $resourceList = data_entry_helper::get_resources();
     foreach (data_entry_helper::$required_resources as $resource)
@@ -767,10 +767,10 @@ function iform_load_language_files($node) {
  * @param array $files List of helper class names to load.
  */
 function iform_load_helpers(array $files) {
-  $path = drupal_get_path('module', 'iform').'/client_helpers';
+  $path = './' . drupal_get_path('module', 'iform') . '/client_helpers';
   // we always need the helper_config file
   if (!class_exists('helper_config')) {
-    require_once("$path/helper_config.php");
+    require_once "$path/helper_config.php";
     // now we have an opportunity to load settings into helper_config from the drupal variables.
     helper_config::$base_url = variable_get('indicia_base_url',helper_config::$base_url);
     helper_config::$geoserver_url = variable_get('indicia_geoserver_url',helper_config::$geoserver_url);
@@ -827,7 +827,7 @@ function iform_uuid_node_features_export_render_alter(&$export, $node, $module) 
   // also remove any params that are specific to the site, so that changing them does not mark it as overridden.
   if (isset($node->iform)) {
     $form = $node->iform;
-    require_once "client_helpers/prebuilt_forms/$form.php";
+    require_once './' . drupal_get_path('module', 'iform') . "/client_helpers/prebuilt_forms/$form.php";
     $params = call_user_func(array('iform_'.$form, 'get_parameters'));
     foreach ($params as $param) {
       if (isset($param['siteSpecific']) && $param['siteSpecific']) 
