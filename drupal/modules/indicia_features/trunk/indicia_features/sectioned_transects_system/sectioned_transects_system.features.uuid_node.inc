@@ -28,8 +28,8 @@ function sectioned_transects_system_uuid_features_default_content() {
   'iform' => 'report_grid',
   'needs_review' => 3,
   'params' => array(
-    'view_access_control' => '0',
-    'permission_name' => '',
+    'view_access_control' => '1',
+    'permission_name' => 'online recording',
     'report_name' => 'library/locations/species_and_occurrence_counts',
     'param_presets' => 'date_from=
 date_to=
@@ -140,7 +140,8 @@ panZoom',
   'iform' => 'sectioned_transects_edit_section',
   'needs_review' => 3,
   'params' => array(
-    'view_access_control' => '0',
+    'view_access_control' => '1',
+    'permission_name' => 'online recording',
     'map_centroid_lat' => '52',
     'map_centroid_long' => '-2',
     'map_zoom' => '8',
@@ -190,8 +191,8 @@ panZoom',
   'iform' => 'sectioned_transects_input_sample',
   'needs_review' => 3,
   'params' => array(
-    'view_access_control' => '0',
-    'permission_name' => '',
+    'view_access_control' => '1',
+    'permission_name' => 'online recording',
     'redirect_on_success' => '',
     'message_after_redirect' => '0',
   ),
@@ -222,8 +223,8 @@ panZoom',
   'iform' => 'report_grid',
   'needs_review' => 3,
   'params' => array(
-    'view_access_control' => '0',
-    'permission_name' => '',
+    'view_access_control' => '1',
+    'permission_name' => 'online recording',
     'report_name' => 'library/samples/samples_list',
     'param_presets' => 'date_from=
 date_to=
