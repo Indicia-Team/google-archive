@@ -131,7 +131,11 @@ locattr:4={user_id}',
     [
       {
         "caption":"edit",
-        "url":"{rootFolder}site-details?site={id}"
+        "url":"{rootFolder}site-details",
+        "urlParams":
+        {
+          "site":"{id}"
+        }
       }
     ]
   }
@@ -172,9 +176,9 @@ locattr:4={user_id}',
   'params' => array(
     'view_access_control' => '1',
     'permission_name' => 'online recording',
-    'map_centroid_lat' => '52',
-    'map_centroid_long' => '-2',
-    'map_zoom' => '7',
+    'map_centroid_lat' => 'default',
+    'map_centroid_long' => 'default',
+    'map_zoom' => 'default',
     'map_width' => '500',
     'map_height' => '500',
     'remember_pos' => '0',
@@ -225,9 +229,9 @@ panZoom',
   'params' => array(
     'view_access_control' => '1',
     'permission_name' => 'online recording',
-    'map_centroid_lat' => '52',
-    'map_centroid_long' => '-2',
-    'map_zoom' => '8',
+    'map_centroid_lat' => 'default',
+    'map_centroid_long' => 'default',
+    'map_zoom' => 'default',
     'map_width' => '500',
     'map_height' => '600',
     'remember_pos' => '0',
@@ -279,7 +283,7 @@ panZoom',
     'redirect_on_success' => '',
     'message_after_redirect' => '0',
   ),
-  'path' => 'input_data',
+  'path' => 'input-data',
   'taxonomy' => array(),
   'uuid' => '84ffede9-c4ee-11e0-9708-e2fa3c3d7fc6',
   'pathauto_perform_alias' => FALSE,
@@ -326,7 +330,11 @@ sample_method_id=Transect',
     [
       {
         "caption":"edit",
-        "url":"{rootFolder}input_data?sample_id={sample_id}"
+        "url":"{rootFolder}input-data",
+        "urlParams":
+        {
+          "sample_id":"{sample_id}"
+        }
       }
     ]
   }
