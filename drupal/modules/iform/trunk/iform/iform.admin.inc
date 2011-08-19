@@ -88,7 +88,7 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     '#description' => t('The Google API key is required to allow use of Google map layers but can be left blank if you do not intend '.
         'to use Google maps. To obtain your own key, please visit <a target="_blank" href="http://code.google.com/apis/maps/signup.html">Google Maps Signup</a>.'),
     '#required' => FALSE,
-    '#default_value' => variable_get('indicia_google_search_api_key', helper_config::$google_search_api_key),
+    '#default_value' => variable_get('indicia_google_api_key', helper_config::$google_search_api_key),
   );
   $form['api_keys']['indicia_google_search_api_key'] = array(
     '#type' => 'textfield',
@@ -267,7 +267,8 @@ function indicia_configuration_form_submit($form, &$form_state) {
   if (!empty($form_state['values']['indicia_password']))
     variable_set('indicia_password', $form_state['values']['indicia_password']);
   variable_set('indicia_geoplanet_api_key', $form_state['values']['indicia_geoplanet_api_key']);
-  variable_set('indicia_google_search_api_key', $form_state['values']['indicia_google_search_api_key']);
+  variable_set('indicia_google_api_key', $form_state['values']['indicia_google_api_key']);
+  variable_set('indicia_google_search_api_key', $form_state['values']['indicia_google_search_api_key']);  
   variable_set('indicia_map_centroid_lat', $form_state['values']['indicia_map_centroid_lat']);
   variable_set('indicia_map_centroid_long', $form_state['values']['indicia_map_centroid_long']);
   variable_set('indicia_map_zoom', $form_state['values']['indicia_map_zoom']);
