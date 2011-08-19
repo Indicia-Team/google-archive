@@ -781,6 +781,7 @@ function iform_load_helpers(array $files) {
     // indicia_upload_path
     // max_upload_size
     helper_config::$geoplanet_api_key = variable_get('indicia_geoplanet_api_key',helper_config::$geoplanet_api_key);
+    helper_config::$google_api_key = variable_get('indicia_google_search_api_key',helper_config::$google_search_api_key);
     helper_config::$google_search_api_key = variable_get('indicia_google_search_api_key',helper_config::$google_search_api_key);
     // $google_api_key ignored because won't be required in v3.
     // $multimap_api_key ignored because layers are deprecated in favour of Bing.
