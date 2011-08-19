@@ -72,7 +72,7 @@ function iform_ajaxproxy_url($node, $index) {
  *
  */
 function iform_ajaxproxy_proxy() {
-  require_once drupal_get_path('module', 'iform') .'/client_helpers/data_entry_helper.php';
+  iform_load_helpers(array('data_entry_helper'));
   
   global $user;
   // User #1 has all privileges:
