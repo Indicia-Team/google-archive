@@ -234,7 +234,6 @@ function iform_form(&$node, $form_state) {
  * Retrieves the parameters required by an iform and creates a JSON string to store
  * them in the database. The iform data must be in the $_POST array or in the node if
  * not in the $_POST.
- *
  * @return string JSON encoded string containing the parameter values.
  */
 function get_custom_param_values($node) {
@@ -282,12 +281,20 @@ function iform_insert($node) {
 * @param node object
 */
 function iform_update($node) {
-  $params=get_custom_param_values($node);
   if (isset($_POST['iform']))
     $iform = $_POST['iform'];
   else
     $iform = $node->iform;
   $needs_review = isset($node->needs_review) ? $node->needs_review : 0;
+  // updating an iform, when needs_review=3, means that the features module has detected that a form in default state 
+  // has had its code changed so needs to be reflected in the database. In this case we actually need to merge the
+  // params together so that user params are not lost.
+  if ($needs_review===3) {
+    $old = node_load($node->nid);
+    $params = json_encode(array_merge($old->params, $node->params));
+    $needs_review=$old->needs_review;
+  } else 
+    $params=get_custom_param_values($node);
   db_query("UPDATE {iform} SET iform='%s', params='%s', needs_review=%d WHERE nid=%d",
       $iform, $params, $needs_review, $node->nid);
 }
@@ -467,8 +474,13 @@ function iform_settings() {
 function iform_view($node, $teaser = FALSE, $page = FALSE) {
   iform_load_helpers(array('data_entry_helper','form_helper'));
   if (iform_check_needs_review($node)) {
-    $r = t('This form has been added by enabling an Indicia Feature but its configuration needs to be reviewed before use. '.
-        'Please contact the site administrator. ');
+    global $user;
+    if (user_access('edit iform')) {
+      $msg = l(t('Please review your Indicia forms'), 'admin/build/features/indicia');
+    } else 
+      $msg = t('Please contact the site administrator.');
+    $r = t('This form has been added by enabling an Indicia Feature but its configuration needs to be reviewed before use. ').
+        $msg;
     $node->content['myfield']=array(
       '#value' => $r,
       '#weight' => 1
