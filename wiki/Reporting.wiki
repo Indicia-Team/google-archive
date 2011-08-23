@@ -123,13 +123,15 @@ you would expect a parameter defined like:
       </columns>
 }}}
 
-The parameter datatypes _smpattrs_, _occattrs_ and _locattrs_ are special types used to allow the input of a comma separated list of custom attributes to be added to the report output. Attributes can be sample attributes, occurrence attributes and location attributes respectively. To use parameters of these types it is necessary to fulfill several requirements in the way your report is specified:
+The parameter datatypes _smpattrs_, _occattrs_ and _locattrs_ are special types used to allow the input of a comma separated list of custom attributes to be added to the report output. Attributes can be sample attributes, occurrence attributes and location attributes respectively and can be provided either by specifying the attribute caption or ID in the comma separated list. To use parameters of these types it is necessary to fulfill several requirements in the way your report is specified:
   # The report must use the _field_sql_ element to separate the field list from the SQL statement, so that additional fields can be added to the list as required.
   # The report query must contain a tag _#joins#_ in the SQL in a position where additional joins can be inserted. 
   # The query must include a table which contains the ID attribute that the attribute values are linked to, for example the sample ID, occurrence ID or location ID.
   # If the ID fields can be referred to in the SQL using _s.id_, _o.id_ and _l.id_ then no further changes are required. You can override these defaults, for example if you have a query listing occurrences which does not join in the samples table but need to be able to add sample attribute values. In this case, the _query_ element needs an attribute _samples_id_field_ which identifies the field reference that can be used in the SQL to join to the sample, in this case _o.sample_id_. 
 
-For an example of writing reports that are extensible by custom attributes, refer to library/occurrences/occurrences_list_for_cmd_user.xml.
+Once you have linked custom attributes into your report output in this way, you can filter the report output using the attribute values. Indicia will create 'virtual' parameters for each of the attributes you add, which can be referred to by providing parameter values called occattr:n, smpattr:n or locattr:n where n is the attribute ID or attribute caption.
+
+For an example of writing reports that are extensible by custom attributes, refer to library/occurrences/occurrences_list_for_cms_user.xml.
 
 ===Columns===
 
