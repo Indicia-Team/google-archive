@@ -123,6 +123,8 @@ you would expect a parameter defined like:
       </columns>
 }}}
 
+===Custom Attributes===
+
 The parameter datatypes _smpattrs_, _occattrs_ and _locattrs_ are special types used to allow the input of a comma separated list of custom attributes to be added to the report output. Attributes can be sample attributes, occurrence attributes and location attributes respectively and can be provided either by specifying the attribute caption or ID in the comma separated list. To use parameters of these types it is necessary to fulfill several requirements in the way your report is specified:
   # The report must use the _field_sql_ element to separate the field list from the SQL statement, so that additional fields can be added to the list as required.
   # The report query must contain a tag _#joins#_ in the SQL in a position where additional joins can be inserted. 
@@ -130,6 +132,11 @@ The parameter datatypes _smpattrs_, _occattrs_ and _locattrs_ are special types 
   # If the ID fields can be referred to in the SQL using _s.id_, _o.id_ and _l.id_ then no further changes are required. You can override these defaults, for example if you have a query listing occurrences which does not join in the samples table but need to be able to add sample attribute values. In this case, the _query_ element needs an attribute _samples_id_field_ which identifies the field reference that can be used in the SQL to join to the sample, in this case _o.sample_id_. 
 
 Once you have linked custom attributes into your report output in this way, you can filter the report output using the attribute values. Indicia will create 'virtual' parameters for each of the attributes you add, which can be referred to by providing parameter values called occattr:n, smpattr:n or locattr:n where n is the attribute ID or attribute caption.
+
+You can also customize the output column as if it were a normally declared column in your report. To do this you need to work out the name of the custom attribute's report column. This will be of the pattern attr_(location|sample|occurrence)_(ref), where ref is the attribute's ID or caption depending on how you requested the attribute originally, with the caption being converted to lowercase and all non-alphanumeric characters converted to underscores. There is also a second hidden column added called attr_id_(location|sample|occurrence)_(ref) which contains the attribute value table's ID useful if you need to identify which record to update to change the data underlying the report. For example, if a sample attribute has ID 4 and caption "CMS User ID" then you can request this in either of the following ways:
+|| *Parameter request for smpattrs* || *Output column name* || *sample_attribute_value.id column name* ||
+|| 4 || attr_location_4 || attr_id_location_4 ||
+|| CMS User ID || attr_location_cms_user_id || attr_id_location_cms_user_id ||
 
 For an example of writing reports that are extensible by custom attributes, refer to library/occurrences/occurrences_list_for_cms_user.xml.
 
