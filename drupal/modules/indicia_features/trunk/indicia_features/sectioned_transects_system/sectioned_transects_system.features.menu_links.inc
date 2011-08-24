@@ -29,10 +29,10 @@ function sectioned_transects_system_menu_default_menu_links() {
   $menu_links['primary-links:84ffb1b0-c4ee-11e0-9708-e2fa3c3d7fc6'] = array(
     'menu_name' => 'primary-links',
     'router_path' => 'node/%',
-    'link_title' => 'Sites List',
+    'link_title' => 'My Sites',
     'options' => array(
       'attributes' => array(
-        'title' => 'Sites List',
+        'title' => 'My Sites',
       ),
       'alter' => TRUE,
     ),

@@ -48,7 +48,11 @@ locattrs=',
     [
       {
         "caption":"edit",
-        "url":"{rootFolder}site-details?site={id}"
+        "url":"{rootFolder}site-details",
+        "urlParams":
+        {
+          "id":"{id}"
+        }
       }
     ]
   }
@@ -58,7 +62,7 @@ locattrs=',
     'download_link' => '1',
     'footer' => '',
     'redirect_on_success' => '',
-    'message_after_redirect' => '0',
+    'message_after_save' => '0',
   ),
   'taxonomy' => array(),
   'uuid' => '240ac08d-c99f-11e0-9708-e2fa3c3d7fc6',
@@ -74,7 +78,7 @@ locattrs=',
   'sticky' => '0',
   'tnid' => '0',
   'translate' => '0',
-  'title' => 'Sites List',
+  'title' => 'My Sites',
   'body' => '',
   'teaser' => '',
   'log' => '',
@@ -92,8 +96,8 @@ locattrs=',
 date_to=
 survey_id=
 location_type_id=Transect
-locattrs=4
-locattr:4={user_id}',
+locattrs=CMS User ID
+attr_location_cms_user_id={user_id}',
     'param_defaults' => '',
     'output' => 'default',
     'report_group' => 'report',
@@ -122,7 +126,7 @@ locattr:4={user_id}',
     "visible":false
   },
   {
-    "fieldname":"attr_location4",
+    "fieldname":"attr_location_cms_user_id",
     "visible":false
   },
   {
@@ -134,7 +138,7 @@ locattr:4={user_id}',
         "url":"{rootFolder}site-details",
         "urlParams":
         {
-          "site":"{id}"
+          "id":"{id}"
         }
       }
     ]
@@ -145,7 +149,7 @@ locattr:4={user_id}',
     'download_link' => '1',
     'footer' => '<a href="{rootFolder}site-details" class="pager-button">Add Site</a>',
     'redirect_on_success' => '',
-    'message_after_redirect' => '0',
+    'message_after_save' => '0',
   ),
   'path' => 'site-list',
   'taxonomy' => array(),
@@ -176,6 +180,7 @@ locattr:4={user_id}',
   'params' => array(
     'view_access_control' => '1',
     'permission_name' => 'online recording',
+    'georefDriver' => 'geoplanet',
     'map_centroid_lat' => 'default',
     'map_centroid_long' => 'default',
     'map_zoom' => 'default',
@@ -198,7 +203,7 @@ panZoom',
     'section_edit_path' => 'section-details',
     'spatial_systems' => 'OSGB',
     'redirect_on_success' => 'site-list',
-    'message_after_redirect' => '1',
+    'message_after_save' => '1',
   ),
   'path' => 'site-details',
   'taxonomy' => array(),
@@ -249,7 +254,7 @@ panZoom',
     'sites_list_path' => 'site-list',
     'transect_edit_path' => 'site-details',
     'redirect_on_success' => '',
-    'message_after_redirect' => '1',
+    'message_after_save' => '1',
   ),
   'path' => 'section-details',
   'taxonomy' => array(),
@@ -280,8 +285,25 @@ panZoom',
   'params' => array(
     'view_access_control' => '1',
     'permission_name' => 'online recording',
+    'map_centroid_lat' => 'default',
+    'map_centroid_long' => 'default',
+    'map_zoom' => 'default',
+    'map_width' => '500',
+    'map_height' => '600',
+    'remember_pos' => '0',
+    'preset_layers' => array(
+      '0' => 'google_hybrid',
+    ),
+    'wms_base_title' => '',
+    'wms_base_url' => '',
+    'wms_base_layer' => '',
+    'tile_cache_layers' => '',
+    'openlayers_options' => '',
+    'indicia_wms_layers' => '',
+    'standard_controls' => 'layerSwitcher
+panZoom',
     'redirect_on_success' => '',
-    'message_after_redirect' => '0',
+    'message_after_save' => '0',
   ),
   'path' => 'input-data',
   'taxonomy' => array(),
@@ -344,7 +366,7 @@ sample_method_id=Transect',
     'download_link' => '1',
     'footer' => '',
     'redirect_on_success' => '',
-    'message_after_redirect' => '0',
+    'message_after_save' => '0',
   ),
   'taxonomy' => array(),
   'uuid' => '84fffa3b-c4ee-11e0-9708-e2fa3c3d7fc6',
