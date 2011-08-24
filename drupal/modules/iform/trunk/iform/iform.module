@@ -546,14 +546,14 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
           if (is_array($response) && array_key_exists('success', $response) &&
               array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
             $url = explode('?', $args['redirect_on_success']);
-            if (isset($args['message_after_redirect']) && $args['message_after_redirect']) {
+            if (!isset($args['message_after_save']) || $args['message_after_save']) {
               drupal_set_message(t('Information saved to the database'));
             }
             $params = 'table='.$response['outer_table'].'&id='.$response['outer_id'];
             if (count($url)>0) 
               $params .= '&' . $url[1];
             drupal_goto($url[0], $params);
-          } else {
+          } elseif (!isset($args['message_after_save']) || $args['message_after_save']) {
             // This dumps errors, and/or a success message if no redirection.
             $r .= data_entry_helper::dump_errors($response);
           }
