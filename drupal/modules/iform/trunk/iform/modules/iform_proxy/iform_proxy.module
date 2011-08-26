@@ -154,7 +154,7 @@ function iform_proxy_redirect($url, $options = array()) {
         case 'CACHE_ID' :
           break;
         default :
-          $url=$url.(strstr($url, "?") ? "&" : "?").$key."=".$value;
+          $url=$url.(strstr($url, "?") ? "&" : "?").$key."=".urlencode($value);
       }
     }
     $session = curl_init($url);
