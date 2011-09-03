@@ -38,6 +38,8 @@
    * [PrebuiltIFormList List of prebuilt forms]
     * [MNHNLDynamicForm1 The dynamic form]
      * [TutorialDynamicForm Guide to using the dynamic form]
+   * [IFormProxyUse The IForm Proxy module]
+   * [IFormAJAXProxy The IForm AJAX Proxy module]
   * Instant Indicia
    * [InstantIndiciaOverview Instant Indicia Overview]
    * [InstantIndiciaInstallation Installing Instant Indicia]
@@ -83,13 +85,19 @@
    * [ClientHelperCodeOverview Overview]
    * [Stylesheets Stylesheets]
    * [ClientHelperOtherFiles Other files required by the client helpers]
-  * [CodingDrupalModules Coding Drupal modules]
+   * [GeoreferenceDrivers Georeference drivers]
+  * Coding Drupal modules
+   * [IFormCodeIntroduction The IForm module code]
+   * [IFormProxyCode The IForm Proxy module]
+   * [IFormAJAXProxyCode The IForm AJAX Proxy module]
+  * Prebuilt Forms
+   * [PrebuiltFormCode Writing a prebuilt form]
+   * [DynamicFormSubclasses Subclassing the dynamic form]
+  * Instant Indicia
+   * [InstantIndiciaFeaturesCode How to write a feature for Instant Indicia]
+  * Problem solving
+   * [WarehouseLogging Using the Warehouse log files]
+   * [Debugging Debugging options]
+  * [IndiciaReleaseProcedure Release procedure for Indicia]
  * Miscellaneous
   * Integration with the Joomla! content management system
-
-
-
- 
-
-
- 
