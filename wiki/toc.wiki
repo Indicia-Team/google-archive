@@ -3,7 +3,7 @@
 = Contents =
 
  * Overview
-  * [introduction A brief introduction to the Indicia project]
+  * [Introduction A brief introduction to the Indicia project]
   * [IndiciaOrientation Get quickly oriented with parts of the Indicia project]
   * [IndiciaSites Gallery of Indicia powered sites]
   * [Screenshots Gallery of screenshots]
@@ -51,7 +51,39 @@
   * [IndiciaDataGeoServer Accessing spatial data using GeoServer]
   * [IndiciaDataDirectAccess Direct access to the PostgreSQL database]
  * Writing code for your Indicia site
+  * [CodingOverview Overview]
+  * [TutorialBuildingBasicPage Building a basic data entry page in PHP]
+  * [SetupHelperConfig Configuring the client helpers]
+  * [AddingCustomAttributes Adding a custom attribute to your page]
+  * [ImplementingLogin Implementing login for your site]
+  * [ReportWriting Writing reports]
+  * [AlertWriting Writing alerts for the notification system]
+  * [ControlList List of client helper controls]
+  * [DrupalFormOverrides Customising functionality of prebuilt forms with your own code]
  * Contributing to Indicia development
+  * [DeveloperGettingStarted Developer Getting Started]
+  * [ArchitectureOverview Architecture Overview]
+  * [DataModel Data Model]
+  * [DevelopmentConventions Development conventions]
+  * [http://www.biodiverseit.co.uk/indicia/dev/docs/ Developer documentation for version 0.6.1]
+  * [http://www.biodiverseit.co.uk/indicia/dev/docs/ Developer documentation for latest code in SVN]
+  * [WebServicesOverview Web services]
+   * [WebServicesData Data services]
+   * [WebServicesReport Report services]
+   * [WebServicesSecurity Security services]
+   * [WebServicesImport Import services]
+   * [WebServicesValidation Validation services]
+  * Warehouse Code
+   * [WarehouseCodeOverview Overview]
+   * [WarehouseCodeDBUpdates Releasing a database upgrade script]
+   * [WarehouseCodeAddAttribute Summary of steps required to add a new attribute]
+   * [WarehouseCodeAddEntity Summary of steps required to add a new entity]
+   * [WarehousePluginsArchiotecture How to write plugin modules for the Warehouse]
+  * Client Helper Code
+   * [ClientHelperCodeOverview Overview]
+   * [Stylesheets Stylesheets]
+   * [ClientHelperOtherFiles Other files required by the client helpers]
+  * [CodingDrupalModules Coding Drupal modules]
  * Miscellaneous
   * Integration with the Joomla! content management system
 
