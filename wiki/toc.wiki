@@ -1,0 +1,63 @@
+#summary Wiki table of contents
+
+= Contents =
+
+ * Overview
+  * [introduction A brief introduction to the Indicia project]
+  * [IndiciaOrientation Get quickly oriented with parts of the Indicia project]
+  * [IndiciaSites Gallery of Indicia powered sites]
+  * [Screenshots Gallery of screenshots]
+  * [Technology An overview of the technologies used]
+  * [FAQs FAQs]
+ * Indicia guide for recorders
+  * Using a data input form
+  * Inputting a list of records
+  * Uploading images
+  * Uploading data
+  * Using reports
+  * Instant Indicia features
+   * Discussion forum
+   * My records
+   * My images
+   * Single or multiple record entry system
+ * Using the Warehouse
+  * [WarehouseOverview Overview]
+  * [Installation Installing your own Warehouse]
+  * [Upgrading Upgrading a Warehouse to the latest release]
+  * [WarehouseImport Importing data into the Warehouse]
+  * [WarehouseDataModel A brief introduction to Warehouse data]
+  * [WarehouseSurveyDesign Designing a survey]
+  * [WarehouseAdmin Administration information]
+  * [WarehouseAlertsNotifications The alerts and notifications system]
+ * Using Drupal with Indicia
+  * [DrupalIntroduction Introduction]
+  * [DrupalLogin User login considerations]
+  * [UsingDrupalIform Using the Drupal IForm module]
+   * [DrupalIFormInstallation Installing the IForm module]
+   * [DrupalIFormAddingForms How to add a form to your Drupal website]
+   * [PrebuiltIFormList List of prebuilt forms]
+    * [MNHNLDynamicForm1 The dynamic form]
+     * [TutorialDynamicForm Guide to using the dynamic form]
+  * Instant Indicia
+   * [InstantIndiciaOverview Instant Indicia Overview]
+   * [InstantIndiciaInstallation Installing Instant Indicia]
+   * [InstantIndiciaExistingSite Configuring an existing Drupal site for Instant Indicia]
+   * [InstantIndiciaFeatures List of Instant Indicia Features]
+    * [InstantIndiciaIndiciaQuickstart Indicia Quickstart]
+   * [InstantIndiciaTheming How to theme an Instant Indicia site]
+ * [IndiciaData Using Indicia data in other applications]
+  * [IndiciaDataDownload Downloading data]
+  * [IndiciaDataWebServices Accessing data via web services]
+  * [IndiciaDataGeoServer Accessing spatial data using GeoServer]
+  * [IndiciaDataDirectAccess Direct access to the PostgreSQL database]
+ * Writing code for your Indicia site
+ * Contributing to Indicia development
+ * Miscellaneous
+  * Integration with the Joomla! content management system
+
+
+
+ 
+
+
+ 
