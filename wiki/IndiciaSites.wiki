@@ -4,6 +4,9 @@
 
 The following is a list of some of the online recording websites that have been built using Indicia.
 
+== [http://naturespot.org.uk/ NatureSpot]
+NatureSpot is a website providing recording, species accounts and site information to naturalists in Leicestershire and Rutland. Indicia allows records to be input with photo upload and the best images are used to provide a comprehensive species library. Launched in spring 2011, at the time of writing (September 2011) already 11,000 records have been collected of approximately 2,500 species.
+
 == [http://www.british-dragonflies.org.uk/ British Dragonfly Society] ==
 The British Dragonfly Society have recently launched a new website using Indicia to replace their previous online recording facilities. Benefits over their previous system include the built in verification systems and immediate storage of all data in the Warehouse's database for reporting and further analysis.
 
