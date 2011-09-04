@@ -1,4 +1,5 @@
 #summary How client websites authenticate using digest authentication
+#labels Needs-Update
 
 = Introduction =
 
