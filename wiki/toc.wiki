@@ -72,9 +72,10 @@
   * [http://www.biodiverseit.co.uk/indicia/dev/docs/ Developer documentation for version 0.6.1]
   * [http://www.biodiverseit.co.uk/indicia/dev/docs/ Developer documentation for latest code in SVN]
   * [WebServicesOverview Web services]
-   * [WebServicesData Data services]
+   * [DigestAuthentication Security services]
+   * [DataServices Data services]
+   * [DataSubmissionFormat Data submission format]
    * [WebServicesReport Report services]
-   * [WebServicesSecurity Security services]
    * [WebServicesImport Import services]
    * [WebServicesValidation Validation services]
   * Warehouse Code
