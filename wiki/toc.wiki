@@ -31,6 +31,7 @@
  * Managing a Warehouse
   * [WarehouseAdmin Administration information]
   * [Backups How to maintain backups]
+  * [DemoSiteModuleInstallation Getting the Warehouse demo module running]
  * Using Drupal with Indicia
   * [DrupalIntroduction Introduction]
   * [DrupalLogin User login considerations]
@@ -42,6 +43,7 @@
      * [TutorialDynamicForm Guide to using the dynamic form]
    * [IFormProxyUse The IForm Proxy module]
    * [IFormAJAXProxy The IForm AJAX Proxy module]
+   * [DrupalDashboardReporting Building a dashboard multi-output report in Drupal]
   * Instant Indicia
    * [InstantIndiciaOverview Instant Indicia Overview]
    * [InstantIndiciaInstallation Installing Instant Indicia]
