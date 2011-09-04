@@ -27,8 +27,10 @@
   * [WarehouseImport Importing data into the Warehouse]
   * [WarehouseDataModel A brief introduction to Warehouse data]
   * [WarehouseSurveyDesign Designing a survey]
+  * [AlertsInIndicia The alerts and notifications system]
+ * Managing a Warehouse
   * [WarehouseAdmin Administration information]
-  * [WarehouseAlertsNotifications The alerts and notifications system]
+  * [Backups How to maintain backups]
  * Using Drupal with Indicia
   * [DrupalIntroduction Introduction]
   * [DrupalLogin User login considerations]
