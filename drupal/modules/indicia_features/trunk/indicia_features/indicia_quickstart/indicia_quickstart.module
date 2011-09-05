@@ -20,3 +20,24 @@ function indicia_quickstart_link_alter(&$links, $node){
     unset($links['comment_add']);
   }
 }
+
+/** 
+ * Implementation of hook_menu.
+ * Declares a simple link for my account, otherwise the link is different per user id.
+ */
+function indicia_quickstart_menu() {
+  $items['my-account'] = array(
+    'page callback' => 'my_account',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('post comments'),
+  );
+  return $items;
+}
+
+/**
+ * Redirect the my-account path to the user/n/edit page.
+ */
+function my_account() {
+  global $user;
+  drupal_goto('user/'.$user->uid.'/edit');
+}
