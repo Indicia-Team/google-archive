@@ -1,6 +1,6 @@
 #summary Summary of the Indicia Quickstart feature
 
-= Indicia Quickstart -
+= Indicia Quickstart =
 
 Indicia Quickstart is a feature provided with Instant Indicia that is enabled by default and should normally be left enabled. This feature is designed to provide a set of 'baseline' facilities that are available on all Instant Indicia sites. 
 
@@ -13,4 +13,3 @@ It performs the following tasks:
  # Declares permissions called _online recording_ and _indicia data admin_ which other features can associate with tasks that have controlled access. For example, any features that provide an online recording facility should restrict access to the online recording permission.
 
  # Disables Drupal 'add comment' links from appearing in abbreviated lists of content.
-
