@@ -4,4 +4,4 @@
 
 Browse images enables a new page on your website, with a report showing images added to the website. It has a basic set of parameters (date range and taxon group) and a menu item is created linking to the page. Here's a screenshot of the page in action:
 
-[http://indicia.googlecode.com/svn/wiki/screenshots/feature_browse_images.png]
+[http://indicia.googlecode.com/svn/wiki/screenshots/feature_browse_images.jpg]
