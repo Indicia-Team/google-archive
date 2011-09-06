@@ -9,18 +9,6 @@
   * [Screenshots Gallery of screenshots]
   * [Technology An overview of the technologies used]
   * [FAQs FAQs]
- * Indicia guide for recorders
-  * Using a data input form
-  * Inputting a list of records
-  * Uploading images
-  * Uploading data
-  * Using reports
-  * Instant Indicia features
-   * Discussion forum
-   * My records
-   * My images
-   * Single or multiple record entry system
-   * [SectionedTransectsUserGuide Sectioned Transects]
  * Using the Warehouse
   * [WarehouseOverview Overview]
   * [Installation Installing your own Warehouse]
@@ -111,3 +99,15 @@
   * [IndiciaReleaseProcedure Release procedure for Indicia]
  * Miscellaneous
   * Integration with the Joomla! content management system
+ * Indicia guide for recorders
+  * Using a data input form
+  * Inputting a list of records
+  * Uploading images
+  * Uploading data
+  * Using reports
+  * Instant Indicia features
+   * Discussion forum
+   * My records
+   * My images
+   * Single or multiple record entry system
+   * [SectionedTransectsUserGuide Sectioned Transects]
