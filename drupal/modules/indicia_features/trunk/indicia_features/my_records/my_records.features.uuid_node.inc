@@ -32,7 +32,9 @@ function my_records_uuid_features_default_content() {
     'permission_name' => 'online recording',
     'report_name' => 'library/occurrences/occurrences_list_for_cms_user',
     'param_presets' => 'survey_id=
-user_id={user_id}',
+user_id={user_id}
+smpattrs=
+occattrs=',
     'param_defaults' => 'date_from=
 date_to=
 taxon_group_id=',
