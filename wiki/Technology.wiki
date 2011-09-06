@@ -19,4 +19,4 @@ The language used for the Core Module development is PHP, selected mainly for it
 [http://jquery.com/ JQuery] is a powerful !JavaScript library that simplifies the task of writing powerful client side code which runs within the web browser, for example to provide animations and facilitate [http://en.wikipedia.org/wiki/AJAX AJAX] interactions.
 
 == OpenLayers ==
-[http://openlayers.org/ OpenLayers] is an Open Source tool for adding dynamic maps to web pages.
+[http://openlayers.org/ OpenLayers] is an open source tool for adding dynamic maps to web pages. For example, these maps are used to allow input of a grid reference, to draw the boundary of a site, or to output a distribution map of a species. OpenLayers has the advantage of being agnostic about the layers you choose to load onto the map, so you can easily use Google or Bing base layers, or can even load your own.
