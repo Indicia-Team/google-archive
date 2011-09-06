@@ -31,7 +31,9 @@ function browse_images_uuid_features_default_content() {
     'view_access_control' => '1',
     'permission_name' => 'online recording',
     'report_name' => 'library/occurrence_images/occurrence_image_list',
-    'param_presets' => 'survey_id=',
+    'param_presets' => 'survey_id=
+smpattrs=
+occattrs=',
     'param_defaults' => 'date_from=
 date_to=
 taxon_group_id=',
@@ -63,6 +65,22 @@ taxon_group_id=',
   },
   {
     "fieldname":"taxon_group",
+    "visible":false
+  },
+  {
+    "fieldname":"occurrence_id",
+    "visible":false
+  },
+  {
+    "fieldname":"entered_sref",
+    "visible":false
+  },
+  {
+    "fieldname":"date",
+    "visible":false
+  },
+  {
+    "fieldname":"zero_abundance",
     "visible":false
   }
 ]',
