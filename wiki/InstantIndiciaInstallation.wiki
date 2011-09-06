@@ -1,0 +1,21 @@
+#summary An overview of Instant Indicia
+
+= Introduction =
+
+Put simply, Instant Indicia provides the fastest and simplest way of setting up an Indicia powered online recording website.
+
+So, how does it do that? Instant Indicia provides you with 
+  * a customised installer for the [DrupalIntroduction Drupal content management system]
+  * a selection of ready-made [InstantIndiciaFeatures features] you can add to your site with minimal configuration.
+
+= When should I use Instant Indicia? =
+
+If you are setting up a new website are happy to base this on the Drupal content management system then use Instant Indicia. Even if you decide not to use the provided features (such as ready-made data input forms and reports) Instant Indicia still simplifies the process of setting up the modules your website is likely to require.
+
+Note that Instant Indicia simplifies the initial setup but does not hinder your further development of the website. You still have full access to the flexibility of customisation available to a normal Indicia website.
+
+= When should I avoid Instant Indicia? =
+
+If you are integrating Indicia into an existing website, or need to use a technology other than Drupal, then Instant Indicia cannot help.
+
+[Instant Indicia Installation Next. Installing Instant Indicia]
