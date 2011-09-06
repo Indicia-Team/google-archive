@@ -31,7 +31,9 @@ function browse_records_uuid_features_default_content() {
     'view_access_control' => '1',
     'permission_name' => 'online recording',
     'report_name' => 'library/occurrences/occurrences_list',
-    'param_presets' => 'survey_id=',
+    'param_presets' => 'survey_id=
+smpattrs=
+occattrs=',
     'param_defaults' => 'date_from=
 date_to=
 taxon_group_id=',
