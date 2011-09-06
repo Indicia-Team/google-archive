@@ -174,7 +174,9 @@ function home_page_default_page_manager_pages() {
       \'date_from\'=>\'\',
       \'date_to\'=>\'\',
       \'survey_id\'=>\'\',
-      \'taxon_group_id\'=>\'\'
+      \'taxon_group_id\'=>\'\',
+      \'smpattrs\'=>\'\',
+      \'occattrs\'=>\'\'
     )
   ));
   report_helper::add_resource(\'defaultStylesheet\');
