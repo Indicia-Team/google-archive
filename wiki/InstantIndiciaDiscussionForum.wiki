@@ -1,0 +1,9 @@
+#summary A summary of the Discussion Forum Instant Indicia feature.
+
+= Discussion Forum =
+
+The Discussion Forum feature provides a one-click solution to installing a discussion forum on your website. The forum itself is built using Drupal forum modules rather than Indicia but it sits naturally alongside Indicia online recording in many cases.
+
+To use the forum your users will need to register with the site first. The forum is divided into a number of folders, each containing any number of forum topics created by the users. You need to configure the list of folders before the forum is used. The installation includes a folder called Miscellaneous to get you started. 
+
+To edit the list of folders, you need to add terms to the relevant _taxonomy_ (here used in the loose rather than biological sense). To do this, select _Content Management >> Taxonomy >> list_ from the menu. Click _list terms_ for the Forums vocabulary. You can now use the _Add term_ link near the top, or edit the existing Miscellaneous entry to configure the list of forum folders.
