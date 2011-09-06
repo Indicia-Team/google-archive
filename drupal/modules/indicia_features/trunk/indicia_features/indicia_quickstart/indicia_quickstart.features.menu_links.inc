@@ -87,6 +87,7 @@ function indicia_quickstart_menu_default_menu_links() {
   t('Logout');
   t('Register');
   t('Login');
+  t('My Account');
 
 
   return $menu_links;
