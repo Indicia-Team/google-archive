@@ -43,6 +43,7 @@
    * [InstantIndiciaFeatures List of Instant Indicia Features]
     * [InstantIndiciaIndiciaQuickstart Indicia Quickstart]
     * [InstantIndiciaIndiciaWelcome Indicia Welcome]
+    * [InstantIndiciaHomepage Homepage]
     * [InstantIndiciaTermsOfUse Terms of Use]
     * [SectionedTransects Sectioned Transects]
    * [InstantIndiciaTheming How to theme an Instant Indicia site]
