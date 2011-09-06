@@ -1,0 +1,7 @@
+#summary A summary of the Indicia Welcome feature
+
+= Indicia Welcome =
+
+Indicia Welcome is a feature provided by Instant Indicia which simply installs a news story with some links to help you get started with Instant Indicia. It is enabled by Instant Indicia by default. For example, it provides a link to the features installation page and Indicia system check, as well as a link to remove the news story when you have done with it. 
+
+The Indicia Welcome feature can be disabled when you are ready and the news story deleted.
