@@ -82,13 +82,13 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     '#required' => FALSE,
     '#default_value' => variable_get('indicia_geoplanet_api_key', helper_config::$geoplanet_api_key),
   );
-   $form['api_keys']['indicia_google_api_key'] = array(
+  $form['api_keys']['indicia_bing_api_key'] = array(
     '#type' => 'textfield',
-    '#title' => t('Google API Key'),
-    '#description' => t('The Google API key is required to allow use of Google map layers but can be left blank if you do not intend '.
-        'to use Google maps. To obtain your own key, please visit <a target="_blank" href="http://code.google.com/apis/maps/signup.html">Google Maps Signup</a>.'),
+    '#title' => t('Bing API Key'),
+    '#description' => t('The Bing API key is required to allow use of Bing map layers but can be left blank if you do not intend '.
+        'to use Bing maps. To obtain your own key, please visit the <a target="_blank" href="http://www.bingmapsportal.com/">Bing Maps Account Center</a>.'),
     '#required' => FALSE,
-    '#default_value' => variable_get('indicia_google_api_key', helper_config::$google_search_api_key),
+    '#default_value' => variable_get('indicia_bing_api_key', ''),
   );
   $form['api_keys']['indicia_google_search_api_key'] = array(
     '#type' => 'textfield',
@@ -109,10 +109,10 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
   );
   $form['map']['panel'] = array(
     '#value' => map_helper::map_panel(array(
-      'width' => 500,
+      'width' => '100%',
       'height' => 500,
       'readAuth' => $readAuth,
-      'presetLayers' => array('virtual_earth'), // VE works without an API key, until we go to Google v3.
+      'presetLayers' => array('google_hybrid'), 
       'editLayer' => false,
       'layers' => array(),
       'initial_lat'=>variable_get('indicia_map_centroid_lat', 55),
@@ -267,7 +267,7 @@ function indicia_configuration_form_submit($form, &$form_state) {
   if (!empty($form_state['values']['indicia_password']))
     variable_set('indicia_password', $form_state['values']['indicia_password']);
   variable_set('indicia_geoplanet_api_key', $form_state['values']['indicia_geoplanet_api_key']);
-  variable_set('indicia_google_api_key', $form_state['values']['indicia_google_api_key']);
+  variable_set('indicia_bing_api_key', $form_state['values']['indicia_bing_api_key']);
   variable_set('indicia_google_search_api_key', $form_state['values']['indicia_google_search_api_key']);  
   variable_set('indicia_map_centroid_lat', $form_state['values']['indicia_map_centroid_lat']);
   variable_set('indicia_map_centroid_long', $form_state['values']['indicia_map_centroid_long']);

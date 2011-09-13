@@ -822,11 +822,11 @@ function iform_load_helpers(array $files) {
     // indicia_upload_path
     // max_upload_size
     helper_config::$geoplanet_api_key = variable_get('indicia_geoplanet_api_key',helper_config::$geoplanet_api_key);
-    helper_config::$google_api_key = variable_get('indicia_google_search_api_key',helper_config::$google_search_api_key);
+    // bing api key may be ommitted for backwards compatibility reasons
+    if (isset(helper_config::$bing_api_key))
+      helper_config::$bing_api_key = variable_get('indicia_bing_api_key', '');
     helper_config::$google_search_api_key = variable_get('indicia_google_search_api_key',helper_config::$google_search_api_key);
-    // $google_api_key ignored because won't be required in v3.
     // $multimap_api_key ignored because layers are deprecated in favour of Bing.
-    // $bing_api_key to be added
     helper_config::$flickr_api_key = variable_get('indicia_flickr_api_key',helper_config::$flickr_api_key);
     helper_config::$flickr_api_secret = variable_get('indicia_flickr_api_secret',helper_config::$flickr_api_secret);
   }
