@@ -338,7 +338,8 @@ panZoom',
     'param_presets' => 'date_from=
 date_to=
 survey_id=
-smpattrs=
+smpattrs=CMS User ID
+attr_sample_cms_user_id={user_id}
 sample_method_id=Transect',
     'param_defaults' => '',
     'output' => 'default',
