@@ -316,10 +316,14 @@ function iform_delete($node) {
 function iform_load($node) {
   $t = db_fetch_object(db_query('SELECT iform, params, needs_review FROM {iform} WHERE nid = %d', $node->nid));
   $params=json_decode($t->params, true);
-  unset($t->params);
-  $t->params = array();
-  // Merge the params into the loaded object
-  foreach($params as $k => $v) $t->params[$k] = $v;
+  if (empty($params)) {
+    drupal_set_message(t('This page\'s configuration has not been stored correctly.', 'warning'));    
+  } else {
+    unset($t->params);
+    $t->params = array();
+    // Merge the params into the loaded object
+    foreach($params as $k => $v) $t->params[$k] = $v;
+  }
   return $t;
 }
 
@@ -813,7 +817,7 @@ function iform_load_helpers(array $files) {
   if (!class_exists('helper_config')) {
     require_once "$path/helper_config.php";
     // now we have an opportunity to load settings into helper_config from the drupal variables.
-    helper_config::$base_url = variable_get('indicia_base_url',helper_config::$base_url);
+    helper_config::$base_url = variable_get('indicia_base_url', helper_config::$base_url);
     helper_config::$geoserver_url = variable_get('indicia_geoserver_url',helper_config::$geoserver_url);
     // upload_path
     // cache_folder
@@ -824,7 +828,7 @@ function iform_load_helpers(array $files) {
     helper_config::$geoplanet_api_key = variable_get('indicia_geoplanet_api_key',helper_config::$geoplanet_api_key);
     // bing api key may be ommitted for backwards compatibility reasons
     if (isset(helper_config::$bing_api_key))
-      helper_config::$bing_api_key = variable_get('indicia_bing_api_key', '');
+      helper_config::$bing_api_key = variable_get('indicia_bing_api_key', helper_config::$bing_api_key);
     helper_config::$google_search_api_key = variable_get('indicia_google_search_api_key',helper_config::$google_search_api_key);
     // $multimap_api_key ignored because layers are deprecated in favour of Bing.
     helper_config::$flickr_api_key = variable_get('indicia_flickr_api_key',helper_config::$flickr_api_key);
