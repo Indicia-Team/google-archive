@@ -374,7 +374,31 @@ function iform_menu() {
     'type' => MENU_LOCAL_TASK,
     'weight' => 1
   );
+  // declare a callback for ajax requests, that any prebuilt form can hook into to provide
+  // it's own AJAX handlers.
+  $items['iform/ajax'] = array(
+    'page callback'=>'iform_ajax_callback',
+    'access arguments' => array(),
+    'type' => MENU_CALLBACK
+  );
   return $items;
+}
+
+/**
+ * Menu callback that lets prebuilt forms expose a method called ajax_* which is then
+ * available on a path iform/ajax/* for AJAX requests from the page.
+ * @param type $form The filename of the form, excluding .php.
+ * @param type $method The method name, excluding the ajax_ prefix.
+ * @return type 
+ */
+function iform_ajax_callback($form=null, $method=null) {
+  if ($form===null || $method===null) {
+    return t('Incorrect AJAX call');
+  }
+  $class = "iform_$form";
+  $method = "ajax_$method";
+  require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/' . $form . '.php';
+  call_user_func(array($class, $method), variable_get('indicia_website_id',''), variable_get('indicia_password',''));
 }
 
 /**
