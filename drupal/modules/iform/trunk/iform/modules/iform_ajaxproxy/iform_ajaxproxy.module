@@ -230,10 +230,13 @@ function iform_ajaxproxy_proxy() {
         return;
     case "occurrence":
         $structure = array('model' => 'occurrence');
-      // Only include determination record if determination in post
+      // Only include determination or comment record if determination in post
       foreach($_POST as $key=>$value){
         if(substr($key,0,14) == 'determination:'){
           $structure['subModels'] = array('determination' => array('fk' => 'occurrence_id'));
+          break;
+        } elseif (substr($key,0,19) == 'occurrence_comment:'){
+          $structure['subModels'] = array('occurrence_comment' => array('fk' => 'occurrence_id'));
           break;
         }
       }
