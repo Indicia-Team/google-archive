@@ -3,8 +3,9 @@
 
 = Setting up the Helper Configuration File =
 
-Developing data entry forms using Indicia normally requires you to write PHP code which calls the ready made library of controls supplied with Indicia. In order to use the full feature set of this library of controls (called the client helpers) there is a small amount of configuration required. 
+Developing data entry forms using Indicia normally requires you to write PHP code which calls the ready made library of controls supplied with Indicia. In order to use the full feature set of this library of controls (called the client helpers) there is a small amount of configuration required.
 
+If you are using Drupal and the IForm module as a basis for your Indicia development, then you can simply visit Site Configuration > IForm > Settings on the administration menu to configure the IForm module. The rest of this page only applies to you if you are using the client_helpers library as a standalone part of your website.
 
 = Details =
 
@@ -24,7 +25,7 @@ class helper_config {
   static $geoserver_url = '';
   static $geoplanet_api_key='PvEFj2rV34FRB4EdRJ8P9WCVq6RgzcRF.xovJZ3fGLGQYwj2ntLoqVB0t5FdPVPvA_wY2w--';
   static $google_search_api_key='ABQIAAAA7HA6ddfArSVixiSlTHrS1RT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRGj3r9a4qCJPaGOYXIsi8AfXFPzQ';
-  static $google_api_key='';
+  static $bing_api_key='';
   static $multimap_api_key='OA09030216927391041';
   static $flickr_api_key='';
   static $flickr_api_secret='';
@@ -56,13 +57,25 @@ Note, if you have GeoServer running on a local development server (localhost), m
 == $geoplanet_api_key ==
 The Yahoo! GeoPlanet API is used to lookup place names when you use the place search control. It references a global database of places and returns the list of possibilities with their spatial references to Indicia. To obtain your own API key for GeoPlanet, please visit [http://developer.yahoo.com/geo/geoplanet/] and follow the link to get an Application ID.
 
+== $bing_api_key ==
+
+_*This key is supported from Indicia 0.7 onwards.*_
+
+The Bing API key is required to allow use of Bing map layers but can be left blank if you do not intend to use Bing maps. To obtain your own key, please visit the [http://www.bingmapsportal.com Bing Maps Account Center].
+
 == $google_search_api_key ==
 The Google AJAX Search API is used by the postcode textbox in Indicia to lookup the central spatial reference of an entered postcode. To obtain your own Google AJAX Search API Key, please visit [http://code.google.com/apis/ajaxsearch/signup.html].
 
 == $google_api_key ==
+
+_*Note from Indicia 0.7 onwards, the $google_api_key setting is no longer required. This is because Indicia now uses the Google Maps v3 API which does not require an API key.*_
+
 The Google Maps API is used to allow the Google map data (e.g. Google Satellite layer) to be displayed on an Indicia map. Note, Indicia does not use the Google Maps API to render the actual map control as we use the open source OpenLayers mapping library instead. But you still need an API key to load the map data into an OpenLayers map. You can get a Google Maps API key at [http://code.google.com/apis/maps/signup.html].
 
 == $multimap_api_key ==
+
+_*The Multimap API is no longer supported and it is now not possible to obtain a new API key to our knowledge. This setting is still maintained in Indicia for backwards compatibility as existing keys still work for the moment.*_
+
 The MultiMap API is used, like the Google Maps API, to access the background maps provided by MultiMap. Of particular interest in the UK is the ability to enable the Ordnance Survey 1:50,000 map layer when the map is zoomed to an appropriate resolution. You can obtain a MultiMap API Key at [https://www.multimap.com/my/register/?openapi_create=1].
 
 == $flickr_api_key and $flickr_api_secret ==
