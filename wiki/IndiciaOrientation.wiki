@@ -37,7 +37,7 @@ The main “guts” of Indicia are provided in the *Warehouse* component. This i
 
 In the UK, the [http://www.brc.ac.uk/ Biological Records Centre] host a Warehouse that is available for appropriate organisations to use. 
 
-The second component required of course is the online recording website itself. This is the part you will definitely need to build but Indicia is designed to make this as simple as possible. It is also designed to run on the vast majority of web servers including very cheap hosted accounts on shared servers. Because most of the hard work is done by the Warehouse, Indicia does not place a huge burden on the server hosting the online recording website.
+The second component required of course is the online recording website itself. This is the part you will definitely need to build but Indicia is designed to make this as simple as possible. It is also designed to run on the vast majority of web servers including very cheap hosted accounts on shared servers. Because most of the hard work is done by the Warehouse, Indicia does not place a huge burden on the server hosting the online recording website and only uses technologies that are more or less standard these days on nearly all web servers.
 
 ==Building your website==
 
