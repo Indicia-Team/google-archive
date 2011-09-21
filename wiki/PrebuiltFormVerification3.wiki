@@ -17,6 +17,6 @@ This from has the following features:
 
 When using this form, you might want to consider ticking the View Access Control checkbox on the Edit page (under the Other IForm Parameters section) and possibly specifying a permission name, to allow you to control who has access to the verification facilities:
 
-http://indicia.googlecode.com/svn/wiki/screenshots/prebuilt_form_verification_3_permissions.png.
+http://indicia.googlecode.com/svn/wiki/screenshots/prebuilt_form_verification_3_permissions.png
 
 Note that if you are using the Verification feature in Instant Indicia, then the permissions are automatically set up for you.
