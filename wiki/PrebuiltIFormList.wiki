@@ -40,3 +40,8 @@ Here is a list of the prebuilt forms available in Indicia.
 || File || report_map.php ||
 || Description || A form for outputting the results of a report on a map. ||
 || Documentation || [PrebuiltFormReportMap Using the Report Map prebuilt form] ||
+
+==Verification 3==
+|| File || verification_3.php ||
+|| Description || A report listing incoming records with facilities to review, verify and reject them. ||
+|| Documentation || [PrebuiltFormVerification3 Using the Verification 3 prebuilt form] ||
