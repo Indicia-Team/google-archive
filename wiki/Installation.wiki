@@ -5,7 +5,7 @@
 
 This guide is a quick summary of the steps required to install the Indicia Warehouse. You don't have to install the Warehouse to use Indicia if you are happy to use a Warehouse provided by another organisation.
 
-Note that if you are installing Indicia onto a hosted shared server, the chances are you will not have the full privileges required to setup the PostGIS database and PHP settings (if required). It may be helpful to ask your web host to perform the steps *Install PostgreSQL and PostGIS* to check that the pgsql and cURL extensions are enabled for PHP as described in the section *Install PHP and a Web Server*.
+Note that if you are installing Indicia onto a hosted shared server, the chances are you will not have the full privileges required to setup the PostGIS database and PHP settings (if required). It may be helpful to ask your web host to perform the steps *Install PostgreSQL and PostGIS* and to check that the pgsql and cURL extensions are enabled for PHP as described in the section *Install PHP and a Web Server*.
 
 == Install PostgreSQL and PostGIS ==
 
