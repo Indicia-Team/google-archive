@@ -15,6 +15,11 @@ function indicia_quickstart_user_default_roles() {
   $roles['site editor'] = array(
     'name' => 'site editor',
   );
+  
+  // Exported role: verifier
+  $roles['verifier'] = array(
+    'name' => 'verifier',
+  );
 
   return $roles;
 }
