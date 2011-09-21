@@ -1,0 +1,22 @@
+#summary Using the Verification 3 prebuilt form.
+
+= The Verification 3 Prebuilt Form=
+
+This prebuilt form provides a quick way of reviewing incoming records and verifying, rejecting, emailing for review or commenting on them. 
+
+http://indicia.googlecode.com/svn/wiki/screenshots/prebuilt_form_verification_3.jpg
+
+This from has the following features:
+  * Uses a report to populate a list of records. 
+  * You can override the report used and the columns displayed in the Edit view for the page.
+  * Each row clearly shows the current status.
+  * Clicking on a row selects the row and shows a tabbed panel containing full record details, a map, any images and comments. 
+  * Buttons are available for rejecting or verifying records as well as emailing full details to an expert for checking.
+  * Verifying or rejecting a record requests a comment to be added explaining why.
+  * The Comments tab allows new comments to be added.
+
+When using this form, you might want to consider ticking the View Access Control checkbox on the Edit page (under the Other IForm Parameters section) and possibly specifying a permission name, to allow you to control who has access to the verification facilities:
+
+http://indicia.googlecode.com/svn/wiki/screenshots/prebuilt_form_verification_3_permissions.png.
+
+Note that if you are using the Verification feature in Instant Indicia, then the permissions are automatically set up for you.
