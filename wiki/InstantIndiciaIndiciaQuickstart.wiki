@@ -6,7 +6,11 @@ Indicia Quickstart is a feature provided with Instant Indicia that is enabled by
 
 It performs the following tasks:
 
- # Creates menu links for register, login, logout and my account. When logged out, the login and register links are visible. When logged in, the logout and my account links are visible.
- # Creates roles called _admin user_ and _site editor_ and grants appropriate permissions to each. 
- # Declares permissions called _online recording_ and _indicia data admin_ which other features can associate with tasks that have controlled access. For example, any features that provide an online recording facility should restrict access to the online recording permission.
- # Disables Drupal 'add comment' links from appearing in abbreviated lists of content.
+ # Creates menu links for user authentication, including *Register*, *Login*, *Logout* and *My Account*. When logged out, the Login and Register links are visible. When logged in, the Logout and My Account links are visible.
+ # Creates roles called *admin user*, *verifier* and *site editor* and grants appropriate permissions to each. 
+ # Declares permissions called *online recording* and *indicia data admin* which other features can associate with tasks that have controlled access. For example, any features that provide an online recording facility should restrict access to the online recording permission.
+ # Disables Drupal 'add comment' links from appearing in abbreviated lists of content such as lists of stories on the home page.
+
+The other features provided with Instant Indicia all make use of these items, for example the [InstantIndiciaVerification Verification feature] restricts access to the verification pages unless the user has been added to the verifier role. Of course, any forms that you create yourself using Indicia can have be restricted in a similar way by using the same named permissions to control access.
+
+The My Account link takes you to a fairly basic page for editing your account profile with fields only for the user name, password and email address. If you enable the Profile module for Drupal, which is supplied with the installation but not enabled by default, you can extend the fields available in the profile to include any fields you require. You can enable the module on the Modules page, found under Site building > Modules on the admin menu. Once you have enabled the Profile module, there is a menu item under User management called Profiles which lets you add new fields to the profile pages. 
