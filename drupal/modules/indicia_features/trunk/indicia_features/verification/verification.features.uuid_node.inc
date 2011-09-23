@@ -28,7 +28,7 @@ function verification_uuid_features_default_content() {
   'iform' => 'verification_3',
   'needs_review' => 3,
   'params' => array(
-    'view_access_control' => '0',
+    'view_access_control' => '1',
     'permission_name' => 'verifier',
     'map_centroid_lat' => 'default',
     'map_centroid_long' => 'default',
