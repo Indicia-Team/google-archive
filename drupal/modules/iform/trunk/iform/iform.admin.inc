@@ -33,7 +33,8 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
   $form['other_warehouse']['indicia_base_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Warehouse URL'),
-    '#description' => 'If selecting Other for the Indicia Warehouse option, please enter the URL of the Indicia Warehouse you are connecting to, otherwise ignore this setting.',
+    '#description' => 'If selecting Other for the Indicia Warehouse option, please enter the URL of the Indicia Warehouse you are connecting to, otherwise ignore this setting. '.
+        'This should include the full path and trailing slash but not the index.php part, e.g. "http://www.mysite.com/indicia/".',
     '#maxlength' => 255,
     '#required' => FALSE,
     '#default_value' => variable_get('indicia_base_url', ''),
