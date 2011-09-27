@@ -164,6 +164,14 @@ function indicia_quickstart_user_default_permissions() {
       '0' => 'admin user',
     ),
   );
+  
+  // Exported permission: access administration menu
+  $permissions['administer search'] = array(
+    'name' => 'administer search',
+    'roles' => array(
+      '0' => 'admin user',
+    ),
+  );
 
   // Exported permission: administer site configuration
   $permissions['administer site configuration'] = array(
@@ -389,6 +397,15 @@ function indicia_quickstart_user_default_permissions() {
       '0' => 'admin user',
     ),
   );
+  
+  // Exported permission: access administration menu
+  $permissions['search content'] = array(
+    'name' => 'search content',
+    'roles' => array(
+      '0' => 'anonymous user',
+      '1' => 'authenticated user',
+    ),
+  );
 
   // Exported permission: select different theme
   $permissions['select different theme'] = array(
@@ -397,6 +414,15 @@ function indicia_quickstart_user_default_permissions() {
       '0' => 'admin user',
     ),
   );
+  
+  // Exported permission: access administration menu
+  $permissions['use advanced search'] = array(
+    'name' => 'use advanced search',
+    'roles' => array(
+      '0' => 'authenticated user',
+    ),
+  );
+
 
   // Exported permission: use PHP for block visibility
   $permissions['use PHP for block visibility'] = array(
