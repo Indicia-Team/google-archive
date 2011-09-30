@@ -3,7 +3,7 @@
 
 = Installation =
 
-This guide is a quick summary of the steps required to install the Indicia Warehouse. You don't have to install the Warehouse to use Indicia if you are happy to use a Warehouse provided by another organisation.
+This guide is a quick summary of the steps required to install the Indicia Warehouse. You don't have to install the Warehouse to use Indicia if you are happy to use a Warehouse provided by another organisation. Note that installing the Warehouse involves setting up a web server since Indicia is a web, rather than a desktop, application. Therefore installation is a little more involved than the typical desktop application.
 
 Note that if you are installing Indicia onto a hosted shared server, the chances are you will not have the full privileges required to setup the PostGIS database and PHP settings (if required). It may be helpful to ask your web host to perform the steps *Install PostgreSQL and PostGIS* and to check that the pgsql and cURL extensions are enabled for PHP as described in the section *Install PHP and a Web Server*.
 
@@ -34,7 +34,9 @@ GRANT EXECUTE ON FUNCTION st_transform(geometry, integer) TO indicia_user;
 
 == Install PHP and a web server ==
 
-There are many tutorials on the web on how to install PHP and a webserver such as Apache. PHP version 5 is required. For example, the following guide explains installation of PHP, Apache and MySQL on Windows: [http://www.php-mysql-tutorial.com/install-apache-php-mysql.php]. MySQL is not required by the Indicia Warehouse. Another alternative is to install a ready made 'stack' with a set of predefined components all packaged into one install kit. An example is [http://www.apachefriends.org/en/xampp.html XAMPP] though note that version 1.7.4 removed several modules from previous versions making Indicia installation more difficult. You can download version 1.7.3 for Windows from [http://sourceforge.net/projects/xampp/files/XAMPP%20Windows/1.7.3/].
+If you are installing on Windows, then you will typically want to use IIS (Internet Information Services) or Apache as your web server software. For other operating systems we recommend the Apache web server. This tutorial is written on the assumption that you are using Apache, though the steps will mostly be the same (except with different folder locations) for IIS.
+
+There are many tutorials on the web on how to install PHP and a webserver such as Apache. PHP version 5.2 or higher is required. For example, the following guide explains installation of PHP, Apache and MySQL on Windows: [http://www.php-mysql-tutorial.com/install-apache-php-mysql.php]. MySQL is not required by the Indicia Warehouse. Another alternative is to install a ready made 'stack' with a set of predefined components all packaged into one install kit. An example is [http://www.apachefriends.org/en/xampp.html XAMPP] though note that version 1.7.4 removed several modules from previous versions making Indicia installation more difficult. You can download version 1.7.3 for Windows from [http://sourceforge.net/projects/xampp/files/XAMPP%20Windows/1.7.3/].
 
 After installing PHP, edit your php.ini file and uncomment the following two lines by removing the semi-colon at the start. This enables the pgsql module required for PHP to access the PostgreSQL database, and the cURL module which the demonstration site pages use to access the web services. After you've changed and saved the file, restart your Apache web server.
 {{{
@@ -42,7 +44,7 @@ extension=php_curl.dll
 extension=php_pgsql.dll
 }}}
 
-Once you have done this, it's a good idea to check that the cURL and pgsql libraries have been installed successfully for PHP. You can do this by creating a file called phpinfo.php in the root html directory of your webserver, and editing it with a text editor. Enter the following text into the file and save it:
+Once you have done this, it's a good idea to check that the cURL and pgsql libraries have been installed successfully for PHP. You can do this by creating a file called phpinfo.php in the root html directory of your webserver, and editing it with a text editor. If you installed XAMPP, then you will find this folder under XAMPP/htdocs. Enter the following text into the file and save it:
 {{{
 <?php echo phpinfo(); ?>
 }}}
@@ -61,7 +63,7 @@ If you are running on a hosted server, it may be easiest to download and unzip t
 
 == Run the Setup ==
 
-The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example //localhost/indicia/index.php, and load the page. This should display the Indicia Setup Check page, which with any luck will show the following information:
+The Setup procedure will automatically start if you access the index.php file in the root of the website. So, just enter this into your web browser, for example http://localhost/indicia/index.php, and load the page. This should display the Indicia Setup Check page, which with any luck will show the following information:
 
 http://indicia.googlecode.com/svn/wiki/setup_check.png
 
@@ -69,9 +71,9 @@ Each of the tasks that the Indicia Warehouse has identified still needs your att
 
 ===Directory Access===
 
-If your server is a production server then you should ensure that each folder has the required permissions, and no more. This section of the setup check gives you some pointers to the permission problems that currently exist. Once you have corrected them you can refresh the page to check that it has worked. 
+If your server is a production server then you should ensure that each folder has the required permissions, and no more. This section of the setup check gives you some pointers to the permission problems that currently exist, listing the folders that it has tested which have correct permissions as well as the ones which don't. In our case, the reports and trigger templates folders are writeable but should be readonly. Once you have corrected them you can refresh the page to check that it has worked. 
 
-If you are installing a server for development purposes and want to ignore this, click the Acknowledge button and confirm this on the next screen to allow you to proceed with the installation.
+If you are installing a server for development or private purposes then it is safe to ignore the fact that the reports and trigger templates folders are writeable. Click the Acknowledge button and confirm that you are happy to ignore this on the next screen to allow you to proceed with the installation.
 
 ===Demo configuration===
 
@@ -81,7 +83,7 @@ http://indicia.googlecode.com/svn/wiki/setup_demo.png
 
 This page allows you to provide a link to a [http://geoserver.org GeoServer] installation on your server which can provide access to the spatial data in your Warehouse. If you don't have one, don't worry as this is only required for some distribution mapping functionality and can be added later. 
 
-In addition, this page allows you to specify API keys for various web services used by the Indicia demo pages. If you don't specify them now, they can be entered later by editing the file client_helpers/helper_config.php.
+In addition, this page allows you to specify API keys for various web services used by the Indicia demo pages. If you don't specify them now, they can be entered later by editing the file client_helpers/helper_config.php. Also note that these settings are only for the demo pages on the warehouse, so it is safe to save this page with blank settings if you are not going to use the demo pages.
 
 ===Email Configuration===
 
