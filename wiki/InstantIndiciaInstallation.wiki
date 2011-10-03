@@ -18,4 +18,4 @@ Note that Instant Indicia simplifies the initial setup but does not hinder your 
 
 If you are integrating Indicia into an existing website, or need to use a technology other than Drupal, then Instant Indicia cannot help.
 
-[InstantIndiciaInstallation Next. Installing Instant Indicia]
+[http://code.google.com/p/indicia/downloads/detail?name=Instant%20Indicia%20Tutorials.docx&can=2&q= Download the Instant Indicia Tutorials]
