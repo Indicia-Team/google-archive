@@ -11,6 +11,10 @@ Note that if you are installing Indicia onto a hosted shared server, the chances
 
 First, install the PostgreSQL database server and the PostGIS extension for your operating system. For downloads and more information see [http://www.postgresql.org/] and [http://postgis.refractions.net/]. Note that if you are installing on Windows, version 8.3 and higher of PostgreSQL allow you to install PostGIS by using the Stack Builder tool included with PostgreSQL.
 
+If you are installing PostgreSQL on a Linux server then you may find the following links extremely useful: 
+  * [http://www.postgresonline.com/journal/archives/203-postgresql90-yum.html An almost idiot's guide to Install PostgreSQL 9.0 with Yum] 
+  * [http://www.postgresonline.com/journal/archives/204-postgis15-install-yum.html An Almost Idiot's Guide to Installing PostGIS 1.5 on PostgreSQL 9.0 via Yum].
+
 Next, create a PostGIS database on your server. You don't need to put any content in the database yet. There are several possible ways of doing this, but the easiest is to run pgAdmin III which is supplied in the PostgreSQL installation. In the tree on the left, there is a node called Servers, and underneath that is your server. Double click this and enter your password if it asks you. Now, expand the Databases node, select "postgres", then click the icon in the toolbar that looks like a document titled SQL with a pencil. Now, in the editor that appears, enter the following SQL script and click the green run button in the toolbar, which creates a PostGIS database called *indicia*.
 {{{
 CREATE DATABASE indicia TEMPLATE=template_postgis;
