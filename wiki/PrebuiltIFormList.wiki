@@ -31,6 +31,14 @@ Here is a list of the prebuilt forms available in Indicia.
 || Description || Advanced form which uses the attributes associated with a survey to dynamically build a form. Flexible and powerful, should be considered as the starting point for any new surveys. ||
 || Documentation || [TutorialDynamicForm Creating a survey using the dynamic form] ||
 
+==Specific MNHNL Forms==
+These are a set of forms produced for specific requirements of the MNHN in Luxembourg.
+|| File || Description || Documentation ||
+|| mnhnl_reptiles.php || Advanced form (inherites from MNHNL Dynamic 1) which is used for recording Reptile occurrences. Has ability to generate new survey polygonal locations, or click to select previously created ones, within parent 5km grid squares. Custom Species grid allows a one taxon to have multiple entries, due to nature of recording method. || [TutorialMNHNLReptile Creating a survey using the MNHNL Reptile form] ||
+||mnhnl_bats.php||||||
+||mnhnl_bird_transect_walks.php||||||
+||mnhnl_butterflies.php||||||
+
 ==Report Grid==
 || File || report_grid.php ||
 || Description || A form for outputting the results of a report in a grid. ||
