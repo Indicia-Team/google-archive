@@ -3,17 +3,21 @@
 = Introduction =
 This page details the configuration process for the MNHNL Reptiles form. It assumes a level of experience in setting forms up.
 
+This form was designed for use with 3 specific surveys, the set up for which is detailed below. It could be used for other surveys, with suitable modification to the attributes used. The set up below includes setting up the attributes for the following surveys:
+  # Common Wall Lizard Survey in Luxembourg.
+  # Smooth Snake Survey in Luxembourg.
+  # Sand Lizard Survey in Luxembourg.
+
 Prerequisites: the Attributes for the MNHNL butterflies and MNHNL bats forms should have been loaded in.
 
 = Warehouse =
   # Open up a browser window to the warehouse.
   # Make note of Website ID and password to be used - create a new one if needed.
-  # Create a survey, and attach it to the Website above. Make a note of its name and ID.
 
 = Database =
   # Open up pgAdmin on the server.
   # Run support file reptiles.sql. This will load in the required termlists and custom attributes.
-  # Make a note of the ids for the *Lux5KSquare* term and the *LizardLocation* term in the *ReptileLocation* termlist.
+  # Make a note of the ids for the *Lux5KSquare* term and the *LizardLocation* term in the *ReptileLocation* termlist. _If the locations are to be separated between the surveys, separate term IDs must be used for the different surveys._
   # Take a copy of the support file reptile_locations.sql.
   # Edit this copy and replace all occurrences of *`<locType>`* with the *Lux5KSquare* term id noted above, and replace all occurrences of *`<website_id>`* with the website ID noted above.
   # Run this modified file against the database.
@@ -42,22 +46,27 @@ Prerequisites: the Attributes for the MNHNL butterflies and MNHNL bats forms sho
 ||Swimming||Reptile Behaviour||*`<behavSwim>`*||||
 ||Undetermined||Reptile Behaviour||*`<behavUndet>`*||||
 
+= Warehouse =
+  # Prepare and upload species list
+  # Make a note of the list ID.
+
+*The following has to be repeated, once for each survey.*
 
 = Warehouse =
+  # Create a sub list for the main species list, and copy down the appropriate taxon ("Podarcis muralis" for the Common Wall Lizard Survey, "Coronella austriaca" for the Smooth Snake Survey, and "Lacerta agilis" for the Sand Lizard Survey). This list is used to provide an initial selection in the species grid when the sample is created. Adding to the list will increase the initial set appropriately. For additional rows in the species grid, the full list of species may be choosen from. Make a note of the sublist ID.
+  # Create a survey, and attach it to the Website above. Make a note of its name and ID.
   # Bring up the surveys, and choose the '*setup attributes*' link for the survey created above.
   # Within samples attribute set, create the following blocks: '*Conditions*', '*General*', '*Weather*', '*Species*', '*No Observation*'.
   # Put the '*General*' and '*Weather*' blocks into the '*Conditions*' block.
   # Put the '*No Observation*' block into the '*Species*' block.
-  # Add the following existing attributes, and place them into the '*General*' block: '*Reptile Survey 1*', '*Duration*', '*Suitability Checkbox*', '*Picture Provided*'.
+  # For the Common Wall Lizard Survey, add the following existing attributes, and place them into the '*General*' block: '*Reptile Survey 1*', '*Duration*', '*Suitability Checkbox*', '*Picture Provided*'.
+  # For the Smooth Snake and Sand Lizard Surveys, add the following existing attributes, and place them into the '*General*' block: '*Reptile Survey 2*', '*Duration*', '*Suitability Checkbox*', '*Picture Provided*'.
   # Add the following existing attributes, and place them into the '*Weather*' block: '*Temperature (Celcius)*', '*Cloud Cover*', '*Rain Checkbox*'.
   # Add the following existing attribute, and place it into the '*No Observation*' block: '*No observation*'.
   # Add the following existing attributes, but leave them outside the blocks: '*CMS User ID*', '*CMS Username*', '*Email*'.
   # Save the layout.
   # Within the occurrences attribute set, add the following existing attributes, but leave them outside the blocks: '*Count*', '*Occurrence Reliability*', '*Counting*', '*Reptile Occurrence Type*', '*Reptile Occurrence Stage*', '*Reptile Occurrence Sex*', '*Reptile Occurrence Behaviour*'.
   # Save the layout.
-  # Prepare and upload species list
-  # Create a sub list for this, and copy down the taxon for "Podarcis muralis".
-  # Make a note of the list IDs for both the main list and the sublist.
 
 = Drupal =
   # Create a new IForm Content Node. Fill in the details as follows then save it.
@@ -101,9 +110,8 @@ Prerequisites: the Attributes for the MNHNL butterflies and MNHNL bats forms sho
   * Form structure: Change the assigned values for the following 3 lines to
 `@`attrRestrictions=*`<typeID>`*:*`<stageID>`*:*`<typeDead>`*,`*`:*`<typeSlough>`*,*`<stageUndet>`*:*`<typeSpec>`*,`*`:*`<typeUndet>`*,*`<stageUndet>`*;*`<stageID>`*:*`<sexID>`*:*`<stageAdult>`*,`*`:*`<stageEgg>`*,*`<sexUndet>`*:*`<stageJuv>`*,*`<sexFem>`*,*`<sexMale>`*,*`<sexUndet>`*:*`<stageUndet>`*,*`<sexUndet>`*;*`<stageID>`*:*`<behaviourID>`*:*`<stageAdult>`*,`*`:*`<stageEgg>`*,*`<behavUndet>`*:*`<stageJuv>`*,*`<behavBask>`*,*`<behavFeed>`*,*`<behavFight>`*,*`<behavHunt>`*,*`<behavInact>`*,*`<behavLeth>`*,*`<behavRest>`*,*`<behavSwim>`*,*`<behavUndet>`*:*`<stageUndet>`*,`*`<br />
 `@`ParentLocationTypeID=*`<X>`*<br />
-`@`LocationTypeID=*`<Y>`*<br />
-Where *`<X>`* is the term id for '*Lux5KSquare*' noted above, *`<Y>`* is the term id for '*LizardLocation*' noted above,
-and the entries in the *`@`attrRestrictions* line are as found above. Note that the exact puctuation is very important, as are the different terms for 'Undetermined'.<br />
+`@`LocationTypeID=*`<Y>`*<br /> 
+Where *`<X>`* is the term id for '*Lux5KSquare*' noted above, *`<Y>`* is the term id for '*LizardLocation*' noted above (_TBC Different terms for different surveys?_), and the entries in the *`@`attrRestrictions* line are as found above. Note that the exact puctuation is very important, as are the different terms for 'Undetermined'.<br />
   * Attribute Termlist Language Filter: checked.
   * Skip initial grid of Data: unchecked.
   * Grid Report: leave as 'reports_for_prebuilt_forms/MNHNL/mnhnl_reptiles'.
