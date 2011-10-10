@@ -86,7 +86,7 @@ function iform_node_info() {
  */
 function iform_menu_link_alter(&$item, $menu) {
   // look for pattern node/%.
-  preg_match('/^node\/(?<nid>\d+)/', $item['link_path'], $matches);
+  preg_match('/^node\/(?P<nid>\d+)/', $item['link_path'], $matches);
   if (count($matches)) {
     // is the found nid an iform?
     $node = node_load($matches['nid']);
@@ -103,7 +103,7 @@ function iform_menu_link_alter(&$item, $menu) {
 function iform_translated_menu_link_alter(&$item, $map) {
   //$item['access'] = FALSE;
   // look for pattern node/%.
-  preg_match('/^node\/(?<nid>\d+)/', $item['link_path'], $matches);
+  preg_match('/^node\/(?P<nid>\d+)/', $item['link_path'], $matches);
   if (count($matches)) {
     $node = node_load($matches['nid']);
     $item['access'] = node_access('view', $node);
