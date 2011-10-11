@@ -587,7 +587,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
               drupal_set_message(t('Information saved to the database'));
             }
             $params = 'table='.$response['outer_table'].'&id='.$response['outer_id'];
-            if (count($url)>0) 
+            if (count($url)>1) 
               $params .= '&' . $url[1];
             drupal_goto($url[0], $params);
           } elseif (!isset($args['message_after_save']) || $args['message_after_save']) {
@@ -608,6 +608,7 @@ $('.ui-state-default').live('mouseout', function() {
 });\n";
     _iform_apply_variables_to_args($args);
     // Now retrieve the form content
+    
     try {
       $r .= call_user_func(array('iform_'.$node->iform, 'get_form'), $args, $node, $response);
     } catch (Exception $e) {
