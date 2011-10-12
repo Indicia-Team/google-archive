@@ -124,7 +124,14 @@ function iform_ajaxproxy_proxy() {
         $Model = data_entry_helper::wrap_with_attrs($_POST, 'sample');
         break;
     case "location":
-        $Model = data_entry_helper::wrap_with_attrs($_POST, 'location');
+        $structure = array(
+          'model' => 'location'
+        );
+        // Only include website if in post data
+        if (array_key_exists('locations_website:website_id', $_POST)){
+          $structure['subModels']['locations_website'] = array('fk' => 'location_id');
+        }
+        $Model = data_entry_helper::build_submission($_POST, $structure);
         break;
     case "loc-sample":
         $structure = array(
@@ -230,17 +237,17 @@ function iform_ajaxproxy_proxy() {
         return;
     case "occurrence":
         $structure = array('model' => 'occurrence');
-      // Only include determination or comment record if determination in post
-      foreach($_POST as $key=>$value){
-        if(substr($key,0,14) == 'determination:'){
-          $structure['subModels'] = array('determination' => array('fk' => 'occurrence_id'));
-          break;
-        } elseif (substr($key,0,19) == 'occurrence_comment:'){
-          $structure['subModels'] = array('occurrence_comment' => array('fk' => 'occurrence_id'));
-          break;
+        // Only include determination or comment record if determination in post
+        foreach($_POST as $key=>$value){
+          if(substr($key,0,14) == 'determination:'){
+            $structure['subModels'] = array('determination' => array('fk' => 'occurrence_id'));
+            break;
+          } elseif (substr($key,0,19) == 'occurrence_comment:'){
+            $structure['subModels'] = array('occurrence_comment' => array('fk' => 'occurrence_id'));
+            break;
+          }
         }
-      }
-      $Model = data_entry_helper::build_submission($_POST, $structure);
+        $Model = data_entry_helper::build_submission($_POST, $structure);
       break;
     case "occ-comment":
         $Model = data_entry_helper::wrap($_POST, 'occurrence_comment');
