@@ -35,8 +35,8 @@ function iform_proxy_menu(){
      'type' => MENU_CALLBACK,
   );
   $items['admin/settings/iform_proxy'] = array(
-    'title' => 'IForm Proxy',
-    'description' => 'Main settings for IForm Proxy.',
+    'title' => 'Indicia Proxy',
+    'description' => 'Main settings for Indicia Proxy.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('iform_proxy_admin_settings'),
     'access arguments' => array('IForm Proxy admin'),
@@ -61,19 +61,19 @@ function iform_proxy_admin_settings() {
   // Define Form
   $form['iform_proxy_username'] = array(
     '#type' => 'textfield',
-    '#title' => t('IForm Proxy Service Account Username'),
+    '#title' => t('Indicia Proxy Service Account Username'),
     '#description' => t('Username that will be attached to all requests made to a proxied server.'),
     '#default_value' => variable_get('iform_proxy_username', '')
   );
   $form['iform_proxy_password'] = array(
     '#type' => 'textfield',
-    '#title' => t('IForm Proxy Service Account Password'),
+    '#title' => t('Indicia Proxy Service Account Password'),
     '#description' => t('Password that will be attached to all requests made to a proxied server.'),
     '#default_value' => variable_get('iform_proxy_password', '')
   );
   $form['iform_proxy_path'] = array(
     '#type' => 'textfield',
-    '#title' => t('IForm Proxy Path'),
+    '#title' => t('Indicia Proxy Path'),
     '#description' => t('Drupal path, excluding the site URL and ?q=, to the proxy location. The proxy can then be called at '.
       '/?q=&lt;path&gt;&amp;url=&lt;url&gt; where &lt;url&gt; is the destination server URL.'),
     '#default_value' => variable_get('iform_proxy_path', 'proxy')
