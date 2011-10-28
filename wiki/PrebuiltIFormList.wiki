@@ -38,6 +38,7 @@ These are a set of forms produced for specific requirements of the MNHN in Luxem
 ||mnhnl_bats.php||||||
 ||mnhnl_bird_transect_walks.php||||||
 ||mnhnl_butterflies.php||||||
+|| mnhnl_butterflies2.php || Advanced form (inherites from MNHNL Dynamic 1) which is used for recording Butterflies (Papillon de Jours) occurrences. Has ability to generate new survey polygonal sites, within parent 5km grid squares, and allows tool for modifying them. Also includes data extraction reports. Custom Species grid allows a count to be added for multiple sites per taxon. || [TutorialMNHNLButterflies2 Creating a survey using the MNHNL Butterflies2 form] ||
 
 ==Report Grid==
 || File || report_grid.php ||
