@@ -1,0 +1,4 @@
+name=Species account importer
+description="Import species accounts from text copied from PDF atlases"
+package="BWARS"
+core=6.x
