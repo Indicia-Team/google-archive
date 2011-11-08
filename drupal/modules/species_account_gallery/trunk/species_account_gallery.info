@@ -1,0 +1,5 @@
+name=Species account gallery
+description="A gallery browser for species accounts"
+package="BWARS"
+dependencies[] = "highslide"
+core=6.x
