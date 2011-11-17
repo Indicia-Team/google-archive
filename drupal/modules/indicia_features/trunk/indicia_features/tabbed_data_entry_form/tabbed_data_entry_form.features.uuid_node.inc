@@ -37,8 +37,7 @@ function tabbed_data_entry_form_uuid_features_default_content() {
     'map_height' => 500,
     'remember_pos' => '1',
     'preset_layers' => array(
-      '0' => 'google_hybrid',
-      '1' => 'bing_hybrid',
+      '0' => 'google_hybrid',      
     ),
     'wms_base_title' => '',
     'wms_base_url' => '',
