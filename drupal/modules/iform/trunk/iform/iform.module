@@ -729,20 +729,8 @@ function handle_resources() {
     }
   }
   data_entry_helper::setup_jquery_validation_js();
-  $script = "if (typeof indiciaData==='undefined') { indiciaData = {}; }\n";
-  $script .= "indiciaData.windowLoaded=false;\n";
-  if (!empty(data_entry_helper::$javascript) || !empty(data_entry_helper::$late_javascript)) {
-    $script .= "jQuery(document).ready(function() {\n".
-      data_entry_helper::$javascript."\n".
-      data_entry_helper::$late_javascript."\n".
-      "});\n";
-  }
-  $script .= "window.onload = function() {\n";
-  if (!empty(data_entry_helper::$onload_javascript))
-    $script .= data_entry_helper::$onload_javascript."\n";
-  $script .= "indiciaData.windowLoaded=true;\n};\n";
-  drupal_add_js($script, 'inline');
-  // clear the scripts incase we load 2 iform nodes onto 1 page.
+  drupal_add_js(data_entry_helper::get_scripts(data_entry_helper::$javascript, data_entry_helper::$late_javascript, data_entry_helper::$onload_javascript), 'inline');
+  // in case there are 2 iforms on one page
   data_entry_helper::$javascript = '';
   data_entry_helper::$late_javascript = '';
   data_entry_helper::$onload_javascript = '';
