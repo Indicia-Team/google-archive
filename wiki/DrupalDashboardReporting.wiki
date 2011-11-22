@@ -32,7 +32,7 @@ In the Form Selection box a little further down the screen, enter the website ID
 
 [http://indicia.googlecode.com/svn/wiki/drupal_select_report_form.png]
 
-Expand the Report Settings section of the form which displays the main controls available for configuration of the report. Enter map_occurrences_for_survey into the *Report Name* control as this is a demonstration report that shows the map as well as grid report output capability of Indicia.
+Expand the Report Settings section of the form which displays the main controls available for configuration of the report. In the *Report Name* control, select *Library > Occurrences > Occurrence list for boundary* as this is a report that shows the map as well as grid report output capability of Indicia.
 
 Change the *Output Mode* option to “Parameters form only – the output will be displayed elsewhere.” since we are just building the node for the parameters form at present and don’t want the output grid on this node. Another option to consider is the *Download Link* - as this is just a parameters form the link is not relevant so it is best to turn it off by unchecking the box. There are quite a few other options in the report configuration form which can be ignored for now. However you may like to disable Drupal commenting in the section near the bottom, then save the node using the button at the bottom of the page.
 
@@ -44,7 +44,7 @@ You should now have a form which looks like the following – not very impressiv
 
 Next we need to build a node to output the map of this report’s output. The steps are the same as for creating the parameters input form node but set the page title to Dashboard map and choose Report Map instead of Report Grid in the Select Form drop down.
 
-Under Report Settings, set the Report Name parameter to map_occurrences_for_survey as before. This time, set the *Output Mode* to “Output only – the params form will be output elsewhere”. In the *Report Map Settings* section You can also set the *Include Layer Picker* option to “Include the layer picker after the map”, though this is of course optional. 
+Under Report Settings, set the Report Name parameter to *Library > Occurrences > Occurrence list for boundary* as before. This time, set the *Output Mode* to “Output only – the params form will be output elsewhere”. In the *Report Map Settings* section You can also set the *Include Layer Picker* option to “Include the layer picker after the map”, though this is of course optional. 
 
 Now, collapse the *Report Settings* section by clicking on the title and expand *Initial Map View*. This section lets you set up the map itself. You can set the settings in this section how you like, but for now here are some defaults to start with:
 
@@ -102,7 +102,7 @@ If you are finding that the performance of your report_map is not as good as you
 
 ===Adding a report grid to your dashboard===
 
-Assuming you would like to output a grid of the report data as well as a map, you can follow the [PrebuiltFormReportGrid Report Grid tutorial] to create a page which shows a grid of the map_occurrences_for_survey report. Remember that you can actually output the results of any report you like as long as it shares the same set of input parameters as the report chosen for map output - otherwise it cannot be driven from the same parameters form. Once you have created the page for this report, change the *Output Mode* to *Output only* so that the page excludes the parameters input form. 
+Assuming you would like to output a grid of the report data as well as a map, you can follow the [PrebuiltFormReportGrid Report Grid tutorial] to create a page which shows a grid of the *Library > Occurrences > Occurrence list for boundary* report. Remember that you can actually output the results of any report you like as long as it shares the same set of input parameters as the report chosen for map output - otherwise it cannot be driven from the same parameters form. Once you have created the page for this report, change the *Output Mode* to *Output only* so that the page excludes the parameters input form. 
 
 Now you need to add the grid output to your dashboard page. On the administration menu of Drupal, browse to _Administer > Site Building > Pages_  and select the edit link to the right of your dashboard demo page. A shortcut to this is to select the *Edit Panel* link at the top of your dashboard page. In the menu to the left of the panel designer select the *Content* option (it will already be selected if you used the Edit Panel link). Click the gears icon in the top left corner of the Report Output region and select *Add content* from the popup menu. This time, choose the *Existing node* option but type in the title of the report grid page you just created. As before check the *Override title* checkbox and uncheck the *Include node links...* checkbox, then click Finish to close the popup and finally click *Update and Save* to save the updated panel layout. Load up your dashboard page (it should be in the primary links menu) and try the report out to check it works. You should find a grid of data loads below the map.
 
