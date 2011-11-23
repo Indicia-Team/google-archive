@@ -143,7 +143,7 @@ function theme_nbn_map_taxon_formatter_output($element, $preset) {
     $image_name = "$tvk-".$preset['presetid'].'.jpg';
     $image_path = $base_path."/".$image_name;
   }
-  if ($preset['settings']['caching'] && $cache = cache_get("nbn_map:$tvk") && file_exists($image_path)) {
+  if ($preset['settings']['caching'] && ($cache = cache_get("nbn_map:$tvk")) && file_exists($image_path)) {
     // everything we need is in the cache and images folder
     return theme('nbn_map_output', base_path().$image_path, $cache->data, $preset);
   }
