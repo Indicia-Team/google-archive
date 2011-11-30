@@ -1,7 +1,7 @@
 <?php
 // $Id$
 
-function sag_species_gallery($tid=false) {
+function sag_species_gallery($tid=false, $hide=false) {
   $vid = sag_get_vid();
   $load_on_demand = variable_get('sag_load_on_demand', false);
   if (!$vid) {
@@ -18,9 +18,10 @@ function sag_species_gallery($tid=false) {
   if (variable_get('sag_load_mode', 'full')==='ajax') {
     // add JS for tree loading on the fly
     drupal_add_js(drupal_get_path('module', 'species_account_gallery').'/ajaxTree.js');
+    drupal_add_js(array('galleryAjaxPath'=>url('species_gallery/ajax')), 'setting');
   }
   drupal_add_css(drupal_get_path('module', 'species_account_gallery').'/stylesheets/species-account-gallery.css');
-  return theme('gallery_tree', gallery_tree($tree));
+  return theme('gallery_tree', gallery_tree($tree), $hide);
 }
 
 function taxonomy_get_nested_tree($terms = array(), $max_depth = NULL, $parent = 0, $parents_index = array(), $depth = 0) {
@@ -39,8 +40,11 @@ function taxonomy_get_nested_tree($terms = array(), $max_depth = NULL, $parent =
     }
   }
   foreach($return as &$term) {
-    if (isset($parents_index[$term->tid]) && (is_null($max_depth) || $depth < $max_depth)) {
-      $term->children = taxonomy_get_nested_tree($parents_index[$term->tid], $max_depth, $term->tid, $parents_index, $depth + 1);
+    if (isset($parents_index[$term->tid])) {
+      $children = taxonomy_get_nested_tree($parents_index[$term->tid], $max_depth, $term->tid, $parents_index, $depth + 1);
+      if (is_null($max_depth) || $depth < $max_depth)
+        $term->children = $children;
+      $term->has_children = count($children)>0;
     }
   }
   return $return;
@@ -50,7 +54,7 @@ function sag_tree_ajax() {
   if (!isset($_GET['tid'])) {
     echo 'Error: no term ID provided';
   } else {
-    echo sag_species_gallery($_GET['tid']);
+    echo sag_species_gallery($_GET['tid'], true);
   }
     
 }
