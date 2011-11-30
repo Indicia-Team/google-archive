@@ -19,15 +19,15 @@ Finally there is the team of people who provide the core services required by an
 
 == What is Indicia? ==
 
-Firstly, what it is not. Indicia is not an off the shelf solution for online recording. Rather, it is a toolkit that makes the development of online recording websites simpler. A bit like Google Maps, in that there is a programmer’s interface which makes it simple to drop rich mapping functionality into your website, Indicia provides a set of services, tools and examples that can be dropped into a website to provide rich online recording functionality. Of course there will be example sites developed using Indicia which can be used to build new sites, but Indicia ultimately gives website designers the power to do what they want, just quicker and more reliably than if they started from scratch.
+Firstly, what it is not. Indicia is not an off the shelf solution for online recording. Rather, it is a toolkit that makes the development of online recording websites simpler. A bit like Google Maps, in that there is a programmer’s interface which makes it simple to drop rich mapping functionality into your website, Indicia provides a set of services, tools and examples that can be added to almost any website to provide rich online recording functionality. Or if you are starting from scratch we provide Instant Indicia which gives you a ready to configure website installation which can be set up without any coding. Of course there will be example sites developed using Indicia which can be used to build new sites, but Indicia ultimately gives website designers the power to do what they want, just quicker and more reliably than if they started from scratch.
 
 You can consider Indicia as coming in two parts; a user interface and a data store. 
   * The data store, known as the Indicia Warehouse, can support many surveys on many websites. You can host your own Warehouse or use one provided by another organisation, such as the [http://www.brc.ac.uk/ Biological Records Centre].
-  * The user interface is built in to a website and sends records to the Warehouse. Tools are provided to make this as easy as pasting a few lines of PHP in to a web page.
+  * The user interface is built in to a website and sends records to the Warehouse. Tools are provided to make this as easy as pasting a few lines of PHP in to a web page or configuring a content management system.
 
 == Who is developing Indicia? ==
 
-In its initial phase, Indicia’s development is being led by Biodiverse IT, is funded by the [http://www.OPALexplorenature.org OPAL] Network and managed by the [http://www.ceh.ac.uk/ Centre for Ecology and Hydrology] (CEH). The project is open source, which means you can have the code for free, and it has a high level of community involvement.
+Indicia’s development is being led by Biodiverse IT, is funded by the [http://www.OPALexplorenature.org OPAL] Network and managed by the [http://www.ceh.ac.uk/ Centre for Ecology and Hydrology] (CEH). The project is open source, which means you can have the code for free, and it has a high level of community involvement.
 
 == Is Indicia ready to use? ==
 
