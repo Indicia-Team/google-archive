@@ -43,11 +43,15 @@ ul.species-gallery-list li.species-gallery-image {
   margin: 0 8px 8px 8px;
   padding: 0;
 }
-/* line 7, ../../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+/* line 7, ../../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
 ul.species-gallery-list li.species-gallery-image {
   *display: inline;
 }
-/* line 38, ../sass/species-account-gallery.scss */
+/* line 37, ../sass/species-account-gallery.scss */
+ul.species-gallery-list li.species-gallery-image img {
+  border: solid 2px #777777;
+}
+/* line 41, ../sass/species-account-gallery.scss */
 ul.species-gallery-list li.leaf {
   border: solid silver 1px;
   -moz-box-shadow: 0px 0px 5px #333333;
