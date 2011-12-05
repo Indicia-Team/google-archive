@@ -378,7 +378,7 @@ function iform_menu() {
   // it's own AJAX handlers.
   $items['iform/ajax'] = array(
     'page callback'=>'iform_ajax_callback',
-    'access arguments' => array(),
+    'access arguments' => array('access iform'),
     'type' => MENU_CALLBACK
   );
   return $items;
