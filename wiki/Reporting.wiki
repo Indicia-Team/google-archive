@@ -151,6 +151,8 @@ Columns are used to give further specification to how particular fields should b
   * `visible` can be set to false to hide a column, or to force a vague date column to appear that is being replaced by a standard date column.
   * `img` can be set to true for a field that contains the filename of an image uploaded to the Warehouse. This will then be replaced by a thumbnail of the image, with support for FancyBox image popups to show the full image size.
   * `mappable` can be set to true to declare a column which can then be output using the report_helper::report_map method available from Indicia version 0.6. The column must output a WKT definition of the geometry to be mapped, e.g. the column definition in the SQL might be `st_astext(geom)`.
+  * `aggregate` is described in the section *Declaring SQL for each column* below.
+  * `distincton` is described in the section *Declaring SQL for each column* below.
   * `feature_style` can be used when there is a mappable column on the report, to define a column which provides the value for one of the map styling parameters supported in OpenLayers. Supported options include _strokeColor_ (a CSS colour specification, e.g. '#00FF00'), _strokeOpacity_ (a number from 0 to 1), _strokeWidth_ (number of pixels wide to draw the perimeter line), _strokeDashStyle_ (dot, dash, dashdot, longdash, longdashdot or solid), _fillColor_ (as strokeColor), _fillOpacity_ (as strokeOpacity). For example, a report could vary the opacity of output grid references on the map according to size by including this column in the SQL:
 {{{
 length(s.entered_sref) / 24.0 as fillopacity,
@@ -242,6 +244,57 @@ By default report files only support a very simple paginator in the grid with ne
 </report>
 }}}
 
+== Declaring SQL for each column ==
+
+There are certain limitations to what the Indicia reporting engine can do with the columns SQL all defined in a single block, either in the query or using the `<field_sql>` element. For example, any query with aggregate functions in it cannot return an accurate record count for the grid paginator. Consider the following query:
+
+{{{
+select l.id, l.name, count(s.id) as sample_count
+from locations l
+join samples s on s.location_id=l.id
+group by l.id, l.name
+}}}
+
+This returns a list of locations with their sample counts. If we use the `<field_sql>` approach, then Indicia will run a `select count(*)` query to get the count of records for the paginator, since this will return the count of sample records not the count of locations. To get round these restrictions, you can define the SQL for each field in the `<column>` definition using an attribute called `sql` then specify a replacement in the SQL statement #columns#. You don’t need to define each field’s alias as the column name will be used for that (since they must be the same). You can also define attributes `aggregate` (set to true for columns that define an aggregate function so they can be skipped in the count query) and `distincton` (set to true for any columns that you don’t want to duplicate ever). To illustrate these points, here is the SQL and column list for the above query:
+
+{{{
+<sql>
+select #columns#
+from locations l
+join samples s on s.location_id=l.id
+group by l.id, l.name
+</sql>
+<columns>
+<column name="id" sql="l.id" />
+<column name="name" sql="l.name " />
+<column name="sample_count" sql="count(s.id)" aggregate="true" />
+</columns>
+}}}
+
+By marking the aggregate column, then Indicia is able to correctly count the distinct non-aggregate values enabling the pager for a report grid to know the correct number of pages. To illustrate the use of `distincton`, consider writing a query which returns a list of locations plus a sample date, where you don’t actually care which sample date is returned (you just want to know that it has been sampled). Here's the query to do this:
+
+{{{
+select distinct on (l.id) l.id, l.name, s.date_start
+from locations l
+join samples s on s.location_id=l.id
+}}}
+
+Here's how you could represent that in report XML:
+
+{{{
+<sql>
+select #columns#
+from locations l
+join samples s on s.location_id=l.id
+</sql>
+<columns>
+<column name="id" sql="l.id" distincton="true" />
+<column name="name" sql="l.name " />
+<column name="date" sql="s.date_start" />
+</columns>
+}}}
+
+Note that the distincton support was added for Indicia 0.8 and is not available in earlier versions.
 
 == Reporting Engine Configuration ==
 
