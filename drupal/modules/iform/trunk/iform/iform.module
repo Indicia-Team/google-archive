@@ -39,7 +39,7 @@ function iform_perm() {
   while($result = db_fetch_object($results)) {
     if ($result->iform) {
       iform_load_helpers(array('data_entry_helper'));
-      require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/' . $result->iform . '.php';
+      require_once iform_client_helpers_path() . 'prebuilt_forms/' . $result->iform . '.php';
       if(method_exists('iform_'.$result->iform, 'get_perms')) {
         $perms = call_user_func(array('iform_'.$result->iform, 'get_perms'), $result->nid);
         $retVal = array_merge($retVal, $perms);
@@ -397,7 +397,7 @@ function iform_ajax_callback($form=null, $method=null) {
   }
   $class = "iform_$form";
   $method = "ajax_$method";
-  require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/' . $form . '.php';
+  require_once iform_client_helpers_path() . 'prebuilt_forms/' . $form . '.php';
   call_user_func(array($class, $method), variable_get('indicia_website_id',''), variable_get('indicia_password',''));
 }
 
@@ -496,7 +496,7 @@ function iform_get_connection_details($node) {
 function iform_settings() {
   module_load_include('inc', 'iform', 'iform.admin');
   $form = drupal_get_form('iform_configuration_form');
-  require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/data_entry_helper.php';
+  require_once iform_client_helpers_path() . 'data_entry_helper.php';
   handle_resources();
   return $form;
 }
@@ -530,17 +530,17 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
   if ($node->iform && $node->iform!=-1) {
     iform_load_language_files($node);
     $args = array('language' => $language->language);
-    require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/' . $node->iform . '.php';
+    require_once iform_client_helpers_path() . 'prebuilt_forms/' . $node->iform . '.php';
     ob_start();
     // also force the theme path to be local
     global $indicia_theme_path;
-    $indicia_theme_path = drupal_get_path('module', 'iform').'/media/themes/';
+    $indicia_theme_path = iform_media_folder_path().'themes/';
     // if there is a template override file, include it
-    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/'.$node->iform.'.php')) {
-      require './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/templates/' . $node->iform . '.php';
+    if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/templates/' . $node->iform . '.php')) {
+      require iform_client_helpers_path() . 'prebuilt_forms/templates/' . $node->iform . '.php';
     }
-    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/templates/node.'.$node->nid.'.php')) {
-      require './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/templates/node.' . $node->nid . '.php';
+    if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/templates/' . $node->iform . '.php')) {
+      require iform_client_helpers_path() . 'prebuilt_forms/templates/node.' . $node->nid . '.php';
     }
     $connection = iform_get_connection_details($node);
     $args['website_id']=$connection['website_id'];
@@ -570,8 +570,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       // if for some reason the iform gives back an empty submission, ignore it
       if ($s){
         // does this Drupal node have any custom validation code?
-        if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/validation/validate.'.$node->nid.'.php')) {
-          require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/prebuilt_forms/validation/validate.' . $node->nid . '.php';
+        if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/validation/validate.' . $node->nid . '.php')) {
+          require_once iform_client_helpers_path() . 'prebuilt_forms/validation/validate.' . $node->nid . '.php';
           $errors = iform_custom_validation($_POST);
           if (!empty($errors)) {
             $r .= data_entry_helper::dump_errors(array('errors'=>$errors));
@@ -627,18 +627,18 @@ $('.ui-state-default').live('mouseout', function() {
     handle_resources();
 
     // Link in the default site css
-    drupal_add_css(drupal_get_path('module', 'iform').'/media/css/default_site.css');
+    drupal_add_css(iform_media_folder_path().'css/default_site.css');
 
     // Link in the custom css file if present. Drupal skips it if missing.
-    drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/'.$node->iform.'.css');
-    drupal_add_css(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/css/node.'.$node->nid.'.css');
+    drupal_add_css(iform_client_helpers_path() . '/prebuilt_forms/css/'.$node->iform.'.css');
+    drupal_add_css(iform_client_helpers_path() . 'prebuilt_forms/css/node.'.$node->nid.'.css');
 
     // Link in the form's custom js file if present.
-    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/'.$node->iform.'.js'))
-      drupal_add_js(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/'.$node->iform.'.js');
+    if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/js/'.$node->iform.'.js'))
+      drupal_add_js(iform_client_helpers_path() . 'prebuilt_forms/js/'.$node->iform.'.js');
     // Link in the specific node's custom js file if present.
-    if (file_exists(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/node.'.$node->nid.'.js'))
-      drupal_add_js(drupal_get_path('module', 'iform').'/client_helpers/prebuilt_forms/js/node.'.$node->nid.'.js');
+    if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/js/node.'.$node->nid.'.js'))
+      drupal_add_js(iform_client_helpers_path() . 'prebuilt_forms/js/node.'.$node->nid.'.js');
 
     ob_end_clean();
     $node->content['myfield']=array(
@@ -695,7 +695,7 @@ function iform_check_needs_review($node) {
 }
 
 function handle_resources() {
-  require_once './' . drupal_get_path('module', 'iform') . '/client_helpers/data_entry_helper.php';
+  require_once iform_client_helpers_path() . 'data_entry_helper.php';
   if (isset(data_entry_helper::$required_resources)) {
     $resourceList = data_entry_helper::get_resources();
     foreach (data_entry_helper::$required_resources as $resource)
@@ -788,7 +788,7 @@ function iform_diagnostics() {
  */
 function iform_load_language_files($node) {
   global $language, $custom_terms, $custom_term_overrides;
-  $moduleLangFilePath = drupal_get_path('module', 'iform')."/client_helpers/prebuilt_forms/lang/";
+  $moduleLangFilePath = iform_client_helpers_path() . "prebuilt_forms/lang/";
   $siteSpecificLangFilePath = file_create_path("iform/client_helpers/prebuilt_forms/lang/");
   $formLangFileName = $node->iform.'.'.$language->language.'.php';
   $nodeLangFileName = 'node.'.$node->nid.'.'.$language->language.'.php';
@@ -830,7 +830,7 @@ function iform_load_language_files($node) {
  * @param array $files List of helper class names to load.
  */
 function iform_load_helpers(array $files) {
-  $path = './' . drupal_get_path('module', 'iform') . '/client_helpers';
+  $path = iform_client_helpers_path();
   // we always need the helper_config file
   if (!class_exists('helper_config')) {
     require_once "$path/helper_config.php";
@@ -855,8 +855,9 @@ function iform_load_helpers(array $files) {
   foreach ($files as $file)
     require_once "$path/$file.php";
   // ensure css and js is loaded locally
-  helper_base::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
-  helper_base::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
+  helper_base::$js_path = base_path() . iform_media_folder_path().'js/';
+  helper_base::$css_path = base_path() . iform_media_folder_path().'css/';
+  helper_base::$images_path = base_path() . iform_media_folder_path().'css/';
 }
 
 /**
@@ -891,7 +892,7 @@ function iform_uuid_node_features_export_render_alter(&$export, $node, $module) 
   // also remove any params that are specific to the site, so that changing them does not mark it as overridden.
   if (isset($node->iform)) {
     $form = $node->iform;
-    require_once './' . drupal_get_path('module', 'iform') . "/client_helpers/prebuilt_forms/$form.php";
+    require_once iform_client_helpers_path() . "prebuilt_forms/$form.php";
     $params = call_user_func(array('iform_'.$form, 'get_parameters'));
     foreach ($params as $param) {
       if (isset($param['siteSpecific']) && $param['siteSpecific']) 
@@ -900,5 +901,40 @@ function iform_uuid_node_features_export_render_alter(&$export, $node, $module) 
     // also remove the warehouse login settings
     unset($export->params['website_id']);
     unset($export->params['password']);
+  }
+}
+
+/**
+ * Method to find the media folder - either in the module or library path.
+ */
+function iform_media_folder_path() {
+  // avoid multiple is_dir calls
+  global $iform_media_folder_path;
+  if (isset($iform_media_folder_path))
+    return $iform_media_folder_path;
+  else {
+    $r = drupal_get_path('module', 'iform').'/media/';
+    if (!is_dir('media/'))
+      $r = str_replace('modules', 'libraries', $r);      
+    $iform_media_folder_path = $r;
+    return $r;
+  }
+}
+
+/**
+ * Method to find the client helpers folder - either in the module or library path.
+ */
+function iform_client_helpers_path() {
+  // avoid multiple is_dir calls
+  global $iform_client_helpers_path;
+  if (isset($iform_client_helpers_path))
+    return $iform_client_helpers_path;
+  else {
+    $path = './' . drupal_get_path('module', 'iform') . '/client_helpers/';
+    // if not in subfolder of the module, then it has been moved to libraries
+    if (!is_dir($path))
+      $path = str_replace('/modules/','/libraries/',$path);
+    $iform_client_helpers_path = $path;
+    return $path;
   }
 }
