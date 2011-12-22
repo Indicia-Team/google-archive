@@ -20,9 +20,9 @@ ALTER TABLE indicia.list_languages OWNER TO indicia_user;
 
 Create a new text file and paste the SQL into it. Then make the following modifications. First remove all references to the schema (e.g. indicia.) since it will run in the context of the current schema so this is unnecessary, and the schema name may not be indicia anyway. Second, remove any statements which assign the ownership of the objects. Again, the statements will run in the context of the indicia user so they will be owned by the indicia user without you needing to explicitly set ownership. So, our example SQL becomes:
 {{{
--- View: indicia.list_languages
+-- View: list_languages
 
--- DROP VIEW indicia.list_languages;
+-- DROP VIEW list_languages;
 
 CREATE OR REPLACE VIEW list_languages AS 
  SELECT l.id, l.language, l.iso, NULL::integer AS website_id
@@ -45,8 +45,8 @@ Don’t forget to include checks for deleted on any joined tables as well.
 
 If you are creating new tables or adding columns, please ensure to provide documentation for the objects using the PostgreSQL comment facility. An example is:
 {{{
-COMMENT ON TABLE indicia.control_types IS 'List of user interface control types available, which can be associated with custom attributes in a survey.';
-COMMENT ON COLUMN indicia.control_types.control IS 'Type of user interface control';
+COMMENT ON TABLE control_types IS 'List of user interface control types available, which can be associated with custom attributes in a survey.';
+COMMENT ON COLUMN control_types.control IS 'Type of user interface control';
 }}}
 
 Now, save the SQL statement file. If the update is for the Indicia core, then save it to modules/indicia_setup/db/version_x_x_x where x_x_x is the next version of Indicia that this script will be included in. If the update is for a specific module which extends the database schema, then the equivalent folder is found by replacing indicia_setup with the module name and using the version of the _module_ you are planning to release the script in. The filename should be of the form yyyymmddhhmm_script_name.sql, so that the scripts are sorted and run in date order with the script name explaining our change. Given the earlier example, we might end up with a file called modules/indicia_setup/db/version_0_7_0/201104281720_list_languages_view.sql.
@@ -54,3 +54,15 @@ Now, save the SQL statement file. If the update is for the Indicia core, then sa
 The next step is to test the file works correctly. To do this, revert any changes you made to the database when preparing the script, then visit the index.php/home/upgrade page to force Indicia’s Warehouse to upgrade. You may need to update the application version in application/config/version.php if you are creating a script for a version that has not yet been created. If this reports that the upgrade was successful then check that your changes have been applied to the database. If not then the Kohana log files should contain full error information.
 
 Once you are happy that the statement works correclty, add it to SVN and commit it with a comment explaining the change.
+
+==Useful tips==
+
+1. If you want to insert a term list and a list of terms to go with it, then there is a handy function called insert_term on the database which creates the term lists_terms and the terms records for you in one go.  To use this, first insert into the termlists table ensuring that you specify an external_key to provide a globally unique identifier for the termlist. For example, all termlists that are owned by Indicia have an external_key set to indicia: followed by the termlist name. Then you can refer to the external key in the calls to the insert_term function. Here's an example:
+{{{
+INSERT INTO termlists (title, description, created_on, created_by_id, updated_on, updated_by_id, external_key)
+VALUES ('Indentification difficulty', 'Lookup list of identification difficulties, used by the verification check rules.', now(), 1, now(), 1, 'indicia:identification_difficulty');
+
+SELECT insert_term('Can be identified at sight in the field.', 'eng', 1, null, 'indicia:identification_difficulty');
+}}}
+
+2. If you are writing a module for the warehouse (in the modules folder under the Indicia installation directory) you can supply database update scripts which will be run when the home/upgrade page is visited after installing the module. This makes it possible to do things like create custom attribute definitions or any other type of data using installable code. In fact it is also possible to create new database entities along with edit screens and so forth using the module (the taxon_designations module is a good example of this). Simply create a folder called db in your module folder, followed by version_0_1_0 and the subsequent version folders as your module develops.
