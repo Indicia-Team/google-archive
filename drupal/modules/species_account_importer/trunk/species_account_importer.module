@@ -19,7 +19,7 @@ function species_account_importer_menu() {
     'description' => t('Change settings for the species account importer.'),
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('species_account_importer_settings_form'),
-    'access arguments' => array('administer species accounts'),
+    'access arguments' => array('administer species accounts','import species accounts'),
   );
   $items['admin/build/import_species_accounts'] = array(
     'title' => t('Species accounts'),
@@ -27,7 +27,7 @@ function species_account_importer_menu() {
     'description' => t('Import species accounts from text extracted from PDF atlas files.'),
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('import_species_accounts_form'),
-    'access arguments' => array('site editor'),
+    'access arguments' => array('import species accounts'),
     'type' => MENU_NORMAL_ITEM
   );
   $items['admin/build/import_species_accounts/accounts'] = array(
@@ -36,7 +36,7 @@ function species_account_importer_menu() {
     'description' => t('Import species accounts from text extracted from PDF atlas files.'),
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('import_species_accounts_form'),
-    'access arguments' => array('site editor'),
+    'access arguments' => array('import species accounts'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 0
   );
@@ -46,7 +46,7 @@ function species_account_importer_menu() {
     'description' => t('Import species images from uploaded files.'),
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('import_species_images_form'),
-    'access arguments' => array('site editor'),
+    'access arguments' => array('import species accounts'),
     'type' => MENU_LOCAL_TASK,
     'weight' => 1
   );
