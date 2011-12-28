@@ -347,7 +347,7 @@ function iform_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 0
   );
-  // Create a tab to display the diagnostics panel.
+  // Create a tab to display the admin panel.
   $items['admin/settings/iform/admin'] = array(
     'title' => 'IForm Admin Tasks',
     'description' => 'Administration tasks for the IForm module.',
