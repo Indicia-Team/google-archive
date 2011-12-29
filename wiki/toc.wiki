@@ -14,6 +14,7 @@
   * [Installation Installing your own Warehouse]
   * [Upgrading Upgrading a Warehouse to the latest release]
   * [WarehouseImport Importing data into the Warehouse]
+    * [Sync2Indicia Using the Sync2Indicia tool to automate uploads]
   * [WarehouseDataModel A brief introduction to Warehouse data]
   * [WarehouseSurveyDesign Designing a survey]
   * [AlertsInIndicia The alerts and notifications system]
