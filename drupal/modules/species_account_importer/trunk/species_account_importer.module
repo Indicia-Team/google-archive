@@ -19,7 +19,7 @@ function species_account_importer_menu() {
     'description' => t('Change settings for the species account importer.'),
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('species_account_importer_settings_form'),
-    'access arguments' => array('administer species accounts','import species accounts'),
+    'access arguments' => array('import species accounts'),
   );
   $items['admin/build/import_species_accounts'] = array(
     'title' => t('Species accounts'),
