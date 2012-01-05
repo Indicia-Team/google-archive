@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Uninstall method cleans up the variables we may have created.
+ */
+function indicia_quickstart_uninstall() {
+  variable_del('iform_param_certainattr');
+  variable_del('iform_param_maxcertain');
+  variable_del('iform_param_mincertain');
+}

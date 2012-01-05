@@ -23,13 +23,24 @@ function indicia_quickstart_link_alter(&$links, $node){
 
 /** 
  * Implementation of hook_menu.
- * Declares a simple link for my account, otherwise the link is different per user id.
+ * Declares a simple link for my account, otherwise the link is different per user id. Also
+ * declares a standard page for setting up some default settings for reports.
  */
 function indicia_quickstart_menu() {
   $items['my-account'] = array(
     'page callback' => 'my_account',
     'type' => MENU_CALLBACK,
-    'access arguments' => array('post comments'),
+    'access arguments' => array('post comments'), // anyone logged in
+  );
+  $items['admin/settings/iform/reports'] = array(
+    'title' => t('Report settings'),
+    'file' => 'indicia_quickstart.admin.inc',
+    'description' => t('Settings for various Indicia reports.'),
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('indicia_quickstart_report_setttings_form'),
+    'access arguments' => array('create iform'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight'=>10
   );
   return $items;
 }
@@ -40,4 +51,19 @@ function indicia_quickstart_menu() {
 function my_account() {
   global $user;
   drupal_goto('user/'.$user->uid.'/edit');
+}
+
+/**
+ * Generic function that applies our standard report parameter values (from the settings form)
+ * to the report options being sent to any report. Call this method passing in your prepared
+ * report options array.
+ * @param array $reportOptions Prepared report options array which will be changed to add the 
+ * standard report parameter values from the current settings.
+ */
+function indicia_quickstart_set_standard_report_params(&$reportOptions) {
+  if (!array_key_exists('extraParams', $reportOptions))
+    $reportOptions['extraParams']=array();
+  $reportOptions['extraParams']['certainattr']=variable_get('iform_param_certainattr', '');
+  $reportOptions['extraParams']['maxcertain']=variable_get('iform_param_maxcertain', '');
+  $reportOptions['extraParams']['maxlikely']=variable_get('iform_param_maxlikely', '');
 }
