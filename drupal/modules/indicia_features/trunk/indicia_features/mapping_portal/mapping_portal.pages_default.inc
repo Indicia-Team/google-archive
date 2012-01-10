@@ -243,7 +243,7 @@ function mapping_portal_default_page_manager_pages() {
 <fieldset>
 	<legend>Designations Summary</legend> <?php
   echo report_helper::report_grid(array(
-    \'id\'=>\'report-records\',
+    \'id\'=>\'designations\',
     \'readAuth\' => $readAuth,
     \'dataSource\'=>\'library/taxon_designations/species_and_occurrence_counts_for_boundary\',
     \'extraParams\' => array(
