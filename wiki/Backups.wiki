@@ -15,7 +15,10 @@ Step 1, installing plpgsql, can be carried out by starting pgAdmin, selecting th
 
 Step 2, running pgagent.sql can be carried out in the same query window used in step 1 by using File > Open on the script. I found it in C:\Program Files\PostgreSQL\8.3\pgAdmin III\scripts.
 
-Step 3, installing the pgAgent service, is executed at the operating system command prompt. Check the path of your posstgreSQL installation first. Check also for the existance of an operating system user called postgres. Add an extra option on the command line, -l2, (minus el two) to enable some error logging which may come in handy.
+*Update*.
+pgAgent is no longer bundled with pgAdmin and has to be [http://www.postgresql.org/ftp/pgadmin3/release/pgagent/ downloaded] separately. Having unzipped the download I had to put pgagent.exe and pgaevent.dll in to the postgresql bin directory in order for it to find a compatible version of ssleay32.dll.
+
+Step 3, installing the pgAgent service, is executed at the operating system command prompt. Check the path of your postgreSQL installation first. Check also for the existance of an operating system user called postgres. Add an extra option on the command line, -l2, (minus el two) to enable some error logging which may come in handy.
 
 While pg_agent is running as operating system user, postgres, it connects to the database as database user, postgres. That's right two different users, in two different contexts but with the same name. Try not to get confused!
 
@@ -38,7 +41,7 @@ To define this environment variable I went to Start>Run… and entered {{{runas 
 
 == MySql ==
 
-When I wanted to create scheduled backups for MySql I simply made use of what was offered in MySql Administrator. I didn't realise that this was effectively just an interface to Windows Task Scheduler. I complicated matters because I decided I didn't want the task to run as Windows administrator, logging in as root to the database. Instead I created users with limited privileges. The steps I took went as follows.
+When I wanted to create scheduled backups for MySql I made use of what was offered in MySql Administrator. This is effectively just an interface to Windows Task Scheduler. I complicated matters because I decided I didn't want the task to run as Windows administrator, logging in as root to the database. Instead I created users with limited privileges. The steps I took went as follows.
 
 Login to server as administrator
 
