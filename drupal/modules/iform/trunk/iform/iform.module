@@ -830,6 +830,8 @@ function iform_load_language_files($node) {
  * @param array $files List of helper class names to load.
  */
 function iform_load_helpers(array $files) {
+  if (!is_array($files)) 
+    throw new exception('Call to iform_load_helpers must pass an array of helper file names');
   $path = iform_client_helpers_path();
   // we always need the helper_config file
   if (!class_exists('helper_config')) {
@@ -852,6 +854,7 @@ function iform_load_helpers(array $files) {
     helper_config::$flickr_api_key = variable_get('indicia_flickr_api_key',helper_config::$flickr_api_key);
     helper_config::$flickr_api_secret = variable_get('indicia_flickr_api_secret',helper_config::$flickr_api_secret);
   }
+  require_once "$path/helper_base.php";
   foreach ($files as $file)
     require_once "$path/$file.php";
   // ensure css and js is loaded locally

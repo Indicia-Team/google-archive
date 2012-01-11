@@ -5,11 +5,8 @@
  * profile as an install task, and provided on the admin menu.
  */
 function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
-  require_once './' . drupal_get_path('module', iform).'/client_helpers/helper_config.php';
-  require_once './' . drupal_get_path('module', iform).'/client_helpers/map_helper.php';
+  iform_load_helpers(array('map_helper'));
   drupal_add_js(drupal_get_path('module', 'iform').'/iform.admin.js');
-  helper_base::$js_path = base_path() . drupal_get_path('module', 'iform').'/media/js/';
-  helper_base::$css_path = base_path() . drupal_get_path('module', 'iform').'/media/css/';
   global $indicia_warehouses;
   iform_load_warehouse_array();
   foreach($indicia_warehouses as $warehouse=>$def) 
@@ -113,13 +110,14 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
       'width' => '100%',
       'height' => 500,
       'readAuth' => $readAuth,
-      'presetLayers' => array('google_hybrid'), 
+      'presetLayers' => array('osm_th'), 
       'editLayer' => false,
       'layers' => array(),
       'initial_lat'=>variable_get('indicia_map_centroid_lat', 55),
       'initial_long'=>variable_get('indicia_map_centroid_long', -1),
       'initial_zoom'=>variable_get('indicia_map_zoom', 5),
-      'standardControls'=>array('panZoomBar')    
+      'standardControls'=>array('panZoomBar'),
+      'scroll_wheel_zoom'=>'false'
     ))
   );
   $form['map']['indicia_map_centroid_lat'] = array(
@@ -196,6 +194,7 @@ mapInitialisationHooks.push(function(div) {
   });
 });
 ";
+  handle_resources();
   return $form;
 }
 
