@@ -1,0 +1,38 @@
+#summary Some notes and tips on creating general purpose content pages on Drupal Instant Indicia sites.
+
+= Notes on creating content on an InstantIndicia site =
+
+== Creating content ==
+
+If you want to create a general purpose content page on your Instant Indicia site, log in as admin or someone with site editor permissions then select *Content management &gt; Create content* on the menu. You are presented with a list of different types of content, including the default Page and Story content types provided by Drupal. Select the type of page you want to create. Enter a page title, then fill in the content in each of the relevant text boxes - the exact text boxes available depends on the content type you have selected to create. Note that each text box has a toolbar at the top allowing you to perform basic formatting operations, insert hyperlinks and images and so forth.
+
+== Adding it to the menu ==
+
+When you create a normal page in this way, although it will appear on the website, by default there is no way for the user to find the page as it is not on the site menu. To add it to the menu, expand the *Menu settings* section and set the *Menu link title* to the title of the menu item. The *Parent item* control lets you pick the parent of the menu item you are creating, which can be a menu (*<Primary links>* is the name of the main menu across the top of the website), or another menu item. The *Weight *control can be used to position the item in the list, although it can be easier to review the positions of each item when viewing the entire menu rather than an item at a time.
+
+Once you have finished editing, click *Save* to save the page.
+
+== Data input tips ==
+
+If you want to copy and paste content in from a word processor, sometimes the formatting pasted in can be rather messy (particularly if you examine the behind-the-scenes definition of the page content which uses a language called HTML). My own preference is to paste the text into Notepad first to get rid of all the formatting, then copy and paste it into the web page entry boxes. This ensures things like the font set up in your word processor are not applied to the text, since we want the website to use consistent fonts across the whole site. Once the plain text is pasted in, you can use the toolbar above each text box to set bold, italic, bullets, numbered lists, insert links and also to insert images. 
+
+Also you can use the drop down in the left to pick from a list of standard formats to apply to a piece of text, for example you might want to create several sub-headings in the text you could select each sub-heading and apply the Heading 3 format to it (heading 1 is used for the web site title, and heading 2 for the page title).
+
+== Adding images ==
+
+If you want to insert images into the page, it is simpler to pick a page layout which lets you put the image into it's own page area, rather than try to insert it into the text and wrap the text around it. You could include a caption below the image in the same area, or other text before or after the image, but trying to align the image alongside text using Drupal's editors can be fiddly. To insert an image, first resize the image to the size you want it to appear on the page then save the image file on your hard disk. The image should be saved as a jpg file if photgraphic, or a png file if the image is a diagram. Next, use the Image button in the text area's toolbar then click the *Browse Server* button on the dialog that appears. This will display a *File Browser* which lets you browse the already uploaded files. The *Upload* button on this page lets you upload the new image, then select it for insertion into the page using the *Insert file* button. On the image dialog, the *URL *box will now show the path to the file. Before clicking OK to insert the image, you should always fill in the *Alternative Text* box with a piece of text that can be used when the image is not visible as well as the *Width* and *Height* of the image in pixels. The alternative text is an essential accessibility requirement for all images you upload to the site.
+
+== Inserting links ==
+
+If you want to insert a link to another page or website, you first need to identify the address of the page to link to. For example, if this is an external page then the address might be *http://www.myothersite.com/page_to_link_to.htm*. For an internal page on the Instant Indicia website, you need to find the *URL path* to the page and use just this path. This ensures that the website will continue working even if at some point it is moved to a different domain. Using another web-browser tab, visit page you want to link to. There are 2 ways to work out the path. If you can, view the *Edit* page and scroll to the bottom to find the section called *URL path settings*. In this section there is a text box which contains the page's path if it has been set. If you don't have access to the Edit view for this page, or the URL path has not been set, then you can still find the path using the following technique. As an example, if you had a species account page configured on the site you may find that your address looks like one of the following, depending on how your server is set up:
+
+  # http://www.mysite.com/species/andrena-apicata
+  # http://www.mysite.com/index.php?q=species/andrena-apicata
+  # http://www.mysite.com/sitesubfolder/species/andrena-apicata
+  # http://www.mysite.com/sitesubfolder/index.php?q=species/andrena-apicata
+
+In each of these cases, the *domain* is www.mysite.com, and we can also exclude the *http://* part at the front. For example 1, the website's home page runs from http://www.mysite.com and the *path* we want is species/andrena-apicata. For the second example, Drupal is configured to work with addresses that include an extra *index.php?q=* in them - this can also be ignored so the path we want is still species/andrena-apicata. For examples 3 and 4 the difference is that the site is running in a sub-folder called "sitessubfolder" (we can tell this because the home page is available at http://www.mysite.com/sitesubfolder/) so we can also exclude the sub-folder from the path.
+
+Once you have the path, type into a text box the piece of text you want to link to something, then click the *link* icon in the toolbar (it looks like a globe with 2 chainlinks). Simply enter the path you have determined in the *URL* box. If the link is to an internal page, then change the *Protocol* to <other> and click *OK* to save it.
+
+Note that it is good practice to ensure that the text being clicked is reasonably explanatory when read in isolation. For example, a *more info* link would be better called *more info on Andrena apicata* for example. This helps to make the site more accessible.
