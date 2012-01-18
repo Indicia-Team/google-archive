@@ -80,6 +80,7 @@
     * [InstantIndiciaBrowseRecords Reports - Browse Records]
     * [InstantIndiciaMyRecords Reports - My Records]
    * [InstantIndiciaTheming How to theme an Instant Indicia site]
+   * [InstantIndiciaCreatingContent Notes on creating general content on an Instant Indicia site]
    * [InstantIndiciaDropDownMenuConfig Configuring Instant Indicia to use drop down menus]
  * [IndiciaData Using Indicia data in other applications]
   * [IndiciaDataDownload Downloading data]
