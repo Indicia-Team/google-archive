@@ -1,10 +1,10 @@
 #summary Some notes and tips on creating general purpose content pages on Drupal Instant Indicia sites.
 
-= Notes on creating content on an InstantIndicia site =
+= Notes on creating content on an Instant Indicia site =
 
 == Creating content ==
 
-If you want to create a general purpose content page on your Instant Indicia site, log in as admin or someone with site editor permissions then select *Content management &gt; Create content* on the menu. You are presented with a list of different types of content, including the default Page and Story content types provided by Drupal. Select the type of page you want to create. Enter a page title, then fill in the content in each of the relevant text boxes - the exact text boxes available depends on the content type you have selected to create. Note that each text box has a toolbar at the top allowing you to perform basic formatting operations, insert hyperlinks and images and so forth.
+As well as the forms and reports you can add to your site using Instant Indicia, you can create any additional pages on your site as required. For example, you might like to create Contact Us, Help or other general site pages. If you want to create a general purpose content page on your Instant Indicia site, log in as admin or someone with site editor permissions then select *Content management > Create content* on the menu. You are presented with a list of different types of content, including the default Page and Story content types provided by Drupal. Select the type of page you want to create. Enter a page title, then fill in the content in each of the relevant text boxes - the exact text boxes available depends on the content type you have selected to create. Note that each text box has a toolbar at the top allowing you to perform basic formatting operations, insert hyperlinks and images and so forth.
 
 == Adding it to the menu ==
 
@@ -33,6 +33,6 @@ If you want to insert a link to another page or website, you first need to ident
 
 In each of these cases, the *domain* is www.mysite.com, and we can also exclude the *http://* part at the front. For example 1, the website's home page runs from http://www.mysite.com and the *path* we want is species/andrena-apicata. For the second example, Drupal is configured to work with addresses that include an extra *index.php?q=* in them - this can also be ignored so the path we want is still species/andrena-apicata. For examples 3 and 4 the difference is that the site is running in a sub-folder called "sitessubfolder" (we can tell this because the home page is available at http://www.mysite.com/sitesubfolder/) so we can also exclude the sub-folder from the path.
 
-Once you have the path, type into a text box the piece of text you want to link to something, then click the *link* icon in the toolbar (it looks like a globe with 2 chainlinks). Simply enter the path you have determined in the *URL* box. If the link is to an internal page, then change the *Protocol* to <other> and click *OK* to save it.
+Once you have the path, type into a text box the piece of text you want to link to something, then click the *link* icon in the toolbar (it looks like a globe with 2 chainlinks). Simply enter the path you have determined in the *URL* box. If the link is to an internal page, then change the *Protocol* to `<other>` and click *OK* to save it.
 
 Note that it is good practice to ensure that the text being clicked is reasonably explanatory when read in isolation. For example, a *more info* link would be better called *more info on Andrena apicata* for example. This helps to make the site more accessible.
