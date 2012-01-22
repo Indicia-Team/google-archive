@@ -20,6 +20,7 @@
   * [AlertsInIndicia The alerts and notifications system]
  * Managing a Warehouse
   * [WarehouseAdmin Administration information]
+    * [WarehouseWebsiteAgreements About Website Agreements]
   * [Backups How to maintain backups]
   * [DemoSiteModuleInstallation Getting the Warehouse demo module running]
   * [WarehouseModules Warehouse Modules]
