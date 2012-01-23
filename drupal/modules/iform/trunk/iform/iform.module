@@ -917,7 +917,7 @@ function iform_media_folder_path() {
     return $iform_media_folder_path;
   else {
     $r = drupal_get_path('module', 'iform').'/media/';
-    if (!is_dir('media/'))
+    if (!is_dir($r))
       $r = str_replace('modules', 'libraries', $r);      
     $iform_media_folder_path = $r;
     return $r;
