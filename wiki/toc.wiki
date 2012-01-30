@@ -112,6 +112,7 @@
    * [WebServicesReport Report services]
    * [WebServicesImport Import services]
    * [WebServicesValidation Validation services]
+   * [WebServicesUserIdentifiers User Identifier Services]
   * Warehouse Code
    * [WarehouseCodeOverview Overview]
    * [WarehouseCodeDBUpdates Releasing a database upgrade script]
