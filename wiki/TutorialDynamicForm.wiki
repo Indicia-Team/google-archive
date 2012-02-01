@@ -48,15 +48,11 @@ Select Create Content -> Indicia Forms from the navigation menu in Drupal. If yo
 Enter a page title, e.g. Test dynamic form. Select MNHNL Dynamic 1 from the indicia form drop down list, and the web page will update with the list of parameters required to set up the form you selected.
 Setup_dynamic_form.png
 
-First, expand the website section, and specify the website ID and password, then click the section title to collapse it again. 
-
-http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_website.png
-
-Next, expand the Other Iform Attributes section and specify at least the Survey ID and Initial Species List IDs which you noted earlier. The other options available provide further configuration and help text is provided beside each one, but you can leave them in their default state for now.
+Expand the Other Iform Attributes section and specify at least the Survey which you noted earlier. The other options available provide further configuration and help text is provided beside each one, but you can leave them in their default state for now.
 
 http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_other.png
 
-Expand the Initial Map View section and specify the latitude and longitude of the centre of the map area you want to gather records for. Also specify a map zoom level, typically a number in the range of around 8-12 depending the size of the area to be covered. You may need to experiment to get these settings right.
+Expand the Initial Map View section and specify the latitude and longitude of the centre of the map area you want to gather records for, or you can leave these at the global settings defined in your site configuration. Also specify a map zoom level, typically a number in the range of around 8-12 depending the size of the area to be covered. You may need to experiment to get these settings right.
 
 http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_initial_map.png
 
@@ -69,6 +65,8 @@ http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_georef.png
 Expand the Map section to specify the format of the spatial references that the form will accept. This is a comma separated list of systems which might include OSGB (=British National Grid), or the 4 digit code of a projection defined by the European Petroleum Survey Group, e.g. 4326 for GPS lat long references using the WGS84 projection, or 2169 for Gauss-Lux references.
 
 http://indicia.googlecode.com/svn/wiki/setup_dynamic_form_georef.png
+
+Expand the Species section and at least specify a species checklist to use in the *Initial Species List* or *Extra Species List* entries. There are several other configurations in this section, including whether you are allowing entry of a list of records via a grid or a single record.
 
 Finally the User Interface section lets you choose from Tabs, Wizard or all-in-one form styles, whether the place search control is present, and whether a control for picking from the list of existing controls is present. You can leave these at the default settings.
 
@@ -109,3 +107,15 @@ Now save it and reload the form with the &nocache parameter. You should find a n
 http://indicia.googlecode.com/svn/wiki/edit_attributes_my_tab.png
 
 If you want to add controls to the existing tabs that can be done as well. As we have seen, controls inside a single level block will be added to a fieldset created on the Other Information tab. So, if you rename your outer block from My Tab to Other Information (by clicking the rename link to the right of the block name in the attribute editor, entering the new name, clicking Apply then Save), and reload the form, you will find your controls are back on the Other Information tab. More usefully, you can create an outer block called 'species' or 'place' to add your controls to the other 2 tabs as well.
+
+== Configuring the list of species available ==
+
+*Introduced in Indicia 0.8*
+
+If you are using the dynamic form to accept records via a species checklist grid then you can take fine control over the list of species available to pick from. To do this, edit your form then expand the *Species* section. In this section look for the input called *Field used to filter taxa* and change this to on of the options. You can elect to filter by the species' preferred name, the title of a taxon group or the meaning ID of the species (which can be obtained from the species' details on the warehouse). Then specify the filter you want in the next box. So, for example, if you wanted to limit the list to a few species you could set *Field used to filter taxa* to *Taxon group title* then in the next box specify (for example):
+{{{
+Andrena nitida
+Andrena fulva
+Andrena apicata
+}}}
+Save the form and you should find this species restriction has been applied.
