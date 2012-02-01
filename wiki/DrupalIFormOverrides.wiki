@@ -19,6 +19,26 @@ To include your own JavaScript files, you need to create a .js file and place it
 
 In addition, developers of prebuilt forms can provide JavaScript that is added to the page for all instances of a particular form by creating a file called sites\all\modules\iform\client_helpers\prebuilt_forms\js\form-name.js, replacing form-name with the name of the form. For example you will find a file called verification_1.js in this location which runs for all instances of the verification_1.php form.
 
+If you need to interact with the map on your web page, there are 2 hooks you can use. The first, *mapSettingsHooks* lets you alter the settings object before it is used to setup the map. For example:
+{{{
+mapSettingsHooks.push(function(opts) {
+  // disable zooming on scroll wheel usage
+  opts.scroll_wheel_zoom = false;
+}
+}}}
+
+Don't forget that there are normally other ways to provide these configurations, for example on the dynamic form you could edit the form structure and provide some property overrides after the `[map]` element. The second hook is *mapInitialisationHooks* which is called once the map is setup, letting you make any post-setup changes or attach event handlers and so forth. For example: 
+{{{
+mapInitialisationHooks.push(function(div) {
+  div.map.events.register('zoomend', this, function (event) { 
+    var currentZoom = map.getZoom(); 
+    if (currentZoom > 5) { 
+      alert('You are zoomed in');
+    } 
+  }); 
+}
+}}}
+
 == Overridding the HTML templates used by the data_entry_helper class ==
 
 The data_entry_helper declares a global array of templates called $indicia_templates. To change any of the template values for an instance of a form, you can create a folder called templates in sites\all\modules\iform\client_helpers\prebuilt_forms\. In this folder, create a file called node.nid.php where nid is the node id of the form page. The file simply changes entries in the $indicia_templates array to suit. The following example shows template changes to remove the header above uploaded images as well as add some instructions to the upload button:
