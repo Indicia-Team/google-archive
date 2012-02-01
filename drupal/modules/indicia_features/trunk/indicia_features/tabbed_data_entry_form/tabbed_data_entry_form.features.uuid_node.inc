@@ -62,9 +62,9 @@ panZoom',
 [species attributes]
 [*]
 =Place=
-?Please provide the spatial reference of the record. You can enter the reference directly, or search for a place then click on the map.?
-[place search]
+?Please provide the spatial reference of the record. You can enter the reference directly, or search for a place then click on the map to set it.?
 [spatial reference]
+[place search]
 [map]
 [*]
 =Other Information=
