@@ -1,0 +1,72 @@
+<?php
+
+function easy_login_install() {
+  $fields = array();
+  $fields[] = array(
+      'title' => 'Indicia User ID',
+      'name' => 'profile_indicia_user_id',
+      'explanation' => 'User ID for this account on the warehouse',
+      'category' => 'System',
+      'type' => 'textfield',
+      'weight' => 1,
+      'required' => 0,
+      'register' => 0,
+      'visibility' => 4,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => ''
+  );
+  $fields[] = array(
+      'title' => 'First name',
+      'name' => 'profile_first_name',
+      'explanation' => 'User\'s first name',
+      'category' => 'Name',
+      'type' => 'textfield',
+      'weight' => 1,
+      'required' => 0,
+      'register' => 1,
+      'visibility' => 2,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => 'Account'
+  );
+  $fields[] = array(
+      'title' => 'Surname',
+      'name' => 'profile_surname',
+      'explanation' => 'User\'s surname',
+      'category' => 'Name',
+      'type' => 'textfield',
+      'weight' => 2,
+      'required' => 1,
+      'register' => 1,
+      'visibility' => 2,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => 'Account'
+  );
+  foreach($fields as $field) 
+    db_query("INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete, options, page) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d, '%s', '%s')",
+        $field['title'],
+        $field['name'],
+        $field['explanation'],
+        $field['category'],
+        $field['type'],
+        $field['weight'],
+        $field['required'],
+        $field['register'],
+        $field['visibility'],
+        $field['autocomplete'],
+        $field['options'],
+        $field['page']
+    );
+  drupal_set_message('Added first name, surname and indicia user ID to user profile fields');
+}
+
+function easy_login_enable() {
+  drupal_set_message(t('You have enabled the Easy Login feature which lets people register and login using an OpenID, Twitter or Facebook account. To enable '.
+      'twitter signin please follow the instructions from step 4 at <a href="http://drupal.org/node/649714">Sign in to Drupal with your Twitter Account</a>. '.
+      'If you are developing on a localhost webserver, then use http://127.0.0.1 instead of http://localhost in the registration form for both the Callback URL and '.
+      'Website parameters. Also note that the Callback URL should have a trailing slash when you specify it, e.g. "http://127.0.0.1/instant/twitter/oauth/".'));
+  drupal_set_message(t('To allow Facebook sign-in, you must enter your Facebook Application details at '.l('Facebook Connect Settings', 'admin/settings/fbconnect').
+      '. You can request an Application ID for facebook at '.l('','http://developers.facebook.com/setup').'.'));
+}
