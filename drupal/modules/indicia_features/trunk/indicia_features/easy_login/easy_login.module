@@ -17,8 +17,8 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         }
         // deliberately flow through - as we always check the account id after account update. So do NOT break
       case 'after_update':
-        if (empty($account->profile_surname)) {
-          drupal_set_message('Please set at least your surname on your '.l('user account', 'user/'.$account->uid.'/edit/Name'). 
+        if (empty($account->profile_last name)) {
+          drupal_set_message('Please set at least your last name on your '.l('user account', 'user/'.$account->uid.'/edit/Name'). 
               '. This will allow your user registration to be linked properly to the central database of records.');
           return;
         }
@@ -36,7 +36,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         $identifiers = urlencode(json_encode($identifiers));
         $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
         $url .= '?nonce='.$auth['write_tokens']['nonce'].'&auth_token='.$auth['write_tokens']['auth_token'];
-        $postargs = 'surname='.$account->profile_surname.'&identifiers='.$identifiers;
+        $postargs = 'last_name='.$account->profile_last_name.'&identifiers='.$identifiers;
         if (!empty($account->profile_first_name))
           $postargs .= '&first_name='.$account->profile_first_name;
         $response = data_entry_helper::http_post($url, $postargs);  
