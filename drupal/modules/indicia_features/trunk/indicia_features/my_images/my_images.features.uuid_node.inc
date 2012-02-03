@@ -83,6 +83,18 @@ taxon_group_id=',
   {
     "fieldname":"zero_abundance",
     "visible":false
+  },
+  {
+    "fieldname":"sample_id",
+    "visible":false
+  },
+  {
+    "fieldname":"taxa_taxon_list_id",
+    "visible":false
+  },
+  {
+    "fieldname":"location_name",
+    "visible":false
   }
 ]',
     'gallery_col_count' => '5',
