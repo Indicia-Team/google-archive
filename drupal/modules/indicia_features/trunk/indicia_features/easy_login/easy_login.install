@@ -31,9 +31,9 @@ function easy_login_install() {
       'page' => 'Account'
   );
   $fields[] = array(
-      'title' => 'Surname',
-      'name' => 'profile_surname',
-      'explanation' => 'User\'s surname',
+      'title' => 'Last name',
+      'name' => 'profile_last_name',
+      'explanation' => 'User\'s last name',
       'category' => 'Name',
       'type' => 'textfield',
       'weight' => 2,
@@ -59,7 +59,7 @@ function easy_login_install() {
         $field['options'],
         $field['page']
     );
-  drupal_set_message('Added first name, surname and indicia user ID to user profile fields');
+  drupal_set_message('Added first name, last name and indicia user ID to user profile fields');
 }
 
 function easy_login_enable() {
