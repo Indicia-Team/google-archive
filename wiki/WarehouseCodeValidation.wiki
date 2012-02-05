@@ -1,0 +1,91 @@
+#summary Detailed information on using the validation system in warehouse code.
+#labels Phase-Implementation
+
+= Using the validation library =
+
+The warehouse includes a built in validation system which makes it simple to validate the content of field values as they are being submitted to the database. For example, you might validate that an incoming field is a correctly formatted email address or URL, or simply that the value is provided if the field is required. 
+
+To use the validation library, you need to create a new validation object passing in the array you want to validate. For example:
+{{{
+// Create a validation object from the form $_POST data.
+$array = new Validation($_POST);
+}}}
+
+Typically though, you will be defining validation rules in a model class' `validation` method, in which case the validation object is passed into the method as the $array parameter so you do not explicitly need to create the object.
+
+Each rule is added to the model by calling the `$array->add_rules method` - you will find many examples of how to use it in the various model files in the warehouse code. It is possible to add several rules to a single field with a single call to `add_rules`, since the first parameter is the field name to validate and it can be followed by any number of parameters, one per validation rule to add to the field. The list of rules available along with other generic functionality of the validation library are described in the [http://docs.kohanaphp.com/libraries/validation Kohana validation documentation] but as with many parts of Indicia, there are custom extensions available pertinent to biological recording as shown in the following list.
+
+==sref_system==
+Fails validation if the field does not contain a valid spatial reference system code or EPSG number. 
+{{{
+$array->add_rules('entered_sref_system', 'sref_system');
+}}}
+
+==sref==
+Fails validation if the field does not contain a valid spatial reference for the system code provided as a parameter.
+{{{
+$array->add_rules('entered_sref', "sref[$system]");
+}}}
+
+==vague_date==
+Fails validation if the passed in field value cannot be parsed as a vague date.
+{{{
+$array->add_rules('date', 'vague_date');
+}}}
+
+==unique== 
+Fails validation if the field value is not unique in the table. The table name and field name are passed as parameters, with the current record’s ID as a third parameter if editing an existing record. This is required because a value should not fail the uniqueness test if it only exists in the existing record for the values being saved. In the following example the `email_address` field is checked for valid email format and uniqueness within the people table.
+{{{
+$array->add_rules('email_address', 'email', 'unique[people,email_address,'.$id.']');  
+}}}
+==valid_term==
+Fails validation if the term provided cannot be found on the list provided by a list ID parameter. 
+{{{
+$array->add_rules('sample_type', 'valid_term[4]');
+}}}
+
+==valid_taxon==
+Fails validation if the taxon provided cannot be found on the taxon list provided by a list ID parameter. 
+{{{
+$array->add_rules('taxon', 'valid_taxon[4]');
+}}}
+
+==regex==
+Fails validation if the field value provided does not match the regular expression provided. For more information on regular expression support, see [http://www.php.net/manual/en/reference.pcre.pattern.syntax.php PCRE Pattern Syntax]. 
+{{{
+$array->add_rules('vowel', 'valid_regex[/^[aeiou]$/]');
+}}}
+
+==matches_post==
+Allows a value in the $_POST data to be checked against the field value for a match. Used within the warehouse for validating that second password inputs match the first, but not used outside the warehouse as submissions to data services are not split into different fields in the $_POST array. In the following field, the password field is flagged as required, between 7 and 30 characters and it must match the password2 field.
+{{{
+$array->add_rules('password', 'required', 'length[7,30]', 'matches_post[password2]');
+}}}
+
+==minimum==
+Fails validation if the value is below a set minimum. 
+{{{
+$array->add_rules('temperature', 'minimum[-30]');
+}}}
+
+==maximum==
+Fails validation if the value is above a set maximum. 
+{{{
+$array->add_rules('temperature', 'maximum[40]');
+}}}
+
+==email_list==
+Fails validation if the value is not a comma separated list of email addresses. 
+{{{
+$array->add_rules('cc_list', 'email_list');
+}}}
+
+If your validation rules are being added to the `validate` method of a model class, there is no need to do any more than simply add the rules. The framework code will automatically run the validation rules against the field value and report back any errors. However, if you are using the validation library in other contexts, then you can call the `validate()` method explicitly as in the following example:
+{{{
+if ($array->validate()) {
+  // Yes! everything is valid
+  echo 'Form validated and submitted correctly. <br />';
+} else {
+  print_r($array->errors('form_error_messages'));
+}
+}}}
