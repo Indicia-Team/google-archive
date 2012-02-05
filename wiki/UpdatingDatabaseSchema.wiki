@@ -2,7 +2,7 @@
 
 = Updating the Indicia Database schema =
 
-As a developer, you may occasionally need to release a change which affects the database schema. To do this, you need to follow these guidelines.
+As a developer, you may occasionally need to release a change which affects the database schema. To do this, you need to follow these guidelines. There is additional information specifically relating to how to release the database schema updates required when adding a new entity to the warehouse data model at [WarehouseCodeAddEntityScripts Database scripts required to add a new warehouse database entity].
 
 First, write an SQL script which makes the changes to the database. One way you can do this is to edit the properties of the object you are changing in pgAdmin, make the required changes then copy the SQL from the SQL tab. Or, if you are creating a complete new object such as a table or view, use pgAdmin to create it, then select it and copy the SQL from the SQL pane. In this fictitious example we issuing a script to install the list_languages view.
 
