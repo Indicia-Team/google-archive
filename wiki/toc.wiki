@@ -118,7 +118,8 @@
    * [WarehouseCodeDBUpdates Releasing a database upgrade script]
    * [WarehouseCodeAddAttribute Summary of steps required to add a new attribute]
    * [WarehouseCodeAddEntity Summary of steps required to add a new entity]
-   * [WarehousePluginsArchiotecture How to write plugin modules for the Warehouse]
+   * [WarehousePluginsArchitecture How to write plugin modules for the Warehouse]
+   * [WarehouseCodeValidation Using the validation library]
   * Client Helper Code
    * [ClientHelperCodeOverview Overview]
    * [Stylesheets Stylesheets]
