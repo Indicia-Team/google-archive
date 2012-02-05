@@ -1,0 +1,131 @@
+#summary Details of the model code required when adding a warehouse entity.
+#labels Phase-Implementation
+
+= Model code required for warehouse entities =
+
+Now that you have created the database scripts for the entity being added to the warehouse, the next step is to create a model in the warehouse’s PHP code. This makes the warehouse ‘aware’ of the entity and also defines how this entity relates to the others as well as things like how to validate the incoming data or handle special field types. 
+
+== Class file ==
+
+First, create a PHP file in the application/models folder, or you could copy one of the existing model files such as _language.php_. The filename should be the singular form of the model name and the class name is the singular form with a leading capital, followed by `_Model`. E.g. for the _languages_ table, there is a _language.php_ file containing a class _Language_Model_. The class should extend either the class called `ORM` or `ORM_Tree` - the latter being used when creating a hierarchical entity with a _parent_id_ field used for self-joins to each record’s parent. 
+
+== Member variables ==
+
+Indicia’s models use the same configuration options as the Kohana ORM system, in particular with respect to [http://docs.kohanaphp.com/libraries/orm/starting#defining_relationships_in_orm defining relationships]. To illustrate this, consider a fictitious example where there is a _people_ table and _addresses_ table with a many to many join (via an _addresses_people_ table). Each address has zero to many phone_numbers and each address has exactly one town, so there are also tables called _towns_ and _phone_numbers_. Here is some example code that illustrates how to set the addresses model up:
+{{{
+class Address_Model extends ORM {
+
+  // each address is part of a town
+  protected $belongs_to = array('town');
+
+  // each address has a list of phone numbers
+  protected $has_many = array('phone_numbers');
+  
+  // each address has any number of people, but people can also have
+  // several addresses so we use $has_and_belongs_to_many
+  protected $has_and_belongs_to_many = array('people');
+}
+}}}
+
+Once these relationships have been created, you can use code like the following to utilise them:
+{{{
+// Load the ORM object for ID 1.
+$address = ORM::factory('address',1);
+foreach($address->people as $person) {
+  // do something with each person
+}
+foreach ($address->phone_numbers as $phone_number) {
+  // do something with each phone number
+}
+$town = $address->town;
+// do something with the town.
+}}}
+
+For each of these you only need to declare the member variables for which you actually have relationships to declare - by omitting them there will simply be no known relationships of this type known to ORM. As well as the standard Kohana member variables the following additional ORM member variables are supported in the Indicia warehouse:
+|| *variable* || *description* ||
+|| $has_attributes || Defaults to false. Set to true if this entity has associated custom attributes, e.g. for samples, occurrences, locations etc. Note that when this is true, you will also need to implement MVC code for the associated attributes and attribute_values tables. See [WarehouseCodeAddCustomAttributeEntities MVC code required for custom attributes] ||
+|| $attrs_field_prefix || Define the prefix used when putting custom attribute values for this entity into a submission. For example, when submitting a sample the submission can contain direct fields such as _id_ or _date_start_, as well as attribute values such as smpAttr:1 or smpAttr:1:2 (a new custom value for attribute 1, or an update to the existing value 2 for attribute 1). Therefore for samples the $attrs_field_prefix will be set to _smpAttr_. In general this should be a 3 character abbreviation for the entity followed by Attr, and check that the 3 character abbreviation is not already in use for another custom attribute type. ||
+|| $attrs_submission_name || This is for legacy support of old submission formats only. Set it to the same 3 character prefix as above followed by _Attributes_, e.g. _smpAttributes_ ||
+|| $search_field || Defaults to ‘title’. Declare the name of the field within the entity which makes most sense to use when looking up a value in this table. An example of how this might be used - when submitting an address from a web form, you can either submit the town_id (if known) or the town name, and Indicia will attempt to lookup the town from the towns table by matching on the search field. The search field is also used as a default caption when displaying the warehouse edit page for an entity, though this can be controlled more finely by implementing the `getNewItemCaption` method as described below. ||
+|| $ORM_Tree_children || Only required for hierarchical data entities which inherit from the `ORM_Tree` class. This defines the model which holds the children of the records, typically this will be the plural form of the current model name assuming the tree is defined in the single entity using a parent_id field. ||
+
+== Methods ==
+
+As well as the member variables described above, model functionality can also be configured by providing a number of methods. 
+
+=== validate ==
+
+This is the only method that you must implement in the model. It is called when data in a model is about to be saved to the database. The following can be used as a template for the validate method:
+{{{
+public function validate(Validation $array, $save = FALSE) {
+    // uses PHP trim() to remove whitespace from beginning and end of all fields before validation
+    $array->pre_filter('trim');
+    // add any validation rules here
+    $this->unvalidatedFields = array(/*List of fields that don’t have validation rules*/);
+    return parent::validate($array, $save);
+  }
+}}}
+
+Copy this template into your model file. The first thing to do is define the validation rules and insert them into the code after the comment `// add any validation rules here`. Detailed information on how to add validation rules to the $array validation array is provided at [WarehouseCodeValidation Using the validation library].
+
+===caption===
+
+Optional. Override this method to return a display caption for the record, e..g the caption displayed at the top of an edit page in the warehouse. For example:
+{{{
+/**
+   * Return a displayable caption for the item.
+   * For People, this should be a combination of the Firstname and Surname.
+   */
+  public function caption()
+  {
+    return ($this->first_name.' '.$this->surname);
+  }
+}}}
+
+===preSubmit===
+
+Optional. Override this method to do any pre-processing on the data before submission. An example use of this is for models with a geometry field and a spatial reference field as input by the user, such as the location or sample model. If there is a spatial reference value but no geometry in the submission data then the preSubmit method can calculate the geometry value automatically. 
+
+===postSubmit===
+
+Optional, The `postSubmit` method is typically used to perform any additional database updates required from the submission. For example, the taxa_taxon_list model automatically processes any synonyms or common names in the submission data to create the taxa required in the database. 
+
+===`_get`===
+
+Optional. Override the `__get` method to perform any special translation required when reading a value from the database. For example, geom fields are stored internally in the database in binary format, but it is more useful to present this information using Well Known Text (WKT, a text based standard for presenting spatial information). 
+{{{
+  /**
+  * Override get handler to translate PostGIS internal spatial data to WKT.
+  */
+  public function __get($column)
+  {
+    $value = parent::__get($column);
+
+    if  (substr($column,-4) == 'geom' && $value!==null)
+    {
+      $row = $this->db->query("SELECT ST_asText('$value') AS wkt")->current();
+      $value = $row->wkt;
+    }
+    return $value;
+  }
+}}}
+
+===`_set`===
+
+Optional. `__set’ is similar to `__get` except that it performs translation on incoming rather than outgoing field values. So, when setting the geom for a sample the value can be set using WKT format and translated to the required binary format.
+{{{
+ /**
+  * Override set handler to translate WKT to PostGIS internal spatial data.
+  */
+  public function __set($key, $value)
+  {
+    if (substr($key,-4) == 'geom')
+    {
+      if ($value) {
+        $row = $this->db->query("SELECT ST_GeomFromText('$value', ".kohana::config('sref_notations.internal_srid').") AS geom")->current();
+        $value = $row->geom;
+      }
+    }
+    parent::__set($key, $value);
+  }
+}}}
