@@ -16,13 +16,13 @@ The module controllers provide public methods and therefore additional URLs avai
 
 == Writing a plugin ==
 
-== Creating the plugin module folders and enabling it ==
+=== Creating the plugin module folders and enabling it ===
 
 To create a plugin module, you need to create a folder for your module in the modules folder. Don't forget to enable your module by editing the `$config['modules' ]` array in the *application/config/config.php* file or the module content will be ignored. Within this folder, you can create views, controllers and models folders for the MVC code your plugin requires. This should give you a new URL displaying some output where the URL path is defined by the controller class name and the methods it exposes.
 
 For further information on how to write models, views and controllers in the Indicia warehouse, see [WarehouseCodeAddEntity Summary of steps required to add an entity]. 
 
-== Declaring changes to the database ==
+=== Declaring changes to the database ===
 
 You can also create a db folder, containing a folder with the scripts for each version of your module. You need to follow the naming conventions given here for this to work:
 
@@ -31,7 +31,7 @@ You can also create a db folder, containing a folder with the scripts for each v
 
 If any of this is unclear a good place to look for examples is the *taxon_designations* module which includes some database upgrade scripts.
 
-== Hooking into the rest of the warehouse ==
+=== Hooking into the rest of the warehouse ===
 
 So far, our module code has allowed us to add new URL paths to the warehouse application as well as how to add the underlying database schema changes. The next step is to turn our module into a *plugin*, which means that we will be writing code to *hook* into existing pieces of functionality and extend them. For example, we could hook into the warehouse's menu generation code to extend the menu with new menu items, or even tweak or remove the existing ones.
 
@@ -41,7 +41,7 @@ To do this, you need to create a *plugins* folder within your module's folder, a
 
 Inside this PHP file you must create *hook methods* that adhere to certain naming conventions, allowing the warehouse to find them and use them to extend existing functionality. Each hook method must be called the same as the module (i.e. the module's folder), followed by an underscore, then the hook name. 
 
-=== extend_ui hook ===
+==== extend_ui hook ====
 
 This hook allows your module to declare extensions to the user interface of existing views. It simply returns an array of the extensions it wants to perform on the user interface, which currently means an additional tab but could be extended to include other types of user interface component in future. Each extension is a child array, containing a view (the path of the view it is extending), type (='tab'), controller (the path to the controller function which should be displayed on the tab), title (the title of the tab). For example:
 {{{
@@ -58,7 +58,7 @@ function my_module_extend_ui() {
 
 In this example, a new tab titled Site Management is attached to the view in application/views/location/location_edit.php. When clicked, the tab loads the content from the controllers/site_management_overview.php file within the plugin. This must declare a class Site_management_overview_Controller derived from Controller or one of its subclasses, with a public Index method since this is the default controller action. The optional value allowForNew can be set to false for tabs which must not be displayed when creating a new record but become available when editing a record.
 
-=== alter_menu hook ===
+==== alter_menu hook ====
 
 This hook allows your module to modify the main menu. Write a method called module_alter_menu replacing _module_ for your module's folder name. It should take a single $menu parameter which is an array describing the main menu structure. It simply makes the modifications it requires setting the entries to the relevant controller path to be called by the new menu items, then returns the menu. The following example is from the log_browser plugin, and it is in a file modules/log_browser/plugins/log_browser.php:
 {{{
@@ -72,7 +72,7 @@ function log_browser_alter_menu($menu) {
 
 In this example, there is a controller file browse_server_logs.php, containing the class Browse_server_logs_Controller which declares a public index method (since the path in the above menu item does not specify the action, so the default index is used).
 
-=== extend_orm hook ===
+==== extend_orm hook ====
 
 The Kohana ORM implementation allows objects to understand how they relate to other objects in the data model. For example, if a _sample has_many occurrences_ then when a sample ORM object is instantiated, it is possible to access the occurrences via `$sample->occurrences`. These relationships are declared as part of the ORM class definitions and are documented at [http://docs.kohanaphp.com/libraries/orm/starting]. 
 
@@ -86,7 +86,7 @@ function land_parcels_extend_orm() {
 }}}
 You can use the following predicates to declare relationships: has_one, has_many, belongs_to, has_and_belongs_to_many. These are described in the [http://docs.kohanaphp.com/libraries/orm/starting Kohana ORM documentation].
 
-===extend_data_services hook===
+====extend_data_services hook====
 
 If a plugin adds entities to the data model, it is possible to extend the data services (*indicia_svc_data*) module to allow the new entities to be accessible externally via web service calls. Of course it is always possible to expose the data via report files, but if you want to allow record level access then it is necessary to extend the data services. In fact this is necessary even to browse the new entities in the warehouse, since the warehouse code generally uses the same components and web services as client websites built using Indicia. To enable access to a data entity via the data services:
   # you first need to create a view called list_myrecords where myrecords is the plural version of your model name. Create an upgrade script for this in your module as described above. This view should contain the minimum details required to provide the basic information for the record as this view is generally used for quick lookups against the data.
@@ -98,7 +98,7 @@ function taxon_designations_extend_data_services() {
 }
 }}}
 
-==Caching==
+===Caching===
 
 One last point about writing plugin modules. Because the architecture requires the warehouse to scan through various PHP files looking for methods which match a set naming convention, there would be a performance impact for each plugin. To avoid this problem, the warehouse caches the list of plugin hook methods it finds and uses the cache versions rather than scanning the files again and again. Although the cache copy is refreshed periodically, when writing your own plugin modules this can be frustrating. 
 
