@@ -131,5 +131,6 @@ Optional. `__set’ is similar to `__get` except that it performs translation on
 }}}
 
 <table width="100%"><tr>
+<td align="left">Next: [WarehouseCodeAddEntityScripts Scripts required to add a new warehouse database entity]</td>
 <td align="right">Next: [WarehouseCodeAddEntityController Creating the controller code]</td>
 </tr></table>
