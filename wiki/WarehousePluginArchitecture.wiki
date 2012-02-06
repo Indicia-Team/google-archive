@@ -20,7 +20,7 @@ The module controllers provide public methods and therefore additional URLs avai
 
 To create a plugin module, you need to create a folder for your module in the modules folder. Don't forget to enable your module by editing the `$config['modules' ]` array in the *application/config/config.php* file or the module content will be ignored. Within this folder, you can create views, controllers and models folders for the MVC code your plugin requires. This should give you a new URL displaying some output where the URL path is defined by the controller class name and the methods it exposes.
 
-For further information on how to write models, views and controllers in the Indicia warehouse, see [WarehouseCodeAddEntity Summary of steps required to add an entity]. 
+For further information on how to write models, views and controllers in the Indicia warehouse, see [WarehouseCodeAddEntity Model View Controller code for the warehouse]. 
 
 === Declaring changes to the database ===
 
