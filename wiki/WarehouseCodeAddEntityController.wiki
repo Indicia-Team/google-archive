@@ -257,3 +257,5 @@ If a non-standard path to the edit view is required, override this method and re
     return 'taxon_attribute/taxon_attribute_edit';
   }
 }}}
+
+Next: [WarehouseCodeAddEntityView Creating the view code]
