@@ -1,7 +1,7 @@
 #summary Details of how to add the views required for a warehouse entity
 #labels Phase-Implementation
 
-= Creating the view code requird for a warehouse entity =
+= Creating the view code required for a warehouse entity =
 
 View code is slightly different to the PHP code required for controllers and models in that it is not a PHP class, simply a template mixing HTML and PHP code required to generate the output. Also there is not a one to one match between entities and view code files unlike controllers and models as each entity can have views for the index and edit pages as well as other sub-templates required to construct the page.
 
@@ -101,3 +101,7 @@ echo data_entry_helper::dump_javascript();
 }}}
 
 Once you have constructed all the controls you require you should have a working index and edit page. Make sure that you can save a new record, input a value that should fail validate and see the result, correct it and save the record, plus edit and delete existing records.
+
+<table width="100%"><tr>
+<td align="left">Previous: [WarehouseCodeAddEntityController Controller code required for warehouse entities]</td>
+</tr></table>
