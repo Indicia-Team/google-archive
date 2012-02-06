@@ -129,3 +129,5 @@ Optional. `__set’ is similar to `__get` except that it performs translation on
     parent::__set($key, $value);
   }
 }}}
+
+Next: [WarehouseCodeAddEntityController Creating the controller code]
