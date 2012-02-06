@@ -1,0 +1,259 @@
+#summary Details of how to write a warehouse controller.
+#labels Phase-Implementation
+
+=Controller code required for warehouse entities=
+
+The controller for each entity is a class which coordinates user input with the model and view code to provide the required output. Essentially it can be thought of as the glue between the other code parts. Each controller class in the warehouse exposes public methods that map to URLs accessible from the browser, whether for direct access or an AJAX path.
+
+== Class file ==
+
+For each entity being coded within the warehouse, create a PHP file in the _application/controllers_ folder, and within this file implement a class called `Name_Controller`, replacing Name with the singular version of your entity’s name. This class should generally inherit from `Gridview_Base_Controller`, a class which provides common functionality for the browsing table (index path) for each entity as well as the entity edit screen. 
+
+So far, we might have code like:
+{{{
+<?php
+
+class Example_Controller extends Gridview_Base_Controller {
+
+}
+
+?>
+}}}
+
+== Methods to implement ==
+
+In your controller you need to declare methods which define the functionality. Because the `Gridview_Base_Controller` class provides much of the common functionality, the bare minimum required to implement a controller is just the constructor. However in most cases you will want to define additional methods.
+
+After the constructor you can pass variables to the view code by accessing `$this->view`.
+
+=== `__construct` ===
+
+The constructor calls the parent constructor, passing the entity name as the first parameter. Additionally it should set the `$this->columns` array to a list of the fields output by the relevant `gv_entityname` view. The array is an associative array with each key being the field name, though there is only a need to specify the value if you want to override the default column caption behaviour. Finally, set the `$this->pagetitle` variable to the title you want to see on the index page.
+{{{
+public function __construct()
+  {
+    parent::__construct('language');
+    $this->columns = array(
+      'iso'=>'',
+      'language'=>'');
+    $this->pagetitle = "Languages";
+  }
+}}}
+
+If the list of records available on the controller’s index page should be filtered according to the websites that the logged in used has access to, then call `$this->set_website_access()` from the constructor. By default the records are only visible for sites that the user has admin access to, though you can pass ‘editor’ as a parameter to change this behaviour and allow users with editor access to a website to see the relevant records. Note that to do this, the `gv_entityname` view must have the website_id exposed as a field to filter on. 
+
+=== index ===
+
+The `index` method is called when displaying the default path for the controller and by default it outputs a browsable grid of records for the current entity. One example why you might want to override the index method is to filter the list of records for index grids which appear on the tabs of other entity edit pages. For example, when viewing the index page for location images, this is displayed as a tab on the edit page for the location. The tab code will call the `location_image/index path` with a URL argument indicating the location ID to filter to, e.g. `location_image/index/3` is accessed to get the images for location 3. The location_image index method is then overridden to filter the list appropriately. The location ID is also passed into the view so that the view can output a _Create new location image_ button which is aware of the location ID to attach the new image to.
+{{{
+/**
+  * Override the default index functionality to filter by location_id.
+  */
+  public function index()
+  { 
+    if ($this->uri->total_arguments()>0) {
+      $this->base_filter=array('location_id' => $this->uri->argument(1));
+    }
+    parent::index();
+    // pass the location id into the view, so the create button can use it to autoset
+    // the location of the new image.
+    if ($this->uri->total_arguments()>0) {
+      $this->view->location_id=$this->uri->argument(1);
+    }
+  }
+}}}
+
+=== prepareOtherViewData ===
+
+This method is called before displaying any edit or create page for the entity. It can be used to prepare data required for the views which are not dependent on the specific record.  The data are returned as an associative array. A good example of this is to obtain a list of terms to populate into a lookup. For example:
+
+{{{
+  /**
+   * Get the list of terms ready for the sample methods list. 
+   */
+  protected function prepareOtherViewData($values)
+  {    
+    return array(
+      'method_terms' => $this->get_termlist_terms('indicia:sample_methods')    
+    );   
+  }
+}}}
+
+=== getModelValues ===
+
+`getModelValues` is called before displaying the edit page for an existing record and it loads the data for the record into an array of values to pass to the view. If you override it, get the results of the parent method into a local variable then add any additional data before returning the variable. In the following example, the occurrences controller uses the `loadAttributes` method to obtain a list of custom attributes to display on the form:
+{{{
+  /**
+   * Returns an array of all values from this model and its super models ready to be 
+   * loaded into a form. For this controller, we need to also setup the custom attributes
+   * available to display on the form.
+   */
+  protected function getModelValues() {
+    $r = parent::getModelValues();
+    $this->loadAttributes($r, array(
+        'website_id'=>array($r['occurrence:website_id']),
+        'restrict_to_survey_id'=>array(null, $r['sample:survey_id'])
+    ));
+    return $r;  
+  }
+}}} 
+
+=== getDefaults ===
+
+The `getDefaults` method is called before displaying a new record for creation in the edit view. It is used to load default values into an array for the view to display, which may be in response to arguments in the URL path. An example of the use of this is when creating a record that belongs to something else, such as a location_images record. 
+{{{
+  /**
+   * Setup the default values to use when loading this controller to edit a new page.
+   */
+  protected function getDefaults() {
+    $r = parent::getDefaults();
+    if ($this->uri->method(false)=='create') {
+      // occurrence id is passed as first argument in URL when creating. 
+      $r['occurrence:id'] = $this->uri->argument(1);
+      $r['occurrence_comment:occurrence_id'] = $this->uri->argument(1);
+    }
+    return $r;
+  }
+}}}
+
+=== page_authorised ===
+
+Implement this method to return true only when the index page is accessible to the logged in user. By default all index pages are authorised unless this method is implemented. To determine authorisation you can use the following:
+  * `$this->auth->logged_in(‘CoreAdmin’)` to check for warehouse admin rights.  
+  * `$this->auth->has_any_website_access($role)` to check for access rights to any website, e.g. pass ‘editor’ or ‘admin’ to check that the user has the appropriate access level to at least one website. 
+  * `$this->auth->is_website_user($user_id, $website_id) to check if a user has access to a specific website.
+
+=== record_authorised ===
+
+Implement this method to control access to specific records, returning true if the user has access to the record to be loaded. The record id is passed as a parameter. In the following example, the occurrence’s website is compared to the $auth_filter member variable which provides a list of the website the user has access to:
+{{{
+  /**
+   * Check access to a occurrence when editing. The occurrence's website must be in the list
+   * of websites the user is authorised to administer.
+   */
+  protected function record_authorised ($id)
+  {
+    if (!is_null($id) AND !is_null($this->auth_filter))
+    {
+      $occ = new Occurrence_Model($id);
+      return (in_array($occ->website_id, $this->auth_filter['values']));
+    }
+    return true;
+  }
+}}}
+
+=== getTabs ===
+
+Implement getTabs to return the default list of tabs visible from the edit page for the entity. Return an array of tabs, with each tab being defined by a sub-array with the following values:
+  # controller - name of the controller providing the tab output. Can include / then the path to a specific controller action if not the index action.
+  # title - title of the tab.
+  # view - optional. View path that this tab is visible for but only needs to be set if attaching to a specific view - normally the actions can be used to specify when the tab appears. 
+  # actions - array of actions which the view is displayed for (e.g. edit, create, index). Normally a tab is just displayed for the edit action, so that it appears as a tab when editing an existing record, because the functionality to access child records of a record normally provided by tabs requires the record to exist first.
+
+{{{
+  /**
+   * Return a list of the tabs to display for this controller's actions.
+   */
+  protected function getTabs($name) {
+    return array(array(
+      'controller' => 'websites_website_agreement',
+      'title' => 'Agreements',
+      'actions'=>array('edit')
+    ));
+  }
+}}}
+
+=== get_return_page ===
+
+Override this method to return to a non-standard page after saving an entry for this entity. The default behaviour is to return to the index page for the entity. However when displaying a tab with an index list of child records, after editing one of the child records you should be returned to the edit page for the parent record. For example after editing a location image you should be returned to the edit page for the location, with the Images tab selected:
+{{{
+  /**
+   * Override the default return page behaviour so that after saving an image you
+   * are returned to the location entry which has the image.
+   */
+  protected function get_return_page() {
+    if (array_key_exists('location_image:location_id', $_POST)) {
+      return "location/edit/".$_POST['location_image:location_id']."?tab=images";
+    } else {
+      return $this->model->object_name;
+    }
+  }
+}}}
+
+=== get_action_columns ===
+
+By default, the index table for an entity has an _edit_ link for every row. Override this method and return an array of action definitions if required. Each definition must have a caption and URL to call when the action is clicked. Each URL can have field names in braces which will be replaced by the field values for the current row. 
+{{{
+  /**
+   * Override the default action columns for a grid - just an edit link - to 
+   * add a link to the attributes list for othe survey.
+   */
+  protected function get_action_columns() {
+    return array(
+      array(
+        'caption'=>'edit',
+        'url'=>$this->controllerpath."/edit/{id}"
+      ),
+      array(
+        'caption'=>'setup attributes',
+        'url'=>"/attribute_by_survey/{id}?type=sample"
+      )
+    );
+  }
+}}}
+
+=== get_read_only ===
+
+Override this method and return true for records which are authorised for a user but not editable. Takes a $values array containing the values ready to be loaded into the view so that the record details can be checked. For example, a taxon list entry is read only when owned by the warehouse but the user is not a warehouse administrator.
+{{{
+  /**
+   * Existing entries owned by warehouse are read only, unless you are core admin
+   */
+  protected function get_read_only($values) {
+    return (html::initial_value($values, 'taxon_list:id') && 
+      !$this->auth->logged_in('CoreAdmin') && 
+      !html::initial_value($values, 'taxon_list:website_id'));
+  }
+}}}
+
+=== defineEditBreadcrumbs ===
+
+Called when displaying the edit page for the entity and allows the breadcrumbs output for the page to be controlled. Set the `$this->breadcrumbs` array to the HTML for each required breadcrumb, starting at the top level. This is particularly useful when defining an entity on a tab, since the breadcrumb should show the path through the parent entity down to the child record being edited.
+{{{
+  /**
+   * Set the edit page breadcrumbs to include the parent surveys list and parent 
+   * survey.
+   */
+  protected function defineEditBreadcrumbs() { 
+    $this->page_breadcrumbs[] = html::anchor('survey', 'Surveys');
+    $survey = ORM::Factory('survey', $this->model->restrict_to_survey_id);
+    $this->page_breadcrumbs[] = html::anchor('/attribute_by_survey/'.$this->model->restrict_to_survey_id.'?type='.$this->type, 'Attributes for '.$survey->title);
+    $this->page_breadcrumbs[] = $this->model->caption();
+  }
+}}}
+
+==Other methods that can be overridden though rarely need to be==
+
+=== create ===
+
+The `create` method is called when displaying a new record edit form. Normally the default behaviour is all that is required so this does not need to be overridden.
+
+=== edit ===
+
+The `edit` method is called when displaying an edit form for an existing record. Normally the default behaviour is all that is required so this does not need to be overridden.
+
+=== save ===
+
+The save method can be overridden to intercept the form $_POST data and perform any required manipulation before calling the parent::save.
+
+=== editViewName ===
+
+If a non-standard path to the edit view is required, override this method and return it. This is the path within the views folder including the PHP file but excluding the file extension.
+{{{
+  /**
+   * Returns the view specific to taxon attribute edits.
+   */
+  protected function editViewName() {
+    return 'taxon_attribute/taxon_attribute_edit';
+  }
+}}}
