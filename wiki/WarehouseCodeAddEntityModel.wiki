@@ -130,4 +130,6 @@ Optional. `__set’ is similar to `__get` except that it performs translation on
   }
 }}}
 
-Next: [WarehouseCodeAddEntityController Creating the controller code]
+<table width="100%"><tr>
+<td align="right">Next: [WarehouseCodeAddEntityController Creating the controller code]</td>
+</tr></table>
