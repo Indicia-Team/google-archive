@@ -7,7 +7,7 @@ View code is slightly different to the PHP code required for controllers and mod
 
 == Placement of view files ==
 
-Although not a requirement of the Kohana framework, by following certain conventions when creating view files you will gain maximum benefit from the generic code written for Indicia. For each entity, create a folder in _application/views/ with the singular entity name. Then create an index view file called _index.php_ and a file called by the singular entity name, then underscore, then edit.php, e.g. `sample_edit.php`. 
+Although not a requirement of the Kohana framework, by following certain conventions when creating view files you will gain maximum benefit from the generic code written for Indicia. For each entity, create a folder in _application/views/_ with the singular entity name. Then create an index view file called _index.php_ and a file called by the singular entity name, then underscore, then edit.php, e.g. `sample_edit.php`. 
 
 == index.php ==
 
