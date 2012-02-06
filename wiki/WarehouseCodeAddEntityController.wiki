@@ -258,4 +258,7 @@ If a non-standard path to the edit view is required, override this method and re
   }
 }}}
 
-Next: [WarehouseCodeAddEntityView Creating the view code]
+<table width="100%"><tr>
+<td align="left">Previous: [WarehouseCodeAddEntityModel Model code required for warehouse entities]</td>
+<td align="right">Next: [WarehouseCodeAddEntityView Creating the view code]</td>
+</tr></table>
