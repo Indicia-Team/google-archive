@@ -20,4 +20,8 @@ For each table that you create, consider whether you need to create the followin
 
 See Also: [UpdatingDatabaseSchema Updating the database schema]
 
-Next: [WarehouseCodeAddEntityModel Creating the model code]
+
+<table width="100%"><tr>
+<td align="left">Previous: [WarehouseCodeAddEntity Model View Controller code for the warehouse]</td>
+<td align="right">Next: [WarehouseCodeAddEntityModel Creating the model code]</td>
+</tr></table>
