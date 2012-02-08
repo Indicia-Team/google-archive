@@ -19,3 +19,12 @@ function summary_reports_node_info() {
   );
   return $items;
 }
+
+/**
+ * Implementation of hook_views_api().
+ */
+function summary_reports_views_api() {
+  return array(
+    'api' => '2',
+  );
+}
