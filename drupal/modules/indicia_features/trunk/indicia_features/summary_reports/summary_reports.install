@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * When enabling the summary reports module, display a message about creating content of type
+ * summary report.
+ */
+function summary_reports_enable() {
+  drupal_set_message(t('The summary reports module has been enabled. To create new reports, select Content Management > Create content > Summary Report '.
+      'from the admin menu. Reports will then be available from the Summarise menu option.'));
+}
