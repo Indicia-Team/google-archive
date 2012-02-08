@@ -10,7 +10,7 @@
   float: right;
 }
 
-.gallery-img {
+.gallery-img, .view-summary-report ul li {
   text-align: center;
   padding: 0.5em;
   margin: 0.5em;
@@ -18,6 +18,12 @@
   display:inline-block;
   zoom:1;
   *display:inline;
+}
+
+.view-summary-report ul li {
+  border: solid silver 1px;
+  list-style-type: none;
+  background: none;
 }
 
 h2 {
@@ -31,4 +37,14 @@ a h2 {
 
 a:hover h2 {
   text-decoration: underline;
+}
+
+/* enable special menu items on nice menus to have correct spacigng */
+ul.nice-menu span.nolink {
+  padding: 0.3em 5px 0.3em 5px;
+  display: block;
+}
+
+ul.nice-menu-down .menuparent span.nolink {
+  padding-right: 15px; 
 }
