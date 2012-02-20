@@ -1,23 +1,24 @@
 <?php
 
-// Drupal needs this blank file.
-
 /**
  * Implementation of hook_user.
- * Traps login events and ensures the user is registered on the warehouse. Stores the user's ID in the local profile data.
+ * Traps login events and ensures the user is registered on the warehouse. Stores the user's ID in the local profile data. * @staticvar boolean $_updating_account
+ * @param type $op
+ * @param type $edit
+ * @param object $account User account
+ * @param type $category
+ * @return type 
  */
 function easy_login_user($op, &$edit, &$account, $category = NULL) {
   static $_updating_account=false;
   if (!$_updating_account) {
     switch ($op) {
       case 'login':
-        if (isset($account->profile_indicia_user_id)) {
-          drupal_set_message('uid: '.$account->profile_indicia_user_id);
+        if (isset($account->profile_indicia_user_id)) 
           return;
-        }
         // deliberately flow through - as we always check the account id after account update. So do NOT break
       case 'after_update':
-        if (empty($account->profile_last name)) {
+        if (empty($account->profile_last_name)) {
           drupal_set_message('Please set at least your last name on your '.l('user account', 'user/'.$account->uid.'/edit/Name'). 
               '. This will allow your user registration to be linked properly to the central database of records.');
           return;
@@ -59,3 +60,4 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
     }
   }
 }
+
