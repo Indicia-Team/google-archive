@@ -84,19 +84,10 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     '#type' => 'textfield',
     '#title' => t('Bing API Key'),
     '#description' => t('The Bing API key is required to allow use of Bing map layers but can be left blank if you do not intend '.
-        'to use Bing maps. To obtain your own key, please visit the <a target="_blank" href="http://www.bingmapsportal.com/">Bing Maps Account Center</a>.'),
+        'to use Bing maps. To obtain your own key, please visit the <a target="_blank" href="http://www.bingmapsportal.com/">Bing Maps Account Center</a>. '.
+        'Please ensure that you read and adhere to the <a href="http://www.microsoft.com/maps/product/terms.html">terms of use</a>.'),
     '#required' => FALSE,
     '#default_value' => variable_get('indicia_bing_api_key', ''),
-  );
-  $form['api_keys']['indicia_google_search_api_key'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Google Search API Key'),
-    '#description' => t('The Google Search API is a second option to lookup place names when you use the place search control. '.
-        'It is also used by the Postcode textbox control to georeference postcodes you input. To obtain your own API key '.
-        'for the Google Search API, please visit <a target="_blank" href="http://code.google.com/apis/loader/signup.html">'.
-        'Google Search API</a> and follow the instructions to get an Application ID. '),
-    '#required' => FALSE,
-    '#default_value' => variable_get('indicia_google_search_api_key', helper_config::$google_search_api_key),
   );
   $form['map'] = array(
     '#type' => 'fieldset',
@@ -268,7 +259,6 @@ function indicia_configuration_form_submit($form, &$form_state) {
     variable_set('indicia_password', $form_state['values']['indicia_password']);
   variable_set('indicia_geoplanet_api_key', $form_state['values']['indicia_geoplanet_api_key']);
   variable_set('indicia_bing_api_key', $form_state['values']['indicia_bing_api_key']);
-  variable_set('indicia_google_search_api_key', $form_state['values']['indicia_google_search_api_key']);  
   variable_set('indicia_map_centroid_lat', $form_state['values']['indicia_map_centroid_lat']);
   variable_set('indicia_map_centroid_long', $form_state['values']['indicia_map_centroid_long']);
   variable_set('indicia_map_zoom', $form_state['values']['indicia_map_zoom']);
