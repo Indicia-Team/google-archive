@@ -593,7 +593,6 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
         if (empty($errors)) {
           $response = data_entry_helper::forward_post_to('save', $s);
           // Does the form redirect after success?
-          drupal_set_message(print_r($response, true));
           drupal_set_message($args['message_after_save']);
           if (is_array($response) && array_key_exists('success', $response) &&
               array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
