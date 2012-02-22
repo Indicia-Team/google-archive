@@ -44,7 +44,63 @@ function easy_login_install() {
       'options' => '',
       'page' => 'Account'
   );
-  foreach($fields as $field) 
+  $fields[] = array(
+      'title' => 'Location',
+      'name' => 'profile_location',
+      'explanation' => 'Area you generally record in.',
+      'category' => 'Preferences',
+      'type' => 'selection',
+      'weight' => 0,
+      'required' => 1,
+      'register' => 1,
+      'visibility' => 2,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => ''
+  );
+  $fields[] = array(
+      'title' => 'Species groups',
+      'name' => 'profile_taxon_groups',
+      'explanation' => 'Species groups you are interested in recording.',
+      'category' => 'Preferences',
+      'type' => 'selection',
+      'weight' => 1,
+      'required' => 1,
+      'register' => 1,
+      'visibility' => 2,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => ''
+  );
+  $fields[] = array(
+      'title' => 'Location of expertise',
+      'name' => 'profile_location_expertise',
+      'explanation' => 'Area your expertise applies in if relevant, e.g. the county you are a county recorder for.',
+      'category' => 'Preferences',
+      'type' => 'selection',
+      'weight' => 0,
+      'required' => 0,
+      'register' => 0,
+      'visibility' => 2,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => ''
+  );
+  $fields[] = array(
+      'title' => 'Species groups you have expertise in',
+      'name' => 'profile_taxon_groups_expertise',
+      'explanation' => 'If considered an expert in one or more species groups (e.g. if a county recorder) select them here.',
+      'category' => 'Preferences',
+      'type' => 'selection',
+      'weight' => 1,
+      'required' => 0,
+      'register' => 0,
+      'visibility' => 2,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => ''
+  );
+  foreach($fields as $field) {
     db_query("INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete, options, page) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d, '%s', '%s')",
         $field['title'],
         $field['name'],
@@ -59,14 +115,20 @@ function easy_login_install() {
         $field['options'],
         $field['page']
     );
-  drupal_set_message('Added first name, last name and indicia user ID to user profile fields');
+    // Taxon groups is multi-select checkboxes
+    if ($field['name']==='profile_taxon_groups_expertise' || $field['name']='profile_taxon_groups') {
+      db_query("INSERT INTO {profile_checkboxes} (fid, type, delimiter) values (%d, 'checkboxes', ',')", db_last_insert_id('profile_fields', 'fid'));
+    }
+    
+  }
 }
 
 function easy_login_enable() {
-  drupal_set_message(t('You have enabled the Easy Login feature which lets people register and login using an OpenID, Twitter or Facebook account. To enable '.
+  /*drupal_set_message(t('You have enabled the Easy Login feature which lets people register and login using an OpenID, Twitter or Facebook account. To enable '.
       'twitter signin please follow the instructions from step 4 at <a href="http://drupal.org/node/649714">Sign in to Drupal with your Twitter Account</a>. '.
       'If you are developing on a localhost webserver, then use http://127.0.0.1 instead of http://localhost in the registration form for both the Callback URL and '.
       'Website parameters. Also note that the Callback URL should have a trailing slash when you specify it, e.g. "http://127.0.0.1/instant/twitter/oauth/".'));
-  drupal_set_message(t('To allow Facebook sign-in, you must enter your Facebook Application details at '.l('Facebook Connect Settings', 'admin/settings/fbconnect').
-      '. You can request an Application ID for facebook at '.l('','http://developers.facebook.com/setup').'.'));
+  drupal_set_message(t('To allow Facebook sign-in, you must enter your Facebook Application details at '.l('Facebook Connect Settings', 'admin/build/fb/fb_app_create').
+      ' then select the app as the Primary Connect Application on the Facebook Connect tab. You can request an Application ID for facebook at '.
+      l('http://developers.facebook.com/setup','http://developers.facebook.com/setup').'.'));*/
 }

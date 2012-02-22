@@ -13,6 +13,14 @@ function easy_login_user_default_permissions() {
       '0' => 'authenticated user',
     ),
   );
+  
+  // Exported permission: administer experts
+  $permissions['administer experts'] = array(
+    'name' => 'administer experts',
+    'roles' => array(
+      '0' => 'admin user',
+    ),
+  );
 
   return $permissions;
 }
