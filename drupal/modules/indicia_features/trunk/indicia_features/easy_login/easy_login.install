@@ -116,7 +116,7 @@ function easy_login_install() {
         $field['page']
     );
     // Taxon groups is multi-select checkboxes
-    if ($field['name']==='profile_taxon_groups_expertise' || $field['name']='profile_taxon_groups') {
+    if ($field['name']=='profile_taxon_groups_expertise' || $field['name']=='profile_taxon_groups') {
       db_query("INSERT INTO {profile_checkboxes} (fid, type, delimiter) values (%d, 'checkboxes', ',')", db_last_insert_id('profile_fields', 'fid'));
     }
     

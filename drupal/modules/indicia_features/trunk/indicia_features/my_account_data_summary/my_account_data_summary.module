@@ -8,7 +8,7 @@ function my_account_data_summary_menu() {
     'title' => 'My Data Summary',
     'page callback' => 'my_account_data_summary_output',
     'page arguments' => array(1),
-    'access callback' => 'my_account_data_summary_access',
+    'access callback' => 'user_edit_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
   );
