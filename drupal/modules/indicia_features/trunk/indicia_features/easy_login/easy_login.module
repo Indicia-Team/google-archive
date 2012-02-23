@@ -1,6 +1,5 @@
 <?php
 
-<<<<<<< .mine
 /**
  * Implementation of hook menu.
  * Exposes a form that can resolve the case when there are several possible users that this account can be linked to
@@ -17,8 +16,6 @@ function easy_login_menu() {
   return $items;
 }
 
-=======
->>>>>>> .r3596
 function resolve_multiple_users_form() {
   $userList = $_SESSION['multiple_users_to_resolve'];
   drupal_set_message(t('There appear to be several existing users on the central records database which may or may not be yours. They are users of the '.
@@ -37,7 +34,7 @@ function resolve_multiple_users_form() {
     '#options' => $websites
   );
   $form['submit'] = array(
-    '#type' => 'submit', 
+    '#type' => 'submit',
     '#value' => t('Save')
   );
   return $form;
@@ -64,32 +61,17 @@ function resolve_multiple_users_form_submit($form, &$form_state) {
 
 /**
  * Implementation of hook_user.
- * Traps login events and ensures the user is registered on the warehouse. Stores the user's ID in the local profile data. * @staticvar boolean $_updating_account
- * @param type $op
- * @param type $edit
- * @param object $account User account
- * @param type $category
- * @return type 
+ * Traps login events and ensures the user is registered on the warehouse. Stores the user's ID in the local profile data.
  */
 function easy_login_user($op, &$edit, &$account, $category = NULL) {
   static $_updating_account=false;
   if (!$_updating_account) {
     switch ($op) {
       case 'login':
-<<<<<<< .mine
         if (isset($account->profile_indicia_user_id))
-=======
-        if (isset($account->profile_indicia_user_id)) 
->>>>>>> .r3596
           return;
-<<<<<<< .mine
         if (empty($account->profile_last_name)) {
-=======
-        // deliberately flow through - as we always check the account id after account update. So do NOT break
-      case 'after_update':
-        if (empty($account->profile_last_name)) {
->>>>>>> .r3596
-          drupal_set_message('Please set at least your last name on your '.l('user account', 'user/'.$account->uid.'/edit/Name'). 
+          drupal_set_message('Please set at least your last name on your '.l('user account', 'user/'.$account->uid.'/edit/Name').
               '. This will allow your user registration to be linked properly to the central database of records.');
           return;
         }
@@ -98,18 +80,17 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
       case 'insert':
         $_updating_account=true;
         $response = easy_login_call_get_user_id($account);
-        easy_login_handle_get_user_id_response($account, $response, $op);        
+        easy_login_handle_get_user_id_response($account, $response, $op);
         $_updating_account=false;
     }
   }
 }
-<<<<<<< .mine
 
 /**
  * Function to call the get_user_id service on the warehouse.
  * @param object $account User object.
  * @param string $force Set to merge (to force a merge operation) or split (to force no merge).
- * @param array $users_to_merge If force is set to merge, but only some users must be merged, 
+ * @param array $users_to_merge If force is set to merge, but only some users must be merged,
  * pass an array of the user IDs.
  */
 function easy_login_call_get_user_id($account, $force='null', $users_to_merge=null) {
@@ -117,7 +98,7 @@ function easy_login_call_get_user_id($account, $force='null', $users_to_merge=nu
   $url = data_entry_helper::$base_url.'index.php/services/user_identifier/get_user_id';
   $identifiers = array(array('type'=>'email','identifier'=>$account->mail));
   // add twitter, fb and openID accounts here
-  // @todo OpenID and fb. 
+  // @todo OpenID and fb.
   if (module_exists('twitter')) {
     $twitterAccounts = twitter_get_user_accounts($account->uid);
     foreach ($twitterAccounts as $twitterAccount) {
@@ -143,7 +124,7 @@ function easy_login_call_get_user_id($account, $force='null', $users_to_merge=nu
 
 function easy_login_handle_get_user_id_response($account, $response, $op=null) {
   if (preg_match('/^[0-9]+$/', $response)) {
-    if (empty($account->profile_indicia_user_id)) 
+    if (empty($account->profile_indicia_user_id))
       drupal_set_message(t('Your user account is now linked to the central records database.'));
     else if ($account->profile_indicia_user_id!=$response) {
       drupal_set_message(t('Your user account link to the central records database has been updated.'));
@@ -213,7 +194,7 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
     // If we are editing someone else's form, then let's load their user account.
     if (isset($form['_account']['#value'])) {
       $values = $form['_account']['#value'];
-      if (isset($values->uid)) 
+      if (isset($values->uid))
         $thisUser = user_load($values->uid);
     }
     // can logged in user change expert geography and taxon groups?
@@ -227,8 +208,5 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
       $form['Preferences']['profile_taxon_groups_expertise']['#type'] = 'hidden';
     }
   }
-  
-}
-=======
 
->>>>>>> .r3596
+}
