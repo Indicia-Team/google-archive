@@ -1,0 +1,50 @@
+@import "compass/css3";
+
+h2 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#header {
+  padding-top: 0;
+  #sitename {
+    margin: 1em 0 0.5em 1em;
+  }
+}
+
+#secondary-links {
+  float: right;
+}
+
+.gallery-img, .view-summary-report ul li {
+  text-align: center;
+  padding: 0.5em;
+  margin: 0.5em;
+  @include inline-block;
+  list-style-type: none;
+  background: none;
+  @include box-shadow(silver 3px 3px 6px);
+  border: solid silver 1px;
+}
+
+.form-checkboxes > div {
+  @include inline-block;
+}
+
+a h2 {
+  color: #006699;
+}
+
+a:hover h2 {
+  text-decoration: underline;
+}
+
+/* enable special menu items on nice menus to have correct spacigng */
+ul.nice-menu span.nolink {
+  padding: 0.3em 5px 0.3em 5px;
+  display: block;
+}
+
+ul.nice-menu-down .menuparent span.nolink {
+  padding-right: 15px; 
+}
