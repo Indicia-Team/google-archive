@@ -8,7 +8,7 @@ function my_account_data_summary_menu() {
     'title' => 'My Data Summary',
     'page callback' => 'my_account_data_summary_output',
     'page arguments' => array(1),
-    'access callback' => 'user_edit_access',
+    'access callback' => 'my_account_data_summary_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
   );
@@ -25,6 +25,11 @@ function my_account_data_summary_output($account) {
   global $account;
   if (!isset($account->profile_indicia_user_id))
     profile_load_profile($account);
+  if (empty($account->profile_indicia_user_id)) {
+    drupal_set_message(t('Before viewing a summary of your data, you must associate your login with the central records database. To do this, '.
+        'please ensure that at least your surname is filled in on the Edit tab under the Name category, then save your account.'));
+    return t('No data available');
+  }
   $params['user_id'] = $account->profile_indicia_user_id;
   if (!user_access('verifier'))
     // drop the last row, which is the number of verified records, since they are not an expert.
