@@ -1,50 +1,77 @@
-#header {
-  padding-top: 0;
-}
-
-#header #sitename {
-  margin: 1em 0 0.5em 1em;
-}
-
-#secondary-links {
-  float: right;
-}
-
-.gallery-img, .view-summary-report ul li {
-  text-align: center;
-  padding: 0.5em;
-  margin: 0.5em;
-  display:-moz-inline-stack;
-  display:inline-block;
-  zoom:1;
-  *display:inline;
-}
-
-.view-summary-report ul li {
-  border: solid silver 1px;
-  list-style-type: none;
-  background: none;
-}
-
+/* line 3, sass/instant_indicia.scss */
 h2 {
   font-size: 16px;
   font-weight: bold;
 }
 
+/* line 8, sass/instant_indicia.scss */
+#header {
+  padding-top: 0;
+}
+/* line 10, sass/instant_indicia.scss */
+#header #sitename {
+  margin: 1em 0 0.5em 1em;
+}
+
+/* line 15, sass/instant_indicia.scss */
+#secondary-links {
+  float: right;
+}
+
+/* line 19, sass/instant_indicia.scss */
+.gallery-img, .view-summary-report ul li {
+  text-align: center;
+  padding: 0.5em;
+  margin: 0.5em;
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  list-style-type: none;
+  background: none;
+  -moz-box-shadow: silver 3px 3px 6px;
+  -webkit-box-shadow: silver 3px 3px 6px;
+  -o-box-shadow: silver 3px 3px 6px;
+  box-shadow: silver 3px 3px 6px;
+  border: solid silver 1px;
+}
+/* line 7, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.gallery-img, .view-summary-report ul li {
+  *display: inline;
+}
+
+/* line 30, sass/instant_indicia.scss */
+.form-checkboxes > div {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+}
+/* line 7, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.form-checkboxes > div {
+  *display: inline;
+}
+
+/* line 34, sass/instant_indicia.scss */
 a h2 {
   color: #006699;
 }
 
+/* line 38, sass/instant_indicia.scss */
 a:hover h2 {
   text-decoration: underline;
 }
 
 /* enable special menu items on nice menus to have correct spacigng */
+/* line 43, sass/instant_indicia.scss */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
 }
 
+/* line 48, sass/instant_indicia.scss */
 ul.nice-menu-down .menuparent span.nolink {
-  padding-right: 15px; 
+  padding-right: 15px;
 }
