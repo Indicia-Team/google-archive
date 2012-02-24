@@ -77,7 +77,6 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         }
         // deliberately flow through - as we always check the account id after account update. So do NOT break
       case 'submit':
-      case 'insert':
         $_updating_account=true;
         $response = easy_login_call_get_user_id($account);
         easy_login_handle_get_user_id_response($account, $response, $op);
@@ -123,18 +122,22 @@ function easy_login_call_get_user_id($account, $force='null', $users_to_merge=nu
 }
 
 function easy_login_handle_get_user_id_response($account, $response, $op=null) {
-  if (preg_match('/^[0-9]+$/', $response)) {
-    if (empty($account->profile_indicia_user_id))
-      drupal_set_message(t('Your user account is now linked to the central records database.'));
-    else if ($account->profile_indicia_user_id!=$response) {
-      drupal_set_message(t('Your user account link to the central records database has been updated.'));
+  if (preg_match('/^[0-9]+$/', $response)) {    
+    if ($account->profile_indicia_user_id!=$response) {
       if ($op==='login' || $op===null) {
+        drupal_set_message($op . ' - doing a profile_fields insert for ' . print_r($response, true));
         // Can use user_save during a login operation
         $r = db_fetch_array(db_query("SELECT fid FROM {profile_fields} WHERE name='profile_indicia_user_id'"));
-        db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $account->uid, $response['output']);
-      } else
+        db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $account->uid, $response);
+      } else {
+        drupal_set_message($op . ' - doing a edit array change for ' . print_r($response, true));
         // must set the edit array for the insert or update operation
         $edit['profile_indicia_user_id']=$response;
+      }
+      if (empty($account->profile_indicia_user_id))
+        drupal_set_message(t('Your user account is now linked to the central records database.'));
+      else
+        drupal_set_message(t('Your user account link to the central records database has been updated.'));
     }
   } else {
     // output not just a user ID, so should be either a json encoded error, or a list of possible users.
