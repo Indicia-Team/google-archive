@@ -13,6 +13,7 @@ function species_account_gallery_install() {
  * Clean up variables.
  */
 function species_account_gallery_uninstall() {
+  variable_del('sag_header');
   variable_del('sag_vid');
   variable_del('sag_gallery_mode');
   variable_del('sag_max_image_weight');

@@ -21,7 +21,40 @@ function sag_species_gallery($tid=false, $hide=false) {
     drupal_add_js(array('galleryAjaxPath'=>url('species_gallery/ajax')), 'setting');
   }
   drupal_add_css(drupal_get_path('module', 'species_account_gallery').'/stylesheets/species-account-gallery.css');
-  return theme('gallery_tree', gallery_tree($tree), $hide);
+  $output = '';
+  if (!$hide) {
+    $output = '<div id="species-account-gallery">';
+    if ($tid) {
+      // If outputting the contents of a term level, and if there is a higher taxon with a node at the current top level, 
+      // we want to output it's title and body, as long as we are outputting the first level not an AJAX call for children.
+      $sql = 'SELECT n.nid, n.title, nr.body '.
+          'FROM {term_node} tn '.          
+          'INNER JOIN {node} n on n.nid=tn.nid AND n.type=\'higher_taxon\''.
+          'INNER JOIN {node_revisions} nr ON nr.nid=n.nid '.
+          'WHERE tn.tid=%d';  
+      if ($n = db_fetch_object(db_query($sql, $tid))) {
+        if (!empty($n->body)) 
+          $output .= '<fieldset class="collapsible collapsed taxon-info"><legend class="info">i</legend>'.$n->body.'</fieldset>';
+        drupal_set_title($n->title);
+      }
+    } else {
+      // no parent term, so outputting the very top level. Output the header.
+      $output .= variable_get('sag_header','');
+    }
+    drupal_add_js('misc/collapse.js');
+  }
+  $output = $output.theme('gallery_tree', gallery_tree($tree), $hide);
+  if (!$hide)
+    $output .= '</div>';
+  else {
+    // reattach collapsible behaviour to ajax content
+    $output .= "<script type=\"text/javascript\">\n";
+    $output .= "<!--//--><![CDATA[//><!--\n";
+    $output .= "Drupal.attachBehaviors($('#species-account-gallery'));\n";
+    $output .= "//--><!]]>\n";
+    $output .= "</script>\n";
+  }
+  return $output;
 }
 
 function taxonomy_get_nested_tree($terms = array(), $max_depth = NULL, $parent = 0, $parents_index = array(), $depth = 0) {
