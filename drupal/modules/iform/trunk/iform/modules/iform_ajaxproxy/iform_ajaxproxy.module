@@ -270,6 +270,9 @@ function iform_ajaxproxy_proxy() {
   $postargs = 'submission='.json_encode($Model);
   $postargs .= '&auth_token='.sha1($nonce.":".$conn['password']);
   $postargs .= '&nonce='.$nonce;
+  // pass through the user ID as this can then be used to set created_by and updated_by_ids
+  if (isset($_REQUEST['user_id']))
+    $postargs .= '&user_id='.$_REQUEST['user_id'];
   $postresponse = data_entry_helper::http_post($request, $postargs, false);
   // the response array will always feature an output, which is the actual response or error message.
   $response = $postresponse['output'];
