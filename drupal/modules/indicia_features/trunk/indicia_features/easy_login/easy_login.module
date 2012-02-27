@@ -158,7 +158,7 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
     // Load the list of locations
     $response = data_entry_helper::get_population_data(array(
       'table' => 'location',
-      'extraParams' => $readAuth,
+      'extraParams' => $readAuth + array('orderby'=>'name', 'sortdir'=>'ASC'),
       'nocache' => true
     ));
     $locations=array(''=>'<Please select>');

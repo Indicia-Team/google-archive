@@ -61,7 +61,7 @@ function easy_login_install() {
   $fields[] = array(
       'title' => 'Species groups',
       'name' => 'profile_taxon_groups',
-      'explanation' => 'Species groups you are interested in recording.',
+      'explanation' => 'Species groups you are interested in recording. This indicates a preference only, you will still be able to record other species.',
       'category' => 'Preferences',
       'type' => 'selection',
       'weight' => 1,
