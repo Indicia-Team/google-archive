@@ -9,7 +9,6 @@ ul.species-gallery-list {
 
     span {
       color: #336699;
-      display: block;
       font-size: 1.2em;
     }
 
@@ -42,5 +41,16 @@ ul.species-gallery-list {
     border: solid silver 1px;
     @include box-shadow();
   }
- 
+  
+  fieldset {
+    margin: 3px 0 0;
+    @include inline-block;
+    width: 60%;
+    vertical-align: top;
+  }
+  
+  fieldset.collapsed {
+    border: none;
+  }
+
 }
