@@ -1,14 +1,14 @@
-#summary A description of the reporting facilities within Indicia
+#summary A description of the report file format used by Indicia
 
 = Introduction =
 
-Indicia uses a subset of the format used in Recorder to allow custom defined reporting. This document outlines how to define a report and how to use the Indicia reporting services to run it, either from the core module or from a site module.
+Indicia uses an XML file which declares a query and metadata about how the query is to be used to allow custom defined reporting. This document outlines how to define a report and how to use the Indicia reporting services to run it, either from the warehouse or from a client website.
 
 = Details =
 
 == Report Format ==
 
-At the moment, reports must be defined in an XML document similar to that used in Recorder. No formal schema exists, but the structure is sufficiently simple that an example should suffice to allow you to write reports easily. If you wish to expand the capability to support other formats, you may do so by implementing the ReportReader interface and defining a report format in the ReportEngine class. Details of this are however beyond the scope of this document.
+Reports must be defined in an XML document. No formal schema exists, but the structure is sufficiently simple that an example should suffice to allow you to write reports easily. If you wish to expand the capability to support other formats, you may do so by implementing the ReportReader interface and defining a report format in the ReportEngine class. Details of this are however beyond the scope of this document.
 
 An XML defined report might look something like this:
 
@@ -92,7 +92,7 @@ The order_bys are appended to the end of the query in the obvious way, and can b
       </params>
 }}}
 
-Parameters may be specified to allow the report requester to specify information at compile-time. In the example above, the report requester will receive a prompt to enter a date, which will then be used in the query. Parameters take four attributes and have no child elements:
+Parameters may be specified to allow the report requester to specify information at compile-time. In the example above, the report requester will receive a prompt to enter a date, which will then be used in the query. Parameters take four attributes:
 
   * `name` should match the name given in the query, excluding the # and # terminators. Thus, in the example above, the parameter name 'date' matches the pattern '#date#' in the query.
   * `display` is the text used to label the parameter in the parameter request screen.
@@ -123,6 +123,15 @@ you would expect a parameter defined like:
             <column name="count" display="Total no. of Occurrences" />
       </columns>
 }}}
+
+Sometimes, a query join is required in a report only when a parameter has a value, or has a certain value. Including the join in the report at all times would normally reduce performance of the report even when the join was not necessary. For example, a parameter filtering on the record's survey title might require a join to the `surveys` table which would not otherwise be required. In this case, specify a child element of the parameter called `<join>` which contains the join SQL, and ensure that the query contains the `#joins#` tag so that the pre-processor knows where to insert the join. The following example is from a verification report which only includes a join to the locations table if the expert's region of expertise is specified:
+{{{
+<param name='expertise_location' display='Location of Expertise' description='Provide the location in which your expertise applies' datatype='lookup' population_call='direct:location:id:name'>
+        <join>JOIN locations lexpert ON st_intersects(lexpert.boundary_geom, s.geom) AND lexpert.id=#expertise_location#</join>  
+</param>
+}}}
+
+It is also possible to qualify the join, by specifying attributes *operator* and *value*. The *operator* must be set to `equal` or `notequal` and the *value* should also be set to define a filter on when this join is applied to the report SQL.
 
 ===Custom Attributes===
 
