@@ -120,11 +120,7 @@ function taxon_formatters_preset_form_validate($form, &$form_state) {
 
 function taxon_formatters_preset_form_submit($form, &$form_state) {
   // build an array of the settings specific to the sub-module
-  $settings = array();
-  foreach($form['taxon_formatter_params']['taxon_formatter_params_wrapper'] as $setting => $config) {
-    if (substr($setting, 0, 1)!='#') 
-      $settings[$setting] = $config['#value'];
-  }
+  $settings = get_form_values_recursively($form['taxon_formatter_params']['taxon_formatter_params_wrapper']);
   // put the settings in the db field
   $form_state['values']['settings'] = json_encode($settings);
   // save the data, overwriting existing or creating a new record.
@@ -163,4 +159,27 @@ function taxon_formatters_preset_delete_form_submit($form, &$form_state) {
   taxon_formatters_preset_delete($preset);
   drupal_set_message(t('Preset %name (ID: @id) was deleted.', array('%name' => $preset['presetname'], '@id' => $preset['presetid'])));
   $form_state['redirect'] = 'admin/build/taxon_formatters';
+}
+
+/*
+ * Function to retrieve control #value fields held in an array.
+ * Because the controls can be held in nested fieldsets the function is called 
+ * recursively to work through the array structure.
+ */
+function get_form_values_recursively($arr) {  
+  $r = array();
+  foreach($arr as $setting => $config) {
+    if (substr($setting, 0, 1)!='#') {
+      // found a fieldset or a control
+      if (isset($config['#value'])) {
+        // it was a control
+        $r[$setting] = $config['#value'];
+      }
+      else {
+        // it was a fieldset
+        $r = array_merge ($r, get_form_values_recursively($config));
+      }
+    }
+  }
+  return $r;
 }
