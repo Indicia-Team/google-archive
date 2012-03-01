@@ -89,17 +89,17 @@ function theme_gallery_tree($tree, $hide) {
     $hideStyle=$hide ? ' style="display: none;"' : '';
     $r = "<ul class=\"species-gallery-list\"$hideStyle>\n";
     // loop through the tree nodes in this level (not the same as Drupal nodes!)
-    foreach($tree as $node) {
-      $tid = $node['tid'];
-      if ($node['has_children']) 
+    foreach($tree as $treenode) {
+      $tid = $treenode['tid'];
+      if ($treenode['has_children']) 
         $class = variable_get('sag_load_mode', 'full') === 'full' ? '' : 'not-loaded';        
       else 
         $class = 'leaf';
-      if (isset($node['label'])) {
+      if (isset($treenode['label'])) {
         $r .= "<li class=\"species-gallery-header $class\">";
-        $label = "<span class=\"gallery-label $class\" id=\"tid-$tid\">".$node['label']."</span>";
+        $label = "<span class=\"gallery-label $class\" id=\"tid-$tid\">".$treenode['label']."</span>";
         // if node is a leaf node, then can create a link to the associated node
-        if (!$node['has_children']) {
+        if (!$treenode['has_children']) {
           $termnodes = db_query("select tn.nid from {term_node} tn ".
               "inner join {node} n on n.nid=tn.nid and n.type<>'image' ".
               "where tn.tid=%d", $tid);
@@ -112,19 +112,21 @@ function theme_gallery_tree($tree, $hide) {
         } 
         $r .= $label;
       }
-      if (!empty($node['description'])) {
+      if (!empty($treenode['description'])) {
         $r .= '<fieldset class="collapsible collapsed taxon-info"><legend class="info">i</legend>';
-        $r .= '<div>'.$node['description'].'</div>';
+        $r .= '<div>'.$treenode['description'].'</div>';
         $r .= '</fieldset>';
       }
-      if (isset($node['images'])) {
+      if (isset($treenode['images'])) {
         $gallery = variable_get('sag_gallery_mode', 'fancybox');
         $r .= "<ul class=\"gallery-images\">\n";
-        foreach($node['images'] as $img) {
+        foreach($treenode['images'] as $img) {
           $largeUrl = imagecache_create_url('large', $img['filepath'], FALSE, $absolute);
-          $r .= '<li class="species-gallery-image"><a href="'.$largeUrl.'" class="'.$gallery.'">'.
-                theme('imagecache', 'thumbnail', 'species_images/'.$img['filename'], 'Species image', t('Click to enlarge')).
-                '</a>';
+          $smallUrl = imagecache_create_url('thumbnail', $img['filepath'], FALSE, false);
+          $elem = theme('imagecache', 'thumbnail', $img['filepath'], 'Species image', t('Click to enlarge'), array('class' => 'lazy imagecache imagecache-thumbnail'));
+          $elem = str_replace($smallUrl, base_path() . drupal_get_path('module', 'species_account_gallery') . '/grey.gif', $elem);
+          $elem = str_replace('src="', 'data-original="'.$smallUrl.'" src="', $elem);
+          $r .= "<li class=\"species-gallery-image\"><a href=\"$largeUrl\" class=\"$gallery\">$elem</a>";
           if (variable_get('sag_gallery_mode', 'fancybox')==='highslide' && (!empty($img['field_credits_value']) || !empty($img['field_caption_value']))) {
             $caption = array();
             if (!empty($img['field_credits_value'])) 
@@ -138,9 +140,9 @@ function theme_gallery_tree($tree, $hide) {
         }
         $r .= "</ul>\n";
       }
-      if (isset($node['children'])) 
-        $r .= theme('gallery_tree', $node['children']);
-      if (isset($node['label'])) 
+      if (isset($treenode['children'])) 
+        $r .= theme('gallery_tree', $treenode['children']);
+      if (isset($treenode['label'])) 
         $r .= '</li>';
     }
     $r .= "</ul>\n";

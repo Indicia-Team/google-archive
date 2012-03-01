@@ -11,19 +11,30 @@ function sag_species_gallery($tid=false, $hide=false) {
   $tree = taxonomy_get_nested_tree($vid, $maxDepth, $tid);
   $gallery = variable_get('sag_gallery_mode', 'fancybox');
   if ($gallery==='fancybox') {
-    drupal_add_js(drupal_get_path('module', 'iform').'/media/js/fancybox/jquery.fancybox.pack.js');
-    drupal_add_css(drupal_get_path('module', 'iform').'/media/js/fancybox/jquery.fancybox.css');
-    drupal_add_js('$(document).ready(function() {$("a.fancybox").fancybox();});','inline');
+    $jsFile = drupal_get_path('module', 'iform').'/media/js/fancybox/jquery.fancybox.pack.js';
+    $cssFile = drupal_get_path('module', 'iform').'/media/js/fancybox/jquery.fancybox.css';
+    // file might be in libraries
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $jsFile)) {
+      drupal_add_js($jsFile);
+      drupal_add_css($cssFile);
+    } else {
+      drupal_add_js(str_replace('/modules', '/libraries/', $jsFile));
+      drupal_add_css(str_replace('/modules', '/libraries/', $cssFile));
+    }
+    drupal_add_js('$(document).ready(function() {
+    $("a.fancybox").fancybox();
+    });','inline');
   }
   if (variable_get('sag_load_mode', 'full')==='ajax') {
     // add JS for tree loading on the fly
     drupal_add_js(drupal_get_path('module', 'species_account_gallery').'/ajaxTree.js');
+    drupal_add_js(drupal_get_path('module', 'species_account_gallery').'/jquery.lazyload.js');
     drupal_add_js(array('galleryAjaxPath'=>url('species_gallery/ajax')), 'setting');
   }
   drupal_add_css(drupal_get_path('module', 'species_account_gallery').'/stylesheets/species-account-gallery.css');
-  $output = '';
-  if (!$hide) {
-    $output = '<div id="species-account-gallery">';
+  $divId = 'species-account-gallery'.($tid ? "-$tid" : '');
+  $output = '<div id="'.$divId.'">';
+  if (!$hide) {    
     if ($tid) {
       // If outputting the contents of a term level, and if there is a higher taxon with a node at the current top level, 
       // we want to output it's title and body, as long as we are outputting the first level not an AJAX call for children.
@@ -44,14 +55,11 @@ function sag_species_gallery($tid=false, $hide=false) {
     drupal_add_js('misc/collapse.js');
   }
   $output = $output.theme('gallery_tree', gallery_tree($tree), $hide);
-  if (!$hide)
-    $output .= '</div>';
-  else {
+  $output .= "</div>\n";
+  if ($hide) {
     // reattach collapsible behaviour to ajax content
     $output .= "<script type=\"text/javascript\">\n";
-    $output .= "<!--//--><![CDATA[//><!--\n";
     $output .= "Drupal.attachBehaviors($('#species-account-gallery'));\n";
-    $output .= "//--><!]]>\n";
     $output .= "</script>\n";
   }
   return $output;
