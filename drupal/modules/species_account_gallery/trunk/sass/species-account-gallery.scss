@@ -28,6 +28,9 @@ ul.species-gallery-list {
       font-weight: bold;
       margin-left: 8px;
     }
+    span.loading{
+      background: url(../ajax-loader.gif) left no-repeat;
+    }
   }
   li.species-gallery-image {
     @include inline-block();

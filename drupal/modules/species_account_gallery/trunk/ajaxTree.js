@@ -1,17 +1,19 @@
 function collapseNode(span) {
-  $(span).parent().find('> .species-gallery-list').slideUp('fast');
+  $(span).parent().find('> div .species-gallery-list').slideUp('fast');
   $(span).removeClass('expanded');
   $(span).addClass('collapsed');
 }
 
 function expandNode(span) {
-  $(span).parent().find('> .species-gallery-list').slideDown('fast');
+  $(span).parent().find('> div .species-gallery-list').slideDown('fast');
   $(span).removeClass('collapsed');
   $(span).addClass('expanded');
+  $(span).parent().find('> div .species-gallery-list img.lazy').lazyload();
 }
 
 function loadNode() {
   var tid=this.id.split('-')[1], span=this;
+  $(span).addClass('loading');
   $.get(
     Drupal.settings.galleryAjaxPath, 
     {tid:tid},
@@ -21,13 +23,14 @@ function loadNode() {
       expandNode(span);
       // attach image popup plugins to the new content
       if (typeof hs !== "undefined") {
-        $(span).parent().find('> .species-gallery-list a.highslide').click(function() {
+        $(span).parent().find('> div .species-gallery-list a.highslide').click(function() {
           return hs.expand(this);
         });
       }
       if (typeof $.fancybox !== "undefined") {
-        $(span).parent().find('> .species-gallery-list a.fancybox').fancybox();
+        $(span).parent().find('> div .species-gallery-list a.fancybox').fancybox();
       }
+      $(span).removeClass('loading');
     },
     'html'
   );

@@ -32,7 +32,11 @@ ul.species-gallery-list li span.leaf {
   font-weight: bold;
   margin-left: 8px;
 }
-/* line 32, ../sass/species-account-gallery.scss */
+/* line 31, ../sass/species-account-gallery.scss */
+ul.species-gallery-list li span.loading {
+  background: url(../ajax-loader.gif) left no-repeat;
+}
+/* line 35, ../sass/species-account-gallery.scss */
 ul.species-gallery-list li.species-gallery-image {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -46,11 +50,11 @@ ul.species-gallery-list li.species-gallery-image {
 ul.species-gallery-list li.species-gallery-image {
   *display: inline;
 }
-/* line 36, ../sass/species-account-gallery.scss */
+/* line 39, ../sass/species-account-gallery.scss */
 ul.species-gallery-list li.species-gallery-image img {
   border: solid 2px #777777;
 }
-/* line 40, ../sass/species-account-gallery.scss */
+/* line 43, ../sass/species-account-gallery.scss */
 ul.species-gallery-list li.leaf {
   border: solid silver 1px;
   -moz-box-shadow: 0px 0px 5px #333333;
@@ -58,7 +62,7 @@ ul.species-gallery-list li.leaf {
   -o-box-shadow: 0px 0px 5px #333333;
   box-shadow: 0px 0px 5px #333333;
 }
-/* line 45, ../sass/species-account-gallery.scss */
+/* line 48, ../sass/species-account-gallery.scss */
 ul.species-gallery-list fieldset {
   margin: 3px 0 0;
   display: -moz-inline-box;
@@ -73,7 +77,7 @@ ul.species-gallery-list fieldset {
 ul.species-gallery-list fieldset {
   *display: inline;
 }
-/* line 52, ../sass/species-account-gallery.scss */
+/* line 55, ../sass/species-account-gallery.scss */
 ul.species-gallery-list fieldset.collapsed {
   border: none;
 }
