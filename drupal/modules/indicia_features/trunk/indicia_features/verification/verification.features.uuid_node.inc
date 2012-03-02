@@ -47,15 +47,17 @@ function verification_uuid_features_default_content() {
     'indicia_wms_layers' => '',
     'standard_controls' => 'layerSwitcher
 panZoom',
-    'report_name' => 'library/occurrences/verification_list',
+    'report_name' => 'library/occurrences/verification_list_2',
     'param_presets' => 'survey_id=
 date_from=
 date_to=
 smpattrs=
 occattrs=',
     'param_defaults' => 'id=
-taxon_group_id=
-record_status=C',
+record_status=C
+rule=
+searchArea=
+idlist=',
     'columns_config' => '[
   {
     "fieldname":"occurrence_id",
@@ -66,6 +68,26 @@ record_status=C',
     "fieldname":"taxon",
     "display":"Species",
     "template":"<div class=\'zero-{zero_abundance}\'>{taxon}<br/>{common}</div>"
+  },
+  {
+    "fieldname":"location_name",
+    "display":"Site Name"
+  },
+  {
+    "fieldname":"entered_sref",
+    "display":"Grid Ref"
+  },
+  {
+    "fieldname":"date",
+    "display":"Date"
+  },
+  {
+    "fieldname":"comment",
+    "display":"Check"
+  },
+  {
+    "fieldname":"taxon_group",
+    "visible":false
   },
   {
     "fieldname":"record_status",
