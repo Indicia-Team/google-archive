@@ -49,25 +49,45 @@ h2 {
 
 /* line 35, sass/instant_indicia.scss */
 .report-map {
-  background-color: green;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #77ff77), color-stop(100%, #008000));
+  background-image: -webkit-linear-gradient(#77ff77, #008000);
+  background-image: -moz-linear-gradient(#77ff77, #008000);
+  background-image: -o-linear-gradient(#77ff77, #008000);
+  background-image: -ms-linear-gradient(#77ff77, #008000);
+  background-image: linear-gradient(#77ff77, #008000);
   color: white;
 }
 
 /* line 40, sass/instant_indicia.scss */
 .report-table {
-  background-color: blue;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7777ff), color-stop(100%, #0000ff));
+  background-image: -webkit-linear-gradient(#7777ff, #0000ff);
+  background-image: -moz-linear-gradient(#7777ff, #0000ff);
+  background-image: -o-linear-gradient(#7777ff, #0000ff);
+  background-image: -ms-linear-gradient(#7777ff, #0000ff);
+  background-image: linear-gradient(#7777ff, #0000ff);
   color: white;
 }
 
 /* line 45, sass/instant_indicia.scss */
 .report-pie {
-  background-color: red;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff7777), color-stop(100%, #ff0000));
+  background-image: -webkit-linear-gradient(#ff7777, #ff0000);
+  background-image: -moz-linear-gradient(#ff7777, #ff0000);
+  background-image: -o-linear-gradient(#ff7777, #ff0000);
+  background-image: -ms-linear-gradient(#ff7777, #ff0000);
+  background-image: linear-gradient(#ff7777, #ff0000);
   color: white;
 }
 
 /* line 50, sass/instant_indicia.scss */
 .report-bar {
-  background-color: purple;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bb77bb), color-stop(100%, #800080));
+  background-image: -webkit-linear-gradient(#bb77bb, #800080);
+  background-image: -moz-linear-gradient(#bb77bb, #800080);
+  background-image: -o-linear-gradient(#bb77bb, #800080);
+  background-image: -ms-linear-gradient(#bb77bb, #800080);
+  background-image: linear-gradient(#bb77bb, #800080);
   color: white;
 }
 
