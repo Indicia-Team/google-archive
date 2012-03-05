@@ -26,11 +26,44 @@ function summary_reports_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
     }
 }
 
+/*
+* Implementation of hook_field_formatter_info().
+* Declare a formatter to output the raw value of a field.
+*/
+function summary_reports_field_formatter_info() {
+  $formatters=array('raw' => array(
+      'label' => t('Raw'),
+      'field types' => array('text')
+  ));
+  return $formatters;
+}
+
+/**
+ * Implement hook_theme.
+ * Generates theme functions for each formatter preset.
+ */
+function summary_reports_theme() {
+  $theme = array('summary_reports_formatter_raw' => array(
+      'arguments' => array('element' => NULL),
+      'function' => 'theme_summary_reports_raw',
+    )
+  );
+  return $theme;
+}
+
+/**
+ * Theme function to return the raw value of a field.
+ */
+function theme_summary_reports_raw($element) {
+  return $element['#item']['safe'];
+}
+
 function summary_report_build($node) {
   iform_load_helpers(array('report_helper'));
   $reportOptions = summary_report_get_report_options($node);
   $func = 'summary_report_build_'.$node->field_summary_report_display[0]['value'];
-  $r = $func($node, $reportOptions);
+  $r = $node->body;
+  $r .= $func($node, $reportOptions);
   handle_resources();
   return $r;
 }
