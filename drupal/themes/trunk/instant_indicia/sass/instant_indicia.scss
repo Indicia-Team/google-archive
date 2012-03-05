@@ -33,22 +33,22 @@ h2 {
 }
 
 .report-map {
-  background-color: green;
+  @include background-image(linear-gradient(#77FF77, green));
   color: white;
 }
 
 .report-table {
-  background-color: blue;
+  @include background-image(linear-gradient(#7777FF, blue));
   color: white;
 }
 
 .report-pie {
-  background-color: red;
+  @include background-image(linear-gradient(#FF7777, red));
   color: white;
 }
 
 .report-bar {
-  background-color: purple;
+  @include background-image(linear-gradient(#BB77BB, purple));
   color: white;
 }
 
