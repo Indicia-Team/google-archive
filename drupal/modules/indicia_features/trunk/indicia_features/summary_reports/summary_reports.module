@@ -190,7 +190,10 @@ function summary_report_build_bar($node, $reportOptions) {
 }
 
 function summary_report_build_pie($node, $reportOptions) {
-  return summary_report_graph($node, $reportOptions, 'pie');
+  return summary_report_graph($node, array_merge(
+    array('legendOptions'=>array('show'=>true)),
+    $reportOptions
+  ), 'pie');
 }
 
 function summary_report_graph($node, $reportOptions, $graphType) {
