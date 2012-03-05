@@ -42,6 +42,36 @@ h2 {
 }
 
 /* line 30, sass/instant_indicia.scss */
+.summary-report {
+  width: 80px;
+  height: 80px;
+}
+
+/* line 35, sass/instant_indicia.scss */
+.report-map {
+  background-color: green;
+  color: white;
+}
+
+/* line 40, sass/instant_indicia.scss */
+.report-table {
+  background-color: blue;
+  color: white;
+}
+
+/* line 45, sass/instant_indicia.scss */
+.report-pie {
+  background-color: red;
+  color: white;
+}
+
+/* line 50, sass/instant_indicia.scss */
+.report-bar {
+  background-color: purple;
+  color: white;
+}
+
+/* line 55, sass/instant_indicia.scss */
 .form-checkboxes > div {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -54,24 +84,30 @@ h2 {
   *display: inline;
 }
 
-/* line 34, sass/instant_indicia.scss */
+/* line 59, sass/instant_indicia.scss */
 a h2 {
   color: #006699;
 }
 
-/* line 38, sass/instant_indicia.scss */
+/* line 63, sass/instant_indicia.scss */
 a:hover h2 {
   text-decoration: underline;
 }
 
 /* enable special menu items on nice menus to have correct spacigng */
-/* line 43, sass/instant_indicia.scss */
+/* line 68, sass/instant_indicia.scss */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
 }
 
-/* line 48, sass/instant_indicia.scss */
+/* line 73, sass/instant_indicia.scss */
 ul.nice-menu-down .menuparent span.nolink {
   padding-right: 15px;
+}
+
+/* Full width species checklist input grid */
+/* line 78, sass/instant_indicia.scss */
+table.species-grid {
+  width: 100%;
 }
