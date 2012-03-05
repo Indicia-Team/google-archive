@@ -73,7 +73,15 @@ function summary_report_get_report_options($node) {
   }
   switch ($node->field_summary_report_inclusion[0]['value']) {
     case 'Logged in user':
-      $r['sharing']='me';
+      global $user;
+      profile_load_profile($user);
+      if (isset($user->profile_indicia_user_id)) {
+        $r['userId']=$user->profile_indicia_user_id;
+        $r['sharing']='me';  
+      } else {
+        drupal_set_message(t('As your user account has not been linked to the central records database yet, this summary is showing all records recorded on this website rather than just yours.'));
+        $r['sharing']='website';
+      }
       break;
     case 'Current website':
       $r['sharing']='website';
