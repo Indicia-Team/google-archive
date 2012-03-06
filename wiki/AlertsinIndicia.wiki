@@ -26,6 +26,12 @@ The triggers you have rights to subscribe to are listed on the Triggers page. Cl
 
 Triggers are not fired immediately each time a record is entered in Indicia, as that would slow down performance during data entry. In order to periodically test all the triggers that have been set up, it is necessary to access the page /index.php/scheduled_tasks. This can either be done manually, using your web browser, or more likely you will want to schedule this to happen automatically at a specified interval, e.g. every hour. On a Linux Apache server, the best way to do this is using [http://en.wikipedia.org/wiki/Cron Cron] whereas on Windows you may like to consider using the [http://en.wikipedia.org/wiki/Task_Scheduler Task Scheduler]. 
 
+When using a scheduler you do not need to launch and kill a browser process as php/kohana can be run from the command line. The command to execute will be in the form: 
+{{{
+php path/to/file/index.php scheduled_tasks
+}}}
+You will need to insert your path to the Kohana index.php file, enclosing it in inverted commas if it contains spaces.
+
 == Defining your own trigger templates ==
 
 Trigger templates are exactly the same as XML report files, except they must be placed in the reports/trigger_templates directory. They must have a parameter called date, which filters the output by the date the record being tested was entered or updated. They must also have an output attribute called website_id to allow authorisation to be applied (so people cannot subscribe see to records they are not allowed to see).
