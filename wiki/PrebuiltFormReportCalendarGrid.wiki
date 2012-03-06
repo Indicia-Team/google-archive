@@ -1,7 +1,37 @@
-#summary Details on how to use the Report Caelndar Grid prebuilt form.
+#summary Details on how to use the Report Calendar Grid prebuilt form.
+#labels CMS-Drupal
 
-= Introduction =
+= Using the report calendar grid prebuilt form =
 
-Initial Placeholder Page.
+The report calendar grid form is used to output a calendar, showing the results of a report.
+This report is assumed to be a date based report, with each day on the calendar populated with a link to either an existing sample display form, or a new sample entry form.
 
-= Details =
+It does not support an auto-generated parameters input form.
+
+To use this prebuilt form from Drupal, select Create Content then Indicia Forms from the menu as for any other prebuilt form. Specify a title for the page then a little down the page enter your website ID and password. The Report Calendar Grid form is available from the Select Form drop-down after choosing the Reporting category first.
+
+Once you have selected the Report Grid form click the Load Settings Form button. Drupal will load the settings form for the report grid which contains a number of options, each with help text explaining what they are for. Here are a list of the important ones:
+
+*Report Name*: Enter the name of the report you want to load. These are the report file names from the reports directory in the Indicia installation directory, with forward slashes used to separate directory names. Don’t include the .xml file extension at the end of the filename. A good starting point is the Library->Samples->"Samples list for a CMS User" report.
+
+*Preset Parameter Values*: If you want to provide a parameter value for a report, you can specify them in this box. For example you might specify survey_id=4 to restrict the data to survey 4.
+
+*Include user specific location filter*: Choose whether to include a filter on the locations assigned to this user using the CMS User ID location attribute.
+
+*Include Sref in location filter name*
+
+*Start of week definition*
+
+*Include Week Number column in calendar grid*
+
+*Week One Contains*
+
+*Restrict displayed weeks*
+
+*New Sample URL*
+
+*New Sample Location Parameter*
+
+*Existing Sample URL*
+
+When you have finished with the settings save your page and test the report. It should show the calendar.
