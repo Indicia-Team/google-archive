@@ -197,14 +197,16 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
         $thisUser = user_load($values->uid);
     }
     // can logged in user change expert geography and taxon groups?
-    if (user_access('administer experts')) {
-      $form['Preferences']['profile_location_expertise']['#attributes'] = array('readonly' => 'readonly');
-      $form['Preferences']['profile_taxon_groups_expertise']['#attributes'] = array('readonly' => 'readonly');
+    if (!user_access('administer permissions')) {
+      $form['Preferences']['profile_location_expertise']['#attributes'] = array('disabled' => 'true');
+      $form['Preferences']['profile_location_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
+      $form['Preferences']['profile_taxon_groups_expertise']['#attributes'] = array('disabled' => 'true');
+      $form['Preferences']['profile_taxon_groups_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
     }
     // Is the user being edited an expert verifier? If not, no need for the profile fields
-    if (!user_access('verifier', $thisUser)) {
-      $form['Preferences']['profile_location_expertise']['#type'] = 'hidden';
-      $form['Preferences']['profile_taxon_groups_expertise']['#type'] = 'hidden';
+    if (!user_access('verification', $thisUser)) {
+      unset($form['Preferences']['profile_location_expertise']['#type']);
+      unset($form['Preferences']['profile_taxon_groups_expertise']);
     }
   }
 
