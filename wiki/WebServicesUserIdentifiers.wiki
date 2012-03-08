@@ -4,7 +4,7 @@
 
 *Introduced in Indicia 0.8*
 
-The User Identifier Services provide a way for client websites to get a unique identifier (a warehouse User ID) for any user of the website. Because this identifier is associated with the user's external identifiers, such as twitter accounts or Open IDs, one user logging into several websites linked to the same warehouse can end up with just 1 warehouse user ID. This makes it simple to identify a user's records globally for reporting and other purposes.
+The User Identifier Services provide a way for client websites to get a unique identifier (a warehouse User ID) for any user of the website. Because this identifier is associated with the user's external identifiers, such as twitter accounts or Open IDs, one user logging into several client websites linked to the same warehouse can end up with just 1 warehouse user ID. This makes it simple to identify a user's records globally for reporting and other purposes.
 
 == How it works ==
 
