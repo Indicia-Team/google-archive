@@ -68,8 +68,6 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
   if (!$_updating_account) {
     switch ($op) {
       case 'login':
-        if (isset($account->profile_indicia_user_id))
-          return;
         if (empty($account->profile_last_name)) {
           drupal_set_message('Please set at least your last name on your '.l('user account', 'user/'.$account->uid.'/edit/Name').
               '. This will allow your user registration to be linked properly to the central database of records.');
@@ -77,9 +75,28 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         }
         // deliberately flow through - as we always check the account id after account update. So do NOT break
       case 'submit':
+        global $user;
+        profile_load_profile($user);
+        $fieldsToSyncByCaption = array();
+        foreach ($edit as $field=>$value) {
+          $fieldsToSync = array();
+          // fields that are available for synchronisation must be called profile_indicia_*. We 
+          // also don't want to handle anything that has not actually changed.
+          if ($value != $user->$field && preg_match('/^profile_indicia_/', $field) && $field!=='profile_indicia_user_id') {
+            $fieldsToSync[$field] = $value;
+          }
+          if (count($fieldsToSync)) {
+            // Indicia requires fields to match on the caption, so we need to query the captions and
+            // convert the array.
+            $r = db_query("select name, title from {profile_fields} where name in ('%s')", implode("','", array_keys($fieldsToSync)));
+            while ($row = db_fetch_array($r)) 
+              $fieldsToSyncByCaption[$row['title']]=$fieldsToSync[$row['name']];
+          }
+            
+        }
         $_updating_account=true;
-        $response = easy_login_call_get_user_id($account);
-        easy_login_handle_get_user_id_response($account, $response, $op);
+        $response = easy_login_call_get_user_id($account, null, null, $fieldsToSyncByCaption);
+        easy_login_handle_get_user_id_response($account, $response, $edit, $op);
         unset($edit['profile_indicia_user_id']);
         $_updating_account=false;
     }
@@ -92,8 +109,9 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
  * @param string $force Set to merge (to force a merge operation) or split (to force no merge).
  * @param array $users_to_merge If force is set to merge, but only some users must be merged,
  * pass an array of the user IDs.
+ * @return string Response from call to get_user_id
  */
-function easy_login_call_get_user_id($account, $force='null', $users_to_merge=null) {
+function easy_login_call_get_user_id($account, $force=null, $users_to_merge=null, $fieldsToSyncByCaption=array()) {
   iform_load_helpers(array('data_entry_helper'));
   $url = data_entry_helper::$base_url.'index.php/services/user_identifier/get_user_id';
   $identifiers = array(array('type'=>'email','identifier'=>$account->mail));
@@ -109,6 +127,8 @@ function easy_login_call_get_user_id($account, $force='null', $users_to_merge=nu
   $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
   $url .= '?nonce='.$auth['write_tokens']['nonce'].'&auth_token='.$auth['write_tokens']['auth_token'].'&cms_user_id='.$account->uid;
   $postargs = 'surname='.urlencode($account->profile_last_name).'&identifiers='.$identifiers;
+  if (count($fieldsToSyncByCaption))
+    $postargs .= '&attribute_values='.urlencode(json_encode($fieldsToSyncByCaption));
   if (!empty($account->profile_first_name))
     $postargs .= '&first_name='.urlencode($account->profile_first_name);
   if ($force && ($force==='merge' || $force==='split')) {
@@ -122,32 +142,52 @@ function easy_login_call_get_user_id($account, $force='null', $users_to_merge=nu
   return $response['output'];
 }
 
-function easy_login_handle_get_user_id_response($account, $response, $op=null) {
-  if (preg_match('/^[0-9]+$/', $response)) {    
-    if ($account->profile_indicia_user_id!=$response) {
-      // Can use user_save during a login operation
+/**
+ * Handle the response from a call to get_user_id on the warehouse services.
+ * @param type $account
+ * @param string $response Response from call to get_user_id (should be a json string).
+ * @param type $op 
+ */
+function easy_login_handle_get_user_id_response($account, $response, &$edit=null, $op=null) {
+  $response = json_decode($response);
+  if (isset($response->userId)) {    
+    if ($account->profile_indicia_user_id!=$response->userId) {
+      easy_login_store_value("name='profile_indicia_user_id'", $account->uid, $response->userId, $edit);
       $r = db_fetch_array(db_query("SELECT fid FROM {profile_fields} WHERE name='profile_indicia_user_id'"));
       db_query("DELETE FROM {profile_values} WHERE fid = %d AND uid = %d", $r['fid'], $account->uid);
-      db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $account->uid, $response);
+      db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $account->uid, $response->userId);
 
       if (empty($account->profile_indicia_user_id))
         drupal_set_message(t('Your user account is now linked to the central records database.'));
       else
         drupal_set_message(t('Your user account link to the central records database has been updated.'));
     }
-  } else {
-    // output not just a user ID, so should be either a json encoded error, or a list of possible users.
-    $output = json_decode($response);
-    if (isset($output->error))
-      drupal_set_message($output->error, 'warning');
-    elseif (is_array($output)) {
-      $_SESSION['multiple_users_to_resolve'] = $output;
-      $_SESSION['uid_to_resolve'] = $account->uid;
-      drupal_goto('resolve_multiple_users');
+    if (isset($response->attrs)) {
+      // got a list of profile attributes to update
+      foreach($response->attrs as $caption => $value) {
+        easy_login_store_value("title='$caption'", $account->uid, $value, $edit);
+      }
     }
-  }
+  } elseif (isset($response->possibleMatches)) {
+    $_SESSION['multiple_users_to_resolve'] = $response->possibleMatches;
+    $_SESSION['uid_to_resolve'] = $account->uid;
+    drupal_goto('resolve_multiple_users');
+  } elseif (isset($response->error)) 
+    drupal_set_message($output->error, 'warning');
 }
 
+/**
+ * Internal function to store a changed field value in the profile.
+ */
+function easy_login_store_value($filter, $uid, $value, $edit) {
+  $r = db_fetch_array(db_query("SELECT fid, name FROM {profile_fields} WHERE $filter"));
+  if (isset($edit[$r['name']]))
+    $edit[$r['name']] = $value;
+  else {
+    db_query("DELETE FROM {profile_values} WHERE fid = %d AND uid = %d", $r['fid'], $uid);
+    db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $uid, $value);
+  }
+}
 /**
  * Alter the account form to load possible options for location and taxon group from the warehouse.
  */
