@@ -1,0 +1,11 @@
+#summary Information on the Indicia Security Services module.
+
+= Indicia Security Service =
+
+The Indicia Security Services module is a required module on the warehouse which provides the following:
+
+[WebServicesSecurity Security Service]
+
+[WebServicesSiteUser Site User Service]
+
+[WebServicesUserIdentifiers User Identifiers Service]
