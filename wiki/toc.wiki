@@ -73,6 +73,7 @@
     * [InstantIndiciaVerification Data Management - Verification]
     * [InstantIndiciaSectionedTransects Input Forms - Sectioned Transects]
     * [InstantIndiciaIndiciaQuickstart Miscellanous - Indicia Quickstart]
+    * [InstantIndiciaEasyLogin Miscellanous - Easy Login]
     * [InstantIndiciaIndiciaWelcome Miscellanous - Indicia Welcome]
     * [InstantIndiciaHomepage Miscellanous - Homepage]
     * [InstantIndiciaTermsOfUse Miscellanous - Terms of Use]
