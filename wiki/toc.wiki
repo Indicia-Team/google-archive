@@ -30,6 +30,7 @@
     * [WarehouseModuleIndiciaSetup Indicia Setup]
     * [WarehouseModuleIndiciaSvcData Indicia Data Services]
     * [WarehouseModuleIndiciaSvcImport Indicia Import Services]
+    * [WarehouseModuleIndiciaSvcSecurity Indicia Security Services]
     * [WarehouseModuleIndiciaSvcSpatial Indicia Spatial Services]
     * [WarehouseModuleIndiciaSvcValidation Indicia Validation Services]
     * [WarehouseModuleLogBrowser Log Browser]
