@@ -58,50 +58,7 @@ record_status=C
 rule=
 searchArea=
 idlist=',
-    'columns_config' => '[
-  {
-    "fieldname":"occurrence_id",
-    "template":"<div class=\'status-{record_status}\'>{occurrence_id}</div>",
-    "display":"ID"
-  },
-  {
-    "fieldname":"taxon",
-    "display":"Species",
-    "template":"<div class=\'zero-{zero_abundance}\'>{taxon}<br/>{common}</div>"
-  },
-  {
-    "fieldname":"location_name",
-    "display":"Site Name"
-  },
-  {
-    "fieldname":"entered_sref",
-    "display":"Grid Ref"
-  },
-  {
-    "fieldname":"date",
-    "display":"Date"
-  },
-  {
-    "fieldname":"comment",
-    "display":"Check"
-  },
-  {
-    "fieldname":"taxon_group",
-    "visible":false
-  },
-  {
-    "fieldname":"record_status",
-    "visible":false
-  },
-  {
-    "fieldname":"common",
-    "visible":false
-  },
-  {
-    "fieldname":"zero_abundance",
-    "visible":false
-  }
-]',
+    'columns_config' => '[]',
     'verifiers_mapping' => '1',
     'email_subject_send_to_verifier' => 'Record of %taxon% requires verification (ID:%id%)',
     'email_body_send_to_verifier' => 'The following record requires verification. Please reply to this mail with the word Verified or Rejected in the email body, followed by any comments you have including the proposed re-identification if relevant on the next line.
