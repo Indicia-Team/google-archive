@@ -54,8 +54,7 @@ date_to=
 smpattrs=
 occattrs=',
     'param_defaults' => 'id=
-record_status=C
-rule=
+records=unverified
 searchArea=
 idlist=',
     'columns_config' => '[]',
