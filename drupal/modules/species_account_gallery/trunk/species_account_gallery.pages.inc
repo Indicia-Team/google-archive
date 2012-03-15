@@ -25,10 +25,13 @@ function sag_species_gallery($tid=false, $hide=false) {
     $("a.fancybox").fancybox();
     });','inline');
   }
+  drupal_add_js(drupal_get_path('module', 'species_account_gallery').'/jquery.lazyload.js');
+  drupal_add_js('$(document).ready(function() {
+    $("img.lazy").lazyload();
+  });','inline');
   if (variable_get('sag_load_mode', 'full')==='ajax') {
     // add JS for tree loading on the fly
     drupal_add_js(drupal_get_path('module', 'species_account_gallery').'/ajaxTree.js');
-    drupal_add_js(drupal_get_path('module', 'species_account_gallery').'/jquery.lazyload.js');
     drupal_add_js(array('galleryAjaxPath'=>url('species_gallery/ajax')), 'setting');
   }
   drupal_add_css(drupal_get_path('module', 'species_account_gallery').'/stylesheets/species-account-gallery.css');
