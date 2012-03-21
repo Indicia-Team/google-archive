@@ -23,12 +23,14 @@ Normally you will select from an existing trigger template (see the next section
 Anyone with a login on the Warehouse can define a trigger. The triggers are available from the *Admin -> Triggers & Notifications* menu item. Triggers can either be *public* or they can be only available to the user who created them. The list shown includes all triggers that are marked as public or that were created by the logged in user. To create a trigger:
 
   # Click New trigger to access the Trigger details screen.
-
   # Enter the name of your trigger, for example "Detect new records in the demo survey" and a description.
-
   # Select the trigger template from the drop down to define the query that will be run when the trigger is tested. The template called test is provided for you to try and simply detects any new records in a selected survey. Leave the public checkbox unchecked for now, but this can be used to declare a trigger which multiple users can subscribe to. For now this test trigger will be for us only.
 
-  # Click the Next button. Depending on the trigger template you selected, the next page will ask you for any other input parameters required. In the case of the test template, it will ask you to select the survey which you want to detect new records in. Select the demonstration survey and click Save.
+http://indicia.googlecode.com/svn/wiki/screenshots/create_trigger.png
+
+Click the *Next* button. Depending on the trigger template you selected, the next page will ask you for any other input parameters required. In the case of the test template, it will ask you to select the survey which you want to detect new records in. Select the demonstration survey and click *Save*.
+
+http://indicia.googlecode.com/svn/wiki/screenshots/configure_trigger_params.png
 
 == Subscribing to the trigger ==
 
