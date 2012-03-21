@@ -17,7 +17,7 @@
     * [Sync2Indicia Using the Sync2Indicia tool to automate uploads]
   * [WarehouseDataModel A brief introduction to Warehouse data]
   * [WarehouseSurveyDesign Designing a survey]
-  * [AlertsInIndicia The alerts and notifications system]
+  * [AlertsinIndicia The alerts and notifications system]
  * Managing a Warehouse
   * [WarehouseAdmin Administration information]
     * [WarehouseWebsiteAgreements About Website Agreements]
