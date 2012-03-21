@@ -34,11 +34,17 @@ http://indicia.googlecode.com/svn/wiki/screenshots/configure_trigger_params.png
 
 == Subscribing to the trigger ==
 
-The triggers you have rights to subscribe to are listed on the Triggers page. Click subscribe in the Task column next to the trigger you want to subscribe to. You can now specify the email digest frequency from the options No emails, Immediate, Daily, Weekly. Currently the no emails option can be used to temporarily disable notifications, but without losing the information. When you switch to one of the other modes you will be notified of all the data changes you missed. In the near future there will be a new feature added to let you view a grid listing all the notifications you have not been emailed about.
+The triggers you have rights to subscribe to are listed on the Triggers page. Click subscribe in the Task column next to the trigger you want to subscribe to. You can now specify the email digest frequency from the options No emails, Immediate, Daily, Weekly. A subscription can also contain a list of other email recipients the notification email should be cc'ed to. This allows notification emails to go to people who are not warehouse users themselves. The *no emails* option defines that notifications are stored in the *notifications* database table and are not emailed out. In this case they can be viewed either from the home page of the warehouse or by adding a report_grid control to an Indicia powered website which lists notifictions for the current user ID.
+
+http://indicia.googlecode.com/svn/wiki/screenshots/subscribe_to_trigger.png
+
+Click *Save* when done. 
 
 == Running the triggers ==
 
-Triggers are not fired immediately each time a record is entered in Indicia, as that would slow down performance during data entry. In order to periodically test all the triggers that have been set up, it is necessary to access the page /index.php/scheduled_tasks. This can either be done manually, using your web browser, or more likely you will want to schedule this to happen automatically at a specified interval, e.g. every hour. On a Linux Apache server, the best way to do this is using [http://en.wikipedia.org/wiki/Cron Cron] whereas on Windows you may like to consider using the [http://en.wikipedia.org/wiki/Task_Scheduler Task Scheduler]. 
+If you are using a warehouse supplied by another organisation then please ask the administrator of the warehouse to confirm that scheduled tasks are running on the warehouse.
+
+If you are using a warehouse for which you are the administrator, then here is how you set them up. Triggers are not fired immediately each time a record is entered in Indicia, as that would slow down performance during data entry. Instead, a task is scheduled to run on a periodic basis (e.g. once per hour) which sweeps up all the records since the last time it was ran. This is done by setting up an operating system task on the server which simply accesses the URL */index.php/scheduled_task* on your warehouse server. On a Linux Apache server, the best way to do this is using [http://en.wikipedia.org/wiki/Cron Cron] whereas on Windows you may like to consider using the [http://en.wikipedia.org/wiki/Task_Scheduler Task Scheduler]. You can also use your web browser to access this url if required, though this is only really appropriate for development and testing purposes as you would need to do this regularly throughout the day.
 
 When using a scheduler you do not need to launch and kill a browser process as php/kohana can be run from the command line. The command to execute will be in the form: 
 {{{
