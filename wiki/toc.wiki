@@ -26,6 +26,7 @@
   * [WarehouseModules Warehouse Modules]
   * [WarehouseModulesAuthoring Authoring Warehouse Modules]
   * Warehouse Module List
+    * [WarehouseModuleCacheBuilder Cache Builder]
     * [WarehouseModuleIndiciaAuth Indicia Auth]
     * [WarehouseModuleIndiciaSetup Indicia Setup]
     * [WarehouseModuleIndiciaSvcData Indicia Data Services]
