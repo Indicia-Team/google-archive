@@ -1,0 +1,12 @@
+#summary Summary of the cache builder module.
+#labels Phase-Implementation
+
+= Cache Builder Warehouse Module =
+
+The Cache Builder generates 3 tables in the database, *cache_occurrences*, *cache_taxa_taxon_lists* and *cache_termlists_terms*. These contain the most useful fields for occurrences, taxa and term records respectively, allowing many report queries to be built with little or no need to join to other tables, hence improving performance considerably.
+
+The negative effect of using cache tables is that the data will be slightly out of date as they are only updated when the index.php/scheduled_tasks path is visited on the server (normally set to run using Windows Task Scheduler or Cron on a regular basis). 
+
+If a full index rebuild is required, specify a url parameter called *force_cache_rebuild*, e.g.
+
+`www.mysite.com/indicia/index.php/scheduled_tasks?force_cache_rebuild`
