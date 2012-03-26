@@ -39,16 +39,24 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
   $form['other_warehouse']['indicia_geoserver_url'] = array(
     '#type' => 'textfield',
     '#title' => t('GeoServer URL'),
-    '#description' => 'If selecting Other for the Indicia Warehouse option, please enter the URL of the GeoServer instance you are connecting to, otherwise ignore this setting. '.
-        'This is optional, if not specified then you will not be able to use some of the advanced mapping facilities provided by GeoServer.',
+    '#description' => t('If selecting Other for the Indicia Warehouse option, please enter the URL of the GeoServer instance you are connecting to, otherwise ignore this setting. '.
+        'This is optional, if not specified then you will not be able to use some of the advanced mapping facilities provided by GeoServer.'),
     '#maxlength' => 255,
     '#required' => FALSE,
     '#default_value' => variable_get('indicia_geoserver_url', ''),
   );
+  $form['indicia_private_warehouse'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Warehouse is private'),
+    '#description' => t('If your warehouse is not publicly visible (e.g. behind a firewall) then as long as it accepts requests from the IP address of the Drupal website\'s server '.
+        'you can tick this box to send requests to the warehouse via a proxy on the Drupal server.'),
+    '#required' => false,
+    '#default_value' => variable_get('indicia_private_warehouse', false),
+  );
   $form['indicia_website_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Indicia Website ID'),
-    '#description' => 'Please enter the ID given to your website record when your website was registered on the Indicia Warehouse.',
+    '#description' => t('Please enter the ID given to your website record when your website was registered on the Indicia Warehouse.'),
     '#size' => 10,
     '#maxlength' => 10,
     '#required' => TRUE,
@@ -254,6 +262,7 @@ function indicia_configuration_form_submit($form, &$form_state) {
       }
     }
   }
+  variable_set('indicia_private_warehouse', $form_state['values']['indicia_private_warehouse']);
   variable_set('indicia_website_id', $form_state['values']['indicia_website_id']);
   if (!empty($form_state['values']['indicia_password']))
     variable_set('indicia_password', $form_state['values']['indicia_password']);
