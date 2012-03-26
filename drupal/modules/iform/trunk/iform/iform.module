@@ -872,6 +872,8 @@ function iform_load_helpers(array $files) {
   helper_base::$js_path = base_path() . iform_media_folder_path().'js/';
   helper_base::$css_path = base_path() . iform_media_folder_path().'css/';
   helper_base::$images_path = base_path() . iform_media_folder_path().'css/';
+  if (variable_get('indicia_private_warehouse',false)) 
+    helper_base::$warehouse_proxy = iform_client_helpers_path().'proxy.php?url='.helper_base::$base_url;
 }
 
 /**
