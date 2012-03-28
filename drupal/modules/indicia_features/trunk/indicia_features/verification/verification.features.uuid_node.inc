@@ -37,7 +37,7 @@ function verification_uuid_features_default_content() {
     'map_height' => '400',
     'remember_pos' => '0',
     'preset_layers' => array(
-      '0' => 'osm,
+      '0' => 'osm',
       '1' => 'google_hybrid',
       '2' => 'google_physical',
       '3' => 'google_streets',
