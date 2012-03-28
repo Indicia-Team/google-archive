@@ -78,21 +78,28 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         global $user;
         profile_load_profile($user);
         $fieldsToSyncByCaption = array();
-        foreach ($edit as $field=>$value) {
-          $fieldsToSync = array();
-          // fields that are available for synchronisation must be called profile_indicia_*. We 
-          // also don't want to handle anything that has not actually changed.
-          if ($value != $user->$field && preg_match('/^profile_indicia_/', $field) && $field!=='profile_indicia_user_id') {
-            $fieldsToSync[$field] = $value;
+        // $edit can be empty during initial registration
+        if (!empty($edit)) {
+          foreach ($edit as $field=>$value) {
+            $fieldsToSync = array();
+            // fields that are available for synchronisation must be called profile_indicia_*. We 
+            // also don't want to handle anything that has not actually changed.
+            if ($value != $user->$field && preg_match('/^profile_indicia_/', $field) && $field!=='profile_indicia_user_id') {
+              $fieldsToSync[$field] = $value;
+            }
+            if (count($fieldsToSync)) {
+              // Indicia requires fields to match on the caption, so we need to query the captions and
+              // convert the array.
+              $r = db_query("select name, title from {profile_fields} where name in ('%s')", implode("','", array_keys($fieldsToSync)));
+              while ($row = db_fetch_array($r)) 
+                $fieldsToSyncByCaption[$row['title']]=$fieldsToSync[$row['name']];
+            }
           }
-          if (count($fieldsToSync)) {
-            // Indicia requires fields to match on the caption, so we need to query the captions and
-            // convert the array.
-            $r = db_query("select name, title from {profile_fields} where name in ('%s')", implode("','", array_keys($fieldsToSync)));
-            while ($row = db_fetch_array($r)) 
-              $fieldsToSyncByCaption[$row['title']]=$fieldsToSync[$row['name']];
+          if (empty($account->profile_location) && empty($account->profile_taxon_groups)) {
+            drupal_set_message('Why not tell us the area you would most often like to record in and the list of '.
+                'species groups you are particularly interested in to help us tailor the system to your needs? '.
+                'You can fill this information in on your '.l('user preferences', 'user/'.$account->uid.'/edit/Preferences').'.');
           }
-            
         }
         $_updating_account=true;
         $response = easy_login_call_get_user_id($account, null, null, $fieldsToSyncByCaption);
