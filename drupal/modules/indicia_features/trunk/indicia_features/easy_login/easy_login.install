@@ -47,12 +47,13 @@ function easy_login_install() {
   $fields[] = array(
       'title' => 'Location',
       'name' => 'profile_location',
-      'explanation' => 'Area you generally record in.',
+      'explanation' => 'If you would like to, please tell us the area you generally record in. This will allow us to tailor data entry screens and '.
+	      'reports to the information that is most likely to be of interest to you.',
       'category' => 'Preferences',
       'type' => 'selection',
       'weight' => 0,
-      'required' => 1,
-      'register' => 1,
+      'required' => 0,
+      'register' => 0,
       'visibility' => 2,
       'autocomplete' => 0,
       'options' => '',
@@ -61,12 +62,13 @@ function easy_login_install() {
   $fields[] = array(
       'title' => 'Species groups',
       'name' => 'profile_taxon_groups',
-      'explanation' => 'Species groups you are interested in recording. This indicates a preference only, you will still be able to record other species.',
+      'explanation' => 'If you would like to, please tell us the species groups you are interested in recording. This indicates a preference only, you will still '.
+          'be able to record other species. It also allows us to tailor reports in iRecord to show you information that is most likely to be of interest.',
       'category' => 'Preferences',
       'type' => 'selection',
       'weight' => 1,
-      'required' => 1,
-      'register' => 1,
+      'required' => 0,
+      'register' => 0,
       'visibility' => 2,
       'autocomplete' => 0,
       'options' => '',
@@ -75,7 +77,7 @@ function easy_login_install() {
   $fields[] = array(
       'title' => 'Location of expertise',
       'name' => 'profile_location_expertise',
-      'explanation' => 'Area your expertise applies in if relevant, e.g. the county you are a county recorder for.',
+      'explanation' => 'Area your expertise applies in if relevant, e.g. the county you are a county recorder for. If left blank then verification access is given for all locations.',
       'category' => 'Preferences',
       'type' => 'selection',
       'weight' => 0,
@@ -89,7 +91,7 @@ function easy_login_install() {
   $fields[] = array(
       'title' => 'Species groups you have expertise in',
       'name' => 'profile_taxon_groups_expertise',
-      'explanation' => 'If considered an expert in one or more species groups (e.g. if a county recorder) select them here.',
+      'explanation' => 'If considered an expert in one or more species groups (e.g. if a county recorder) select them here. If left blank then all species will be available for verification.',
       'category' => 'Preferences',
       'type' => 'selection',
       'weight' => 1,
