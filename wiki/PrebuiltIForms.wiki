@@ -154,6 +154,21 @@ When a form needs to dynamically redirect after submission, this method can be i
 
 }}}
 
+=== get_validation_errors ===
+
+Implementing the *get_validation_errors* function is optional and allows a prebuilt form to intercept the form's post data and perform additional checks. It also receives the form options in the second parameter which allows it to make the validation behave appropriately to the form settings. 
+
+Return an associative array which contains a list of the error messages keyed by the fieldnames from the data array. For example:
+
+{{{
+public static function get_validation_errors($data, $args) {
+  $errors=array();
+  if (strpos($data['sample:date'],'2004')!==false)
+    $errors['sample:date']='Records from 2004 are not allowed';
+  return $errors;
+}
+}}}
+
 == Custom CSS ==
 
 If the form requires its own custom css file, then place the file in the css sub-folder of the prebuilt_forms directory. The css file should have the same filename as your form's PHP file, but with the extension css instead of php.
