@@ -582,22 +582,19 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       }
       // if for some reason the iform gives back an empty submission, ignore it
       if ($s){
+        $errors = array();
         // does this Drupal node have any in-built validation code?
-	    if (method_exists('iform_'.$node->iform, 'get_validation_errors')) {
-	      $errors = call_user_func(array('iform_'.$node->iform, 'get_validation_errors'), $_POST, $args);
-          if (!empty($errors)) {
-            $r .= data_entry_helper::dump_errors(array('errors'=>$errors));
-          }
-	    }
+        if (method_exists('iform_'.$node->iform, 'get_validation_errors')) {
+          $errors = call_user_func(array('iform_'.$node->iform, 'get_validation_errors'), $_POST, $args);
+        }
         // does this Drupal node have any custom validation code?
         if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/validation/validate.' . $node->nid . '.php')) {
           require_once iform_client_helpers_path() . 'prebuilt_forms/validation/validate.' . $node->nid . '.php';
-          $errors = iform_custom_validation($_POST);
-          if (!empty($errors)) {
-            $r .= data_entry_helper::dump_errors(array('errors'=>$errors));
-          }
+          $errors = array_merge($errors, iform_custom_validation($_POST));
         }
-        if (empty($errors)) {
+        if (!empty($errors)) {
+          $r .= data_entry_helper::dump_errors(array('errors'=>$errors));
+        } else {
           $response = data_entry_helper::forward_post_to('save', $s);
           // Does the form redirect after success?
           if (is_array($response) && array_key_exists('success', $response) &&
