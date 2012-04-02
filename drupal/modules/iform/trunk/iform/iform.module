@@ -877,7 +877,11 @@ function iform_load_helpers(array $files) {
   helper_base::$css_path = base_path() . iform_media_folder_path().'css/';
   helper_base::$images_path = base_path() . iform_media_folder_path().'css/';
   if (variable_get('indicia_private_warehouse',false)) 
-    helper_base::$warehouse_proxy = iform_client_helpers_path().'proxy.php?url='.helper_base::$base_url;
+    // helper_base::$warehouse_proxy = iform_client_helpers_path().'proxy.php?url='.helper_base::$base_url;
+    $relative_proxy_path = iform_client_helpers_path().'proxy.php?url='.helper_base::$base_url;
+    // convert to absolute by removeing the leading '.' and prepending the base URL
+    global $base_url;
+    helper_base::$warehouse_proxy = $base_url.substr($relative_proxy_path, 1);
 }
 
 /**
