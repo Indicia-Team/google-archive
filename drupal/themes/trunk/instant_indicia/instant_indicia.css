@@ -44,54 +44,30 @@ h2 {
 /* line 30, sass/instant_indicia.scss */
 .summary-report {
   width: 80px;
-  height: 80px;
+  padding-top: 80px;
 }
 
 /* line 35, sass/instant_indicia.scss */
 .report-map {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #77ff77), color-stop(100%, #008000));
-  background-image: -webkit-linear-gradient(#77ff77, #008000);
-  background-image: -moz-linear-gradient(#77ff77, #008000);
-  background-image: -o-linear-gradient(#77ff77, #008000);
-  background-image: -ms-linear-gradient(#77ff77, #008000);
-  background-image: linear-gradient(#77ff77, #008000);
-  color: white;
+  background: url(images/summary_map.png) no-repeat center top;
 }
 
-/* line 40, sass/instant_indicia.scss */
+/* line 39, sass/instant_indicia.scss */
 .report-table {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7777ff), color-stop(100%, #0000ff));
-  background-image: -webkit-linear-gradient(#7777ff, #0000ff);
-  background-image: -moz-linear-gradient(#7777ff, #0000ff);
-  background-image: -o-linear-gradient(#7777ff, #0000ff);
-  background-image: -ms-linear-gradient(#7777ff, #0000ff);
-  background-image: linear-gradient(#7777ff, #0000ff);
-  color: white;
+  background: url(images/summary_datatable.png) no-repeat center top;
 }
 
-/* line 45, sass/instant_indicia.scss */
+/* line 43, sass/instant_indicia.scss */
 .report-pie {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff7777), color-stop(100%, #ff0000));
-  background-image: -webkit-linear-gradient(#ff7777, #ff0000);
-  background-image: -moz-linear-gradient(#ff7777, #ff0000);
-  background-image: -o-linear-gradient(#ff7777, #ff0000);
-  background-image: -ms-linear-gradient(#ff7777, #ff0000);
-  background-image: linear-gradient(#ff7777, #ff0000);
-  color: white;
+  background: url(images/summary_piechart.png) no-repeat center top;
 }
 
-/* line 50, sass/instant_indicia.scss */
+/* line 47, sass/instant_indicia.scss */
 .report-bar {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bb77bb), color-stop(100%, #800080));
-  background-image: -webkit-linear-gradient(#bb77bb, #800080);
-  background-image: -moz-linear-gradient(#bb77bb, #800080);
-  background-image: -o-linear-gradient(#bb77bb, #800080);
-  background-image: -ms-linear-gradient(#bb77bb, #800080);
-  background-image: linear-gradient(#bb77bb, #800080);
-  color: white;
+  background: url(images/summary_barchart.png) no-repeat center top;
 }
 
-/* line 55, sass/instant_indicia.scss */
+/* line 51, sass/instant_indicia.scss */
 .form-checkboxes > div {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -104,30 +80,34 @@ h2 {
   *display: inline;
 }
 
-/* line 59, sass/instant_indicia.scss */
+/* line 55, sass/instant_indicia.scss */
 a h2 {
   color: #006699;
 }
 
-/* line 63, sass/instant_indicia.scss */
+/* line 59, sass/instant_indicia.scss */
 a:hover h2 {
   text-decoration: underline;
 }
 
 /* enable special menu items on nice menus to have correct spacigng */
-/* line 68, sass/instant_indicia.scss */
+/* line 64, sass/instant_indicia.scss */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
 }
 
-/* line 73, sass/instant_indicia.scss */
+/* line 69, sass/instant_indicia.scss */
+ul.nice-menu-down {
+  width: 100%;
+}
+/* line 71, sass/instant_indicia.scss */
 ul.nice-menu-down .menuparent span.nolink {
   padding-right: 15px;
 }
 
 /* Full width species checklist input grid */
-/* line 78, sass/instant_indicia.scss */
+/* line 77, sass/instant_indicia.scss */
 table.species-grid {
   width: 100%;
 }
