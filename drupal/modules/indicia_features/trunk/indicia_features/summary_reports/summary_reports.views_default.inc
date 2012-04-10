@@ -128,6 +128,15 @@ function summary_reports_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
+  $handler->override_option('header', '<?php
+$breadcrumb = array();
+$breadcrumb[] = l(\'Home\', \'<front>\');
+$breadcrumb[] = t(\'Summarise\');
+// Set Breadcrumbs
+drupal_set_breadcrumb($breadcrumb);
+?>');
+  $handler->override_option('header_format', '3');
+  $handler->override_option('header_empty', 1);
   $handler->override_option('use_pager', '1');
   $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(

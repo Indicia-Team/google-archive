@@ -65,6 +65,13 @@ function summary_report_build($node) {
   $r = $node->body;
   $r .= $func($node, $reportOptions);
   handle_resources();
+  $breadcrumb = array();
+  $breadcrumb[] = l('Home', '<front>');
+  $breadcrumb[] = l('Summarise', 'summarise');
+  $breadcrumb[] = drupal_get_title(); // Link to current URL
+
+  // Set Breadcrumbs
+  drupal_set_breadcrumb($breadcrumb);
   return $r;
 }
 
