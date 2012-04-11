@@ -198,7 +198,10 @@ function summary_report_build_bar($node, $reportOptions) {
 
 function summary_report_build_pie($node, $reportOptions) {
   return summary_report_graph($node, array_merge(
-    array('legendOptions'=>array('show'=>true)),
+    array(
+	  'legendOptions'=>array('show'=>true),
+	  'rendererOptions'=>array('showDataLabels'=>true,'dataLabelFormatString'=>'%d','dataLabels'=>'value','dataLabelThreshold'=>1,'dataLabelPositionFactor'=>1.05)
+	),
     $reportOptions
   ), 'pie');
 }
