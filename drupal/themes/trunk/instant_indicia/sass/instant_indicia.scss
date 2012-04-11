@@ -1,4 +1,8 @@
 @import "compass/css3";
+@import "sassy-buttons";
+@import "blueprint/form";
+
+$default-color: #4ba3cc;
 
 h2 {
   font-size: 16px;
@@ -48,6 +52,16 @@ h2 {
   background: url(images/summary_barchart.png) no-repeat center top;
 }
 
+form {
+  @include blueprint-form-borders(#bbbbbb, #666666, #cccccc);
+  select {
+    border-color: #bbbbbb;
+    &:focus {
+      border-color: #666666; 
+    }
+  }
+}
+
 .form-checkboxes > div {
   @include inline-block;
 }
@@ -60,7 +74,7 @@ a:hover h2 {
   text-decoration: underline;
 }
 
-/* enable special menu items on nice menus to have correct spacigng */
+/* enable special menu items on nice menus to have correct spacing */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
@@ -77,3 +91,17 @@ ul.nice-menu-down {
 table.species-grid {
   width: 100%;
 }
+
+button, input[type=submit] {
+  margin: 0.25em;
+  @include sassy-button-structure(4px, 1px, 0.25em, 11px, 1em);
+  font-weight: bold; 
+  &.default-button {
+    @include sassy-button-colors("simple", $default-color, darken($default-color, 20%), true, #ffffff, raised);
+  }
+  &.button-active {
+    @include sassy-button-style(inset, #555577);
+    @include box-shadow(#0000FF 0px 0px 3px);
+  }
+}
+
