@@ -11,6 +11,7 @@ function my_account_data_summary_menu() {
     'access callback' => 'user_edit_access',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
+    'weight' => -50
   );
   return $items;
 }
