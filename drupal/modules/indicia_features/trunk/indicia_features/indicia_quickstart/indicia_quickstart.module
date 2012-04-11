@@ -50,7 +50,10 @@ function indicia_quickstart_menu() {
  */
 function my_account() {
   global $user;
-  drupal_goto('user/'.$user->uid.'/edit');
+  if (module_exists('my_account_data_summary'))
+    drupal_goto('user/'.$user->uid.'/my_account_data');
+  else
+    drupal_goto('user/'.$user->uid.'/edit');
 }
 
 /**
