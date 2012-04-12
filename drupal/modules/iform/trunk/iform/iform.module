@@ -411,7 +411,7 @@ function iform_ajax_callback($form=null, $method=null, $nid=null) {
     $website_id=variable_get('indicia_website_id','');
     $password=variable_get('indicia_password','');
   }
-  call_user_func(array($class, $method), $website_id, $password);
+  call_user_func(array($class, $method), $website_id, $password, $node);
 }
 
 /**
