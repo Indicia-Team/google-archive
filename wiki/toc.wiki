@@ -27,6 +27,7 @@
   * [WarehouseModulesAuthoring Authoring Warehouse Modules]
   * Warehouse Module List
     * [WarehouseModuleCacheBuilder Cache Builder]
+    * [WarehouseModuleDataCleaner Data Cleaner]
     * [WarehouseModuleIndiciaAuth Indicia Auth]
     * [WarehouseModuleIndiciaSetup Indicia Setup]
     * [WarehouseModuleIndiciaSvcData Indicia Data Services]
@@ -44,12 +45,6 @@
     * [WarehouseModuleSrefUtm UTM Spatial References]
     * [WarehouseModuleTaxonDesignations Taxon Designations]
     * [WarehouseModuleTaxonGroupsTaxonLists Taxon Groups to Taxon Lists Connector]
-    * [WarehouseModuleVerificationCheck Verification Check]
-    * [WarehouseModuleVerificationCheckIdentificationDifficulty Verification Check Identification Difficulty]
-    * [WarehouseModuleVerificationCheckPeriod Verification Check Period]
-    * [WarehouseModuleVerificationCheckPeriodWithinYear Verification Check Period within Year]
-    * [WarehouseModuleVerificationCheckPolygon Verification Check Polygon]
-    * [WarehouseModuleVerificationCheckSpeciesDesignation Verification Check Species Designation]
  * Using Drupal with Indicia
   * [DrupalIntroduction Introduction]
   * [DrupalLogin User login considerations]
