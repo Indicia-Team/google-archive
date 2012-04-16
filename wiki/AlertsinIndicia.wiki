@@ -44,13 +44,7 @@ Click *Save* when done.
 
 If you are using a warehouse supplied by another organisation then please ask the administrator of the warehouse to confirm that scheduled tasks are running on the warehouse.
 
-If you are using a warehouse for which you are the administrator, then here is how you set them up. Triggers are not fired immediately each time a record is entered in Indicia, as that would slow down performance during data entry. Instead, a task is scheduled to run on a periodic basis (e.g. once per hour) which sweeps up all the records since the last time it was ran. This is done by setting up an operating system task on the server which simply accesses the URL */index.php/scheduled_task* on your warehouse server. On a Linux Apache server, the best way to do this is using [http://en.wikipedia.org/wiki/Cron Cron] whereas on Windows you may like to consider using the [http://en.wikipedia.org/wiki/Task_Scheduler Task Scheduler]. You can also use your web browser to access this url if required, though this is only really appropriate for development and testing purposes as you would need to do this regularly throughout the day.
-
-When using a scheduler you do not need to launch and kill a browser process as php/kohana can be run from the command line. The command to execute will be in the form: 
-{{{
-php path/to/file/index.php scheduled_tasks
-}}}
-You will need to insert your path to the Kohana index.php file, enclosing it in inverted commas if it contains spaces.
+If you are using a warehouse for which you are the administrator, then instructions on setting them up can be found at [ScheduledTaskSetup Setting up the scheduled tasks].
 
 == Defining your own trigger templates ==
 
