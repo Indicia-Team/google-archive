@@ -45,6 +45,12 @@ Remember with options 1 and 2 there is an overhead of installation and administr
 
 One of the things you may want to think about when selecting a host is whether you want to expose your data as "spatial web services". The way we are doing this is to install a package called GeoServer. This runs alongside the PostgreSQL database and allows GIS and web-mapping packages to request maps and map data directly from the database using a standardised method. So, for example, it is easy to dump data onto a web-map, Google Earth or your GIS. To do this requires the ability to run Java on the server and it would be worth asking a potential web host if they can support GeoServer before going down this route (unless of course you don't need to expose the data spatially).
 
+*Does Indicia support the NBN Record Cleaner*
+
+Indicia supports importing rule files created for the NBN Record Cleaner which define verification rules. The rules are then automatically applied to incoming data and this information is made available for verifiers during the verification process. It all happens online and there is no need to download data into the NBN Record Cleaner tool itself. 
+
+Indicia supports Period, Period Within Year, Identification Difficulty and Without Polygon rules. See [http://www.nbn.org.uk/Tools-Resources/Recording-Resources/NBN-Record-Cleaner/Creating-verification-rules.aspx] for more information.
+
 == Installation Requirements ==
 
 *What are the requirements for running an Indicia powered website?*
