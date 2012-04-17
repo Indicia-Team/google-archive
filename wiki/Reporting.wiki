@@ -163,6 +163,7 @@ Columns are used to give further specification to how particular fields should b
   * `mappable` can be set to true to declare a column which can then be output using the report_helper::report_map method available from Indicia version 0.6. The column must output a WKT definition of the geometry to be mapped, e.g. the column definition in the SQL might be `st_astext(geom)`.
   * `aggregate` is described in the section *Declaring SQL for each column* below.
   * `distincton` is described in the section *Declaring SQL for each column* below.
+  * `in_count` is described in the section *Declaring SQL for each column* below.
   * `feature_style` can be used when there is a mappable column on the report, to define a column which provides the value for one of the map styling parameters supported in OpenLayers. Supported options include _strokeColor_ (a CSS colour specification, e.g. '#00FF00'), _strokeOpacity_ (a number from 0 to 1), _strokeWidth_ (number of pixels wide to draw the perimeter line), _strokeDashStyle_ (dot, dash, dashdot, longdash, longdashdot or solid), _fillColor_ (as strokeColor), _fillOpacity_ (as strokeOpacity). For example, a report could vary the opacity of output grid references on the map according to size by including this column in the SQL:
 {{{
 length(s.entered_sref) / 24.0 as fillopacity,
@@ -265,7 +266,7 @@ join samples s on s.location_id=l.id
 group by l.id, l.name
 }}}
 
-This returns a list of locations with their sample counts. If we use the `<field_sql>` approach, then Indicia will run a `select count(*)` query to get the count of records for the paginator, since this will return the count of sample records not the count of locations. To get round these restrictions, you can define the SQL for each field in the `<column>` definition using an attribute called `sql` then specify a replacement in the SQL statement #columns#. You don’t need to define each field’s alias as the column name will be used for that (since they must be the same). You can also define attributes `aggregate` (set to true for columns that define an aggregate function so they can be skipped in the count query) and `distincton` (set to true for any columns that you don’t want to duplicate ever). To illustrate these points, here is the SQL and column list for the above query:
+This returns a list of locations with their sample counts. If we use the `<field_sql>` approach, then Indicia will run a `select count(*)` query to get the count of records for the paginator, since this will return the count of sample records not the count of locations. To get round these restrictions, you can define the SQL for each field in the `<column>` definition using an attribute called `sql` then specify a replacement in the SQL statement #columns#. You don’t need to define each field’s alias as the column name will be used for that (since they must be the same). You can also define attributes `aggregate` (set to true for columns that define an aggregate function so they can be skipped in the count query), `distincton` (set to true for any columns that you don’t want to duplicate ever) and `in_count` (set to true if the column should be included in the count query, which defaults to true for distincton columns but false otherwise). To illustrate these points, here is the SQL and column list for the above query:
 
 {{{
 <sql>
