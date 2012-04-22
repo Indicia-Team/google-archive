@@ -109,7 +109,7 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
       'width' => '100%',
       'height' => 500,
       'readAuth' => $readAuth,
-      'presetLayers' => array('osm_th'), 
+      'presetLayers' => array('osm'), 
       'editLayer' => false,
       'layers' => array(),
       'initial_lat'=>variable_get('indicia_map_centroid_lat', 55),
