@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary About the Data Cleaner Designated Taxa warehouse module.
 #labels Phase-Implementation
 
 = Data Cleaner Designated Taxa Module =
