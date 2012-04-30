@@ -131,11 +131,6 @@ function summary_report_get_report_options($node) {
       break;
   }
   $r['dataSource'] = "library/$folder/$dataType"."_counts_mappable_summary";
-  // Let the Indicia Quickstart module apply report parameters that are defined globally
-  // on its report settings form.
-  if (function_exists('indicia_quickstart_set_standard_report_params')) 
-    indicia_quickstart_set_standard_report_params($r);
-  
   return $r;
 }
 

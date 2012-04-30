@@ -16,7 +16,7 @@ function indicia_quickstart_perm() {
 function indicia_quickstart_link_alter(&$links, $node){
   if( arg(0) == 'node' && is_numeric(arg(1)) ){
     return; // halt if full page view
-  }elseif( ! empty($links['comment_add']) ){
+  } elseif( ! empty($links['comment_add']) ){
     unset($links['comment_add']);
   }
 }
@@ -32,12 +32,12 @@ function indicia_quickstart_menu() {
     'type' => MENU_CALLBACK,
     'access arguments' => array('post comments'), // anyone logged in
   );
-  $items['admin/settings/iform/reports'] = array(
-    'title' => t('Report settings'),
+  $items['admin/settings/iform/other'] = array(
+    'title' => t('Other settings'),
     'file' => 'indicia_quickstart.admin.inc',
-    'description' => t('Settings for various Indicia reports.'),
+    'description' => t('Other settings for Indicia.'),
     'page callback' => 'drupal_get_form', 
-    'page arguments' => array('indicia_quickstart_report_setttings_form'),
+    'page arguments' => array('indicia_quickstart_other_settings_form'),
     'access arguments' => array('create iform'),
     'type' => MENU_NORMAL_ITEM,
     'weight'=>10
@@ -54,19 +54,4 @@ function my_account() {
     drupal_goto('user/'.$user->uid.'/my_account_data');
   else
     drupal_goto('user/'.$user->uid.'/edit');
-}
-
-/**
- * Generic function that applies our standard report parameter values (from the settings form)
- * to the report options being sent to any report. Call this method passing in your prepared
- * report options array.
- * @param array $reportOptions Prepared report options array which will be changed to add the 
- * standard report parameter values from the current settings.
- */
-function indicia_quickstart_set_standard_report_params(&$reportOptions) {
-  if (!array_key_exists('extraParams', $reportOptions))
-    $reportOptions['extraParams']=array();
-  $reportOptions['extraParams']['certainattr']=variable_get('iform_param_certainattr', '');
-  $reportOptions['extraParams']['maxcertain']=variable_get('iform_param_maxcertain', '');
-  $reportOptions['extraParams']['maxlikely']=variable_get('iform_param_maxlikely', '');
 }
