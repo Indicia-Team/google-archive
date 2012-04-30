@@ -28,6 +28,11 @@
   * Warehouse Module List
     * [WarehouseModuleCacheBuilder Cache Builder]
     * [WarehouseModuleDataCleaner Data Cleaner]
+    * [WarehouseModuleDataCleaner Data Cleaner Designated Taxa]
+    * [WarehouseModuleDataCleaner Data Cleaner Identification Difficulty]
+    * [WarehouseModuleDataCleaner Data Cleaner Period]
+    * [WarehouseModuleDataCleaner Data Cleaner Period Within Year]
+    * [WarehouseModuleDataCleaner Data Cleaner Without Polygon]
     * [WarehouseModuleIndiciaAuth Indicia Auth]
     * [WarehouseModuleIndiciaSetup Indicia Setup]
     * [WarehouseModuleIndiciaSvcData Indicia Data Services]
