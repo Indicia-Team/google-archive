@@ -17,6 +17,7 @@ To enable the Data Cleaner module insert a link to the `MODPATH.'data_cleaner'` 
   * data_cleaner_period
   * data_cleaner_period_within_year
   * data_cleaner_without_polygon
+  * data_cleaner_designated_taxa
 
 After saving the config file, search for and delete any files containing _menu_ in the filename in the application/cache folder to ensure that the changes are immediately visible. 
 
