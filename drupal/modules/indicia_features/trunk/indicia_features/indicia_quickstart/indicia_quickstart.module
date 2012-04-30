@@ -39,10 +39,18 @@ function indicia_quickstart_menu() {
     'page callback' => 'drupal_get_form', 
     'page arguments' => array('indicia_quickstart_other_settings_form'),
     'access arguments' => array('create iform'),
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_LOCAL_TASK,
     'weight'=>10
   );
   return $items;
+}
+
+/**
+ * Proxy the form request from the menu to the inc file, otherwise Drupal_get_form cannot find the inc file.
+ */
+function indicia_quickstart_other_settings_form() {
+  require_once('indicia_quickstart.admin.inc');
+  return indicia_quickstart_other_settings_form_inc();
 }
 
 /**
