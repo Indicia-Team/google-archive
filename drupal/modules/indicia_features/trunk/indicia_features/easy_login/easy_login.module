@@ -229,11 +229,11 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
       $groups[$group['id']]=$group['title'];
     }
     $form['Preferences']['profile_taxon_groups']['#options'] = $groups;
-    $form['Preferences']['profile_taxon_groups']['#prefix'] = '<div class="inline-divs">';
+    $form['Preferences']['profile_taxon_groups']['#prefix'] = '<div class="inline-checkboxes taxon_groups">';
     $form['Preferences']['profile_taxon_groups']['#suffix'] = '</div>';
     if ($form_id === 'user_profile_form') {
       $form['Preferences']['profile_taxon_groups_expertise']['#options'] = $groups;
-      $form['Preferences']['profile_taxon_groups_expertise']['#prefix'] = '<div class="inline-checkboxes">';
+      $form['Preferences']['profile_taxon_groups_expertise']['#prefix'] = '<div class="inline-checkboxes taxon-groups">';
       $form['Preferences']['profile_taxon_groups_expertise']['#suffix'] = '</div>';
     }
     global $user;
