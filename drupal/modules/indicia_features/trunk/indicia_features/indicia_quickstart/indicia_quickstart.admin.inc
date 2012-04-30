@@ -1,6 +1,6 @@
 <?php
 
-function indicia_quickstart_other_settings_form() {
+function indicia_quickstart_other_settings_form_inc() {
   iform_load_helpers(array('data_entry_helper'));
   $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
   $response = data_entry_helper::get_population_data(array(
