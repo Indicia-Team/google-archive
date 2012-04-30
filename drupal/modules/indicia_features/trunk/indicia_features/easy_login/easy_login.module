@@ -218,10 +218,11 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
       'table' => 'location',
       'extraParams' => $readAuth
     ));
-    // Load the list of taxon groups
+    // Load the list of taxon groups. If we have a master list setting for the site, use this to ensure we only pick up 
+    // groups that are in use on the site.
     $response = data_entry_helper::get_population_data(array(
-      'table' => 'taxon_group',
-      'extraParams' => $readAuth
+      'report' => 'library/taxon_groups/taxon_groups_used_in_checklist',
+      'extraParams' => $readAuth + array('taxon_list_id'=>variable_get('iform_master_checklist_id', ''))
     ));
     $groups=array();
     foreach ($response as $group) {
