@@ -1,0 +1,6 @@
+#summary One-sentence summary of this page.
+#labels Phase-Implementation
+
+= Data Cleaner Designated Taxa Module =
+
+This module extends the [WarehouseModuleDataCleaner Data Cleaner] module to flag any species with an associated designation as requiring manual verification checks.
