@@ -733,6 +733,10 @@ function handle_resources() {
           else if (strcasecmp(substr($j, -23), 'jquery-ui.custom.min.js')==0) {
             jquery_ui_add(array('jquery-ui'));
           }
+          else if (substr($j, 0, 4)=='[IE]'){
+            var_dump('[IE]');
+             $libraries .= "<!--[if IE]><script type=\"text/javascript\" src=\"".substr($j, 4)."\"></script><![endif]-->\n";
+          }
           else if (substr($j, 0, 4)=='http') {
             // JS file external to Drupal. add_js will not work, so insert it into the head manually.
             drupal_set_html_head("<script type='text/javascript' src='$j'></script>");
