@@ -32,8 +32,12 @@ h2 {
 #secondary-links * {
   *display: inline;
 }
+/* line 27, sass/instant_indicia.scss */
+#secondary-links a {
+  font-weight: bold;
+}
 
-/* line 30, sass/instant_indicia.scss */
+/* line 32, sass/instant_indicia.scss */
 .gallery-img, .view-summary-report ul li {
   text-align: center;
   padding: 0.5em;
@@ -56,28 +60,28 @@ h2 {
   *display: inline;
 }
 
-/* line 41, sass/instant_indicia.scss */
+/* line 43, sass/instant_indicia.scss */
 .summary-report {
   width: 80px;
   padding-top: 80px;
 }
 
-/* line 46, sass/instant_indicia.scss */
+/* line 48, sass/instant_indicia.scss */
 .report-map {
   background: url(images/summary_map.png) no-repeat center top;
 }
 
-/* line 50, sass/instant_indicia.scss */
+/* line 52, sass/instant_indicia.scss */
 .report-table {
   background: url(images/summary_datatable.png) no-repeat center top;
 }
 
-/* line 54, sass/instant_indicia.scss */
+/* line 56, sass/instant_indicia.scss */
 .report-pie {
   background: url(images/summary_piechart.png) no-repeat center top;
 }
 
-/* line 58, sass/instant_indicia.scss */
+/* line 60, sass/instant_indicia.scss */
 .report-bar {
   background: url(images/summary_barchart.png) no-repeat center top;
 }
@@ -103,16 +107,16 @@ form select {
   border-width: 1px;
   border-style: solid;
 }
-/* line 64, sass/instant_indicia.scss */
+/* line 66, sass/instant_indicia.scss */
 form select {
   border-color: #bbbbbb;
 }
-/* line 66, sass/instant_indicia.scss */
+/* line 68, sass/instant_indicia.scss */
 form select:focus {
   border-color: #666666;
 }
 
-/* line 72, sass/instant_indicia.scss */
+/* line 74, sass/instant_indicia.scss */
 .form-checkboxes > div {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -125,39 +129,39 @@ form select:focus {
   *display: inline;
 }
 
-/* line 76, sass/instant_indicia.scss */
+/* line 78, sass/instant_indicia.scss */
 a h2 {
   color: #006699;
 }
 
-/* line 80, sass/instant_indicia.scss */
+/* line 82, sass/instant_indicia.scss */
 a:hover h2 {
   text-decoration: underline;
 }
 
 /* enable special menu items on nice menus to have correct spacing */
-/* line 85, sass/instant_indicia.scss */
+/* line 87, sass/instant_indicia.scss */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
 }
 
-/* line 90, sass/instant_indicia.scss */
+/* line 92, sass/instant_indicia.scss */
 ul.nice-menu-down {
   width: 100%;
 }
-/* line 92, sass/instant_indicia.scss */
+/* line 94, sass/instant_indicia.scss */
 ul.nice-menu-down .menuparent span.nolink {
   padding-right: 15px;
 }
 
 /* Full width species checklist input grid */
-/* line 98, sass/instant_indicia.scss */
+/* line 100, sass/instant_indicia.scss */
 table.species-grid {
   width: 100%;
 }
 
-/* line 102, sass/instant_indicia.scss */
+/* line 104, sass/instant_indicia.scss */
 button, input[type=submit] {
   margin: 0.25em;
   display: inline-block;
@@ -177,7 +181,7 @@ button, input[type=submit] {
   border-radius: 4px;
   font-weight: bold;
 }
-/* line 106, sass/instant_indicia.scss */
+/* line 108, sass/instant_indicia.scss */
 button.default-button, input[type=submit].default-button {
   background-color: #4ba3cc;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4ba3cc), color-stop(100%, #276b8a));
@@ -199,7 +203,7 @@ button.default-button:hover, input[type=submit].default-button:hover {
   background: -ms-linear-gradient(#5fadd2, #2d7a9e);
   background: linear-gradient(#5fadd2, #2d7a9e);
 }
-/* line 109, sass/instant_indicia.scss */
+/* line 111, sass/instant_indicia.scss */
 button.button-active, input[type=submit].button-active {
   -moz-box-shadow: #44445f 0 0.2em 0.4em inset;
   -webkit-box-shadow: #44445f 0 0.2em 0.4em inset;
