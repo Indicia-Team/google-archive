@@ -18,6 +18,13 @@ h2 {
 
 #secondary-links {
   float: right;
+  font-size: 12px;
+  vertical-align: top;
+  * {
+    @include inline-block;
+    vertical-align: top;
+  }
+    
 }
 
 .gallery-img, .view-summary-report ul li {

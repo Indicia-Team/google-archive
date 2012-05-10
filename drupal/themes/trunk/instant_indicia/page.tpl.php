@@ -16,7 +16,13 @@
   
       <div id="header" class="clearfix">
         <?php if (isset($secondary_links)) : ?>
-          <div id="secondary-links" class="clearfix"><?php print theme('links', $secondary_links, array('class' => 'links secondary-links')) ?></div>
+          <div id="secondary-links" class="clearfix">
+          <?php 
+            global $user;
+            if ($user->uid) 
+              echo '<span>'.t('Logged in as {0}', array('{0}' => $user->name)).' &gt;&gt; </span>';
+          ?>
+          <?php print theme('links', $secondary_links, array('class' => 'links secondary-links')) ?></div>
           <div class="clearfix"></div>
         <?php endif; ?>
         <?php print $header; ?>
