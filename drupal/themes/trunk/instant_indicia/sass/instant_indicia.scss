@@ -24,7 +24,9 @@ h2 {
     @include inline-block;
     vertical-align: top;
   }
-    
+  a {
+    font-weight: bold;
+  }
 }
 
 .gallery-img, .view-summary-report ul li {
