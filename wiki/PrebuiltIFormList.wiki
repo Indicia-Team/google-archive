@@ -50,6 +50,16 @@ These are a set of forms produced for specific requirements of the MNHN in Luxem
 || Description || A form for outputting the results of a report on a map. ||
 || Documentation || [PrebuiltFormReportMap Using the Report Map prebuilt form] ||
 
+==Report Calendar Grid==
+|| File || report_calendar_grid.php ||
+|| Description || A form for outputting the results of a report within a calendar. Its primary use is the calendar based display of previously entered samples for a user, and allowing the invocation of a data entry form for a particular day. It optionally allows for filtering by location. ||
+|| Documentation || [PrebuiltFormReportCalendarGrid Using the Report Calendar Grid prebuilt form] ||
+
+==Report Calendar Summary==
+|| File || report_calendar_summary.php ||
+|| Description || A form for outputting the results of a report. It summarises the report results into weeks, and displays the results for a year as a chart and/or a table. It optionally allows for filtering by user and location. ||
+|| Documentation || [PrebuiltFormReportCalendarSummary Using the Report Calendar Summary prebuilt form] ||
+
 ==Verification 3==
 || File || verification_3.php ||
 || Description || A report listing incoming records with facilities to review, verify and reject them. ||
