@@ -96,9 +96,32 @@ ul.nice-menu-down {
   }
 }
 
-/* Full width species checklist input grid */
-table.species-grid {
-  width: 100%;
+table {
+  /* Full width species checklist input grid */
+  &.species-grid {
+    width: 100%;
+  }
+  /* anything inside a table (td, tr) can have styles to reflect verification and certainty. Prioritise verification status by making report-grid class specific. */
+  &.report-grid {
+    .status-V {
+      background: url(images/nuvola/ok-16px.png) no-repeat right;
+    }
+    .status-D {
+      background: url(images/nuvola/dubious-16px.png) no-repeat right;
+    }  
+    .status-R {
+      background: url(images/nuvola/cancel-16px.png) no-repeat right;
+    }
+  }
+  .certainty-C {
+    background: url(images/star3.png) no-repeat right;
+  }
+  .certainty-L {
+    background: url(images/star2.png) no-repeat right;
+  }
+  .certainty-P {
+    background: url(images/star1.png) no-repeat right;
+  }
 }
 
 button, input[type=submit] {
@@ -113,4 +136,5 @@ button, input[type=submit] {
     @include box-shadow(#0000FF 0px 0px 3px);
   }
 }
+
 

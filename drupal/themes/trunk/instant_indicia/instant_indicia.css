@@ -155,13 +155,41 @@ ul.nice-menu-down .menuparent span.nolink {
   padding-right: 15px;
 }
 
-/* Full width species checklist input grid */
-/* line 100, sass/instant_indicia.scss */
+/* line 99, sass/instant_indicia.scss */
+table {
+  /* Full width species checklist input grid */
+  /* anything inside a table (td, tr) can have styles to reflect verification and certainty. Prioritise verification status by making report-grid class specific. */
+}
+/* line 101, sass/instant_indicia.scss */
 table.species-grid {
   width: 100%;
 }
+/* line 106, sass/instant_indicia.scss */
+table.report-grid .status-V {
+  background: url(images/nuvola/ok-16px.png) no-repeat right;
+}
+/* line 109, sass/instant_indicia.scss */
+table.report-grid .status-D {
+  background: url(images/nuvola/dubious-16px.png) no-repeat right;
+}
+/* line 112, sass/instant_indicia.scss */
+table.report-grid .status-R {
+  background: url(images/nuvola/cancel-16px.png) no-repeat right;
+}
+/* line 116, sass/instant_indicia.scss */
+table .certainty-C {
+  background: url(images/star3.png) no-repeat right;
+}
+/* line 119, sass/instant_indicia.scss */
+table .certainty-L {
+  background: url(images/star2.png) no-repeat right;
+}
+/* line 122, sass/instant_indicia.scss */
+table .certainty-P {
+  background: url(images/star1.png) no-repeat right;
+}
 
-/* line 104, sass/instant_indicia.scss */
+/* line 127, sass/instant_indicia.scss */
 button, input[type=submit] {
   margin: 0.25em;
   display: inline-block;
@@ -181,7 +209,7 @@ button, input[type=submit] {
   border-radius: 4px;
   font-weight: bold;
 }
-/* line 108, sass/instant_indicia.scss */
+/* line 131, sass/instant_indicia.scss */
 button.default-button, input[type=submit].default-button {
   background-color: #4ba3cc;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4ba3cc), color-stop(100%, #276b8a));
@@ -203,7 +231,7 @@ button.default-button:hover, input[type=submit].default-button:hover {
   background: -ms-linear-gradient(#5fadd2, #2d7a9e);
   background: linear-gradient(#5fadd2, #2d7a9e);
 }
-/* line 111, sass/instant_indicia.scss */
+/* line 134, sass/instant_indicia.scss */
 button.button-active, input[type=submit].button-active {
   -moz-box-shadow: #44445f 0 0.2em 0.4em inset;
   -webkit-box-shadow: #44445f 0 0.2em 0.4em inset;
