@@ -21,6 +21,7 @@
  * Managing a Warehouse
   * [WarehouseAdmin Administration information]
     * [WarehouseWebsiteAgreements About Website Agreements]
+  * [WarehouseImports Importing existing data]
   * [Backups How to maintain backups]
   * [DemoSiteModuleInstallation Getting the Warehouse demo module running]
   * [WarehouseModules Warehouse Modules]
