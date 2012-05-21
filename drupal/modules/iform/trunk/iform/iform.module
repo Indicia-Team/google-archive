@@ -316,13 +316,16 @@ function iform_delete($node) {
 function iform_load($node) {
   $t = db_fetch_object(db_query('SELECT iform, params, needs_review FROM {iform} WHERE nid = %d', $node->nid));
   $params=json_decode($t->params, true);
-  if (empty($params)) {
-    drupal_set_message(t('This page\'s configuration has not been stored correctly.', 'warning'));    
-  } else {
+  // null string is stored if the iform has no parameters to store
+  if ($t->params!=='null') {
     unset($t->params);
     $t->params = array();
-    // Merge the params into the loaded object
-    foreach($params as $k => $v) $t->params[$k] = $v;
+    if (!is_array($params)) {
+      drupal_set_message(t('This page\'s configuration has not been stored correctly.'.print_r($t->params, true)), 'warning');    
+    } else {
+      // Merge the params into the loaded object
+      foreach($params as $k => $v) $t->params[$k] = $v;
+    }
   }
   return $t;
 }
@@ -537,10 +540,9 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     );
     return $node;
   }
-    
   global $language;
   $node = node_prepare($node, $teaser);
-  if ($node->iform && $node->iform!=-1) {
+  if (isset($node->iform) && $node->iform!=-1) {
     iform_load_language_files($node);
     $args = array('language' => $language->language);
     require_once iform_client_helpers_path() . 'prebuilt_forms/' . $node->iform . '.php';
