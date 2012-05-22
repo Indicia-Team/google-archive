@@ -677,7 +677,7 @@ function _iform_apply_variables_to_args(&$args) {
 
 function _iform_apply_variable_to_args($variable, &$args) {
   $default=variable_get("indicia_$variable", '');
-  if (isset($args[$variable]) && ($args[$variable]==t('default') || $args[$variable]=='')  && !empty($default))
+  if (isset($args[$variable]) && ($args[$variable]==t('default') || $args[$variable]=='default' || $args[$variable]=='')  && !empty($default))
     $args[$variable]=$default;
 }
 
