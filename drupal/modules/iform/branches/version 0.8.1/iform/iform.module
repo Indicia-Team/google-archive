@@ -973,10 +973,10 @@ function iform_client_helpers_path() {
 function hostsite_get_user_field($field, $default=false) {
   global $user;
   if ($user->uid) {
+    $fieldname = "profile_$field";
     if (!isset($user->$fieldname) && function_exists('profile_load_profile'))
       // this call is not cached, so only do it once
       profile_load_profile($user);
-    $fieldname = "profile_$field";
     if (isset($user->$fieldname))
       return $user->$fieldname;
     else {
