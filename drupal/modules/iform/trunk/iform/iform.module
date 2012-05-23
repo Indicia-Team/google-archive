@@ -819,11 +819,13 @@ function iform_load_language_files($node) {
   $formLangFileName = $node->iform.'.'.$language->language.'.php';
   $nodeLangFileName = 'node.'.$node->nid.'.'.$language->language.'.php';
   $formFallbackFileName = $node->iform.'.en.php';
+  $nodeFallbackFileName = 'node.'.$node->nid.'.en.php';
   // Define a priority ordered list of file names that could contain the custom terms list.
   if ($siteSpecificLangFilePath)
     $langFiles = array(
       $siteSpecificLangFilePath . $nodeLangFileName,
       $siteSpecificLangFilePath . $formLangFileName,
+      $siteSpecificLangFilePath . $nodeFallbackFileName,
       $siteSpecificLangFilePath . $formFallbackFileName
     );
   else
@@ -831,6 +833,7 @@ function iform_load_language_files($node) {
   $langFiles = array_merge($langFiles, array(
     $moduleLangFilePath       . $nodeLangFileName,
     $moduleLangFilePath       . $formLangFileName,
+    $moduleLangFilePath       . $nodeFallbackFileName,
     $moduleLangFilePath       . $formFallbackFileName
   ));
   $custom_terms=array(); // this is an array of key value pairs
