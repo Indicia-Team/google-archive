@@ -197,9 +197,9 @@ function iform_ajaxproxy_proxy() {
             $parts = explode(".",$name);
             $fext = array_pop($parts);
             // Generate a file id to store the image as
-            $destination = time().rand(0,1000).".".$fext;
+            $destination = time().str_pad((string)rand(0,999),3,'0',STR_PAD_LEFT).".".$fext;
             if (move_uploaded_file($fname, $uploadpath.$destination)) { //successfully stored locally - send to the warehouse
-              $postargs = array();
+              $postargs = array('name_is_guid' => 'true'); // we've done the time etc thing, so server doesn't need to.
               if (array_key_exists('auth_token', $_POST)) $postargs['auth_token'] = $_POST['auth_token'];
               if (array_key_exists('nonce', $_POST)) $postargs['nonce'] = $_POST['nonce'];
               $file_to_upload = array('media_upload'=>'@'.realpath($uploadpath.$destination));
@@ -265,8 +265,7 @@ function iform_ajaxproxy_proxy() {
         $Model = data_entry_helper::wrap($_POST, 'notification');
       break;
     default:
-      var_dump($_POST);
-      var_dump($_FILES);
+      echo "{error:\"iform_ajaxproxy Error: Current defined methods are: sample, location, loc-sample, loc-smp-occ, smp-occ, media, occurrence, occ-comment, smp-comment, determination, notification\"}";
       // TODO invoke optional method in relevant iform prebuilt form to handle non standard indexes
       // TODO? echo a failure response: invalid index type
       return;
