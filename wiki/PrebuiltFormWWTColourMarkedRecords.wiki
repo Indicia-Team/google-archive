@@ -1,0 +1,150 @@
+#summary Setup Instructions for the WWT Colour-marked Wildfowl Form.
+#labels CMS-Drupal,In-Progress
+
+=﻿ Introduction. =
+
+This page details the configuration process for the WWT Colour-marked Wildfowl form. It assumes a level of experience in setting forms up. 
+
+Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4098. 
+
+You will also need to have set up a website, survey and species list on the warehouse. 
+
+== Attributes ==
+
+The following custom attributes are used by this form. These need to be set up. The term lists currently exist but can be edited.
+
+=== Subject Observation Attributes ===
+
+|| *Caption* || *Type* || *System Function* || *Comments* ||
+|| Attached Devices || Lookup List || Attached Device || Use the Attachment Type term list. Tick 'Allow multiple values'. ||
+|| Age/plumage || Lookup List || Age/Stage Classification || Use the Stage/Age Group Status term list. ||
+|| Sex || Lookup List || Sex/Gender || Use the Gender term list. ||
+|| Life Status || Lookup List || Alive or Dead || Use the Life Status term list. ||
+
+== Identifier Attributes ==
+
+|| *Caption* || *Type* || *System Function* || *Comments* ||
+|| Base Colour || Lookup List || Base/Background Colour || Use the Ring Colour term list. ||
+|| Text Colour || Lookup List || Text/Code Colour || Use the Ring Colour term list. ||
+|| Sequence || Text || Unique Sequence/Code || Validate as standard text ||
+|| Position || Lookup List || Position on the organism || Use the Identifier Position term list. Allow multiple values. ||
+
+= Drupal =
+
+  # Create a new IForm Content Node. Fill in the details as follows then save it. 
+
+  * Set menu options as required.
+  * Choose a 'Title of Page'. 
+  * Enter text for the 'Page introductory text'.
+  * Select Form Category 'General purpose data entry forms'. 
+  * Choose Form 'WWT Colour-marked Wildfowl'. 
+  * Load the settings form. 
+
+== Other Iform Parameters ==
+
+  * View Access Control: unticked. 
+  * Permission name for view access control: blank. 
+  * Survey: Choose the survey created on the warehouse for this form from drop down list. 
+  * Sample Method: Choose 'Field observation'. 
+  * Subject Type: Choose 'Individual'.
+  * Default Values: Leave as 'occurrence:record_status=C'. 
+  * Redirect to page after successful data entry: blank. 
+  * Display notification after save: tick. 
+
+== Initial Map View ==
+
+  * Set as desired or allow it to default to your general drupal settings. 
+
+== Base Map Layers ==
+
+  * Preset Base Layers: Tick 'Google Hybrid' only. 
+  * All other fields: blank 
+
+== Advanced Base Map Layers ==
+
+  * All fields: blank 
+
+== Other Map Settings ==
+
+  * WMS layers from Geoserver: blank 
+  * Controls to add to map: leave as - layerSwitcher panZoom (each value on its own line)
+  * Allowed Spatial Ref Systems: OSGB,4326 (comma separated)
+
+== Georeferencing ==
+
+  * Leave all fields as default. 
+
+== User Interface ==
+
+  * Interface Style Option: select preferred style
+  * Show Progress through Wizard/Tabs: Ticked if wizard chosen above
+  * Show email field even if logged in: unticked 
+  * Show user profile fields even if logged in: unticked 
+  * Copy field values from user profile: unticked
+  * Client Side Validation: Ticked. 
+  * Form structure: leave as default. (should be as follows)
+
+{{{
+=When and Where=
+?Please tell us when you saw the colour-marked bird.?
+[date]
+[*]
+?Please tell us where you saw the marked bird. You can do this in any of the following ways:-<ol><li>enter GPS co-ordinates or an OS grid reference directly,</li><li>enter a place name and search for it,</li><li>search for the place on the map and then click to set it.</li></ol>?
+[spatial reference]
+[place search]
+[map]
+?What name do you know this location by?
+[location name]
+[*]
+=Colour Marks=
+?Please pick the species from the following list and enter the details for the colour identifiers.?
+[species identifier]
+[*]
+=Added Comments=
+?Please add any comments for review or editing of this report.?
+[show added sample comments]
+[add sample comment]
+[*]
+=*=
+}}}
+
+  * Attribute Termlist Language Filter: unticked. 
+  * Skip initial grid of Data: ticked if you wish to show a grid of exiting records to allow editing, otherwise unticked
+  * Grid Report: 'reports_for_prebuilt_forms/simple_subject_observation_identifier_list_1'. 
+  * Number of rows displayed in grid: 10.
+  * Save button below all pages?: unticked. 
+
+== Species ==
+
+  * Species List: Choose the species list you have created.
+  * Cache lookups: Ticked (but may need unticking after updates during development).
+  * Single Species Selection Control Type: recommend 'select' for small lists, otherwise autocomplete. 
+  * Include both names in species controls and added rows. Suggest unticked but chose as preferred.
+  * Include taxon group name in species autocomplete and added rows: Unticked.
+  * Field used to filter taxa: leave as default. 
+  * Taxon filter items: leave black.. 
+  * Species Names Filter: All names are available. 
+
+== Identifiers ==
+
+  * Neck Collar Type: Choose the identifier type which indicates a neck collar.
+  * Neck collar maximum length: enter the maximum character length for a neck collar sequence e.g. 3.
+  * Neck collar validation pattern: if you wish to restrict the allowed format, enter a 'regular expression' for the neck collar validation pattern. If you are not familiar with regular expressions, please seek advice.
+  * Repeat the above 3 steps for the colour ring and the metal ring
+  * Base Colours: Select the colours which you want to be recordable for the background of the identifiers. 
+  * Text Colours: Select the colours which you want to be recordable for the text/sequence of the identifiers. 
+  * Identifier Position: Select the body positions which you want to be recordable for the identifiers which have a choice of positions. Recommend 'Left leg', 'Right leg' and 'Unknown'.
+  * Default Position on Leg: If for identifier position, you select  'Left leg' and 'Right leg' rather than the positions which include above/below the 'knee', you can default the leg vertical position here. Recommend “Below the 'Knee'”.
+  * Use Colour Picker: Ticked.
+
+== Subject observation ==
+
+  * Other Devices: Choose the attachment device types you wish to record. Leave all unticked to hide this feature
+  * Allow Comment For Colour-marked Individual: recommend ticked
+  * Request Gender Values: Choose the gender values you wish to record. Leave all unticked to hide this feature. Suggest ticking Male, Female, Unknown.
+  * Request Age Values: Choose the gender values you wish to record. Leave all unticked to hide this feature. Suggest ticking 1st winter, 1st summer, 2nd winter, Adult, Unknown but choose as appropriate.
+  * Request Life Status Values: Choose the 'life status' values you wish to record. Leave all unticked to hide this feature.
+
+== Debug ==
+
+  * Provide debug information: Ticked. This section will be removed for production.
