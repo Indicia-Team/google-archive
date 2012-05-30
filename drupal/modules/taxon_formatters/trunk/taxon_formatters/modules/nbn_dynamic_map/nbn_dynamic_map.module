@@ -59,8 +59,6 @@ function nbn_dynamic_map_taxon_formatter_settings_form($settings, $type, $args) 
 
 /**
  * Implements the output theme function.
- * @todo Theming
- * @todo NBN map web service integration
  */
 function theme_nbn_dynamic_map_taxon_formatter_output($element, $preset) {
   // return nothing if no TVK.
@@ -69,7 +67,7 @@ function theme_nbn_dynamic_map_taxon_formatter_output($element, $preset) {
     return '';
   iform_load_helpers(array('map_helper'));
   $r = map_helper::map_panel(array(
-    'presetLayers' => array('google_physical'), /****/
+    'presetLayers' => array('google_satellite','google_physical','osm'), 
     'editLayer' => false,
     'initial_lat'=>variable_get('indicia_map_centroid_lat', 55),
     'initial_long'=>variable_get('indicia_map_centroid_long', -1),
@@ -78,7 +76,7 @@ function theme_nbn_dynamic_map_taxon_formatter_output($element, $preset) {
     'height'=>$preset['settings']['width'],
     'standardControls'=>array('layerSwitcher','panZoomBar'),
     'rememberPos'=>false
-  ));
+  ), array('theme' => map_helper::$js_path . 'theme/default/style.css'));
   if (!empty($preset['settings']['datasets'])) {
     $ds = str_replace("\r\n", "\n", $preset['settings']['datasets']);
     $ds = str_replace("\r", "\n", $ds);
