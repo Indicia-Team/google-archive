@@ -99,9 +99,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           // hidden these fields if they feel they are not relevant to the site.
           $requests = array();
           $rows = db_query("select name from {profile_fields} where name in ('profile_location','profile_taxon_groups') and visibility in (2,3)");
-          drupal_set_message(print_r($account, true));
           while ($row = db_fetch_array($rows)) {
-            drupal_set_message(print_r($rows, true));
             if ($row['name']==='profile_location' && empty($account->profile_location))
               $requests[] = t('the area you would most often like to record in');
             if ($row['name']==='profile_taxon_groups' && empty($account->profile_taxon_groups))
