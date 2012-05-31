@@ -12,9 +12,9 @@ When Easy Login is installed, the Drupal user profile has additional fields avai
 
 *Last Name* - allows the user to enter their last name. 
 
-*Location* - allows the user to pick from a list of locations available on the warehouse to set their grographic area.
+*Location* - allows the user to pick from a list of locations available on the warehouse to set their grographic area. Note that if you do not want this functionality on your website, select *User management > Profiles* from the Drupal admin menu, then click the *edit* link for the Location row. Scroll down the page and set the *Visibility* setting to *Hidden profile field, only accessible by administrators, modules and themes.*.
 
-*Species groups* - allows the user to pick one or more groups from the list available on the warehouse to indicate their recording preferences. 
+*Species groups* - allows the user to pick one or more groups from the list available on the warehouse to indicate their recording preferences. Note that if you do not want this functionality on your website, select *User management > Profiles* from the Drupal admin menu, then click the *edit* link for the Species Groups row. Scroll down the page and set the *Visibility* setting to *Hidden profile field, only accessible by administrators, modules and themes.*.
 
 In addition, if the user is promoted to the verifier role then there are the following additional fields in the profile:
 
