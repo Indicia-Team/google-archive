@@ -95,11 +95,26 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
                 $fieldsToSyncByCaption[$row['title']]=$fieldsToSync[$row['name']];
             }
           }
-          if (empty($account->profile_location) && empty($account->profile_taxon_groups)) {
-            drupal_set_message('Why not tell us the area you would most often like to record in and the list of '.
-                'species groups you are particularly interested in to help us tailor the system to your needs? '.
-                'You can fill this information in on your '.l('user preferences', 'user/'.$account->uid.'/edit/Preferences').'.');
+          // If the user has not filled in preferences then prompt them. Allow for the fact that the site administrator might have
+          // hidden these fields if they feel they are not relevant to the site.
+          $requests = array();
+          $rows = db_query("select name from {profile_fields} where name in ('profile_location','profile_taxon_groups') and visibility in (2,3)");
+          drupal_set_message(print_r($account, true));
+          while ($row = db_fetch_array($rows)) {
+            drupal_set_message(print_r($rows, true));
+            if ($row['name']==='profile_location' && empty($account->profile_location))
+              $requests[] = t('the area you would most often like to record in');
+            if ($row['name']==='profile_taxon_groups' && empty($account->profile_taxon_groups))
+              $requests[] = t('the list of species groups you are particularly interested in');
           }
+          if (!empty($requests)) 
+            drupal_set_message(t('Why not tell us !requests to help us tailor the system to your needs? '.
+                'You can fill this information in on your !link.', 
+                array(
+                  '!requests'=>implode(' '.t('and').' ', $requests),
+                  '!link'=>l('user preferences', 'user/'.$account->uid.'/edit/Preferences')
+                )
+            ));
         }
         $_updating_account=true;
         $response = easy_login_call_get_user_id($account, null, null, $fieldsToSyncByCaption);
