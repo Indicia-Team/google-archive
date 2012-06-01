@@ -830,7 +830,7 @@ function iform_check_helper_config_exists() {
   // initial safety check for the presence of the helper_config file
   $path = iform_client_helpers_path();
   // we always need the helper_config file
-  return file_exists('$path/helper_config.php');
+  return file_exists("$path/helper_config.php");
 }
 
 /**
