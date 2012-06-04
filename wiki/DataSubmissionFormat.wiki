@@ -22,6 +22,10 @@ Each entity that is supported by the webservices is represented by a single URL 
 }
 }}}
 
+=== Data types ===
+
+  * *boolean* - when posting a boolean value, pass the string values 't' or 'f' for true or false respectively.
+
 == Posting to the save service ==
 
 In addition to the URLs representing each entity, there is a service that allows more complex data to be posted, for example a sample containing several occurrences. An example submission to the Indicia save web service follows. The json string representing the data you want to post should be sent to the 
