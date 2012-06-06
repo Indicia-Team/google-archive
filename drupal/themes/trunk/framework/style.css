@@ -540,6 +540,15 @@ span.clear       { clear: both; display: block; font-size: 0; height: 1px; line-
 .clearfix,
 .container       { display: block; }
 
+/* IE6 */
+* html .clearfix {
+  height: 1%;
+}
+/* IE7 */
+*:first-child + html .clearfix {
+  min-height: 1%;
+}
+
 .float-left      { float: left; }
 .float-right     { float: right; }
 .img-left        { float: left; margin: 1.5em 1.5em 1.5em 0; }
