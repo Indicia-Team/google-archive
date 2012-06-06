@@ -161,6 +161,7 @@ Columns are used to give further specification to how particular fields should b
   * `visible` can be set to false to hide a column, or to force a vague date column to appear that is being replaced by a standard date column.
   * `img` can be set to true for a field that contains the filename of an image uploaded to the Warehouse. This will then be replaced by a thumbnail of the image, with support for FancyBox image popups to show the full image size.
   * `mappable` can be set to true to declare a column which can then be output using the report_helper::report_map method available from Indicia version 0.6. The column must output a WKT definition of the geometry to be mapped, e.g. the column definition in the SQL might be `st_astext(geom)`.
+  * `orderby` can be set to the name of another column in the report (including hidden columns) when a column that is logically selected for sorting physically uses another column to provide the sort order. For example a report column containing a term from a termlist might use a hidden column to define the sort order of the terms in the list as the underlying sort when the user clicks on the term column title.
   * `aggregate` is described in the section *Declaring SQL for each column* below.
   * `distincton` is described in the section *Declaring SQL for each column* below.
   * `in_count` is described in the section *Declaring SQL for each column* below.
