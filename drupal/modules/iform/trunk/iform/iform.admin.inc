@@ -199,7 +199,20 @@ mapInitialisationHooks.push(function(div) {
 
 function indicia_configuration_form_validate($form, &$form_state) {
   if ($form_state['values']['indicia_warehouse']=='other' && empty($form_state['values']['indicia_base_url']))
-    form_set_error('indicia_website_id', t('Please supply a warehouse URL for connection to Indicia, or select a pre-configured connection.')); 
+    form_set_error('indicia_website_id', t('Please supply a warehouse URL for connection to Indicia, or select a pre-configured connection.'));
+  elseif (!empty($form_state['values']['indicia_password'])) {
+    // test the connection to the warehouse
+    $urls = indicia_get_warehouse_urls($form_state);
+    data_entry_helper::$base_url = $urls['base_url'];
+    $readAuth = data_entry_helper::get_read_auth($form_state['values']['indicia_website_id'], $form_state['values']['indicia_password']);
+    $test = data_entry_helper::get_population_data(array(
+      'table'=>'survey',
+      'extraParams'=>$readAuth + array('limit'=>0)
+    ));
+    if (isset($test['error']))
+      form_set_error('indicia_website_id', t('The configuration for the connection to the warehouse is incorrect. This could be an incorrect '.
+          'or unavailable Indicia Warehouse, an incorrect Indicia Website ID or Password.'));
+  }
   $systems = _indicia_sref_systems_from_form($form_state['values']);
   if (empty($systems)) {
     form_set_error('spatial_ref_systems', t('Please enable at least one spatial or grid reference system.'));
@@ -248,20 +261,9 @@ function _indicia_form_values_from_sref_systems($systems) {
 
 function indicia_configuration_form_submit($form, &$form_state) {
   variable_set('indicia_warehouse', $form_state['values']['indicia_warehouse']);
-  if (strcasecmp($form_state['values']['indicia_warehouse'], t('Other'))===0) {
-    variable_set('indicia_base_url', $form_state['values']['indicia_base_url']);
-    variable_set('indicia_geoserver_url', $form_state['values']['indicia_geoserver_url']);
-  } else {
-    global $indicia_warehouses;
-    iform_load_warehouse_array();
-    foreach($indicia_warehouses as $warehouse=>$def) {
-      if ($warehouse==$form_state['values']['indicia_warehouse']) {
-        variable_set('indicia_base_url', $def['base_url']);
-        variable_set('indicia_geoserver_url', $def['geoserver_url']);
-        break;
-      }
-    }
-  }
+  $urls = indicia_get_warehouse_urls($form_state);
+  variable_set('indicia_base_url', $urls['base_url']);
+  variable_set('indicia_geoserver_url', $urls['geoserver_url']);
   variable_set('indicia_private_warehouse', $form_state['values']['indicia_private_warehouse']);
   variable_set('indicia_website_id', $form_state['values']['indicia_website_id']);
   if (!empty($form_state['values']['indicia_password']))
@@ -274,6 +276,29 @@ function indicia_configuration_form_submit($form, &$form_state) {
   $systems = _indicia_sref_systems_from_form($form_state['values']);
   variable_set('indicia_spatial_systems', $systems);
   drupal_set_message(t('Indicia settings saved.'));
+}
+
+/**
+ * Returns the base url and geoserver url defined in the form state array.
+ */
+function indicia_get_warehouse_urls($form_state) {
+  if (strcasecmp($form_state['values']['indicia_warehouse'], t('Other'))===0) {
+    return array(
+      'base_url'=>$form_state['values']['indicia_base_url'],
+      'geoserver_url'=>$form_state['values']['indicia_geoserver_url']
+    );
+  } else {
+    global $indicia_warehouses;
+    iform_load_warehouse_array();
+    foreach($indicia_warehouses as $warehouse=>$def) {
+      if ($warehouse==$form_state['values']['indicia_warehouse']) {
+        return array(
+          'base_url'=>$def['base_url'],
+          'geoserver_url'=>$def['geoserver_url']
+        );
+      }
+    }
+  }
 }
 
 /**
