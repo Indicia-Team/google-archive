@@ -82,6 +82,7 @@ The following custom attributes are used by this form. These need to be set up. 
   * Show user profile fields even if logged in: unticked 
   * Copy field values from user profile: unticked
   * Client Side Validation: Ticked. 
+  * Use Accordion for Individuals: unticked.
   * Form structure: leave as default. (should be as follows)
 
 {{{
