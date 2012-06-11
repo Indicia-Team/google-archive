@@ -266,10 +266,8 @@ function indicia_configuration_form_submit($form, &$form_state) {
   variable_set('indicia_base_url', $urls['base_url']);
   variable_set('indicia_geoserver_url', $urls['geoserver_url']);
   // clear the cache if the linked warehouse changes
-  if ($origWarehouseUrl !== variable_get('indicia_base_url', '')) {
-    data_entry_helper::clear_cache();  
-    drupal_set_message('Cache cleared');
-  }
+  if ($origWarehouseUrl !== $urls['base_url'])
+    data_entry_helper::clear_cache();
   variable_set('indicia_private_warehouse', $form_state['values']['indicia_private_warehouse']);
   variable_set('indicia_website_id', $form_state['values']['indicia_website_id']);
   if (!empty($form_state['values']['indicia_password']))
