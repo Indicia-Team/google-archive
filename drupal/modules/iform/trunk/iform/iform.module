@@ -580,7 +580,13 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     }
     if ($_POST && (array_key_exists('website_id', $_POST)) && method_exists('iform_'.$node->iform, 'get_submission')) {
       // Ask the form to submit itself.
-      $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
+      try {
+        $s = call_user_func(array('iform_'.$node->iform, 'get_submission'), $_POST, $args);
+      } catch (Exception $e) {
+        watchdog('iform','Exception occurred during build of form submission: '.$e->getMessage());
+        drupal_set_message('An error occurred whilst saving the new site details.');
+        unset($s);
+      }
       // And allow the form to dynamically set the destination after post
       if (method_exists('iform_'.$node->iform, 'get_redirect_on_success')) {
         $redirect = call_user_func(array('iform_'.$node->iform, 'get_redirect_on_success'), $_POST, $args);
