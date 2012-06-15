@@ -750,7 +750,6 @@ function handle_resources() {
             jquery_ui_add(array('jquery-ui'));
           }
           else if (substr($j, 0, 4)=='[IE]'){
-            var_dump('[IE]');
              $libraries .= "<!--[if IE]><script type=\"text/javascript\" src=\"".substr($j, 4)."\"></script><![endif]-->\n";
           }
           else if (substr($j, 0, 4)=='http') {
