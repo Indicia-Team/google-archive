@@ -5,7 +5,7 @@
 
 This page details the configuration process for the WWT Colour-marked Wildfowl form. It assumes a level of experience in setting forms up. 
 
-Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4098. 
+Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4221. 
 
 You will also need to have set up a website, survey and species list on the warehouse. 
 
