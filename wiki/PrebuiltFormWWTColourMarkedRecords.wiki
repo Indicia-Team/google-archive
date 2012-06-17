@@ -29,6 +29,21 @@ The following custom attributes are used by this form. These need to be set up. 
 || Sequence || Text || Unique Sequence/Code || Validate as standard text ||
 || Position || Lookup List || Position on the organism || Use the Identifier Position term list. Allow multiple values. ||
 
+== Sample Attributes ==
+
+*These should already exist, but create them if they don't*
+
+|| *Caption* || *Type* || *System Function* || *Comments* ||
+|| First name || Text || First name || ||
+|| Last name || Text || Last name || ||
+|| Email || Text || Email || ||
+
+These 3 attributes need to be associated with the survey being used for this form. To do this, go to the Sample attributes page on the warehouse, click the 'Edit' action in the action column for each of the above attributes, and tick the required website/survey tick box near the bottom of the form, then save.
+
+You then need to create a block containing these sample attributes. An example showing a similar setup can be found at http://code.google.com/p/indicia/wiki/TutorialDynamicForm. On the warehouse, choose Surveys from the Lookup lists menu, then find your survey in the table and click the 'Setup attributes' action in the final column. As the First name, Last name and Email attributes are linked to this survey, they should already show on the page. Enter 'Recorder details' into the Block name input box and click 'Create new block'. A new block should appear at the top of the page. Now create a second block called 'Enter data by proxy'. You can now use the drag handles to the left of each attribute name to drag each attribute into the Recorder details block. Order them with First name at the top of the block, Last name in the middle and Email at the bottom of the Recorder details block. Finally, drag the whole of the Recoder details block into the Enter data by proxy block and press the save button. The resulting structure should look like the following picture.
+
+http://indicia.googlecode.com/svn/wiki/attribute_block.png
+
 = Drupal =
 
   # Create a new IForm Content Node. Fill in the details as follows then save it. 
@@ -78,28 +93,33 @@ The following custom attributes are used by this form. These need to be set up. 
 
   * Interface Style Option: select preferred style
   * Show Progress through Wizard/Tabs: Ticked if wizard chosen above
-  * Show email field even if logged in: unticked 
-  * Show user profile fields even if logged in: unticked 
-  * Copy field values from user profile: unticked
   * Client Side Validation: Ticked. 
-  * Use Accordion for Individuals: unticked.
-  * Form structure: leave as default. (should be as follows)
+  * Form structure: leave as default or optionally add lockable options as as follows:-
 
 {{{
-=When and Where=
+=Who When and Where=
+?Recorder details for this information?
+[recorder details]
+@lockable=true
 ?Please tell us when you saw the colour-marked bird.?
 [date]
+@allowVagueDates=true
+@lockable=true
 [*]
 ?Please tell us where you saw the marked bird. You can do this in any of the following ways:-<ol><li>enter GPS co-ordinates or an OS grid reference directly,</li><li>enter a place name and search for it,</li><li>search for the place on the map and then click to set it.</li></ol>?
 [spatial reference]
+@lockable=true
 [place search]
 [map]
 ?What name do you know this location by?
 [location name]
+@lockable=true
 [*]
+@smpAttr:6|label=First Name:
 =Colour Marks=
 ?Please pick the species from the following list and enter the details for the colour identifiers.?
 [species identifier]
+@lockable=true
 [*]
 =Added Comments=
 ?Please add any comments for review or editing of this report.?
@@ -148,4 +168,18 @@ The following custom attributes are used by this form. These need to be set up. 
 
 == Debug ==
 
-  * Provide debug information: Ticked. This section will be removed for production.
+  * Provide debug information: unticked. This section will be removed for production.
+
+= Drupal roles and permissions =
+
+== Create a drupal role for WWT staff ==
+
+If you have not already done so, create a drupal role for staff who will be able to enter data for other users. You can do this from the drupal admin menu User management > Roles.
+
+Once you have created this role, you can allocate it to appropriate drupal users.
+
+== Allocate the enter data by proxy permission ==
+
+Use the drupal admin menu User management > Permissions to show a grid of permissions by roles and tick the 'IForm n99 enter data by proxy' permission for the staff role you created above. ('99' in the permission name will actually be the drupal node id for your colour-marked form.)
+
+Users with the staff role will now be able to edit the recorder details block on the colour-marked form in order to enter data for other people.
