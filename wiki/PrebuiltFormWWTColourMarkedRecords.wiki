@@ -42,7 +42,7 @@ These 3 attributes need to be associated with the survey being used for this for
 
 You then need to create a block containing these sample attributes. An example showing a similar setup can be found at http://code.google.com/p/indicia/wiki/TutorialDynamicForm. On the warehouse, choose Surveys from the Lookup lists menu, then find your survey in the table and click the 'Setup attributes' action in the final column. As the First name, Last name and Email attributes are linked to this survey, they should already show on the page. Enter 'Recorder details' into the Block name input box and click 'Create new block'. A new block should appear at the top of the page. Now create a second block called 'Enter data by proxy'. You can now use the drag handles to the left of each attribute name to drag each attribute into the Recorder details block. Order them with First name at the top of the block, Last name in the middle and Email at the bottom of the Recorder details block. Finally, drag the whole of the Recoder details block into the Enter data by proxy block and press the save button. The resulting structure should look like the following picture.
 
-http://indicia.googlecode.com/svn/wiki/attribute_block.png
+http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block.png
 
 = Drupal =
 
@@ -105,7 +105,6 @@ http://indicia.googlecode.com/svn/wiki/attribute_block.png
 [date]
 @allowVagueDates=true
 @lockable=true
-[*]
 ?Please tell us where you saw the marked bird. You can do this in any of the following ways:-<ol><li>enter GPS co-ordinates or an OS grid reference directly,</li><li>enter a place name and search for it,</li><li>search for the place on the map and then click to set it.</li></ol>?
 [spatial reference]
 @lockable=true
@@ -115,7 +114,6 @@ http://indicia.googlecode.com/svn/wiki/attribute_block.png
 [location name]
 @lockable=true
 [*]
-@smpAttr:6|label=First Name:
 =Colour Marks=
 ?Please pick the species from the following list and enter the details for the colour identifiers.?
 [species identifier]
@@ -183,3 +181,11 @@ Once you have created this role, you can allocate it to appropriate drupal users
 Use the drupal admin menu User management > Permissions to show a grid of permissions by roles and tick the 'IForm n99 enter data by proxy' permission for the staff role you created above. ('99' in the permission name will actually be the drupal node id for your colour-marked form.)
 
 Users with the staff role will now be able to edit the recorder details block on the colour-marked form in order to enter data for other people.
+
+== Screen shots ==
+
+The following screenshots give an impression of the configured form (using the wizard style).
+
+http://indicia.googlecode.com/svn/wiki/screenshots/wwt_colour-marked_form_page_1.png
+
+http://indicia.googlecode.com/svn/wiki/screenshots/wwt_colour-marked_form_page_2.png
