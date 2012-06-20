@@ -5,7 +5,7 @@
 
 This page details the configuration process for the WWT Colour-marked Wildfowl form. It assumes a level of experience in setting forms up. 
 
-Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4221. 
+Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4254. 
 
 You will also need to have set up a website, survey and species list on the warehouse. 
 
@@ -147,6 +147,7 @@ http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block.png
 == Identifiers ==
 
   * Neck Collar Type: Choose the identifier type which indicates a neck collar.
+  * Neck Collar Position: Choose the appropriate position for a neck collar (e.g. 'Neck').
   * Neck collar maximum length: enter the maximum character length for a neck collar sequence e.g. 3.
   * Neck collar validation pattern: if you wish to restrict the allowed format, enter a 'regular expression' for the neck collar validation pattern. If you are not familiar with regular expressions, please seek advice.
   * Repeat the above 3 steps for the colour ring and the metal ring
