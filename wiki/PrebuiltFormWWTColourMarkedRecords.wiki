@@ -5,7 +5,7 @@
 
 This page details the configuration process for the WWT Colour-marked Wildfowl form. It assumes a level of experience in setting forms up. 
 
-Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4254. 
+Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4275 (23 June 2012). 
 
 You will also need to have set up a website, survey and species list on the warehouse. 
 
@@ -38,11 +38,44 @@ The following custom attributes are used by this form. These need to be set up. 
 || Last name || Text || Last name || ||
 || Email || Text || Email || ||
 
-These 3 attributes need to be associated with the survey being used for this form. To do this, go to the Sample attributes page on the warehouse, click the 'Edit' action in the action column for each of the above attributes, and tick the required website/survey tick box near the bottom of the form, then save.
+These 3 attributes need to be associated with the survey being used for this form. To do this, 
 
-You then need to create a block containing these sample attributes. An example showing a similar setup can be found at http://code.google.com/p/indicia/wiki/TutorialDynamicForm. On the warehouse, choose Surveys from the Lookup lists menu, then find your survey in the table and click the 'Setup attributes' action in the final column. As the First name, Last name and Email attributes are linked to this survey, they should already show on the page. Enter 'Recorder details' into the Block name input box and click 'Create new block'. A new block should appear at the top of the page. Now create a second block called 'Enter data by proxy'. You can now use the drag handles to the left of each attribute name to drag each attribute into the Recorder details block. Order them with First name at the top of the block, Last name in the middle and Email at the bottom of the Recorder details block. Finally, drag the whole of the Recoder details block into the Enter data by proxy block and press the save button. The resulting structure should look like the following picture.
+  # Go to the indicia warehouse home page and log in as a user with administrative rights.
+  # Click the 'Custom Attributes' menu item and on the drop-down, pick 'Sample attributes' to open the sample attributes page.
+  # Find the 3 attributes in the list above and check if the entries have the survey name you are using next to them in the survey column as in this screen-shot.
+http://indicia.googlecode.com/svn/wiki/screenshots/sample_attributes.png
+
+If your survey isn't shown next to all three attributes, you must add it;
+  # Click the 'Edit' action in the action column for each of the above attributes.
+  # Tick the required website/survey tick box near the bottom of the form.
+  # Click save.
+http://indicia.googlecode.com/svn/wiki/screenshots/edit_first_name.png
+
+You now need to create a block containing these sample attributes.
+  # On the warehouse, choose Surveys from the Lookup lists menu.
+  # Find your survey in the table and click the 'Setup attributes' action in the final column.
+  # As the First name, Last name and Email attributes are linked to this survey, they should already show on the page. 
+http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block_1.png
+
+  # Enter 'Enter data by proxy' into the Block name input box.
+  # click 'Create new block'.
+  # A new block should appear at the top of the page.
+  # Now create a second block called 'Recorder details' in a similar way.
+http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block_2.png
+
+  You can now use the drag handles (blue box with out-pointing arrows) to the left of each attribute name to drag each of your 3 attributes into the Recorder details block. 
+  # click on the attribute's 'drag handle'
+  # drag the attribute over the 'Recorder details' block until the middle of that block turns yellow.
+  # drop the attribute into the block by releasing the mouse button.
+  # Repeat this for each attribute until all 3 are in the block
+  # Order them with First name at the top of the block, Last name in the middle and Email at the bottom of the 'Recorder details' block. 
+  # Now drag the whole of the 'Recorder details' block into the 'Enter data by proxy' block.
+  # Click the save button. 
+The resulting structure should look like the following picture.
 
 http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block.png
+
+You have now successfully set up the sample attributes on the warehouse and can now progress to setting up the prebuilt form on drupal.
 
 = Drupal =
 
