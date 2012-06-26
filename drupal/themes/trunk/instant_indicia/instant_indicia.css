@@ -14,13 +14,18 @@ h2 {
 }
 
 /* line 19, sass/instant_indicia.scss */
+#search-theme-form {
+  clear: right;
+}
+
+/* line 23, sass/instant_indicia.scss */
 #secondary-links {
   float: right;
   font-size: 12px;
   vertical-align: top;
 }
-/* line 23, sass/instant_indicia.scss */
-#secondary-links * {
+/* line 27, sass/instant_indicia.scss */
+#secondary-links > * {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
   display: inline-block;
@@ -29,15 +34,15 @@ h2 {
   vertical-align: top;
 }
 /* line 7, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-#secondary-links * {
+#secondary-links > * {
   *display: inline;
 }
-/* line 27, sass/instant_indicia.scss */
+/* line 31, sass/instant_indicia.scss */
 #secondary-links a {
   font-weight: bold;
 }
 
-/* line 32, sass/instant_indicia.scss */
+/* line 36, sass/instant_indicia.scss */
 .gallery-img, .view-summary-report ul li {
   text-align: center;
   padding: 0.5em;
@@ -60,28 +65,28 @@ h2 {
   *display: inline;
 }
 
-/* line 43, sass/instant_indicia.scss */
+/* line 47, sass/instant_indicia.scss */
 .summary-report {
   width: 80px;
   padding-top: 80px;
 }
 
-/* line 48, sass/instant_indicia.scss */
+/* line 52, sass/instant_indicia.scss */
 .report-map {
   background: url(images/summary_map.png) no-repeat center top;
 }
 
-/* line 52, sass/instant_indicia.scss */
+/* line 56, sass/instant_indicia.scss */
 .report-table {
   background: url(images/summary_datatable.png) no-repeat center top;
 }
 
-/* line 56, sass/instant_indicia.scss */
+/* line 60, sass/instant_indicia.scss */
 .report-pie {
   background: url(images/summary_piechart.png) no-repeat center top;
 }
 
-/* line 60, sass/instant_indicia.scss */
+/* line 64, sass/instant_indicia.scss */
 .report-bar {
   background: url(images/summary_barchart.png) no-repeat center top;
 }
@@ -107,16 +112,16 @@ form select {
   border-width: 1px;
   border-style: solid;
 }
-/* line 66, sass/instant_indicia.scss */
+/* line 70, sass/instant_indicia.scss */
 form select {
   border-color: #bbbbbb;
 }
-/* line 68, sass/instant_indicia.scss */
+/* line 72, sass/instant_indicia.scss */
 form select:focus {
   border-color: #666666;
 }
 
-/* line 74, sass/instant_indicia.scss */
+/* line 78, sass/instant_indicia.scss */
 .form-checkboxes > div {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -129,67 +134,67 @@ form select:focus {
   *display: inline;
 }
 
-/* line 78, sass/instant_indicia.scss */
+/* line 82, sass/instant_indicia.scss */
 a h2 {
   color: #006699;
 }
 
-/* line 82, sass/instant_indicia.scss */
+/* line 86, sass/instant_indicia.scss */
 a:hover h2 {
   text-decoration: underline;
 }
 
 /* enable special menu items on nice menus to have correct spacing */
-/* line 87, sass/instant_indicia.scss */
+/* line 91, sass/instant_indicia.scss */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
 }
 
-/* line 92, sass/instant_indicia.scss */
+/* line 96, sass/instant_indicia.scss */
 ul.nice-menu-down {
   width: 100%;
 }
-/* line 94, sass/instant_indicia.scss */
+/* line 98, sass/instant_indicia.scss */
 ul.nice-menu-down .menuparent span.nolink {
   padding-right: 15px;
 }
 
-/* line 99, sass/instant_indicia.scss */
+/* line 103, sass/instant_indicia.scss */
 table {
   /* Full width species checklist input grid */
   /* anything inside a table (td, tr) can have styles to reflect verification and certainty. Prioritise verification status by making report-grid class specific. */
 }
-/* line 101, sass/instant_indicia.scss */
+/* line 105, sass/instant_indicia.scss */
 table.species-grid {
   width: 100%;
 }
-/* line 106, sass/instant_indicia.scss */
+/* line 110, sass/instant_indicia.scss */
 table.report-grid .status-V {
   background: url(images/nuvola/ok-16px.png) no-repeat right;
 }
-/* line 109, sass/instant_indicia.scss */
+/* line 113, sass/instant_indicia.scss */
 table.report-grid .status-D {
   background: url(images/nuvola/dubious-16px.png) no-repeat right;
 }
-/* line 112, sass/instant_indicia.scss */
+/* line 116, sass/instant_indicia.scss */
 table.report-grid .status-R {
   background: url(images/nuvola/cancel-16px.png) no-repeat right;
 }
-/* line 116, sass/instant_indicia.scss */
+/* line 120, sass/instant_indicia.scss */
 table .certainty-C {
   background: url(images/star3.png) no-repeat right;
 }
-/* line 119, sass/instant_indicia.scss */
+/* line 123, sass/instant_indicia.scss */
 table .certainty-L {
   background: url(images/star2.png) no-repeat right;
 }
-/* line 122, sass/instant_indicia.scss */
+/* line 126, sass/instant_indicia.scss */
 table .certainty-P {
   background: url(images/star1.png) no-repeat right;
 }
 
-/* line 127, sass/instant_indicia.scss */
+/* line 131, sass/instant_indicia.scss */
 button, input[type=submit] {
   margin: 0.25em;
   display: inline-block;
@@ -209,7 +214,7 @@ button, input[type=submit] {
   border-radius: 4px;
   font-weight: bold;
 }
-/* line 131, sass/instant_indicia.scss */
+/* line 135, sass/instant_indicia.scss */
 button.default-button, input[type=submit].default-button {
   background-color: #4ba3cc;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4ba3cc), color-stop(100%, #276b8a));
@@ -231,7 +236,7 @@ button.default-button:hover, input[type=submit].default-button:hover {
   background: -ms-linear-gradient(#5fadd2, #2d7a9e);
   background: linear-gradient(#5fadd2, #2d7a9e);
 }
-/* line 134, sass/instant_indicia.scss */
+/* line 138, sass/instant_indicia.scss */
 button.button-active, input[type=submit].button-active {
   -moz-box-shadow: #44445f 0 0.2em 0.4em inset;
   -webkit-box-shadow: #44445f 0 0.2em 0.4em inset;

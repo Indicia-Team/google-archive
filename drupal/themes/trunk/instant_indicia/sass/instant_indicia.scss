@@ -16,11 +16,15 @@ h2 {
   }
 }
 
+#search-theme-form {
+  clear: right;
+}
+
 #secondary-links {
   float: right;
   font-size: 12px;
   vertical-align: top;
-  * {
+  > * {
     @include inline-block;
     vertical-align: top;
   }
