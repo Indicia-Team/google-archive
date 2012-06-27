@@ -109,22 +109,28 @@ table {
   &.report-grid {
     .status-V {
       background: url(images/nuvola/ok-16px.png) no-repeat right;
+      padding-right: 16px;
     }
     .status-D {
       background: url(images/nuvola/dubious-16px.png) no-repeat right;
+      padding-right: 16px;
     }  
     .status-R {
       background: url(images/nuvola/cancel-16px.png) no-repeat right;
+      padding-right: 16px;
     }
   }
   .certainty-C {
     background: url(images/star3.png) no-repeat right;
+    padding-right: 16px;
   }
   .certainty-L {
     background: url(images/star2.png) no-repeat right;
+    padding-right: 16px;
   }
   .certainty-P {
     background: url(images/star1.png) no-repeat right;
+    padding-right: 16px;
   }
   .zero-t {
     font-style: italic;
