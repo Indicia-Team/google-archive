@@ -126,6 +126,10 @@ table {
   .certainty-P {
     background: url(images/star1.png) no-repeat right;
   }
+  .zero-t {
+    font-style: italic;
+    text-decoration: line-through;
+  }
 }
 
 button, input[type=submit] {
