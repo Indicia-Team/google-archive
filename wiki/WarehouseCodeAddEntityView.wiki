@@ -26,7 +26,7 @@ is enough to do this. Next, output a simple HTML form with a button for calling 
 
 Finally, if you want to allow upload of CSV data then the form for doing this is pre-constructed in the `$upload_csv_form` variable.
 {{{
-<?php echo $upload_csv_form ?>
+<?php echo $upload_csv_form; ?>
 }}}
 
 That gives you the basics required for an index view, it can of course include other code but there are plenty of examples in the existing warehouse code if you want to see other ideas.
