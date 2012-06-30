@@ -5,7 +5,7 @@
 
 This page details the configuration process for the WWT Colour-marked Wildfowl form. It assumes a level of experience in setting forms up. 
 
-Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4275 (23 June 2012). 
+Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4320 (30 June 2012). 
 
 You will also need to have set up a website, survey and species list on the warehouse. 
 
@@ -195,9 +195,12 @@ You have now successfully set up the sample attributes on the warehouse and can 
   * Other Devices: Choose the attachment device types you wish to record. Leave all unticked to hide this feature
   * Allow Comment For Colour-marked Individual: recommend ticked
   * Request Gender Values: Choose the gender values you wish to record. Leave all unticked to hide this feature. Suggest ticking Male, Female, Unknown.
+  * Default Gender: Allows a gender to be chosen as initially selected when the form is displayed.
   * Request Age Values: Choose the gender values you wish to record. Leave all unticked to hide this feature. Suggest ticking 1st winter, 1st summer, 2nd winter, Adult, Unknown but choose as appropriate.
-  * Request Life Status Values: Choose the 'life status' values you wish to record. Leave all unticked to hide this feature.
-
+  * Default Age: Allows an age/stage to be chosen as initially selected when the form is displayed.
+  * Request Subject Status Values: Choose the 'life status' values you wish to record. Leave all unticked to hide this feature.
+  * Default Subject Status: Allows a subject status to be chosen as initially selected when the form is displayed.
+  
 == Debug ==
 
   * Provide debug information: unticked. This section will be removed for production.
