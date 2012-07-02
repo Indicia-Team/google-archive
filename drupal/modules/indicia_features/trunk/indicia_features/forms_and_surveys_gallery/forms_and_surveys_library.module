@@ -2,7 +2,7 @@
 
 function forms_and_surveys_library_menu() {
   $items['forms_and_surveys_library'] = array(
-    'title' => 'Forms & surveys library',
+    'title' => 'My Forms',
     'description' => 'A library of available input forms to use and surveys to participate in.',
     'file'=>'forms_and_surveys_library.pages.inc',
     'page callback' => 'library_view',
@@ -71,22 +71,25 @@ function forms_and_surveys_library_form_alter(&$form, $form_state, $form_id) {
     $form['library_settings']['include_in_library'] = array(
       '#title' => t('Include in library'),
       '#type' => 'checkbox',
-      '#default_value' => $include,
+      '#default_value' => $include ? 1 : 0,
       '#description' => t('Tick this box to add the form to the forms and surveys library page.'),
     );
-    $form['library_settings']['library_title'] = array(
+    $form['library_settings']['included'] = array(
+      '#type' => 'fieldset'
+    );
+    $form['library_settings']['included']['library_title'] = array(
       '#title' => t('Library title'),
       '#type' => 'textfield',
       '#default_value' => $title,
       '#description' => t('Title of the form as it appears in the library browser.'),
     );
-    $form['library_settings']['library_description'] = array(
+    $form['library_settings']['included']['library_description'] = array(
       '#title' => t('Library description'),
       '#type' => 'textarea',
       '#default_value' => $description,
       '#description' => t('Description of the form as it appears in the library browser.'),
     );
-    $form['library_settings']['locations'] = array(
+    $form['library_settings']['included']['locations'] = array(
       '#value' => data_entry_helper::sub_list(array(
         'label' => t('Locations'), 
         'fieldname'=>'locations',
@@ -98,7 +101,7 @@ function forms_and_surveys_library_form_alter(&$form, $form_state, $form_id) {
         'class'=>'control-width-5'
       ))
     );
-    $form['library_settings']['taxon_groups'] = array(
+    $form['library_settings']['included']['taxon_groups'] = array(
       '#value' => data_entry_helper::sub_list(array(
         'label' => t('Species groups'), 
         'fieldname'=>'taxon_groups',
@@ -110,6 +113,17 @@ function forms_and_surveys_library_form_alter(&$form, $form_state, $form_id) {
         'class'=>'control-width-5'
       ))
     );
+    data_entry_helper::$javascript .= "
+function set_include() {
+  var ctrls=$('#edit-library-title-wrapper').parent('fieldset');
+  if ($('#edit-include-in-library').is(':checked')) {
+    ctrls.show();
+  } else {
+    ctrls.hide();
+  }
+}
+$('#edit-include-in-library').bind('click', set_include);
+set_include();\n";
     handle_resources();
   }
 }
