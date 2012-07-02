@@ -1,0 +1,23 @@
+#library-form-list li {
+  width: 20%;
+}
+
+#library-form-list li.selected {
+  background-color: #bbffbb;
+}
+
+#library-form-list li.hidden {
+  display: none;
+}
+
+#library-form-list h3 {
+  margin: 0;
+}
+
+#library-form-list p {
+  margin: 0;
+}
+
+#library-form-list button {
+  display: block;
+}

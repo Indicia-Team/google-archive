@@ -1,0 +1,79 @@
+<?php 
+// $Id$
+
+/**
+ * Implementation for hook_schema. Declares the table that is required for storing
+ * iform data.
+ */
+function forms_and_surveys_library_schema() {
+  $schema['forms_and_surveys_library'] = array(
+    'description' => 'Table required for storing Indicia library input forms.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The primary identifier for a node and therefore an iform instance.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'location_ids' => array(
+        'description' => 'Serliased array of location IDs from the warehouse that this form is associated with.',
+        'type' => 'text'
+      ),
+      'taxon_group_ids' => array(
+        'description' => 'Serliased array of taxon group IDs from the warehouse that this form is associated with.',
+        'type' => 'text'
+      ),
+      'library_title' => array(
+        'description' => 'Short descrtiption of the form or survey to display in the library.',
+        'type' => 'varchar',
+        'length' => 255
+      ),
+      'library_description' => array(
+        'description' => 'Short descrtiption of the form or survey to display in the library.',
+        'type' => 'text'
+      )
+      
+    ),
+    'primary key' => array('nid')
+  );
+  return $schema;
+}
+
+function forms_and_surveys_library_install() {
+  drupal_install_schema('forms_and_surveys_library');
+  $field = array(
+      'title' => 'Favourite library forms',
+      'name' => 'profile_favourite_library_forms',
+      'explanation' => 'Which forms this user has favourited.',
+      'category' => 'System',
+      'type' => 'selection',
+      'weight' => 1,
+      'required' => 0,
+      'register' => 0,
+      'visibility' => 4,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => ''
+  );
+  db_query("INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete, options, page) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d, '%s', '%s')",
+        $field['title'],
+        $field['name'],
+        $field['explanation'],
+        $field['category'],
+        $field['type'],
+        $field['weight'],
+        $field['required'],
+        $field['register'],
+        $field['visibility'],
+        $field['autocomplete'],
+        $field['options'],
+        $field['page']
+  );
+  db_query("INSERT INTO {profile_checkboxes} (fid, type, delimiter) values (%d, 'checkboxes', ',')", db_last_insert_id('profile_fields', 'fid'));
+}
+
+function forms_and_surveys_library_uninstall() {
+  drupal_uninstall_schema('forms_and_surveys_library');
+  db_query("delete from {profile_fields} where title='profile_favourite_library_forms'");
+}
+
