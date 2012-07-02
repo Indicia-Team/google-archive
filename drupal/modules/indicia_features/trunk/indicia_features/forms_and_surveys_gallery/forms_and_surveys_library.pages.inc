@@ -1,22 +1,20 @@
 <?php
 
-function library_view() {
-  // Search box, filters the following ul element contains to forms containing the name or in the form's description. 
-  // Expands the appropriate fieldsets.
-  // 
-  // Output unordered list of sections contained in collapsed fieldsets
-  // My local forms and surveys (dorset) contains a list of forms designed for your preferred locality. Omitted if no locality in user profile
-  // Other local forms and surveys contains a list of forms designed for locations but not your preferred. 
-  //   Renamed to Local forms and surveys if no locality in profile
-  // My species group forms and surveys (if any in profile)
-  // Other species group forms (or just Species group forms and surveys)
+function library_view() {  
   drupal_add_css(drupal_get_path('module', 'forms_and_surveys_library').'/forms_and_surveys_library-styles.css', 'module');
-  $r = '<label>Search:<input type="text" id="library-search"/></label><br/>';
+  $r = '<div id="library-toolbar" class="clearfix"><label id="search-label">Search:<input type="text" id="library-search"/></label>';
   global $user;
   profile_load_profile($user);
   $selected = empty($user->profile_favourite_library_forms) ? array() : unserialize($user->profile_favourite_library_forms);
-  $checked = count($selected)>0 ? ' checked="checked"' : '';
-  $r .= "<label>Show only my favourite forms: <input type=\"checkbox\" id=\"only-favourites\"$checked/> </label>\n";
+  $active = count($selected)===0 ? ' class="button-active"' : '';
+  $r .= "<button type=\"button\" id=\"organise-favourites\"$active/>".t('Find other forms')."</button></div>\n";
+  if ($active) 
+    $message=t('Click the title of one of the forms to access the form, or use the buttons to add forms to your list of favourite forms so you '.
+        'can easily access them again in future.');
+  else
+    $message=t('Click the title of one of the forms to access the form, or use the Find other forms button to enable searching for additional '.
+      'forms you might like to use.');
+  drupal_set_message($message.' '.t('Forms are sorted so the ones most likely to be of interest to you are listed first.'));
   $r .= '<ul>';
   global $user;
   profile_load_profile($user);
@@ -95,7 +93,7 @@ function library_output_form_list($forms, $selected) {
       $r .= '<h3>'.l(t($form->library_title), 'node/'.$form->nid).'</h3>';
       $r .= $form->library_description;
       $buttonCaption = (in_array($form->nid, $selected)) ? 'Remove from favourites' : 'Add to favourites'; 
-      $r .= '<button type="button" class="button-active" id="btn-'.$form->nid.'">'.t($buttonCaption).'</button>';
+      $r .= '<button type="button" id="btn-'.$form->nid.'">'.t($buttonCaption).'</button>';
       $r .= '</li>';
     }
     $r .= '</ul>';

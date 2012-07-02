@@ -14,12 +14,19 @@ $(document).ready(function() {
     }
   });
   
-  $('#only-favourites').click(function(evt) {
-    if ($(evt.target).attr('checked')) {
-      $('#library-form-list li').not('.selected').addClass('hidden');
-    } else {
+  function set_visibility() {
+    if ($('#organise-favourites').hasClass('button-active')) {
       $('#library-form-list li').not('.selected').removeClass('hidden');
+      $('#library-form-list button').show();
+    } else {
+      $('#library-form-list li').not('.selected').addClass('hidden');
+      $('#library-form-list button').hide();
     }
+  }
+  
+  $('#organise-favourites').click(function() {
+    $('#organise-favourites').toggleClass('button-active');
+    set_visibility();
   });
   
   $('#library-form-list button').click(function(evt) {
@@ -38,4 +45,6 @@ $(document).ready(function() {
       }
     );
   });
+  
+  set_visibility();
 });

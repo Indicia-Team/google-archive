@@ -1,3 +1,11 @@
+#library-toolbar label {
+  float: left;
+}
+
+#library-toolbar #organise-favourites {
+  float: right;
+}
+
 #library-form-list li {
   width: 20%;
 }
@@ -12,12 +20,10 @@
 
 #library-form-list h3 {
   margin: 0;
+  line-height: 1.4em;
 }
 
 #library-form-list p {
   margin: 0;
 }
 
-#library-form-list button {
-  display: block;
-}
