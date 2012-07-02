@@ -164,7 +164,7 @@ function home_page_default_page_manager_pages() {
     \'columns\' => array(
       array(
         \'fieldname\' => \'path\',
-        \'template\' => \'<div class="gallery-img"><a class="fancybox" href="{imageFolder}{path}"><img src="{imageFolder}thumb-{path}" title="{caption}" alt="{caption}"/></a></div>\'
+        \'template\' => \'<div class="gallery-item"><a class="fancybox" href="{imageFolder}{path}"><img src="{imageFolder}thumb-{path}" title="{caption}" alt="{caption}"/></a></div>\'
       )
     ),
     \'includeAllColumns\' => false,

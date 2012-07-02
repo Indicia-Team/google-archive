@@ -161,7 +161,8 @@ table|As a table of data',
     'text_processing' => '0',
     'max_length' => '',
     'allowed_values' => 'region|By region
-species|By species group
+taxon_group|By species group
+taxon|By species
 year|By year
 month|By month',
     'allowed_values_php' => '',
@@ -175,6 +176,62 @@ month|By month',
       'label' => 'How do you want to group the data in the report?',
       'weight' => '-2',
       'description' => 'Select how the report data should be grouped in the outputs of the report.',
+      'type' => 'optionwidgets_buttons',
+      'module' => 'optionwidgets',
+    ),
+  );
+  
+  // Exported field: field_summary_report_spatial
+  $fields['summary_report-field_summary_report_spatial'] = array(
+    'field_name' => 'field_summary_report_spatial',
+    'type_name' => 'summary_report',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '1',
+    'multiple' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '0',
+    'max_length' => '',
+    'allowed_values' => 'spatial|include any record that overlaps the site\'s boundary
+ linked|include any record which has been linked directly to the site during data entry',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'How do you want to find the records or species for each site?',
+      'weight' => '-2',
+      'description' => 'Select how to find the records or species to count for each site.',
       'type' => 'optionwidgets_buttons',
       'module' => 'optionwidgets',
     ),
