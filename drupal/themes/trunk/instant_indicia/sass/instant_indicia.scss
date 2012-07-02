@@ -33,7 +33,7 @@ h2 {
   }
 }
 
-.gallery-img, .view-summary-report ul li {
+.gallery-item, .gallery li {
   text-align: center;
   padding: 0.5em;
   margin: 0.5em;
@@ -140,14 +140,11 @@ table {
 
 button, input[type=submit] {
   margin: 0.25em;
-  @include sassy-button-structure(4px, 1px, 0.25em, 11px, 1em);
+  @include sassy-button-structure(4px, 11px, 0.25em);
+  @include sassy-button("simple", 4px, 11px, $default-color, darken($default-color, 20%),  #ffffff);
   font-weight: bold; 
-  &.default-button {
-    @include sassy-button-colors("simple", $default-color, darken($default-color, 20%), true, #ffffff, raised);
-  }
   &.button-active {
-    @include sassy-button-style(inset, #555577);
-    @include box-shadow(#0000FF 0px 0px 3px);
+    @include sassy-button-style("inset", darken($default-color, 30%));
   }
 }
 
