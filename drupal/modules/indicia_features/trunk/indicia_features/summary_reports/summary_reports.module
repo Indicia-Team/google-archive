@@ -93,15 +93,11 @@ function summary_report_get_report_options($node) {
     case 'region':
       $folder = 'locations';
       break;
-    case 'species':
+    case 'species': // legacy
       $folder = 'taxon_groups';
       break;
-    case 'year':
-      $folder = 'years';
-      break;
-    case 'month':
-      $folder = 'months';
-      break;
+    default:
+      $folder = $node->field_summary_report_grouping[0]['value'] . 's';
   }
   switch ($node->field_summary_report_count[0]['value']) {
     case 'records':
@@ -130,7 +126,10 @@ function summary_report_get_report_options($node) {
       $r['sharing']='reporting';
       break;
   }
-  $r['dataSource'] = "library/$folder/$dataType"."_counts_mappable_summary";
+  $extra = (isset($node->field_summary_report_spatial[0]['value']) && $node->field_summary_report_spatial[0]['value']==='linked')
+      ? '_linked' : '';
+      
+  $r['dataSource'] = "library/$folder/$dataType"."_counts_mappable_summary".$extra;
   return $r;
 }
 

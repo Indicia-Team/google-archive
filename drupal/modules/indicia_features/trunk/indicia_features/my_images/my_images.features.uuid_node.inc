@@ -46,7 +46,7 @@ taxon_group_id=',
     'columns_config' => '[
   {
     "fieldname":"testing",
-    "template":"<div class=\'gallery-img\'><a href=\'{imageFolder}{path}\' class=\'fancybox\'><img src=\'{imageFolder}thumb-{path}\'/><br/>\\n<em>{taxon}</em><br/>\\n{common}</a></div>"
+    "template":"<div class=\'gallery-item\'><a href=\'{imageFolder}{path}\' class=\'fancybox\'><img src=\'{imageFolder}thumb-{path}\'/><br/>\\n<em>{taxon}</em><br/>\\n{common}</a></div>"
   },
   {
     "fieldname":"path",
