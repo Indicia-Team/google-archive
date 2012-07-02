@@ -1,0 +1,184 @@
+<?php
+
+function forms_and_surveys_library_menu() {
+  $items['forms_and_surveys_library'] = array(
+    'title' => 'Forms & surveys library',
+    'description' => 'A library of available input forms to use and surveys to participate in.',
+    'file'=>'forms_and_surveys_library.pages.inc',
+    'page callback' => 'library_view',
+    'access arguments' => array('online recording'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  $items['forms_and_surveys_library/set_favourite'] = array(
+    'page callback'=>'forms_and_surveys_library_set_favourite',
+    'access arguments' => array('access iform'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function forms_and_surveys_library_form_alter(&$form, $form_state, $form_id) {
+  if (isset($form['type']) && $form['type']['#value']==='iform' && isset($form['#node']) && $form['type']['#value'] .'_node_form' == $form_id) {
+    iform_load_helpers(array('data_entry_helper'));
+    $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', 0), variable_get('indicia_password', ''));
+    $libEntry = db_fetch_array(db_query('select * from {forms_and_surveys_library} where nid=%d', $form['#node']->nid));
+    if ($libEntry) {
+      $include=true;
+      $locations = empty($libEntry['location_ids']) ? array() : unserialize($libEntry['location_ids']);
+      $taxon_groups = empty($libEntry['taxon_group_ids']) ? array() : unserialize($libEntry['taxon_group_ids']);
+    } else {
+      $include=false; 
+      $locations = array();
+      $taxon_groups=array();
+    }
+    // load the location names as at the moment we only have the keys
+    if (!empty($locations)) {
+      $qry = json_encode(array('in'=>array('id', $locations)));
+      $result = data_entry_helper::get_population_data(array(
+        'table' => 'location',
+        'extraParams'=>$readAuth + array('query'=>$qry)
+      ));
+      // convert result array to correct format for sub_list control
+      $locations = array();
+      foreach($result as $row)
+        $locations[$row['id']]=$row['name'];
+    }
+    // load the taxon group titles names as at the moment we only have the keys
+    if (!empty($taxon_groups)) {
+      $qry = json_encode(array('in'=>array('id', $taxon_groups)));
+      $result = data_entry_helper::get_population_data(array(
+        'table' => 'taxon_group',
+        'extraParams'=>$readAuth + array('query'=>$qry)
+      ));
+      // convert result array to correct format for sub_list control
+      $taxon_groups = array();
+      foreach($result as $row)
+        $taxon_groups[$row['id']]=$row['title'];
+    }
+    $title = $row ? $libEntry['library_title'] : $form['#node']->title;
+    $description = $libEntry ? $libEntry['library_description'] : ''  ;
+    $form['library_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Forms and surveys library settings'),
+      '#collapsible' => true,
+      '#collapsed' => !$include,
+      '#access' => user_access('create iform'),
+      '#weight' => 30,
+    );
+    $form['library_settings']['include_in_library'] = array(
+      '#title' => t('Include in library'),
+      '#type' => 'checkbox',
+      '#default_value' => $include,
+      '#description' => t('Tick this box to add the form to the forms and surveys library page.'),
+    );
+    $form['library_settings']['library_title'] = array(
+      '#title' => t('Library title'),
+      '#type' => 'textfield',
+      '#default_value' => $title,
+      '#description' => t('Title of the form as it appears in the library browser.'),
+    );
+    $form['library_settings']['library_description'] = array(
+      '#title' => t('Library description'),
+      '#type' => 'textarea',
+      '#default_value' => $description,
+      '#description' => t('Description of the form as it appears in the library browser.'),
+    );
+    $form['library_settings']['locations'] = array(
+      '#value' => data_entry_helper::sub_list(array(
+        'label' => t('Locations'), 
+        'fieldname'=>'locations',
+        'table'=>'location',
+        'valueField'=>'id',
+        'captionField'=>'name',
+        'extraParams' => $readAuth,
+        'default'=>$locations,
+        'class'=>'control-width-5'
+      ))
+    );
+    $form['library_settings']['taxon_groups'] = array(
+      '#value' => data_entry_helper::sub_list(array(
+        'label' => t('Species groups'), 
+        'fieldname'=>'taxon_groups',
+        'table'=>'taxon_group',
+        'valueField'=>'id',
+        'captionField'=>'title',
+        'extraParams' => $readAuth,
+        'default'=>$taxon_groups,
+        'class'=>'control-width-5'
+      ))
+    );
+    handle_resources();
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ *
+ * Allows library info to be specified at node edit time rather
+ * than through the administrative interface.
+ */
+function forms_and_surveys_library_nodeapi(&$node, $op, $arg) {
+  // Permissions are required for everything except node loading.
+  if (user_access('create iform') || ($op == 'load')) {
+    switch ($op) {
+      //case 'load': -- not implemented as not needed, since it causes extra db hits when nodes are loaded
+
+      case 'insert':
+      case 'update':
+        if ($node->include_in_library) {
+          // Have to use $_POST as Drupal does not seem to pickup the output of the sub_list control.
+          // Work out if there is an existing record. db_write_record can then do an insert or update.
+          $exist = db_fetch_object(db_query('select nid from {forms_and_surveys_library} where nid=%d', $node->nid));
+          $key = $exist ? 'nid' : array();
+          
+          $record = array(
+            'nid'=>$node->nid,
+            'location_ids'=>array_key_exists('locations', $_POST) ? serialize($_POST['locations']) : null,
+            'taxon_group_ids'=>array_key_exists('taxon_groups', $_POST) ? serialize($_POST['taxon_groups']) : null,
+            'library_title'=>$node->library_title,
+            'library_description'=>$node->library_description
+          );
+          drupal_write_record('forms_and_surveys_library', $record, $key);
+        } else {
+          _forms_and_surveys_library_delete($node->nid);
+        }
+        
+        break;
+
+      case 'delete':
+        // delete from forms_and_surveys_library where nid=$node->nid;
+        _forms_and_surveys_library_delete($node->nid);
+        break;
+    }
+  }
+}
+
+/**
+ * Delete a form from the library.
+ * @param type $nid Node ID
+ */
+function _forms_and_surveys_library_delete($nid) {
+  drupal_set_message('deleted '.$nid);
+  db_query('delete from {forms_and_surveys_library} where nid=%d', $nid);
+}
+
+/**
+ * Ajax method for setting whether a particular form is in the list of forms associated with the current user.
+ */
+function forms_and_surveys_library_set_favourite() {
+  global $user;
+  profile_load_profile($user);
+  $forms = empty($user->profile_favourite_library_forms) ? array() : unserialize($user->profile_favourite_library_forms);
+  if ($_GET['favourite']==='1') {
+    if (!in_array($_GET['nid'], $forms)) 
+      $forms[] = $_GET['nid'];
+  } else
+    // remove the form from the array
+    $forms = array_diff($forms, array($_GET['nid']));
+  $edit = array('profile_favourite_library_forms'=>serialize($forms));
+  profile_save_profile($edit, $user, 'System');
+  return 'Ok';
+}
