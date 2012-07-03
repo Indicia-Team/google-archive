@@ -3,7 +3,7 @@
 =Notes on adding Identifier Condition information to the WWT Colour-marked Wildfowl prebuilt form.=
 
 ==Introduction==
-This note was intended to give an example of adding an identifier attribute, but it turned out this wasn't the solution to the requirement, so this account covers changes to add a custom attribute which is associated with the observation of an identifier to the identifier data on the form. This is a more complex but more informative exercise.
+This note was intended to give an example of adding an identifier attribute, but it turned out this wasn't the solution to the requirement, so this account covers changes to add a custom attribute which is associated with the observation of an identifier to the identifier data on the form. This is a more complex but more informative exercise. This note is based on r4336.
 
 ==The Requirement==
   # To provide a method for users of the colour-marked wildfowl form to record information regarding the condition of identifiers noted during an observation. 
@@ -115,7 +115,7 @@ Use the warehouse interface to create ISO custom attributes.
 
 The attribute creation form should look similar to this:
 
-screenshots/iso_attr_create_condition.png
+http://indicia.googlecode.com/svn/wiki/screenshots/colour_marked_form/iso_attr_create_condition.png
 
 Now save your changes.
 
@@ -185,8 +185,7 @@ This will appear in the Indentifiers section but the position it appears will be
 We will now be able to access the filtered condition lists in the form code as $args['neck_collar_conditions'], $args['coloured_ring_conditions'] and $args['metal_ring_conditions'].
 
 If we save the form code and distribute it, we will be able to configure our identifier-specific condition lists, we now need some code which will do something with them.
-
-screenshots/condition_filters.png
+http://indicia.googlecode.com/svn/wiki/screenshots/colour_marked_form/condition_filters.png
 
 ===Adding the condition controls to the colour-marked form===
 ====Part 1: specifying the request for the conditions attribute====
@@ -352,7 +351,11 @@ An examination of the control output code for List type attributes shows a selec
 }}}
 This gives a functional but rather expansive UI so we may wish to revisit this later and investigate making it a popup. Note the writing of hidden inputs for any values already on the database, this ensures we do the right thing (delete them) if existing values are un-ticked in the check-box group. The same technique is already used in this form for attached devices.
 
-We now have a form which presents the conditions list on each identifier panel and allows us to tick any conditions which apply. The next stage is to correctly submit the conditions data to indicia.
+We now have a form which presents the conditions list on each identifier panel and allows us to tick any conditions which apply. 
+
+http://indicia.googlecode.com/svn/wiki/screenshots/colour_marked_form/display_conditions.png
+
+The next stage is to correctly submit the conditions data to indicia.
 
 ===Data submission to the warehouse===
 
