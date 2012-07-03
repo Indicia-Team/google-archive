@@ -1,0 +1,411 @@
+#summary Notes on adding a new identifier to the WWT Colour-marked Wildfowl prebuilt form.
+
+=Notes on adding Identifier Condition information to the WWT Colour-marked Wildfowl prebuilt form.=
+
+==Introduction==
+This note gives an example of adding a new identifier to the colour-marked form. It is intended that this will enable others with limited knowledge of the form to use this as a 'recipe' when new identifiers are required. 
+
+In this example, I will consider the changes required to add a nasal saddle to the form. Conceptually, a nasal saddle is very similar to a neck collar with the most significant difference being its position. Other identifiers may have unique features which require additional changes. 
+
+This note is based on r4336 so if you are working with a later version of the form, there may be additional code to add. A good way to find such code is to search for references to an identifier which is similar to the one you wish to add, e.g. a search on 'collar' was useful in locating code to add for nasal saddle.
+
+Reviewing the code for this note, it was evident that all the PHP and Javascript code could be refactored to be data driven, and thus configurable. Before considering such a change I would suggest the impact of compound identifiers (e.g. colour ring combinations) is analysed as they may have specific processing requirements which are more difficult to support in generic code.
+ 
+==Overview==
+
+The changes needed will involve all the files which make up the colour-marked form. These are;
+
+  * The PHP code at client_helpers/prebuilt_forms/wwt_colour_marked_report.php
+  * The Javascript code at client_helpers/prebuilt_forms/js/wwt_colour_marked_report.js
+  * The CSS code at client_helpers/prebuilt_forms/css/wwt_colour_marked_report.css
+
+We need to decide where in the identifiers list we want to add the Nasal Saddle, I will choose to add it immediately after Neck Collar.
+
+There are seven areas of functionality we need to extend for the new identifier;
+
+  # New configuration options
+  # Displaying a panel for the new identifier
+  # Constructing the coded value for the identifier
+  # Adding the identifier to the graphic
+  # Data submission
+  # Data reload
+  # Validation
+
+We will now cover each of these in turn.
+
+==New configuration options==
+
+We need to add configuration options for the new identifier. These are all defined as arrays in the get_parameters() function of the PHP file.
+
+There are five existing option arrays for neck collar (neck_collar_type, neck_collar_position, neck_collar_max_length, neck_collar_regex, neck_collar_conditions). Copy all five and insert the copies immediately below the block of neck collar arrays. Now change all the references from neck collar to nasal saddle. For example, neck_collar_type becomes nasal_saddle_type and should look as follows:
+{{{
+        array(
+          'name'=>'nasal_saddle_type',
+          'caption'=>'Nasal Saddle Type',
+          'description'=>'The type of identifier which indicates a nasal saddle.',
+          'type'=>'select',
+          'table'=>'termlists_term',
+          'captionField'=>'term',
+          'valueField'=>'id',
+          'extraParams' => array('termlist_external_key'=>'indicia:assoc:identifier_type'),
+          'required' => true,
+          'group' => 'Identifiers',
+        ),
+}}}
+Check you have made similar changes to the other four inserted option. If you wish, you can save these changes and deploy the PHP file for test, you should see the new configuration options are present in the form edit as shown.
+http://indicia.googlecode.com/svn/wiki/screenshots/colour_marked_form/nasal_saddle_options.png
+
+==Displaying a panel for the new identifier==
+
+We need to add a new panel in the identifiers accordion for the new identifier. This code is all in the PHP file. Code in the get_control_speciesidentifier() function specifies what is needed in the new panel and code in the get_control_identifier() function is called to draw each identifier panel.
+
+Find the code in get_control_speciesidentifier which specifies the neck collar (below the comment 'setup and call function for neck collar').
+{{{
+    // setup and call function for neck collar
+    $options['identifierName'] = '';
+    $options['identifierTypeId'] = '';
+    foreach ($options['identifierTypes'] as $identifier_type) {
+      if ($identifier_type['id']==$args['neck_collar_type']) {
+        $options['identifierName'] = $identifier_type['term'];
+        $options['identifierTypeId'] = $identifier_type['id'];
+        break;
+      }
+    }
+    $options['attrList'] = array(
+      array('attrType' => 'idn', 'typeId' => $options['baseColourId'], 'lockable' => true, 'hidden' => false,),
+      array('attrType' => 'idn', 'typeId' => $options['textColourId'], 'lockable' => true, 'hidden' => false,),
+      array('attrType' => 'idn', 'typeId' => $options['sequenceId'], 'lockable' => false, 'hidden' => false,),
+      array('attrType' => 'idn', 'typeId' => $options['positionId'], 'lockable' => false, 'hidden' => true, 'hiddenValue' => $args['neck_collar_position'],),
+      array('attrType' => 'iso', 'typeId' => $options['conditionsId'], 'lockable' => false, 'hidden' => false,),
+    );
+    $options['fieldprefix'] = 'idn:'.$taxIdx.':neck-collar:';
+    $options['classprefix'] = 'idn-neck-collar-';
+    $options['seq_maxlength'] = (!empty($args['neck_collar_max_length'])) ? $args['neck_collar_max_length'] : '';
+    if (!empty($args['neck_collar_regex'])) {
+      $options['seq_format_class'] = 'collarFormat';
+    }
+    $r .= self::get_control_identifier($auth, $args, $tabalias, $options);
+    if (!empty($args['neck_collar_regex'])) {
+      unset($options['seq_format_class']);
+    }
+}}}
+Clone this and insert the copy immediately below the neck collar code. Change all references from neck collar to nasal saddle so the code now reads
+{{{
+    // setup and call function for nasal saddle
+    $options['identifierName'] = '';
+    $options['identifierTypeId'] = '';
+    foreach ($options['identifierTypes'] as $identifier_type) {
+      if ($identifier_type['id']==$args['nasal_saddle_type']) {
+        $options['identifierName'] = $identifier_type['term'];
+        $options['identifierTypeId'] = $identifier_type['id'];
+        break;
+      }
+    }
+    $options['attrList'] = array(
+      array('attrType' => 'idn', 'typeId' => $options['baseColourId'], 'lockable' => true, 'hidden' => false,),
+      array('attrType' => 'idn', 'typeId' => $options['textColourId'], 'lockable' => true, 'hidden' => false,),
+      array('attrType' => 'idn', 'typeId' => $options['sequenceId'], 'lockable' => false, 'hidden' => false,),
+      array('attrType' => 'idn', 'typeId' => $options['positionId'], 'lockable' => false, 'hidden' => true, 'hiddenValue' => $args['nasal_saddle_position'],),
+      array('attrType' => 'iso', 'typeId' => $options['conditionsId'], 'lockable' => false, 'hidden' => false,),
+    );
+    $options['fieldprefix'] = 'idn:'.$taxIdx.':nasal-saddle:';
+    $options['classprefix'] = 'idn-nasal-saddle-';
+    $options['seq_maxlength'] = (!empty($args['nasal_saddle_max_length'])) ? $args['nasal_saddle_max_length'] : '';
+    if (!empty($args['nasal_saddle_regex'])) {
+      $options['seq_format_class'] = 'saddleFormat';
+    }
+    $r .= self::get_control_identifier($auth, $args, $tabalias, $options);
+    if (!empty($args['nasal_saddle_regex'])) {
+      unset($options['seq_format_class']);
+    }
+}}}
+
+Now in the get_control_identifiers function, find the code to filter the identifier conditions available (under the comment 'filter the identifier conditions available') and add a branch to the if statement for nasal saddle. The code will now look like this.
+{{{
+        // filter the identifier conditions available
+        if ($options['identifierTypeId']==$args['neck_collar_type'] && !empty($args['neck_collar_conditions'])) {
+          $query = array('in'=>array('id', $args['neck_collar_conditions']));
+        } elseif ($options['identifierTypeId']==$args['nasal_saddle_type'] && !empty($args['nasal_saddle_conditions'])) {
+          $query = array('in'=>array('id', $args['nasal_saddle_conditions']));
+        } elseif ($options['identifierTypeId']==$args['enscribed_colour_ring_type'] && !empty($args['coloured_ring_conditions'])) {
+          $query = array('in'=>array('id', $args['coloured_ring_conditions']));
+        } elseif ($options['identifierTypeId']==$args['metal_ring_type'] && !empty($args['metal_ring_conditions'])) {
+          $query = array('in'=>array('id', $args['metal_ring_conditions']));
+        }
+}}}
+
+These changes will now give us a new panel in the identifier accordion. If you wish, you can deploy the form, provide suitable configuration options for nasal saddle, and view it. The new identifier panel should now show up (but it's not fully working yet!)
+http://indicia.googlecode.com/svn/wiki/screenshots/colour_marked_form/new_identifier_panel.png
+
+==Constructing the coded value for the identifier==
+
+The identifiers which are recorded on this form are all stored with a coded description of the identifier attributes. For a dark blue nasal saddle with white sequence 'A2' this would be NSBW(A2). We need to amend some code in the javascript file so that it knows nasal saddle codes are prefixed with NS.
+
+Open the javascript file and find the makeIdentifierCode function. This contains a switch statement which provides the correct prefix for each identifier type. Add a 'case' clause for the nasal saddle so the whole switch statement will now be like this.
+{{{
+    switch (idnTypeName) {
+    case 'neck-collar':
+      iCode = 'NC';
+      break;
+    case 'nasal-saddle':
+      iCode = 'NS';
+      break;
+    case 'colour-left':
+      iCode = 'L';
+      iCode = iCode + verticalDefault;
+      break;
+    case 'colour-right':
+      iCode = 'R';
+      iCode = iCode + verticalDefault;
+      break;
+    case 'metal':
+      if (iPos.toLowerCase().indexOf('left')!==-1) {
+        iCode = 'L';
+      } else if (iPos.toLowerCase().indexOf('right')!==-1) {
+        iCode = 'R';
+      } else {
+        iCode = '?';
+      }
+      if (iPos.toLowerCase().indexOf('above')!==-1) {
+        iCode = iCode + 'A';
+      } else if (iPos.toLowerCase().indexOf('below')!==-1) {
+        iCode = iCode + 'B';
+      } else {
+        iCode = iCode + verticalDefault;
+      }
+      break;
+    default:
+      iCode = '??';
+    }
+}}}
+
+==Adding the identifier to the graphic==
+
+We want to show the nasal saddle on the bird graphic, this requires additions to the PHP and the CSS. The PHP creates some html to hold the identifier 'visualisation' and the CSS controls where it is positioned on the graphic. The colour and text are set in javascript code which is generic enough not to need any changes.
+
+To add the html, open the PHP file and find the section in get_control_speciesidentifier() where the markup is written (towards the end, under the 'output identifier visualisations' comment). Clone the neck collar line and change it to nasal saddle so the code now looks as follows.
+{{{
+    // output identifier visualisations
+    $r .= '<div id="idn:'.$taxIdx.':neck-collar:colourbox" class="neck-collar-indentifier-colourbox ui-corner-all">&nbsp;</div>';
+    $r .= '<div id="idn:'.$taxIdx.':nasal-saddle:colourbox" class="nasal-saddle-indentifier-colourbox ui-corner-all">&nbsp;</div>';
+    $r .= '<div id="idn:'.$taxIdx.':colour-left:colourbox" class="colour-left-indentifier-colourbox ui-corner-all">&nbsp;</div>';
+    $r .= '<div id="idn:'.$taxIdx.':colour-right:colourbox" class="colour-right-indentifier-colourbox ui-corner-all">&nbsp;</div>';
+}}}
+Save your PHP changes and now open the CSS file. 
+
+Let's review the CSS for neck collar. Find the CSS code which configures the size, font and initial position of the identifier visualisation for neck collar which looks like this:
+{{{
+.neck-collar-indentifier-colourbox  {
+	float: left;
+	width: 5em;
+	height: 2em;
+	border: 1px solid #3f3f3f; 
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 1.25em;
+	font-weight: bold;
+	font-family: Verdana, sans-serif;
+	line-height: 2em;
+	margin-top: 50px;
+	margin-left: 540px;
+	margin-right: -617px;
+}
+
+* html .neck-collar-indentifier-colourbox  {
+	margin-left: 270px;
+}
+}}}
+The end bit, beginning `*` html is there to fix a well-loved bug in IE6 (google 'ie6 double margin' for half a million references to this).
+
+Further down the file there is CSS to position the neck collar on the graphic when a species has been selected. (See below) 
+
+As we currently use one graphic for all species, the position is the same for each species. When we move to species specific graphics, different positions will be needed for each. 
+
+Note, we set the right margin to the negative sum of the left margin plus the visualisation box width (currently 77 pixels). This means the visualisation boxes effectively take no space in the layout and don't displace other items.
+{{{ 
+.ind-tax-img-barnaclegoose .neck-collar-indentifier-colourbox,
+.ind-tax-img-bewicksswan .neck-collar-indentifier-colourbox,
+.ind-tax-img-greylaggoose .neck-collar-indentifier-colourbox,
+.ind-tax-img-pinkfootedgoose .neck-collar-indentifier-colourbox,
+.ind-tax-img-whooperswan .neck-collar-indentifier-colourbox  {
+	margin-top: 84px;
+	margin-left: 576px;
+	margin-right: -653px;
+}
+
+* html .ind-tax-img-barnaclegoose .neck-collar-indentifier-colourbox,
+* html .ind-tax-img-bewicksswan .neck-collar-indentifier-colourbox,
+* html .ind-tax-img-greylaggoose .neck-collar-indentifier-colourbox,
+* html .ind-tax-img-pinkfootedgoose .neck-collar-indentifier-colourbox,
+* html .ind-tax-img-whooperswan .neck-collar-indentifier-colourbox  {
+	margin-left: 288px;
+}
+}}}
+Again, the `*` html entries are for the ie6 double margin bug.
+
+So we need to clone this CSS and change references from neck collar to nasal saddle. We also need to position the visualisation box for initial presentation without a species (we'll put it beneath the neck collar box by increasing the top-margin) and on the bird's bill in the graphic when a species has been selected. (The latter task could be quite onerous if there are many species specific graphics, a delegation opportunity perhaps!)
+
+The new code for nasal saddle is:
+{{{
+.nasal-saddle-indentifier-colourbox  {
+	float: left;
+	width: 5em;
+	height: 2em;
+	border: 1px solid #3f3f3f; 
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 1.25em;
+	font-weight: bold;
+	font-family: Verdana, sans-serif;
+	line-height: 2em;
+	margin-top: 90px;
+	margin-left: 540px;
+	margin-right: -617px;
+}
+
+* html .nasal-saddle-indentifier-colourbox  {
+	margin-left: 270px;
+}
+
+.ind-tax-img-barnaclegoose .nasal-saddle-indentifier-colourbox,
+.ind-tax-img-bewicksswan .nasal-saddle-indentifier-colourbox,
+.ind-tax-img-greylaggoose .nasal-saddle-indentifier-colourbox,
+.ind-tax-img-pinkfootedgoose .nasal-saddle-indentifier-colourbox,
+.ind-tax-img-whooperswan .nasal-saddle-indentifier-colourbox  {
+	margin-top: 30px;
+	margin-left: 680px;
+	margin-right: -753px;
+}
+
+* html .ind-tax-img-barnaclegoose .nasal-saddle-indentifier-colourbox,
+* html .ind-tax-img-bewicksswan .nasal-saddle-indentifier-colourbox,
+* html .ind-tax-img-greylaggoose .nasal-saddle-indentifier-colourbox,
+* html .ind-tax-img-pinkfootedgoose .nasal-saddle-indentifier-colourbox,
+* html .ind-tax-img-whooperswan .nasal-saddle-indentifier-colourbox  {
+	margin-left: 380px;
+}
+}}}
+
+The nasal saddle settings will now be shown on the graphic.
+
+==Data submission==
+When the user clicks the save button on the form, the data is submitted to the warehouse. We need to tell the form to submit the new identifier panel. Fortunately this is simple.
+
+Open the PHP file and find the add_observation_submissions() function. Within this, find the loop which prepares the identifier data for submission (it's headed with a comment 'create submodel for each join to identifier (plus identifier models if new) and add it'). This is a foreach statement driven off an array of the identifiers on the form. The first line looks like this;
+{{{
+      // create submodel for each join to identifier (plus identifier models if new) and add it
+      foreach (array('neck-collar', 'colour-left', 'colour-right', 'metal') as $identifier_type) {
+}}}
+We just add nasal saddle to this array so it now reads:
+{{{
+      // create submodel for each join to identifier (plus identifier models if new) and add it
+      foreach (array('neck-collar', 'nasal-saddle', 'colour-left', 'colour-right', 'metal') as $identifier_type) {
+}}}
+Job done.
+
+==Data reload==
+
+When an observation is to be redisplayed for editing, we need to reload the data from the warehouse. The new identifier data will be automatically loaded, but we need to mark it in some way so that the form knows it's dealing with a nasal saddle. We do this by adding a suitable prefix to the data names.
+
+In the PHP file, find the reload_form_data() function and then find the section headed by a comment 'prefix the keys and load to form data'. A few lines down you will see some code which prefixes neck collar data with 'neck-collar' and the other types with their descriptions like this:
+{{{
+              if ($identifier['identifier_type_id']==$args['neck_collar_type']) {
+                $identifier_type = 'neck-collar';
+              } elseif ($identifier['identifier_type_id']==$args['enscribed_colour_ring_type']) {
+                if (substr($identifier['coded_value'], 0, 1)=='L') {
+                  $identifier_type = 'colour-left';
+                } elseif (substr($identifier['coded_value'], 0, 1)=='R') {
+                  $identifier_type = 'colour-right';
+                }
+              } elseif ($identifier['identifier_type_id']==$args['metal_ring_type']) {
+                $identifier_type = 'metal';
+              } else {
+                $identifier_type = '';
+              }
+}}}
+We need to add some similar code for nasal saddle so we change this code to
+
+{{{
+              if ($identifier['identifier_type_id']==$args['neck_collar_type']) {
+                $identifier_type = 'neck-collar';
+              } elseif ($identifier['identifier_type_id']==$args['nasal_saddle_type']) {
+                $identifier_type = 'nasal-saddle';
+              } elseif ($identifier['identifier_type_id']==$args['enscribed_colour_ring_type']) {
+                if (substr($identifier['coded_value'], 0, 1)=='L') {
+                  $identifier_type = 'colour-left';
+                } elseif (substr($identifier['coded_value'], 0, 1)=='R') {
+                  $identifier_type = 'colour-right';
+                }
+              } elseif ($identifier['identifier_type_id']==$args['metal_ring_type']) {
+                $identifier_type = 'metal';
+              } else {
+                $identifier_type = '';
+              }
+}}}
+The data will now reload with labels that the form can interpret correctly.
+
+==Validation==
+The final step is client-side validation. This is mostly dealt with in the javascript, but first we need to provide the javascript with the type id for the nasal saddle by passing it from the PHP to the javascript.
+
+Open the PHP file and find the get_control_speciesidentifier function. Then find the section headed with a comment 'configure the identifiers javascript'. This calls a initialisation function in the javascript code which sets various values. We need to pass it the regular expression pattern to be used to validate the nasal saddle identifier type. The amended call looks like this:
+{{{
+    // configure the identifiers javascript
+    // write it late so it happens after any locked values are applied
+    if (!$options['inNewIndividual']) {
+      data_entry_helper::$late_javascript .= "indicia.wwt.initForm (
+        '".$options['baseColourId']."',
+        '".$options['textColourId']."',
+        '".$options['sequenceId']."',
+        '".$options['positionId']."',
+        '".$args['default_leg_vertical']."',
+        '".(!empty($args['neck_collar_regex']) ? $args['neck_collar_regex'] : '')."',
+        '".(!empty($args['nasal_saddle_regex']) ? $args['nasal_saddle_regex'] : '')."',
+        '".(!empty($args['enscribed_colour_ring_regex']) ? $args['enscribed_colour_ring_regex'] : '')."',
+        '".(!empty($args['metal_ring_regex']) ? $args['metal_ring_regex'] : '')."',
+        '".($args['clientSideValidation'] ? 'true' : 'false')."',
+        '".($args['subjectAccordion'] ? 'true' : 'false')."'\n".
+        ");\n";
+    }
+}}}
+We now need to open the javascript file to make corresponding changes to accept this new value being passed to it.
+
+First we will add the new parameter to the initForm function. Find the list of variables passed from PHP headed 'variables pumped in from PHP' and add a new variable called saddleRegex (for saddle regular expression). This is going to store the passed value so we have it ready when we need to validate things.
+
+{{{
+  // variables pumped in from PHP.
+  var baseColourId = '';
+  var textColourId = '';
+  var sequenceId = '';
+  var positionId = '';
+  var verticalDefault = '?';
+  var collarRegex = '';
+  var saddleRegex = '';
+  var colourRegex = '';
+  var metalRegex = '';
+  var validate = false;
+  var subjectAccordion = false;
+  var subjectCount = 0;
+}}}
+
+Next find the initForm function by searching for 'indicia.wwt.initForm' (it's at the end of the file). Add a new parameter after pCollarRegex and call it pSaddleRegex.
+{{{
+  indicia.wwt.initForm = function(pBaseColourId, pTextColourId, 
+      pSequenceId, pPositionId, pVerticalDefault, pCollarRegex, pSaddleRegex, 
+      pColourRegex, pMetalRegex, pValidate, pSubjectAccordion) {
+}}}
+Then assign the passed in value to the variable we created for it. Place this after the similar line for collarRegex).
+{{{
+    saddleRegex = pSaddleRegex;
+}}}
+Finally, we need to clone the existing validation method 'collarFormat' to create a new validation method 'saddleFormat' which will look as follows.
+{{{
+    $.validator.addMethod('saddleFormat', function (value, element) { 
+      if (saddleRegex==='') {
+        return true;
+      }
+      var re = new RegExp(saddleRegex);
+      return this.optional(element) || re.test(value);
+    }, 'This is not a known nasal saddle format, please check the value and re-enter.');
+}}}
+All changes now complete, test well and serve.
+http://indicia.googlecode.com/svn/wiki/screenshots/colour_marked_form/new_identifier_complete.png
