@@ -207,7 +207,8 @@ function indicia_configuration_form_validate($form, &$form_state) {
     $readAuth = data_entry_helper::get_read_auth($form_state['values']['indicia_website_id'], $form_state['values']['indicia_password']);
     $test = data_entry_helper::get_population_data(array(
       'table'=>'survey',
-      'extraParams'=>$readAuth + array('limit'=>0)
+      'extraParams'=>$readAuth + array('limit'=>0),
+      'nocache'=>true
     ));
     if (isset($test['error']))
       form_set_error('indicia_website_id', t('The configuration for the connection to the warehouse is incorrect. This could be an incorrect '.
