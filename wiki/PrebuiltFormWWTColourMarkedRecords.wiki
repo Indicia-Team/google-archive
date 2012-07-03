@@ -5,7 +5,7 @@
 
 This page details the configuration process for the WWT Colour-marked Wildfowl form. It assumes a level of experience in setting forms up. 
 
-Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4320 (30 June 2012). 
+Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using revision 4336 (3rd July 2012). 
 
 You will also need to have set up a website, survey and species list on the warehouse. 
 
@@ -28,6 +28,11 @@ The following custom attributes are used by this form. These need to be set up. 
 || Text Colour || Lookup List || Text/Code Colour || Use the Ring Colour term list. ||
 || Sequence || Text || Unique Sequence/Code || Validate as standard text ||
 || Position || Lookup List || Position on the organism || Use the Identifier Position term list. Allow multiple values. ||
+
+== Identifier Subject Observation Attributes ==
+
+|| *Caption* || *Type* || *System Function* || *Comments* ||
+|| Identifier Condition || Lookup List || identifier_condition || Use the Identifier Condition term list. Allow multiple values. ||
 
 == Sample Attributes ==
 
@@ -143,6 +148,7 @@ You have now successfully set up the sample attributes on the warehouse and can 
 @lockable=true
 [place search]
 [map]
+@scroll_wheel_zoom=false
 ?What name do you know this location by?
 [location name]
 @lockable=true
@@ -188,7 +194,7 @@ You have now successfully set up the sample attributes on the warehouse and can 
   * Text Colours: Select the colours which you want to be recordable for the text/sequence of the identifiers. 
   * Identifier Position: Select the body positions which you want to be recordable for the identifiers which have a choice of positions. Recommend 'Left leg', 'Right leg' and 'Unknown'.
   * Default Position on Leg: If for identifier position, you select  'Left leg' and 'Right leg' rather than the positions which include above/below the 'knee', you can default the leg vertical position here. Recommend “Below the 'Knee'”.
-  * Use Colour Picker: Ticked.
+  * Neck Collar Conditions: Tick condition terms that you want to be applicable to the neck collar. Repeat for Coloured Ring and Metal Ring.
 
 == Subject observation ==
 
