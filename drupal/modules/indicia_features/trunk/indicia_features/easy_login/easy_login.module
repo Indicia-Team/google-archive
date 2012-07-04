@@ -215,39 +215,44 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
   if (($form_id === 'user_profile_form' || $form_id === 'user_register') && array_key_exists('Preferences', $form)) {
     iform_load_helpers(array('data_entry_helper'));
     $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
-    // Load the list of locations
-    $response = data_entry_helper::get_population_data(array(
-      'table' => 'location',
-      'extraParams' => $readAuth + array('orderby'=>'name', 'sortdir'=>'ASC'),
-      'nocache' => true
-    ));
-    $locations=array(''=>'<Please select>');
-    foreach ($response as $location) {
-      $locations[$location['id']]=$location['name'];
+    // The fields can be hidden for sites that don't want them, so check they exist on the form.
+    if (isset($form['Preferences']['profile_location']) || isset($form['Preferences']['profile_location_expertise'])) {
+      // Load the list of locations
+      $response = data_entry_helper::get_population_data(array(
+        'table' => 'location',
+        'extraParams' => $readAuth + array('orderby'=>'name', 'sortdir'=>'ASC'),
+        'nocache' => true
+      ));
+      $locations=array(''=>'<Please select>');
+      foreach ($response as $location) {
+        $locations[$location['id']]=$location['name'];
+      }
+      if (isset($form['Preferences']['profile_location']))
+        $form['Preferences']['profile_location']['#options'] = $locations;
+      if ($form_id === 'user_profile_form' && isset($form['Preferences']['profile_location_expertise']))
+        $form['Preferences']['profile_location_expertise']['#options'] = $locations;
     }
-    $form['Preferences']['profile_location']['#options'] = $locations;
-    $form['Preferences']['profile_location_expertise']['#options'] = $locations;
-    $response = data_entry_helper::get_population_data(array(
-      'table' => 'location',
-      'extraParams' => $readAuth
-    ));
-    // Load the list of taxon groups. If we have a master list setting for the site, use this to ensure we only pick up 
-    // groups that are in use on the site.
-    $response = data_entry_helper::get_population_data(array(
-      'report' => 'library/taxon_groups/taxon_groups_used_in_checklist',
-      'extraParams' => $readAuth + array('taxon_list_id'=>variable_get('iform_master_checklist_id', ''))
-    ));
-    $groups=array();
-    foreach ($response as $group) {
-      $groups[$group['id']]=$group['title'];
-    }
-    $form['Preferences']['profile_taxon_groups']['#options'] = $groups;
-    $form['Preferences']['profile_taxon_groups']['#prefix'] = '<div class="inline-checkboxes taxon_groups">';
-    $form['Preferences']['profile_taxon_groups']['#suffix'] = '</div>';
-    if ($form_id === 'user_profile_form') {
-      $form['Preferences']['profile_taxon_groups_expertise']['#options'] = $groups;
-      $form['Preferences']['profile_taxon_groups_expertise']['#prefix'] = '<div class="inline-checkboxes taxon-groups">';
-      $form['Preferences']['profile_taxon_groups_expertise']['#suffix'] = '</div>';
+    if (isset($form['Preferences']['profile_taxon_groups']) || isset($form['Preferences']['profile_taxon_groups_expertise'])) {
+      // Load the list of taxon groups. If we have a master list setting for the site, use this to ensure we only pick up 
+      // groups that are in use on the site.
+      $response = data_entry_helper::get_population_data(array(
+        'report' => 'library/taxon_groups/taxon_groups_used_in_checklist',
+        'extraParams' => $readAuth + array('taxon_list_id'=>variable_get('iform_master_checklist_id', ''))
+      ));
+      $groups=array();
+      foreach ($response as $group) {
+        $groups[$group['id']]=$group['title'];
+      }
+      if (isset($form['Preferences']['profile_taxon_groups'])) {
+        $form['Preferences']['profile_taxon_groups']['#options'] = $groups;
+        $form['Preferences']['profile_taxon_groups']['#prefix'] = '<div class="inline-checkboxes taxon_groups">';
+        $form['Preferences']['profile_taxon_groups']['#suffix'] = '</div>';
+      }
+      if ($form_id === 'user_profile_form' && isset($form['Preferences']['profile_taxon_groups_expertise'])) {
+        $form['Preferences']['profile_taxon_groups_expertise']['#options'] = $groups;
+        $form['Preferences']['profile_taxon_groups_expertise']['#prefix'] = '<div class="inline-checkboxes taxon-groups">';
+        $form['Preferences']['profile_taxon_groups_expertise']['#suffix'] = '</div>';
+      }
     }
     global $user;
     $thisUser = $user;
@@ -259,10 +264,14 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
     }
     // can logged in user change expert geography and taxon groups?
     if (!user_access('administer permissions')) {
-      $form['Preferences']['profile_location_expertise']['#attributes'] = array('disabled' => 'true');
-      $form['Preferences']['profile_location_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
-      $form['Preferences']['profile_taxon_groups_expertise']['#attributes'] = array('disabled' => 'true');
-      $form['Preferences']['profile_taxon_groups_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
+      if (isset($form['Preferences']['profile_location_expertise'])) {
+        $form['Preferences']['profile_location_expertise']['#attributes'] = array('disabled' => 'true');
+        $form['Preferences']['profile_location_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
+      }
+      if (isset($form['Preferences']['profile_taxon_groups_expertise'])) {
+        $form['Preferences']['profile_taxon_groups_expertise']['#attributes'] = array('disabled' => 'true');
+        $form['Preferences']['profile_taxon_groups_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
+      }
     }
     // Is the user being edited an expert verifier? If not, no need for the profile fields
     if (!user_access('verification', $thisUser)) {
