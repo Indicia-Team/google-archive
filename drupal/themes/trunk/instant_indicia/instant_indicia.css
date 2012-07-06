@@ -26,16 +26,8 @@ h2 {
 }
 /* line 27, sass/instant_indicia.scss */
 #secondary-links > * {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
+  float: left;
   vertical-align: top;
-}
-/* line 7, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-#secondary-links > * {
-  *display: inline;
 }
 /* line 31, sass/instant_indicia.scss */
 #secondary-links a {
@@ -60,7 +52,7 @@ h2 {
   box-shadow: silver 3px 3px 6px;
   border: solid silver 1px;
 }
-/* line 7, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+/* line 7, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
 .gallery-item, .gallery li {
   *display: inline;
 }
@@ -91,22 +83,22 @@ h2 {
   background: url(images/summary_barchart.png) no-repeat center top;
 }
 
-/* line 55, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
+/* line 55, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
 form fieldset {
   border: 1px solid #cccccc;
 }
-/* line 58, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
+/* line 58, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
 form input.text, form input.title, form input[type=email], form input[type=text], form input[type=password],
 form textarea {
   background-color: #fff;
   border: 1px solid #bbbbbb;
 }
-/* line 61, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
+/* line 61, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
 form input.text:focus, form input.title:focus, form input[type=email]:focus, form input[type=text]:focus, form input[type=password]:focus,
 form textarea:focus {
   border-color: #666666;
 }
-/* line 65, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
+/* line 65, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/blueprint/stylesheets/blueprint/_form.scss */
 form select {
   background-color: #fff;
   border-width: 1px;
@@ -129,7 +121,7 @@ form select:focus {
   vertical-align: middle;
   *vertical-align: auto;
 }
-/* line 7, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+/* line 7, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
 .form-checkboxes > div {
   *display: inline;
 }
@@ -208,22 +200,30 @@ table .zero-t {
 /* line 141, sass/instant_indicia.scss */
 button, input[type=submit] {
   margin: 0.25em;
-  font-size: 11px;
-  padding: 0.25em;
   display: inline-block;
+  width: auto;
+  height: auto;
   cursor: pointer;
-  line-height: 1.5;
+  font-size: 16px;
+  padding: 0.25em;
+  line-height: 1.2em;
+  border-style: solid;
+  border-width: 11px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -o-border-radius: 4px;
   -ms-border-radius: 4px;
   -khtml-border-radius: 4px;
   border-radius: 4px;
-  font-size: 11px;
-  padding: 0.3em 1.5em;
   display: inline-block;
+  width: auto;
+  height: auto;
   cursor: pointer;
-  line-height: 1.5;
+  font-size: 11px;
+  padding: 0.5em 1.5em;
+  line-height: 1.2em;
+  border-style: solid;
+  border-width: 1px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -o-border-radius: 4px;
@@ -237,31 +237,19 @@ button, input[type=submit] {
   background: -o-linear-gradient(#4ba3cc, #276b8a);
   background: -ms-linear-gradient(#4ba3cc, #276b8a);
   background: linear-gradient(#4ba3cc, #276b8a);
-  -moz-box-shadow: #87c1dd 0 1px 0 inset;
-  -webkit-box-shadow: #87c1dd 0 1px 0 inset;
-  -o-box-shadow: #87c1dd 0 1px 0 inset;
-  box-shadow: #87c1dd 0 1px 0 inset;
-  border: 1px solid #215b76;
+  border-color: #276b8a;
   color: white;
-  text-shadow: #1a465a 0 -1px 0;
+  text-shadow: #256482, 0 -1px 0;
   font-weight: bold;
 }
-/* line 28, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/sassy-buttons-0.0.9/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
+/* line 23, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.0.5/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 button:hover, input[type=submit]:hover {
-  background-color: #215b76;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #3899c6), color-stop(100%, #215b76));
-  background: -webkit-linear-gradient(#3899c6, #215b76);
-  background: -moz-linear-gradient(#3899c6, #215b76);
-  background: -o-linear-gradient(#3899c6, #215b76);
-  background: -ms-linear-gradient(#3899c6, #215b76);
-  background: linear-gradient(#3899c6, #215b76);
-}
-/* line 31, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/sassy-buttons-0.0.9/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
-button:active, input[type=submit]:active {
-  -moz-box-shadow: #1e526a 0 1px 2px inset;
-  -webkit-box-shadow: #1e526a 0 1px 2px inset;
-  -o-box-shadow: #1e526a 0 1px 2px inset;
-  box-shadow: #1e526a 0 1px 2px inset;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5fadd2), color-stop(100%, #2d7a9e));
+  background: -webkit-linear-gradient(#5fadd2, #2d7a9e);
+  background: -moz-linear-gradient(#5fadd2, #2d7a9e);
+  background: -o-linear-gradient(#5fadd2, #2d7a9e);
+  background: -ms-linear-gradient(#5fadd2, #2d7a9e);
+  background: linear-gradient(#5fadd2, #2d7a9e);
 }
 /* line 146, sass/instant_indicia.scss */
 button.button-active, input[type=submit].button-active {
@@ -270,11 +258,4 @@ button.button-active, input[type=submit].button-active {
   -o-box-shadow: #133342 0 0.2em 0.4em inset;
   box-shadow: #133342 0 0.2em 0.4em inset;
   border: solid 1px #0b1e27;
-}
-/* line 13, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/sassy-buttons-0.0.9/stylesheets/sassy-buttons/_sassy-button-styles.sass */
-button.button-active:active, input[type=submit].button-active:active {
-  -moz-box-shadow: #0e2732 0 0.2em 0.4em inset;
-  -webkit-box-shadow: #0e2732 0 0.2em 0.4em inset;
-  -o-box-shadow: #0e2732 0 0.2em 0.4em inset;
-  box-shadow: #0e2732 0 0.2em 0.4em inset;
 }
