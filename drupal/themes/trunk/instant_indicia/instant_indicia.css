@@ -35,7 +35,7 @@ h2 {
 }
 
 /* line 36, sass/instant_indicia.scss */
-.gallery-item, .gallery li {
+.gallery-item, .gallery li, .summary-report {
   text-align: center;
   padding: 0.5em;
   margin: 0.5em;
@@ -53,7 +53,7 @@ h2 {
   border: solid silver 1px;
 }
 /* line 7, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.gallery-item, .gallery li {
+.gallery-item, .gallery li, .summary-report {
   *display: inline;
 }
 
