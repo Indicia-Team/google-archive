@@ -18,6 +18,7 @@ h2 {
 
 #search-theme-form {
   clear: right;
+  padding-right: 1em;
 }
 
 #secondary-links {
@@ -47,6 +48,11 @@ h2 {
 .summary-report {
   width: 80px;
   padding-top: 80px;
+}
+
+#map {
+  /* Fixes a problem with map z-index preventing clicks getting to overlaid menus */
+  position: relative;
 }
 
 .report-map {
