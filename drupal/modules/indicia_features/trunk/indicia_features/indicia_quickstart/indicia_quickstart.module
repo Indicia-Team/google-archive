@@ -6,7 +6,7 @@
 * @return array An array of valid permissions for the module
 */
 function indicia_quickstart_perm() {
-  $retVal = array('online recording', 'indicia data admin');
+  return array('online recording', 'indicia data admin');
 }
 
 /**
