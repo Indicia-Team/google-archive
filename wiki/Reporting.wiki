@@ -367,6 +367,7 @@ POST will be required if you need to support long report parameter values such a
  # 'xml'
  # 'json'
  # 'csv'
+ # 'nbn' (for NBN exchange format compatibility)
 
 `params` may be used when you wish to autocomplete certain parameters rather than being prompted for them. If used, it should be a JSON-encoded array of parameter name pointing to parameter value.
 
