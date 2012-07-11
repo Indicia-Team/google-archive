@@ -66,7 +66,11 @@ Calls to the Data Services return a minimal amount of information for the entity
 
 == Output Mode ==
 
-Calls to the URLs normally return a formatted XML document describing the results. This can be overridden by providing a GET parameter called mode in the URL to request json or csv data. Other formats can be supported by adding views that generate the formatted output to the modules/indicia_svc_data/views/services/data/_entity name_ folder.
+Calls to the URLs normally return a formatted XML document describing the results. Provide a GET parameter called mode with one of the following values to override the output format:
+  * json - for JavaScript Object Notation (JSON) format
+  * csv - for Comma Separated Values file format
+  * nbn - for a tab delimited file compatible with the NBN Exchange format.
+Other formats can be supported by adding views that generate the formatted output to the modules/indicia_svc_data/views/services/data/_entity name_ folder.
 
 === JSONP ===
 
