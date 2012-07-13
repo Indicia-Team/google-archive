@@ -194,6 +194,10 @@ function forms_and_surveys_library_set_favourite() {
     $forms = array_diff($forms, array($_GET['nid']));
   $edit = array('profile_favourite_library_forms'=>serialize($forms));
   profile_save_profile($edit, $user, 'System');
+  // force a menu rebuild
+  cache_clear_all('fsl-menu-'.$user->uid, 'cache');
+  // must do this now, because if we leave it till later the $user object has the out of date forms list when it reloads (presumably a cache issue)
+  forms_and_surveys_submenu($forms);
   return 'Ok';
 }
 
@@ -213,12 +217,21 @@ function forms_and_surveys_library_user($op, &$edit, &$account, $category = NULL
   }  
 }
 
+/**
+ * Modify the forms registry so that the nice menus output is controlled by this module. This let us splice in user's forms. 
+ */
 function forms_and_surveys_library_theme_registry_alter(&$theme_registry) {
   if (module_exists('nice_menus') && !empty($theme_registry['nice_menus_build'])) {  
     $theme_registry['nice_menus_build']['function'] = 'forms_and_surveys_library_menu_build';
   }
 }
 
+/** 
+ * Build the nice menu output, inserting our fave forms in the My Forms menu item.
+ * @todo: Caching
+ * @todo: Clear the nice menu cache when the user saves a fave.
+ * @todo: Make the menu item configurable.
+ */
 function forms_and_surveys_library_menu_build($menu, $depth = -1, $trail = NULL) {
   $output = '';
   // Prepare to count the links so we can mark first, last, odd and even.
@@ -272,22 +285,21 @@ function forms_and_surveys_library_menu_build($menu, $depth = -1, $trail = NULL)
         }        
         $output .= "</li>\n";
       } elseif (strcasecmp($menu_item['link']['title'], 'My Forms')===0) {
-        global $user;
-        profile_load_profile($user);
-        $parent_class = empty($user->profile_favourite_library_forms) ? '' : 'menuparent ';
-        $output .= '<li class="menu-' . $mlid . ' ' . $parent_class . $class . $first_class . $oddeven_class . $last_class .'">'. theme('menu_item_link', $menu_item['link']);
-        // add a sub-menu for the user's favourite forms
-        if (!empty($user->profile_favourite_library_forms)) {
-          $output .= '<ul>';
-          $forms = unserialize($user->profile_favourite_library_forms);
-          foreach($forms as $nid) {
-            $node = node_load($nid);
-            // Loop here to add the faves
-            $output .= '<li>'.l(t($node->title), $node->path).'</li>';
+        global $user;        
+        // Use the cache to avoid loading all the form nodes each rebuild. 
+        $formsMenu = cache_get('fsl-menu-'.$user->uid);
+        if ($formsMenu)
+          $output .= $formsMenu->data;
+        else {
+          profile_load_profile($user);
+          $parent_class = empty($user->profile_favourite_library_forms) ? '' : 'menuparent ';
+          $output .= '<li class="menu-' . $mlid . ' ' . $parent_class . $class . $first_class . $oddeven_class . $last_class .'">'. theme('menu_item_link', $menu_item['link']);
+          // add a sub-menu for the user's favourite forms
+          if (!empty($user->profile_favourite_library_forms)) {
+            $output .= forms_and_surveys_submenu(unserialize($user->profile_favourite_library_forms));
           }
-          $output .= '</ul>';
+          $output .= "</li>\n";
         }
-        $output .= "</li>\n";
       } else {
         $output .= '<li class="menu-' . $mlid . ' ' . $class . $first_class . $oddeven_class . $last_class .'">'. theme('menu_item_link', $menu_item['link']) .'</li>'."\n";
       }
@@ -296,3 +308,17 @@ function forms_and_surveys_library_menu_build($menu, $depth = -1, $trail = NULL)
   return $output;
 }
 
+/**
+ * Build the submenu from the list of forms.
+ */
+function forms_and_surveys_submenu($forms) {
+  $fslMenu .= '<ul>';
+  foreach($forms as $nid) {
+    $node = node_load($nid);
+    // Loop here to add the faves
+    $fslMenu .= '<li>'.l(t($node->title), $node->path).'</li>';
+  }
+  $fslMenu .= '</ul>';
+  cache_set('fsl-menu-'.$user->uid, $fslMenu);
+  return $fslMenu;
+}
