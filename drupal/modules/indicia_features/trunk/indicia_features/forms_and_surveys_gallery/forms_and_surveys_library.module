@@ -196,3 +196,103 @@ function forms_and_surveys_library_set_favourite() {
   profile_save_profile($edit, $user, 'System');
   return 'Ok';
 }
+
+/**
+ @todo
+ Put favourite items on the menu using theme_links.
+ Add a registration url and registration message to the schema for forms and surveys library table.
+ Use hook menu to catch the registration urls. Redirect to the user/register page (access anonymous users only), with ?form=nid in url.
+ Use hook_user to catch register and add message to the top.
+ Use hook_user to catch submit of registration, and auto-add the appropriate form to the user's faves in their profile.
+*/ 
+function forms_and_surveys_library_user($op, &$edit, &$account, $category = NULL) {
+  switch ($op) {
+    case 'register':
+      if ($_GET['form'])
+        drupal_set_message('You are registering for form '.$_GET['form']);
+  }  
+}
+
+function forms_and_surveys_library_theme_registry_alter(&$theme_registry) {
+  if (module_exists('nice_menus') && !empty($theme_registry['nice_menus_build'])) {  
+    $theme_registry['nice_menus_build']['function'] = 'forms_and_surveys_library_menu_build';
+  }
+}
+
+function forms_and_surveys_library_menu_build($menu, $depth = -1, $trail = NULL) {
+  $output = '';
+  // Prepare to count the links so we can mark first, last, odd and even.
+  $index = 0;
+  $count = 0;
+  foreach ($menu as $menu_count) {
+    if ($menu_count['link']['hidden'] == 0) {
+      $count++;
+    }
+  }
+  // Get to building the menu.
+  foreach ($menu as $menu_item) {
+    $mlid = $menu_item['link']['mlid'];
+    // Check to see if it is a visible menu item.
+    if (!isset($menu_item['link']['hidden']) || $menu_item['link']['hidden'] == 0) {
+      // Check our count and build first, last, odd/even classes.
+      $index++;
+      $first_class = $index == 1 ? ' first ' : '';
+      $oddeven_class = $index % 2 == 0 ? ' even ' : ' odd ';
+      $last_class = $index == $count ? ' last ' : '';
+      // Build class name based on menu path
+      // e.g. to give each menu item individual style.
+      // Strip funny symbols.
+      $clean_path = str_replace(array('http://', 'www', '<', '>', '&', '=', '?', ':', '.'), '', $menu_item['link']['href']);
+      // Convert slashes to dashes.
+      $clean_path = str_replace('/', '-', $clean_path);
+      $class = 'menu-path-'. $clean_path;
+      if ($trail && in_array($mlid, $trail)) {
+        $class .= ' active-trail';
+      }
+      // If it has children build a nice little tree under it.
+      if ((!empty($menu_item['link']['has_children'])) && (!empty($menu_item['below'])) && $depth != 0) {
+        // Keep passing children into the function 'til we get them all.
+        $children = theme('nice_menus_build', $menu_item['below'], $depth, $trail);
+        // Set the class to parent only of children are displayed.
+        $parent_class = ($children && ($menu_item['link']['depth'] <= $depth || $depth == -1)) ? 'menuparent ' : '';
+        $output .= '<li class="menu-' . $mlid . ' ' . $parent_class . $class . $first_class . $oddeven_class . $last_class .'">'. theme('menu_item_link', $menu_item['link']);
+        // Check our depth parameters.
+        if ($menu_item['link']['depth'] <= $depth || $depth == -1) {
+          // Build the child UL only if children are displayed for the user.
+          if ($children) {
+            $output .= '<ul>';
+            $output .= $children;
+            $output .= "</ul>\n";
+          }
+          if ($menu_item['link']['title']==='My Forms') {
+            $output .= '<ul>';
+            $output .= '<li>test</li>';
+            $output .= "</ul>\n";
+          }
+        }        
+        $output .= "</li>\n";
+      } elseif (strcasecmp($menu_item['link']['title'], 'My Forms')===0) {
+        global $user;
+        profile_load_profile($user);
+        $parent_class = empty($user->profile_favourite_library_forms) ? '' : 'menuparent ';
+        $output .= '<li class="menu-' . $mlid . ' ' . $parent_class . $class . $first_class . $oddeven_class . $last_class .'">'. theme('menu_item_link', $menu_item['link']);
+        // add a sub-menu for the user's favourite forms
+        if (!empty($user->profile_favourite_library_forms)) {
+          $output .= '<ul>';
+          $forms = unserialize($user->profile_favourite_library_forms);
+          foreach($forms as $nid) {
+            $node = node_load($nid);
+            // Loop here to add the faves
+            $output .= '<li>'.l(t($node->title), $node->path).'</li>';
+          }
+          $output .= '</ul>';
+        }
+        $output .= "</li>\n";
+      } else {
+        $output .= '<li class="menu-' . $mlid . ' ' . $class . $first_class . $oddeven_class . $last_class .'">'. theme('menu_item_link', $menu_item['link']) .'</li>'."\n";
+      }
+    }
+  }
+  return $output;
+}
+
