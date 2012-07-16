@@ -68,6 +68,7 @@ h2 {
 #map {
   /* Fixes a problem with map z-index preventing clicks getting to overlaid menus */
   position: relative;
+  z-index: 0;
 }
 
 /* line 58, sass/instant_indicia.scss */
