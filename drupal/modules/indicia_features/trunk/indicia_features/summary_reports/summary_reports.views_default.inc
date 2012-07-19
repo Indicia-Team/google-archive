@@ -154,8 +154,10 @@ drupal_set_breadcrumb($breadcrumb);
   $handler->override_option('use_pager', '1');
   $handler->override_option('style_plugin', 'list');
   $handler->override_option('style_options', array(
-    'grouping' => '',
-    'type' => 'ul',
+    'grouping' => 'field_summary_report_inclusion_value',
+    'columns' => '5',
+    'alignment' => 'horizontal',
+    'fill_single_line' => 0,
   ));
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'summarise');

@@ -7,7 +7,7 @@
 function easy_login_install() {
   $fields = _easy_login_profile_fields();
   foreach($fields as $name => $fieldDef) {
-    _easy_login_add_profile_field($name, $fieldDef);
+    easy_login_add_profile_field($name, $fieldDef);
   }
 }
 
@@ -29,13 +29,13 @@ function easy_login_uninstall() {
  */
 function easy_login_update_6200() {
   $fields = _easy_login_profile_fields();
-  _easy_login_add_profile_field('profile_surveys_expertise', $fields['profile_surveys_expertise']);
+  easy_login_add_profile_field('profile_surveys_expertise', $fields['profile_surveys_expertise']);
 }
 
 /**
  * Add a field to the list of available user profile fields.
  */
-function _easy_login_add_profile_field($name, $fieldDef) {
+function easy_login_add_profile_field($name, $fieldDef) {
   db_query("INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete, options, page) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d, '%s', '%s')",
       $fieldDef['title'],
       $name,
