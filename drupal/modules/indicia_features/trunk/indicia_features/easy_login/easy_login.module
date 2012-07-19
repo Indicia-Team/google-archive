@@ -82,7 +82,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         if (!empty($edit)) {
           foreach ($edit as $field=>$value) {
             $fieldsToSync = array();
-            // fields that are available for synchronisation must be called profile_indicia_*. We 
+            // fields that are available for synchronisation must be called profile_indicia_*. We
             // also don't want to handle anything that has not actually changed.
             if ($value != $user->$field && preg_match('/^profile_indicia_/', $field) && $field!=='profile_indicia_user_id') {
               $fieldsToSync[$field] = $value;
@@ -91,7 +91,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
               // Indicia requires fields to match on the caption, so we need to query the captions and
               // convert the array.
               $r = db_query("select name, title from {profile_fields} where name in ('%s')", implode("','", array_keys($fieldsToSync)));
-              while ($row = db_fetch_array($r)) 
+              while ($row = db_fetch_array($r))
                 $fieldsToSyncByCaption[$row['title']]=$fieldsToSync[$row['name']];
             }
           }
@@ -105,9 +105,9 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
             if ($row['name']==='profile_taxon_groups' && empty($account->profile_taxon_groups))
               $requests[] = t('the list of species groups you are particularly interested in');
           }
-          if (!empty($requests)) 
+          if (!empty($requests))
             drupal_set_message(t('Why not tell us !requests to help us tailor the system to your needs? '.
-                'You can fill this information in on your !link.', 
+                'You can fill this information in on your !link.',
                 array(
                   '!requests'=>implode(' '.t('and').' ', $requests),
                   '!link'=>l('user preferences', 'user/'.$account->uid.'/edit/Preferences')
@@ -166,11 +166,11 @@ function easy_login_call_get_user_id($account, $force=null, $users_to_merge=null
  * Handle the response from a call to get_user_id on the warehouse services.
  * @param type $account
  * @param string $response Response from call to get_user_id (should be a json string).
- * @param type $op 
+ * @param type $op
  */
 function easy_login_handle_get_user_id_response($account, $response, &$edit=null, $op=null) {
   $response = json_decode($response);
-  if (isset($response->userId)) {    
+  if (isset($response->userId)) {
     if ($account->profile_indicia_user_id!=$response->userId) {
       easy_login_store_value("name='profile_indicia_user_id'", $account->uid, $response->userId, $edit);
       $r = db_fetch_array(db_query("SELECT fid FROM {profile_fields} WHERE name='profile_indicia_user_id'"));
@@ -192,7 +192,7 @@ function easy_login_handle_get_user_id_response($account, $response, &$edit=null
     $_SESSION['multiple_users_to_resolve'] = $response->possibleMatches;
     $_SESSION['uid_to_resolve'] = $account->uid;
     drupal_goto('resolve_multiple_users');
-  } elseif (isset($response->error)) 
+  } elseif (isset($response->error))
     drupal_set_message($output->error, 'warning');
 }
 
@@ -233,7 +233,7 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
         $form['Preferences']['profile_location_expertise']['#options'] = $locations;
     }
     if (isset($form['Preferences']['profile_taxon_groups']) || isset($form['Preferences']['profile_taxon_groups_expertise'])) {
-      // Load the list of taxon groups. If we have a master list setting for the site, use this to ensure we only pick up 
+      // Load the list of taxon groups. If we have a master list setting for the site, use this to ensure we only pick up
       // groups that are in use on the site.
       $response = data_entry_helper::get_population_data(array(
         'report' => 'library/taxon_groups/taxon_groups_used_in_checklist',
@@ -274,7 +274,7 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
       $fields = _easy_login_profile_fields();
       $form['Preferences']['profile_surveys_expertise'] = array(
         '#value' => data_entry_helper::sub_list(array(
-          'label' => t($fields['profile_surveys_expertise']['title']), 
+          'label' => t($fields['profile_surveys_expertise']['title']),
           'fieldname'=>'profile_surveys_expertise',
           'table'=>'survey',
           'valueField'=>'id',
@@ -325,9 +325,9 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
  * the sub_list data into the correct format for Drupal to save it.
  */
 function easy_login_submit_preferences($form, &$form_state) {
-  if (isset($_POST['profile_surveys_expertise'])) 
+  if (isset($_POST['profile_surveys_expertise']))
     $form_state['values']['profile_surveys_expertise']=serialize($_POST['profile_surveys_expertise']);
-  else 
+  else
     unset($form_state['values']['profile_surveys_expertise']);
 }
 
