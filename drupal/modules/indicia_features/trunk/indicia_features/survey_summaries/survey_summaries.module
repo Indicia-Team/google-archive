@@ -2,6 +2,10 @@
 
 include_once('survey_summaries.features.inc');
 
+/**
+ * Implement hook_nodeapi
+ * Trap view of survey summary nodes so we can format our own output.
+ */
 function survey_summaries_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   if ($node->type==='survey_summary')
     switch ($op) {
@@ -16,26 +20,50 @@ function survey_summaries_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
 }
 
 function survey_summary_build($node) {
-  $surveyId=$node->field_survey_id[0]['value'];
   iform_load_helpers(array('report_helper'));
-  $readAuth = report_helper::get_read_auth(variable_get('indicia_website_id', 0), variable_get('indicia_password', ''));
-  $arr = helper_base::explode_lines($node->field_survey_summary_output[0]['value']);
-  $r = '';
-  $currentBlock='';
-  $currentOptions=array();
-  foreach($arr as $item) {
-    if (preg_match('/^\[(?P<ctrl>.+)\]$/', $item, $matches)) {
-      if ($fn) 
-        $r .= survey_summary_output_block($fn, $readAuth, $surveyId, $currentOptions);
-      $fn = 'survey_summary_'.$matches['ctrl'];
-      $currentOptions=array();
-    } elseif (preg_match('/^@(?P<key>.+)=(?P<value>.+)$/', $item, $matches)) {
-      $currentOptions[$matches['key']]=$matches['value'];
-    } else drupal_set_message($item);
+  // force our page to expire when its ready, as Drupal normally leaves expired content till the next node save
+  db_query("DELETE FROM {cache} WHERE expire != %d AND expire < %d and cid='%s'", CACHE_PERMANENT, time(), 'survey-summary-'.$node->nid);
+  // Can we use a cached version of the page
+  if ($cacheData=cache_get('survey-summary-'.$node->nid)) {
+    $r = $cacheData->data['r'];
+    report_helper::$javascript = $cacheData->data['javascript'];
+    report_helper::$onload_javascript = $cacheData->data['onload_javascript'];
+    report_helper::$late_javascript = $cacheData->data['late_javascript'];
+    report_helper::$required_resources = $cacheData->data['resources'];    
+    drupal_set_message('cached');
+  } else {
+    drupal_set_message('build');
+    $surveyId=$node->field_survey_id[0]['value'];
+    $readAuth = report_helper::get_read_auth(variable_get('indicia_website_id', 0), variable_get('indicia_password', ''));
+    $arr = helper_base::explode_lines($node->field_survey_summary_output[0]['value']);
+    $r = '<div id="survey-summary" class="ui-clearfix">';
+    $currentBlock='';
+    $currentOptions=array();
+    foreach($arr as $item) {
+      if (preg_match('/^\[(?P<ctrl>.+)\]$/', $item, $matches)) {
+        if ($fn) 
+          $r .= survey_summary_output_block($fn, $readAuth, $surveyId, $currentOptions);
+        $fn = 'survey_summary_'.$matches['ctrl'];
+        $currentOptions=array();
+      } elseif (preg_match('/^@(?P<key>.+)=(?P<value>.+)$/', $item, $matches)) {
+        $currentOptions[$matches['key']]=$matches['value'];
+      }
+    }
+    if ($fn) 
+      $r .= survey_summary_output_block($fn, $readAuth, $surveyId, $currentOptions);
+    report_helper::add_resource('defaultStylesheet');
+    $r .= '</div>';
+    // Cache the form, including the javascript and resources
+    $cacheData = array(
+      'r'=>$r,
+      'javascript'=>report_helper::$javascript,
+      'onload_javascript'=>report_helper::$onload_javascript,
+      'late_javascript'=>report_helper::$late_javascript,
+      'resources'=>report_helper::$required_resources
+    );    
+    // We only set a short cache timeout so the form is fairly current, and readAuths don't expire.
+    cache_set('survey-summary-'.$node->nid, $cacheData, 'cache', time()+300);
   }
-  if ($fn) 
-    $r .= survey_summary_output_block($fn, $readAuth, $surveyId, $currentOptions);
-  report_helper::add_resource('defaultStylesheet');
   handle_resources();
   return $r;
 }
@@ -45,7 +73,7 @@ function survey_summary_output_block($fn, $readAuth, $surveyId, $options) {
   $classes=array('survey-summary-panel');
   if (isset($options['class']))
     $classes[]=$options['class'];
-  $r = '<div class="'.implode(' ', $classes).'"';
+  $r = '<div id="'.$fn.'" class="'.implode(' ', $classes).'"';
   $style = array();
   if (isset($options['width']))
     $style[] = 'width: '.$options['width'].'px;';
@@ -62,9 +90,11 @@ function survey_summary_output_block($fn, $readAuth, $surveyId, $options) {
 function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
   $options = array_merge(array(
     'itemsPerPage'=>4,
-    'galleryColCount'=>4
+    'galleryColCount'=>4,
+    'date_from'=>'',
+    'date_to'=>'',
   ), $currentOptions);
-  return report_helper::report_grid(array(
+  return '<h3>Photos</h3>'.report_helper::report_grid(array(
     'id'=>'latest-photos',
     'readAuth' => $readAuth,
     'dataSource'=>'library/occurrence_images/occurrence_image_list',
@@ -79,8 +109,8 @@ function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
     'headers' => false,
     'galleryColCount' => $options['galleryColCount'],
     'extraParams' => array(
-      'date_from'=>'',
-      'date_to'=>'',
+      'date_from'=>$options['date_from'],
+      'date_to'=>$options['date_to'],
       'survey_id'=>$surveyId,
       'taxon_group_id'=>'',
       'smpattrs'=>'',
@@ -97,7 +127,7 @@ function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
   ), $currentOptions);
   global $user;
   profile_load_profile($user);
-  return report_helper::report_grid(array(
+  return '<h3>Recorder League</h3>'.report_helper::report_grid(array(
     'id'=>'recorder-league',
     'readAuth' => $readAuth,
     'dataSource'=>'library/users/species_and_occurrence_counts',
@@ -146,7 +176,7 @@ function survey_summary_participation_map($readAuth, $surveyId, $currentOptions)
           {isBaseLayer: false, sphericalMercator: true, singleTile: true}
     );\n";
   $olOptions = array('theme' => map_helper::$js_path . 'theme/default/style.css');
-  return map_helper::map_panel($options, $olOptions);
+  return '<h3>Records Map</h3>'.map_helper::map_panel($options, $olOptions);
 }
 
 function survey_summary_total($readAuth, $surveyId, $currentOptions) {
