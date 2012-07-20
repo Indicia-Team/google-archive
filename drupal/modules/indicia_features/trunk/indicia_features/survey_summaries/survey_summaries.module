@@ -91,7 +91,9 @@ function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
 
 function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
   $options = array_merge(array(
-    'itemsPerPage'=>10
+    'itemsPerPage'=>10,
+    'date_from'=>'',
+    'date_to'=>'',
   ), $currentOptions);
   global $user;
   profile_load_profile($user);
@@ -109,8 +111,8 @@ function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
     'includeAllColumns' => false,
     'rowClass'=>'{me}',
     'extraParams' => array(
-      'date_from'=>'',
-      'date_to'=>'',
+      'date_from'=>$options['date_from'],
+      'date_to'=>$options['date_to'],
       'survey_id'=>$surveyId,
       'taxon_group_id'=>'',
       'smpattrs'=>'',
@@ -150,7 +152,7 @@ function survey_summary_participation_map($readAuth, $surveyId, $currentOptions)
 function survey_summary_total($readAuth, $surveyId, $currentOptions) {
   $options = array_merge(array(
     'date_from'=>'',
-    'date_to=>',
+    'date_to'=>'',
     'template'=>'{species_count} species found so far!'
   ), $currentOptions);
   return report_helper::freeform_report(array(
