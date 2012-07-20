@@ -178,24 +178,42 @@ set_include();\n";
           $content .= '<p>'.t('If you prefer, you can <a href="!url">add records without registering</a> but you will not be able to access all the features of iRecord.', 
                 array('!url'=>url('node/'.$_GET['n']))).'</p>';
         }
-        $form['Preferences']['profile_home_page']['#default_value']='node/'.$_GET['n'];
+        $form['profile_home_page'] = array(
+          '#type'=>'hidden',
+          '#default_value'=>'node/'.$_GET['n']
+        );
         $form['registration_intro']=array(
           '#value'=>$content,
           '#weight'=>-49
         );
       }
     }
-    $form['Preferences']['profile_home_page']['#type']='hidden';
   }
-  if ($form_id === 'user_profile_form' || $form_id==='user_register') {
+  if ($form_id === 'user_profile_form' && isset($form['Preferences'])) {
     // load the available forms as options to register against
     $regForms = db_query("select nid, library_title from {forms_and_surveys_library}");
     $options = array(''=>'Default home page');
     while ($regForm=db_fetch_object($regForms))
-      $options['node/'.$regForm->nid]=$regForm->library_title;
+      $options['node/'.$regForm->nid]=$regForm->library_title;    
     $form['Preferences']['profile_home_page']['#options']=$options;
+    $form['#submit'][] = 'forms_and_surveys_library_save_profile';
   }
-  
+}
+
+/**
+ * Submit handler for user registration and profile forms, which ensures any selected home page form
+ * is added to the list of user favourites.
+ */
+function forms_and_surveys_library_save_profile($form, &$form_state) {
+  if (preg_match('/^node\/(?P<nid>\d+)/', $form_state['values']['profile_home_page'], $matches)) {
+    // saving a home page setting, so make sure this is one of the user's faved forms
+    global $user;
+    profile_load_profile($user);
+    $forms = empty($user->profile_favourite_library_forms) ? array() : unserialize($user->profile_favourite_library_forms);
+    if (!in_array($matches['nid'], $forms)) 
+      $forms[] = $matches['nid'];
+    forms_and_surveys_library_save_forms($forms, $user->uid);
+  }
 }
 
 /**
@@ -209,7 +227,6 @@ function forms_and_surveys_library_nodeapi(&$node, $op, $arg) {
   if (user_access('create iform') || ($op == 'load')) {
     switch ($op) {
       //case 'load': -- not implemented as not needed, since it causes extra db hits when nodes are loaded
-
       case 'insert':
       case 'update':
         if ($node->include_in_library) {
@@ -266,11 +283,7 @@ function forms_and_surveys_library_set_favourite() {
   } else
     // remove the form from the array
     $forms = array_diff($forms, array($_GET['nid']));
-  // have to use our own db save code, because profile_save_profile does not save hidden fields you don't have access to
-  $field = db_fetch_object(db_query("select fid from {profile_fields} where name='profile_favourite_library_forms'"));
-  db_query("update {profile_values} set value='%s' where fid=%d and uid=%d", serialize($forms), $field->fid, $user->uid);
-  if (db_affected_rows()===0)
-    db_query("insert into {profile_values} (fid, uid, value) values (%d, %d, '%s')", $field->fid, $user->uid, serialize($forms));
+  forms_and_surveys_library_save_forms($forms, $user->uid);
   // force a menu rebuild
   cache_clear_all('fsl-menu-'.$user->uid, 'cache');
   // must do this now, because if we leave it till later the $user object has the out of date forms list when it reloads (presumably a cache issue)
@@ -279,17 +292,66 @@ function forms_and_surveys_library_set_favourite() {
 }
 
 /**
+ * Saves an array of forms to the user's favourite forms array.
+ */
+function forms_and_surveys_library_save_forms($forms, $uid) {
+  // have to use our own db save code, because profile_save_profile does not save hidden fields you don't have access to
+  $field = db_fetch_object(db_query("select fid from {profile_fields} where name='profile_favourite_library_forms'"));
+  $formData=serialize($forms);  
+  db_query("insert into {profile_values} (fid, uid, value) values (%d, %d, '%s') on duplicate key update value='%s'", $field->fid, $uid, $formData, $formData);
+}
+
+/**
+ * Saves a home page selection to the user's profile
+ */
+function forms_and_surveys_library_save_home_page($home_page, $uid) {
+  // have to use our own db save code, because profile_save_profile does not save hidden fields you don't have access to
+  $field = db_fetch_object(db_query("select fid from {profile_fields} where name='profile_home_page'"));  
+  db_query("insert into {profile_values} (fid, uid, value) values (%d, %d, '%s') on duplicate key update value='%s'", $field->fid, $uid, $home_page, $home_page);
+}
+
+
+/**
  * Implement hook_user
  * For registration of users via a survey registration page, make that form one of the user's faves
  */ 
 function forms_and_surveys_library_user($op, &$edit, &$account, $category = NULL) {
   switch ($op) {
-    case 'login':
-      // If registration for a specific form then redirect
-      if (isset($account->profile_home_page))
-        drupal_goto($account->profile_home_page);
+    case 'insert':      
+      if (!empty($edit['profile_home_page'])) {   
+        $account->profile_home_page=$edit['profile_home_page'];
+        save_home_page_and_faves($account);
+      }
       break;
+    case 'login':      
+      // Don't redirect if we are about to reset our password.
+      if (!isset($_GET['q']) || !preg_match('/^user\/reset\//', $_GET['q'])) {
+        // If registration for a specific form then redirect
+        profile_load_profile($account);
+        if (isset($account->profile_home_page)) {
+          $_REQUEST['destination'] = $account->profile_home_page;
+        }
+      }
+      break;
+    case 'submit':
+      // User has submitted their profile, so might have just changed their password for the first time. We have to trap and save the 
+      // home page form and favourite forms at this stage, since this is when we know the user ID for the first time.
+      if (isset($account->profile_home_page))
+        save_home_page_and_faves($account, true);
   }  
+}
+
+function save_home_page_and_faves($user, $notify=false) {
+  if (preg_match('/^node\/(?P<nid>\d+)/', $user->profile_home_page, $matches)) {
+    forms_and_surveys_library_save_forms(array($matches['nid']), $user->uid);
+    if ($notify) {
+      $n = db_fetch_object(db_query('select library_title from {forms_and_surveys_library} '.
+          'where registration_path is not null and nid=%d', $matches['nid']));
+      drupal_set_message(t("Perhaps you'd like to get on with using the form !title? You can find this form later under the Record -&gt; My Forms menu item.", 
+          array('!title'=>l($n->library_title, $user->profile_home_page))));
+    }
+  }
+  forms_and_surveys_library_save_home_page($user->profile_home_page, $user->uid);
 }
 
 /**
@@ -387,13 +449,17 @@ function forms_and_surveys_library_menu_build($menu, $depth = -1, $trail = NULL)
  * Build the submenu from the list of forms.
  */
 function forms_and_surveys_submenu($forms) {
-  $fslMenu .= '<ul>';
-  foreach($forms as $nid) {
-    $node = node_load($nid);
-    // Loop here to add the faves
-    $fslMenu .= '<li>'.l(t($node->title), $node->path).'</li>';
-  }
-  $fslMenu .= '</ul>';
-  cache_set('fsl-menu-'.$user->uid, $fslMenu);
-  return $fslMenu;
+  if (count($forms)>0) {
+    $fslMenu .= '<ul class="forms-library">';
+    $forms = implode(',',$forms);
+    $qry=db_query('select nid, library_title from {forms_and_surveys_library} where nid in (%s)', $forms);
+    // add li elements for each faved form
+    while ($item=db_fetch_object($qry)) {
+      $fslMenu .= '<li>'.l(t($item->library_title), 'node/'.$item->nid).'</li>';
+    }
+    $fslMenu .= '</ul>';
+    cache_set('fsl-menu-'.$user->uid, $fslMenu);
+    return $fslMenu;
+  } else
+    return '';
 }
