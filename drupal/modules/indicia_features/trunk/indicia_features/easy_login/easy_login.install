@@ -28,8 +28,10 @@ function easy_login_uninstall() {
  * Update method for version 6.2. Adds a field for surveys which experts can verify.
  */
 function easy_login_update_6200() {
+  $ret = array();
   $fields = _easy_login_profile_fields();
   easy_login_add_profile_field('profile_surveys_expertise', $fields['profile_surveys_expertise']);
+  return $ret;
 }
 
 /**
