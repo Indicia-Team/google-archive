@@ -53,7 +53,6 @@ $surveys = data_entry_helper::get_population_data(array(
   \'table\'=>\'survey\',
   \'extraParams\'=>$readAuth
 ));
-drupal_set_message(print_r($surveys, true));
 $r = array();
 foreach ($surveys as $survey) {
   $r[$survey[\'id\']]=$survey[\'title\'];
