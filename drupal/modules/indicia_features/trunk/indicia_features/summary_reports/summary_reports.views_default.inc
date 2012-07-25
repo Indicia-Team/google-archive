@@ -56,6 +56,88 @@ function summary_reports_views_default_views() {
       'field' => 'field_summary_report_display_value',
       'relationship' => 'none',
     ),
+    'field_summary_report_inclusion_value' => array(
+      'label' => 'Which data should be included?',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'link_to_node' => 0,
+      'label_type' => 'widget',
+      'format' => 'default',
+      'multiple' => array(
+        'group' => TRUE,
+        'multiple_number' => '',
+        'multiple_from' => '',
+        'multiple_reversed' => FALSE,
+      ),
+      'exclude' => 1,
+      'id' => 'field_summary_report_inclusion_value',
+      'table' => 'node_data_field_summary_report_inclusion',
+      'field' => 'field_summary_report_inclusion_value',
+      'relationship' => 'none',
+    ),
+    'phpcode' => array(
+      'label' => '',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'link_class' => '',
+        'alt' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'value' => '<?php
+switch ($data->node_data_field_summary_report_display_field_summary_report_inclusion_value) {
+  case \'Collaborating websites\': 
+    echo \'All records\';
+    break;
+  case \'Current website\': 
+    echo \'Records added via iRecord\';
+    break;
+  case \'Logged in user\': 
+    echo \'My records\';
+    break;
+  default: 
+    echo $data->node_data_field_summary_report_display_field_summary_report_inclusion_value;
+}
+?>',
+      'exclude' => 1,
+      'id' => 'phpcode',
+      'table' => 'customfield',
+      'field' => 'phpcode',
+      'relationship' => 'none',
+    ),
     'title' => array(
       'label' => '',
       'alter' => array(
@@ -121,20 +203,6 @@ function summary_reports_views_default_views() {
       'field' => 'type',
       'relationship' => 'none',
     ),
-    'status_extra' => array(
-      'operator' => '=',
-      'value' => '',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status_extra',
-      'table' => 'node',
-      'field' => 'status_extra',
-      'relationship' => 'none',
-    ),
   ));
   $handler->override_option('access', array(
     'type' => 'none',
@@ -152,9 +220,9 @@ drupal_set_breadcrumb($breadcrumb);
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
   $handler->override_option('use_pager', '1');
-  $handler->override_option('style_plugin', 'list');
+  $handler->override_option('style_plugin', 'grid');
   $handler->override_option('style_options', array(
-    'grouping' => 'field_summary_report_inclusion_value',
+    'grouping' => 'phpcode',
     'columns' => '5',
     'alignment' => 'horizontal',
     'fill_single_line' => 0,
