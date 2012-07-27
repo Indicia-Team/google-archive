@@ -71,22 +71,22 @@ h2 {
   z-index: 0;
 }
 
-/* line 58, sass/instant_indicia.scss */
+/* line 59, sass/instant_indicia.scss */
 .report-map {
   background: url(images/summary_map.png) no-repeat center top;
 }
 
-/* line 62, sass/instant_indicia.scss */
+/* line 63, sass/instant_indicia.scss */
 .report-table {
   background: url(images/summary_datatable.png) no-repeat center top;
 }
 
-/* line 66, sass/instant_indicia.scss */
+/* line 67, sass/instant_indicia.scss */
 .report-pie {
   background: url(images/summary_piechart.png) no-repeat center top;
 }
 
-/* line 70, sass/instant_indicia.scss */
+/* line 71, sass/instant_indicia.scss */
 .report-bar {
   background: url(images/summary_barchart.png) no-repeat center top;
 }
@@ -112,16 +112,16 @@ form select {
   border-width: 1px;
   border-style: solid;
 }
-/* line 76, sass/instant_indicia.scss */
+/* line 77, sass/instant_indicia.scss */
 form select {
   border-color: #bbbbbb;
 }
-/* line 78, sass/instant_indicia.scss */
+/* line 79, sass/instant_indicia.scss */
 form select:focus {
   border-color: #666666;
 }
 
-/* line 84, sass/instant_indicia.scss */
+/* line 85, sass/instant_indicia.scss */
 .form-checkboxes > div {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -134,79 +134,91 @@ form select:focus {
   *display: inline;
 }
 
-/* line 88, sass/instant_indicia.scss */
+/* line 89, sass/instant_indicia.scss */
 a h2 {
   color: #006699;
 }
 
-/* line 92, sass/instant_indicia.scss */
+/* line 93, sass/instant_indicia.scss */
 a:hover h2 {
   text-decoration: underline;
 }
 
 /* enable special menu items on nice menus to have correct spacing */
-/* line 97, sass/instant_indicia.scss */
+/* line 98, sass/instant_indicia.scss */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
 }
 
-/* line 102, sass/instant_indicia.scss */
+/* line 103, sass/instant_indicia.scss */
 ul.nice-menu-down {
   width: 100%;
 }
-/* line 104, sass/instant_indicia.scss */
+/* line 105, sass/instant_indicia.scss */
 ul.nice-menu-down .menuparent span.nolink {
   padding-right: 15px;
 }
 
-/* line 109, sass/instant_indicia.scss */
+/* line 116, sass/instant_indicia.scss */
 table {
   /* Full width species checklist input grid */
   /* anything inside a table (td, tr) can have styles to reflect verification and certainty. Prioritise verification status by making report-grid class specific. */
 }
-/* line 111, sass/instant_indicia.scss */
+/* line 118, sass/instant_indicia.scss */
 table.species-grid {
   width: 100%;
 }
-/* line 116, sass/instant_indicia.scss */
+/* line 123, sass/instant_indicia.scss */
 table.report-grid .status-V {
-  background: url(images/nuvola/ok-16px.png) no-repeat right;
+  background: no-repeat right;
   padding-right: 16px;
+  min-height: 16px;
+  background-image: url(images/nuvola/ok-16px.png);
 }
-/* line 120, sass/instant_indicia.scss */
+/* line 127, sass/instant_indicia.scss */
 table.report-grid .status-D {
-  background: url(images/nuvola/dubious-16px.png) no-repeat right;
+  background: no-repeat right;
   padding-right: 16px;
+  min-height: 16px;
+  background-image: url(images/nuvola/dubious-16px.png);
 }
-/* line 124, sass/instant_indicia.scss */
+/* line 131, sass/instant_indicia.scss */
 table.report-grid .status-R {
-  background: url(images/nuvola/cancel-16px.png) no-repeat right;
+  background: no-repeat right;
   padding-right: 16px;
+  min-height: 16px;
+  background-image: url(images/nuvola/cancel-16px.png);
 }
-/* line 129, sass/instant_indicia.scss */
+/* line 136, sass/instant_indicia.scss */
 table .certainty-C {
-  background: url(images/star3.png) no-repeat right;
+  background: no-repeat right;
   padding-right: 16px;
+  min-height: 16px;
+  background-image: url(images/star3.png);
 }
-/* line 133, sass/instant_indicia.scss */
+/* line 140, sass/instant_indicia.scss */
 table .certainty-L {
-  background: url(images/star2.png) no-repeat right;
+  background: no-repeat right;
   padding-right: 16px;
+  min-height: 16px;
+  background-image: url(images/star2.png);
 }
-/* line 137, sass/instant_indicia.scss */
+/* line 144, sass/instant_indicia.scss */
 table .certainty-U {
-  background: url(images/star1.png) no-repeat right;
+  background: no-repeat right;
   padding-right: 16px;
+  min-height: 16px;
+  background-image: url(images/star1.png);
 }
-/* line 141, sass/instant_indicia.scss */
+/* line 148, sass/instant_indicia.scss */
 table .zero-t {
   font-style: italic;
   text-decoration: line-through;
 }
 
-/* line 147, sass/instant_indicia.scss */
-button, input[type=submit] {
+/* line 154, sass/instant_indicia.scss */
+a.button, button, input[type=submit] {
   margin: 0.25em;
   display: inline-block;
   width: auto;
@@ -251,7 +263,7 @@ button, input[type=submit] {
   font-weight: bold;
 }
 /* line 23, ../../../../../../../Ruby192/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.0.5/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
-button:hover, input[type=submit]:hover {
+a.button:hover, button:hover, input[type=submit]:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5fadd2), color-stop(100%, #2d7a9e));
   background: -webkit-linear-gradient(#5fadd2, #2d7a9e);
   background: -moz-linear-gradient(#5fadd2, #2d7a9e);
@@ -259,11 +271,16 @@ button:hover, input[type=submit]:hover {
   background: -ms-linear-gradient(#5fadd2, #2d7a9e);
   background: linear-gradient(#5fadd2, #2d7a9e);
 }
-/* line 152, sass/instant_indicia.scss */
-button.button-active, input[type=submit].button-active {
+/* line 159, sass/instant_indicia.scss */
+a.button.button-active, button.button-active, input[type=submit].button-active {
   -moz-box-shadow: #133342 0 0.2em 0.4em inset;
   -webkit-box-shadow: #133342 0 0.2em 0.4em inset;
   -o-box-shadow: #133342 0 0.2em 0.4em inset;
   box-shadow: #133342 0 0.2em 0.4em inset;
   border: solid 1px #0b1e27;
+}
+
+/* line 164, sass/instant_indicia.scss */
+a.button, p a.button {
+  text-decoration: none;
 }
