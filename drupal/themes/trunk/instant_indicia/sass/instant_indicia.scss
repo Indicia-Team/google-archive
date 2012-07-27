@@ -107,6 +107,12 @@ ul.nice-menu-down {
   }
 }
 
+@mixin table-cell-icon {
+  background: no-repeat right;
+  padding-right: 16px;
+  min-height: 16px;
+}
+
 table {
   /* Full width species checklist input grid */
   &.species-grid {
@@ -115,29 +121,29 @@ table {
   /* anything inside a table (td, tr) can have styles to reflect verification and certainty. Prioritise verification status by making report-grid class specific. */
   &.report-grid {
     .status-V {
-      background: url(images/nuvola/ok-16px.png) no-repeat right;
-      padding-right: 16px;
+      @include table-cell-icon;
+      background-image: url(images/nuvola/ok-16px.png);
     }
     .status-D {
-      background: url(images/nuvola/dubious-16px.png) no-repeat right;
-      padding-right: 16px;
+      @include table-cell-icon;
+      background-image: url(images/nuvola/dubious-16px.png);
     }  
     .status-R {
-      background: url(images/nuvola/cancel-16px.png) no-repeat right;
-      padding-right: 16px;
+      @include table-cell-icon;
+      background-image: url(images/nuvola/cancel-16px.png);
     }
   }
   .certainty-C {
-    background: url(images/star3.png) no-repeat right;
-    padding-right: 16px;
+    @include table-cell-icon;
+    background-image: url(images/star3.png);
   }
   .certainty-L {
-    background: url(images/star2.png) no-repeat right;
-    padding-right: 16px;
+    @include table-cell-icon;
+    background-image: url(images/star2.png);
   }
   .certainty-U {
-    background: url(images/star1.png) no-repeat right;
-    padding-right: 16px;
+    @include table-cell-icon;
+    background-image: url(images/star1.png);
   }
   .zero-t {
     font-style: italic;
@@ -145,7 +151,7 @@ table {
   }
 }
 
-button, input[type=submit] {
+a.button, button, input[type=submit] {
   margin: 0.25em;
   @include sassy-button-structure(4px, 11px, 0.25em);
   @include sassy-button("simple", 4px, 11px, $default-color, darken($default-color, 20%),  #ffffff);
@@ -153,6 +159,10 @@ button, input[type=submit] {
   &.button-active {
     @include sassy-button-style("inset", darken($default-color, 30%));
   }
+}
+
+a.button, p a.button {
+  text-decoration: none;
 }
 
 
