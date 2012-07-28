@@ -89,7 +89,7 @@ $readAuth = data_entry_helper::get_read_auth($config['website_id'], $config['pas
 <?php echo data_entry_helper::autocomplete(array(
   'label' => 'Taxon',
   'fieldname' => 'occurrence:taxa_taxon_list_id', 
-  'tablename' => 'taxa_taxon_list', 
+  'table' => 'taxa_taxon_list', 
   'captionField' => 'taxon',
   'valueField' => 'id',
   'extraParams' => $readAuth
