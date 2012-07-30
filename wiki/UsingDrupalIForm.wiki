@@ -27,7 +27,7 @@ The jquery_ui plugin also needs you to download the latest stable version of the
 
 It's worth double checking this path is correct right now before you go any further. Next you need to install the modules into Drupal. In the Drupal front-end, select Administer->Site building->Modules. Scroll down the list of modules and tick the Indicia forms module, jQuery UI and jQuery Update modules then click on the Save Configuration button at the bottom of the page.
 
-You also need to configure the Indicia "client helper". In your sites/modules/all/iform/client_helpers folder, create a file called helper_config.php and paste the following content into it, replacing the url in the first entry with that of the Indicia Warehouse you are using, including the http:// prefix even for localhost connections and the trailing slash:
+You also need to configure the Indicia "client helper". In your sites/all/modules/iform/client_helpers folder, create a file called helper_config.php and paste the following content into it, replacing the url in the first entry with that of the Indicia Warehouse you are using, including the http:// prefix even for localhost connections and the trailing slash:
 {{{
 <?php
 class helper_config {
