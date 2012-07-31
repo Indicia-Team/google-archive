@@ -324,6 +324,8 @@ function forms_and_surveys_library_user($op, &$edit, &$account, $category = NULL
       }
       break;
     case 'login':      
+      // default
+      $_REQUEST['destination'] = '<front>';
       // Don't redirect if we are about to reset our password.
       if (!isset($_GET['q']) || !preg_match('/^user\/reset\//', $_GET['q'])) {
         // If registration for a specific form then redirect
