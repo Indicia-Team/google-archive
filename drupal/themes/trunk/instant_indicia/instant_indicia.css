@@ -1,41 +1,67 @@
-/* line 7, sass/instant_indicia.scss */
+/* line 8, sass/instant_indicia.scss */
 h2 {
   font-size: 16px;
   font-weight: bold;
 }
 
-/* line 12, sass/instant_indicia.scss */
+/* grid layout stuff */
+/* line 14, sass/instant_indicia.scss */
+.columns {
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 16, sass/instant_indicia.scss */
+.columns .column {
+  float: left;
+  min-height: 1px;
+  position: relative;
+}
+/* line 22, sass/instant_indicia.scss */
+.columns.two > .column {
+  width: 48%;
+  padding: 0 2%;
+}
+/* line 26, sass/instant_indicia.scss */
+.columns.two > .column:first-child {
+  padding-left: 0;
+}
+/* line 29, sass/instant_indicia.scss */
+.columns.two > .column:last-child {
+  padding-right: 0;
+}
+
+/* line 37, sass/instant_indicia.scss */
 #header {
   padding-top: 0;
 }
-/* line 14, sass/instant_indicia.scss */
+/* line 39, sass/instant_indicia.scss */
 #header #sitename {
   margin: 1em 0 0.5em 1em;
 }
 
-/* line 19, sass/instant_indicia.scss */
+/* line 44, sass/instant_indicia.scss */
 #search-theme-form {
   clear: right;
   padding-right: 1em;
 }
 
-/* line 24, sass/instant_indicia.scss */
+/* line 49, sass/instant_indicia.scss */
 #secondary-links {
   float: right;
   font-size: 12px;
   vertical-align: top;
 }
-/* line 28, sass/instant_indicia.scss */
+/* line 53, sass/instant_indicia.scss */
 #secondary-links > * {
   float: left;
   vertical-align: top;
 }
-/* line 32, sass/instant_indicia.scss */
+/* line 57, sass/instant_indicia.scss */
 #secondary-links a {
   font-weight: bold;
 }
 
-/* line 37, sass/instant_indicia.scss */
+/* line 62, sass/instant_indicia.scss */
 .gallery-item, .gallery li, .summary-report {
   text-align: center;
   padding: 0.5em;
@@ -58,35 +84,35 @@ h2 {
   *display: inline;
 }
 
-/* line 48, sass/instant_indicia.scss */
+/* line 73, sass/instant_indicia.scss */
 .summary-report {
   width: 80px;
   padding-top: 80px;
 }
 
-/* line 53, sass/instant_indicia.scss */
+/* line 78, sass/instant_indicia.scss */
 #map {
   /* Fixes a problem with map z-index preventing clicks getting to overlaid menus */
   position: relative;
   z-index: 0;
 }
 
-/* line 59, sass/instant_indicia.scss */
+/* line 84, sass/instant_indicia.scss */
 .report-map {
   background: url(images/summary_map.png) no-repeat center top;
 }
 
-/* line 63, sass/instant_indicia.scss */
+/* line 88, sass/instant_indicia.scss */
 .report-table {
   background: url(images/summary_datatable.png) no-repeat center top;
 }
 
-/* line 67, sass/instant_indicia.scss */
+/* line 92, sass/instant_indicia.scss */
 .report-pie {
   background: url(images/summary_piechart.png) no-repeat center top;
 }
 
-/* line 71, sass/instant_indicia.scss */
+/* line 96, sass/instant_indicia.scss */
 .report-bar {
   background: url(images/summary_barchart.png) no-repeat center top;
 }
@@ -112,16 +138,16 @@ form select {
   border-width: 1px;
   border-style: solid;
 }
-/* line 77, sass/instant_indicia.scss */
+/* line 102, sass/instant_indicia.scss */
 form select {
   border-color: #bbbbbb;
 }
-/* line 79, sass/instant_indicia.scss */
+/* line 104, sass/instant_indicia.scss */
 form select:focus {
   border-color: #666666;
 }
 
-/* line 85, sass/instant_indicia.scss */
+/* line 110, sass/instant_indicia.scss */
 .form-checkboxes > div {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -134,90 +160,90 @@ form select:focus {
   *display: inline;
 }
 
-/* line 89, sass/instant_indicia.scss */
+/* line 114, sass/instant_indicia.scss */
 a h2 {
   color: #006699;
 }
 
-/* line 93, sass/instant_indicia.scss */
+/* line 118, sass/instant_indicia.scss */
 a:hover h2 {
   text-decoration: underline;
 }
 
 /* enable special menu items on nice menus to have correct spacing */
-/* line 98, sass/instant_indicia.scss */
+/* line 123, sass/instant_indicia.scss */
 ul.nice-menu span.nolink {
   padding: 0.3em 5px 0.3em 5px;
   display: block;
 }
 
-/* line 103, sass/instant_indicia.scss */
+/* line 128, sass/instant_indicia.scss */
 ul.nice-menu-down {
   width: 100%;
 }
-/* line 105, sass/instant_indicia.scss */
+/* line 130, sass/instant_indicia.scss */
 ul.nice-menu-down .menuparent span.nolink {
   padding-right: 15px;
 }
 
-/* line 116, sass/instant_indicia.scss */
+/* line 141, sass/instant_indicia.scss */
 table {
   /* Full width species checklist input grid */
   /* anything inside a table (td, tr) can have styles to reflect verification and certainty. Prioritise verification status by making report-grid class specific. */
 }
-/* line 118, sass/instant_indicia.scss */
+/* line 143, sass/instant_indicia.scss */
 table.species-grid {
   width: 100%;
 }
-/* line 123, sass/instant_indicia.scss */
+/* line 148, sass/instant_indicia.scss */
 table.report-grid .status-V {
   background: no-repeat right;
   padding-right: 16px;
   min-height: 16px;
   background-image: url(images/nuvola/ok-16px.png);
 }
-/* line 127, sass/instant_indicia.scss */
+/* line 152, sass/instant_indicia.scss */
 table.report-grid .status-D {
   background: no-repeat right;
   padding-right: 16px;
   min-height: 16px;
   background-image: url(images/nuvola/dubious-16px.png);
 }
-/* line 131, sass/instant_indicia.scss */
+/* line 156, sass/instant_indicia.scss */
 table.report-grid .status-R {
   background: no-repeat right;
   padding-right: 16px;
   min-height: 16px;
   background-image: url(images/nuvola/cancel-16px.png);
 }
-/* line 136, sass/instant_indicia.scss */
+/* line 161, sass/instant_indicia.scss */
 table .certainty-C {
   background: no-repeat right;
   padding-right: 16px;
   min-height: 16px;
   background-image: url(images/star3.png);
 }
-/* line 140, sass/instant_indicia.scss */
+/* line 165, sass/instant_indicia.scss */
 table .certainty-L {
   background: no-repeat right;
   padding-right: 16px;
   min-height: 16px;
   background-image: url(images/star2.png);
 }
-/* line 144, sass/instant_indicia.scss */
+/* line 169, sass/instant_indicia.scss */
 table .certainty-U {
   background: no-repeat right;
   padding-right: 16px;
   min-height: 16px;
   background-image: url(images/star1.png);
 }
-/* line 148, sass/instant_indicia.scss */
+/* line 173, sass/instant_indicia.scss */
 table .zero-t {
   font-style: italic;
   text-decoration: line-through;
 }
 
-/* line 154, sass/instant_indicia.scss */
+/* line 179, sass/instant_indicia.scss */
 a.button, button, input[type=submit] {
   margin: 0.25em;
   display: inline-block;
@@ -271,7 +297,7 @@ a.button:hover, button:hover, input[type=submit]:hover {
   background: -ms-linear-gradient(#5fadd2, #2d7a9e);
   background: linear-gradient(#5fadd2, #2d7a9e);
 }
-/* line 159, sass/instant_indicia.scss */
+/* line 184, sass/instant_indicia.scss */
 a.button.button-active, button.button-active, input[type=submit].button-active {
   -moz-box-shadow: #133342 0 0.2em 0.4em inset;
   -webkit-box-shadow: #133342 0 0.2em 0.4em inset;
@@ -280,7 +306,7 @@ a.button.button-active, button.button-active, input[type=submit].button-active {
   border: solid 1px #0b1e27;
 }
 
-/* line 164, sass/instant_indicia.scss */
+/* line 189, sass/instant_indicia.scss */
 a.button, p a.button {
   text-decoration: none;
 }
