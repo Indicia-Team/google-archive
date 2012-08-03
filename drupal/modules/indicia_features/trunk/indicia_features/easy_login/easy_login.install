@@ -5,6 +5,8 @@
  * Adds a number of fields to the user profile, for storing preferences such as location and species groups.
  */
 function easy_login_install() {
+  // Load the module file so we can access _easy_login_profile_fields()
+  module_load_include('module', 'easy_login');
   $fields = _easy_login_profile_fields();
   foreach($fields as $name => $fieldDef) {
     easy_login_add_profile_field($name, $fieldDef);
