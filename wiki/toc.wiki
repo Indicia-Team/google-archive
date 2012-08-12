@@ -29,6 +29,7 @@
   * Warehouse Module List
     * [WarehouseModuleCacheBuilder Cache Builder]
     * [WarehouseModuleDataCleaner Data Cleaner]
+    * [WarehouseModuleDataCleanerAncillarySpecies Data Cleaner Ancillary Species]
     * [WarehouseModuleDataCleanerDesignatedTaxa Data Cleaner Designated Taxa]
     * [WarehouseModuleDataCleanerIdentificationDifficulty Data Cleaner Identification Difficulty]
     * [WarehouseModuleDataCleanerPeriod Data Cleaner Period]
