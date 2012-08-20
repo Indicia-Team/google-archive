@@ -614,7 +614,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
               array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
             $url = explode('?', $args['redirect_on_success']);
             if (!isset($args['message_after_save']) || $args['message_after_save']) {
-              drupal_set_message(t('Information saved to the database'));
+              drupal_set_message(t('Thank you. Your records have been saved to the database.'));
             }
             $params = 'table='.$response['outer_table'].'&id='.$response['outer_id'];
             if (count($url)>1)
