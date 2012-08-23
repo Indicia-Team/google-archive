@@ -173,10 +173,11 @@ set_include();\n";
           '#weight'=>-50
         );
         $content='<p>'.$n->registration_intro.'</p>';
+        $content.='<p>'.t('If you already have an @site account, !link.', array('@site'=>variable_get('site_name', t('this site')), '!link'=>l(t('login here'), 'user/login'))).'</p>';
         $node = node_load($_GET['n']);
         if (node_access('view', $node)) {
-          $content .= '<p>'.t('If you prefer, you can <a href="!url">add records without registering</a> but you will not be able to access all the features of iRecord.', 
-                array('!url'=>url('node/'.$_GET['n']))).'</p>';
+          $content .= '<p>'.t('If you prefer, you can <a href="!url">add records without registering</a> but you will not be able to access all the features of @site.', 
+                array('!url'=>url('node/'.$_GET['n']), '@site'=>variable_get('site_name', t('this site')))).'</p>';
         }
         $form['profile_home_page'] = array(
           '#type'=>'hidden',
