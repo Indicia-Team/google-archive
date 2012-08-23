@@ -30,13 +30,11 @@ function survey_summary_build($node) {
     report_helper::$onload_javascript = $cacheData->data['onload_javascript'];
     report_helper::$late_javascript = $cacheData->data['late_javascript'];
     report_helper::$required_resources = $cacheData->data['resources'];    
-    drupal_set_message('cached');
   } else {
-    drupal_set_message('build');
     $surveyId=$node->field_survey_id[0]['value'];
     $readAuth = report_helper::get_read_auth(variable_get('indicia_website_id', 0), variable_get('indicia_password', ''));
     $arr = helper_base::explode_lines($node->field_survey_summary_output[0]['value']);
-    $r = '<div id="survey-summary" class="ui-clearfix">';
+    $r = '<div id="node-body">'.$node->content['body']['#value'].'<div id="survey-summary" class="ui-clearfix">';
     $currentBlock='';
     $currentOptions=array();
     foreach($arr as $item) {
@@ -102,7 +100,7 @@ function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
     'columns' => array(
       array(
         'fieldname' => 'path',
-        'template' => '<div class="gallery-item"><a class="fancybox" href="{imageFolder}{path}"><img src="{imageFolder}thumb-{path}" title="{caption}" alt="{caption}"/></a></div>'
+        'template' => '<div class="gallery-item"><a class="fancybox" href="{imageFolder}{path}"><img src="{imageFolder}thumb-{path}" title="{caption}" alt="{caption}"/><br/>{species}</a></div>'
       )
     ),
     'includeAllColumns' => false,
@@ -133,10 +131,10 @@ function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
     'dataSource'=>'library/users/species_and_occurrence_counts',
     'itemsPerPage' => $options['itemsPerPage'],
     'columns' => array(
-      array('fieldname'=>'username','caption'=>'Recorder'),
-      array('fieldname'=>'taxa','caption'=>'Species'),
-      array('fieldname'=>'occurrences','caption'=>'Records'),
-      array('fieldname'=>'groups','caption'=>'Species Groups'),
+      array('fieldname'=>'username','display'=>'Recorder'),
+      array('fieldname'=>'taxa','display'=>'Species'),
+      array('fieldname'=>'occurrences','display'=>'Records'),
+      array('fieldname'=>'groups','display'=>'Species Groups'),
     ),
     'includeAllColumns' => false,
     'rowClass'=>'{me}',
