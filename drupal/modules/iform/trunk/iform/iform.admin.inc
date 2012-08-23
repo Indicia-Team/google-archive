@@ -56,7 +56,7 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
   $form['indicia_website_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Indicia Website ID'),
-    '#description' => t('Please enter the ID given to your website record when your website was registered on the Indicia Warehouse.'),
+    '#description' => t('Please enter the numeric ID given to your website record when your website was registered on the Indicia Warehouse.'),
     '#size' => 10,
     '#maxlength' => 10,
     '#required' => TRUE,
