@@ -193,7 +193,8 @@ function summary_report_build_bar($node, $reportOptions) {
 function summary_report_build_pie($node, $reportOptions) {
   return summary_report_graph($node, array_merge(
     array(
-	  'legendOptions'=>array('show'=>true),
+	  // limit size of the legend
+	  'legendOptions'=>array('show'=>true, 'rendererOptions'=>array('numberColumns'=>2, 'numberRows'=>21)),
 	  'rendererOptions'=>array('showDataLabels'=>true,'dataLabelFormatString'=>'%d','dataLabels'=>'value','dataLabelThreshold'=>1,'dataLabelPositionFactor'=>1.05)
 	),
     $reportOptions
