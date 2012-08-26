@@ -45,6 +45,7 @@
     * [WarehouseModuleLogBrowser Log Browser]
     * [WarehouseModuleNbnSpeciesDictSync NBN Species Dict Sync]
     * [WarehouseModulePhpUnit PHP Unit]
+    * [WarehouseModuleSpatialIndexBuilder Spatial Index Builder]
     * [WarehouseModuleSrefChannelIslands Channel Islands Spatial References]
     * [WarehouseModuleSrefMtb MTB Spatial References]
     * [WarehouseModuleSrefOsgb OSGB Spatial References]
