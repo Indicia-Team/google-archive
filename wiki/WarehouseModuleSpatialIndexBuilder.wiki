@@ -1,0 +1,56 @@
+#summary About the Spatial Index Builder warehouse module
+#labels Phase-Implementation
+
+= Spatial Index Builder module =
+
+On-the-fly reporting against a large number of records can be slow and processor intensive, especially when spatial operations are involved. A common requirement when reporting is to retrieve a list of the records which fall inside or overlap a site's boundary. If the site boundary is complex (such as those of most administrative boundaries), or there are many sites and many records this type of report can be unfeasible on a live web-server, even if the appropriate database indexes are in place.
+
+The Spatial Index Builder is a warehouse module which performs an offline analysis of which records fall within which location boundary. The module creates and populates a new table _index_locations_samples_ with the content refreshed each time the [ScheduledTaskSetup scheduled tasks] are run. Because this is a simple join table between the indexed locations and samples with indexes on the key fields, queries using this index instead of doing a spatial join are extremely fast.
+
+Rather than indexing the occurrences table the index is created with the samples table since all records belong to a sample and this results in a smaller index. *Although optional for core functionality, some reports may depend on the Spatial Index Builder module and will therefore not work without it.*
+
+The _index_locations_samples_ table contains the following fields:
+
+  * *id* - Unique identifier
+  * *location_id* - Identifies the location that the sample overlaps with
+  * *sample_id* - identifies the sample that overlaps with the location in location_id
+  * *contains* - if false, then the location boundary and sample partially overlap and in theory the record could fall outside the boundary. If true then the sample falls entirely within the boundary.
+
+This table is therefore available for inclusion in any reports and views.
+
+== Installation ==
+
+Open the _application/config/config.php_ file on the warehouse's installation files using a text or code editor. Near the bottom there is a list of the enabled modules:
+{{{
+$config['modules'] = array(
+...
+);
+}}}
+Ensure that this list of modules contains the spatial_index_builder entry:
+{{{
+$config['modules'] = array(
+...
+MODPATH.'spatial_index_builder'
+);
+}}}
+
+If you want to only create a spatial index for certain location types, then remove the .example from the end of the file _modules/spatial_index_builder/config/spatial_index_builder.php.example_ so that it has the normal php file extension. Edit this with a text or code editor and insert the list of preferred terms for the location types you would like to accept, with each term in single quotes and comma separated from the others. For example, to only index parishes and National Nature Reserves you might set up the following:
+{{{
+$config['location_types']=array(
+  'Parish',
+  'NNR'
+);
+}}}
+If you don't want any restrictions on location types, then simply do not rename the _spatial_index_builder.php.example_ file.
+
+Because the builder only processes new and changed records, after installation the table will be empty - it would take too long to populate it using the normal upgrade procedure and might time-out the upgrade's web page. So, to populate it manually, you need to run the following query against the database, e.g. using the pgAdmin database tool:
+{{{
+insert into index_locations_samples (location_id, sample_id, contains)
+    select l.id, s.id, st_contains(l.boundary_geom, s.geom)
+    from locations l
+    join cache_termlists_terms t on t.id=l.location_type_id
+    join samples s on s.deleted=false and st_intersects(l.boundary_geom, s.geom)
+    where l.deleted=false
+    and t.preferred_term in ('Parish','NNR')
+}}}
+Make sure you correct the list of location types in the last line to those you are configuring the Spatial Index Builder to index, or remove this line if you want no restriction.
