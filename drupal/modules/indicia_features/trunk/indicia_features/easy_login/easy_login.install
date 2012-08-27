@@ -1,5 +1,7 @@
 <?php
 
+require_once('easy_login.setup.inc');
+
 /**
  * Implementation of hook_install
  * Adds a number of fields to the user profile, for storing preferences such as location and species groups.
