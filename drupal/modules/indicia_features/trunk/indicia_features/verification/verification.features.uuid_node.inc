@@ -50,7 +50,7 @@ function verification_uuid_features_default_content() {
     'indicia_wms_layers' => '',
     'standard_controls' => 'layerSwitcher
 panZoom',
-    'report_name' => 'library/occurrences/verification_list_2',
+    'report_name' => 'library/occurrences/verification_list_3',
     'param_presets' => 'survey_id=
 date_from=
 date_to=
