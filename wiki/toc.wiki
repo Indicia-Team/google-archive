@@ -34,7 +34,7 @@
     * [WarehouseModuleDataCleanerIdentificationDifficulty Data Cleaner Identification Difficulty]
     * [WarehouseModuleDataCleanerPeriod Data Cleaner Period]
     * [WarehouseModuleDataCleanerPeriodWithinYear Data Cleaner Period Within Year]
-    * [WarehouseModuleDataCleanerSpeciesNewToSite Data Cleaner Species New to Site]
+    * [WarehouseModuleDataCleanerNewSpeciesForSite Data Cleaner Species New to Site]
     * [WarehouseModuleDataCleanerWithoutPolygon Data Cleaner Without Polygon]
     * [WarehouseModuleIndiciaAuth Indicia Auth]
     * [WarehouseModuleIndiciaSetup Indicia Setup]
