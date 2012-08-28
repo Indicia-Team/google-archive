@@ -1,0 +1,12 @@
+#summary About the Data Cleaner New Species for Site module
+#labels Phase-Implementation
+
+= Data Cleaner New Species for Site =
+
+This optional warehouse module enables an automated verification check for species which have not been previously verified at a site. For this to work, a verification rule must be created on the warehouse to enable the rule for each survey that uses it (under Admin > Verification Rules) which has the following settings:
+  * *Title* - set as required
+  * *Test Type* - set to NewSpeciesForSite
+  * *Error Message* - set as required, e.g. 'This species has not been verified as present at this site'
+  * *Metadata* - SurveyId=n (set n to the ID of the survey you want to enable this rule for)
+
+Also, because this rule requires the location_id to be filled in to detect the locations for each record, the survey's data entry form must capture a location as well as the grid reference. This rule does not use a spatial query to work out the location for each record, so the rule is only really appropriate for surveys which capture records against a defined list of sites.
