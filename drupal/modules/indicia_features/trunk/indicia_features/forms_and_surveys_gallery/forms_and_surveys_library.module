@@ -331,7 +331,7 @@ function forms_and_surveys_library_user($op, &$edit, &$account, $category = NULL
       if (!isset($_GET['q']) || !preg_match('/^user\/reset\//', $_GET['q'])) {
         // If registration for a specific form then redirect
         profile_load_profile($account);
-        if (isset($account->profile_home_page)) {
+        if (!empty($account->profile_home_page)) {
           $_REQUEST['destination'] = $account->profile_home_page;
         }
       }
