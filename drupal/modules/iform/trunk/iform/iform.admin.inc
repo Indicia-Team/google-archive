@@ -53,6 +53,14 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     '#required' => false,
     '#default_value' => variable_get('indicia_private_warehouse', false),
   );
+  $form['indicia_allow_connection_override'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow website connection override'),
+    '#description' => t('Tick this box to allow forms to override the specified website ID and password on an individual basis. This allows a single Drupal installation '.
+        'to support forms which link to multiple Indicia website registrations. Leave unticked if you are not sure.'),
+    '#required' => false,
+    '#default_value' => variable_get('indicia_allow_connection_override', false),
+  );
   $form['indicia_website_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Indicia Website ID'),
@@ -270,6 +278,7 @@ function indicia_configuration_form_submit($form, &$form_state) {
   if ($origWarehouseUrl !== $urls['base_url'])
     data_entry_helper::clear_cache();
   variable_set('indicia_private_warehouse', $form_state['values']['indicia_private_warehouse']);
+  variable_set('indicia_allow_connection_override', $form_state['values']['indicia_allow_connection_override']);
   variable_set('indicia_website_id', $form_state['values']['indicia_website_id']);
   if (!empty($form_state['values']['indicia_password']))
     variable_set('indicia_password', $form_state['values']['indicia_password']);

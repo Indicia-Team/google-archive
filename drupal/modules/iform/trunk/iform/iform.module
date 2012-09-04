@@ -204,7 +204,7 @@ function iform_form(&$node, $form_state) {
       'form' => $node->iform,
       'website_id' => $connection['website_id'],
       'password' => $connection['password'],
-      'needWebsiteInputs' => !$connection['using_drupal_vars']
+      'needWebsiteInputs' => !$connection['using_drupal_vars'] || variable_get('indicia_allow_connection_override', false)
     ))
   );
   if ($node->iform) {
@@ -499,10 +499,10 @@ function iform_get_connection_details($node) {
   $r['website_id']=variable_get('indicia_website_id','');
   $r['password']=variable_get('indicia_password','');
   $r['using_drupal_vars'] = !empty($r['website_id']) && !empty($r['password']);
-  if (empty($r['website_id']))
-    $r['website_id'] = isset($node->params['website_id']) ? $node->params['website_id'] : '';
-  if (empty($r['password']))
-    $r['password'] = isset($node->params['password']) ? $node->params['password'] : '';
+  if (empty($r['website_id']) || variable_get('indicia_allow_connection_override', false))
+    $r['website_id'] = isset($node->params['website_id']) ? $node->params['website_id'] : $r['website_id'];
+  if (empty($r['password']) || variable_get('indicia_allow_connection_override', false))
+    $r['password'] = isset($node->params['password']) ? $node->params['password'] : $r['password'];
   return $r;
 }
 

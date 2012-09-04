@@ -57,9 +57,10 @@ function iform_install() {
 
 function iform_uninstall() {
   drupal_uninstall_schema('iform');
-  variable_del('indicia_password');
-  variable_del('indicia_base_url');
   variable_del('indicia_website_id');
+  variable_del('indicia_password');
+  variable_del('indicia_allow_connection_override');
+  variable_del('indicia_base_url');
   variable_del('indicia_geoserver_url');
   variable_del('indicia_geoplanet_api_key');
   // This variable is deprecated but might exist from pre 0.8 installs.
