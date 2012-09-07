@@ -29,7 +29,7 @@ function verification_uuid_features_default_content() {
   'needs_review' => 3,
   'params' => array(
     'view_access_control' => '1',
-    'permission_name' => 'verifier',
+    'permission_name' => 'verification',
     'map_centroid_lat' => 'default',
     'map_centroid_long' => 'default',
     'map_zoom' => 'default',
