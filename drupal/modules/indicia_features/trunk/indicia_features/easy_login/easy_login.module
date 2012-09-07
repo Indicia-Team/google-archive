@@ -255,8 +255,6 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
       }
     }
     if ($form_id === 'user_profile_form' && isset($form['Preferences']['profile_surveys_expertise'])) {
-      //$taxon_groups = empty($libEntry['taxon_group_ids']) ? array() : unserialize($libEntry['taxon_group_ids']);
-      // @todo reload the existing survey ids
       if (!empty($form['Preferences']['profile_surveys_expertise']['#default_value'])) {
         $surveys=unserialize($form['Preferences']['profile_surveys_expertise']['#default_value']);
         $qry = json_encode(array('in'=>array('id', array_values($surveys))));
@@ -296,7 +294,7 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
         $thisUser = user_load($values->uid);
     }
     // can logged in user change expert geography and taxon groups?
-    if (!user_access('administer permissions')) {
+    if (!user_access('administer users')) {
       if (isset($form['Preferences']['profile_location_expertise'])) {
         $form['Preferences']['profile_location_expertise']['#attributes'] = array('disabled' => 'true');
         $form['Preferences']['profile_location_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
