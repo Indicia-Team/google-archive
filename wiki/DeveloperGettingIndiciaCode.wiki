@@ -1,0 +1,14 @@
+#summary Getting the Indicia code
+
+= Getting the Indicia code =
+
+Indicia's code is hosted on the Google Code website and can be obtained either as a download of the latest stable release via the [http://code.google.com/p/indicia/downloads/list Downloads] tab, or direct from the code repository for other versions of the code. The code repository uses a source control system called Subversion - this provides audit trails of code changes and version management amongst other things. If you are not familiar with Subversion or version control in general then this might be a good time to read a primer, for example you the [http://svnbook.red-bean.com/ Subversion manual] contains chapters on Version Control Basics and Version Control the Subversion Way which provide a good starting point. 
+
+Although it is possible to browse the code via the [http://code.google.com/p/indicia/source/checkout Source tab], in most cases you will want to use a *Subversion client* to access the code. There are many options available and the best one will depend on your choice of development operating system and code editor. For Windows use a popular choice is [http://tortoisesvn.net/ TortoiseSVN] and I also use the client built into the [http://netbeans.org/ NetBeans IDE] which is multi-platform.
+
+== Trunks, branches and tags ==
+
+Subversion keeps code in a tree structure which maps to a folder structure on your disk. By convention it splits the code for each project or sub-project into 3 folders:
+  * *trunk* - This folder contains the latest 'bleeding edge' code and is the one that developers actively commit changes into when they become part of the project core. Although it is not good practice to knowingly commit changes into the trunk which will break the project, it is also not expected that every change will be fully tested for production when it is committed. Therefore *the trunk code should not be used for production servers*. 
+  * *branches*
+  * *tags*
