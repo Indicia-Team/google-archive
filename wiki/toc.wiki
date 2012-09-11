@@ -109,6 +109,7 @@
   * [DrupalIFormOverrides Customising functionality of prebuilt forms with your own code]
  * Contributing to Indicia development
   * [DeveloperGettingStarted Developer Getting Started]
+  * [DeveloperGettingIndiciaCode Getting the Indicia code]
   * [ArchitectureOverview Architecture Overview]
   * [DataModel Data Model]
   * [DevelopmentConventions Development conventions]
