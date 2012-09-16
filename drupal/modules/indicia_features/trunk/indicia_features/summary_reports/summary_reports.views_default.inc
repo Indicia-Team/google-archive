@@ -219,11 +219,12 @@ drupal_set_breadcrumb($breadcrumb);
 ?>');
   $handler->override_option('header_format', '3');
   $handler->override_option('header_empty', 1);
+  $handler->override_option('items_per_page', '0');
   $handler->override_option('use_pager', '1');
   $handler->override_option('style_plugin', 'grid');
   $handler->override_option('style_options', array(
     'grouping' => 'phpcode',
-    'columns' => '5',
+    'columns' => '8',
     'alignment' => 'horizontal',
     'fill_single_line' => 0,
   ));
