@@ -11,7 +11,7 @@ There is a screencast of this installation process on a Mac available at [http:/
 
 == Install PostgreSQL and PostGIS ==
 
-First, install the PostgreSQL database server and the PostGIS extension for your operating system. For downloads and more information see [http://www.postgresql.org/] and [http://postgis.refractions.net/]. Note that if you are installing on Windows, version 8.3 and higher of PostgreSQL allow you to install PostGIS by using the Stack Builder tool included with PostgreSQL.
+First, install the PostgreSQL database server and the PostGIS extension for your operating system. For downloads and more information see [http://www.postgresql.org/] and [http://postgis.refractions.net/]. You should install version 8.4 or later of PostgreSQL, preferably 9.x, though if installing on Windows it is worth reviewing the [http://postgis.refractions.net/download/windows/ Windows installation notes] before selecting a version. For example, at the current point in time version 9.1 is the latest version which supports installation of PostGIS using the Application Stack Builder, so opting for this version rather than 9.2 will make things simpler later. 
 
 If you are installing PostgreSQL on a Linux server then you may find the following links extremely useful: 
   * [http://www.postgresonline.com/journal/archives/203-postgresql90-yum.html An almost idiot's guide to Install PostgreSQL 9.0 with Yum] 
