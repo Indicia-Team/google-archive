@@ -321,7 +321,7 @@ function iform_load($node) {
     unset($t->params);
     $t->params = array();
     if (!is_array($params)) {
-      drupal_set_message(t('This page\'s configuration has not been stored correctly.'.print_r($t->params, true)), 'warning');
+      drupal_set_message(t('This page\'s configuration has not been stored correctly. '.print_r($t->params, true)), 'warning');
     } else {
       // Merge the params into the loaded object
       foreach($params as $k => $v) $t->params[$k] = $v;
