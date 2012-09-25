@@ -146,7 +146,7 @@ function summary_report_build_map($node, $reportOptions) {
     'initial_zoom' => 8,
     'presetLayers' => array('google_physical'),
     'editLayer' => false
-  ));
+  ), array('theme' => map_helper::$js_path . 'theme/default/style.css'));
   // Are we drawing circles?
   if ($node->field_summary_report_map_output[0]['value']!=='polygoncolour')
     $reportOptions['displaySymbol']='circle';
@@ -163,21 +163,22 @@ function summary_report_build_map($node, $reportOptions) {
   else {
     $reportOptions['valueOutput']=array(
       'fillColor'=>array(
-        'from'=>'#0000CC',
-        'to' => '#ff0033',
+        'from'=>'#000077',
+        'to' => '#ff0000',
         'valueField' => 'value',
         'minValue'=> '{minvalue}',
         'maxValue'=> '{maxvalue}'
       ),
       'strokeColor'=>array(
-        'from'=>'#0000CC',
-        'to' => '#ff0033',
+        'from'=>'#000055',
+        'to' => '#550000',
         'valueField' => 'value',
         'minValue'=> '{minvalue}',
         'maxValue'=> '{maxvalue}'
       )
     );
   }
+  $reportOptions['clickable']=false;
   $r .= report_helper::report_map($reportOptions);
   return $r;
 }
