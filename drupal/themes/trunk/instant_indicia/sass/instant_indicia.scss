@@ -176,7 +176,7 @@ table {
   }
 }
 
-a.button, button, input[type=submit] {
+a.button, button, input[type=submit], input[type=button] {
   margin: 0.25em;
   @include sassy-button-structure(4px, 11px, 0.25em);
   @include sassy-button("simple", 4px, 11px, $default-color, darken($default-color, 20%),  #ffffff);
