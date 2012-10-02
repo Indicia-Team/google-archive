@@ -244,7 +244,7 @@ table .zero-t {
 }
 
 /* line 179, sass/instant_indicia.scss */
-a.button, button, input[type=submit] {
+a.button, button, input[type=submit], input[type=button] {
   margin: 0.25em;
   display: inline-block;
   width: auto;
