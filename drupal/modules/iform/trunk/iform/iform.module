@@ -318,14 +318,13 @@ function iform_load($node) {
   $params=json_decode($t->params, true);
   // null string is stored if the iform has no parameters to store
   if ($t->params!=='null') {
+    if (!is_array($params))
+      drupal_set_message(t('This page\'s configuration has not been stored correctly. '.print_r($t->params, true)), 'warning');
     unset($t->params);
     $t->params = array();
-    if (!is_array($params)) {
-      drupal_set_message(t('This page\'s configuration has not been stored correctly. '.print_r($t->params, true)), 'warning');
-    } else {
+    if (is_array($params))
       // Merge the params into the loaded object
       foreach($params as $k => $v) $t->params[$k] = $v;
-    }
   }
   return $t;
 }
