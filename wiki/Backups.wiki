@@ -9,6 +9,41 @@ This article gives guidance on what I did to set this up on a Windows server.
 
 == PostgreSQL ==
 
+===Update 10 October 2012===
+Following an upgrade to PostgreSQL I tried to recreate the backup according to the original documentation below. I found that PgAgent is now released as source code which you have to compile for yourself. That seemed like a complete waste of time when I could use the Windows Task Scheduler. Easy, I thought... simply create a batch file containing the commands to dump my database and create a scheduled task to run as my Windows user, postgres, that executes the batch file.
+
+Here are the steps that eventually got it working.
+
+1. Create the file pgpass.conf in the folder C:\Documents and Settings\postgres\Application Data\postgresql. It contains the following line
+
+{{{localhost:*:*:postgres:password}}}
+
+where you need to replace the word password with your actual password for the PostgreSQL user called postgres. (Yes, the job is going to be run as a Windows user called postgres with one password and it will connect to the database as the PostgreSQL user, also called postgres, which may have a different password.)
+
+2. Create a file called backup.bat containing something like the following
+
+{{{
+set APPDATA=C:\Documents and Settings\postgres\Application Data
+set PGPASSFILE=%APPDATA%\postgresql\pgpass.conf
+"C:\Program Files\PostgreSQL\9.2\bin\pg_dump.exe" -h localhost -p 5432 -U postgres -F c -b -v -w -f "D:\Indicia Backup\Scheduled\warehouse1.backup" warehouse1
+}}}
+
+Note that 
+  * The envirionment variables set at the command prompt are not preserved so they have to be set each time.
+  * Setting APPDATA alone seems insufficient for the password file to be found.
+  * When setting PGPASSFILE, the direction of the slashes mattered.
+  * You will need to locate where pg_dump is installed on your server.
+  * You will need to set the options, the backup file path, and the database name to match your own needs.
+
+3. Create a scheduled task (which I assume needs no explanation to a Windows server administrator) that runs as Windows user postgres and executes the batch file.
+
+4. Ensure the Windows user, postgres, has permissions to
+  * write to the destination folder, 
+  * execute the batch file
+  * execute C:\Windows\System32\cmd.exe
+
+===Original documentation===
+
 First of all, [http://www.postgresonline.com/journal/index.php?/archives/19-Setting-up-PgAgent-and-Doing-Scheduled-Backups.html  read the following article]! I installed [http://www.pgadmin.org/docs/1.8/pgagent-install.html PgAgent], following the three steps in the article. (Although, after setting up MySQL backups, I guess I would have been just as happy using Windows task scheduler.)
 
 Step 1, installing plpgsql, can be carried out by starting pgAdmin, selecting the postgres database, and selecting the Tools > Query tool menu item to open a window in which the sql command can be copied and run.
