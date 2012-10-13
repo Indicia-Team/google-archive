@@ -27,3 +27,8 @@ Therefore, Kohana uses digest authentication, where a public token is generated 
  # The nonce and website id are written into the server cache. The nonce is used as the key to lookup the cache value, since many nonces can be active for one website. Only the server can save the nonce in the cache. The nonce is also passed back to the client website.
  # When posting data, the client passes back the nonce, plus the auth_token which is a hash of the nonce, plus website id and password.
  # The server authenticates the request by looking up the nonce in the cache to find the website id which it is associated with. It can then hash the nonce, website id and password to check it is the same as the auth_token.
+
+If writing your own code, then you must include the *nonce* and *auth_token* in the GET or POST data sent to the server. The nonce is the exact value returned from the call to *get_read_nonce* as described above. The auth_token is created by building a string by adding a colon to the nonce, followed by the website's password, then running this all through the sha1 encryption algorithm. For example, the following illustrates how this might be done in PHP:
+{{{
+$auth_token=sha1("$nonce:$password");
+}}}
