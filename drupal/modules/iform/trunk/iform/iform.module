@@ -647,6 +647,7 @@ $('.ui-state-default').live('mouseout', function() {
     } catch (Exception $e) {
       watchdog('debug', 'Error occurred loading form');
       watchdog('debug', $e->getMessage());
+      watchdog('trace', print_r($e->getTrace(), true));
       $r =  $e->getMessage();
     }
 
@@ -1009,12 +1010,15 @@ function iform_client_helpers_path() {
  * introducing a Drupal code dependency.
  * @param string $field Name of a profile field, e.g. indicia_user_id as introduced by the Easy Login feature. This will be converted
  * to the profile field name if not prefixed with 'profile_'.
- * @param
+ * @param mixed $default Default value to return if not set.
  */
 function hostsite_get_user_field($field, $default=false) {
   global $user;
+  $fieldname = "profile_$field";
+  $exists = db_result(db_query("SELECT count(*) FROM {profile_fields} WHERE name='$fieldname'"));
+  if (!$exists)
+    throw new Exception('Missing field');
   if ($user->uid) {
-    $fieldname = "profile_$field";
     if (!isset($user->$fieldname) && function_exists('profile_load_profile'))
       // this call is not cached, so only do it once
       profile_load_profile($user);
@@ -1026,6 +1030,31 @@ function hostsite_get_user_field($field, $default=false) {
   } else
     return $default;
 }
+
+
+/**
+ * Function that allows Indicia code to hook into the Drupal user profile to set a field value, without
+ * introducing a Drupal code dependency.
+ * @global type $user
+ * @param type $field The name of a profile field.
+ * @param type $data The data to be saved into the field.
+ * @return boolean Returns false if the uid is not available so data cannot be written
+ */
+function hostsite_set_user_field($field, $data) {
+  global $user;
+  if ($user->uid) {
+    $fieldname = "profile_$field";
+    //this call is not cached, so only do it once
+    profile_load_profile($user);
+    $r = db_fetch_array(db_query("SELECT fid FROM {profile_fields} WHERE name=\"$fieldname\""));
+    db_query("DELETE FROM {profile_values} WHERE fid = %d AND uid = %d", $r['fid'], $user->uid);
+    db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $user->uid, $data);
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 /**
  * Returns a list of website IDs that this website is allowed use data for. This is defined by the agreement between the 
