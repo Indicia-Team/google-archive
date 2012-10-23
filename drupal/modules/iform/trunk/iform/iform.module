@@ -1013,6 +1013,8 @@ function iform_client_helpers_path() {
  * @param mixed $default Default value to return if not set.
  */
 function hostsite_get_user_field($field, $default=false) {
+  if (!module_exists('profile'))
+    return $default;
   global $user;
   $fieldname = "profile_$field";
   $exists = db_result(db_query("SELECT count(*) FROM {profile_fields} WHERE name='$fieldname'"));
