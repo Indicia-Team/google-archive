@@ -26,19 +26,22 @@ Here is a list of the prebuilt forms available in Indicia.
 || Description || A wizard for importing data into Indicia. ||
 || Documentation || [prebuilt_importer Configuring the Importer prebuilt form.] ||
 
-==MNHNL Dynamic 1==
-|| File || mnhnl_dynamic_1.php ||
+==Dynamic Sample Occurrence==
+|| File || dynamic_sample_occurrence.php ||
 || Description || Advanced form which uses the attributes associated with a survey to dynamically build a form. Flexible and powerful, should be considered as the starting point for any new surveys. ||
-|| Documentation || [TutorialDynamicForm Creating a survey using the dynamic form] ||
+|| Documentation || [TutorialDynamicForm Creating a survey using the Dynamic Sample Occurrence form] ||
 
 ==Specific MNHNL Forms==
-These are a set of forms produced for specific requirements of the MNHN in Luxembourg.
-|| File || Description || Documentation ||
-|| mnhnl_reptiles.php || Advanced form (inherites from MNHNL Dynamic 1) which is used for recording Reptile occurrences. Has ability to generate new survey polygonal locations, or click to select previously created ones, within parent 5km grid squares. Custom Species grid allows a one taxon to have multiple entries, due to nature of recording method. || [TutorialMNHNLReptile Creating a survey using the MNHNL Reptile form] ||
-||mnhnl_bats.php||||||
-||mnhnl_bird_transect_walks.php||||||
-||mnhnl_butterflies.php||||||
-|| mnhnl_butterflies2.php || Advanced form (inherites from MNHNL Dynamic 1) which is used for recording Butterflies (Papillon de Jours) occurrences. Has ability to generate new survey polygonal sites, within parent 5km grid squares, and allows tool for modifying them. Also includes data extraction reports. Custom Species grid allows a count to be added for multiple sites per taxon. || [TutorialMNHNLButterflies2 Creating a survey using the MNHNL Butterflies2 form] ||
+These are a set of forms produced for specific requirements of the Biomonitoring Scheme in Luxembourg, which is hosted by the Luxembourg Natural History Museum website (MNHNL). They are all available under the 'MNHNL forms' Category.
+|| Title || File || Description || Documentation ||
+|| MNHNL Dynamic 1 || mnhnl_dynamic_1.php || Advanced form, inherits from Dynamic Sample Occurrence. The only additional functionality is an optional Luxembourg specific header and footer, the inclusion of which controlled by a checkbox in the Form node configuration 'User Interface'. ||||
+|| MNHNL Dynamic 2 || mnhnl_dynamic_2.php || Advanced form, inherits from MNHNL Dynamic 1. Allows optional position recording of individual Occurrences by using a heirarchical sample structure. Used as the basis for recording Amphibians, Reptiles, Dormice and Dragonflies.  Features a standardised Location record creation/selection interface, Shapefile lookup for automatic geolocation (Communes), Recorder names picklist (from designated Drupal users), a custom Target Species Grid, and a flexible custom Species grid. || [TutorialMNHNLDynamicForm2 Creating a survey using the MNHNL Dynamic 2 form] ||
+|| MNHNL Winter Bats || mnhnl_bats.php || Advanced form (inherits from MNHNL Dynamic 1) which is used for recording Bat Hibernation occurrences. Features a standardised Location record creation/selection interface, Shapefile lookup for automatic geolocation (Communes), Recorder names picklist (from designated Drupal users), and a custom Species grid. || [TutorialMNHNLBats Creating a survey using the MNHNL Winter Bats form] ||
+|| MNHNL Summer Bats || mnhnl_bats2.php || Advanced form (inherits from MNHNL Winter Bats) which is used for recording Bat Roost occurrences. Features custom controls for a Survey Method grid, and Species Grid. || [TutorialMNHNLBats2 Creating a survey using the MNHNL Summer Bats form] ||
+|| Bird Transect Walks || mnhnl_bird_transect_walks.php || Advanced custom form used for COBIMO recording (does not inherit). || [TutorialCOBIMO Creating a survey using the MNHNL Bird Transect Walks form] ||
+|| MNHNL Butterflies form || mnhnl_butterflies.php|| Advanced form (inherits from MNHNL Dynamic 1) which is used for recording Butterfly counts in Transects. Not map based, and features custom controls for entering section and grid based counts for a transect. || [TutorialMNHNLButterflies Creating a survey using the MNHNL Butterflies form] ||
+|| Luxembourg Butterfly Biomonitoring (site based)|| mnhnl_butterflies2.php || Advanced form (inherites from MNHNL Dynamic 1) which is used for recording Butterflies (Papillon de Jours) occurrences. Area based: handles multiple sites at once. Features a standardised Location record creation/selection interface, and custom sample attribute and occurrence count grid controls to allow entry of data for multiple sites at once. || [TutorialMNHNLButterflies2 Creating a survey using the MNHNL Butterflies2 form] ||
+|| Luxembourg Reptile Biomonitoring || mnhnl_reptiles.php || <b>Deprecated. Superceeded by MNHNL Dynamic 2</b><br/>Advanced form (inherites from MNHNL Dynamic 1) which was used for recording Reptile occurrences. || [TutorialMNHNLReptile Creating a survey using the MNHNL Reptile form] ||
 
 ==Report Grid==
 || File || report_grid.php ||
