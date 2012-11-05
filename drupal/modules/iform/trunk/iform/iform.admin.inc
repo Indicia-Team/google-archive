@@ -116,7 +116,6 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     '#value' => map_helper::map_panel(array(
       'width' => '100%',
       'height' => 500,
-      'readAuth' => $readAuth,
       'presetLayers' => array('osm'), 
       'editLayer' => false,
       'layers' => array(),
