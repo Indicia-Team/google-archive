@@ -19,8 +19,8 @@ To retrieve a single item of data with a known id, append a forward slash then t
 Retrieving a list of data can be achieved by ommitting the id from the URL. In this case, a number of parameters are available to control the output as follows. Each parameter can be provided as either a GET or a POST parameter. Typically you would use GET as this is a request for data rather than a post of data, but POST can be used in cases where this might result in an excessively long URL for example. 
 
 ||_fieldname_||If a parameter is provided which matches a field in the output data, then the value provided is used to filter on that field. When filtering against a text attribute, use an asterisk character to represent a wildcard if an inexact match is required. Use NULL to filter for null values.||
-||orderby||Allows the field that the results are to be sorted by to be specified.||
-||sortdir||Specifies the sort direction. Options are ASC or DESC.||
+||orderby||Allows the field that the results are to be sorted by to be specified. From version 0.8.2, this can be a comma separated list of field names to sort.||
+||sortdir||Specifies the sort direction. Options are ASC or DESC. From version 0.8.2, this can be a comma separated list of ASC or DESC entries with the same number of entries as in orderby to define the order of each field. If there are less entries then the sort order for unspecified fields will be ASC.||
 ||limit||Limits the returned results to _n_ items.||
 ||offset||Starts the returned results offsetted by _n_ records.||
 ||wantRecords||Defaults to 1. If 1, then the returned data includes the records.||
