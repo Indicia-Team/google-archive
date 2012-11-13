@@ -250,7 +250,8 @@ function get_custom_param_values($node) {
     $values['password']=$_POST['password'];
     // now get the rest of the parameters
     foreach ($params as $param) {
-      $values[$param['fieldname']] = $_POST[$param['fieldname']];
+      if (isset($_POST[$param['fieldname']]))
+        $values[$param['fieldname']] = $_POST[$param['fieldname']];
     }
     // Json encode the parameters to store them in the Drupal database.
     return json_encode($values);
