@@ -62,13 +62,13 @@ function iform_proxy_admin_settings() {
   $form['iform_proxy_username'] = array(
     '#type' => 'textfield',
     '#title' => t('Indicia Proxy Service Account Username'),
-    '#description' => t('Username that will be attached to all requests made to a proxied server.'),
+    '#description' => t('Default username that will be attached to all requests made to a proxied server.'),
     '#default_value' => variable_get('iform_proxy_username', '')
   );
   $form['iform_proxy_password'] = array(
     '#type' => 'textfield',
     '#title' => t('Indicia Proxy Service Account Password'),
-    '#description' => t('Password that will be attached to all requests made to a proxied server.'),
+    '#description' => t('Default password that will be attached to all requests made to a proxied server.'),
     '#default_value' => variable_get('iform_proxy_password', '')
   );
   $form['iform_proxy_path'] = array(
@@ -77,6 +77,15 @@ function iform_proxy_admin_settings() {
     '#description' => t('Drupal path, excluding the site URL and ?q=, to the proxy location. The proxy can then be called at '.
       '/?q=&lt;path&gt;&amp;url=&lt;url&gt; where &lt;url&gt; is the destination server URL.'),
     '#default_value' => variable_get('iform_proxy_path', 'proxy')
+  );
+  $form['iform_proxy_logins'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Specific URL logins'),
+    '#description' => t('If you have specific destination URLs which need a custom username and password such as a different secured geoserver, then '.
+        'specify them here. Provide one per line in the form "url regex;username;password". For example, specify "/http[s]?:\/\/.+?\.com(\/.*)?/;user1;pwd1" to set the '.
+        'username and password to user1 and pwd1 for all .com URLs. If there are multiple matches, then the first in the list will take priority.'),
+    '#default_value' => variable_get('iform_proxy_logins', ''),
+    '#wysiwyg' => FALSE
   );
 
   // Make a system setting form and return
@@ -140,8 +149,7 @@ function iform_proxy_redirect($url, $options = array()) {
     if (strpos($url, 'http://') !== 0){
       $url = 'http://' . $url;
     }
-    $user = check_plain(variable_get('iform_proxy_username', ''));
-    $password = check_plain(variable_get('iform_proxy_password', ''));
+    $login = iform_proxy_get_login($url);
     // load any previously cached long parameter values which are identified by CACHE_ID
     if (isset($options['CACHE_ID'])) {
       $cache = cache_get($options['CACHE_ID']);
@@ -171,8 +179,8 @@ function iform_proxy_redirect($url, $options = array()) {
       }
     }
 
-    if ($user != null && strlen($user)>0 && $password != null && strlen($password)>0) {
-      $httpHeader[]='Authorization: Basic '.base64_encode($user.':'.$password);
+    if ($user != null && strlen($login['username'])>0 && $login['password'] != null && strlen($login['password'])>0) {
+      $httpHeader[]='Authorization: Basic '.base64_encode($login['username'].':'.$login['password']);
     }
     if (count($httpHeader)>0) {
       curl_setopt($session, CURLOPT_HTTPHEADER, $httpHeader);
@@ -241,4 +249,29 @@ function iform_proxy_proxy() {
   iform_proxy_redirect($url, $options);
 }
 
-
+/**
+ * Works out the login to use for a specific destination URL. Either the default, or
+ * returns the one configured for the specific URL regex.
+ */
+function iform_proxy_get_login($url) {
+  $loginDef = variable_get('iform_proxy_logins', '');
+  $structure = str_replace("\r\n", "\n", $loginDef);
+  $structure = str_replace("\r", "\n", $structure);
+  $loginList = explode("\n", trim($structure));
+  foreach($loginList as $login) {
+    $loginDef = explode(';', $login);
+    if (count($loginDef)===3) {
+      if (preg_match($loginDef[0], $url)) {
+        return array(
+          'username'=>$loginDef[1],
+          'password'=>$loginDef[2]
+        );
+      }
+    }
+  }
+  // no specific login, so use default
+  return array(
+    'username'=>check_plain(variable_get('iform_proxy_username', '')),
+    'password'=>check_plain(variable_get('iform_proxy_password', ''))
+  );
+}
