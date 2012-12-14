@@ -614,7 +614,10 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
               array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
             $url = explode('?', $args['redirect_on_success']);
             if (!isset($args['message_after_save']) || $args['message_after_save']) {
-              drupal_set_message(t('Thank you. Your records have been saved to the database.'));
+              // use lang::get rather than t() here because this message is displayed to the recorders, 
+              // and therefore it must be possible to change the English language version as well as other
+              // language translations
+              drupal_set_message(lang::get('Thank you. Your records have been saved to the database.'));
             }
             $params = 'table='.$response['outer_table'].'&id='.$response['outer_id'];
             if (count($url)>1)
