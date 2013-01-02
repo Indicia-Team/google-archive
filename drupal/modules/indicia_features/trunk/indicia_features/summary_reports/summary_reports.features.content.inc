@@ -119,6 +119,7 @@ table|As a table of data',
       'description' => 'Choose the display format for the report.',
       'type' => 'optionwidgets_buttons',
       'module' => 'optionwidgets',
+      'attributes' => array('class'=>'display-radios')
     ),
   );
 
@@ -411,7 +412,51 @@ L|Data must be verified or at least likely
       'module' => 'optionwidgets',
     ),
   );
-
+  
+  // Exported field: field_summary_report_call_report
+  $fields['summary_report-field_summary_report_call_report'] = array(
+    'field_name' => 'field_summary_report_call_report',
+    'type_name' => 'summary_report',
+    'widget_active' => '1',
+    'type' => 'textfield',
+    'required' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'max_length' => 100,
+    'default_value' => ' ',
+    'widget' => array(
+      'size' => 25,
+      'label' => 'Report page to call when clicked?',
+      'description' => 'Enter the path of a page which holds a report that you would like to be called when the user 
+          clicks on a report item (e.g. a pie segment, map polygon or chart bar). This should be a valid Drupal page 
+          path, e.g. node/54 or a node\'s URL alias. Leave blank if you want to disable the clickable report functionality.',
+      'type' => 'text_textfield',
+      'module' => 'text',
+    ),
+  );
+  
+    // Exported field: field_summary_report_call_param
+  $fields['summary_report-field_summary_report_call_param'] = array(
+    'field_name' => 'field_summary_report_call_param',
+    'type_name' => 'summary_report',
+    'widget_active' => '1',
+    'type' => 'textfield',
+    'required' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'max_length' => 100,
+    'default_value' => ' ',
+    'widget' => array(
+      'size' => 25,
+      'label' => 'Report input parameter name',
+      'description' => 'When clicking on a report item to call the report on the other page, the input parameter 
+        you supply here will be passed to that page, with the value set to the ID of the item clicked on. For example
+        this could be a location_id, taxon_group_id, month or year number.',
+      'type' => 'text_textfield',
+      'module' => 'text',
+    ),
+  );
+  
   // Translatables
   // Included for use with string extractors like potx.
   t('How do you want to display it?');
@@ -420,6 +465,8 @@ L|Data must be verified or at least likely
   t('What do you want to count?');
   t('What quality control should be applied?');
   t('Which data should be included?');
-
+  t('What is the URL of the report that is run when you click on a summary?');
+  t('What input parameter does the report use?');
+  
   return $fields;
 }
