@@ -417,11 +417,6 @@ function forms_and_surveys_library_menu_build($menu, $depth = -1, $trail = NULL)
             $output .= $children;
             $output .= "</ul>\n";
           }
-          if ($menu_item['link']['title']==='My Forms') {
-            $output .= '<ul>';
-            $output .= '<li>test</li>';
-            $output .= "</ul>\n";
-          }
         }        
         $output .= "</li>\n";
       } elseif (strcasecmp($menu_item['link']['title'], 'My Forms')===0) {
