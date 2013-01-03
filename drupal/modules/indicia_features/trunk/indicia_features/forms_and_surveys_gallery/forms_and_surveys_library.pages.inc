@@ -15,7 +15,6 @@ function library_view() {
     $message=t('Click the title of one of the forms to access the form, or use the Find other forms button to enable searching for additional '.
       'forms you might like to use.');
   drupal_set_message($message.' '.t('Forms are sorted so the ones most likely to be of interest to you are listed first.'));
-  $r .= '<ul>';
   global $user;
   profile_load_profile($user);
   // find all the library form details
