@@ -5,7 +5,8 @@
  * profile as an install task, and provided on the admin menu.
  */
 function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
-  iform_load_helpers(array('map_helper'));
+  iform_load_helpers(array('map_helper','data_entry_helper'));
+  $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', 0), variable_get('indicia_password', ''));
   drupal_add_js(drupal_get_path('module', 'iform').'/iform.admin.js');
   global $indicia_warehouses;
   iform_load_warehouse_array();
@@ -167,6 +168,46 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
     '#description' => t('For any system not in this list, you can enter a comma separated list of EPSG codes or other system names as long as they are '.
         'recognised by the Indicia Warehouse you are using.')
   );
+  
+  // extra variables only visible after install, as they may need a website connection
+  if (!defined('MAINTENANCE_MODE') || MAINTENANCE_MODE != 'install') {
+    // Add any indicia variables declared by hook_variable_info
+    global $language;
+    $vars = module_invoke_all('variable_info', array("language" => $language));
+    $ctrls=array();
+    foreach ($vars as $var=>$config) {
+      $matches=array();
+      if (isset($config['addToIndiciaSettingsPage']) && $config['addToIndiciaSettingsPage']) {
+        if (isset($config['subtype']) && preg_match('/^termlists_term:(?P<list>.+)/', $config['subtype'], $matches))
+          $type='select';  
+        else
+          $type='textfield';
+        $ctrls[$var] = array(
+          '#type'=>$type,
+          '#title'=>$config['title'],
+          '#description'=>$config['description'],
+          '#default_value'=>variable_get($var, '')
+        );
+        if (isset($matches['list'])) {
+          $rows = data_entry_helper::get_population_data(array(
+            'table'=>'termlists_term',
+            'extraParams'=>$readAuth + array('termlist_external_key'=>'indicia:'.$matches['list'])
+          ));
+          $options = array(''=>t('<please select>'));
+          foreach ($rows as $row) {
+            $options[$row['id']]=$row['term'];
+          }
+          $ctrls[$var]['#options']=$options;
+        }
+      }
+    }
+    if (!empty($ctrls)) {
+      $form['additional'] = array_merge(array(
+        '#type' => 'fieldset',
+        '#title' => t('Additional Settings')
+      ), $ctrls);
+    }
+  }
   $form['continue'] = array(
     '#type' => 'submit', 
     '#value' => t('Save'),
@@ -286,6 +327,13 @@ function indicia_configuration_form_submit($form, &$form_state) {
   variable_set('indicia_map_centroid_lat', $form_state['values']['indicia_map_centroid_lat']);
   variable_set('indicia_map_centroid_long', $form_state['values']['indicia_map_centroid_long']);
   variable_set('indicia_map_zoom', $form_state['values']['indicia_map_zoom']);
+  // Save any indicia variables declared by hook_variable_info
+  global $language;
+  $vars = module_invoke_all('variable_info', array("language" => $language));  
+  foreach ($vars as $var=>$config) {
+    if ($config['addToIndiciaSettingsPage'])
+      variable_set($var, $form_state['values'][$var]);
+  }
   $systems = _indicia_sref_systems_from_form($form_state['values']);
   variable_set('indicia_spatial_systems', $systems);
   drupal_set_message(t('Indicia settings saved.'));
