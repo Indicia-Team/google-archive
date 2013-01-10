@@ -6,21 +6,13 @@
 function easy_login_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: add twitter accounts
+  /*// Exported permission: add twitter accounts
   $permissions['add twitter accounts'] = array(
     'name' => 'add twitter accounts',
     'roles' => array(
       '0' => 'authenticated user',
     ),
-  );
-  
-  // Exported permission: administer experts
-  $permissions['administer experts'] = array(
-    'name' => 'administer experts',
-    'roles' => array(
-      '0' => 'admin user',
-    ),
-  );
+  );*/
   
   // Exported permission: collate regional records
   $permissions['collate regional records'] = array(
