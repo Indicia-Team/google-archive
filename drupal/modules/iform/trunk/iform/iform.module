@@ -559,7 +559,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/templates/' . $node->iform . '.php')) {
       require iform_client_helpers_path() . 'prebuilt_forms/templates/' . $node->iform . '.php';
     }
-    if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/templates/' . $node->iform . '.php')) {
+    if (file_exists(iform_client_helpers_path() . 'prebuilt_forms/templates/node.' . $node->nid . '.php')) {
       require iform_client_helpers_path() . 'prebuilt_forms/templates/node.' . $node->nid . '.php';
     }
     $connection = iform_get_connection_details($node);
