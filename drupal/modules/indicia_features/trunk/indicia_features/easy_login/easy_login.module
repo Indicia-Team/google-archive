@@ -379,3 +379,12 @@ function easy_login_variable_info($options) {
   );
   return $variable;
 }
+
+/**
+* Implementation of hook_perm.
+* Declare a permission for regional collators. 
+* @return array An array of valid permissions for the module
+*/
+function easy_login_perm() {
+  return array('collate regional records');
+}
