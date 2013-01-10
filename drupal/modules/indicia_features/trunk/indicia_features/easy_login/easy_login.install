@@ -26,6 +26,8 @@ function easy_login_uninstall() {
     db_query("delete from {profile_values} where fid=%d", $field->fid);
     db_query("delete from {profile_fields} where fid=%d", $field->fid);
   }
+  variable_del('indicia_profile_location_type_id');
+  variable_del('indicia_profile_collation_location_type_id');
 }
 
 /**
@@ -35,6 +37,16 @@ function easy_login_update_6200() {
   $ret = array();
   $fields = _easy_login_profile_fields();
   easy_login_add_profile_field('profile_surveys_expertise', $fields['profile_surveys_expertise']);
+  return $ret;
+}
+
+/**
+ * Update method for version 6.3. Adds a field for collation regions.
+ */
+function easy_login_update_6300() {
+  $ret = array();
+  $fields = _easy_login_profile_fields();
+  easy_login_add_profile_field('profile_location_collation', $fields['profile_location_collation']);
   return $ret;
 }
 

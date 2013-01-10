@@ -113,5 +113,20 @@ function _easy_login_profile_fields() {
       'options' => '',
       'page' => ''
   );
+  $fields['profile_location_collation'] = array(
+      'title' => 'Location of collation',
+      'explanation' => 'For users who are in the regional collator role, this allows the '.
+          'location which defines the boundary of their collation to be defined, for example '.
+          'the boundary of a Local Record Centre.',
+      'category' => 'Preferences',
+      'type' => 'selection',
+      'weight' => 0,
+      'required' => 0,
+      'register' => 0,
+      'visibility' => 2,
+      'autocomplete' => 0,
+      'options' => '',
+      'page' => ''
+  );
   return $fields;
 }
