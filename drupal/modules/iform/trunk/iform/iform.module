@@ -569,7 +569,11 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     $params = form_helper::get_form_parameters($node->iform);
 
     foreach ($params as $param) {
-      $args[$param['fieldname']] = $node->params[$param['fieldname']];
+      if (isset($node->params[$param['fieldname']]))
+        $args[$param['fieldname']] = $node->params[$param['fieldname']];
+      elseif (isset($param['default']))
+        // apply the default, this was an old saved form configuration which doesn't have a new parameter.
+        $args[$param['fieldname']] = $param['default'];
     }
     $r = '';
     $response = null;
