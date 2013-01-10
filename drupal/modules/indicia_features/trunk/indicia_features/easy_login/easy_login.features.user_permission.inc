@@ -21,6 +21,14 @@ function easy_login_user_default_permissions() {
       '0' => 'admin user',
     ),
   );
+  
+  // Exported permission: collate regional records
+  $permissions['collate regional records'] = array(
+    'name' => 'collate regional records',
+    'roles' => array(
+      '0' => 'regional collator',
+    ),
+  );
 
   return $permissions;
 }

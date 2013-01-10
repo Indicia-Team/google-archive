@@ -217,20 +217,15 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
     $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
     // The fields can be hidden for sites that don't want them, so check they exist on the form.
     if (isset($form['Preferences']['profile_location']) || isset($form['Preferences']['profile_location_expertise'])) {
-      // Load the list of locations
-      $response = data_entry_helper::get_population_data(array(
-        'table' => 'location',
-        'extraParams' => $readAuth + array('orderby'=>'name', 'sortdir'=>'ASC'),
-        'nocache' => true
-      ));
-      $locations=array(''=>'<Please select>');
-      foreach ($response as $location) {
-        $locations[$location['id']]=$location['name'];
-      }
+      $locations=easy_login_get_locations($readAuth,'indicia_profile_location_type_id');
       if (isset($form['Preferences']['profile_location']))
         $form['Preferences']['profile_location']['#options'] = $locations;
       if ($form_id === 'user_profile_form' && isset($form['Preferences']['profile_location_expertise']))
         $form['Preferences']['profile_location_expertise']['#options'] = $locations;
+    }
+    if (isset($form['Preferences']['profile_location_collation'])) {
+      $locations=easy_login_get_locations($readAuth,'indicia_profile_collation_location_type_id');
+      $form['Preferences']['profile_location_collation']['#options'] = $locations;
     }
     if (isset($form['Preferences']['profile_taxon_groups']) || isset($form['Preferences']['profile_taxon_groups_expertise'])) {
       // Load the list of taxon groups. If we have a master list setting for the site, use this to ensure we only pick up
@@ -307,6 +302,10 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
         $form['Preferences']['profile_surveys_expertise']['#attributes'] = array('disabled' => 'true');
         $form['Preferences']['profile_surveys_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
       }
+      if (isset($form['Preferences']['profile_location_collation'])) {
+        $form['Preferences']['profile_location_collation']['#attributes'] = array('disabled' => 'true');
+        $form['Preferences']['profile_location_collation']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
+      }
     }
     // Is the user being edited an expert verifier? If not, no need for the profile fields
     if (!user_access('verification', $thisUser)) {
@@ -314,9 +313,29 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
       unset($form['Preferences']['profile_taxon_groups_expertise']);
       unset($form['Preferences']['profile_surveys_expertise']);
     }
+    // Is the user being edited a regional collator? If not, no need for the profile field
+    if (!user_access('collate regional records', $thisUser)) 
+      unset($form['Preferences']['profile_location_collation']['#type']);
     drupal_add_css(drupal_get_path('module','iform').'/media/css/default_site.css');
     handle_resources();
   }
+}
+
+function easy_login_get_locations($readAuth, $typeVarName) {
+  // Load the list of locations, filtered by location type if the setting is defined.
+  $extraParams=array('orderby'=>'name', 'sortdir'=>'ASC');
+  if ($locType=variable_get($typeVarName, ''))
+    $extraParams['location_type_id']=$locType;
+  $response = data_entry_helper::get_population_data(array(
+    'table' => 'location',
+    'extraParams' => $readAuth + $extraParams,
+    'nocache' => true
+  ));
+  $locations=array(''=>t('<Please select>'));
+  foreach ($response as $location) {
+    $locations[$location['id']]=$location['name'];
+  }
+  return $locations;
 }
 
 /**
@@ -328,4 +347,35 @@ function easy_login_submit_preferences($form, &$form_state) {
     $form_state['values']['profile_surveys_expertise']=serialize($_POST['profile_surveys_expertise']);
   else
     unset($form_state['values']['profile_surveys_expertise']);
+}
+
+/**
+ * Implement hook_variable_info.
+ * Returns information about the variables used by this module, allowing an admin interface
+ * to be created. We use a couple of custom extensions to allow these to be added to the Indicia
+ * settings page.
+ */
+function easy_login_variable_info($options) {
+  $variable['indicia_profile_location_type_id']=array(
+    'title'=>t('Location type for profile locality options'),
+    'description'=>t('The location type on the warehouse used to filter the '.
+      'locations available on the user profile edit pages for selection of the preferred '.
+      'locality and locality of expertise.'),
+    'type'=>'number',
+    'subtype'=>'termlists_term:location_types',
+    'default'=>'',
+    'addToIndiciaSettingsPage'=>true
+  );
+  $variable['indicia_profile_collation_location_type_id']=array(
+    'title'=>t('Location type for profile collation options'),
+    'description'=>t('The ID location type on the warehouse used to filter the '.
+      'locations available on the user profile edit pages for selection of the locality '.
+      'which a user has collation rights to. A typical use of this would be to filter the '.
+      'locations available for selection to LRC boundaries.'),
+    'type'=>'number',
+    'subtype'=>'termlists_term:location_types',
+    'default'=>'',
+    'addToIndiciaSettingsPage'=>true
+  );
+  return $variable;
 }
