@@ -51,6 +51,16 @@ function easy_login_update_6300() {
 }
 
 /**
+ * Update method for version 6.3.1 Adds a field for not sharing records.
+ */
+function easy_login_update_6310() {
+  $ret = array();
+  $fields = _easy_login_profile_fields();
+  easy_login_add_profile_field('profile_disable_sharing', $fields['profile_disable_sharing']);
+  return $ret;
+}
+
+/**
  * Add a field to the list of available user profile fields.
  */
 function easy_login_add_profile_field($name, $fieldDef) {

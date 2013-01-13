@@ -81,6 +81,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         // $edit can be empty during initial registration
         if (!empty($edit)) {
           foreach ($edit as $field=>$value) {
+            $account->$field=$value;
             $fieldsToSync = array();
             // fields that are available for synchronisation must be called profile_indicia_*. We
             // also don't want to handle anything that has not actually changed.
@@ -156,6 +157,9 @@ function easy_login_call_get_user_id($account, $force=null, $users_to_merge=null
     // We are definitely doing something on the server, so can inform the user
     drupal_set_message(t('Your user information has been updated.'));
   }
+  $postargs .= '&shares_to_prevent=';
+  if (isset($account->profile_record_privacy) && $account->profile_record_privacy) 
+    $postargs .= 'reporting,peer_review,verification,data_flow,moderation';
   if ($users_to_merge)
     $postargs .= '&user_to_merge='.urlencode(json_encode($users_to_merge));
   $response = data_entry_helper::http_post($url, $postargs);
@@ -173,10 +177,6 @@ function easy_login_handle_get_user_id_response($account, $response, &$edit=null
   if (isset($response->userId)) {
     if ($account->profile_indicia_user_id!=$response->userId) {
       easy_login_store_value("name='profile_indicia_user_id'", $account->uid, $response->userId, $edit);
-      $r = db_fetch_array(db_query("SELECT fid FROM {profile_fields} WHERE name='profile_indicia_user_id'"));
-      db_query("DELETE FROM {profile_values} WHERE fid = %d AND uid = %d", $r['fid'], $account->uid);
-      db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $account->uid, $response->userId);
-
       if (empty($account->profile_indicia_user_id))
         drupal_set_message(t('Your user account is now linked to the central records database.'));
       else

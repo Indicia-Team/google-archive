@@ -128,5 +128,19 @@ function _easy_login_profile_fields() {
       'options' => '',
       'page' => ''
   );
+  // 
+  $fields['profile_record_privacy'] = array(
+      'title' => 'Record privacy',
+      'explanation' => 'Tick this box if you would like to opt out of allowing your records to appear on other websites. '.
+          'They will still be visible to users of this website.',
+      'category' => 'Preferences',
+      'type' => 'checkbox',
+      'weight' => 0,
+      'required' => 0,
+      'register' => 0,
+      'visibility' => 4,
+      'autocomplete' => 0,
+      'page' => '',
+  );
   return $fields;
 }
