@@ -67,6 +67,36 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
   static $_updating_account=false;
   if (!$_updating_account) {
     switch ($op) {
+      case 'view':
+        iform_load_helpers(array('data_entry_helper'));
+        $readAuth=data_entry_helper::get_read_auth(variable_get('indicia_website_id',''), variable_get('indicia_password',''));
+        _easy_login_set_view_account_for_table('location', 'name', $account, 'profile_location', $readAuth, 
+            'Recording preferences', 'Your preferred locality for recording is !items.');
+        _easy_login_set_view_account_for_table('location', 'name', $account, 'profile_location_expertise', $readAuth, 
+            'Verification settings', 'Your locality for verification is !items.');
+        _easy_login_set_view_account_for_table('location', 'name', $account, 'profile_location_collation', $readAuth, 
+            'Data collation settings', 'Your locality for data collation downloads is !items.');
+        _easy_login_set_view_account_for_table('taxon_group', 'title', $account, 'profile_taxon_groups', $readAuth, 
+            'Recording preferences', 'Your preferred species groups for recording are: !items.');
+        _easy_login_set_view_account_for_table('taxon_group', 'title', $account, 'profile_taxon_groups_expertise', $readAuth, 
+            'Verification settings', 'Your species groups for verification are: !items.');
+        _easy_login_set_view_account_for_table('survey', 'title', $account, 'profile_surveys_expertise', $readAuth, 
+            'Verification settings', 'Your surveys for verification are: !items.');
+        if (isset($account->content['Preferences']['profile_record_privacy'])) {
+          // convert a boolean to something more readable
+          $account->content['Preferences']['profile_record_privacy']['#title']=t('Record privacy');
+          $account->content['Preferences']['profile_record_privacy']['#value']=t(
+              'You have opted not to share your records with other websites.');
+        }
+        // remove the preferences section ONLY if it has no sub-items
+        $gotPreferences=false;
+        foreach($account->content['Preferences'] as $item=>$content) {
+          if (substr($item, 0, 1)!=='#') {
+            $gotPreferences=true;
+          }
+        }
+        if (!$gotPreferences)
+          unset($account->content['Preferences']);
       case 'login':
         if (empty($account->profile_last_name)) {
           drupal_set_message('Please set at least your last name on your '.l('user account', 'user/'.$account->uid.'/edit/Name').
@@ -74,7 +104,8 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           return;
         }
         // deliberately flow through - as we always check the account id after account update. So do NOT break
-      case 'submit':
+      case 'insert':
+      case 'update':
         global $user;
         profile_load_profile($user);
         $fieldsToSyncByCaption = array();
@@ -121,6 +152,45 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         unset($edit['profile_indicia_user_id']);
         $_updating_account=false;
     }
+  }
+}
+
+/**
+ * Converts the information on the account's View page to show a list of species groups
+ * rather than the taxon_group_ids.
+ */
+function _easy_login_set_view_account_for_table($table, $titleField, &$account, $profileField, $readAuth, $title, $description) {
+  if (!empty($account->$profileField)) {
+    // unserialise the variable value if we have to
+    if ($profileField==='profile_surveys_expertise')
+      $value=unserialize($account->$profileField);
+    else
+      $value=explode(',', $account->$profileField);
+    $items = data_entry_helper::get_population_data(array(
+      'table'=>$table,
+      'extraParams'=>$readAuth + array('orderby'=>$titleField, 'sortdir'=>'ASC', 
+          'query'=>json_encode(array('in'=>array('id', $value)))
+      )
+    ));
+    $section = str_replace(' ', '', $title);
+    if (!isset($account->content[$section]))
+      $account->content[$section]=array(
+        '#type' => 'user_profile_category',
+        '#title' => t($title),
+        '#weight' => 1
+      );
+    $itemList='';
+    foreach($items as $item) 
+      $itemList[]='<strong>'.$item[$titleField].'</strong>';
+    $itemList=implode(', ', $itemList);
+    $account->content[$section][$profileField] = array_merge(
+      $account->content['Preferences'][$profileField],
+      array(
+        '#value'=>t($description, array('!items'=>$itemList)),
+        '#title'=>''
+      )
+    );
+    unset($account->content['Preferences'][$profileField]);
   }
 }
 
