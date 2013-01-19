@@ -4,6 +4,13 @@
 @import "blueprint/form";
 
 $default-color: #4ba3cc;
+$ok-color: #33A333;
+$error-color: #a30000;
+$menu-background-color: #eeeeee;
+
+body {
+  font-size: 75%;
+}
 
 h2 {
   font-size: 16px;
@@ -57,6 +64,11 @@ h2 {
   a {
     font-weight: bold;
   }
+}
+
+#navigation {
+  background-color: $menu-background-color;
+  padding: 0 0.5em;
 }
 
 .gallery-item, .gallery li, .summary-report {
@@ -190,4 +202,21 @@ a.button, p a.button {
   text-decoration: none;
 }
 
+/* message divs */
+.messages {
+  background-color: #FFFFFF;
+  border: 1px solid #B8D3E5;
+  margin: 0 0 1.5em;
+  padding: 8px 1em;
+
+  &.status {
+    border-color: lighten($ok-color, 30%);
+    color: $ok-color;
+  }
+  &.error {
+    border-color: lighten($error-color, 10%);
+    background-color: lighten($error-color, 60%);
+    color: $error-color;
+  }
+}
 
