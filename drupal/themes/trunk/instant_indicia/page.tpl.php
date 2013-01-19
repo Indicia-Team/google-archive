@@ -1,21 +1,34 @@
-<?php
-// $Id: page.tpl.php,v 1.4 2009/07/13 23:52:58 andregriffin Exp $
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $language->language ?>" >
-  <head>
-    <title><?php print $head_title ?></title>
-    <?php print $head ?>
-    <?php print $styles ?>
-    <?php print $scripts ?>
-    <!--[if lte IE 7]><?php print framework_get_ie_styles(); ?><![endif]--> <!--If Less Than or Equal (lte) to IE 7-->
-  </head>
-  <body<?php print framework_body_class($left, $right); ?>>
-    <!-- Layout -->
-    <div class="container"> <!-- add "showgrid" class to display grid -->
-  
-      <div id="header" class="clearfix">
-        <?php if (isset($secondary_links)) : ?>
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie6 ie" lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 ie" lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 ie" lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"> <![endif]-->
+<!--[if gt IE 8]> <!--> <html class="" lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"> <!--<![endif]-->
+<head>
+  <?php print $head; ?>
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width" />
+  <title><?php print $head_title; ?></title>
+  <?php print $styles; ?>
+  <?php print $scripts; ?>
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body class="<?php print $body_classes; ?>">
+
+  <div id="container" class="clearfix">
+
+    <div id="skip-link">
+      <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
+      <?php if ($primary_links): ?>
+        <a href="#navigation" class="element-invisible element-focusable"><?php print t('Skip to navigation'); ?></a>
+      <?php endif; ?>
+    </div>
+
+    <header id="header" role="banner" class="clearfix">
+      <?php if (isset($secondary_links)) : ?>
           <div id="secondary-links" class="clearfix">
           <?php 
             global $user;
@@ -25,74 +38,84 @@
           <?php print theme('links', $secondary_links, array('class' => 'links secondary-links')) ?></div>
           <div class="clearfix"></div>
         <?php endif; ?>
-        <?php print $header; ?>
-
-        <?php if ($logo): ?>
-          <a href="<?php print check_url($front_page); ?>" title="<?php print check_plain($site_name); ?>">
-            <img src="<?php print check_url($logo); ?>" alt="<?php print check_plain($site_name); ?>" id="logo" />
-          </a>
-        <?php endif; ?>
-
-        <div id="sitename">
-					<?php if ($site_name): ?>
-            <h1><a href="<?php print check_url($front_page); ?>" title="<?php print check_plain($site_name); ?>"><?php print check_plain($site_name); ?></a></h1>
+      <?php if ($logo): ?>
+        <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" id="logo">
+          <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+        </a>
+      <?php endif; ?>
+      <?php if ($site_name || $site_slogan): ?>
+        <hgroup id="site-name-slogan">
+          <?php if ($site_name): ?>
+            <h1 id="site-name">
+              <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><span><?php print $site_name; ?></span></a>
+            </h1>
           <?php endif; ?>
-  
           <?php if ($site_slogan): ?>
-            <span id="siteslogan"><?php print check_plain($site_slogan); ?></span>
+            <h2 id="site-slogan"><?php print $site_slogan; ?></h2>
           <?php endif; ?>
-        </div> <!-- /#sitename -->
+        </hgroup>
+      <?php endif; ?>
       
-        <?php if ($search_box): ?><?php print $search_box ?><?php endif; ?>
-      </div> <!-- /#header -->
-
-      <div id="nav">
-        <?php if ($nav): ?>
-          <?php print $nav ?>
-        <?php endif; ?>
-
-        <?php if (!$nav): ?> <!-- if block in $nav, overrides default $primary links -->
-
-          <?php if (isset($primary_links)) : ?>
-            <?php print theme('links', $primary_links, array('class' => 'links primary-links')) ?>
+      <?php print $header; ?>
+      
+      <?php if ($search_box): ?><?php print $search_box ?><?php endif; ?>
+      
+	  <?php if ($primary_links  || !empty($navigation)): ?>
+        <nav id="navigation" role="navigation" class="clearfix ">
+          <?php if (!empty($navigation)): ?> <!--if block in $navigation region, override $primary_links and $secondary_links-->
+            <?php print $navigation ?>
           <?php endif; ?>
-
-        <?php endif; ?>
-      </div> <!-- /#nav -->
-
-			<?php if ($left): ?>
-        <div id="sidebar-left" class="sidebar">
-          <?php print $left ?>
-        </div> <!-- /#sidebar-left -->
+          <?php if (empty($navigation)): ?> 
+            <?php if (isset($primary_links)) : ?>
+			  <?php print theme(array('links__system_main_menu', 'links'), $primary_links,
+                array(
+                  'id' => 'main-menu',
+                  'class' => 'links clearfix',
+                ),
+                array(
+                  'text' => t('Main menu'),
+                  'level' => 'h2',
+                  'class' => 'element-invisible',
+                ));
+              ?>
+            <?php endif; ?>
+          <?php endif; ?>
+        </nav> <!-- /#navigation -->
       <?php endif; ?>
+      <?php if (!empty($breadcrumb)): print $breadcrumb; endif; ?>
+    </header> <!-- /#header -->
 
-      <div id="main">
-        <?php print $breadcrumb; ?>
-        <?php if ($mission): print '<div id="mission">'. $mission .'</div>'; endif; ?>
-        <?php if ($title): print '<h2'. ($tabs ? ' class="with-tabs"' : '') .'>'. $title .'</h2>'; endif; ?>
-        <?php if ($tabs): print '<div id="tabs-wrapper" class="clear-block"><ul class="tabs primary">'. $tabs .'</ul>'; endif; ?>
-        <?php if ($tabs2): print '<ul class="tabs secondary">'. $tabs2 .'</ul>'; endif; ?>
-        <?php if ($tabs): print '<span class="clear"></span></div>'; endif; ?>
-        <?php if ($show_messages && $messages): print $messages; endif; ?>
-        <?php print $help; ?>
-        <?php print $content ?>
-      </div> <!-- /#main -->
+    <section id="main" role="main" class="clearfix">
+      <?php if (!empty($messages)): print $messages; endif; ?>
+      <?php if (!empty($mission)): ?><div id="mission"><?php print $mission; ?></div><?php endif; ?>
+      <a id="main-content"></a>
+      <?php if (!empty($title)): ?><h1 class="title" id="page-title"><?php print $title ?></h1><?php endif; ?>
+      <?php if (!empty($tabs)): ?><div class="tabs-wrapper clearfix"><?php print $tabs; ?></div><?php endif; ?>
+      <?php if (!empty($help)): print $help; endif; ?>
+      <?php print $content; ?>
+    </section> <!-- /#main -->
 
-      <?php if ($right): ?>
-        <div id="sidebar-right" class="sidebar">
-          <?php print $right ?>
-        </div> <!-- /#sidebar-right -->
-      <?php endif; ?>
+    <?php if (!empty($left)): ?>
+      <aside id="sidebar-left" role="complementary" class="sidebar clearfix">
+        <?php print $left; ?>
+      </aside> <!-- /sidebar-left -->
+    <?php endif; ?>
 
-      <div id="footer" class="clear">
-        <?php print $footer_message . $footer ?>
-        <?php print $feed_icons ?>
-      </div> <!-- /#footer -->
+    <?php if (!empty($right)): ?>
+      <aside id="sidebar-right" role="complementary" class="sidebar clearfix">
+        <?php print $right; ?>
+      </aside> <!-- /sidebar-right -->
+    <?php endif; ?>
 
-    </div> <!-- /.container -->
-    <!-- /layout -->
+    <footer id="footer" role="contentinfo" class="clearfix">
+      <?php print $footer_message; ?>
+      <?php if (!empty($footer)): print $footer; endif; ?>
+      <?php print $feed_icons ?>
+    </footer> <!-- /#footer -->
 
-  <?php print $closure ?>
+    <?php print $closure ?>
 
-  </body>
+  </div> <!-- /#container -->
+
+</body>
 </html>
