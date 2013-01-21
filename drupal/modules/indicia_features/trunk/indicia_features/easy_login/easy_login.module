@@ -90,11 +90,12 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         }
         // remove the preferences section ONLY if it has no sub-items
         $gotPreferences=false;
-        foreach($account->content['Preferences'] as $item=>$content) {
-          if (substr($item, 0, 1)!=='#') {
-            $gotPreferences=true;
+        if (isset($account->content['Preferences']))
+          foreach($account->content['Preferences'] as $item=>$content) {
+            if (substr($item, 0, 1)!=='#') {
+              $gotPreferences=true;
+            }
           }
-        }
         if (!$gotPreferences)
           unset($account->content['Preferences']);
       case 'login':
@@ -104,8 +105,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           return;
         }
         // deliberately flow through - as we always check the account id after account update. So do NOT break
-      case 'insert':
-      case 'update':
+      case 'submit':
         global $user;
         profile_load_profile($user);
         $fieldsToSyncByCaption = array();
