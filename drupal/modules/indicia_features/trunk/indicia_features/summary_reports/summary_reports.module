@@ -8,7 +8,7 @@ include_once('summary_reports.features.inc');
  * @param type $node
  * @param type $op
  * @param type $a3
- * @param type $a4 
+ * @param type $a4
  */
 function summary_reports_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   if ($node->type==='summary_report')
@@ -81,8 +81,8 @@ function summary_report_get_report_options($node) {
     'mode' => 'report',
     'readAuth' => $readAuth,
     'extraParams' => array(
-      'date_from'=>'', 
-      'date_to'=>'', 
+      'date_from'=>'',
+      'date_to'=>'',
       'survey_id'=>'',
       'location_type_id'=>'',
       'locattrs'=>'',
@@ -96,7 +96,7 @@ function summary_report_get_report_options($node) {
     case 'species': // legacy
       $folder = 'taxon_groups';
       break;
-    case 'taxon': 
+    case 'taxon':
       $folder = 'taxa';
       break;
     default:
@@ -116,7 +116,7 @@ function summary_report_get_report_options($node) {
       profile_load_profile($user);
       if (isset($user->profile_indicia_user_id)) {
         $r['userId']=$user->profile_indicia_user_id;
-        $r['sharing']='me';  
+        $r['sharing']='me';
       } else {
         drupal_set_message(t('As your user account has not been linked to the central records database yet, this summary is showing all records recorded on this website rather than just yours.'));
         $r['sharing']='website';
@@ -131,7 +131,7 @@ function summary_report_get_report_options($node) {
   }
   $extra = (isset($node->field_summary_report_spatial[0]['value']) && $node->field_summary_report_spatial[0]['value']==='linked')
       ? '_linked' : '';
-      
+
   $r['dataSource'] = "library/$folder/$dataType"."_counts_mappable_summary".$extra;
   return $r;
 }
@@ -180,7 +180,7 @@ function summary_report_build_map($node, $reportOptions) {
         'maxValue'=> '{maxvalue}'
       )
     );
-  }  
+  }
   // collect the user defined values for report clcking from the edit tab.
   $reportURL = $node->field_summary_report_call_report[0]['value'];
   $param = $node->field_summary_report_call_param[0]['value'];
@@ -245,10 +245,10 @@ function summary_report_build_bar($node, $reportOptions) {
 function summary_report_build_pie($node, $reportOptions) {
   return summary_report_graph($node, array_merge(
     array(
-	  // limit size of the legend
-	  'legendOptions'=>array('show'=>true, 'rendererOptions'=>array('numberColumns'=>2, 'numberRows'=>21)),
-	  'rendererOptions'=>array('showDataLabels'=>true,'dataLabelFormatString'=>'%d','dataLabels'=>'value','dataLabelThreshold'=>1,'dataLabelPositionFactor'=>1.05)
-	),
+    // limit size of the legend
+    'legendOptions'=>array('show'=>true, 'rendererOptions'=>array('numberColumns'=>2, 'numberRows'=>21)),
+    'rendererOptions'=>array('showDataLabels'=>true,'dataLabelFormatString'=>'%d','dataLabels'=>'value','dataLabelThreshold'=>1,'dataLabelPositionFactor'=>1.05)
+  ),
     $reportOptions
   ), 'pie');
 }
