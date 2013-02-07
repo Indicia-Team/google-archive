@@ -422,10 +422,10 @@ L|Data must be verified or at least likely
     'required' => '0',
     'module' => 'text',
     'active' => '1',
-    'max_length' => 100,
+    'max_length' => 500,
     'default_value' => ' ',
     'widget' => array(
-      'size' => 25,
+      'size' => 80,
       'label' => 'Report page to call when clicked?',
       'description' => 'Enter the path of a page which holds a report that you would like to be called when the user 
           clicks on a report item (e.g. a pie segment, map polygon or chart bar). This should be a valid Drupal page 
@@ -444,14 +444,15 @@ L|Data must be verified or at least likely
     'required' => '0',
     'module' => 'text',
     'active' => '1',
-    'max_length' => 100,
+    'max_length' => 500,
     'default_value' => ' ',
     'widget' => array(
-      'size' => 25,
-      'label' => 'Report input parameter name',
-      'description' => 'When clicking on a report item to call the report on the other page, the input parameter 
-        you supply here will be passed to that page, with the value set to the ID of the item clicked on. For example
-        this could be a location_id, taxon_group_id, month or year number.',
+      'size' => 80,
+      'label' => 'Report input parameters',
+      'description' => 'When clicking on a report item to call the report on the other page, the input parameters 
+        you supply here will be passed to that page as the URL query string, with #param# replaced by the ID of the 
+        item clicked on, which could be a location_id, taxon_group_id, month or year number. For example, specify 
+        from_date=01/01/#param#?to_date=31/12/#param# for a year filtered report.',
       'type' => 'text_textfield',
       'module' => 'text',
     ),
