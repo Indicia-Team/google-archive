@@ -17,9 +17,10 @@ function library_view() {
   drupal_set_message($message.' '.t('Forms are sorted so the ones most likely to be of interest to you are listed first.'));
   global $user;
   profile_load_profile($user);
-  // find all the library form details
+  // find all the library form details. Filter out unpublished, unless admin user.
+  $where = ($user->uid==1 || user_access('administer nodes')) ? '' : 'WHERE n.status<>0';
   $result = db_query("SELECT n.nid, l.library_title, l.library_description, l.location_ids, l.taxon_group_ids FROM {node} n
-INNER JOIN {forms_and_surveys_library} l on l.nid=n.nid");
+INNER JOIN {forms_and_surveys_library} l on l.nid=n.nid ".$where);
   // create arrays to hold the different sections of forms we will display
   $forms = array();
   // loop through the forms, work out a weighting score
@@ -87,10 +88,14 @@ function library_output_form_list($forms, $selected) {
       if (in_array($form->nid, $selected)) {
         $classes[] = 'selected';
       }
+      if ($form->status==0)
+        $classes[]='warning';
       $class = (count($classes)) ? ' class="'.implode(' ', $classes).'"' : '';
       $r .= '<li id="'.str_replace(' ', '_', strtolower($form->library_title)).'"'.$class.'>';
       $r .= '<h3>'.l(t($form->library_title), 'node/'.$form->nid).'</h3>';
       $r .= $form->library_description;
+      if ($form->status==0)
+        $r .= '<br/>'.t('Unpublished');
       $buttonCaption = (in_array($form->nid, $selected)) ? 'Remove from favourites' : 'Add to favourites'; 
       $r .= '<button type="button" id="btn-'.$form->nid.'">'.t($buttonCaption).'</button>';
       $r .= '</li>';
