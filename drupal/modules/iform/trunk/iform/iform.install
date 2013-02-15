@@ -28,13 +28,13 @@ function iform_schema() {
         'not null' => TRUE,
       ),
       'needs_review' => array(
-        'description' => 'Review state after node import. 0 indicates the node is not imported. '.
-            '1 indicates a node that is imported but has been reviewed. 2 indicates that the node '.
-            'is imported and site specific settings have been set - it just '.
-            'needs a final review. 3 indicates that this is a freshly imported form which may have some '.
+        'description' => 'Review state after node import. 0 indicates the node is not imported. ' .
+            '1 indicates a node that is imported but has been reviewed. 2 indicates that the node ' .
+            'is imported and site specific settings have been set - it just ' .
+            'needs a final review. 3 indicates that this is a freshly imported form which may have some ' .
             'configuration parameters that are site specific and need review.',
         'type' => 'int',
-        'not null' => true,
+        'not null' => TRUE,
         'default' => 0
       )
     ),
