@@ -128,7 +128,6 @@ function _easy_login_profile_fields() {
       'options' => '',
       'page' => ''
   );
-  // 
   $fields['profile_record_privacy'] = array(
       'title' => 'Record privacy',
       'explanation' => 'Tick this box if you would like to opt out of allowing your records to appear on other websites. '.
@@ -139,6 +138,19 @@ function _easy_login_profile_fields() {
       'required' => 0,
       'register' => 0,
       'visibility' => 4,
+      'autocomplete' => 0,
+      'page' => '',
+  );
+  $fields['profile_training'] = array(
+      'title' => 'Training',
+      'explanation' => 'Tick this box to enable training mode. When in training mode, the records you create will be hidden from other users and will ' .
+          'be only used for your training purposes.',
+      'category' => 'Preferences',
+      'type' => 'checkbox',
+      'weight' => 0,
+      'required' => 0,
+      'register' => 0,
+      'visibility' => 2,
       'autocomplete' => 0,
       'page' => '',
   );

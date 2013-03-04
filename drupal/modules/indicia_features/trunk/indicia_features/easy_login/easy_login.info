@@ -25,4 +25,4 @@ description = "Manages the user login process and integrates users with the ware
 name = "Easy Login"
 package = "Indicia Miscellaneous Features"
 project = "easy_login"
-version = "6.x-3.1"
+version = "6.x-3.2"
