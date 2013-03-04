@@ -17,7 +17,9 @@
 </head>
 
 <body class="<?php print $body_classes; ?>">
-
+  <?php if (hostsite_get_user_field('training', false)) 
+    drupal_set_message(t('You are in training mode. Records you add will be for training purposes only and you can only see training records.'), 'warning');
+  ?>
   <div id="container" class="clearfix">
 
     <div id="skip-link">
