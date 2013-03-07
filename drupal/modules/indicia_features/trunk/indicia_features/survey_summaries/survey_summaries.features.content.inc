@@ -121,7 +121,7 @@ return $r;',
           'value' => '[participation_map]
 [latest_photos]
 [recorder_league]
-[species_totals_by_group_pie]',
+[total]',
           '_error_element' => 'default_value_widget][field_survey_summary_output][0][value',
         ),
       ),
@@ -132,9 +132,7 @@ return $r;',
 [participation_map]
 [latest_photos]
 [recorder_league]
-[recorder_league_pie]
-[species_totals_by_group]
-[species_totals_by_group_pie]',
+[total]',
       'type' => 'text_textarea',
       'module' => 'text',
     ),
