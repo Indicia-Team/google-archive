@@ -31,7 +31,16 @@ function survey_summary_build($node) {
     report_helper::$late_javascript = $cacheData->data['late_javascript'];
     report_helper::$required_resources = $cacheData->data['resources'];    
   } else {
-    $surveyId=$node->field_survey_id[0]['value'];
+    $surveyIds=array();
+    foreach($node->field_survey_id as $value) {
+      $surveyIds[] = $value['value'];
+    }
+    $surveyIds=implode(',', $surveyIds);
+    $locationIds=array();
+    foreach($node->field_location_id as $value) {
+      $locationIds[] = $value['value'];
+    }
+    $locationIds=implode(',', $locationIds);
     $readAuth = report_helper::get_read_auth(variable_get('indicia_website_id', 0), variable_get('indicia_password', ''));
     $arr = helper_base::explode_lines($node->field_survey_summary_output[0]['value']);
     $r = '<div id="node-body">'.$node->content['body']['#value'].'<div id="survey-summary" class="ui-clearfix">';
@@ -40,7 +49,7 @@ function survey_summary_build($node) {
     foreach($arr as $item) {
       if (preg_match('/^\[(?P<ctrl>.+)\]$/', $item, $matches)) {
         if ($fn) 
-          $r .= survey_summary_output_block($fn, $readAuth, $surveyId, $currentOptions);
+          $r .= survey_summary_output_block($fn, $readAuth, $surveyIds, $locationIds, $currentOptions);
         $fn = 'survey_summary_'.$matches['ctrl'];
         $currentOptions=array();
       } elseif (preg_match('/^@(?P<key>.+)=(?P<value>.+)$/', $item, $matches)) {
@@ -48,7 +57,7 @@ function survey_summary_build($node) {
       }
     }
     if ($fn) 
-      $r .= survey_summary_output_block($fn, $readAuth, $surveyId, $currentOptions);
+      $r .= survey_summary_output_block($fn, $readAuth, $surveyIds, $locationIds, $currentOptions);
     report_helper::add_resource('defaultStylesheet');
     $r .= '</div>';
     // Cache the form, including the javascript and resources
@@ -67,7 +76,7 @@ function survey_summary_build($node) {
 }
 
 
-function survey_summary_output_block($fn, $readAuth, $surveyId, $options) {
+function survey_summary_output_block($fn, $readAuth, $surveyIds, $locationIds, $options) {
   $classes=array('survey-summary-panel');
   if (isset($options['class']))
     $classes[]=$options['class'];
@@ -80,12 +89,12 @@ function survey_summary_output_block($fn, $readAuth, $surveyId, $options) {
   if (count($style))
     $r .= ' style="'.implode(' ', $style).'"';
   $r .= '>';
-  $r .= $fn($readAuth, $surveyId, $options);
+  $r .= $fn($readAuth, $surveyIds, $locationIds, $options);
   $r .= '</div>';
   return $r;
 }
 
-function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
+function survey_summary_latest_photos($readAuth, $surveyIds, $locationIds, $currentOptions) {
   $options = array_merge(array(
     'itemsPerPage'=>4,
     'galleryColCount'=>4,
@@ -95,7 +104,7 @@ function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
   return '<h3>Photos</h3>'.report_helper::report_grid(array(
     'id'=>'latest-photos',
     'readAuth' => $readAuth,
-    'dataSource'=>'library/occurrence_images/occurrence_image_list',
+    'dataSource'=>'library/occurrence_images/occurrence_image_list_2',
     'itemsPerPage' => $options['itemsPerPage'],
     'columns' => array(
       array(
@@ -109,7 +118,8 @@ function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
     'extraParams' => array(
       'date_from'=>$options['date_from'],
       'date_to'=>$options['date_to'],
-      'survey_id'=>$surveyId,
+      'survey_ids'=>$surveyIds,
+      'location_ids'=>$locationIds,
       'taxon_group_id'=>'',
       'smpattrs'=>'',
       'occattrs'=>''
@@ -117,7 +127,7 @@ function survey_summary_latest_photos($readAuth, $surveyId, $currentOptions) {
   ));
 }
 
-function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
+function survey_summary_recorder_league($readAuth, $surveyIds, $locationIds, $currentOptions) {
   $options = array_merge(array(
     'itemsPerPage'=>10,
     'date_from'=>'',
@@ -128,7 +138,7 @@ function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
   return '<h3>Recorder League</h3>'.report_helper::report_grid(array(
     'id'=>'recorder-league',
     'readAuth' => $readAuth,
-    'dataSource'=>'library/users/species_and_occurrence_counts',
+    'dataSource'=>'library/users/species_and_occurrence_counts_2',
     'itemsPerPage' => $options['itemsPerPage'],
     'columns' => array(
       array('fieldname'=>'username','display'=>'Recorder'),
@@ -141,7 +151,8 @@ function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
     'extraParams' => array(
       'date_from'=>$options['date_from'],
       'date_to'=>$options['date_to'],
-      'survey_id'=>$surveyId,
+      'survey_ids'=>$surveyIds,
+      'location_ids'=>$locationIds,
       'taxon_group_id'=>'',
       'smpattrs'=>'',
       'occattrs'=>'',
@@ -151,7 +162,7 @@ function survey_summary_recorder_league($readAuth, $surveyId, $currentOptions) {
   
 }
 
-function survey_summary_participation_map($readAuth, $surveyId, $currentOptions) {
+function survey_summary_participation_map($readAuth, $surveyIds, $locationIds, $currentOptions) {
   iform_load_helpers(array('map_helper'));
   $wmsUrl = map_helper::$geoserver_url.'wms';
   $options = array_merge(array(
@@ -166,7 +177,15 @@ function survey_summary_participation_map($readAuth, $surveyId, $currentOptions)
     'standardControls'=>array('panZoomBar'),
     'featureType'=>'indicia:cache_occurrences'
   ), $currentOptions);
-  map_helper::$onload_javascript .= "\n    var filter='survey_id=".$surveyId."';";
+  $filters=array();
+  if ($surveyIds) {
+    $filters[] = "survey_id in ($surveyIds)";
+  }
+  if ($locationIds) {
+    $filters[] = "location_id in ($locationIds)";
+  }
+  $filters = implode(' AND ', $filters);
+  map_helper::$onload_javascript .= "\n    var filter='$filters';";
   map_helper::$onload_javascript .= "\n    var distLayer = new OpenLayers.Layer.WMS(
           '".lang::get('Participants')."',
           '$wmsUrl',
@@ -177,7 +196,7 @@ function survey_summary_participation_map($readAuth, $surveyId, $currentOptions)
   return '<h3>Records Map</h3>'.map_helper::map_panel($options, $olOptions);
 }
 
-function survey_summary_total($readAuth, $surveyId, $currentOptions) {
+function survey_summary_total($readAuth, $surveyIds, $locationIds, $currentOptions) {
   $options = array_merge(array(
     'date_from'=>'',
     'date_to'=>'',
@@ -185,9 +204,9 @@ function survey_summary_total($readAuth, $surveyId, $currentOptions) {
   ), $currentOptions);
   return report_helper::freeform_report(array(
     'readAuth' => $readAuth,
-    'dataSource'=>'library/totals/species_and_occurrence_counts',
+    'dataSource'=>'library/totals/species_and_occurrence_counts_2',
     'bands'=>array(array('content'=>$options['template'])),
-    'extraParams'=>array('date_from'=>$options['date_from'], 'date_to'=>$options['date_to'], 'survey_id'=>$surveyId)
+    'extraParams'=>array('date_from'=>$options['date_from'], 'date_to'=>$options['date_to'], 'survey_ids'=>$surveyIds, 'location_ids'=>$locationIds)
   ));
   
 }

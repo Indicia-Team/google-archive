@@ -38,8 +38,8 @@ function survey_summaries_content_default_fields() {
     ),
     'widget_active' => '1',
     'type' => 'number_integer',
-    'required' => '1',
-    'multiple' => '0',
+    'required' => '0',
+    'multiple' => '1',
     'module' => 'number',
     'active' => '1',
     'prefix' => '',
@@ -65,11 +65,68 @@ return $r;',
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Survey',
+      'label' => 'Surveys',
       'weight' => '-2',
-      'description' => 'Select the survey to output a summary for',
+      'description' => 'Select the survey(s) to output a summary for',
       'type' => 'optionwidgets_select',
       'module' => 'optionwidgets',
+    ),
+  );
+  
+  // Exported field: field_location_id
+  $fields['survey_summary-field_location_id'] = array(
+    'field_name' => 'field_location_id',
+    'type_name' => 'survey_summary',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '2' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '3' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_integer',
+    'required' => '0',
+    'multiple' => '1',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '',
+    'min' => '',
+    'max' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Location IDs',
+      'weight' => '-2',
+      'description' => 'Input the IDs of the locations to output a summary for',
+      'type' => 'text_textfield',
+      'module' => 'text',
     ),
   );
 
