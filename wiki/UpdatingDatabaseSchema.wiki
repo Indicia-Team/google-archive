@@ -66,3 +66,9 @@ SELECT insert_term('Can be identified at sight in the field.', 'eng', 1, null, '
 }}}
 
 2. If you are writing a module for the warehouse (in the modules folder under the Indicia installation directory) you can supply database update scripts which will be run when the home/upgrade page is visited after installing the module. This makes it possible to do things like create custom attribute definitions or any other type of data using installable code. In fact it is also possible to create new database entities along with edit screens and so forth using the module (the taxon_designations module is a good example of this). Simply create a folder called db in your module folder, followed by version_0_1_0 and the subsequent version folders as your module develops.
+
+3. If you need a script to run with postgres user rights for full permissions, then put a comment on the first line as below. This shows the script to the user running the upgrade so that they can run it manually, since the upgrader will not have permissions:
+
+{{{
+-- #postgres user#
+}}}
