@@ -179,7 +179,7 @@ function _easy_login_set_view_account_for_table($table, $titleField, &$account, 
         '#title' => t($title),
         '#weight' => 1
       );
-    $itemList='';
+    $itemList=array();
     foreach($items as $item) 
       $itemList[]='<strong>'.$item[$titleField].'</strong>';
     $itemList=implode(', ', $itemList);
