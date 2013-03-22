@@ -203,7 +203,7 @@ function _easy_login_get_profile_field_as_list($table, $account, $profileField, 
     // convert to a list of readable location or group titles
     $items = data_entry_helper::get_population_data(array(
       'table'=>$table,
-      'extraParams'=>$readAuth + array('orderby'=>$titleField, 'sortdir'=>'ASC', 
+      'extraParams'=>$readAuth + array('orderby'=>$titleField, 'sortdir'=>'ASC', 'sharing'=>'verification',
           'query'=>json_encode(array('in'=>array('id', $value)))
       )
     ));
