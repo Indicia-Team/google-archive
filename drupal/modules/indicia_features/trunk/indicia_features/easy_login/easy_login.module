@@ -77,11 +77,11 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         _easy_login_set_view_account_for_table('location', 'name', $account, 'profile_location_collation', $readAuth, 
             'Data collation settings', 'Your locality for data collation downloads is !items.');
         _easy_login_set_view_account_for_table('taxon_group', 'title', $account, 'profile_taxon_groups', $readAuth, 
-            'Recording preferences', 'Your preferred species groups for recording are: !items.');
+            'Recording preferences', 'Your preferred species groups for recording are !items.');
         _easy_login_set_view_account_for_table('taxon_group', 'title', $account, 'profile_taxon_groups_expertise', $readAuth, 
-            'Verification settings', 'Your species groups for verification are: !items.');
+            'Verification settings', 'Your species groups for verification are !items.');
         _easy_login_set_view_account_for_table('survey', 'title', $account, 'profile_surveys_expertise', $readAuth, 
-            'Verification settings', 'Your surveys for verification are: !items.');
+            'Verification settings', 'Your surveys for verification are !items.');
         if (isset($account->content['Preferences']['profile_record_privacy'])) {
           // convert a boolean to something more readable
           $account->content['Preferences']['profile_record_privacy']['#title']=t('Record privacy');
@@ -111,6 +111,10 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         $fieldsToSyncByCaption = array();
         // $edit can be empty during initial registration
         if (!empty($edit)) {
+          // there seems to be an issue in profile_checkboxes, which means that #access=FALSE sets of taxon groups
+          // will overwrite the value with empty when it shouldn't. This prevents the overwrite if you don't have access.
+          if (!user_access('administer users'))
+            $edit['profile_taxon_groups_expertise']=serialize(explode(',', $account->profile_taxon_groups_expertise));
           foreach ($edit as $field=>$value) {
             $account->$field=$value;
             $fieldsToSync = array();
@@ -156,22 +160,12 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
 }
 
 /**
- * Converts the information on the account's View page to show a list of species groups
- * rather than the taxon_group_ids.
+ * Converts the information on the account's View page to show a list of species groups or locations
+ * rather than the taxon_group_ids or location IDs.
  */
 function _easy_login_set_view_account_for_table($table, $titleField, &$account, $profileField, $readAuth, $title, $description) {
   if (!empty($account->$profileField)) {
-    // unserialise the variable value if we have to
-    if ($profileField==='profile_surveys_expertise')
-      $value=unserialize($account->$profileField);
-    else
-      $value=explode(',', $account->$profileField);
-    $items = data_entry_helper::get_population_data(array(
-      'table'=>$table,
-      'extraParams'=>$readAuth + array('orderby'=>$titleField, 'sortdir'=>'ASC', 
-          'query'=>json_encode(array('in'=>array('id', $value)))
-      )
-    ));
+    $itemList = _easy_login_get_profile_field_as_list($table, $account, $profileField, $titleField, $readAuth);
     $section = str_replace(' ', '', $title);
     if (!isset($account->content[$section]))
       $account->content[$section]=array(
@@ -179,10 +173,6 @@ function _easy_login_set_view_account_for_table($table, $titleField, &$account, 
         '#title' => t($title),
         '#weight' => 1
       );
-    $itemList=array();
-    foreach($items as $item) 
-      $itemList[]='<strong>'.$item[$titleField].'</strong>';
-    $itemList=implode(', ', $itemList);
     $account->content[$section][$profileField] = array_merge(
       $account->content['Preferences'][$profileField],
       array(
@@ -190,7 +180,37 @@ function _easy_login_set_view_account_for_table($table, $titleField, &$account, 
         '#title'=>''
       )
     );
+    // Hide the original display of the field provided by Drupal
     unset($account->content['Preferences'][$profileField]);
+  }
+}
+
+/**
+ * Converts the serialized list of IDs in a profile field (list of locations or species groups) into
+ * a comma separated list of readable item titles.
+ */
+function _easy_login_get_profile_field_as_list($table, $account, $profileField, $titleField, $readAuth) {
+  if (!empty($account->$profileField)) {
+    // unserialise the variable value if we have to. If serialised, the string will contain {.
+    if (strpos($account->$profileField, '{')===false)
+      $value=explode(',', $account->$profileField);
+    else
+      $value=unserialize($account->$profileField);
+  }
+  if (!isset($value) || empty($value)) 
+    return '<strong>' . t('not specified') . '</strong>';
+  else {
+    // convert to a list of readable location or group titles
+    $items = data_entry_helper::get_population_data(array(
+      'table'=>$table,
+      'extraParams'=>$readAuth + array('orderby'=>$titleField, 'sortdir'=>'ASC', 
+          'query'=>json_encode(array('in'=>array('id', $value)))
+      )
+    ));
+    $itemList=array();
+    foreach($items as $item) 
+      $itemList[]='<strong>'.$item[$titleField].'</strong>';
+    return implode(', ', $itemList);
   }
 }
 
@@ -282,6 +302,9 @@ function easy_login_store_value($filter, $uid, $value, $edit) {
  * Alter the account form to load possible options for location and taxon group from the warehouse.
  */
 function easy_login_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+  if (!isset($user->profile_last_name))
+    profile_load_profile($user);
   if (($form_id === 'user_profile_form' || $form_id === 'user_register') && array_key_exists('Preferences', $form)) {
     iform_load_helpers(array('data_entry_helper'));
     $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
@@ -319,7 +342,7 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
         $form['Preferences']['profile_taxon_groups_expertise']['#suffix'] = '</div>';
       }
     }
-    if ($form_id === 'user_profile_form' && isset($form['Preferences']['profile_surveys_expertise'])) {
+    if ($form_id === 'user_profile_form' && isset($form['Preferences']['profile_surveys_expertise']) && user_access('administer users')) {
       if (!empty($form['Preferences']['profile_surveys_expertise']['#default_value'])) {
         $surveys=unserialize($form['Preferences']['profile_surveys_expertise']['#default_value']);
         $qry = json_encode(array('in'=>array('id', array_values($surveys))));
@@ -358,34 +381,40 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
       if (isset($values->uid))
         $thisUser = user_load($values->uid);
     }
-    // can logged in user change expert geography and taxon groups?
-    if (!user_access('administer users')) {
-      if (isset($form['Preferences']['profile_location_expertise'])) {
-        $form['Preferences']['profile_location_expertise']['#attributes'] = array('disabled' => 'true');
-        $form['Preferences']['profile_location_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
-      }
-      if (isset($form['Preferences']['profile_taxon_groups_expertise'])) {
-        $form['Preferences']['profile_taxon_groups_expertise']['#attributes'] = array('disabled' => 'true');
-        $form['Preferences']['profile_taxon_groups_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
-      }
-      if (isset($form['Preferences']['profile_surveys_expertise'])) {
-        $form['Preferences']['profile_surveys_expertise']['#attributes'] = array('disabled' => 'true');
-        $form['Preferences']['profile_surveys_expertise']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
-      }
+    // If the user is a verifier but the person editing the account has no rights to change the settings, then add read only descriptions
+    // of verification settings. We'll remove the actual fields in a moment.
+    if (user_access('verification', $thisUser) && !user_access('administer users')) {
+      $verification_info =  array();
+      $verification_info[] = t('Your locality for verification: !items.', 
+          array('!items' => _easy_login_get_profile_field_as_list('location', $user, 'profile_location_expertise', 'name', $readAuth)));
+      $verification_info[] = t('Your taxon groups for verification: !items.', 
+          array('!items' => _easy_login_get_profile_field_as_list('taxon_group', $user, 'profile_taxon_groups_expertise', 'title', $readAuth)));
+      $verification_info[] = t('Your surveys for verification: !items.', 
+          array('!items' => _easy_login_get_profile_field_as_list('survey', $user, 'profile_surveys_expertise', 'title', $readAuth)));
+      $form['Preferences']['verification_info'] = array('#value' => '<div class="form-item"><label>' . t('Verification settings') . '</label><ul><li>' .
+          implode("</li>\n<li>", $verification_info) . '</li></ul>' . 
+          '<div class="description">' . t('If you want to change any of these settings, please contact the website administrator.') . '</div></div>');
+    }
+    if (user_access('collate regional records', $thisUser) && !user_access('administer users')) {
+      $form['Preferences']['collation_info'] = array('#value' => '<div class="form-item"><label>' . t('Record collation settings') . '</label><ul><li>' .
+          t('Your locality for collation: !items.', 
+          array('!items' => _easy_login_get_profile_field_as_list('location', $user, 'profile_location_collation', 'name', $readAuth))) . '</ul></li>' . 
+          '<div class="description">' . t('If you want to change this setting, please contact the website administrator.') . '</div></div>');
       if (isset($form['Preferences']['profile_location_collation'])) {
         $form['Preferences']['profile_location_collation']['#attributes'] = array('disabled' => 'true');
-        $form['Preferences']['profile_location_collation']['#description'] .= '<br/>If you want to change this setting, please contact the website administrator.';
+        $form['Preferences']['profile_location_collation']['#description'] = t('If you want to change this setting, please contact the website administrator.');
       }
     }
-    // Is the user being edited an expert verifier? If not, no need for the profile fields
-    if (!user_access('verification', $thisUser)) {
-      unset($form['Preferences']['profile_location_expertise']['#type']);
-      unset($form['Preferences']['profile_taxon_groups_expertise']);
-      unset($form['Preferences']['profile_surveys_expertise']);
+    // If the user is not a verifier, or the person editing the account has no rights to change verification user settings, remove the fields.
+    if (!user_access('verification', $thisUser) || !user_access('administer users')) {
+      $form['Preferences']['profile_location_expertise']['#access'] = FALSE;
+      $form['Preferences']['profile_taxon_groups_expertise']['#access'] = FALSE;
+      $form['Preferences']['profile_surveys_expertise']['#access'] = FALSE;
     }
     // Is the user being edited a regional collator? If not, no need for the profile field
-    if (!user_access('collate regional records', $thisUser)) 
-      unset($form['Preferences']['profile_location_collation']['#type']);
+    if (!user_access('collate regional records', $thisUser) || !user_access('administer users')) {
+      $form['Preferences']['profile_location_collation']['#access'] = FALSE;
+    }
     drupal_add_css(drupal_get_path('module','iform').'/media/css/default_site.css');
     handle_resources();
   }
