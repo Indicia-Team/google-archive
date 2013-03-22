@@ -1,7 +1,7 @@
 <?php
 // $Id$
 require_once(drupal_get_path('module','iform').'/iform.module');
-require_once(drupal_get_path('module','iform').'/client_helpers/prebuilt_forms/distribution_map_1.php');
+require_once(iform_client_helpers_path() . 'prebuilt_forms/distribution_map_1.php');
 
 /**
 * Implement hook_taxon_formatter_types
