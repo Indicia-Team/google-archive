@@ -268,6 +268,9 @@ function iform_ajaxproxy_proxy() {
         $structure = array('model' => 'user_trust');
         $Model = data_entry_helper::build_submission($_POST, $structure);
       break;
+    case "person_attribute_value":
+        $Model = data_entry_helper::wrap($_POST, 'person_attribute_value');
+      break;
     default:
       echo "{error:\"iform_ajaxproxy Error: Current defined methods are: sample, location, loc-sample, loc-smp-occ, smp-occ, media, occurrence, occ-comment, smp-comment, determination, notification, user-trust\"}";
       // TODO invoke optional method in relevant iform prebuilt form to handle non standard indexes
