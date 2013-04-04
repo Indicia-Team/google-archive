@@ -602,7 +602,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       // Ask the form to submit itself.
       try {
         // attach the path to the input form. It'll just get skipped if we are not posting a sample.
-        $_POST['sample:input_form'] = $node->path;
+        $_POST['sample:input_form'] =  url('node/' . $node->nid, array('absolute' => TRUE));
         $s = call_user_func(array('iform_' . $node->iform, 'get_submission'), $_POST, $args);
       } catch (Exception $e) {
         watchdog('iform', 'Exception occurred during build of form submission: ' . $e->getMessage());
