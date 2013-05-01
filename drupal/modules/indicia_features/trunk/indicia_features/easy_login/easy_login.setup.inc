@@ -144,7 +144,8 @@ function _easy_login_profile_fields() {
   $fields['profile_training'] = array(
       'title' => 'Training',
       'explanation' => 'Tick this box to enable training mode. When in training mode, the records you create will be hidden from other users and will ' .
-          'be only used for your training purposes.',
+          'be only used for your training purposes. This only affects the records you create and not sites so you will still be able to practice inputting records for any '.
+          'sites that you have already created.',
       'category' => 'Preferences',
       'type' => 'checkbox',
       'weight' => 0,
