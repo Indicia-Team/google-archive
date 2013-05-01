@@ -61,7 +61,7 @@ INNER JOIN {forms_and_surveys_library} l on l.nid=n.nid ".$where);
   drupal_add_js(drupal_get_path('module', 'forms_and_surveys_library').'/forms_and_surveys_library.js');
   drupal_add_js('indiciaData={"ajaxUrl":"'.url('forms_and_surveys_library/set_favourite').'",
   "addCaption": "'.t('Add to favourites').'",
-  "removeCaption": "'.t('Remove from favourites').'",
+  "removeCaption": "'.t('Remove from favourites').'"
 };
 ', 'inline');
   return $r;
