@@ -342,14 +342,14 @@ function iform_menu() {
   $items = array();
   $items['admin/settings/iform'] = array(
     'title' => 'IForm',
-    'description' => t('Configuration for the IForm module.'),
+    'description' => 'Configuration for the IForm module.',
     'page callback' => 'iform_settings',
     'access arguments' => array('create iform'),
     'type' => MENU_NORMAL_ITEM
   );
   $items['admin/settings/iform/settings'] = array(
-    'title' => t('Settings'),
-    'description' => t('Settings page for the IForm module.'),
+    'title' => 'Settings',
+    'description' => 'Settings page for the IForm module.',
     'page callback' => 'iform_settings',
     'access arguments' => array('create iform'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -357,8 +357,8 @@ function iform_menu() {
   );
   // Create a tab to display the admin panel.
   $items['admin/settings/iform/admin'] = array(
-    'title' => t('IForm Admin Tasks'),
-    'description' => t('Administration tasks for the IForm module.'),
+    'title' => 'IForm Admin Tasks',
+    'description' => 'Administration tasks for the IForm module.',
     'page callback' => 'iform_admin_tasks',
     'access arguments' => array('create iform'),
     'type' => MENU_LOCAL_TASK,
@@ -366,17 +366,17 @@ function iform_menu() {
   );
   // Create a tab to display the diagnostics panel.
   $items['admin/settings/iform/diagnostics'] = array(
-    'title' => t('IForm Diagnostics'),
-    'description' => t('Run a configuration check for the IForm module.'),
+    'title' => 'IForm Diagnostics',
+    'description' => 'Run a configuration check for the IForm module.',
     'page callback' => 'iform_diagnostics',
     'access arguments' => array('create iform'),
     'type' => MENU_LOCAL_TASK,
     'weight' => 2
   );
   $items['admin/build/features/indicia'] = array(
-    'title' => t('Review IForm Features'),
-    'description' => t('After installing a feature containing Indicia forms, use this page to configure any '.
-        'site specific settings for the forms.'),
+    'title' => 'Review IForm Features',
+    'description' => 'After installing a feature containing Indicia forms, use this page to configure any '.
+        'site specific settings for the forms.',
     'page callback' => 'iform_features_review',
     'access arguments' => array('create iform'),
     'type' => MENU_LOCAL_TASK,
@@ -674,7 +674,7 @@ $('.ui-state-default').live('mouseout', function() {
     } catch (Exception $e) {
       watchdog('debug', 'Error occurred loading form');
       watchdog('debug', $e->getMessage());
-      watchdog('trace', print_r($e->getTrace(), true));
+      watchdog('trace', print_r($e->getTrace(), TRUE));
       $r =  $e->getMessage();
     }
 
@@ -784,7 +784,7 @@ function handle_resources() {
             drupal_add_js('misc/jquery.js', 'core');
           }
           elseif (strcasecmp(substr($j, -23), 'jquery-ui.custom.min.js')==0) {
-            jquery_ui_add(array('jquery-ui'));
+            hostsite_add_library('jquery-ui');
           }
           elseif (substr($j, 0, 4)=='[IE]') {
             drupal_set_html_head("<!--[if IE]><script type=\"text/javascript\" src=\"" . substr($j, 4) . "\"></script><![endif]-->\n");
@@ -915,7 +915,7 @@ function iform_load_helpers(array $files) {
   $path = iform_client_helpers_path();
   // we always need the helper_config file
   if (!class_exists('helper_config')) {
-    require_once $path.'helper_config.php';
+    require_once $path . 'helper_config.php';
     // now we have an opportunity to load settings into helper_config from the drupal variables.
     helper_config::$base_url = variable_get('indicia_base_url', helper_config::$base_url);
     helper_config::$geoserver_url = variable_get('indicia_geoserver_url', helper_config::$geoserver_url);
@@ -1029,7 +1029,8 @@ function iform_client_helpers_path() {
 /**
  * Function that allows Indicia code to hook into the Drupal user profile to find out a field value, without
  * introducing a Drupal code dependency.
- * @param string $field Name of a profile field, e.g. indicia_user_id as introduced by the Easy Login feature. This will be converted
+ * @param string $field Name of a user field to return. This can be 'language' which returns a user's 2 character language code, 
+ * or a profile field, e.g. indicia_user_id as introduced by the Easy Login feature. This will be converted
  * to the profile field name if not prefixed with 'profile_'.
  * @param mixed $default Default value to return if not set.
  */
@@ -1039,6 +1040,8 @@ function hostsite_get_user_field($field, $default=false) {
     return $user->lang;
   if (!module_exists('profile'))
     return $default;
+  if ($field==='language')
+    return $user->lang;
   $fieldname = "profile_$field";
   $exists = db_result(db_query("SELECT count(*) FROM {profile_fields} WHERE name='$fieldname'"));
   if (!$exists)
@@ -1075,10 +1078,30 @@ function hostsite_set_user_field($field, $data) {
     $r = db_fetch_array(db_query("SELECT fid FROM {profile_fields} WHERE name=\"$fieldname\""));
     db_query("DELETE FROM {profile_values} WHERE fid = %d AND uid = %d", $r['fid'], $user->uid);
     db_query("INSERT INTO {profile_values} (fid, uid, value) VALUES (%d, %d, '%s')", $r['fid'], $user->uid, $data);
-    return true;
+    return TRUE;
   } 
   else {
-    return false;
+    return FALSE;
+  }
+}
+
+/**
+ * Enable a library in rhw host website.
+ * @param string $library Name of the library. The following are supported:
+ * 
+ * collapse - To enable collapsible fieldsets. Requires the class collapsible to be added to a fieldset.
+ * jquery-ui - Adds the jQuery ui library with tab and datepicker support.
+ */
+function hostsite_add_library($library) {
+  switch ($library) {
+    case 'collapse':
+      drupal_add_js('misc/collapse.js');
+      break;
+    case 'jquery-ui':
+      jquery_ui_add(array('jquery-ui'));
+      break;
+    default: 
+      watchdog('iform', "Unknown library requested: $library");
   }
 }
 
