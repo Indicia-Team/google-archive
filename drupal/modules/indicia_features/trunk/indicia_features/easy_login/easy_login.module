@@ -113,10 +113,10 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         if (!empty($edit)) {
           // there seems to be an issue in profile_checkboxes, which means that #access=FALSE sets of taxon groups
           // will overwrite the value with empty when it shouldn't. This prevents the overwrite if you don't have access.
-          if (!user_access('administer users'))
-            $edit['profile_taxon_groups_expertise']=serialize(explode(',', $account->profile_taxon_groups_expertise));
-          foreach ($edit as $field=>$value) {
-            $account->$field=$value;
+          if (!user_access('administer users') && !empty($account->profile_taxon_groups_expertise))
+            $edit['profile_taxon_groups_expertise'] = serialize(explode(',', $account->profile_taxon_groups_expertise));
+          foreach ($edit as $field => $value) {
+            $account->$field = $value;
             $fieldsToSync = array();
             // fields that are available for synchronisation must be called profile_indicia_*. We
             // also don't want to handle anything that has not actually changed.
@@ -128,7 +128,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
               // convert the array.
               $r = db_query("select name, title from {profile_fields} where name in ('%s')", implode("','", array_keys($fieldsToSync)));
               while ($row = db_fetch_array($r))
-                $fieldsToSyncByCaption[$row['title']]=$fieldsToSync[$row['name']];
+                $fieldsToSyncByCaption[$row['title']] = $fieldsToSync[$row['name']];
             }
           }
           // If the user has not filled in preferences then prompt them. Allow for the fact that the site administrator might have
@@ -136,17 +136,17 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           $requests = array();
           $rows = db_query("select name from {profile_fields} where name in ('profile_location','profile_taxon_groups') and visibility in (2,3)");
           while ($row = db_fetch_array($rows)) {
-            if ($row['name']==='profile_location' && empty($account->profile_location))
+            if ($row['name'] === 'profile_location' && empty($account->profile_location))
               $requests[] = t('the area you would most often like to record in');
-            if ($row['name']==='profile_taxon_groups' && empty($account->profile_taxon_groups))
+            if ($row['name'] === 'profile_taxon_groups' && empty($account->profile_taxon_groups))
               $requests[] = t('the list of species groups you are particularly interested in');
           }
           if (!empty($requests))
             drupal_set_message(t('Why not tell us !requests to help us tailor the system to your needs? '.
                 'You can fill this information in on your !link.',
                 array(
-                  '!requests'=>implode(' '.t('and').' ', $requests),
-                  '!link'=>l('user preferences', 'user/'.$account->uid.'/edit/Preferences')
+                  '!requests' => implode(' '.t('and').' ', $requests),
+                  '!link' => l('user preferences', 'user/'.$account->uid.'/edit/Preferences')
                 )
             ));
         }
