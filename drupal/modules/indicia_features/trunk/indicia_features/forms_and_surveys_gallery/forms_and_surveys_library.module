@@ -173,7 +173,8 @@ set_include();\n";
           '#weight'=>-50
         );
         $content='<p>'.$n->registration_intro.'</p>';
-        $content.='<p>'.t('If you already have an @site account, !link.', array('@site'=>variable_get('site_name', t('this site')), '!link'=>l(t('login here'), 'user/login'))).'</p>';
+        $content.='<p>'.t('If you already have an @site account, !link.', array('@site'=>variable_get('site_name', t('this site')), 
+            '!link'=>l(t('login here'), 'user/login', array('query'=>array('destination'=>'node/'.$_GET['n']))))).'</p>';
         $node = node_load($_GET['n']);
         if (node_access('view', $node)) {
           $content .= '<p>'.t('If you prefer, you can <a href="!url">add records without registering</a> but you will not be able to access all the features of @site.', 
@@ -326,13 +327,15 @@ function forms_and_surveys_library_user($op, &$edit, &$account, $category = NULL
       break;
     case 'login':      
       // default
-      $_REQUEST['destination'] = '<front>';
-      // Don't redirect if we are about to reset our password.
-      if (!isset($_GET['q']) || !preg_match('/^user\/reset\//', $_GET['q'])) {
-        // If registration for a specific form then redirect
-        profile_load_profile($account);
-        if (!empty($account->profile_home_page)) {
-          $_REQUEST['destination'] = $account->profile_home_page;
+      if (empty($_REQUEST['destination'])) {
+        $_REQUEST['destination'] = '<front>';
+        // Don't redirect if we are about to reset our password.
+        if (!isset($_GET['q']) || !preg_match('/^user\/reset\//', $_GET['q'])) {
+          // If registration for a specific form then redirect
+          profile_load_profile($account);
+          if (!empty($account->profile_home_page)) {
+            $_REQUEST['destination'] = $account->profile_home_page;
+          }
         }
       }
       break;
