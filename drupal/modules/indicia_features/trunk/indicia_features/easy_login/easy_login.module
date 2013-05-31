@@ -164,7 +164,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
  * rather than the taxon_group_ids or location IDs.
  */
 function _easy_login_set_view_account_for_table($table, $titleField, &$account, $profileField, $readAuth, $title, $description) {
-  if (!empty($account->$profileField)) {
+  if (!empty($account->$profileField) && !empty($account->content['Preferences'][$profileField])) {
     $itemList = _easy_login_get_profile_field_as_list($table, $account, $profileField, $titleField, $readAuth);
     $section = str_replace(' ', '', $title);
     if (!isset($account->content[$section]))
