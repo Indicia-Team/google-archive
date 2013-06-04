@@ -173,8 +173,8 @@ set_include();\n";
           '#weight'=>-50
         );
         $content='<p>'.$n->registration_intro.'</p>';
-        $content.='<p>'.t('If you already have an @site account, !link.', array('@site'=>variable_get('site_name', t('this site')), 
-            '!link'=>l(t('login here'), 'user/login', array('query'=>array('destination'=>'node/'.$_GET['n']))))).'</p>';
+        $content.='<p class="messages"><strong>'.t('If you already have an @site account, !link.', array('@site'=>variable_get('site_name', t('this site')), 
+            '!link'=>l(t('login here'), 'user/login', array('query'=>array('destination'=>'node/'.$_GET['n']))))).'</strong></p>';
         $node = node_load($_GET['n']);
         if (node_access('view', $node)) {
           $content .= '<p>'.t('If you prefer, you can <a href="!url">add records without registering</a> but you will not be able to access all the features of @site.', 
