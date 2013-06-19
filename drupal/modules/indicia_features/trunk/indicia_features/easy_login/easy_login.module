@@ -98,6 +98,7 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           }
         if (!$gotPreferences)
           unset($account->content['Preferences']);
+        break;
       case 'login':
         if (empty($account->profile_last_name)) {
           drupal_set_message('Please set at least your last name on your '.l('user account', 'user/'.$account->uid.'/edit/Name').
@@ -106,9 +107,9 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
         }
         // deliberately flow through - as we always check the account id after account update. So do NOT break
       case 'submit':
-        global $user;
-        profile_load_profile($user);
         $fieldsToSyncByCaption = array();
+        // Make a copy of the account being edited.          
+        $editedAccount = clone $account;
         // $edit can be empty during initial registration
         if (!empty($edit)) {
           // there seems to be an issue in profile_checkboxes, which means that #access=FALSE sets of taxon groups
@@ -116,11 +117,13 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           if (!user_access('administer users') && !empty($account->profile_taxon_groups_expertise))
             $edit['profile_taxon_groups_expertise'] = serialize(explode(',', $account->profile_taxon_groups_expertise));
           foreach ($edit as $field => $value) {
-            $account->$field = $value;
+            // Apply the edits to the copy of the account
+            // This is needed when calling easy_login_call_get_user_id
+            $editedAccount->$field = $value;
             $fieldsToSync = array();
             // fields that are available for synchronisation must be called profile_indicia_*. We
             // also don't want to handle anything that has not actually changed.
-            if ($value != $user->$field && preg_match('/^profile_indicia_/', $field) && $field!=='profile_indicia_user_id') {
+            if ($value != $account->$field && preg_match('/^profile_indicia_/', $field) && $field!=='profile_indicia_user_id') {
               $fieldsToSync[$field] = $value;
             }
             if (count($fieldsToSync)) {
@@ -136,9 +139,9 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           $requests = array();
           $rows = db_query("select name from {profile_fields} where name in ('profile_location','profile_taxon_groups') and visibility in (2,3)");
           while ($row = db_fetch_array($rows)) {
-            if ($row['name'] === 'profile_location' && empty($account->profile_location))
+            if ($row['name'] === 'profile_location' && empty($edit['profile_location']))
               $requests[] = t('the area you would most often like to record in');
-            if ($row['name'] === 'profile_taxon_groups' && empty($account->profile_taxon_groups))
+            if ($row['name'] === 'profile_taxon_groups' && empty($edit['profile_taxon_groups']))
               $requests[] = t('the list of species groups you are particularly interested in');
           }
           if (!empty($requests))
@@ -151,8 +154,8 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
             ));
         }
         $_updating_account=true;
-        $response = easy_login_call_get_user_id($account, null, null, $fieldsToSyncByCaption);
-        easy_login_handle_get_user_id_response($account, $response, $edit, $op);
+        $response = easy_login_call_get_user_id($editedAccount, null, null, $fieldsToSyncByCaption);
+        easy_login_handle_get_user_id_response($editedAccount, $response, $edit, $op);
         unset($edit['profile_indicia_user_id']);
         $_updating_account=false;
     }
@@ -384,6 +387,9 @@ function easy_login_form_alter(&$form, &$form_state, $form_id) {
     }
     // If the user is a verifier but the person editing the account has no rights to change the settings, then add read only descriptions
     // of verification settings. We'll remove the actual fields in a moment.
+    // The verification permission is usually created by adding a verification form with the 
+    // iForm module, checking "View access control" and setting "Permission name for view
+    // access control" to "verification"
     if (user_access('verification', $thisUser) && !user_access('administer users')) {
       $verification_info =  array();
       $verification_info[] = t('Your locality for verification: !items.', 
