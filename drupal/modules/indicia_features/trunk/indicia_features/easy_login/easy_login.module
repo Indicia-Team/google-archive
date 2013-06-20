@@ -139,9 +139,9 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
           $requests = array();
           $rows = db_query("select name from {profile_fields} where name in ('profile_location','profile_taxon_groups') and visibility in (2,3)");
           while ($row = db_fetch_array($rows)) {
-            if ($row['name'] === 'profile_location' && empty($edit['profile_location']))
+            if ($row['name'] === 'profile_location' && empty($editedAccount->profile_location))
               $requests[] = t('the area you would most often like to record in');
-            if ($row['name'] === 'profile_taxon_groups' && empty($edit['profile_taxon_groups']))
+            if ($row['name'] === 'profile_taxon_groups' && empty($editedAccount->profile_taxon_groups))
               $requests[] = t('the list of species groups you are particularly interested in');
           }
           if (!empty($requests))
