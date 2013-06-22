@@ -599,6 +599,11 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
       call_user_func(array('iform_' . $node->iform, 'indicia_define_remembered_fields'), $args);
     }
     if ($_POST && (array_key_exists('website_id', $_POST)) && method_exists('iform_' . $node->iform, 'get_submission')) {
+      if (!empty($_POST['delete-button'])) {
+        $_POST['deleted']='t';
+        $msg = lang::get('The record has been deleted.');
+      } else
+        $msg = '';
       // Ask the form to submit itself.
       try {
         // attach the path to the input form. It'll just get skipped if we are not posting a sample.
@@ -628,9 +633,8 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
           require_once iform_client_helpers_path() . 'prebuilt_forms/validation/validate.' . $node->nid . '.php';
           $errors = array_merge($errors, iform_custom_validation($_POST));
         }
-        if (!empty($errors)) {
+        if (!empty($errors))
           $r .= data_entry_helper::dump_errors(array('errors' => $errors));
-        } 
         else {
           $response = data_entry_helper::forward_post_to('save', $s);
           // Does the form redirect after success?
@@ -653,7 +657,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
             drupal_goto($url[0], $params);
           } elseif (!isset($args['message_after_save']) || $args['message_after_save'] || !array_key_exists('success', $response)) {
             // This dumps errors, and/or a success message if no redirection.
-            $r .= data_entry_helper::dump_errors($response);
+            $r .= data_entry_helper::dump_errors($response, true, $msg);
           }
         }
       }
