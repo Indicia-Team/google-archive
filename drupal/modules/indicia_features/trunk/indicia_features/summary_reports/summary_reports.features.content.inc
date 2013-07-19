@@ -450,9 +450,8 @@ L|Data must be verified or at least likely
       'size' => 80,
       'label' => 'Report input parameters',
       'description' => 'When clicking on a report item to call the report on the other page, the input parameters 
-        you supply here will be passed to that page as the URL query string, with #param# replaced by the ID of the 
-        item clicked on, which could be a location_id, taxon_group_id, month or year number. For example, specify 
-        from_date=01/01/#param#?to_date=31/12/#param# for a year filtered report.',
+        you supply here will be passed to that page as the URL query string, with report fieldnames wrapped in # replaced by the 
+        report output value from the report row which corresponds to the item clicked on.',
       'type' => 'text_textfield',
       'module' => 'text',
     ),
