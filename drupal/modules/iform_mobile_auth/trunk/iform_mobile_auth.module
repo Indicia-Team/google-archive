@@ -619,6 +619,7 @@ function iform_mobile_auth_client_submission() {
         $params['occurrence:present'] = 'on';
         $params['occurrence:record_status'] = 'C';
 
+        $isOccurrencesList = FALSE;
         // add all supplied data
         foreach ($_POST as $key => $value)
         {
@@ -634,9 +635,22 @@ function iform_mobile_auth_client_submission() {
             {
                 $params[$key] = iform_mobile_auth_escape($value);
             }
+            if (strstr($key,'sc:') != FALSE)
+            {
+                // sc: params indicate a list submission
+                $isOccurrencesList = TRUE;
+                $params[$key] = iform_mobile_auth_escape($value);
+            }
         }
 
-        $submission = data_entry_helper::build_sample_occurrence_submission($params);
+        if ($isOccurrencesList) 
+        {
+            $submission = data_entry_helper::build_sample_occurrences_list_submission($params);
+        }
+        else 
+        {
+            $submission = data_entry_helper::build_sample_occurrence_submission($params);
+        }
 
         iform_mobile_auth_log('Sending the following fields:');
         foreach ($params as $key => $value)
