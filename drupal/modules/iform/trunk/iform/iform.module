@@ -1041,7 +1041,7 @@ function iform_client_helpers_path() {
  * Function that allows Indicia code to hook into the Drupal user profile to find out a field value, without
  * introducing a Drupal code dependency.
  * @param string $field Name of a user field to return. This can be 'language' which returns a user's 2 character language code, 
- * or a profile field, e.g. indicia_user_id as introduced by the Easy Login feature. This will be converted
+ * 'id' to return the user's ID, or a profile field, e.g. indicia_user_id as introduced by the Easy Login feature. This will be converted
  * to the profile field name if not prefixed with 'profile_'.
  * @param mixed $default Default value to return if not set.
  */
@@ -1049,10 +1049,10 @@ function hostsite_get_user_field($field, $default=false) {
   global $user;
   if ($field==='language')
     return $user->lang;
+  elseif ($field==='id')
+    return $user->uid;
   if (!module_exists('profile'))
     return $default;
-  if ($field==='language')
-    return $user->lang;
   $fieldname = "profile_$field";
   $exists = db_result(db_query("SELECT count(*) FROM {profile_fields} WHERE name='$fieldname'"));
   if (!$exists)
