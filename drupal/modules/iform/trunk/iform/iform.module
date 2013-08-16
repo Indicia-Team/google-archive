@@ -811,6 +811,8 @@ function handle_resources() {
           }
         }
       }
+      // add the standard functions library
+      drupal_add_js(iform_media_folder_path() . 'js/indicia.functions.js', 'module');
     }
   }
   data_entry_helper::setup_jquery_validation_js();
