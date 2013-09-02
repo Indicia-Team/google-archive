@@ -201,6 +201,8 @@ function summary_report_build_map($node, $reportOptions) {
     $reportOptions['clickableLayers']=array('reportlayer');
     //this is the function that is called when the user clcks on a map
     $reportOptions['customClickFn']='callReport';
+    // store the location IDs in the polygons
+    $reportOptions['rowId']='id';
     //the report URL the user supplies for report clicking does not include the server URL. 
     $path = url($reportUrl, array('query'=>$param));
     //open a report when map is clicked passing the locationId which is the feature id.
