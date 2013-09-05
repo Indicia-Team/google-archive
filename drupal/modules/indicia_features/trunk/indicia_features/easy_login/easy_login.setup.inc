@@ -155,5 +155,28 @@ function _easy_login_profile_fields() {
       'autocomplete' => 0,
       'page' => '',
   );
+  $fields['profile_u16'] = array(
+      'title' => 'Under 16',
+      'explanation' => 'Tick if you are under 16 years old?',
+      'category' => 'Name',
+      'type' => 'checkbox',
+      'weight' => 3,
+      'required' => 0,
+      'register' => 1,
+      'visibility' => 1,
+      'autocomplete' => 0,
+      'page' => 'Account',
+  );
+  $fields['profile_dob'] = array(
+      'title' => 'Date of birth',
+      'category' => 'Name',
+      'type' => 'date',
+      'weight' => 4,
+      'required' => 0,
+      'register' => 1,
+      'visibility' => 1,
+      'autocomplete' => 0,
+      'page' => 'Account',
+  );
   return $fields;
 }

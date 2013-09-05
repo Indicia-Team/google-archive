@@ -71,6 +71,17 @@ function easy_login_update_6320() {
 }
 
 /**
+ * Update method for version 6.3.3 Adds fields for setting a date of birth and under 16 flag.
+ */
+function easy_login_update_6330() {
+  $ret = array();
+  $fields = _easy_login_profile_fields();
+  easy_login_add_profile_field('profile_u16', $fields['profile_u16']);
+  easy_login_add_profile_field('profile_dob', $fields['profile_dob']);
+  return $ret;
+}
+
+/**
  * Add a field to the list of available user profile fields.
  */
 function easy_login_add_profile_field($name, $fieldDef) {
