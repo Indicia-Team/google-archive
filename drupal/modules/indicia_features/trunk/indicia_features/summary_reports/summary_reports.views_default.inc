@@ -230,13 +230,6 @@ drupal_set_breadcrumb($breadcrumb);
   ));
   $handler = $view->new_display('page', 'Page', 'page_1');
   $handler->override_option('path', 'summarise');
-  $handler->override_option('menu', array(
-    'type' => 'normal',
-    'title' => 'Summarise',
-    'description' => 'Summary reports to provide an overview of iRecord\'s data.',
-    'weight' => '4',
-    'name' => 'primary-links',
-  ));
   $handler->override_option('tab_options', array(
     'type' => 'none',
     'title' => '',
