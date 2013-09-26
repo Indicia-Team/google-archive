@@ -119,6 +119,10 @@ function easy_login_user($op, &$edit, &$account, $category = NULL) {
               $edit['profile_taxon_groups_expertise'] = serialize(explode(',', $account->profile_taxon_groups_expertise));
             else
               unset($edit['profile_taxon_groups_expertise']);
+            if (!empty($account->profile_surveys_expertise)) 
+              $edit['profile_surveys_expertise']=$account->profile_surveys_expertise;
+            else
+              unset($edit['profile_surveys_expertise']);
           }
           foreach ($edit as $field => $value) {
             // Apply the edits to the copy of the account
