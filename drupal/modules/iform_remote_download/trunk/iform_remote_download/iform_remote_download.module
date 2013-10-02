@@ -65,8 +65,9 @@ function iform_remote_download_download() {
     return;
   global $user;
   $type = $_POST['type'];
-  $report = $type === 'collate-records' ? 'occurrences_download_2_by_input_date_using_spatial_index_builder' : 'occurrences_download_2';
+  $report = $type === 'collate-records' ? 'remote_download_by_input_date_using_spatial_index_builder' : 'remote_download';
   $readAuth = report_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
+  $location_id = $type==='collate-records' ? $user->profile_location_collation : $user->profile_location_expertise;
   $options = array(
     'dataSource' => "library/occurrences/$report",
     'readAuth' => $readAuth,
@@ -80,8 +81,8 @@ function iform_remote_download_download() {
       'idlist' => '',
       'ownData' => $type==='my-records' ? 1 : 0,
       'currentUser' => $user->profile_indicia_user_id,
-      'ownLocality' => $type==='my-records' ? 0 : 1,
-      'location_id' => $type==='collate-records' ? $user->profile_location_collation : $user->profile_location_expertise,
+      'ownLocality' => $type==='my-records' || empty($location_id) ? 0 : 1,
+      'location_id' => $location_id,
       'taxon_groups' => '',
       'ownGroups' => 0,
       'surveys' => empty($_POST['survey_id']) ? '' : $_POST['survey_id'],
