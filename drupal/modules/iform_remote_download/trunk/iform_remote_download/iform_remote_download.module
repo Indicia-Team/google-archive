@@ -15,13 +15,13 @@ function iform_remote_download_menu() {
     'title'             => 'Gets the download privileges for a remote logged in user',
     'type'              => MENU_CALLBACK,
     'page callback'     => 'iform_remote_download_privileges',
-    'access callback'   => true,
+    'access callback'   => TRUE,
   );
   $items['user/remote_download/download'] = array(
     'title'             => 'Gets a download CSV file',
     'type'              => MENU_CALLBACK,
     'page callback'     => 'iform_remote_download_download',
-    'access callback'   => true,
+    'access callback'   => TRUE,
   );
 
   return $items;
