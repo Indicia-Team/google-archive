@@ -51,7 +51,8 @@ function iform_mobile_auth_profile_save_fields(&$edit, &$user, $category){
   
   while ($field = db_fetch_object($result)) {
     if (_profile_field_serialize($field->type)) {
-      $edit[$field->name] = serialize($edit[$field->name]);
+      $name=$field->name;
+      $edit->$name = serialize($edit->$name);
     }
     
     $name = $field->name;
