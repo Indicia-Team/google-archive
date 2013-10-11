@@ -464,7 +464,7 @@ function easy_login_get_locations($readAuth, $typeVarName) {
  * the sub_list data into the correct format for Drupal to save it.
  */
 function easy_login_submit_preferences($form, &$form_state) {
-  if ($form_state['values']['profile_u16']===0)
+  if ($form_state['values']['profile_u16']===0 || $form_state['values']['profile_u16']===null)
     unset($form_state['values']['profile_dob']);
   else {
     $dob=$form_state['values']['profile_dob'];
