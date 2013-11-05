@@ -68,7 +68,11 @@ function iform_remote_download_download() {
   $type = $_POST['type'];
   $report = $type === 'collate-records' ? 'remote_download_by_input_date_using_spatial_index_builder' : 'remote_download';
   $readAuth = report_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
-  $location_id = $type==='collate-records' ? $user_obj->field_location_collation->value() : $user_obj->field_location_expertise->value();
+  try {
+    $location_id = $type==='collate-records' ? $user_obj->field_location_collation->value() : $user_obj->field_location_expertise->value();
+  } catch (Exception $e) {
+    $location_id = '';
+  }
   $options = array(
     'dataSource' => "library/occurrences/$report",
     'readAuth' => $readAuth,
