@@ -61,6 +61,14 @@ function iform_loctools_deletelocations($node) {
 }
 
 /**
+* @param node object
+* @param lid integer: location id to be deleted
+*/
+function iform_loctools_deletelocation($node, $lid) {   
+    db_query("DELETE FROM {iform_loctools} WHERE nid=%d AND lid=%d", $node->nid, $lid);
+}
+
+/**
 * Implementation of hook_listlocations
 * @param node object to return locations IDs for.
 * @return array of location IDs or 'all'
