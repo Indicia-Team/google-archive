@@ -30,7 +30,7 @@
   ; least one more for our custom CSS.
 
   stylesheets[all][] = color/colors.css
-  stylesheets[all][] = css/footheme.css
+  stylesheets[all][] = css/indiciatheme.css
 
   ; Internet Explorer Stylesheets
   ;
@@ -417,6 +417,6 @@
 ; Information added by drupal.org packaging script on 2012-09-19
 version = "7.x-3.0-rc1"
 core = "7.x"
-project = "footheme"
+project = "indiciatheme"
 datestamp = "1348059849"
 

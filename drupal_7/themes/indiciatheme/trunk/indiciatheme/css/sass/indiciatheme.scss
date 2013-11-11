@@ -1,0 +1,74 @@
+@import "compass/css3";
+@import "sassy-buttons";
+
+@import "variables/*.*";
+@import "custom/variables/*.*";
+ 
+/* Remove restriction on banner height */
+header#header, div#branding {
+  max-height: none;
+}
+
+/* Adaptive theme panel layouts */
+.at-panel {
+  .region {
+    padding-right: $spacing;
+    /* Prevent padding messing up layout */
+    @include box-sizing(border-box);    
+    label {
+      /* labels in columns take up 1 line */
+      display: block;
+      margin-bottom: 0;
+    }
+    textarea, #map-help {
+      /* full width boxes, accounting for border, padding etc*/
+      width: 100%;
+      @include box-sizing(border-box);
+    }    
+    .helpText, p.inline-error {
+      /* Controls on separate line to labels, so remove margin for the helptext and errors */
+      margin-left: 0;
+    }
+  }
+  .region:last-child {
+    padding-right: 0;    
+  }
+
+}
+/* Sassify the buttons */
+input[type=submit], input[type=button], button, .indicia-button {
+  @include sassy-button-gradient('matte', $colour-ctrl-background, $colour-ctrl-background-light, $colour-ctrl-text, 'inset', true);
+}
+input[type=button], button, .indicia-button {
+  @include sassy-button-structure(4px, 10px, 0.25em);
+}
+/* Submit button a bit bigger */
+input[type=submit], button[type=submit], .fb-close {
+  @include sassy-button-structure(4px, 14px, 0.25em);
+  margin-right: $spacing;
+}
+.form-submit:hover {
+  color: $colour-ctrl-text;
+}
+/* Line up lock icons */
+input, .unlocked-icon, .locked-icon {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+/* remove legend background colour (from pixture reloaded's link colour) */
+fieldset legend {
+  background-color: transparent;
+  color: $colour-header-text;
+  padding: 0 $spacing;
+}
+
+/* Apply tweaks and bugfixes */
+
+/* Fixes a bug where Google attributions appear 1 character wide therefore go up the middle of the map in IE on some D7 templates. We 
+   can't use a conditional stylesheet, as it also applies to IE10 which does not support conditional comments. */
+.gm-style .gmnoprint {
+  width: auto !important;
+}
+
+/* import any layout override files */
+@import "custom/*.*";
