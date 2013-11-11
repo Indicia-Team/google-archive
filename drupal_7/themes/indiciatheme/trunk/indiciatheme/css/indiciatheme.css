@@ -133,10 +133,29 @@ fieldset legend {
   padding: 0 10px;
 }
 
+/* Menu colour */
+/* line 65, sass/indiciatheme.scss */
+#menu-bar, #menu-bar li a {
+  background-color: #6e3aa2;
+  color: white;
+}
+
+/* Correct padding in main menu for nolink items */
+/* line 70, sass/indiciatheme.scss */
+#menu-bar ul.sf-menu li span {
+  padding: 0 15px;
+}
+
+/* line 73, sass/indiciatheme.scss */
+ul.sf-menu.sf-horizontal span {
+  height: 32px;
+  line-height: 32px;
+}
+
 /* Apply tweaks and bugfixes */
 /* Fixes a bug where Google attributions appear 1 character wide therefore go up the middle of the map in IE on some D7 templates. We 
    can't use a conditional stylesheet, as it also applies to IE10 which does not support conditional comments. */
-/* line 69, sass/indiciatheme.scss */
+/* line 82, sass/indiciatheme.scss */
 .gm-style .gmnoprint {
   width: auto !important;
 }
