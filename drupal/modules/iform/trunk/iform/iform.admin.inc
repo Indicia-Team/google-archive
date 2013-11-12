@@ -249,19 +249,25 @@ mapInitialisationHooks.push(function(div) {
 function indicia_configuration_form_validate($form, &$form_state) {
   if ($form_state['values']['indicia_warehouse']=='other' && empty($form_state['values']['indicia_base_url']))
     form_set_error('indicia_website_id', t('Please supply a warehouse URL for connection to Indicia, or select a pre-configured connection.'));
-  elseif (!empty($form_state['values']['indicia_password'])) {
+  else {
     // test the connection to the warehouse
     $urls = indicia_get_warehouse_urls($form_state);
     data_entry_helper::$base_url = $urls['base_url'];
     $read_auth = data_entry_helper::get_read_auth($form_state['values']['indicia_website_id'], $form_state['values']['indicia_password']);
-    $test = data_entry_helper::get_population_data(array(
-      'table' => 'survey',
-      'extraParams'=>$read_auth + array('limit' => 0),
-      'nocache' => true
-    ));
-    if (isset($test['error']))
-      form_set_error('indicia_website_id', t('The configuration for the connection to the warehouse is incorrect. This could be an incorrect ' .
-          'or unavailable Indicia Warehouse, an incorrect Indicia Website ID or Password.'));
+    // any spaces in the nonce indicate an error message
+    if (strpos($read_auth['nonce'], ' ')!==FALSE) {
+      form_set_error('indicia_warehouse', t('The configuration for the connection to the warehouse is incorrect. The most likely cause is an unavailable '.
+          'warehouse or incorrect warehouse URL.'));
+    } else {
+      $test = data_entry_helper::get_population_data(array(
+        'table' => 'survey',
+        'extraParams'=>$read_auth + array('limit' => 0),
+        'nocache' => true
+      ));
+      if (isset($test['error']))
+        form_set_error('indicia_website_id', t('The configuration for the connection to the warehouse is incorrect. This could be an incorrect ' .
+            'or unavailable Indicia Warehouse, an incorrect Indicia Website ID or Password.'));
+    }
   }
   $systems = _indicia_sref_systems_from_form($form_state['values']);
   if (empty($systems)) {
