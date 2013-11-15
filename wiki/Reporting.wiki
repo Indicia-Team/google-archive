@@ -367,10 +367,11 @@ POST will be required if you need to support long report parameter values such a
 `mode` dictates the format of the response in the same fashion as the data service. Select from:
  # 'xml'
  # 'json'
- # 'csv'
+ # 'csv' (comma separated value)
+ # 'tsv' (tab separated value, version 0.9 onwards)
  # 'kml'
- # 'gpx' (for GPS exchange format compatibility)
- # 'nbn' (for NBN exchange format compatibility)
+ # 'gpx' (for GPS exchange format compatibility, version 0.9 onwards)
+ # 'nbn' (for NBN exchange format compatibility, version 0.9 onwards)
 
 `params` may be used when you wish to autocomplete certain parameters rather than being prompted for them. If used, it should be a JSON-encoded array of parameter name pointing to parameter value.
 
