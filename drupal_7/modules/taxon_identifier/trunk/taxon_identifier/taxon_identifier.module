@@ -1,18 +1,16 @@
 <?php
-// $Id: $
-
 /**
  * @file
- * Defines taxon identifier field types for CCK, including taxon version keys and BRC codes.
+ * Defines taxon identifier field types for CCK, including taxon version keys
+ * and BRC codes.
  */
- 
-// CCK Field Hooks ************************************************************************
 
+// ******************************* CCK Field Hooks *****************************
 /**
- * Implementation of hook_field_info().
+ * Implements hook_field_info().
  */
 function taxon_identifier_field_info() {
-  watchdog('ti','taxon_identifier_field_info');
+  watchdog('ti', 'taxon_identifier_field_info');
   return array(
     'tvk' => array(
       'label' => t('Taxon Version Key'),
@@ -29,32 +27,57 @@ function taxon_identifier_field_info() {
     'gbif' => array(
       'label' => t('GBIF Species Number'),
       'description' => t('Store a GBIF species number in the database.'),
-    )
+    ),
   );
 }
 
 /**
- * Implementation of hook_field_settings().
+ * Implements hook_field_settings().
  */
 function taxon_identifier_field_settings($op, $field) {
-  watchdog('ti','hook_field_settings');
+  watchdog('ti', 'hook_field_settings');
   switch ($op) {
     case 'database columns':
       if ($field['type'] == 'tvk' || $field['type'] == 'rtlik') {
-        $columns['value'] = array('type' => 'char', 'length' => 16, 'not null' => FALSE, 'sortable' => TRUE, 'views' => TRUE);
+        $columns['value'] = array(
+          'type' => 'char',
+          'length' => 16,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+          'views' => TRUE,
+        );
         return $columns;
-      } else if ($field['type'] == 'brc') {
-        // BRC code has 2 parts
+      }
+      elseif ($field['type'] == 'brc') {
+        // BRC code has 2 parts.
         // @todo: How long are these fields?
-        $columns['value_1'] = array('type' => 'varchar', 'length' => 16, 'not null' => FALSE, 'sortable' => TRUE, 'views' => TRUE);
-        $columns['value_2'] = array('type' => 'varchar', 'length' => 16, 'not null' => FALSE, 'sortable' => TRUE, 'views' => TRUE);
+        $columns['value_1'] = array(
+          'type' => 'varchar',
+          'length' => 16,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+          'views' => TRUE,
+        );
+        $columns['value_2'] = array(
+          'type' => 'varchar',
+          'length' => 16,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+          'views' => TRUE,
+        );
         return $columns;
-      } elseif ($field['type'] == 'gbif') {
-        $columns['value'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE, 'views' => TRUE);
+      }
+      elseif ($field['type'] == 'gbif') {
+        $columns['value'] = array(
+          'type' => 'int',
+          'not null' => FALSE,
+          'sortable' => TRUE,
+          'views' => TRUE,
+        );
         return $columns;
       }
     case 'views data':
-      // @todo: views integration testing
+      // @todo: views integration testing.
       $allowed_values = content_allowed_values($field);
       if (count($allowed_values)) {
         $data = content_views_field_views_data($field);
@@ -62,20 +85,21 @@ function taxon_identifier_field_settings($op, $field) {
         $table_alias = content_views_tablename($field);
 
         // Filter: Add a 'many to one' filter.
-        $copy = $data[$table_alias][$field['field_name'] .'_value'];
+        $copy = $data[$table_alias][$field['field_name'] . '_value'];
         $copy['title'] = t('@label (!name) - Allowed values', array('@label' => t($field['widget']['label']), '!name' => $field['field_name']));
         $copy['filter']['handler'] = 'content_handler_filter_many_to_one';
         unset($copy['field'], $copy['argument'], $copy['sort']);
-        $data[$table_alias][$field['field_name'] .'_value_many_to_one'] = $copy;
+        $data[$table_alias][$field['field_name'] . '_value_many_to_one'] = $copy;
         // Argument : swap the handler to the 'many to one' operator.
-        $data[$table_alias][$field['field_name'] .'_value']['argument']['handler'] = 'content_handler_argument_many_to_one';
+        $data[$table_alias][$field['field_name'] . '_value']['argument']['handler'] = 'content_handler_argument_many_to_one';
         return $data;
       }
   }
 }
 
 /**
- * Implementation of hook_field(). 
+ * Implements hook_field(). 
+ * 
  * Defines behaviour of the field, including validation in our case.
  */
 function taxon_identifier_field($op, &$node, $field, &$items, $teaser, $page) {
@@ -83,6 +107,7 @@ function taxon_identifier_field($op, &$node, $field, &$items, $teaser, $page) {
     case 'sanitize':
       taxon_identifier_sanitize($node, $field, $items, $teaser, $page);
       break;
+
     case 'validate':
       taxon_identifier_validate($node, $field, $items, $teaser, $page);
       break;
@@ -90,11 +115,12 @@ function taxon_identifier_field($op, &$node, $field, &$items, $teaser, $page) {
 }
 
 /**
- * Sanitization function for the hook_field method. Strips non alphanumerics from the 
- * values and stores in safe_value.
+ * Sanitization function for the hook_field method. 
+ * 
+ * Strips non alphanumerics from the values and stores in safe_value.
  */
 function taxon_identifier_sanitize(&$node, $field, &$items, $teaser, $page) {
-  foreach( $items as $delta => $item ) {
+  foreach ($items as $delta => $item) {
     if (isset($item['value'])) {
       $items[$delta]['safe_value'] = ereg_replace("[^A-Z0-9]", "", $item['value']);
     }
@@ -108,63 +134,68 @@ function taxon_identifier_sanitize(&$node, $field, &$items, $teaser, $page) {
 }
 
 /**
- * validation function for the hook_field method.
+ * Validation function for the hook_field method.
  */
 function taxon_identifier_validate(&$node, $field, &$items, $teaser, $page) {
   if (is_array($items)) {
     foreach ($items as $delta => $item) {
       $error_element = isset($item['_error_element']) ? $item['_error_element'] : '';
-      if (is_array($item) && isset($item['_error_element'])) unset($item['_error_element']);
+      if (is_array($item) && isset($item['_error_element'])) {
+        unset($item['_error_element']);
+      }
       switch ($field['type']) {
         case 'tvk':
         case 'rtlik':
-          // TVK and TLIKs must be valid 16 character NBN keys, 0-9+A-Z only. Or null...
+          // TVK and TLIKs must be valid 16 character NBN keys, 0-9+A-Z only.
+          // Or null...
           if (!empty($item['value'])) {
-            // check length is 16 characters       
+            // Check length is 16 characters.
             if (drupal_strlen($item['value']) != 16) {
               form_set_error($error_element, t('%name: the value must be 16 characters long.', array('%name' => $field['widget']['label'])));
             }
-            // check 0-9A-Z only
-            if (!preg_match('/^[0-9,A-Z]*$/', $item['value'])) {                  
+            // Check 0-9A-Z only.
+            if (!preg_match('/^[0-9,A-Z]*$/', $item['value'])) {
               form_set_error($error_element, t('%name: the value consist of characters 0-9 and A-Z only.', array('%name' => $field['widget']['label'])));
             }
           }
-          break;            
-        case 'brc':
-          // @todo BRC code validation
           break;
+
+        case 'brc':
+          // @todo BRC code validation.
+          break;
+
         case 'gbif':
-          // @todo GBIF number validation
-          break;          
+          // @todo GBIF number validation.
+          break;
       }
     }
   }
 }
 
 /**
- * Implementation of hook_content_is_empty().
+ * Implements hook_content_is_empty().
  */
 function taxon_identifier_content_is_empty($item, $field) {
   switch ($field['type']) {
     case 'tvk':
     case 'rtlik':
     case 'gbif':
-      if (empty($item['value']) && (string)$item['value'] !== '0') {
+      if (empty($item['value']) && (string) $item['value'] !== '0') {
         return TRUE;
       }
       return FALSE;
+
     case 'brc':
-      if (empty($item['value_1']) && (string)$item['value_1'] !== '0' && empty($item['value_2']) && (string)$item['value_2'] !== '0') {
+      if (empty($item['value_1']) && (string) $item['value_1'] !== '0' && empty($item['value_2']) && (string) $item['value_2'] !== '0') {
         return TRUE;
       }
       return FALSE;
   }
 }
 
-// Widget Hooks ************************************************************************
-
+// ******************************* Widget Hooks ********************************
 /**
- * Implementation of hook_widget_info().
+ * Implements hook_widget_info().
  *
  * Defines widgets for BRC Codes and any other field types. Here we indicate 
  * that the content module will handle the default value and multiple
@@ -192,12 +223,12 @@ function taxon_identifier_widget_info() {
       'callbacks' => array(
         'default value' => CONTENT_CALLBACK_DEFAULT,
       ),
-    )
+    ),
   );
 }
 
 /**
- * Implementation of FAPI hook_elements().
+ * Implements FAPI hook_elements().
  *
  * Defines the data entry forms for widgets and how they are processed.
  *
@@ -213,12 +244,12 @@ function taxon_identifier_widget_info() {
 function taxon_identifier_elements() {
   return array(
     'brc' => array(
-      '#input' => TRUE,      
-      '#process' => array('brc_process')
+      '#input' => TRUE,
+      '#process' => array('brc_process'),
     ),
     'other' => array(
-      '#input' => TRUE,      
-      '#process' => array('other_process')      
+      '#input' => TRUE,
+      '#process' => array('other_process'),
     ),
   );
 }
@@ -226,19 +257,19 @@ function taxon_identifier_elements() {
 /**
  * FAPI Process method for brc fields. Returns the edit form required.
  */
-function brc_process($element, $edit, &$form_state, $form) {  
+function brc_process($element, $edit, &$form_state, $form) {
   $defaults = $element['#value'];
   $element['value_1'] = array(
-    '#title' => t( $element['#title'] ).' 1',
+    '#title' => t($element['#title']) . ' 1',
     '#type' => 'textfield',
     '#default_value' => $defaults['value_1'],
-    '#weight' => 1
+    '#weight' => 1,
   );
   $element['value_2'] = array(
-    '#title' => t( $element['#title'] ).' 2',
+    '#title' => t($element['#title']) . ' 2',
     '#type' => 'textfield',
     '#default_value' => $defaults['value_2'],
-    '#weight' => 1
+    '#weight' => 1,
   );
   return $element;
 }
@@ -246,15 +277,15 @@ function brc_process($element, $edit, &$form_state, $form) {
 /**
  * FAPI Process method for generic fields. Returns the edit form required.
  */
-function other_process($element, $edit, &$form_state, $form) {  
+function other_process($element, $edit, &$form_state, $form) {
   $defaults = $element['#value'];
   $element['value'] = array(
-    '#title' => t( $element['#title'] ),
+    '#title' => t($element['#title']),
     '#type' => 'textfield',
     '#default_value' => $defaults['value'],
-    '#weight' => 1
+    '#weight' => 1,
   );
-  return $element;  
+  return $element;
 }
 
 /**
@@ -267,14 +298,15 @@ function theme_brc($element) {
 /**
  * Theme function for the default widget.
  */
-function theme_other($element) {  
+function theme_other($element) {
   return $element['#children'];
 }
 
 /**
- * Implementation of hook_widget().
- * Tells the FAPI to use the form definition defined for this field using hook_elements and the 
- * process callbacks.
+ * Implements hook_widget().
+ * 
+ * Tells the FAPI to use the form definition defined for this field using
+ * hook_elements and the process callbacks.
  */
 function taxon_identifier_widget(&$form, &$form_state, $field, $items, $delta = 0) {
   $element = array(
@@ -284,10 +316,9 @@ function taxon_identifier_widget(&$form, &$form_state, $field, $items, $delta = 
   return $element;
 }
 
-// Define a default formatter ************************************************************************
-
+// ******************************* Define a default formatter ******************
 /**
- * Implementation of hook_field_formatter_info().
+ * Implements hook_field_formatter_info().
  */
 function taxon_identifier_field_formatter_info() {
   return array(
@@ -295,18 +326,20 @@ function taxon_identifier_field_formatter_info() {
       'label' => t('Default'),
       'field types' => array('tvk', 'rtlik', 'brc', 'gbif'),
       'multiple values' => CONTENT_HANDLE_CORE,
-    )
+    ),
   );
 }
 
 /**
- * Theme function for 'default' text field formatter. Just implodes any valid data into a single string.
+ * Theme function for 'default' text field formatter.
+ * 
+ * Just implodes any valid data into a single string.
  */
 function theme_taxon_identifier_formatter_default($element) {
-  watchdog('ti','theme_taxon_identifier_formatter_default: '.print_r($element, true));
+  watchdog('ti', 'theme_taxon_identifier_formatter_default: ' . print_r($element, TRUE));
   $output = array();
-  foreach($element['#item'] as $key=>$value) {
-    if (substr($key, 0, 5)=='safe_') {
+  foreach ($element['#item'] as $key => $value) {
+    if (substr($key, 0, 5) == 'safe_') {
       $output[] = $value;
     }
   }
@@ -314,19 +347,20 @@ function theme_taxon_identifier_formatter_default($element) {
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
+ * 
  * Informs the theming engine of our theme functions.
  */
 function taxon_identifier_theme() {
   return array(
     'brc' => array(
-       'arguments' => array('element' => NULL)
+      'arguments' => array('element' => NULL),
     ),
     'other' => array(
-       'arguments' => array('element' => NULL)
+      'arguments' => array('element' => NULL),
     ),
     'taxon_identifier_formatter_default' => array(
-       'arguments' => array('element' => NULL)
+      'arguments' => array('element' => NULL),
     ),
   );
 }
