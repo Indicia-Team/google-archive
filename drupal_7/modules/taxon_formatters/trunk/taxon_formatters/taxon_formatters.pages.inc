@@ -6,11 +6,11 @@ function taxon_formatters_preset_overview() {
   // Always clear the preset cache on this display.
   foreach (taxon_formatters_presets(TRUE) as $preset) {
     $row = array();
-    $row[] = l($preset['presetname'], 'admin/build/taxon_formatters/'. $preset['presetid']);
+    $row[] = l($preset['presetname'], 'admin/build/taxon_formatters/' . $preset['presetid']);
     $row[] = $preset['type'];
-    $row[] = l(t('View'), 'admin/build/taxon_formatters/'. $preset['presetid'])
-          .'&nbsp;&nbsp;&nbsp;&nbsp;'
-          .l(t('Delete'), 'admin/build/taxon_formatters/'. $preset['presetid'].'/delete');
+    $row[] = l(t('View'), 'admin/build/taxon_formatters/' . $preset['presetid']) .
+          '&nbsp;&nbsp;&nbsp;&nbsp;' .
+          l(t('Delete'), 'admin/build/taxon_formatters/' . $preset['presetid'] . '/delete');
     $rows[] = $row;
   }
   $output = theme('table', $header, $rows);
@@ -46,12 +46,12 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
       '#title' => t('Formatter Preset Name'),
       '#default_value' => $preset['presetname'],
       '#description' => t('The name used to refer to this formatter preset.'),
-      '#required' => true
+      '#required' => TRUE,
     );
   }
-  $formatTypes = module_invoke_all('taxon_formatter_types');
-  $formatters = array(''=>'<Please Select>');
-  foreach ($formatTypes as $type=>$config) {
+  $format_types = module_invoke_all('taxon_formatter_types');
+  $formatters = array('' => '<Please Select>');
+  foreach ($format_types as $type => $config) {
     $formatters[$type] = t($config['title']);
   }
   if (empty($preset['type'])) {
@@ -60,57 +60,60 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
       '#title' => t('Formatter'),
       '#options' => $formatters,
       '#description' => t('Select the type of output you want for this preset'),
-      '#required' => true,
+      '#required' => TRUE,
       '#default_value' => $preset['type'],
       '#ahah' => array(
         'path' => 'taxon_formatter_settings/js/0',
         'wrapper' => 'taxon-formatter-settings',
         'method' => 'replace',
         'effect' => 'fade',
-        'event' => 'change'
+        'event' => 'change',
       )
     );
-  } else {
+  }
+  else {
     // for an existing formatter, set this as a fixed value on the form - the user cannot change the fundamental type of an existing formatter.
     $form['type'] = array(
       '#title' => t('Formatter'),
       '#type' => 'item',
-      '#value' => t($formatTypes[$preset['type']]['title'])
+      '#value' => t($format_types[$preset['type']]['title']),
     );
   }
   $form['taxon_formatter_params'] = array(
     '#type' => 'fieldset',
     '#title' => t('Formatter settings'),
-    '#tree' => FALSE
+    '#tree' => FALSE,
   );
   
-  // Define a wrapper in which to place just the list of settings
+  // Define a wrapper in which to place just the list of settings.
   $form['taxon_formatter_params']['taxon_formatter_params_wrapper'] = array(
     '#tree' => FALSE,
     '#weight' => 5,
     '#prefix' => '<div class="clear-block" id="taxon-formatter-settings">',
-    '#suffix' => '</div>'
+    '#suffix' => '</div>',
   );
   $type = isset($form_state['post']['type']) ? $form_state['post']['type'] : (isset($preset['type']) ? $preset['type'] : '');
   // Get the selected form's parameters  
   if ($type) {
-    if (isset($preset['settings'])) 
-      $settings = json_decode($preset['settings'], true);
-    else
+    if (isset($preset['settings'])) {
+      $settings = json_decode($preset['settings'], TRUE);
+    }
+    else {
       $settings = array();
-    $form['taxon_formatter_params']['taxon_formatter_params_wrapper'] = call_user_func($formatTypes[$type]['form_callback'], 
-        $settings, $type, isset($formatTypes[$type]['form_args']) ? $formatTypes[$type]['form_args'] : null);
+    }
+    $form['taxon_formatter_params']['taxon_formatter_params_wrapper'] = call_user_func($format_types[$type]['form_callback'], 
+        $settings, $type, isset($format_types[$type]['form_args']) ? $format_types[$type]['form_args'] : NULL);
   } else {
     $form['taxon_formatter_params']['taxon_formatter_params_wrapper']['dummy'] = array(
       '#type' => 'item',
-      '#value' => '<em>'.t('Please select a formatter before defining the settings.').'</em>'
+      '#value' => '<em>' . t('Please select a formatter before defining the settings.') . '</em>',
     );
   }
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => $preset['storage'] === TAXON_FORMATTERS_STORAGE_DEFAULT ? t('Override Defaults') : t('Save Preset')    
-  );  
-  
+    '#value' => $preset['storage'] === TAXON_FORMATTERS_STORAGE_DEFAULT ? t('Override Defaults') : t('Save Preset'),
+  );
+
   return $form;
 }
 
@@ -119,11 +122,11 @@ function taxon_formatters_preset_form_validate($form, &$form_state) {
 }
 
 function taxon_formatters_preset_form_submit($form, &$form_state) {
-  // build an array of the settings specific to the sub-module
+  // Build an array of the settings specific to the sub-module.
   $settings = get_form_values_recursively($form['taxon_formatter_params']['taxon_formatter_params_wrapper']);
-  // put the settings in the db field
+  // Put the settings in the db field.
   $form_state['values']['settings'] = json_encode($settings);
-  // save the data, overwriting existing or creating a new record.
+  // Save the data, overwriting existing or creating a new record.
   if (isset($form_state['values']['presetid']) && is_numeric($form_state['values']['presetid'])) {
     drupal_write_record('taxon_formatters_preset', $form_state['values'], 'presetid');
   }
@@ -131,7 +134,7 @@ function taxon_formatters_preset_form_submit($form, &$form_state) {
     drupal_write_record('taxon_formatters_preset', $form_state['values']);
   }
   drupal_set_message(t('Your form has been saved.'));
-  // return to the list
+  // Return to the list.
   $form_state['redirect'] = 'admin/build/taxon_formatters/';
 }
 
@@ -150,7 +153,7 @@ function taxon_formatters_preset_delete_form($form_state, $preset = array()) {
     ),
     'admin/build/taxon_formatters',
     t('This action cannot be undone.'),
-    t('Delete'),  t('Cancel')
+    t('Delete'), t('Cancel')
   );
 }
 
@@ -163,21 +166,21 @@ function taxon_formatters_preset_delete_form_submit($form, &$form_state) {
 
 /*
  * Function to retrieve control #value fields held in an array.
- * Because the controls can be held in nested fieldsets the function is called 
+ * Because the controls can be held in nested fieldsets the function is called
  * recursively to work through the array structure.
  */
-function get_form_values_recursively($arr) {  
+function get_form_values_recursively($arr) {
   $r = array();
-  foreach($arr as $setting => $config) {
-    if (substr($setting, 0, 1)!='#') {
-      // found a fieldset or a control
+  foreach ($arr as $setting => $config) {
+    if (substr($setting, 0, 1) != '#') {
+      // Found a fieldset or a control.
       if (isset($config['#value'])) {
-        // it was a control
+        // It was a control.
         $r[$setting] = $config['#value'];
       }
       else {
-        // it was a fieldset
-        $r = array_merge ($r, get_form_values_recursively($config));
+        // It was a fieldset.
+        $r = array_merge($r, get_form_values_recursively($config));
       }
     }
   }
