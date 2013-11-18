@@ -181,14 +181,16 @@ function iform_configuration_form(&$form_state, $url='', $submit_handler='') {
       if (isset($config['addToIndiciaSettingsPage']) && $config['addToIndiciaSettingsPage']) {
         if (isset($config['subtype']) && preg_match('/^termlists_term:(?P<list>.+)/', $config['subtype'], $matches))
           $type = 'select';  
-        else
-          $type = 'textfield';
+        else {
+          $type = ($config['type'] == 'radios' ? 'radios' : 'textfield');
+        }
         $ctrls[$var] = array(
           '#type'=>$type,
           '#title'=>$config['title'],
           '#description'=>$config['description'],
-          '#default_value'=>variable_get($var, '')
+          '#default_value'=>variable_get($var, isset($config['default']) ? $config['default'] : '')
         );
+        if (isset($config['options'])) $ctrls[$var]['#options'] = $config['options'];
         if (isset($matches['list'])) {
           $rows = data_entry_helper::get_population_data(array(
             'table' => 'termlists_term',
