@@ -1,9 +1,11 @@
 <?php
-// $Id: $
-
 /**
  * @file
- * Implementation of hook_install().
+ * Install, update and uninstall functions for the taxon_identifier module.
+ */
+
+/**
+ * Implements hook_install().
  */
 function taxon_identifier_install() {
   drupal_load('module', 'content');
@@ -11,7 +13,7 @@ function taxon_identifier_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function taxon_identifier_uninstall() {
   drupal_load('module', 'content');
@@ -19,7 +21,7 @@ function taxon_identifier_uninstall() {
 }
 
 /**
- * Implementation of hook_enable().
+ * Implements hook_enable().
  *
  * Notify content module when this module is enabled.
  */
@@ -29,7 +31,7 @@ function taxon_identifier_enable() {
 }
 
 /**
- * Implementation of hook_disable().
+ * Implements hook_disable().
  *
  * Notify content module when this module is disabled.
  */
