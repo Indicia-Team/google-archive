@@ -94,7 +94,7 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
     );
   }
   else {
-    // for an existing formatter, set this as a fixed value on the form - the
+    // For an existing formatter, set this as a fixed value on the form - the
     // user cannot change the fundamental type of an existing formatter.
     $form['type'] = array(
       '#title' => t('Formatter'),
@@ -228,6 +228,7 @@ function taxon_formatters_preset_delete_form_submit($form, &$form_state) {
 
 /**
  * Function to retrieve control #value fields held in an array.
+ * 
  * Because the controls can be held in nested fieldsets the function is called
  * recursively to work through the array structure.
  */

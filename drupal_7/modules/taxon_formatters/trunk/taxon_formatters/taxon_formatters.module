@@ -121,7 +121,7 @@ function taxon_formatters_presets($reset = FALSE) {
     $normal_presets = array();
 
     $result = db_query('SELECT * FROM {taxon_formatters_preset} ORDER BY presetname');
-    while ($preset = db_fetch_array($result)) {
+    while ($preset = $result->fetchAssoc()) {
       $presets[$preset['presetid']] = $preset;
       $preset['storage'] = TAXON_FORMATTERS_STORAGE_NORMAL;
       // Collect normal preset names so we can skip defaults and mark overrides
