@@ -39,8 +39,8 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
     $form['registration'] = array(
       '#type' => 'textfield',
       '#title' => t('Registration Key'),
-      '#description' => str_replace('{0}', 'http://www.nbn.org.uk/Guidebooks/Web-services-documentation/Resources/registration.aspx', t('NBN Web Services registration key, see <a href="{0}">' .
-          'Registration of Web Service Clients</a> for more information.')),
+      '#description' => t('NBN Web Services registration key, see <a href="@link">Registration of Web Service Clients</a> for more information.',
+              array('@link' => 'http://www.nbn.org.uk/Guidebooks/Web-services-documentation/Resources/registration.aspx')),
       '#required' => TRUE,
       '#default_value' => $settings['registration'],
     );
@@ -76,9 +76,7 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
     $form['bands'] = array(
       '#type' => 'textarea',
       '#title' => t('Display Bands'),
-      '#description' => t('List display bands one per line to define the fill and border colour of the output by date range, or leave blank for just the default band. ' .
-          'Each band line consists of a comma separated list of the settings (from, to, fill and border). The from and to values are 4 digit years, the fill and border ' .
-          'values are RGB colour codes. For example "from=1980,to=1990,fill=FF0000,border=000000".'),
+      '#description' => t('List display bands one per line to define the fill and border colour of the output by date range, or leave blank for just the default band. Each band line consists of a comma separated list of the settings (from, to, fill and border). The from and to values are 4 digit years, the fill and border values are RGB colour codes. For example "from=1980,to=1990,fill=FF0000,border=000000".'),
       '#required' => FALSE,
       '#default_value' => $settings['bands'],
       '#wysiwyg' => FALSE,
@@ -98,8 +96,7 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
     $form['vice_county'] = array(
       '#type' => 'textfield',
       '#title' => t('Vice County Number'),
-      '#description' => t('Select a vice county number to zoom the map to, or leave blank. This only zooms the map, it does not filter the records. ' .
-          'The region setting above must be correct or the vice county number is ignored.'),
+      '#description' => t('Select a vice county number to zoom the map to, or leave blank. This only zooms the map, it does not filter the records. The region setting above must be correct or the vice county number is ignored.'),
       '#required' => FALSE,
       '#default_value' => $settings['vice_county'],
     );
@@ -212,7 +209,7 @@ function theme_nbn_map_taxon_formatter_output($element, $preset) {
  * Theme function that creates the final map output with NBN attribution.
  */
 function theme_nbn_map_output($image_path, $response, $preset) {
-  $result = '<div style="width: ' . $preset['settings']['width'] . 'px; margin: 0 auto;"><img src="' . $image_path  . '" width="' . $preset['settings']['width'] . '" height="' . $preset['settings']['height'] . '" />';
+  $result = '<div style="width: ' . $preset['settings']['width'] . 'px; margin: 0 auto;"><img src="' . $image_path . '" width="' . $preset['settings']['width'] . '" height="' . $preset['settings']['height'] . '" />';
   $result .= '<table width="100%"><tbody><tr><td align="left"><a href="' . $response['!TermsAndConditions'] . '">' .
       t('Gateway terms and conditions') . '</a></td><td align="right"><a href="http://data.nbn.org.uk">' .
       '<img src="' . $response['!NBNLogo'] . '" border="0"></a></td></tr></tbody></table></div>';
@@ -242,7 +239,7 @@ function nbn_map_build_query($element, $preset) {
     if (count($datasets) > 0) {
       // Clean the dataset keys.
       foreach ($datasets as &$dataset) {
-        $dataset = ereg_replace("[^A-Z0-9]", "", $dataset);
+        $dataset = preg_replace("/[^A-Z0-9]/", "", $dataset);
       }
       $dataset_list = "<dat:DatasetList>\n<dat:DatasetKey>" . implode("</dat:DatasetKey>\n<dat:DatasetKey>", $datasets) . "</dat:DatasetKey>\n</dat:DatasetList>\n";
     }
@@ -267,10 +264,10 @@ function nbn_map_build_query($element, $preset) {
             continue;
           }
           if (trim($key_value[0]) == 'from' || trim($key_value[0]) == 'to') {
-            $key_value[1] = ereg_replace("[^0-9]", "", $key_value[1]);
+            $key_value[1] = preg_replace("/[^0-9]/", "", $key_value[1]);
           }
           elseif (trim($key_value[0]) == 'border' || trim($key_value[0]) == 'fill') {
-            $key_value[1] = '#' . ereg_replace("[^A-F0-9]", "", $key_value[1]);
+            $key_value[1] = '#' . preg_replace("/[^A-F0-9]/", "", $key_value[1]);
           }
           else {
             continue;
@@ -284,7 +281,7 @@ function nbn_map_build_query($element, $preset) {
   }
   // Get the vice county into the XML definition, if required.
   if (!empty($preset['settings']['vice_county'])) {
-    $vc = '<map:ViceCounty>' . ereg_replace("[^0-9]", "", $preset['settings']['vice_county']) . '</map:ViceCounty>';
+    $vc = '<map:ViceCounty>' . preg_replace("/[^0-9]/", "", $preset['settings']['vice_county']) . '</map:ViceCounty>';
   }
   else {
     $vc = '';

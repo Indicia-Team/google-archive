@@ -63,8 +63,8 @@ function theme_gbif_map_taxon_formatter_output($element, $preset) {
   elseif ($preset['settings']['size'] == 'full') {
     $size = "width: 746px; height: 412px;";
   }
-  $result = '<iframe style="border: none; ' . $size . '" frameborder="0" ' .
-      'src="' . $request . '"></iframe></div>';
+  $result = '<iframe style="border: none; ' . $size . '" frameborder="0" src="' .
+          $request . '"></iframe></div>';
   return $result;
 }
 

@@ -6,3 +6,4 @@ core = 7.x
 package = Fields
 dependencies[] = taxon_formatters
 dependencies[] = iform
+files[] = indicia_map.module
