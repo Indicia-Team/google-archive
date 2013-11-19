@@ -52,8 +52,13 @@ function indicia_map_taxon_formatter_settings_form($settings, $type, $args) {
     $map_params = iform_distribution_map_1::get_parameters();
     $form = array();
     // We don't want all of them and these are the ones to ignore.
-    $ignore_params = array('refresh_timer', 'load_on_refresh',
-      'external_key', 'show_all_species', 'taxon_identifier');
+    $ignore_params = array(
+      'refresh_timer',
+      'load_on_refresh',
+      'external_key',
+      'show_all_species',
+      'taxon_identifier',
+    );
     // The parameters are returned in a mixed format that that has to be mapped
     // on to the forms API format.
     $type_mapping = array(

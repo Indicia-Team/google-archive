@@ -196,7 +196,10 @@ function taxon_formatters_preset_delete_form($form_state, $preset = array()) {
   }
 
   $form = array();
-  $form['presetid'] = array('#type' => 'value', '#value' => $preset['presetid']);
+  $form['presetid'] = array(
+    '#type' => 'value',
+    '#value' => $preset['presetid'],
+  );
   return confirm_form(
     $form,
     t('Are you sure you want to delete the preset %preset?',
