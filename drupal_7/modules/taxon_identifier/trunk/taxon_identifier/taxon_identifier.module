@@ -122,13 +122,13 @@ function taxon_identifier_field($op, &$node, $field, &$items, $teaser, $page) {
 function taxon_identifier_sanitize(&$node, $field, &$items, $teaser, $page) {
   foreach ($items as $delta => $item) {
     if (isset($item['value'])) {
-      $items[$delta]['safe_value'] = ereg_replace("[^A-Z0-9]", "", $item['value']);
+      $items[$delta]['safe_value'] = preg_replace("/[^A-Z0-9]/", "", $item['value']);
     }
     if (isset($item['value_1'])) {
-      $items[$delta]['safe_value_1'] = ereg_replace("[^A-Z0-9]", "", $item['value_1']);
+      $items[$delta]['safe_value_1'] = preg_replace("/[^A-Z0-9]/", "", $item['value_1']);
     }
     if (isset($item['value_2'])) {
-      $items[$delta]['safe_value_2'] = ereg_replace("[^A-Z0-9]", "", $item['value_2']);
+      $items[$delta]['safe_value_2'] = preg_replace("/[^A-Z0-9]/", "", $item['value_2']);
     }
   }
 }
