@@ -2,7 +2,7 @@
 /**
  * @file
  * Defines a formatter that can display output from various taxonomic
- * webservices based on the content of an underlying CCK taxon identifier field.
+ * webservices based on the content of an underlying taxon identifier field.
  */
 
 /**
@@ -188,11 +188,10 @@ function taxon_formatters_formatters() {
 
 
 /**
- * The AHAH callback function.
+ * The AJAX callback function.
  * 
  * Receieves AJAX requests for updates to the settings for the selected 
  * formatter
- * @return unknown_type
  */
 function get_settings_js() {
   // The form is generated in an include file which we need to include manually.
@@ -237,9 +236,9 @@ function taxon_formatters_preset_load($preset_id) {
  * @param int $preset_id
  *   The numeric id of a preset.
  * @param bool $reset
-*   if set to TRUE it will clear the preset cache.
-  *
- * @return
+ *   if set to TRUE it will clear the preset cache.
+ *
+ * @return array
  *   preset array( 'presetname' => string, 'presetid' => integet)
  *   empty array if preset_id is an invalid preset
  */
@@ -249,11 +248,17 @@ function taxon_formatters_preset($preset_id, $reset = FALSE) {
 }
 
 /**
+ * Creates a title for an action on a preset.
  * 
- * @param type $title
- * @param type $preset
- * @param type $action
- * @return type
+ * @param string $title
+ *   A title template which may contain replacement patterns.
+ * @param array $preset
+ *   Details of a preset.
+ * @param array $action
+ *   Details on an action.
+ * 
+ * @return string
+ *   The title with replacements.
  */
 function taxon_formatter_preset_title_callback($title, $preset = array(), $action = array()) {
   $replacements = array();
@@ -271,9 +276,13 @@ function taxon_formatter_preset_title_callback($title, $preset = array(), $actio
 }
 
 /**
+ * Deletes a preset.
  * 
- * @param type $preset
+ * @param array $preset
+ *   Details of a $preset.
+ * 
  * @return bool
+ *   Always returns TRUE.
  */
 function taxon_formatters_preset_delete($preset) {
   db_query('DELETE FROM {taxon_formatters_preset} where presetid = %d', $preset['presetid']);
@@ -281,7 +290,7 @@ function taxon_formatters_preset_delete($preset) {
   return TRUE;
 }
 
-/*
+/**
  * Implements hook_field_formatter_info().
  */
 function taxon_formatters_field_formatter_info() {
@@ -289,8 +298,8 @@ function taxon_formatters_field_formatter_info() {
   $formatters = array();
   foreach (taxon_formatters_presets() as $presetid => $preset) {
     $formatters['tf_' . $presetid] = array(
-        'label' => t($preset['presetname']),
-        'field types' => array($format_types[$preset['type']]['field_type']),
+      'label' => t($preset['presetname']),
+      'field types' => array($format_types[$preset['type']]['field_type']),
     );
   }
   return $formatters;
@@ -313,9 +322,13 @@ function taxon_formatters_theme() {
 }
 
 /**
+ * Themes the output of a field.
  * 
- * @param type $element
- * @return type
+ * @param array $element
+ *   The definition of the field element.
+ * 
+ * @return string
+ *   The themed output.
  */
 function theme_taxon_formatters_formatter($element) {
   // Extract the preset id from the formatter name.

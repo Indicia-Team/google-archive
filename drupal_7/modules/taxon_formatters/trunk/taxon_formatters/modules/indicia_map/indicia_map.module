@@ -87,7 +87,7 @@ function indicia_map_taxon_formatter_settings_form($settings, $type, $args) {
             // Add it if not already created.
             $form[$fieldset] = array(
               '#type' => 'fieldset',
-              '#title' => t($a['group']),
+              '#title' => check_plain(t($a['group'])),
               // Collapsing doesn't appear to work in this context.
               '#collapsible' => FALSE,
               '#collapsed' => FALSE,
@@ -117,8 +117,8 @@ function indicia_map_taxon_formatter_settings_form($settings, $type, $args) {
         // Turn the parameter in to an item on the form.
         $formitem = array(
           '#type' => $type_mapping[$a['type']],
-          '#title' => $title,
-          '#description' => $description,
+          '#title' => check_plain($title),
+          '#description' => check_plain($description),
           '#required' => $a['required'],
           '#wysiwyg' => FALSE,
         );

@@ -34,8 +34,8 @@ function nbn_designations_taxon_formatter_settings_form($settings, $type, $args)
     $form['registration'] = array(
       '#type' => 'textfield',
       '#title' => t('Registration Key'),
-      '#description' => str_replace('{0}', 'http://www.nbn.org.uk/Guidebooks/Web-services-documentation/Resources/registration.aspx', t('NBN Web Services registration key, see <a href="{0}">' .
-          'Registration of Web Service Clients</a> for more information.')),
+      '#description' => t('NBN Web Services registration key, see <a href="@link">Registration of Web Service Clients</a> for more information.',
+              array('@link' => 'http://www.nbn.org.uk/Guidebooks/Web-services-documentation/Resources/registration.aspx')),
       '#required' => TRUE,
       '#default_value' => $settings['registration'],
     );
