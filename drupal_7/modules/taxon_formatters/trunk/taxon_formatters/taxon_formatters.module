@@ -197,7 +197,10 @@ function get_settings_js() {
   // The form is generated in an include file which we need to include manually.
   include_once 'modules/node/node.pages.inc';
   include_once drupal_get_path('module', 'taxon_formatters') . '/taxon_formatters.pages.inc';
-  $form_state = array('storage' => NULL, 'submitted' => FALSE);
+  $form_state = array(
+    'storage' => NULL,
+    'submitted' => FALSE,
+  );
   $form_build_id = $_POST['form_build_id'];
 
   // Get the form from the cache.
