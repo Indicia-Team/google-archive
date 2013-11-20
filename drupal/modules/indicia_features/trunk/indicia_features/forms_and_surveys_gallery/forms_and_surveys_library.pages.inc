@@ -19,7 +19,7 @@ function library_view() {
   profile_load_profile($user);
   // find all the library form details. Filter out unpublished, unless admin user.
   $where = ($user->uid==1 || user_access('administer nodes')) ? '' : 'WHERE n.status<>0';
-  $result = db_query("SELECT n.nid, l.library_title, l.library_description, l.location_ids, l.taxon_group_ids FROM {node} n
+  $result = db_query("SELECT n.nid, n.status, l.library_title, l.library_description, l.location_ids, l.taxon_group_ids FROM {node} n
 INNER JOIN {forms_and_surveys_library} l on l.nid=n.nid ".$where);
   // create arrays to hold the different sections of forms we will display
   $forms = array();
