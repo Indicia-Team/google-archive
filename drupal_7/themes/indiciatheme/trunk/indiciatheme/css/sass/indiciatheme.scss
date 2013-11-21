@@ -4,9 +4,17 @@
 @import "variables/*.*";
 @import "custom/variables/*.*";
  
-/* Remove restriction on banner height */
+/* banner area improvements */
+@media screen and (max-width:600px) {
+  #logo {
+    float: none;
+  }
+}
+
+/* Remove restriction on banner height and width */
 header#header, div#branding {
   max-height: none;
+  width: 100%;
 }
 
 /* Adaptive theme panel layouts */
