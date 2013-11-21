@@ -52,14 +52,21 @@ function nbn_designations_taxon_formatter_settings_form($settings, $type, $args)
 /**
  * Implements the output theme function.
  */
-function theme_nbn_designations_taxon_formatter_output($element, $preset) {
-  $list = nbn_designations_get_designations($element['#item']['safe_value'], $preset);
+function theme_nbn_designations_taxon_formatter_output($params) {
+  $item = $params['item'];
+  $preset = $params['preset'];  
+  $list = nbn_designations_get_designations($item['value'], $preset);
   if (is_array($list)) {
     $items = array();
     foreach ($list as $designation) {
-      $items[] = theme('nbn_designations_format_item', $designation);
+      $items[] = theme('nbn_designations_format_item', array('item' => $designation));
     }
-    return theme('item_list', $items, NULL, 'ul', array('class' => 'designations-list'));
+    $args = array(
+      'items' => $items,
+      'type' => 'ul',
+      'attributes' => array('class' => 'designations-list'),
+    );
+    return theme('item_list', $args);
   }
   else {
     return t("No designations found.<br/>$list");
@@ -114,7 +121,8 @@ function nbn_designations_get_designations($tvk, $preset) {
 /**
  * Theme function for a single item in the designations list output.
  */
-function theme_nbn_designations_format_item($element) {
+function theme_nbn_designations_format_item($params) {
+  $element = $params['item'];
   $item = '<strong>' . $element['Designation']['name'] . '</strong><br/>' .
           $element['Designation']['description'] . '<br/>';
   if (isset($element['source'])) {

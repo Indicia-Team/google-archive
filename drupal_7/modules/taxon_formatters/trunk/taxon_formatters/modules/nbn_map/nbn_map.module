@@ -129,13 +129,12 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
 
 /**
  * Implements the output theme function.
- * @todo Theming
- * @todo NBN map web service integration
- * @todo caching option
  */
-function theme_nbn_map_taxon_formatter_output($element, $preset) {
+function theme_nbn_map_taxon_formatter_output($params) {
+  $item = $params['item'];
+  $preset = $params['preset'];
   // Return nothing if no TVK.
-  $tvk = trim($element['#item']['safe_value']);
+  $tvk = trim($item['value']);
   if (empty($tvk)) {
     return '';
   }
@@ -161,7 +160,7 @@ function theme_nbn_map_taxon_formatter_output($element, $preset) {
     $result .= "String: {$e->getMessage} </p>";
     return $result;
   }
-  $query = nbn_map_build_query($element, $preset);
+  $query = nbn_map_build_query($tvk, $preset);
   try {
     $response = $client->call("GetGridMap", $query);
   }
@@ -202,14 +201,22 @@ function theme_nbn_map_taxon_formatter_output($element, $preset) {
     // No caching, so refer to the remote map image.
     $image_path = $map['Url'];
   }
-  return theme('nbn_map_output', $image_path, $response, $preset);
+  $args = array(
+    'image_path' => $image_path,
+    'response' => $response,
+    'preset' => $preset);
+  return theme('nbn_map_output', $args);
 }
 
 /**
  * Theme function that creates the final map output with NBN attribution.
  */
-function theme_nbn_map_output($image_path, $response, $preset) {
-  $result = '<div style="width: ' . $preset['settings']['width'] . 'px; margin: 0 auto;"><img src="' . $image_path . '" width="' . $preset['settings']['width'] . '" height="' . $preset['settings']['height'] . '" />';
+function theme_nbn_map_output($args) {
+  $image_path = $args['image_path'];
+  $response = $args['response'];
+  $width = $args['preset']['settings']['width'];
+  $height = $args['preset']['settings']['height'];
+  $result = '<div style="width: ' . $width . 'px; margin: 0 auto;"><img src="' . $image_path . '" width="' . $width . '" height="' . $height . '" />';
   $result .= '<table width="100%"><tbody><tr><td align="left"><a href="' . $response['!TermsAndConditions'] . '">' .
       t('Gateway terms and conditions') . '</a></td><td align="right"><a href="http://data.nbn.org.uk">' .
       '<img src="' . $response['!NBNLogo'] . '" border="0"></a></td></tr></tbody></table></div>';
@@ -233,7 +240,7 @@ function nbn_map_theme() {
 /**
  * Internal method to create the XML query required for a web service request.
  */
-function nbn_map_build_query($element, $preset) {
+function nbn_map_build_query($tvk, $preset) {
   if (!empty($preset['settings']['datasets'])) {
     $datasets = explode("\n", $preset['settings']['datasets']);
     if (count($datasets) > 0) {
@@ -288,7 +295,7 @@ function nbn_map_build_query($element, $preset) {
   }
   $query = '<map:GridMapRequest registrationKey="' . $preset['settings']['registration'] . '" xmlns:tax="http://www.nbnws.net/Taxon" ' .
       'xmlns:dat="http://www.nbnws.net/Dataset" xmlns:map="http://www.nbnws.net/Map">' .
-      '<tax:TaxonVersionKey>' . $element['#item']['safe_value'] . '</tax:TaxonVersionKey>' .
+      '<tax:TaxonVersionKey>' . $tvk . '</tax:TaxonVersionKey>' .
       '<map:Resolution>_' . $preset['settings']['resolution'] . '</map:Resolution>' .
       '<map:GridMapSettings>' .
         '<map:Width>' . $preset['settings']['width'] . '</map:Width>' .

@@ -49,8 +49,10 @@ function gbif_map_taxon_formatter_settings_form($settings, $type, $args) {
 /**
  * Implements the output theme function.
  */
-function theme_gbif_map_taxon_formatter_output($element, $preset) {
-  $request = 'http://data.gbif.org/species/' . $element['#item']['safe_value'] .
+function theme_gbif_map_taxon_formatter_output($args) {
+  $item = $args['item'];
+  $preset = $args['preset'];
+  $request = 'http://data.gbif.org/species/' . $item['#item']['safe_value'] .
           '/mapWidget?size=' . $preset['settings']['size'];
   // The following settings allow an 8px margin.
   // Hopefully GBIF won't change this.
