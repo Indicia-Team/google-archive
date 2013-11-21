@@ -231,7 +231,26 @@ function taxon_identifier_field_widget_info() {
 }
 
 /**
- * Implements FAPI hook_elements().
+ * Implements hook_field_widget_form().
+ */
+function taxon_identifier_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  // Use += to avoid overwriting incoming $element.
+  $element += array(
+    '#type' => $instance['widget']['type'],
+    '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
+  );
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_error().
+ */
+function taxon_identifier_field_widget_error($element, $error, $form, &$form_state) {
+  form_error($element['value'], $error['message']);
+}
+
+/**
+ * Implements hook_element_info().
  *
  * Defines the data entry forms for widgets and how they are processed.
  *
@@ -240,11 +259,8 @@ function taxon_identifier_field_widget_info() {
  *
  * Drupal will automatically theme the element using a theme with
  * the same name as the hook_elements key.
- *
- * Autocomplete_path is not used by text_widget but other widgets can use it
- * (see nodereference and userreference).
  */
-function taxon_identifier_elements() {
+function taxon_identifier_element_info() {
   return array(
     'brc' => array(
       '#input' => TRUE,
@@ -260,7 +276,7 @@ function taxon_identifier_elements() {
 /**
  * FAPI Process method for brc fields. Returns the edit form required.
  */
-function brc_process($element, $edit, &$form_state, $form) {
+function brc_process($element, $form_state) {
   $defaults = $element['#value'];
   $element['value_1'] = array(
     '#title' => t($element['#title']) . ' 1',
@@ -280,12 +296,12 @@ function brc_process($element, $edit, &$form_state, $form) {
 /**
  * FAPI Process method for generic fields. Returns the edit form required.
  */
-function other_process($element, $edit, &$form_state, $form) {
+function other_process($element, $form_state) {
   $defaults = $element['#value'];
   $element['value'] = array(
     '#title' => t($element['#title']),
     '#type' => 'textfield',
-    '#default_value' => $defaults['value'],
+    '#default_value' => isset($defaults['value']) ? $defaults['value'] : '',
     '#weight' => 1,
   );
   return $element;
@@ -303,26 +319,6 @@ function theme_brc($element) {
  */
 function theme_other($element) {
   return $element['#children'];
-}
-
-/**
- * Implements hook_field_widget_form().
- * 
- */
-function taxon_identifier_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  // Use += to avoid overwriting incoming $element.
-  $element += array(
-    '#type' => $field['type'],
-    '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
-  );
-  return $element;
-}
-
-/**
- * Implements hook_field_widget_error().
- */
-function taxon_identifier_field_widget_error($element, $error, $form, &$form_state) {
-  form_error($element['value'], $error['message']);
 }
 
 /*******************************************************************************
@@ -346,8 +342,6 @@ function taxon_identifier_field_formatter_info() {
  */
 function taxon_identifier_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
-  $settings = $display['settings'];
-  $formatter = $display['type'];
   foreach ($items as $delta => $item) {
     $element[$delta] = array('#markup' => $item['value']);
   }
