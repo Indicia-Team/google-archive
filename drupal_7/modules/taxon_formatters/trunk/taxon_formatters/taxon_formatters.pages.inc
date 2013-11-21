@@ -17,38 +17,42 @@ function taxon_formatters_preset_overview() {
   // Always clear the preset cache on this display.
   foreach (taxon_formatters_presets(TRUE) as $preset) {
     $row = array();
-    $row[] = l($preset['presetname'], 'admin/build/taxon_formatters/' . $preset['presetid']);
+    $row[] = l($preset['presetname'], 'admin/config/content/taxon_formatters/' . $preset['presetid']);
     $row[] = $preset['type'];
-    $row[] = l(t('View'), 'admin/build/taxon_formatters/' . $preset['presetid']) .
+    $row[] = l(t('View'), 'admin/config/content/taxon_formatters/' . $preset['presetid']) .
           '&nbsp;&nbsp;&nbsp;&nbsp;' .
-          l(t('Delete'), 'admin/build/taxon_formatters/' . $preset['presetid'] . '/delete');
+          l(t('Delete'), 'admin/config/content/taxon_formatters/' . $preset['presetid'] . '/delete');
     $rows[] = $row;
   }
-  $output = theme('table', $header, $rows);
+  $output = theme('table', array('header' => $header, 'rows' => $rows));
   return $output;
 }
 
 /**
  * Creates the preset form.
  * 
+ * @param array $form
+ *   The form.
  * @param array $form_state
  *   The form state.
  * @param array $preset
- *   Details of the preset.
+ *   Details of an existing preset if editing or absent if adding.
  * 
  * @return array
  *   A form array.
  */
-function taxon_formatters_preset_form($form_state, $preset = array()) {
-  $form = array();
+function taxon_formatters_preset_form($form, &$form_state, $preset = array()) {
+  // A hidden value containing the presetid.
   $form['presetid'] = array(
     '#type' => 'value',
-    '#value' => $preset['presetid'],
+    '#value' => isset($preset['presetid']) ? $preset['presetid'] : '',
   );
 
+  // The preset name field.
+  $is_default_preset = isset($preset['storage']) && $preset['storage'] === TAXON_FORMATTERS_STORAGE_DEFAULT;
+  if ($is_default_preset) {
   // Browsers don't submit disabled form values so we've got to put two copies
   // of the name on the form: one for the submit handler and one for the user.
-  if ($preset['storage'] === TAXON_FORMATTERS_STORAGE_DEFAULT) {
     $form['presetname'] = array(
       '#type' => 'value',
       '#value' => $preset['presetname'],
@@ -66,26 +70,30 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
       '#type' => 'textfield',
       '#size' => '64',
       '#title' => t('Formatter Preset Name'),
-      '#default_value' => $preset['presetname'],
+      '#default_value' => isset($preset['presetname']) ? $preset['presetname'] : '',
       '#description' => t('The name used to refer to this formatter preset.'),
       '#required' => TRUE,
     );
   }
+  
+  // Invoke hook_taxon_formatter_types to find what enabled modules provide.
   $format_types = module_invoke_all('taxon_formatter_types');
   $formatters = array('' => '<Please Select>');
   foreach ($format_types as $type => $config) {
     $formatters[$type] = t($config['title']);
   }
+  // The format type field.
   if (empty($preset['type'])) {
+    //For a new preset, an Ajax field that will load settings for selected type.
     $form['type'] = array(
       '#type' => 'select',
       '#title' => t('Formatter'),
       '#options' => $formatters,
       '#description' => t('Select the type of output you want for this preset'),
       '#required' => TRUE,
-      '#default_value' => $preset['type'],
       '#ajax' => array(
-        'path' => 'taxon_formatter_settings/js/0',
+//        'path' => 'taxon_formatter_settings/js/0',
+        'callback' => 'get_d7_settings_js',
         'wrapper' => 'taxon-formatter-settings',
         'method' => 'replace',
         'effect' => 'fade',
@@ -94,7 +102,7 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
     );
   }
   else {
-    // For an existing formatter, set this as a fixed value on the form - the
+    // For an existing preset, set this as a fixed value on the form - the
     // user cannot change the fundamental type of an existing formatter.
     $form['type'] = array(
       '#title' => t('Formatter'),
@@ -102,40 +110,39 @@ function taxon_formatters_preset_form($form_state, $preset = array()) {
       '#value' => t($format_types[$preset['type']]['title']),
     );
   }
+  
+  // A container for formatter settings
   $form['taxon_formatter_params'] = array(
     '#type' => 'fieldset',
     '#title' => t('Formatter settings'),
+    '#prefix' => '<div class="clear-block" id="taxon-formatter-settings">',
+    '#suffix' => '</div>',
     '#tree' => FALSE,
   );
 
-  // Define a wrapper in which to place just the list of settings.
+  // Define a wrapper in which to place the formatter fields.
   $form['taxon_formatter_params']['taxon_formatter_params_wrapper'] = array(
+    '#type' => 'item',
+    '#markup' => '<em>' . t('Please select a formatter before defining the settings.') . '</em>',
     '#tree' => FALSE,
-    '#weight' => 5,
-    '#prefix' => '<div class="clear-block" id="taxon-formatter-settings">',
-    '#suffix' => '</div>',
   );
-  $type = isset($form_state['post']['type']) ? $form_state['post']['type'] : (isset($preset['type']) ? $preset['type'] : '');
-  // Get the selected form's parameters.
-  if ($type) {
-    if (isset($preset['settings'])) {
-      $settings = json_decode($preset['settings'], TRUE);
-    }
-    else {
-      $settings = array();
-    }
-    $form['taxon_formatter_params']['taxon_formatter_params_wrapper'] = call_user_func($format_types[$type]['form_callback'],
-        $settings, $type, isset($format_types[$type]['form_args']) ? $format_types[$type]['form_args'] : NULL);
+
+  // The formatter type is in $form_state when an Ajax callback is in 
+  // progress. It is in $preset if editing an existing preset
+  if (!empty($form_state['input']['type']) || (isset($preset['type']))) {
+    $func = $format_types[$type]['form_callback'];
+    $settings = (isset($preset['settings'])) ?  json_decode($preset['settings'], TRUE) : array();
+    $type = isset($form_state['input']['type']) ? $form_state['input']['type'] : $preset['type'];
+    $args = isset($format_types[$type]['form_args']) ? $format_types[$type]['form_args'] : NULL;
+    // Call the form function for the selected formatter
+    $form['taxon_formatter_params']['taxon_formatter_params_wrapper'] = 
+            call_user_func($func, $settings, $type, $args);
   }
-  else {
-    $form['taxon_formatter_params']['taxon_formatter_params_wrapper']['dummy'] = array(
-      '#type' => 'item',
-      '#value' => '<em>' . t('Please select a formatter before defining the settings.') . '</em>',
-    );
-  }
+  
+  // The submit button.
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => $preset['storage'] === TAXON_FORMATTERS_STORAGE_DEFAULT ? t('Override Defaults') : t('Save Preset'),
+    '#value' => $is_default_preset ? t('Override Defaults') : t('Save Preset'),
   );
 
   return $form;
@@ -189,10 +196,10 @@ function taxon_formatters_preset_form_submit($form, &$form_state) {
  * @return array
  *   The form array.
  */
-function taxon_formatters_preset_delete_form($form_state, $preset = array()) {
+function taxon_formatters_preset_delete_form($form, &$form_state, $preset = array()) {
   if (empty($preset)) {
     drupal_set_message(t('The specified preset was not found'), 'error');
-    drupal_goto('admin/build/taxon_formatters');
+    drupal_goto('admin/config/content/taxon_formatters');
   }
 
   $form = array();

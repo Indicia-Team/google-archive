@@ -191,9 +191,11 @@ function indicia_map_taxon_formatter_settings_form($settings, $type, $args) {
  * @todo NBN map web service integration
  * @todo caching option
  */
-function theme_indicia_map_taxon_formatter_output($element, $preset) {
+function theme_indicia_map_taxon_formatter_output($params) {
+  $item = $params['item'];
+  $preset = $params['preset'];
   // Return nothing if no TVK.
-  $tvk = trim($element['#item']['safe_value']);
+  $tvk = trim($item['value']);
   if (empty($tvk)) {
     return '';
   }
@@ -207,13 +209,15 @@ function theme_indicia_map_taxon_formatter_output($element, $preset) {
   _iform_apply_variables_to_args($args);
   $map = iform_distribution_map_1::get_form($args);
   handle_resources();
-  return theme('indicia_map_output', $map, $preset);
+  return theme('indicia_map_output', array('map' => $map, 'preset' => $preset));
 }
 
 /**
  * Theme function that creates the final map output with NBN attribution.
  */
-function theme_indicia_map_output($map, $preset) {
+function theme_indicia_map_output($params) {
+  $map = $params['map'];
+  $preset = $params['preset'];
   $result = '<div style="width: ' . $preset['settings']['map_width'] .
           'px; margin: 0 auto;">' . $map . '</div>';
   return $result;
