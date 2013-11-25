@@ -326,6 +326,8 @@ function iform_load($node) {
   if ($t->params!=='null') {
     if (!is_array($params))
       drupal_set_message(t('This page\'s configuration has not been stored correctly. '.print_r($t->params, true)), 'warning');
+    if (function_exists('iform_user_ui_options_preprocess_iform'))
+      iform_user_ui_options_preprocess_iform($params);
     unset($t->params);
     $t->params = array();
     if (is_array($params))
