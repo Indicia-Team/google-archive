@@ -82,6 +82,7 @@ function summary_report_get_report_options($node) {
     'mode' => 'report',
     'readAuth' => $readAuth,
     'caching' => true,
+    'cachePerUser' => false,
     'extraParams' => array(
       'date_from'=>'',
       'date_to'=>'',
@@ -101,6 +102,10 @@ function summary_report_get_report_options($node) {
     case 'taxon':
       $folder = 'taxa';
       break;
+    case 'year':
+      $r['extraParams']['orderby']='extract(year from coalesce(o.date_start, o.date_end))';
+      $r['extraParams']['sortdir']='ASC';
+      // no break
     default:
       $folder = $node->field_summary_report_grouping[0]['value'] . 's';
   }
