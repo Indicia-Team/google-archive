@@ -60,9 +60,20 @@ function iform_user_ui_options_load_config() {
  */
 function iform_user_ui_options_form_submit($form, &$form_state) {
   $options = array();
+  $currentOpts = json_decode(hostsite_get_user_field('iform_ui_options', '{}'), true);
   foreach ($form_state['values'] as $key=>$value) {
     if (preg_match('/^iform_user_ui_(?P<key>.+)/', $key, $matches)) {
       $options[$matches['key']] = $value;
+      if ($currentOpts[$matches['key']]!==$value) {
+        // We are switching from one config set to another. This might mean we need to clear out cookies, e.g. if switching map layers from one
+        // projection to another then we don't want to remember the map position.
+        $config=iform_user_ui_options_load_config();
+        if (isset($config[$matches['key']]['clearCookies'])) {
+          foreach ($config[$matches['key']]['clearCookies'] as $cookie) {
+            setcookie($cookie, '', time()+3600, "/");
+          }
+        }
+      }
     } 
   }
   if (!empty($options)) 
