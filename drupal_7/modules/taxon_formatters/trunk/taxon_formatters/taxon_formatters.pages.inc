@@ -182,7 +182,7 @@ function taxon_formatters_preset_form_submit($form, &$form_state) {
   }
   drupal_set_message(t('Your form has been saved.'));
   // Return to the list.
-  $form_state['redirect'] = 'admin/config_content/taxon_formatters/';
+  $form_state['redirect'] = 'admin/config/content/taxon_formatters/';
 }
 
 /**
@@ -230,7 +230,7 @@ function taxon_formatters_preset_delete_form_submit($form, &$form_state) {
   $preset = taxon_formatters_preset($form_state['values']['presetid']);
   taxon_formatters_preset_delete($preset);
   drupal_set_message(t('Preset %name (ID: @id) was deleted.', array('%name' => $preset['presetname'], '@id' => $preset['presetid'])));
-  $form_state['redirect'] = 'admin/build/taxon_formatters';
+  $form_state['redirect'] = 'admin/config/content/taxon_formatters';
 }
 
 /**
