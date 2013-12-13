@@ -140,7 +140,7 @@ function theme_nbn_map_taxon_formatter_output($params) {
   }
   require_once drupal_get_path('module', 'taxon_formatters') . '/lib/nusoap.php';
   if ($preset['settings']['caching']) {
-    $base_path = file_directory_path() . "/nbn_maps";
+    $base_path = drupal_realpath('public://nbn_maps');
     if (!file_exists($base_path)) {
       mkdir($base_path, 0777);
     }
@@ -241,19 +241,16 @@ function nbn_map_theme() {
  * Internal method to create the XML query required for a web service request.
  */
 function nbn_map_build_query($tvk, $preset) {
+  $dataset_list = '';
   if (!empty($preset['settings']['datasets'])) {
     $datasets = explode("\n", $preset['settings']['datasets']);
-    if (count($datasets) > 0) {
-      // Clean the dataset keys.
-      foreach ($datasets as &$dataset) {
-        $dataset = preg_replace("/[^A-Z0-9]/", "", $dataset);
-      }
-      $dataset_list = "<dat:DatasetList>\n<dat:DatasetKey>" . implode("</dat:DatasetKey>\n<dat:DatasetKey>", $datasets) . "</dat:DatasetKey>\n</dat:DatasetList>\n";
+    // Clean the dataset keys.
+    foreach ($datasets as &$dataset) {
+      $dataset = preg_replace("/[^A-Z0-9]/", "", $dataset);
     }
-    else {
-      $dataset_list = '';
-    }
+    $dataset_list = "<dat:DatasetList>\n<dat:DatasetKey>" . implode("</dat:DatasetKey>\n<dat:DatasetKey>", $datasets) . "</dat:DatasetKey>\n</dat:DatasetList>\n";
   }
+  
   $band_list = '';
   if (!empty($preset['settings']['bands'])) {
     // Split the band definitions up by line.
@@ -286,6 +283,7 @@ function nbn_map_build_query($tvk, $preset) {
       $band_list = "<map:Classification>$band_list</map:Classification>\n";
     }
   }
+  
   // Get the vice county into the XML definition, if required.
   if (!empty($preset['settings']['vice_county'])) {
     $vc = '<map:ViceCounty>' . preg_replace("/[^0-9]/", "", $preset['settings']['vice_county']) . '</map:ViceCounty>';
@@ -293,6 +291,7 @@ function nbn_map_build_query($tvk, $preset) {
   else {
     $vc = '';
   }
+  
   $query = '<map:GridMapRequest registrationKey="' . $preset['settings']['registration'] . '" xmlns:tax="http://www.nbnws.net/Taxon" ' .
       'xmlns:dat="http://www.nbnws.net/Dataset" xmlns:map="http://www.nbnws.net/Map">' .
       '<tax:TaxonVersionKey>' . $tvk . '</tax:TaxonVersionKey>' .
