@@ -130,9 +130,9 @@ function taxon_formatters_preset_form($form, &$form_state, $preset = array()) {
   // The formatter type is in $form_state when an Ajax callback is in 
   // progress. It is in $preset if editing an existing preset
   if (!empty($form_state['input']['type']) || (isset($preset['type']))) {
-    $func = $format_types[$type]['form_callback'];
     $settings = (isset($preset['settings'])) ?  json_decode($preset['settings'], TRUE) : array();
     $type = isset($form_state['input']['type']) ? $form_state['input']['type'] : $preset['type'];
+    $func = $format_types[$type]['form_callback'];
     $args = isset($format_types[$type]['form_args']) ? $format_types[$type]['form_args'] : NULL;
     // Call the form function for the selected formatter
     $form['taxon_formatter_params']['taxon_formatter_params_wrapper'] = 
@@ -182,7 +182,7 @@ function taxon_formatters_preset_form_submit($form, &$form_state) {
   }
   drupal_set_message(t('Your form has been saved.'));
   // Return to the list.
-  $form_state['redirect'] = 'admin/build/taxon_formatters/';
+  $form_state['redirect'] = 'admin/config_content/taxon_formatters/';
 }
 
 /**
@@ -212,7 +212,7 @@ function taxon_formatters_preset_delete_form($form, &$form_state, $preset = arra
     t('Are you sure you want to delete the preset %preset?',
       array('%preset' => $preset['presetname'])
     ),
-    'admin/build/taxon_formatters',
+    'admin/config/content/taxon_formatters',
     t('This action cannot be undone.'),
     t('Delete'), t('Cancel')
   );
