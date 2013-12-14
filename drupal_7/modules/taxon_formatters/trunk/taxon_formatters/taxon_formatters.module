@@ -249,7 +249,9 @@ function taxon_formatter_preset_title_callback($title, $preset = array(), $actio
  *   Always returns TRUE.
  */
 function taxon_formatters_preset_delete($preset) {
-  db_query('DELETE FROM {taxon_formatters_preset} where presetid = %d', $preset['presetid']);
+  db_delete('taxon_formatters_preset')
+    ->condition('presetid', $preset['presetid'])
+    ->execute();
   taxon_formatters_presets(TRUE);
   return TRUE;
 }
