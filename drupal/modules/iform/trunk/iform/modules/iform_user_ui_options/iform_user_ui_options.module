@@ -114,6 +114,27 @@ function iform_user_ui_options_preprocess_iform(&$params) {
       }
     }
   }
-  $params = array_merge($params, $paramsToApply);
+  $paramsAllowedToApply=$paramsToApply;
+  if (!empty($params['locked_params'])) {
+    $lockedParams = explode(',', $params['locked_params']);
+    foreach ($lockedParams as $lockedParam)
+      unset($paramsAllowedToApply[$lockedParam]);
+  }
+  $params = array_merge($params, $paramsAllowedToApply);
 }
 
+/**
+ * Declare that we want an additional param for all forms, allowing this functionality to be turned off by the form when a particular
+ * setting is critical.
+ * return Array List of parameters to add to each iform config form.
+ */
+function iform_user_ui_options_additional_params() {
+  return array(array(
+      'fieldname'=>'locked_params',
+      'label'=>'Params to lock',
+      'helpText'=>'Enter a comma separated list of the names of form parameters which are essential to the operation of this form and must not be overrridden by the '.
+          'iform_user_ui_options module.',
+      'type'=>'text_input',
+      'required'=>false
+  ));
+} 
