@@ -4,9 +4,11 @@
 @import "variables/*.*";
 @import "custom/variables/*.*";
  
-/* banner area improvements */
+/** banner area improvements **/
+
 @media screen and (max-width:600px) {
   #logo {
+    /* logo occupies own line if narrow */
     float: none;
   }
 }
@@ -17,7 +19,8 @@ header#header, div#branding {
   width: 100%;
 }
 
-/* Adaptive theme panel layouts */
+/** Adaptive theme panel layouts **/
+
 .at-panel {
   .region {
     padding-right: $spacing;
@@ -27,12 +30,19 @@ header#header, div#branding {
       /* labels in columns take up 1 line */
       display: block;
       margin-bottom: 0;
+      width: auto;
     }
     textarea, #map-help {
       /* full width boxes, accounting for border, padding etc*/
       width: 100%;
       @include box-sizing(border-box);
-    }    
+    }
+    .control-box nobr {
+      @include inline-block;
+      span * {
+        @include inline-block;
+      }
+    }
     .helpText, p.inline-error {
       /* Controls on separate line to labels, so remove margin for the helptext and errors */
       margin-left: 0;
@@ -43,12 +53,16 @@ header#header, div#branding {
   }
 
 }
+
+/** Buttons **/
+
 /* Sassify the buttons */
-input[type=submit], input[type=button], button, .indicia-button {
+input[type=submit], input[type=button], button, .indicia-button, a.indicia-button {
+  color: $colour-ctrl-text;
   @include sassy-button-gradient('matte', $colour-ctrl-background, $colour-ctrl-background-light, $colour-ctrl-text, 'inset', true);
 }
 input[type=button], button, .indicia-button {
-  @include sassy-button-structure(4px, 10px, 0.25em);
+  @include sassy-button-structure(4px, 12px, 0.25em);
 }
 /* Submit button a bit bigger */
 input[type=submit], button[type=submit], .fb-close {
@@ -58,17 +72,17 @@ input[type=submit], button[type=submit], .fb-close {
 .form-submit:hover {
   color: $colour-ctrl-text;
 }
-/* Line up lock icons */
-input, .unlocked-icon, .locked-icon {
-  margin-top: 4px;
-  margin-bottom: 4px;
+
+/** Menu configuration **/
+
+/* Menus on same line */
+#block-superfish-1 {
+  float: left;
 }
-/* remove legend background colour (from pixture reloaded's link colour) */
-fieldset legend {
-  background-color: transparent;
-  color: $colour-header-text;
-  padding: 0 $spacing;
+#block-system-user-menu {
+  float: right;
 }
+
 /* Menu colour */
 #menu-bar, #menu-bar li a {
   background-color: $colour-ctrl-background;
@@ -83,7 +97,19 @@ ul.sf-menu.sf-horizontal span {
     line-height: 32px;
 }
 
-/* Apply tweaks and bugfixes */
+/** Apply tweaks and bugfixes **/
+
+/* Line up lock icons */
+input, .unlocked-icon, .locked-icon {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+/* remove legend background colour (from pixture reloaded's link colour) */
+fieldset legend {
+  background-color: transparent;
+  color: $colour-header-text;
+  padding: 0 $spacing;
+}
 
 /* Fixes a bug where Google attributions appear 1 character wide therefore go up the middle of the map in IE on some D7 templates. We 
    can't use a conditional stylesheet, as it also applies to IE10 which does not support conditional comments. */
@@ -91,5 +117,6 @@ ul.sf-menu.sf-horizontal span {
   width: auto !important;
 }
 
-/* import any layout override files */
+/** import any custom override files **/
+
 @import "custom/*.*";
