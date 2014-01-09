@@ -88,7 +88,14 @@ input[type=submit], button[type=submit], .fb-close {
 #menu-bar ul.sf-menu li a.sf-with-ul {
   padding: 0 25px;
 }
-
+.nav ul.sf-menu.sf-horizontal ul li {
+  background: #fffdff;
+  border-left: solid 1px #333333;
+  border-right: solid 1px #333333;
+}
+.nav ul.sf-menu.sf-horizontal ul li.last {
+  border-bottom: solid 1px #333333;
+}
 /** Blocks **/
 #block-system-main .block-content {
   padding: 4px;
