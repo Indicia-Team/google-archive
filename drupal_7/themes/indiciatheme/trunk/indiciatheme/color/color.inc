@@ -59,10 +59,7 @@ $info = array(
   ),
   'fill' => array(),
   'gradients' => array(),
-  // Coordinates of all the theme slices (x, y, width, height).
-  'slices' => array(
-    'images/sf-hover-tile.png'  => array(0,30,250,1),
-  ),
+  'slices' => array(),
   'blend_target' => '#ffffff',
   'preview_image' => 'color/preview.png',
   'preview_css' => 'color/preview.css',

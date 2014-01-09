@@ -163,34 +163,28 @@ input[type=submit], button[type=submit], .fb-close {
   float: right;
 }
 
-/* Correct padding in main menu for nolink items */
+/* Correct a pixture reloaded bug with menu arrow placement */
 /* line 88, sass/indiciatheme.scss */
-#menu-bar ul.sf-menu li span {
-  padding: 0 15px;
-}
-
-/* line 91, sass/indiciatheme.scss */
-ul.sf-menu.sf-horizontal span {
-  height: 32px;
-  line-height: 32px;
+#menu-bar ul.sf-menu li a.sf-with-ul {
+  padding: 0 25px;
 }
 
 /** Blocks **/
-/* line 97, sass/indiciatheme.scss */
+/* line 93, sass/indiciatheme.scss */
 #block-system-main .block-content {
   padding: 4px;
 }
 
 /** Apply tweaks and bugfixes **/
 /* Line up lock icons */
-/* line 104, sass/indiciatheme.scss */
+/* line 100, sass/indiciatheme.scss */
 input, .unlocked-icon, .locked-icon {
   margin-top: 4px;
   margin-bottom: 4px;
 }
 
 /* remove legend background colour (from pixture reloaded's link colour) */
-/* line 109, sass/indiciatheme.scss */
+/* line 105, sass/indiciatheme.scss */
 fieldset legend {
   background-color: transparent;
   color: #333333;
@@ -199,7 +193,7 @@ fieldset legend {
 
 /* Fixes a bug where Google attributions appear 1 character wide therefore go up the middle of the map in IE on some D7 templates. We 
    can't use a conditional stylesheet, as it also applies to IE10 which does not support conditional comments. */
-/* line 117, sass/indiciatheme.scss */
+/* line 113, sass/indiciatheme.scss */
 .gm-style .gmnoprint {
   width: auto !important;
 }

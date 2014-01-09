@@ -84,13 +84,9 @@ input[type=submit], button[type=submit], .fb-close {
   float: right;
 }
 
-/* Correct padding in main menu for nolink items */
-#menu-bar ul.sf-menu li span {
-  padding: 0 15px;
-}
-ul.sf-menu.sf-horizontal span {
-    height: 32px;
-    line-height: 32px;
+/* Correct a pixture reloaded bug with menu arrow placement */
+#menu-bar ul.sf-menu li a.sf-with-ul {
+  padding: 0 25px;
 }
 
 /** Blocks **/
