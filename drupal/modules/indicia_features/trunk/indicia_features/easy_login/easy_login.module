@@ -296,7 +296,7 @@ function easy_login_handle_get_user_id_response($account, $response, &$edit=null
     $_SESSION['uid_to_resolve'] = $account->uid;
     drupal_goto('resolve_multiple_users');
   } elseif (isset($response->error))
-    drupal_set_message('The account details you have provided have been accepted by iRecord but there is a problem linking you to the central records database.', 'warning');
+    drupal_set_message('The account details you have provided have been accepted but there is a problem linking you to the central records database.', 'warning');
     drupal_set_message($response->error, 'warning');
 }
 
@@ -317,9 +317,9 @@ function easy_login_store_value($filter, $uid, $value, $edit) {
  */
 function easy_login_form_alter(&$form, &$form_state, $form_id) {
   global $user;
-  if (!isset($user->profile_last_name))
-    profile_load_profile($user);
   if (($form_id === 'user_profile_form' || $form_id === 'user_register') && array_key_exists('Preferences', $form)) {
+    if (!isset($user->profile_last_name))
+      profile_load_profile($user);
     iform_load_helpers(array('data_entry_helper'));
     $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
     // The fields can be hidden for sites that don't want them, so check they exist on the form.
