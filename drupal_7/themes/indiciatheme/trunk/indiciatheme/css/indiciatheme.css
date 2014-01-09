@@ -1,3 +1,4 @@
+/* Use reference colours from the default Girly Pink colour scheme here so that the colors module can overwrite them */
 /* Standard spacing between buttons, panels etc */
 /* No files to import found in custom/variables/*.* */
 /** banner area improvements **/
@@ -72,20 +73,20 @@ header#header, div#branding {
 /* Sassify the buttons */
 /* line 61, sass/indiciatheme.scss */
 input[type=submit], input[type=button], button, .indicia-button, a.indicia-button {
-  color: white;
+  color: #fffffc;
   *zoom: 1;
-  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF006699', endColorstr='#FF002233');
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #006699), color-stop(70%, #0088cc));
-  background: -webkit-linear-gradient(#006699, #0088cc 70%);
-  background: -moz-linear-gradient(#006699, #0088cc 70%);
-  background: -o-linear-gradient(#006699, #0088cc 70%);
-  background: linear-gradient(#006699, #0088cc 70%);
-  -webkit-box-shadow: #0099e6 0 1px 0 inset;
-  -moz-box-shadow: #0099e6 0 1px 0 inset;
-  box-shadow: #0099e6 0 1px 0 inset;
-  border: 1px solid #0077b3;
-  color: white;
-  text-shadow: #00141f 0 -1px 0;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFEB5AC3', endColorstr='#FFC71897');
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eb5ac3), color-stop(70%, #eb5ac3));
+  background: -webkit-linear-gradient(#eb5ac3, #eb5ac3 70%);
+  background: -moz-linear-gradient(#eb5ac3, #eb5ac3 70%);
+  background: -o-linear-gradient(#eb5ac3, #eb5ac3 70%);
+  background: linear-gradient(#eb5ac3, #eb5ac3 70%);
+  -webkit-box-shadow: #f39edc 0 1px 0 inset;
+  -moz-box-shadow: #f39edc 0 1px 0 inset;
+  box-shadow: #f39edc 0 1px 0 inset;
+  border: 1px solid #e843bb;
+  color: #fffffc;
+  text-shadow: #b01585 0 -1px 0;
 }
 /* line 15, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
@@ -93,24 +94,24 @@ input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-butto
 }
 /* line 18, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
-  background-color: #0077b3;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #005580), color-stop(75%, #0077b3));
-  background: -webkit-linear-gradient(#005580 3%, #0077b3 75%);
-  background: -moz-linear-gradient(#005580 3%, #0077b3 75%);
-  background: -o-linear-gradient(#005580 3%, #0077b3 75%);
-  background: linear-gradient(#005580 3%, #0077b3 75%);
+  background-color: #e843bb;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #e843bb), color-stop(75%, #e843bb));
+  background: -webkit-linear-gradient(#e843bb 3%, #e843bb 75%);
+  background: -moz-linear-gradient(#e843bb 3%, #e843bb 75%);
+  background: -o-linear-gradient(#e843bb 3%, #e843bb 75%);
+  background: linear-gradient(#e843bb 3%, #e843bb 75%);
 }
 /* line 21, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:active, input[type=button]:active, button:active, .indicia-button:active, a.indicia-button:active {
-  -webkit-box-shadow: #006da3 0 1px 2px inset;
-  -moz-box-shadow: #006da3 0 1px 2px inset;
-  box-shadow: #006da3 0 1px 2px inset;
+  -webkit-box-shadow: #e736b6 0 1px 2px inset;
+  -moz-box-shadow: #e736b6 0 1px 2px inset;
+  box-shadow: #e736b6 0 1px 2px inset;
 }
 /* line 6, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit].disabled, input[type=submit][disabled], input[type=button].disabled, input[type=button][disabled], button.disabled, button[disabled], .indicia-button.disabled, .indicia-button[disabled], a.indicia-button.disabled, a.indicia-button[disabled] {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
   opacity: 0.6;
-  background: #0088cc;
+  background: #eb5ac3;
   cursor: default;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -147,7 +148,7 @@ input[type=submit], button[type=submit], .fb-close {
 
 /* line 73, sass/indiciatheme.scss */
 .form-submit:hover {
-  color: white;
+  color: #fffffc;
 }
 
 /** Menu configuration **/
@@ -162,23 +163,22 @@ input[type=submit], button[type=submit], .fb-close {
   float: right;
 }
 
-/* Menu colour */
-/* line 88, sass/indiciatheme.scss */
-#menu-bar, #menu-bar li a {
-  background-color: #006699;
-  color: white;
-}
-
 /* Correct padding in main menu for nolink items */
-/* line 93, sass/indiciatheme.scss */
+/* line 88, sass/indiciatheme.scss */
 #menu-bar ul.sf-menu li span {
   padding: 0 15px;
 }
 
-/* line 96, sass/indiciatheme.scss */
+/* line 91, sass/indiciatheme.scss */
 ul.sf-menu.sf-horizontal span {
   height: 32px;
   line-height: 32px;
+}
+
+/** Blocks **/
+/* line 97, sass/indiciatheme.scss */
+#block-system-main .block-content {
+  padding: 4px;
 }
 
 /** Apply tweaks and bugfixes **/
