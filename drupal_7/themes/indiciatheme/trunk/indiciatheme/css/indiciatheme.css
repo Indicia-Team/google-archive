@@ -13,10 +13,11 @@
 header#header, div#branding {
   max-height: none;
   width: 100%;
+  text-transform: none;
 }
 
 /** Adaptive theme panel layouts **/
-/* line 25, sass/indiciatheme.scss */
+/* line 26, sass/indiciatheme.scss */
 .at-panel .region {
   padding-right: 10px;
   /* Prevent padding messing up layout */
@@ -24,14 +25,14 @@ header#header, div#branding {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 29, sass/indiciatheme.scss */
+/* line 30, sass/indiciatheme.scss */
 .at-panel .region label {
   /* labels in columns take up 1 line */
   display: block;
   margin-bottom: 0;
   width: auto;
 }
-/* line 35, sass/indiciatheme.scss */
+/* line 36, sass/indiciatheme.scss */
 .at-panel .region textarea, .at-panel .region #map-help {
   /* full width boxes, accounting for border, padding etc*/
   width: 100%;
@@ -39,7 +40,7 @@ header#header, div#branding {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 40, sass/indiciatheme.scss */
+/* line 41, sass/indiciatheme.scss */
 .at-panel .region .control-box nobr {
   display: -moz-inline-stack;
   display: inline-block;
@@ -48,7 +49,7 @@ header#header, div#branding {
   zoom: 1;
   *display: inline;
 }
-/* line 42, sass/indiciatheme.scss */
+/* line 43, sass/indiciatheme.scss */
 .at-panel .region .control-box nobr span * {
   display: -moz-inline-stack;
   display: inline-block;
@@ -57,19 +58,19 @@ header#header, div#branding {
   zoom: 1;
   *display: inline;
 }
-/* line 46, sass/indiciatheme.scss */
+/* line 47, sass/indiciatheme.scss */
 .at-panel .region .helpText, .at-panel .region p.inline-error {
   /* Controls on separate line to labels, so remove margin for the helptext and errors */
   margin-left: 0;
 }
-/* line 51, sass/indiciatheme.scss */
+/* line 52, sass/indiciatheme.scss */
 .at-panel .region:last-child {
   padding-right: 0;
 }
 
 /** Buttons **/
 /* Sassify the buttons */
-/* line 60, sass/indiciatheme.scss */
+/* line 61, sass/indiciatheme.scss */
 input[type=submit], input[type=button], button, .indicia-button, a.indicia-button {
   color: white;
   *zoom: 1;
@@ -116,7 +117,7 @@ input[type=submit].disabled, input[type=submit][disabled], input[type=button].di
   box-shadow: none;
 }
 
-/* line 64, sass/indiciatheme.scss */
+/* line 65, sass/indiciatheme.scss */
 input[type=button], button, .indicia-button {
   font-size: 12px;
   padding: 0.25em;
@@ -130,7 +131,7 @@ input[type=button], button, .indicia-button {
 }
 
 /* Submit button a bit bigger */
-/* line 68, sass/indiciatheme.scss */
+/* line 69, sass/indiciatheme.scss */
 input[type=submit], button[type=submit], .fb-close {
   font-size: 14px;
   padding: 0.25em;
@@ -144,37 +145,37 @@ input[type=submit], button[type=submit], .fb-close {
   margin-right: 10px;
 }
 
-/* line 72, sass/indiciatheme.scss */
+/* line 73, sass/indiciatheme.scss */
 .form-submit:hover {
   color: white;
 }
 
 /** Menu configuration **/
 /* Menus on same line */
-/* line 79, sass/indiciatheme.scss */
+/* line 80, sass/indiciatheme.scss */
 #block-superfish-1 {
   float: left;
 }
 
-/* line 82, sass/indiciatheme.scss */
+/* line 83, sass/indiciatheme.scss */
 #block-system-user-menu {
   float: right;
 }
 
 /* Menu colour */
-/* line 87, sass/indiciatheme.scss */
+/* line 88, sass/indiciatheme.scss */
 #menu-bar, #menu-bar li a {
   background-color: #006699;
   color: white;
 }
 
 /* Correct padding in main menu for nolink items */
-/* line 92, sass/indiciatheme.scss */
+/* line 93, sass/indiciatheme.scss */
 #menu-bar ul.sf-menu li span {
   padding: 0 15px;
 }
 
-/* line 95, sass/indiciatheme.scss */
+/* line 96, sass/indiciatheme.scss */
 ul.sf-menu.sf-horizontal span {
   height: 32px;
   line-height: 32px;
@@ -182,14 +183,14 @@ ul.sf-menu.sf-horizontal span {
 
 /** Apply tweaks and bugfixes **/
 /* Line up lock icons */
-/* line 103, sass/indiciatheme.scss */
+/* line 104, sass/indiciatheme.scss */
 input, .unlocked-icon, .locked-icon {
   margin-top: 4px;
   margin-bottom: 4px;
 }
 
 /* remove legend background colour (from pixture reloaded's link colour) */
-/* line 108, sass/indiciatheme.scss */
+/* line 109, sass/indiciatheme.scss */
 fieldset legend {
   background-color: transparent;
   color: #333333;
@@ -198,7 +199,7 @@ fieldset legend {
 
 /* Fixes a bug where Google attributions appear 1 character wide therefore go up the middle of the map in IE on some D7 templates. We 
    can't use a conditional stylesheet, as it also applies to IE10 which does not support conditional comments. */
-/* line 116, sass/indiciatheme.scss */
+/* line 117, sass/indiciatheme.scss */
 .gm-style .gmnoprint {
   width: auto !important;
 }
