@@ -84,11 +84,6 @@ input[type=submit], button[type=submit], .fb-close {
   float: right;
 }
 
-/* Menu colour */
-#menu-bar, #menu-bar li a {
-  background-color: $colour-ctrl-background;
-  color: $colour-ctrl-text;
-}
 /* Correct padding in main menu for nolink items */
 #menu-bar ul.sf-menu li span {
   padding: 0 15px;
@@ -96,6 +91,11 @@ input[type=submit], button[type=submit], .fb-close {
 ul.sf-menu.sf-horizontal span {
     height: 32px;
     line-height: 32px;
+}
+
+/** Blocks **/
+#block-system-main .block-content {
+  padding: 4px;
 }
 
 /** Apply tweaks and bugfixes **/
