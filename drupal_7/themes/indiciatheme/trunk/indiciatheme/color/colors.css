@@ -62,7 +62,7 @@ a:link,
 a:visited,
 a:active,
 a.active {
-  color: #b21f88;
+  color: #006699;
 }
 
 a:hover,
@@ -106,7 +106,7 @@ tr.even {
 
 .region-header .form-text,
 .region-header .form-submit {
-  border-color: #b21f88;
+  border-color: #006699;
 }
 
 
@@ -130,7 +130,7 @@ tr.even {
 }
 
 #footer #block-node-recent a {
-  color: #b21f88;
+  color: #006699;
 }
 
 
@@ -142,6 +142,9 @@ tr.even {
 .block-title, th.ui-widget-header, th.ui-widget-header a, thead.ui-widget-header, thead.ui-widget-header th, thead.ui-widget-header a {
   color: #fffffc;
   background: #444445;
+}
+tr.filter-row th {
+  background: none;
 }
 
 
@@ -246,13 +249,13 @@ div.item-list ul.pager li {
 div.item-list ul.pager li:hover,
 div.item-list ul.pager li:focus {
   border: 1px solid #444445;
-  color: #b21f88;
+  color: #006699;
 }
 
 div.item-list ul.pager li.pager-current,
 div.item-list ul.pager li.pager-current a.active {
   border: 1px solid #444445;
-  color: #b21f88;
+  color: #006699;
 }
 
 /* Menu bar menu */
@@ -320,7 +323,7 @@ ul.sf-menu.sf-navbar.sf-style-default li ul {
 }
 
 ul.sf-menu.sf-navbar.sf-style-default > li > ul > li {
-  border-bottom: 1px solid #b21f88;
+  border-bottom: 1px solid #006699;
 }
 
 
@@ -328,7 +331,7 @@ ul.sf-menu.sf-navbar.sf-style-default > li > ul > li {
 
 ul.sf-menu.sf-menu.sf-vertical.sf-style-default a {
   border: 0 !important;
-  color: #b21f88;
+  color: #006699;
 }
 ul.sf-menu.sf-vertical.sf-style-default a:hover,
 ul.sf-menu.sf-vertical.sf-style-default a:focus,
@@ -344,12 +347,12 @@ ul.sf-menu.sf-vertical.sf-style-default ul ul ul ul a {
 
 .calendar-calendar div.date-nav {
   background-color: transparent;
-  color: #b21f88;
+  color: #006699;
 }
 
 .calendar-calendar div.date-nav a,
 .calendar-calendar div.date-nav h3 {
-  color: #b21f88;
+  color: #006699;
 }
 
 .calendar-calendar td {
@@ -358,13 +361,13 @@ ul.sf-menu.sf-vertical.sf-style-default ul ul ul ul a {
 
 .calendar-calendar th {
   background-color: #f9cbed;
-  color: #b21f88;
+  color: #006699;
   border: 1px solid #f9cbed;
 }
 
 .calendar-calendar th.days {
   background-color: #fffff0;
-  color: #b21f88;
+  color: #006699;
 }
 
 .calendar-calendar tr td.today,

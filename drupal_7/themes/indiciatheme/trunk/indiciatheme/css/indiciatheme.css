@@ -1,4 +1,4 @@
-/* Use reference colours from the default Girly Pink colour scheme here so that the colors module can overwrite them */
+/* Use reference colours from the default colour scheme here so that the colors module can overwrite them */
 /* Standard spacing between buttons, panels etc */
 /* No files to import found in custom/variables/*.* */
 /** banner area improvements **/
@@ -73,20 +73,20 @@ header#header, div#branding {
 /* Sassify the buttons */
 /* line 61, sass/indiciatheme.scss */
 input[type=submit], input[type=button], button, .indicia-button, a.indicia-button {
-  color: #fffffc;
+  color: white;
   *zoom: 1;
-  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFEB5AC3', endColorstr='#FFC71897');
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eb5ac3), color-stop(70%, #eb5ac3));
-  background: -webkit-linear-gradient(#eb5ac3, #eb5ac3 70%);
-  background: -moz-linear-gradient(#eb5ac3, #eb5ac3 70%);
-  background: -o-linear-gradient(#eb5ac3, #eb5ac3 70%);
-  background: linear-gradient(#eb5ac3, #eb5ac3 70%);
-  -webkit-box-shadow: #f39edc 0 1px 0 inset;
-  -moz-box-shadow: #f39edc 0 1px 0 inset;
-  box-shadow: #f39edc 0 1px 0 inset;
-  border: 1px solid #e843bb;
-  color: #fffffc;
-  text-shadow: #b01585 0 -1px 0;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF006699', endColorstr='#FF002233');
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #006699), color-stop(70%, #0088cc));
+  background: -webkit-linear-gradient(#006699, #0088cc 70%);
+  background: -moz-linear-gradient(#006699, #0088cc 70%);
+  background: -o-linear-gradient(#006699, #0088cc 70%);
+  background: linear-gradient(#006699, #0088cc 70%);
+  -webkit-box-shadow: #0099e6 0 1px 0 inset;
+  -moz-box-shadow: #0099e6 0 1px 0 inset;
+  box-shadow: #0099e6 0 1px 0 inset;
+  border: 1px solid #0077b3;
+  color: white;
+  text-shadow: #00141f 0 -1px 0;
 }
 /* line 15, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
@@ -94,24 +94,24 @@ input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-butto
 }
 /* line 18, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
-  background-color: #e843bb;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #e843bb), color-stop(75%, #e843bb));
-  background: -webkit-linear-gradient(#e843bb 3%, #e843bb 75%);
-  background: -moz-linear-gradient(#e843bb 3%, #e843bb 75%);
-  background: -o-linear-gradient(#e843bb 3%, #e843bb 75%);
-  background: linear-gradient(#e843bb 3%, #e843bb 75%);
+  background-color: #0077b3;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #005580), color-stop(75%, #0077b3));
+  background: -webkit-linear-gradient(#005580 3%, #0077b3 75%);
+  background: -moz-linear-gradient(#005580 3%, #0077b3 75%);
+  background: -o-linear-gradient(#005580 3%, #0077b3 75%);
+  background: linear-gradient(#005580 3%, #0077b3 75%);
 }
 /* line 21, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:active, input[type=button]:active, button:active, .indicia-button:active, a.indicia-button:active {
-  -webkit-box-shadow: #e736b6 0 1px 2px inset;
-  -moz-box-shadow: #e736b6 0 1px 2px inset;
-  box-shadow: #e736b6 0 1px 2px inset;
+  -webkit-box-shadow: #006da3 0 1px 2px inset;
+  -moz-box-shadow: #006da3 0 1px 2px inset;
+  box-shadow: #006da3 0 1px 2px inset;
 }
 /* line 6, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit].disabled, input[type=submit][disabled], input[type=button].disabled, input[type=button][disabled], button.disabled, button[disabled], .indicia-button.disabled, .indicia-button[disabled], a.indicia-button.disabled, a.indicia-button[disabled] {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
   opacity: 0.6;
-  background: #eb5ac3;
+  background: #0088cc;
   cursor: default;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -148,7 +148,7 @@ input[type=submit], button[type=submit], .fb-close {
 
 /* line 73, sass/indiciatheme.scss */
 .form-submit:hover {
-  color: #fffffc;
+  color: white;
 }
 
 /** Menu configuration **/
@@ -181,22 +181,16 @@ input[type=submit], button[type=submit], .fb-close {
   border-bottom: solid 1px #333333;
 }
 
-/** Blocks **/
-/* line 100, sass/indiciatheme.scss */
-#block-system-main .block-content {
-  padding: 4px;
-}
-
 /** Apply tweaks and bugfixes **/
 /* Line up lock icons */
-/* line 107, sass/indiciatheme.scss */
+/* line 103, sass/indiciatheme.scss */
 input, .unlocked-icon, .locked-icon {
   margin-top: 4px;
   margin-bottom: 4px;
 }
 
 /* remove legend background colour (from pixture reloaded's link colour) */
-/* line 112, sass/indiciatheme.scss */
+/* line 108, sass/indiciatheme.scss */
 fieldset legend {
   background-color: transparent;
   color: #333333;
@@ -205,9 +199,15 @@ fieldset legend {
 
 /* Fixes a bug where Google attributions appear 1 character wide therefore go up the middle of the map in IE on some D7 templates. We 
    can't use a conditional stylesheet, as it also applies to IE10 which does not support conditional comments. */
-/* line 120, sass/indiciatheme.scss */
+/* line 116, sass/indiciatheme.scss */
 .gm-style .gmnoprint {
   width: auto !important;
+}
+
+/* Remove pixture reloaded margin on report tables */
+/* line 121, sass/indiciatheme.scss */
+table.report-grid {
+  margin: 0;
 }
 
 /** import any custom override files **/
