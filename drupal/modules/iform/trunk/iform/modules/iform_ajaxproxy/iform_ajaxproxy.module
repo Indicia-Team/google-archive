@@ -292,7 +292,11 @@ function iform_ajaxproxy_proxy() {
       // TODO? echo a failure response: invalid index type
       return;
   }
-  $response = data_entry_helper::forward_post_to('save', $Model, array('nonce'=>$nonce, 'auth_token' => sha1($nonce.":".$conn['password'])));
+  $writeTokens = array('nonce'=>$nonce, 'auth_token' => sha1($nonce.":".$conn['password']));
+  // pass through the user ID as this can then be used to set created_by and updated_by_ids
+  if (isset($_REQUEST['user_id'])) $writeTokens['user_id'] = $_REQUEST['user_id'];
+  if (isset($_REQUEST['sharing'])) $writeTokens['sharing'] = $_REQUEST['sharing'];
+  $response = data_entry_helper::forward_post_to('save', $Model, $writeTokens);
   // if it is not json format, assume error text, and json encode that.
   //if (!json_decode($output, true))
   //    $response = "{error:\"".$output."\"}";
