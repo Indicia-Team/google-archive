@@ -1163,6 +1163,27 @@ function hostsite_set_page_title($title) {
 }
 
 /**
+ * Goto a page on the host site.
+ * @param string $path The page path.
+ * @param array $params The params to add to the URL.
+ */
+function hostsite_goto_page($path, $params=array()) {
+  drupal_goto($path, $params);
+}
+
+/**
+ * Goto a page on the host site.
+ * @param string $path The page path.
+ * @param array $params The params to add to the URL.
+ */
+function hostsite_get_url($path, $params=false) {
+  $opts=array();
+  if ($params)
+    $opts['query']=$params;
+  return url($path, $opts);
+}
+
+/**
  * Returns a list of website IDs that this website is allowed use data for. This is defined by the agreement between the 
  * 2 websites and depends on the exact task being performed.
  * @param array $readAuth Read authorisation tokens
