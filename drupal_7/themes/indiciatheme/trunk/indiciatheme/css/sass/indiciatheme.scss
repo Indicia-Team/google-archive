@@ -16,8 +16,14 @@
 /* Remove restriction on banner height and width */
 header#header, div#branding {
   max-height: none;
-  width: 100%;
   text-transform: none;
+}
+header#header {
+  width: 100%;
+}
+div#branding {
+  /* Allow space for user menu */
+  width: 75%;
 }
 
 /** Adaptive theme panel layouts **/
@@ -85,8 +91,11 @@ input[type=submit], button[type=submit], .fb-close {
 }
 
 /* Correct a pixture reloaded bug with menu arrow placement */
-#menu-bar ul.sf-menu li a.sf-with-ul {
-  padding: 0 25px;
+div#menu-bar {
+  font-size: 120%;
+  ul.sf-menu li a.sf-with-ul {
+    padding: 0 25px;
+  }
 }
 .nav ul.sf-menu.sf-horizontal ul li {
   background: #fffdff;
@@ -117,10 +126,76 @@ fieldset legend {
   width: auto !important;
 }
 
+/* Fix potential for datepicker div to appear as blob at bottom of screen, and to go under the menu when it pops up */
+div#ui-datepicker-div {
+  display: none;
+  z-index: 100 !important;
+}
+
 /* Remove pixture reloaded margin on report tables */
 table.report-grid {
   margin: 0;
 }
+
+/* A small font option, e.g. for wide habitat drop downs */
+.small-font, .small-font * {
+  font-size: 9px;
+  font-family: tahoma,sans-serif;
+}
+
+/* Two col grid layout in iforms */
+#entry_form .at-panel {
+  margin: 0 4px;
+  .two-50 {
+    label {
+      display: block;
+      width: auto;
+      &.olButton {
+        display: inline-block;
+      }
+    }
+    .control-box label {
+      display: inline;
+    }
+    textarea {
+      width: 90%;
+    }
+    .helpText {
+      margin-left: 0;
+    }
+    .hierarchy-select {
+      display: block;
+    }
+    .page-notice {
+      margin: 0 0.5em 0 0;
+    }
+    p.inline-error {
+      margin: 0;
+      display:-moz-inline-stack;
+      display:inline-block;
+      zoom:1;
+      *display:inline;
+    }
+  }
+}
+
+.region {
+  padding: 1em;
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+}
+.record-details-fields div span:first-child {
+  width: 40%;
+  font-weight: bold;
+  float: left;
+}
+
+.record-details-fields div span:last-child {
+  width: 58%;
+  float: right;
+}
+
 
 /** import any custom override files **/
 
