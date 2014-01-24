@@ -137,7 +137,7 @@ tr.even {
 /* Blocks */
 
 .block-inner {
-  background: #f9cbec;
+  background: #fcfcfc;
 }
 .block-title, th.ui-widget-header, th.ui-widget-header a, thead.ui-widget-header, thead.ui-widget-header th, thead.ui-widget-header a {
   color: #fffffc;
