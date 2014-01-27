@@ -85,18 +85,18 @@ div#branding {
 input[type=submit], input[type=button], button, .indicia-button, a.indicia-button {
   color: white;
   *zoom: 1;
-  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF006699', endColorstr='#FF002233');
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #006699), color-stop(70%, #0088cc));
-  background: -webkit-linear-gradient(#006699, #0088cc 70%);
-  background: -moz-linear-gradient(#006699, #0088cc 70%);
-  background: -o-linear-gradient(#006699, #0088cc 70%);
-  background: linear-gradient(#006699, #0088cc 70%);
-  -webkit-box-shadow: #0099e6 0 1px 0 inset;
-  -moz-box-shadow: #0099e6 0 1px 0 inset;
-  box-shadow: #0099e6 0 1px 0 inset;
-  border: 1px solid #0077b3;
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF00679A', endColorstr='#FF002334');
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00679a), color-stop(70%, #00578a));
+  background: -webkit-linear-gradient(#00679a, #00578a 70%);
+  background: -moz-linear-gradient(#00679a, #00578a 70%);
+  background: -o-linear-gradient(#00679a, #00578a 70%);
+  background: linear-gradient(#00679a, #00578a 70%);
+  -webkit-box-shadow: #009ae7 0 1px 0 inset;
+  -moz-box-shadow: #009ae7 0 1px 0 inset;
+  box-shadow: #009ae7 0 1px 0 inset;
+  border: 1px solid #004771;
   color: white;
-  text-shadow: #00141f 0 -1px 0;
+  text-shadow: #001119 0 -1px 0;
 }
 /* line 15, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
@@ -104,24 +104,24 @@ input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-butto
 }
 /* line 18, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
-  background-color: #0077b3;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #005580), color-stop(75%, #0077b3));
-  background: -webkit-linear-gradient(#005580 3%, #0077b3 75%);
-  background: -moz-linear-gradient(#005580 3%, #0077b3 75%);
-  background: -o-linear-gradient(#005580 3%, #0077b3 75%);
-  background: linear-gradient(#005580 3%, #0077b3 75%);
+  background-color: #004771;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #005681), color-stop(75%, #004771));
+  background: -webkit-linear-gradient(#005681 3%, #004771 75%);
+  background: -moz-linear-gradient(#005681 3%, #004771 75%);
+  background: -o-linear-gradient(#005681 3%, #004771 75%);
+  background: linear-gradient(#005681 3%, #004771 75%);
 }
 /* line 21, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit]:active, input[type=button]:active, button:active, .indicia-button:active, a.indicia-button:active {
-  -webkit-box-shadow: #006da3 0 1px 2px inset;
-  -moz-box-shadow: #006da3 0 1px 2px inset;
-  box-shadow: #006da3 0 1px 2px inset;
+  -webkit-box-shadow: #003d61 0 1px 2px inset;
+  -moz-box-shadow: #003d61 0 1px 2px inset;
+  box-shadow: #003d61 0 1px 2px inset;
 }
 /* line 6, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
 input[type=submit].disabled, input[type=submit][disabled], input[type=button].disabled, input[type=button][disabled], button.disabled, button[disabled], .indicia-button.disabled, .indicia-button[disabled], a.indicia-button.disabled, a.indicia-button[disabled] {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
   opacity: 0.6;
-  background: #0088cc;
+  background: #00578a;
   cursor: default;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
