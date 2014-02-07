@@ -1,0 +1,17 @@
+/*
+*/
+/* line 4, ../sass/icpveg_mobile.scss */
+body {
+  background-color: #C6612E;
+  color: #7B4720;
+}
+
+/* line 9, ../sass/icpveg_mobile.scss */
+.ui-page {
+  padding: 0 0.5em;
+}
+
+/* line 13, ../sass/icpveg_mobile.scss */
+label, form label {
+  width: auto;
+}
