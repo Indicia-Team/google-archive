@@ -640,21 +640,32 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
           // Does the form redirect after success?
           if (is_array($response) && array_key_exists('success', $response) &&
               array_key_exists('redirect_on_success', $args) && $args['redirect_on_success']) {
-            $url = explode('?', $args['redirect_on_success']);
             if (!isset($args['message_after_save']) || $args['message_after_save']) {
               // use lang::get rather than t() here because this message is displayed to the recorders, 
               // and therefore it must be possible to change the English language version as well as other
               // language translations
               drupal_set_message(lang::get('Thank you. Your records have been saved to the database.'));
             }
-            $params = 'table=' . $response['outer_table'].'&id=' . $response['outer_id'];
-            if (count($url)>1)
-              $params .= '&' . $url[1];
-            // if the URL contains a bookmark, move this to the end of the params
-            $url = explode('#', $url[0]);
-            if (count($url)>1)
-              $params .= '#' . $url[1];
-            drupal_goto($url[0], $params);
+            $parts = explode('?', $args['redirect_on_success'], 2);
+            $url = array_shift($parts); // first item removed from array
+            if (count($parts)) {
+              $parts = explode('#', $parts[0], 2);
+              $queryStr = array_shift($parts); // info between the ? and # is the query string
+              // Get an array of the redirect_on_success specified query string params
+              parse_str($queryStr, $params);
+            } else {
+              $params=array();
+            }
+            // Merge the information about the saved record in
+            $params = array_merge(array(
+              'table'=>$response['outer_table'],
+              'id'=>$response['outer_id']
+            ), $params);
+            // anything left in $parts is the bookmark
+            if (count($parts))
+              drupal_goto($url, $params, $parts[0]);
+            else
+              drupal_goto($url, $params);
           } elseif (!isset($args['message_after_save']) || $args['message_after_save'] || !array_key_exists('success', $response)) {
             // This dumps errors, and/or a success message if no redirection.
             $r .= data_entry_helper::dump_errors($response, true, $msg);
