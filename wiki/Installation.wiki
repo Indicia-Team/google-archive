@@ -42,7 +42,7 @@ GRANT EXECUTE ON FUNCTION st_transform(geometry, integer) TO indicia_user;
 
 If you are installing on Windows, then you will typically want to use IIS (Internet Information Services) or Apache as your web server software. For other operating systems we recommend the Apache web server. This tutorial is written on the assumption that you are using Apache, though the steps will mostly be the same (except with different folder locations) for IIS.
 
-There are many tutorials on the web on how to install PHP and a webserver such as Apache. PHP version 5.3 is recommended, PHP 5.2 should work fine but PHP 5.4 is not yet supported. For example, the following guide explains installation of PHP, Apache and MySQL on Windows: [http://www.php-mysql-tutorial.com/install-apache-php-mysql.php]. MySQL is not required by the Indicia Warehouse. Another alternative is to install a ready made 'stack' with a set of predefined components all packaged into one install kit. An example is [http://www.apachefriends.org/en/xampp.html XAMPP] though note that version 1.7.4 removed several modules from previous versions making Indicia installation more difficult. You can download version 1.7.3 for Windows from [http://sourceforge.net/projects/xampp/files/XAMPP%20Windows/1.7.3/].
+There are many tutorials on the web on how to install PHP and a webserver such as Apache. PHP version 5.3, 5.4 or 5.5 are required. For example, the following guide explains installation of PHP, Apache and MySQL on Windows: [http://www.php-mysql-tutorial.com/install-apache-php-mysql.php]. MySQL is not required by the Indicia Warehouse. Another alternative is to install a ready made 'stack' with a set of predefined components all packaged into one install kit. An example is [http://www.apachefriends.org/en/xampp.html XAMPP] though note that version 1.7.4 removed several modules from previous versions making Indicia installation more difficult. You can download version 1.7.3 for Windows from [http://sourceforge.net/projects/xampp/files/XAMPP%20Windows/1.7.3/].
 
 After installing PHP, edit your php.ini file and uncomment the following two lines by removing the semi-colon at the start. This enables the pgsql module required for PHP to access the PostgreSQL database, and the cURL module which the demonstration site pages use to access the web services. After you've changed and saved the file, restart your Apache web server.
 {{{
@@ -58,8 +58,7 @@ Once you have done this, it's a good idea to check that the cURL and pgsql libra
 Now go to a web browser, and enter the root of your webserver followed by phpinfo.php (e.g
 http://localhost/phpinfo.php). The page you see should detail your PHP configuration, and if you look down the page you should see that the cURL and pgsql libraries are loaded.
 
-_Tip: If you have installed PHP 5.2.6 and the pgsql library won't load, this may be because of a bug in this release of PHP making it incompatible with the version of PostgreSQL you have installed. To fix this, you will need to replace the file php_pgsql.dll in your PHP installation with the version from the PHP 5.2.5 download, and also replace the file libpq.dll from your PostgreSQL install folder with the one from this download.
-Another problem can occur when loading the pgsql libraries for PHP on a Windows Apache server, because of the paths not being correct. For more information on this issue see [http://stackoverflow.com/questions/551734/php-not-loading-php-pgsql-dll-on-windows.]_
+_Tip: A problem can occur when loading the pgsql libraries for PHP on a Windows Apache server, because of the paths not being correct. For more information on this issue see [http://stackoverflow.com/questions/551734/php-not-loading-php-pgsql-dll-on-windows.]_
 
 == Get the Warehouse code ==
 
@@ -73,7 +72,7 @@ The Setup procedure will automatically start if you access the index.php file in
 
 http://indicia.googlecode.com/svn/wiki/setup_check.png
 
-Each of the tasks that the Indicia Warehouse has identified still needs your attention are listed on this page in a warning box. Assuming that you have enabled the cUrl and PostgreSQL PHP extensions earlier in this guide and that an appropriate version of PHP is installed (at least 5.2), then the things you will need to attend to are as follows:
+Each of the tasks that the Indicia Warehouse has identified still needs your attention are listed on this page in a warning box. Assuming that you have enabled the cUrl and PostgreSQL PHP extensions earlier in this guide and that an appropriate version of PHP is installed (at least 5.3), then the things you will need to attend to are as follows:
 
 ===Directory Access===
 
