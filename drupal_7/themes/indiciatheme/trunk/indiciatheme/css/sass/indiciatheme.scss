@@ -20,11 +20,24 @@ header#header, div#branding {
 }
 header#header {
   width: 100%;
+  div#branding {
+    width: 100%;
+  }
+  div.region {
+    // overlay the user menu over the banner image
+    width: 25%;
+    margin: 0 0 0 -25%;
+    padding: 0; 
+    
+    nav {
+      float: right;
+      .block-content {
+        padding: 0;
+      }
+    }    
+  }
 }
-div#branding {
-  /* Allow space for user menu */
-  width: 75%;
-}
+
 
 /** Adaptive theme panel layouts **/
 

@@ -152,7 +152,6 @@ tr.filter-row th {
 /* Strip backgrounds */
 
 #header .block-inner,
-#block-system-main .block-inner,
 #footer .block-inner,
 #footer .block .block-title {
   background: none;
@@ -267,11 +266,11 @@ div.item-list ul.pager li.pager-current a.active {
   background-color: #fffdff;
 }
 
-nav .menu-wrapper li a,
-nav .menu-wrapper li a:hover,
-nav .menu-wrapper li a:focus,
-nav .menu-wrapper li a:visited,
-nav .menu-wrapper li a.active {
+nav.menu-wrapper li a,
+nav.menu-wrapper li a:hover,
+nav.menu-wrapper li a:focus,
+nav.menu-wrapper li a:visited,
+nav.menu-wrapper li a.active {
   color: #222222;
 }
 
