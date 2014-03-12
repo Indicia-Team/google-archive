@@ -44,7 +44,8 @@ function iform_user_ui_options_load_config() {
     $configPath=file_directory_path() . '/iform_user_ui_options';
     $files=scandir($configPath);
     foreach ($files as $file) {
-      if ($file==='.' || $file==='..')
+      $parts = explode('.', $file);
+      if ($file==='.' || $file==='..' || count($parts)<2 || $parts[1]!=='json')
         continue;
       $jsstring=file_get_contents($configPath.'/'.$file);
       $fileSettings=json_decode($jsstring, true);
