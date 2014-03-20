@@ -80,22 +80,25 @@
 ?>
 
 <?php if($type == 'iform') : ?>
-  <form method="post" id="entry_form" action="<?php print $node_url; ?>">
-<?php endif; ?>
+  <form method="post" enctype="multipart/form-data" id="entry_form" action="<?php print $node_url; ?>" data-ajax="false">
+      <?php print render($content['iform']) ?>
+  </form>
+<?php else : ?>
 
     <div id="<?php print $pageid; ?>" data-role="page">
-      <div data-role="header">
-        <a href="#" data-rel="back">Back</a>
-	      <h1><?php print $title; ?></h1>       
-      </div><!-- /header -->
+      <header data-role="header">
+        <?php //TODO not to hardcode the app base URL! ?>
+        
+        <?php if($node_url != '/drupal/app' && !fnmatch("*dialog", $node_url)) : ?>
+            <a href="#" data-rel="back" data-icon="arrow-l" data-iconpos="left">Back</a>
+        <?php endif; ?>
+	    <h1><?php print $title; ?></h1>       
+      </header><!-- /header -->
 
       <div role="main" class="ui-content">
         <?php print render($content['body']) ?>
       </div>
 
-      <?php print render($content['iform']) ?>
     </div><!-- /page -->
 
-<?php if($type == 'iform') : ?>
-  </form>
 <?php endif; ?>
