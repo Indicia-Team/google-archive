@@ -23,16 +23,6 @@ function mobile_iform_preprocess_html(&$vars) {
   // jquerymobile.module adds jQuery Mobile with weight = 102 and
   // every_page defaulting to false. For plugins to come afterwards then
   // every_page must also be false and the weight greater than 102.
-  global $theme_key;
-  $theme_path = drupal_get_path('theme', $theme_key);
-  // Subpage plugin currently requires jQM 1.3
-  drupal_add_js( $theme_path. '/scripts/jquery.mobile.subpage.js', array(
-      'type' => 'file',
-      'group' => JS_THEME, 
-      'weight' => 103,
-      'scope' => 'header',
-      ));
-
 }
 
 /**
