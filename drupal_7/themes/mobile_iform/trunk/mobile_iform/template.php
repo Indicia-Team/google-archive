@@ -16,7 +16,16 @@
  * @see html.tpl.php
  */
 function mobile_iform_preprocess_html(&$vars) {
-//  _mobile_jquery_load_files('mobile_iform');
+  $css_options = array(
+    'type' => 'file', 
+    'group' => CSS_THEME, 
+    'every_page' => TRUE, 
+    'media' => 'all', 
+    'preprocess' => FALSE, 
+    'weight' => 101,
+  );
+  $css_path = drupal_get_path('theme', 'mobile_iform') . '/styles/mobile_iform.css';
+  drupal_add_css($css_path, $css_options);
   $vars['styles'] = drupal_get_css();
   
   // Add jQuery Mobile plugins.
