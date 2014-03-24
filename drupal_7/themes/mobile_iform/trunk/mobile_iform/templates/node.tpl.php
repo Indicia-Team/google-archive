@@ -89,7 +89,8 @@
       <header data-role="header">
         <?php //TODO not to hardcode the app base URL! ?>
         
-        <?php if($node_url != '/drupal/app' && !fnmatch("*dialog", $node_url)) : ?>
+        <?php //if($node_url != '/drupal/app' && !fnmatch("*dialog", $node_url)) : ?>
+       	<?php if($node_url != '/drupal/app') : ?>
             <a href="#" data-rel="back" data-icon="arrow-l" data-iconpos="left">Back</a>
         <?php endif; ?>
 	    <h1><?php print $title; ?></h1>       
