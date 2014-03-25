@@ -43,7 +43,7 @@ function updateFormCounter() {
 	console.log("DEBUG: Updating form counter");
 	var count = localStorage.getItem("form_count");
 
-	jQuery("#dialog-savedFormCounter").text(count);
+	jQuery("#dialog-savedFormCounter").text(count + ((count == 1) ? " form" : " forms"));
 	jQuery(".savedFormCounter").text(count);
 
 	if (count != null && count != 0) {
@@ -60,14 +60,14 @@ function updateFormCounter() {
  * @param {type} file
  * @returns {undefined}
  */
-function dataURItoBlob(dataURI) {
+function dataURItoBlob(dataURI, file_type) {
 	var binary = atob(dataURI.split(',')[1]);
 	var array = [];
 	for (var i = 0; i < binary.length; i++) {
 		array.push(binary.charCodeAt(i));
 	}
 	return new Blob([new Uint8Array(array)], {
-		type : 'image/jpeg'
+		type : file_type
 	});
 }
 
@@ -92,72 +92,83 @@ function sendAllSavedForms() {
 /*
  * Sends the form
  */
-function sendSavedForm(i) {
-	if (i != null)
-		;
-	//get the right form
-	else {
-		console.log("DEBUG: SEND");
-		var formsCount = localStorage.getItem(FORM_COUNT_KEY);
-		//send the last form
-		if (formsCount != null && formsCount > 0) {
-			//Send form
-			console.log("DEBUG: SEND - creating the form.");
-			var data = new FormData();
-			var files_clean = [];
-			//files to clean afterwards
-			var input_array = JSON.parse(localStorage.getItem(FORM_KEY + formsCount));
+function sendSavedForm() {
+	console.log("DEBUG: SEND");
+	var formsCount = localStorage.getItem(FORM_COUNT_KEY);
+	//send the last form
+	if (formsCount != null && formsCount > 0) {
+		//Send form
+		console.log("DEBUG: SEND - creating the form.");
+		var data = new FormData();
+		var files_clean = [];
+		//files to clean afterwards
+		var input_array = JSON.parse(localStorage.getItem(FORM_KEY + formsCount));
 
-			for (var k = 0; k < input_array.length; k++) {
-				if (input_array[k].type == "file") {
-					var pic_file = localStorage.getItem(input_array[k].value);
-					if (pic_file != null) {
-						console.log("DEBUG: SEND - attaching '" + input_array[k].value + "' to " + input_array[k].name);
-						files_clean.push(input_array[k].value);
-						//TODO change pic.jpg to something to correspond to fyle type
-						data.append(input_array[k].name, dataURItoBlob(pic_file), "pic.jpg");
-					} else {
-						console.log("DEBUG: SEND - " + input_array[k].value + " is " + pic_file);
-					}
+		for (var k = 0; k < input_array.length; k++) {
+			if (input_array[k].type == "file") {
+				var pic_file = localStorage.getItem(input_array[k].value);
+				if (pic_file != null) {
+					console.log("DEBUG: SEND - attaching '" + input_array[k].value + "' to " + input_array[k].name);
+					files_clean.push(input_array[k].value);
+					var type = pic_file.split(";")[0].split(":")[1];
+					var extension = type.split("/")[1];
+					console.log("HHHH: " + type + " " + extension);
+					data.append(input_array[k].name, dataURItoBlob(pic_file, type), "pic." + extension);
 				} else {
-					data.append(input_array[k].name, input_array[k].value);
+					console.log("DEBUG: SEND - " + input_array[k].value + " is " + pic_file);
 				}
+			} else {
+				data.append(input_array[k].name, input_array[k].value);
 			}
-
-			//AJAX POST
-			console.log("DEBUG: SEND - form ajax");
-			jQuery.ajax({
-				url : 'form',
-				type : 'POST',
-				data : data,
-				cache : false,
-				enctype : 'multipart/form-data',
-				dataType : 'json',
-				processData : false, // Don't process the files
-				contentType : false, // Set content type to false as jQuery will tell the server its a query string request
-				//                            success:function(data){
-				//                                console.log("success");
-				//                                console.log(data);
-				//                            },
-				//                            error: function (xhr, ajaxOptions, thrownError) {
-				//                                console.log(xhr.status);
-				//                                console.log(thrownError);
-				//                            }
-			});
-
-			//clean
-			console.log("DEBUG: SEND - cleaning up");
-			localStorage.removeItem(FORM_KEY + formsCount);
-			localStorage.setItem(FORM_COUNT_KEY, --formsCount);
-			for (var j = 0; j < files_clean.length; j++)
-				localStorage.removeItem(files_clean[j]);
 		}
+
+		//AJAX POST
+		console.log("DEBUG: SEND - form ajax");
+		jQuery.ajax({
+			url : 'form',
+			type : 'POST',
+			data : data,
+			cache : false,
+			enctype : 'multipart/form-data',
+			dataType : 'json',
+			processData : false, // Don't process the files
+			contentType : false, // Set content type to false as jQuery will tell the server its a query string request
+            success:function(data){
+               console.log("DEBUG: SEND - form ajax (success):");
+               console.log(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+               console.log("DEBUG: SEND - form ajax (ERROR)");
+               console.log(xhr.status);
+               console.log(thrownError);
+            }
+		});
+
+		//clean
+		console.log("DEBUG: SEND - cleaning up");
+		localStorage.removeItem(FORM_KEY + formsCount);
+		localStorage.setItem(FORM_COUNT_KEY, --formsCount);
+		for (var j = 0; j < files_clean.length; j++)
+			localStorage.removeItem(files_clean[j]);
 	}
 	updateFormCounter();
 }
 
 /*
+ * Checks if it is possible to store some sized data in localStorage.
+ */
+function localStorageHasSpace(size){
+	var taken = JSON.stringify(localStorage).length;
+	var left = 1024 * 1024 * 5 - (taken + taken*0.34); //33% bigger size of saved pic
+	if ((left - size) > 0)
+		return 1;
+	else
+		return 0;
+}
+
+/*
  * Saves the form
+ * Returns 1 if save is successful, else 0 if error. 
  */
 function saveForm() {
 	console.log("DEBUG: FORM.");
@@ -165,20 +176,9 @@ function saveForm() {
 	var input_key = {};
 	var name, value, type, id;
 
-	//form counter
-	var form_count = localStorage.getItem(FORM_COUNT_KEY);
-	if (form_count != null) {
-		console.log("DEBUG: FORM - incrementing form counter");
-		localStorage.setItem(FORM_COUNT_KEY, ++form_count);
-	} else {
-		console.log("DEBUG: FORM - setting up form counter for the first time")
-		form_count = 1;
-		localStorage.setItem(FORM_COUNT_KEY, form_count);
-	}
-
 	//INPUTS
 	var pic_count = 0;
-
+	var file_storage_status = 1; //if localStorage has little space it becomes 0
 	jQuery('form').find('input').each(function(index, input) {
 		name = jQuery(input).attr("name");
 		value = jQuery(input).attr('value');
@@ -197,44 +197,59 @@ function saveForm() {
 			var file = jQuery(input).prop("files")[0];
 			if (file != null) {
 				console.log("DEBUG: FORM - working with a file");
+				if (!localStorageHasSpace(file.size)){
+				 	return file_storage_status = 0;
+				}
+				
 				var reader = new FileReader();
 				var key = Date.now() + "_" + jQuery(input).val().replace("C:\\fakepath\\", "");
 				value = key;
 				reader.onload = function(e) {
-					localStorage.setItem(key, reader.result);
-					// console.log("DEBUG: FORM - resizing file");
-					// var image = new Image();
-					// image.src = reader.result;
-					// var width = image.width;
-					// var height = image.height;
-					//
-					// //resizing
-					// var res;
-					// if (width > height){
-					// res = width / MAX_IMG_WIDTH;
-					// } else {
-					// res = height / MAX_IMG_HEIGHT;
+					// try{
+						// console.log("DEBUG: FORM - saving file in storage");
+						// localStorage.setItem(key, reader.result);
+					// } catch (e){
+						// console.log("DEBUG: FORM - ERROR while saving the file");
+						// console.log(e);
 					// }
-					// width = width / res;
-					// height = height / res;
-					//
-					// var canvas = document.createElement('canvas');
-					// canvas.width = width;
-					// canvas.height = height;
-					//
-					// var imgContext = canvas.getContext('2d');
-					// imgContext.drawImage(image, 0, 0, width, height);
-					//
-					// var shrinked = canvas.toDataURL("image/jpeg");
-					//
-					// try {
-					// console.log("DEBUG: FORM - saving file in storage");
-					// localStorage.setItem(key,  shrinked); //stores the image to localStorage
-					// }
-					// catch (e) {
-					// console.log("DEBUG: FORM - saving file in storage failed: " + e);
-					// }
-				}
+					console.log("DEBUG: FORM - resizing file");
+					var image = new Image();
+					image.src = reader.result;
+					var width = image.width;
+					var height = image.height;
+					
+					//resizing
+					var res;
+					if (width > height){
+					res = width / MAX_IMG_WIDTH;
+					} else {
+					res = height / MAX_IMG_HEIGHT;
+					}
+					width = width / res;
+					height = height / res;
+					
+					var canvas = document.createElement('canvas');
+					canvas.width = width;
+					canvas.height = height;
+					
+					var imgContext = canvas.getContext('2d');
+					imgContext.drawImage(image, 0, 0, width, height);
+					
+					var shrinked = canvas.toDataURL(file.type);
+					
+					//TODO: on Firefox toDataURL somehow does not work	
+					//while debugging it is OK
+					setTimeout(function(){
+					try {
+					console.log("DEBUG: FORM - saving file in storage");
+					localStorage.setItem(key,  shrinked); //stores the image to localStorage
+					}
+					catch (e) {
+					console.log("DEBUG: FORM - saving file in storage failed: " + e);
+					}
+					}, 20);
+					
+				};
 				reader.readAsDataURL(file);
 			}
 		}
@@ -245,6 +260,10 @@ function saveForm() {
 			"type" : type
 		});
 	});
+	
+	//return if unsaccessfull file saving
+	if (file_storage_status == 0)
+		return 0;
 
 	//SELECTS
 	jQuery('form').find("select").each(function(index, select) {
@@ -258,12 +277,29 @@ function saveForm() {
 			"type" : type
 		});
 	});
+	
+	//form counter
+	var form_count = localStorage.getItem(FORM_COUNT_KEY);
+	if (form_count != null) {
+		console.log("DEBUG: FORM - incrementing form counter");
+		localStorage.setItem(FORM_COUNT_KEY, ++form_count);
+	} else {
+		console.log("DEBUG: FORM - setting up form counter for the first time");
+		form_count = 1;
+		localStorage.setItem(FORM_COUNT_KEY, form_count);
+	}
 
 	input_array_string = JSON.stringify(input_array);
 	console.log("DEBUG: FORM - saving the form into storage");
-	localStorage.setItem(FORM_KEY + form_count, input_array_string);
-
+	try{
+		localStorage.setItem(FORM_KEY + form_count, input_array_string);
+	} catch (e){
+		console.log("DEBUG: FORM - ERROR while saving the form");
+		console.log(e);
+		return 0;	
+	}
 	updateFormCounter();
+	return 1;
 }
 
 /*
@@ -279,22 +315,40 @@ function makeDialog(text) {
 function submitStart() {
 	//TODO: validate the form
 	if (navigator.onLine) {
-		//ONLINE
+		// saveForm();
+		// setTimeout(function() {
+				// sendSavedForm();
+			// }, 2000);
+		// //ONLINE
 		console.log("DEBUG: SUBMIT - online");
-		saveForm();
-		setTimeout(function() {
-			sendSavedForm();
-		}, 500); //needs a delay as the storage is not so fast
-		makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
-		jQuery.mobile.changePage('#app-dialog');
-		goHome(2000);
+		if (saveForm() == 1){
+			setTimeout(function() {
+				sendSavedForm();
+			}, 1000); //needs a delay as the storage is not so fast
+			makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
+			jQuery.mobile.changePage('#app-dialog');
+			goHome(2000);
+		} else {
+			makeDialog("<center><h2>Error while saving the form.</h2></center>");	
+			jQuery.mobile.changePage('#app-dialog');
+			setTimeout(function() {
+				jQuery.mobile.changePage('/drupal/app/form');
+			}, 2000);
+		}
 	} else {
 		//OFFLINE
 		console.log("DEBUG: SUBMIT - offline");
-		saveForm();
-		makeDialog("<center><h2>No Internet. Form saved.</h2></center>");
-		jQuery.mobile.changePage('#app-dialog');
-		goHome(2000);
+		if (saveForm() == 1){
+			makeDialog("<center><h2>No Internet. Form saved.</h2></center>");
+			jQuery.mobile.changePage('#app-dialog');
+			goHome(2000);
+		} else {
+			makeDialog("<center><h2>Error while saving the form.</h2></center>");	
+			jQuery.mobile.changePage('#app-dialog');
+			setTimeout(function() {
+				jQuery.mobile.changePage('/drupal/app/form');
+			}, 2000);
+		}
 	}
 }
 
