@@ -308,7 +308,7 @@ function makeDialog(text) {
 /*
  * Submits the form.
  */
-function submitForm(form_id){
+function submitForm(form_id, oncomplete){
 	var form = document.getElementById(form_id);
 	var data = new FormData(form);
 	jQuery.ajax({
@@ -328,7 +328,8 @@ function submitForm(form_id){
                console.log("DEBUG: SEND - form ajax (ERROR)");
                console.log(xhr.status);
                console.log(thrownError);
-            }
+            },
+            complete: oncomplete
 		});
 }
 
@@ -343,10 +344,11 @@ function submitStart() {
 			// setTimeout(function() {
 				// sendSavedForm();
 			// }, 1000); //needs a delay as the storage is not so fast
-		submitForm('entry_form');
-		makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
-		jQuery.mobile.changePage('#app-dialog');
-		goHome(2000);
+		submitForm('entry_form', function(){
+			makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
+			jQuery.mobile.changePage('#app-dialog');
+			goHome(2000);
+		});
 		// } else {
 			// makeDialog("<center><h2>Error while saving the form.</h2></center>");	
 			// jQuery.mobile.changePage('#app-dialog');
