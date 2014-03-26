@@ -117,6 +117,10 @@ function sendSavedForm() {
 				} else {
 					console.log("DEBUG: SEND - " + input_array[k].value + " is " + pic_file);
 				}
+			// } else if (input_array[k].type == "checkbox") {
+				// //it is saved in localStorage using occAttr:202:3, but it should be passed as name occAttr:202[]
+				// var name = input_array[k].name.split(":");
+				// data.append(name[0] + ":" + name[1] + "[]", input_array[k].value);
 			} else {
 				data.append(input_array[k].name, input_array[k].value);
 			}
@@ -159,7 +163,7 @@ function sendSavedForm() {
  */
 function localStorageHasSpace(size){
 	var taken = JSON.stringify(localStorage).length;
-	var left = 1024 * 1024 * 5 - (taken + taken*0.34); //33% bigger size of saved pic
+	var left = 1024 * 1024 * 5 - taken; 
 	if ((left - size) > 0)
 		return 1;
 	else
@@ -187,7 +191,7 @@ function saveForm() {
 
 		//checkbox
 		if (jQuery(input).attr('type') == "checkbox") {
-			name = id;
+			//name = id;
 			value = jQuery(input).is(":checked");
 			//text
 		} else if (type == "text")
@@ -196,7 +200,7 @@ function saveForm() {
 		else if (type == "file" && id != null) {
 			var file = jQuery(input).prop("files")[0];
 			if (file != null) {
-				console.log("DEBUG: FORM - working with a file");
+				console.log("DEBUG: FORM - working with " + file.name);
 				if (!localStorageHasSpace(file.size)){
 				 	return file_storage_status = 0;
 				}
@@ -205,50 +209,42 @@ function saveForm() {
 				var key = Date.now() + "_" + jQuery(input).val().replace("C:\\fakepath\\", "");
 				value = key;
 				reader.onload = function(e) {
-					// try{
-						// console.log("DEBUG: FORM - saving file in storage");
-						// localStorage.setItem(key, reader.result);
-					// } catch (e){
-						// console.log("DEBUG: FORM - ERROR while saving the file");
-						// console.log(e);
-					// }
 					console.log("DEBUG: FORM - resizing file");
 					var image = new Image();
+					image.onload = function() {
+						var width = image.width;
+						var height = image.height;
+						
+						//resizing
+						var res;
+						if (width > height){
+						  res = width / MAX_IMG_WIDTH;
+						} else {
+						  res = height / MAX_IMG_HEIGHT;
+						}
+		
+						width = width / res;
+						height = height / res;
+						
+						var canvas = document.createElement('canvas');
+						canvas.width = width;
+						canvas.height = height;
+						
+						var imgContext = canvas.getContext('2d');
+						imgContext.drawImage(image, 0, 0, width, height);
+						
+						var shrinked = canvas.toDataURL(file.type);
+						try {
+							console.log("DEBUG: FORM - saving file in storage ("  
+							+ (shrinked.length / 1024) + "KB)" );
+							
+							localStorage.setItem(key,  shrinked); //stores the image to localStorage
+						}
+						catch (e) {
+							console.log("DEBUG: FORM - saving file in storage failed: " + e);
+						}
+					};
 					image.src = reader.result;
-					var width = image.width;
-					var height = image.height;
-					
-					//resizing
-					var res;
-					if (width > height){
-					res = width / MAX_IMG_WIDTH;
-					} else {
-					res = height / MAX_IMG_HEIGHT;
-					}
-					width = width / res;
-					height = height / res;
-					
-					var canvas = document.createElement('canvas');
-					canvas.width = width;
-					canvas.height = height;
-					
-					var imgContext = canvas.getContext('2d');
-					imgContext.drawImage(image, 0, 0, width, height);
-					
-					var shrinked = canvas.toDataURL(file.type);
-					
-					//TODO: on Firefox toDataURL somehow does not work	
-					//while debugging it is OK
-					setTimeout(function(){
-					try {
-					console.log("DEBUG: FORM - saving file in storage");
-					localStorage.setItem(key,  shrinked); //stores the image to localStorage
-					}
-					catch (e) {
-					console.log("DEBUG: FORM - saving file in storage failed: " + e);
-					}
-					}, 20);
-					
 				};
 				reader.readAsDataURL(file);
 			}
