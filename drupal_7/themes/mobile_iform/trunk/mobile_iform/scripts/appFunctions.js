@@ -310,31 +310,54 @@ function makeDialog(text) {
 }
 
 /*
+ * Submits the form.
+ */
+function submitForm(form_id){
+	var form = document.getElementById(form_id);
+	var data = new FormData(form);
+	jQuery.ajax({
+			url : 'form',
+			type : 'POST',
+			data : data,
+			cache : false,
+			enctype : 'multipart/form-data',
+			dataType : 'json',
+			processData : false, // Don't process the files
+			contentType : false, // Set content type to false as jQuery will tell the server its a query string request
+            success:function(data){
+               console.log("DEBUG: SEND - form ajax (success):");
+               console.log(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+               console.log("DEBUG: SEND - form ajax (ERROR)");
+               console.log(xhr.status);
+               console.log(thrownError);
+            }
+		});
+}
+
+/*
  * Starts the submition process.
  */
 function submitStart() {
 	//TODO: validate the form
 	if (navigator.onLine) {
-		// saveForm();
-		// setTimeout(function() {
-				// sendSavedForm();
-			// }, 2000);
-		// //ONLINE
 		console.log("DEBUG: SUBMIT - online");
-		if (saveForm() == 1){
-			setTimeout(function() {
-				sendSavedForm();
-			}, 1000); //needs a delay as the storage is not so fast
-			makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
-			jQuery.mobile.changePage('#app-dialog');
-			goHome(2000);
-		} else {
-			makeDialog("<center><h2>Error while saving the form.</h2></center>");	
-			jQuery.mobile.changePage('#app-dialog');
-			setTimeout(function() {
-				jQuery.mobile.changePage('/drupal/app/form');
-			}, 2000);
-		}
+		// if (saveForm() == 1){
+			// setTimeout(function() {
+				// sendSavedForm();
+			// }, 1000); //needs a delay as the storage is not so fast
+		submitForm('entry_form');
+		makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
+		jQuery.mobile.changePage('#app-dialog');
+		goHome(2000);
+		// } else {
+			// makeDialog("<center><h2>Error while saving the form.</h2></center>");	
+			// jQuery.mobile.changePage('#app-dialog');
+			// setTimeout(function() {
+				// jQuery.mobile.changePage('/drupal/app/form');
+			// }, 2000);
+		// }
 	} else {
 		//OFFLINE
 		console.log("DEBUG: SUBMIT - offline");
