@@ -269,6 +269,7 @@ div.item-list ul.pager li.pager-current a.active {
 nav.menu-wrapper li a,
 nav.menu-wrapper li a:hover,
 nav.menu-wrapper li a:focus,
+nav.menu-wrapper li a:link,
 nav.menu-wrapper li a:visited,
 nav.menu-wrapper li a.active {
   color: #222222;
