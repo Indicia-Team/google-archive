@@ -74,15 +74,13 @@ function dataURItoBlob(dataURI, file_type) {
 /*
  * Sending all saved forms.
  * @returns {undefined}
- */
+*/
 function sendAllSavedForms() {
 	if (navigator.onLine) {
-		var count = localStorage.getItem("form_count");
-		while (count != null && count-- != 0) {
-			setTimeout(function() {
-				console.log("Sending form: " + count);
-				sendSavedForm();
-			}, 700);
+		var count = localStorage.getItem(FORM_COUNT_KEY);
+		if (count > 0) {
+			console.log("Sending form: " + count);
+			sendSavedForm();
 		}
 	} else {
 		alert("offline");
@@ -90,7 +88,7 @@ function sendAllSavedForms() {
 }
 
 /*
- * Sends the form
+ * Sends the form recursively
  */
 function sendSavedForm() {
 	console.log("DEBUG: SEND");
@@ -112,15 +110,10 @@ function sendSavedForm() {
 					files_clean.push(input_array[k].value);
 					var type = pic_file.split(";")[0].split(":")[1];
 					var extension = type.split("/")[1];
-					console.log("HHHH: " + type + " " + extension);
 					data.append(input_array[k].name, dataURItoBlob(pic_file, type), "pic." + extension);
 				} else {
 					console.log("DEBUG: SEND - " + input_array[k].value + " is " + pic_file);
 				}
-			// } else if (input_array[k].type == "checkbox") {
-				// //it is saved in localStorage using occAttr:202:3, but it should be passed as name occAttr:202[]
-				// var name = input_array[k].name.split(":");
-				// data.append(name[0] + ":" + name[1] + "[]", input_array[k].value);
 			} else {
 				data.append(input_array[k].name, input_array[k].value);
 			}
@@ -145,17 +138,20 @@ function sendSavedForm() {
                console.log("DEBUG: SEND - form ajax (ERROR)");
                console.log(xhr.status);
                console.log(thrownError);
-            }
+            },
+            complete: function(){
+				//clean
+				console.log("DEBUG: SEND - cleaning up");
+				localStorage.removeItem(FORM_KEY + formsCount);
+				localStorage.setItem(FORM_COUNT_KEY, --formsCount);
+				for (var j = 0; j < files_clean.length; j++)
+					localStorage.removeItem(files_clean[j]);
+			
+				updateFormCounter();
+				sendAllSavedForms();	
+			}
 		});
-
-		//clean
-		console.log("DEBUG: SEND - cleaning up");
-		localStorage.removeItem(FORM_KEY + formsCount);
-		localStorage.setItem(FORM_COUNT_KEY, --formsCount);
-		for (var j = 0; j < files_clean.length; j++)
-			localStorage.removeItem(files_clean[j]);
 	}
-	updateFormCounter();
 }
 
 /*
