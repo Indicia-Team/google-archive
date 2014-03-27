@@ -43,7 +43,11 @@ function updateFormCounter() {
 	console.log("DEBUG: Updating form counter");
 	var count = localStorage.getItem("form_count");
 
-	jQuery("#dialog-savedFormCounter").text(count + ((count == 1) ? " form" : " forms"));
+	jQuery("#savedFormCounter").fadeOut(200);
+	jQuery("#savedFormCounter").text(count);
+	jQuery("#savedFormCounter").fadeIn(200);
+    
+	jQuery("#savedFormCounterWording").text(((count == 1) ? " form" : " forms"));
 	jQuery(".savedFormCounter").text(count);
 
 	if (count != null && count != 0) {
@@ -79,8 +83,11 @@ function sendAllSavedForms() {
 	if (navigator.onLine) {
 		var count = localStorage.getItem(FORM_COUNT_KEY);
 		if (count > 0) {
+			jQuery.mobile.loading('show');
 			console.log("Sending form: " + count);
 			sendSavedForm();
+		} else {
+			jQuery.mobile.loading('hide');	
 		}
 	} else {
 		alert("offline");
@@ -304,7 +311,7 @@ function makeDialog(text) {
 /*
  * Submits the form.
  */
-function submitForm(form_id, oncomplete){
+function submitForm(form_id, onSend, onComplete){
 	var form = document.getElementById(form_id);
 	var data = new FormData(form);
 	jQuery.ajax({
@@ -325,7 +332,8 @@ function submitForm(form_id, oncomplete){
                console.log(xhr.status);
                console.log(thrownError);
             },
-            complete: oncomplete
+            complete: onComplete,
+            beforeSend: onSend
 		});
 }
 
@@ -340,11 +348,18 @@ function submitStart() {
 			// setTimeout(function() {
 				// sendSavedForm();
 			// }, 1000); //needs a delay as the storage is not so fast
-		submitForm('entry_form', function(){
-			makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
-			jQuery.mobile.changePage('#app-dialog');
-			goHome(2000);
-		});
+		submitForm('entry_form', 
+			function(){
+				//start load
+				jQuery.mobile.loading('show');
+			},
+			function(){
+				//end load 
+				jQuery.mobile.loading('hide');
+				makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
+				jQuery.mobile.changePage('#app-dialog');
+				goHome(2000);
+			});
 		// } else {
 			// makeDialog("<center><h2>Error while saving the form.</h2></center>");	
 			// jQuery.mobile.changePage('#app-dialog');
@@ -355,11 +370,14 @@ function submitStart() {
 	} else {
 		//OFFLINE
 		console.log("DEBUG: SUBMIT - offline");
+		jQuery.mobile.loading('show');
 		if (saveForm() == 1){
+			jQuery.mobile.loading('hide');
 			makeDialog("<center><h2>No Internet. Form saved.</h2></center>");
 			jQuery.mobile.changePage('#app-dialog');
 			goHome(2000);
 		} else {
+			jQuery.mobile.loading('hide');
 			makeDialog("<center><h2>Error while saving the form.</h2></center>");	
 			jQuery.mobile.changePage('#app-dialog');
 			setTimeout(function() {
