@@ -52,8 +52,8 @@
   <title><?php print $head_title; ?></title>
   <?php print $styles; ?>
   <?php print $scripts; ?>
-  <?php $theme_path = drupal_get_path('theme', 'mobile_iform'); ?>
-  <script type="text/javascript" src="/<?php print $theme_path;?>/scripts/appFunctions.js"></script>
+  <?php $theme_path = base_path() . drupal_get_path('theme', 'mobile_iform'); ?>
+  <script type="text/javascript" src="<?php print $theme_path;?>/scripts/appFunctions.js"></script>
 </head>
 
 <body class="<?php print $classes; ?>" <?php print $attributes; ?>>
