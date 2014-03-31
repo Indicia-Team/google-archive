@@ -128,11 +128,12 @@ function sendSavedForm() {
 				data.append(input_array[k].name, input_array[k].value);
 			}
 		}
+    data.append('appsecret', Drupal.settings.appSecret);
 
 		//AJAX POST
 		console.log("DEBUG: SEND - form ajax");
 		jQuery.ajax({
-			url : 'form',
+			url : Drupal.settings.basePath + 'mobile/submit',
 			type : 'POST',
 			data : data,
 			cache : false,
@@ -326,26 +327,27 @@ function makePopup(text){
 function submitForm(form_id, onSend, onComplete){
 	var form = document.getElementById(form_id);
 	var data = new FormData(form);
+  data.append('appsecret', Drupal.settings.appSecret);
 	jQuery.ajax({
-			url : 'form',
-			type : 'POST',
-			data : data,
-			cache : false,
-			enctype : 'multipart/form-data',
-			dataType : 'json',
-			processData : false, // Don't process the files
-			contentType : false, // Set content type to false as jQuery will tell the server its a query string request
-            success:function(data){
-               console.log("DEBUG: SEND - form ajax (success):");
-               console.log(data);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-               console.log("DEBUG: SEND - form ajax (ERROR)");
-               console.log(xhr.status);
-               console.log(thrownError);
-            },
-            complete: onComplete,
-            beforeSend: onSend
+			url: Drupal.settings.basePath + 'mobile/submit',
+			type: 'POST',
+			data: data,
+			cache: false,
+			enctype: 'multipart/form-data',
+			dataType: 'json',
+			processData: false, // Don't process the files
+			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+      success: function(data){
+        console.log("DEBUG: SEND - form ajax (success):");
+        console.log(data);
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log("DEBUG: SEND - form ajax (ERROR)");
+        console.log(xhr.status);
+        console.log(thrownError);
+      },
+      complete: onComplete,
+      beforeSend: onSend
 		});
 }
 
@@ -544,7 +546,7 @@ function submitStart() {
 			makeDialog("<center><h2>Error while saving the form.</h2></center>");	
 			jQuery.mobile.changePage('#app-dialog');
 			setTimeout(function() {
-				jQuery.mobile.changePage('/drupal/app/form');
+				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + '/form');
 			}, 2000);
 		}
 	}
@@ -555,6 +557,6 @@ function submitStart() {
  */
 function goHome(delay) {
 	setTimeout(function() {
-		window.location = '/drupal/app';
+		window.location = Drupal.settings.mobileIformStartPath;
 	}, delay);
 }
