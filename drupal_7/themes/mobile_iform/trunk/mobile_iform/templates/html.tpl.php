@@ -52,7 +52,19 @@
   <title><?php print $head_title; ?></title>
   <?php print $styles; ?>
   <?php print $scripts; ?>
-  <?php $theme_path = base_path() . drupal_get_path('theme', 'mobile_iform'); ?>
+  <?php 
+    // Get settings to pass to JavaScript
+    $start_path = base_path() . mobile_jquery_theme_get_setting('app_home');
+    $app_secret = variable_get('iform_mobile_auth_shared_secret', NULL);
+    // Get path to JavaScript
+    $theme_path = base_path() . $GLOBALS['theme_path']; 
+    ?>
+  <script>
+    jQuery.extend(Drupal.settings, {
+      "mobileIformStartPath": "<?php print $start_path; ?>",
+      "appSecret": "<?php print $app_secret; ?>"
+    });
+  </script> 
   <script type="text/javascript" src="<?php print $theme_path;?>/scripts/appFunctions.js"></script>
 </head>
 
