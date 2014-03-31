@@ -398,9 +398,9 @@ function startGeolocation(timeout){
         	
         //only set it up if the accuracy is increased
         if (accuracy > -1 && accuracy < prev_accuracy){    
-	        // jQuery('#imp-sref').attr('value', latitude + ', ' + longitude);
-	        // jQuery('#sref_accuracy').attr('value', accuracy);
-	        // console.log("DEBUG: GPS - setting accuracy of " + accuracy + " meters" );
+	        jQuery('#imp-sref').attr('value', latitude + ', ' + longitude);
+	        jQuery('#sref_accuracy').attr('value', accuracy);
+	        console.log("DEBUG: GPS - setting accuracy of " + accuracy + " meters" );
 	        if (accuracy < SREF_ACCURACY_LIMIT){
 	        	console.log("DEBUG: GPS - Success! Accuracy of " + accuracy + " meters");
 	        	jQuery.mobile.loading('hide');
@@ -471,7 +471,7 @@ function validateGeolocation(){
 		
 		return false;
 	} else if (accuracy > window.SREF_ACCURACY_LIMIT){
-		console.log("DEBUG: GPS Validation - accuracy " + accuracy);
+		console.log("DEBUG: GPS Validation - accuracy " );
 		//Geolocation bad accuracy
 		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 				" <div style='padding:10px 20px;'>" +
@@ -490,7 +490,7 @@ function validateGeolocation(){
 		
 		return false;
 	} else {
-		console.log("DEBUG: GPS Validation - accuracy Good Enough");
+		console.log("DEBUG: GPS Validation - accuracy Good Enough ( " + accuracy + ") loc: " +  jQuery('#imp-sref').val());
 		//Geolocation accuracy is good enough
 		return true;	
 	} 
