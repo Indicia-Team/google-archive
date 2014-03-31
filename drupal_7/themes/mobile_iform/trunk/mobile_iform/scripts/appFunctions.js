@@ -28,6 +28,9 @@ jQuery(document).ready(function() {
 
 	//adds a reusable dialog to the pages
 jQuery("#entry_form").append('<div id="app-dialog" data-role="dialog"><div id="app-dialog-content"data-role="content"></div></div>');
+
+jQuery("#entry_form").append('<div data-role="popup" id="app-popup" class="ui-corner-all ui-popup ui-body-a ui-overlay-shadow" data-theme="b" data-overlay-theme="a"></div>');
+
 });
 
 //GLOBALS
@@ -194,8 +197,8 @@ function saveForm() {
 
 		//checkbox
 		if (jQuery(input).attr('type') == "checkbox") {
-			//name = id;
-			value = jQuery(input).is(":checked");
+			if(!jQuery(input).is(":checked"))
+					value = ""; 
 			//text
 		} else if (type == "text")
 			value = jQuery(input).val();
@@ -308,6 +311,15 @@ function makeDialog(text) {
 	jQuery('#app-dialog-content').empty().append(text);
 }
 
+
+/*
+ * Updares the popup div appended to the page
+ */
+function makePopup(text){
+	jQuery('#app-popup').empty().append(text);
+}
+
+
 /*
  * Submits the form.
  */
@@ -337,11 +349,162 @@ function submitForm(form_id, onSend, onComplete){
 		});
 }
 
+function startGeolocation(timeout){
+	var start_time = new Date().getTime();
+	
+	console.log("DEBUG: GPS - start");
+	  window.SREF_ACCURACY_LIMIT = 20; //meters
+	  var tries = window.GEOLOCATION_TRY;
+	  if(tries == 0 || tries == null)
+	  	window.GEOLOCATION_TRY = 1;
+	  else
+	  	window.GEOLOCATION_TRY = tries +  1;
+	  	
+	  //stop any other geolocation service started before
+	  navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+		
+	  if(!navigator.geolocation) {
+	  	console.log("DEBUG: GPS - error, no gps support!");
+        // Early return if geolocation not supported.
+        makePopup('<div style="padding:10px 20px;"><center><h2>Geolocation is not supported by your browser.</h2></center></div>');   
+        jQuery('#app-popup').popup();
+        jQuery('#app-popup').popup('open');
+        return;
+      }
+
+      // Callback if geolocation succeeds.
+      var counter = 0;
+      function success(position) {
+      	//timeout
+      	var current_time = new Date().getTime();
+      	if ((current_time - start_time) > timeout){
+      		//stop everything
+      		console.log("DEBUG: GPS - timeout");
+      		jQuery.mobile.loading('hide');
+      		jQuery('#app-popup').popup('close');
+	        navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+	        submitStart();
+      	}
+      	console.log("TIME: left - " + (current_time - start_time));
+      	
+        var latitude  = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        var accuracy = position.coords.accuracy;
+        
+        //set for the first time
+        var prev_accuracy = jQuery('#sref_accuracy').val();
+        if (prev_accuracy == -1)
+        	prev_accuracy = accuracy + 1;
+        	
+        //only set it up if the accuracy is increased
+        if (accuracy > -1 && accuracy < prev_accuracy){    
+	        // jQuery('#imp-sref').attr('value', latitude + ', ' + longitude);
+	        // jQuery('#sref_accuracy').attr('value', accuracy);
+	        // console.log("DEBUG: GPS - setting accuracy of " + accuracy + " meters" );
+	        if (accuracy < SREF_ACCURACY_LIMIT){
+	        	console.log("DEBUG: GPS - Success! Accuracy of " + accuracy + " meters");
+	        	jQuery.mobile.loading('hide');
+	        	jQuery('#app-popup').popup('close');
+	            navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+	            submitStart();
+	        }
+	    }
+      };
+      
+      // Callback if geolocation fails.
+      function error(error) {
+      	console.log("DEBUG: GPS - error");
+      	jQuery.mobile.loading('hide');
+      	jQuery('#app-popup').popup('close');
+      	submitStart();
+      };
+      
+      // Geolocation options.
+      var options = {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 120000
+      };
+      
+      // Request geolocation.
+      window.GEOLOCATION_ID = navigator.geolocation.watchPosition(success, error, options);
+      jQuery.mobile.loading('show');
+}
+
+/*
+ * Validates the current GPS lock quality
+ */
+function validateGeolocation(){
+	var accuracy = jQuery('#sref_accuracy').val();
+	
+	if ( accuracy == -1 ){
+		console.log("DEBUG: GPS Validation - accuracy -1");
+		//No GPS lock yet#
+		var tries = window.GEOLOCATION_TRY;
+		if (tries == 0 || tries == null){
+			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+					 " <div style='padding:10px 20px;'>" +
+					 " <h3>Sorry, we couldn't get your location. Please make sure the GPS is on and try again.</h3>"+
+					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
+					 " </div>");
+		} else if (tries == 5){
+			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+					 " <div style='padding:10px 20px;'>" +
+					 " <h3>Hmm.. nope, but don't worry, one day you might just get lucky. </h3>"+
+					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
+					 " </div>");
+		}else {
+			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+					  " <div style='padding:10px 20px;'>" +
+					 " <h3>Still can't get your location. Make sure you are outside and move away from tall buildings, trees and try again.</h3>"+
+					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
+					 " </div>");
+		}
+		jQuery('#app-popup').popup({
+			afterclose: function( event, ui ) {
+				console.log("DEBUG: POPUP - closed");
+				jQuery.mobile.loading('hide');
+				navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+			}
+		});
+		jQuery('#app-popup').popup('open');
+		
+		return false;
+	} else if (accuracy > window.SREF_ACCURACY_LIMIT){
+		console.log("DEBUG: GPS Validation - accuracy " + accuracy);
+		//Geolocation bad accuracy
+		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+				" <div style='padding:10px 20px;'>" +
+				 " <h3>Sorry, we haven't got your GPS location accurately yet.</h3>"+
+				 " <h3>Accuracy: " + accuracy + " meters (we need < " +  window.SREF_ACCURACY_LIMIT + ")</h3>" +
+				 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
+				 " </div>");
+		jQuery('#app-popup').popup({
+			afterclose: function( event, ui ) {
+				console.log("DEBUG: POPUP - closed");
+				jQuery.mobile.loading('hide');
+				navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+			}
+		});
+		jQuery('#app-popup').popup('open');
+		
+		return false;
+	} else {
+		console.log("DEBUG: GPS Validation - accuracy Good Enough");
+		//Geolocation accuracy is good enough
+		return true;	
+	} 
+}
+
 /*
  * Starts the submition process.
  */
 function submitStart() {
+	console.log("DEBUG: SUBMIT - start");
 	//TODO: validate the form
+	if(!validateGeolocation()){
+ 		return;
+ 	}
 	if (navigator.onLine) {
 		console.log("DEBUG: SUBMIT - online");
 		// if (saveForm() == 1){
