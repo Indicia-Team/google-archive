@@ -82,7 +82,6 @@
 <?php if($type == 'iform') : ?>
   <form method="post" enctype="multipart/form-data" id="entry_form" action="<?php print $node_url; ?>" data-ajax="false">
       <?php print render($content['iform']) ?>
-  </form>
 <?php else : ?>
 
     <div id="<?php print $pageid; ?>" data-role="page">
@@ -102,4 +101,15 @@
 
     </div><!-- /page -->
 
+<?php endif; ?>
+<div id="app-dialog" data-role="dialog">
+    <div id="app-dialog-content"data-role="content"></div>
+</div>
+
+<div data-role="popup" id="app-popup" class="ui-corner-all ui-popup ui-body-a ui-overlay-shadow" 
+  data-theme="b" data-overlay-theme="a">
+</div>
+
+<?php if($type == 'iform') : ?>
+  </form>
 <?php endif; ?>
