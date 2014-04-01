@@ -26,10 +26,6 @@ window.applicationCache.onerror = function(e) {
 jQuery(document).ready(function() {
 	updateFormCounter();
 
-	//adds a reusable dialog to the pages
-jQuery("#entry_form").append('<div id="app-dialog" data-role="dialog"><div id="app-dialog-content"data-role="content"></div></div>');
-
-jQuery("#entry_form").append('<div data-role="popup" id="app-popup" class="ui-corner-all ui-popup ui-body-a ui-overlay-shadow" data-theme="b" data-overlay-theme="a"></div>');
 
 });
 
@@ -93,7 +89,11 @@ function sendAllSavedForms() {
 			jQuery.mobile.loading('hide');	
 		}
 	} else {
-		alert("offline");
+		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+					" <div style='padding:10px 20px;'>" +
+					"<center><h2>Submitted successfully. </br>Thank You!</h2></center>" +
+					 " </div>");
+		jQuery('#app-popup').popup().popup('open');
 	}
 }
 
@@ -355,7 +355,7 @@ function startGeolocation(timeout){
 	var start_time = new Date().getTime();
 	
 	console.log("DEBUG: GPS - start");
-	  window.SREF_ACCURACY_LIMIT = 20; //meters
+	  window.SREF_ACCURACY_LIMIT = 26000; //meters
 	  var tries = window.GEOLOCATION_TRY;
 	  if(tries == 0 || tries == null)
 	  	window.GEOLOCATION_TRY = 1;
@@ -369,8 +369,7 @@ function startGeolocation(timeout){
 	  	console.log("DEBUG: GPS - error, no gps support!");
         // Early return if geolocation not supported.
         makePopup('<div style="padding:10px 20px;"><center><h2>Geolocation is not supported by your browser.</h2></center></div>');   
-        jQuery('#app-popup').popup();
-        jQuery('#app-popup').popup('open');
+        jQuery('#app-popup').popup().popup('open');
         return;
       }
 
@@ -521,8 +520,10 @@ function submitStart() {
 			function(){
 				//end load 
 				jQuery.mobile.loading('hide');
-				makeDialog("<center><h2>Submitted successfully. </br>Thank You!</h2></center>");
-				jQuery.mobile.changePage('#app-dialog');
+				makePopup("<div style='padding:10px 20px;'>" +
+					"<center><h2>Submitted successfully. </br>Thank You!</h2></center>" +
+					 " </div>");
+				jQuery('#app-popup').popup().popup('open');
 				goHome(2000);
 			});
 		// } else {
@@ -538,13 +539,17 @@ function submitStart() {
 		jQuery.mobile.loading('show');
 		if (saveForm() == 1){
 			jQuery.mobile.loading('hide');
-			makeDialog("<center><h2>No Internet. Form saved.</h2></center>");
-			jQuery.mobile.changePage('#app-dialog');
+			makePopup("<div style='padding:10px 20px;'>" +
+					"<center><h2>No Internet. Form saved.</h2></center>" +
+					 " </div>");
+			jQuery('#app-popup').popup().popup('open');
 			goHome(2000);
 		} else {
 			jQuery.mobile.loading('hide');
-			makeDialog("<center><h2>Error while saving the form.</h2></center>");	
-			jQuery.mobile.changePage('#app-dialog');
+			makePopup("<div style='padding:10px 20px;'>" +
+					" <center><h2>Error while saving the form.</h2></center>" +
+					" </div>");
+			jQuery('#app-popup').popup().popup('open');
 			setTimeout(function() {
 				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + '/form');
 			}, 2000);
