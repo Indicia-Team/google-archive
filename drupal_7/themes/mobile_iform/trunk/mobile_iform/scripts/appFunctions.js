@@ -91,7 +91,7 @@ function sendAllSavedForms() {
 	} else {
 		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 					" <div style='padding:10px 20px;'>" +
-					"<center><h2>Submitted successfully. </br>Thank You!</h2></center>" +
+					" <center><h2>Looks like you are offline!</h2></center>" +
 					 " </div>");
 		jQuery('#app-popup').popup().popup('open');
 	}
@@ -138,29 +138,31 @@ function sendSavedForm() {
 			data : data,
 			cache : false,
 			enctype : 'multipart/form-data',
-			dataType : 'json',
 			processData : false, // Don't process the files
 			contentType : false, // Set content type to false as jQuery will tell the server its a query string request
             success:function(data){
                console.log("DEBUG: SEND - form ajax (success):");
                console.log(data);
+               
+               //clean
+              console.log("DEBUG: SEND - cleaning up");
+              localStorage.removeItem(FORM_KEY + formsCount);
+              localStorage.setItem(FORM_COUNT_KEY, --formsCount);
+              for (var j = 0; j < files_clean.length; j++)
+                localStorage.removeItem(files_clean[j]);
+            
+              updateFormCounter();
+              sendAllSavedForms();  
             },
             error: function (xhr, ajaxOptions, thrownError) {
-               console.log("DEBUG: SEND - form ajax (ERROR)");
-               console.log(xhr.status);
-               console.log(thrownError);
-            },
-            complete: function(){
-				//clean
-				console.log("DEBUG: SEND - cleaning up");
-				localStorage.removeItem(FORM_KEY + formsCount);
-				localStorage.setItem(FORM_COUNT_KEY, --formsCount);
-				for (var j = 0; j < files_clean.length; j++)
-					localStorage.removeItem(files_clean[j]);
-			
-				updateFormCounter();
-				sendAllSavedForms();	
-			}
+                      jQuery.mobile.loading('hide');
+                      makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+                          " <div style='padding:10px 20px;'>" +
+                          " <center><h2>Error</h2></center><p> " +xhr.status + " " + thrownError + "</p>" +
+                           " </div>");
+                      jQuery('#app-popup').popup().popup('open');
+                       console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError +")");
+                    }
 		});
 	}
 }
@@ -324,7 +326,7 @@ function makePopup(text){
 /*
  * Submits the form.
  */
-function submitForm(form_id, onSend, onComplete){
+function submitForm(form_id, onSend, onSuccess){
 	var form = document.getElementById(form_id);
 	var data = new FormData(form);
   data.append('appsecret', Drupal.settings.appSecret);
@@ -334,19 +336,22 @@ function submitForm(form_id, onSend, onComplete){
 			data: data,
 			cache: false,
 			enctype: 'multipart/form-data',
-			dataType: 'json',
 			processData: false, // Don't process the files
 			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
       success: function(data){
         console.log("DEBUG: SEND - form ajax (success):");
         console.log(data);
+        onSuccess();
       },
-      error: function (xhr, ajaxOptions, thrownError) {
-        console.log("DEBUG: SEND - form ajax (ERROR)");
-        console.log(xhr.status);
-        console.log(thrownError);
-      },
-      complete: onComplete,
+       error: function (xhr, ajaxOptions, thrownError) {
+                jQuery.mobile.loading('hide');
+                makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+                    " <div style='padding:10px 20px;'>" +
+                    " <center><h2>Error</h2></center><p> " +xhr.status + " " + thrownError + "</p>" +
+                     " </div>");
+                jQuery('#app-popup').popup().popup('open');
+                console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError +")");
+              },
       beforeSend: onSend
 		});
 }
@@ -355,81 +360,82 @@ function startGeolocation(timeout){
 	var start_time = new Date().getTime();
 	
 	console.log("DEBUG: GPS - start");
-	  window.SREF_ACCURACY_LIMIT = 26000; //meters
-	  var tries = window.GEOLOCATION_TRY;
-	  if(tries == 0 || tries == null)
-	  	window.GEOLOCATION_TRY = 1;
-	  else
-	  	window.GEOLOCATION_TRY = tries +  1;
+  if (window.SREF_ACCURACY_LIMIT == null)
+     window.SREF_ACCURACY_LIMIT = 26000; //meters
+  var tries = window.GEOLOCATION_TRY;
+  if(tries == 0 || tries == null)
+  	window.GEOLOCATION_TRY = 1;
+  else
+  	window.GEOLOCATION_TRY = tries +  1;
 	  	
-	  //stop any other geolocation service started before
-	  navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
-		
-	  if(!navigator.geolocation) {
-	  	console.log("DEBUG: GPS - error, no gps support!");
-        // Early return if geolocation not supported.
-        makePopup('<div style="padding:10px 20px;"><center><h2>Geolocation is not supported by your browser.</h2></center></div>');   
-        jQuery('#app-popup').popup().popup('open');
-        return;
-      }
+  //stop any other geolocation service started before
+  navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+	
+  if(!navigator.geolocation) {
+  	console.log("DEBUG: GPS - error, no gps support!");
+      // Early return if geolocation not supported.
+      makePopup('<div style="padding:10px 20px;"><center><h2>Geolocation is not supported by your browser.</h2></center></div>');   
+      jQuery('#app-popup').popup().popup('open');
+      return;
+    }
 
-      // Callback if geolocation succeeds.
-      var counter = 0;
-      function success(position) {
-      	//timeout
-      	var current_time = new Date().getTime();
-      	if ((current_time - start_time) > timeout){
-      		//stop everything
-      		console.log("DEBUG: GPS - timeout");
-      		jQuery.mobile.loading('hide');
-      		jQuery('#app-popup').popup('close');
-	        navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
-	        submitStart();
-      	}
-      	console.log("TIME: left - " + (current_time - start_time));
+    // Callback if geolocation succeeds.
+    var counter = 0;
+    function success(position) {
+    	//timeout
+    	var current_time = new Date().getTime();
+    	if ((current_time - start_time) > timeout){
+    		//stop everything
+    		console.log("DEBUG: GPS - timeout");
+    		jQuery.mobile.loading('hide');
+    		jQuery('#app-popup').popup('close');
+        navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+        submitStart();
+    	}
+    	console.log("TIME: left - " + (current_time - start_time));
+    	
+      var latitude  = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      var accuracy = position.coords.accuracy;
+      
+      //set for the first time
+      var prev_accuracy = jQuery('#sref_accuracy').val();
+      if (prev_accuracy == -1)
+      	prev_accuracy = accuracy + 1;
       	
-        var latitude  = position.coords.latitude;
-        var longitude = position.coords.longitude;
-        var accuracy = position.coords.accuracy;
-        
-        //set for the first time
-        var prev_accuracy = jQuery('#sref_accuracy').val();
-        if (prev_accuracy == -1)
-        	prev_accuracy = accuracy + 1;
-        	
-        //only set it up if the accuracy is increased
-        if (accuracy > -1 && accuracy < prev_accuracy){    
-	        jQuery('#imp-sref').attr('value', latitude + ', ' + longitude);
-	        jQuery('#sref_accuracy').attr('value', accuracy);
-	        console.log("DEBUG: GPS - setting accuracy of " + accuracy + " meters" );
-	        if (accuracy < SREF_ACCURACY_LIMIT){
-	        	console.log("DEBUG: GPS - Success! Accuracy of " + accuracy + " meters");
-	        	jQuery.mobile.loading('hide');
-	        	jQuery('#app-popup').popup('close');
-	            navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
-	            submitStart();
-	        }
-	    }
-      };
-      
-      // Callback if geolocation fails.
-      function error(error) {
-      	console.log("DEBUG: GPS - error");
-      	jQuery.mobile.loading('hide');
-      	jQuery('#app-popup').popup('close');
-      	submitStart();
-      };
-      
-      // Geolocation options.
-      var options = {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 120000
-      };
-      
-      // Request geolocation.
-      window.GEOLOCATION_ID = navigator.geolocation.watchPosition(success, error, options);
-      jQuery.mobile.loading('show');
+      //only set it up if the accuracy is increased
+      if (accuracy > -1 && accuracy < prev_accuracy){    
+        jQuery('#imp-sref').attr('value', latitude + ', ' + longitude);
+        jQuery('#sref_accuracy').attr('value', accuracy);
+        console.log("DEBUG: GPS - setting accuracy of " + accuracy + " meters" );
+        if (accuracy < window.SREF_ACCURACY_LIMIT){
+        	console.log("DEBUG: GPS - Success! Accuracy of " + accuracy + " meters");
+        	jQuery.mobile.loading('hide');
+        	jQuery('#app-popup').popup('close');
+            navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+            submitStart();
+        }
+    }
+    };
+    
+    // Callback if geolocation fails.
+    function error(error) {
+    	console.log("DEBUG: GPS - error");
+    	jQuery.mobile.loading('hide');
+    	jQuery('#app-popup').popup('close');
+    	submitStart();
+    };
+    
+    // Geolocation options.
+    var options = {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 120000
+    };
+    
+    // Request geolocation.
+    window.GEOLOCATION_ID = navigator.geolocation.watchPosition(success, error, options);
+    jQuery.mobile.loading('show');
 }
 
 /*
@@ -438,9 +444,9 @@ function startGeolocation(timeout){
 function validateGeolocation(){
 	var accuracy = jQuery('#sref_accuracy').val();
 	
+	//No GPS lock yet
 	if ( accuracy == -1 ){
 		console.log("DEBUG: GPS Validation - accuracy -1");
-		//No GPS lock yet#
 		var tries = window.GEOLOCATION_TRY;
 		if (tries == 0 || tries == null){
 			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
@@ -471,9 +477,10 @@ function validateGeolocation(){
 		jQuery('#app-popup').popup('open');
 		
 		return false;
+		
+  //Geolocation bad accuracy
 	} else if (accuracy > window.SREF_ACCURACY_LIMIT){
 		console.log("DEBUG: GPS Validation - accuracy " );
-		//Geolocation bad accuracy
 		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 				" <div style='padding:10px 20px;'>" +
 				 " <h3>Sorry, we haven't got your GPS location accurately yet.</h3>"+
@@ -490,9 +497,10 @@ function validateGeolocation(){
 		jQuery('#app-popup').popup('open');
 		
 		return false;
+		
+  //Geolocation accuracy is good enough
 	} else {
 		console.log("DEBUG: GPS Validation - accuracy Good Enough ( " + accuracy + ") loc: " +  jQuery('#imp-sref').val());
-		//Geolocation accuracy is good enough
 		return true;	
 	} 
 }
@@ -503,15 +511,17 @@ function validateGeolocation(){
 function submitStart() {
 	console.log("DEBUG: SUBMIT - start");
 	//TODO: validate the form
-	if(!validateGeolocation()){
- 		return;
- 	}
+	//jQuery("#entry_form").validate();
+	//alert (indiciaData.validator.numberOfInvalids());
+	// if (!indiciaData.validator.form()){
+	   // alert("invalid");
+	// }
+	 if(validateGeolocation()){
+ 		 
+ 	 
+ 	//Online
 	if (navigator.onLine) {
 		console.log("DEBUG: SUBMIT - online");
-		// if (saveForm() == 1){
-			// setTimeout(function() {
-				// sendSavedForm();
-			// }, 1000); //needs a delay as the storage is not so fast
 		submitForm('entry_form', 
 			function(){
 				//start load
@@ -526,15 +536,9 @@ function submitStart() {
 				jQuery('#app-popup').popup().popup('open');
 				goHome(2000);
 			});
-		// } else {
-			// makeDialog("<center><h2>Error while saving the form.</h2></center>");	
-			// jQuery.mobile.changePage('#app-dialog');
-			// setTimeout(function() {
-				// jQuery.mobile.changePage('/drupal/app/form');
-			// }, 2000);
-		// }
+			
+	//Offline		
 	} else {
-		//OFFLINE
 		console.log("DEBUG: SUBMIT - offline");
 		jQuery.mobile.loading('show');
 		if (saveForm() == 1){
@@ -551,9 +555,10 @@ function submitStart() {
 					" </div>");
 			jQuery('#app-popup').popup().popup('open');
 			setTimeout(function() {
-				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + '/form');
+				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + 'form');
 			}, 2000);
 		}
+	}
 	}
 }
 
