@@ -360,16 +360,14 @@ function startGeolocation(timeout){
 	var start_time = new Date().getTime();
 	
 	console.log("DEBUG: GPS - start");
-  if (window.SREF_ACCURACY_LIMIT == null)
-     window.SREF_ACCURACY_LIMIT = 26000; //meters
-  var tries = window.GEOLOCATION_TRY;
+  var tries = indiciaData.gps_try;
   if(tries == 0 || tries == null)
-  	window.GEOLOCATION_TRY = 1;
+  	indiciaData.gps_try = 1;
   else
-  	window.GEOLOCATION_TRY = tries +  1;
+  	indiciaData.gps_try = tries +  1;
 	  	
   //stop any other geolocation service started before
-  navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+  navigator.geolocation.clearWatch(indiciaData.gps_running_id);
 	
   if(!navigator.geolocation) {
   	console.log("DEBUG: GPS - error, no gps support!");
@@ -389,7 +387,7 @@ function startGeolocation(timeout){
     		console.log("DEBUG: GPS - timeout");
     		jQuery.mobile.loading('hide');
     		jQuery('#app-popup').popup('close');
-        navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+        navigator.geolocation.clearWatch(indiciaData.gps_running_id);
         submitStart();
     	}
     	console.log("TIME: left - " + (current_time - start_time));
@@ -408,11 +406,11 @@ function startGeolocation(timeout){
         jQuery('#imp-sref').attr('value', latitude + ', ' + longitude);
         jQuery('#sref_accuracy').attr('value', accuracy);
         console.log("DEBUG: GPS - setting accuracy of " + accuracy + " meters" );
-        if (accuracy < window.SREF_ACCURACY_LIMIT){
+        if (accuracy < indiciaData.GPS_ACCURACY_LIMIT){
         	console.log("DEBUG: GPS - Success! Accuracy of " + accuracy + " meters");
         	jQuery.mobile.loading('hide');
         	jQuery('#app-popup').popup('close');
-            navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+            navigator.geolocation.clearWatch(indiciaData.gps_running_id);
             submitStart();
         }
     }
@@ -434,7 +432,7 @@ function startGeolocation(timeout){
     };
     
     // Request geolocation.
-    window.GEOLOCATION_ID = navigator.geolocation.watchPosition(success, error, options);
+    indiciaData.gps_running_id = navigator.geolocation.watchPosition(success, error, options);
     jQuery.mobile.loading('show');
 }
 
@@ -447,7 +445,7 @@ function validateGeolocation(){
 	//No GPS lock yet
 	if ( accuracy == -1 ){
 		console.log("DEBUG: GPS Validation - accuracy -1");
-		var tries = window.GEOLOCATION_TRY;
+		var tries = indiciaData.gps_try;
 		if (tries == 0 || tries == null){
 			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 					 " <div style='padding:10px 20px;'>" +
@@ -471,7 +469,7 @@ function validateGeolocation(){
 			afterclose: function( event, ui ) {
 				console.log("DEBUG: POPUP - closed");
 				jQuery.mobile.loading('hide');
-				navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+				navigator.geolocation.clearWatch(indiciaData.gps_running_id);
 			}
 		});
 		jQuery('#app-popup').popup('open');
@@ -479,19 +477,19 @@ function validateGeolocation(){
 		return false;
 		
   //Geolocation bad accuracy
-	} else if (accuracy > window.SREF_ACCURACY_LIMIT){
+	} else if (accuracy > indiciaData.GPS_ACCURACY_LIMIT){
 		console.log("DEBUG: GPS Validation - accuracy " );
 		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 				" <div style='padding:10px 20px;'>" +
 				 " <h3>Sorry, we haven't got your GPS location accurately yet.</h3>"+
-				 " <h3>Accuracy: " + accuracy + " meters (we need < " +  window.SREF_ACCURACY_LIMIT + ")</h3>" +
+				 " <h3>Accuracy: " + accuracy + " meters (we need < " +  indiciaData.GPS_ACCURACY_LIMIT + ")</h3>" +
 				 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
 				 " </div>");
 		jQuery('#app-popup').popup({
 			afterclose: function( event, ui ) {
 				console.log("DEBUG: POPUP - closed");
 				jQuery.mobile.loading('hide');
-				navigator.geolocation.clearWatch(window.GEOLOCATION_ID);
+				navigator.geolocation.clearWatch(indiciaData.gps_running_id);
 			}
 		});
 		jQuery('#app-popup').popup('open');
