@@ -158,10 +158,10 @@ function sendSavedForm() {
                       jQuery.mobile.loading('hide');
                       makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
                           " <div style='padding:10px 20px;'>" +
-                          " <center><h2>Error</h2></center><p> " +xhr.status + " " + thrownError + "</p>" +
-                           " </div>");
+                          " <center><h2>Sorry!</h2></center><p> " + xhr.responseText + "</p>" +
+                          " </div>");
                       jQuery('#app-popup').popup().popup('open');
-                       console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError +")");
+                       console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError + " " + xhr.responseText +")");
                     }
 		});
 	}
@@ -347,10 +347,10 @@ function submitForm(form_id, onSend, onSuccess){
                 jQuery.mobile.loading('hide');
                 makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
                     " <div style='padding:10px 20px;'>" +
-                    " <center><h2>Error</h2></center><p> " +xhr.status + " " + thrownError + "</p>" +
-                     " </div>");
+                    " <center><h2>Sorry!</h2></center><p> " + xhr.responseText + "</p>" +
+                    " </div>");
                 jQuery('#app-popup').popup().popup('open');
-                console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError +")");
+                console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError + " " + xhr.responseText + ")");
               },
       beforeSend: onSend
 		});
