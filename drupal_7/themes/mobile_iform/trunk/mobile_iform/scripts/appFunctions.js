@@ -25,8 +25,7 @@ window.applicationCache.onerror = function(e) {
  
 jQuery(document).ready(function() {
 	updateFormCounter();
-
-
+	jQuery("#entry-form-submit").click(submitStart);
 });
 
 //GLOBALS
@@ -449,19 +448,22 @@ function validateGeolocation(){
 		if (tries == 0 || tries == null){
 			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 					 " <div style='padding:10px 20px;'>" +
-					 " <h3>Sorry, we couldn't get your location. Please make sure the GPS is on and try again.</h3>"+
+					 " <center><h3>GPS</h3></center" +
+					 " <p>Sorry, we couldn't get your location. Please make sure the GPS is on and try again.</p>"+
 					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
 					 " </div>");
 		} else if (tries == 5){
 			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 					 " <div style='padding:10px 20px;'>" +
-					 " <h3>Hmm.. nope, but don't worry, one day you might just get lucky. </h3>"+
+					 " <center><h3>GPS</h3></center" +
+					 " <p>Hmm.. nope, but don't worry, one day you might just get lucky. </p>"+
 					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
 					 " </div>");
 		}else {
 			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 					  " <div style='padding:10px 20px;'>" +
-					 " <h3>Still can't get your location. Make sure you are outside and move away from tall buildings, trees and try again.</h3>"+
+					  " <center><h3>GPS</h3></center" +
+					 " <p>Still can't get your location. Make sure you are outside and move away from tall buildings, trees and try again.</p>"+
 					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
 					 " </div>");
 		}
@@ -480,9 +482,10 @@ function validateGeolocation(){
 	} else if (accuracy > indiciaData.GPS_ACCURACY_LIMIT){
 		console.log("DEBUG: GPS Validation - accuracy " );
 		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-				" <div style='padding:10px 20px;'>" +
-				 " <h3>Sorry, we haven't got your GPS location accurately yet.</h3>"+
-				 " <h3>Accuracy: " + accuracy + " meters (we need < " +  indiciaData.GPS_ACCURACY_LIMIT + ")</h3>" +
+				 " <div style='padding:10px 20px;'>" +
+				 " <center><h3>GPS</h3></center" + 
+				 " <p>Sorry, we haven't got your GPS location accurately yet.</p>"+
+				 " <p>Accuracy: " + accuracy + " meters (we need < " +  indiciaData.GPS_ACCURACY_LIMIT + ")</p>" +
 				 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
 				 " </div>");
 		jQuery('#app-popup').popup({
@@ -504,59 +507,92 @@ function validateGeolocation(){
 }
 
 /*
+ * Form validation
+ */
+function validateForm($){
+    var invalids = [];
+    var tabinputs = $('#entry_form').find('input,select,textarea').not(':disabled,[name=],.scTaxonCell,.inactive');
+    var tabtaxoninputs = $('#entry_form .scTaxonCell').find('input,select').not(':disabled');
+    if (tabinputs.length>0){
+      tabinputs.each(function(index){
+        if (!$(this).valid())
+          invalids.push(this.id);
+      });      
+    }
+      
+    if (tabtaxoninputs.length>0) {
+     tabtaxoninputs.each(function(index){
+        if (!$(this).valid())
+          invalids.push(this.id);
+     }); 
+    }
+    
+    if (invalids.length > 0){
+      var popupString = "<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
+        " <div style='padding:10px 20px;'>" +
+        " <center><h3>Validation</h3></center" +
+        " <p>The following is still missing:</p><ul>";
+        
+        for (var i=0; i < invalids.length; i++)
+          popupString += "<li>" + $("label[for='" + invalids[i]+ "']").text() + "</li>";
+        
+        popupString += "</ul></div>";
+        makePopup(popupString);
+        jQuery('#app-popup').popup().popup('open');
+      
+      return false;
+    }
+    return true;
+}
+
+/*
  * Starts the submition process.
  */
 function submitStart() {
-	console.log("DEBUG: SUBMIT - start");
-	//TODO: validate the form
-	//jQuery("#entry_form").validate();
-	//alert (indiciaData.validator.numberOfInvalids());
-	// if (!indiciaData.validator.form()){
-	   // alert("invalid");
-	// }
-	 if(validateGeolocation()){
- 		 
- 	 
- 	//Online
-	if (navigator.onLine) {
-		console.log("DEBUG: SUBMIT - online");
-		submitForm('entry_form', 
-			function(){
-				//start load
-				jQuery.mobile.loading('show');
-			},
-			function(){
-				//end load 
-				jQuery.mobile.loading('hide');
-				makePopup("<div style='padding:10px 20px;'>" +
-					"<center><h2>Submitted successfully. </br>Thank You!</h2></center>" +
-					 " </div>");
-				jQuery('#app-popup').popup().popup('open');
-				goHome(2000);
-			});
-			
-	//Offline		
-	} else {
-		console.log("DEBUG: SUBMIT - offline");
-		jQuery.mobile.loading('show');
-		if (saveForm() == 1){
-			jQuery.mobile.loading('hide');
-			makePopup("<div style='padding:10px 20px;'>" +
-					"<center><h2>No Internet. Form saved.</h2></center>" +
-					 " </div>");
-			jQuery('#app-popup').popup().popup('open');
-			goHome(2000);
-		} else {
-			jQuery.mobile.loading('hide');
-			makePopup("<div style='padding:10px 20px;'>" +
-					" <center><h2>Error while saving the form.</h2></center>" +
-					" </div>");
-			jQuery('#app-popup').popup().popup('open');
-			setTimeout(function() {
-				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + 'form');
-			}, 2000);
-		}
-	}
+	 console.log("DEBUG: SUBMIT - start");
+	
+	 if(validateForm(indiciaData.jQuery) && validateGeolocation()){
+	   
+   	//Online
+  	if (navigator.onLine) {
+  		console.log("DEBUG: SUBMIT - online");
+  		submitForm('entry_form', 
+  			function(){
+  				//start load
+  				jQuery.mobile.loading('show');
+  			},
+  			function(){
+  				//end load 
+  				jQuery.mobile.loading('hide');
+  				makePopup("<div style='padding:10px 20px;'>" +
+  					"<center><h2>Submitted successfully. </br>Thank You!</h2></center>" +
+  					 " </div>");
+  				jQuery('#app-popup').popup().popup('open');
+  				goHome(2000);
+  			});
+  			
+  	//Offline		
+  	} else {
+  		console.log("DEBUG: SUBMIT - offline");
+  		jQuery.mobile.loading('show');
+  		if (saveForm() == 1){
+  			jQuery.mobile.loading('hide');
+  			makePopup("<div style='padding:10px 20px;'>" +
+  					"<center><h2>No Internet. Form saved.</h2></center>" +
+  					 " </div>");
+  			jQuery('#app-popup').popup().popup('open');
+  			goHome(2000);
+  		} else {
+  			jQuery.mobile.loading('hide');
+  			makePopup("<div style='padding:10px 20px;'>" +
+  					" <center><h2>Error while saving the form.</h2></center>" +
+  					" </div>");
+  			jQuery('#app-popup').popup().popup('open');
+  			setTimeout(function() {
+  				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + 'form');
+  			}, 2000);
+  		}
+  	}
 	}
 }
 
