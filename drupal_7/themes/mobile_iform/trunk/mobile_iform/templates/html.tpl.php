@@ -45,17 +45,17 @@
 <html ><!--lang="<?php print $language->language; ?>" manifest="<?php print base_path(); ?>manifest.appcache">
 -->
 <head>
-    <!-- ICONS -->
-    <?php $file_path = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files'); ?>
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android128.png">
-    <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android196.png">
-    <link href="<?php print $file_path; ?>/ios57.png" sizes="57x57" rel="apple-touch-icon">
-    <link href="<?php print $file_path; ?>/ios72.png" sizes="72x72" rel="apple-touch-icon">
-    <link href="<?php print $file_path; ?>/ios114.png" sizes="114x114" rel="apple-touch-icon">
-    <link href="<?php print $file_path; ?>/ios144.png" sizes="144x144" rel="apple-touch-icon">
-    
+  <!-- ICONS -->
+  <?php $file_path = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files'); ?>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android128.png">
+  <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android196.png">
+  <link href="<?php print $file_path; ?>/ios57.png" sizes="57x57" rel="apple-touch-icon">
+  <link href="<?php print $file_path; ?>/ios72.png" sizes="72x72" rel="apple-touch-icon">
+  <link href="<?php print $file_path; ?>/ios114.png" sizes="114x114" rel="apple-touch-icon">
+  <link href="<?php print $file_path; ?>/ios144.png" sizes="144x144" rel="apple-touch-icon">
+  
   <?php print $head; ?>
   <?php if ($viewport): ?>
   <meta name="viewport" content="<?php print $viewport; ?>" /> 
