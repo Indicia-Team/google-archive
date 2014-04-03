@@ -106,9 +106,7 @@
     <div id="app-dialog-content"data-role="content"></div>
 </div>
 
-<div data-role="popup" id="app-popup" class="ui-corner-all ui-popup ui-body-a ui-overlay-shadow" 
-  data-theme="b" data-overlay-theme="a">
-</div>
+<div data-role="popup" id="app-popup" data-theme="b" data-overlay-theme="b"></div>
 
 <?php if($type == 'iform') : ?>
   </form>
