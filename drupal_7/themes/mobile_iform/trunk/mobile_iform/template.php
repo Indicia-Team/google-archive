@@ -16,13 +16,14 @@
  * @see html.tpl.php
  */
 function mobile_iform_preprocess_html(&$vars) {
+  // Add local css with weight greater than jquery-mobile.css so it can override.
   $css_options = array(
     'type' => 'file', 
     'group' => CSS_THEME, 
     'every_page' => TRUE, 
     'media' => 'all', 
     'preprocess' => FALSE, 
-    'weight' => 101,
+    'weight' => 102,
   );
   $css_path = drupal_get_path('theme', 'mobile_iform') . '/styles/mobile_iform.css';
   drupal_add_css($css_path, $css_options);
