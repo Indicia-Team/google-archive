@@ -1,17 +1,47 @@
-/*
-*/
-/* line 4, ../sass/icpveg_mobile.scss */
-body {
-  background-color: #C6612E;
-  color: #7B4720;
+/* line 2, ../sass/mobile_iform.scss */
+#app.ui-page {
+  background: url(../images/clover-tile.jpg) #679d67 repeat;
 }
 
-/* line 9, ../sass/icpveg_mobile.scss */
+/* line 5, ../sass/mobile_iform.scss */
+.splash-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: #555 solid 2px;
+  border-radius: 10px;
+  padding: 1em;
+  text-align: center;
+}
+
+/* line 13, ../sass/mobile_iform.scss */
 .ui-page {
-  padding: 0 0.5em;
+  background: lavender;
 }
 
-/* line 13, ../sass/icpveg_mobile.scss */
+/* line 17, ../sass/mobile_iform.scss */
+img {
+  max-width: 100%;
+}
+
+/* line 21, ../sass/mobile_iform.scss */
+.centre {
+  text-align: center;
+}
+
+/* line 25, ../sass/mobile_iform.scss */
 label, form label {
   width: auto;
+}
+
+/* Increase label width compared to standard jQM. */
+/* line 30, ../sass/mobile_iform.scss */
+.ui-field-contain > label,
+.ui-field-contain .ui-controlgroup-label,
+.ui-field-contain > .ui-rangeslider > label {
+  width: 30%;
+}
+
+/* line 35, ../sass/mobile_iform.scss */
+.ui-field-contain > label ~ [class*="ui-"],
+.ui-field-contain .ui-controlgroup-controls {
+  width: 68%;
 }
