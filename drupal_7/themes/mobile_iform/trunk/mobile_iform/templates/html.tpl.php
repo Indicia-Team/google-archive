@@ -48,6 +48,7 @@
   <!-- ICONS -->
   <?php $file_path = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files'); ?>
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="minimal-ui">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android128.png">
   <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android196.png">
