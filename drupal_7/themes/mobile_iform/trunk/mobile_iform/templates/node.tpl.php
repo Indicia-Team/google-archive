@@ -86,10 +86,10 @@
 
     <div id="<?php print $pageid; ?>" data-role="page">
       <header data-role="header">
-        <?php //TODO not to hardcode the app base URL! ?>
-        
-        <?php //if($node_url != '/drupal/app' && !fnmatch("*dialog", $node_url)) : ?>
-       	<?php if($node_url != '/drupal/app') : ?>
+        <?php 
+          $start_path = base_path() . mobile_jquery_theme_get_setting('app_home');
+        ?>
+       	<?php if($node_url != $start_path) : ?>
             <a href="#" data-rel="back" data-icon="arrow-l" data-iconpos="left">Back</a>
         <?php endif; ?>
 	    <h1><?php print $title; ?></h1>       
