@@ -1,33 +1,10 @@
-//APP CACHE DEBUGGING
-// log each of the events fired by window.applicationCache
-window.applicationCache.onchecking = function(e) {
-	console.log("CACHE: Checking for updates");
-};
-window.applicationCache.onnoupdate = function(e) {
-	console.log("CACHE: No updates");
-};
-window.applicationCache.onupdateready = function(e) {
-	console.log("CACHE: Update ready");
-};
-window.applicationCache.onobsolete = function(e) {
-	console.log("CACHE: Obsolete");
-};
-window.applicationCache.ondownloading = function(e) {
-	console.log("CACHE: Downloading");
-};
-window.applicationCache.oncached = function(e) {
-	console.log("CACHE: Cached - available offline");
-};
-window.applicationCache.onerror = function(e) {
-	console.log("CACHE: Error");
-};
-// END APP CACHE DEBUGGING
+
  
 jQuery(document).ready(function() {
 	updateFormCounter();
 	jQuery("#entry-form-submit").click(submitStart);
 });
-
+	
 //GLOBALS
 var FORM_COUNT_KEY = "form_count";
 var FORM_KEY = "form_";
@@ -313,7 +290,6 @@ function makeDialog(text) {
 	jQuery('#app-dialog-content').empty().append(text);
 }
 
-
 /*
  * Updares the popup div appended to the page
  */
@@ -572,6 +548,7 @@ function validateForm($){
     return true;
 }
 
+
 /*
  * Starts the submition process.
  */
@@ -632,6 +609,6 @@ function submitStart() {
  */
 function goHome(delay) {
 	setTimeout(function() {
-		window.location = Drupal.settings.mobileIformStartPath;
+		window.location = Drupal.settings.mobileIformStartPath + "home";
 	}, delay);
 }

@@ -42,8 +42,8 @@
  */
 ?>
 <!DOCTYPE html>
-<html ><!--lang="<?php print $language->language; ?>" manifest="<?php print base_path(); ?>manifest.appcache">
--->
+<html lang="<?php print $language->language; ?>" manifest="<?php print base_path(); ?>manifest.appcache">
+
 <head>
   <!-- ICONS -->
   <?php $file_path = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files'); ?>
