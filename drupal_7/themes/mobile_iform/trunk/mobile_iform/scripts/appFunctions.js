@@ -1,10 +1,17 @@
 
  
+// jQuery(document).ready will only trigger on a full page load, 
+// not when Ajax loading a page
+// The recording form is never Ajax loaded as it contains multiple pages.
 jQuery(document).ready(function() {
-	updateFormCounter();
 	jQuery("#entry-form-submit").click(submitStart);
 });
-	
+
+// This will trigger on Ajax loading the #app-home page.
+jQuery(document).on('pagecreate', '#app-home', function(event, ui) {
+	updateFormCounter();
+});
+
 //GLOBALS
 var FORM_COUNT_KEY = "form_count";
 var FORM_KEY = "form_";
@@ -18,13 +25,29 @@ function updateFormCounter() {
 	console.log("DEBUG: Updating form counter");
 	var count = localStorage.getItem("form_count");
 
-	jQuery("#savedFormCounter").fadeOut(200);
+  // This updates a counter on a send form dialog.
+  // The dialog is created as a node in Drupal.
+  // It contains the content:
+  // <center>
+  //   <h2>You have: <span id="savedFormCounter">0</span>
+  //     <span id="savedFormCounterWording"> forms</span> to send.  
+  //   </h2>
+  // </center>
+  jQuery("#savedFormCounter").fadeOut(200);
 	jQuery("#savedFormCounter").text(count);
 	jQuery("#savedFormCounter").fadeIn(200);
-    
 	jQuery("#savedFormCounterWording").text(((count == 1) ? " form" : " forms"));
+  
+  // This updates a counter on a home page menu item.
+  // This home page is created as a node in Drupal
+  // It contains the content:
+  // <li class="a-savedFormCounter" data-theme="b" style="display:none">
+  //   <a href="/drupal/app/send-forms-dialog" onclick="updateFormCounter()"   data-prefetch> 
+  //     <i>Saved forms:</i><span class="savedFormCounter">0</span>
+  //   </a>
+  // </li>
 	jQuery(".savedFormCounter").text(count);
-
+  // The home page menu item is hidden if there are no saved forms.
 	if (count != null && count != 0) {
 		jQuery(".a-savedFormCounter").css("display", "");
 	} else {
@@ -596,7 +619,7 @@ function submitStart() {
   					" </div>");
   			jQuery('#app-popup').popup().popup('open');
   			setTimeout(function() {
-  				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + 'form');
+  				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + '/form');
   			}, 4000);
   		}
   	}
@@ -609,6 +632,6 @@ function submitStart() {
  */
 function goHome(delay) {
 	setTimeout(function() {
-		window.location = Drupal.settings.mobileIformStartPath + "home";
+		window.location = Drupal.settings.mobileIformStartPath + "/home";
 	}, delay);
 }
