@@ -1,12 +1,63 @@
+//APP CACHE DEBUGGING
+// log each of the events fired by window.applicationCache
+window.applicationCache.onchecking = function(e) {
+	console.log("CACHE: Checking for updates");
+};
+window.applicationCache.onnoupdate = function(e) {
+	console.log("CACHE: No updates");
+};
+window.applicationCache.onupdateready = function(e) {
+	console.log("CACHE: Update ready");
+};
+window.applicationCache.onobsolete = function(e) {
+	console.log("CACHE: Obsolete");
+};
+window.applicationCache.ondownloading = function(e) {
+jQuery.mobile.loading( 'show', {
+  text: "Downloading the app",
+  theme: "b",
+  textVisible: true,
+  textonly: true
+  });
+  
+setTimeout(function(){
+	jQuery.mobile.loading('hide');
+}, 3000);
+	console.log("CACHE: Downloading");
+};
+window.applicationCache.oncached = function(e) {
+	jQuery.mobile.loading( 'show', {
+	  text: "App is available offline",
+	  theme: "b",
+	  textVisible: true,
+	  textonly: true
+	  });
+	  
+	setTimeout(function(){
+		jQuery.mobile.loading('hide');
+	}, 3000);
+	console.log("CACHE: Cached - available offline");
+};
+window.applicationCache.onerror = function(e) {
+	console.log("CACHE: Error");
+};
+// END APP CACHE DEBUGGING
+ 
 // jQuery(document).ready will only trigger on a full page load, 
 // not when Ajax loading a page
 // The recording form is never Ajax loaded as it contains multiple pages.
 jQuery(document).ready(function() {
-	jQuery("#entry-form-submit").click(submitStart);
+	jQuery("#entry-form-submit").click(submitStart); //assingns the form submit button handler to use submitStart()
 });
-
-// This will trigger on Ajax loading the #app-home page.
+	
 jQuery(document).on('pagecreate', '#app-home', function(event, ui) {
+	//ios app mode a link fix
+	//will fix all a tagged elements with the class 'ios-enhanced'
+	jQuery("a.ios-enhanced").click(function (event) {
+		event.preventDefault();
+		window.location = jQuery(this).attr("href"); 
+	});
+	
 	updateFormCounter();
 });
 
@@ -31,10 +82,19 @@ function updateFormCounter() {
   //     <span id="savedFormCounterWording"> forms</span> to send.  
   //   </h2>
   // </center>
-  jQuery("#savedFormCounter").fadeOut(200);
+	jQuery("#savedFormCounter").fadeOut(200);
 	jQuery("#savedFormCounter").text(count);
 	jQuery("#savedFormCounter").fadeIn(200);
 	jQuery("#savedFormCounterWording").text(((count == 1) ? " form" : " forms"));
+    
+  // This updates a counter on a home page menu item.
+  // This home page is created as a node in Drupal
+  // It contains the content:
+  // <li class="a-savedFormCounter" data-theme="b" style="display:none">
+  //   <a href="/drupal/app/send-forms-dialog" onclick="updateFormCounter()"   data-prefetch> 
+  //     <i>Saved forms:</i><span class="savedFormCounter">0</span>
+  //   </a>
+  // </li>
   
   // This updates a counter on a home page menu item.
   // This home page is created as a node in Drupal
