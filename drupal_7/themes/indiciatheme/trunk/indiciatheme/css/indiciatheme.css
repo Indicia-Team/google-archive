@@ -314,5 +314,11 @@ table.report-grid {
   float: right;
 }
 
+/* Fix an issue in Chrome / Adaptive theme where the grid action buttons overflow the grid */
+/* line 213, sass/indiciatheme.scss */
+.action-button img {
+  max-width: inherit;
+}
+
 /** import any custom override files **/
 /* No files to import found in custom/*.* */
