@@ -440,7 +440,7 @@ function startGeolocation(timeout){
  */
 function validateGeolocation(){
 	var accuracy = jQuery('#sref_accuracy').val();
-	
+	jQuery.mobile.loading('hide');
 	//No GPS lock yet
 	if ( accuracy == -1 ){
 		console.log("DEBUG: GPS Validation - accuracy -1");
@@ -456,7 +456,7 @@ function validateGeolocation(){
 			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
 					 " <div style='padding:10px 20px;'>" +
 					 " <center><h3>GPS</h3></center" +
-					 " <p>Hmm.. nope, but don't worry, one day you might just get lucky. </p>"+
+					 " <p>Hmm.. don't worry, some day you might just get lucky. </p>"+
 					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
 					 " </div>");
 		}else {
@@ -564,6 +564,7 @@ function validateForm($){
         
         popupString += "</ul></div>";
         makePopup(popupString);
+        jQuery.mobile.loading('hide');
         jQuery('#app-popup').popup().popup('open');
       
       return false;
@@ -577,6 +578,8 @@ function validateForm($){
 function submitStart() {
 	 console.log("DEBUG: SUBMIT - start");
 	
+	jQuery.mobile.loading('show');
+	setTimeout(function(){
 	 if(validateForm(indiciaData.jQuery) && validateGeolocation()){
 	   
    	//Online
@@ -594,7 +597,7 @@ function submitStart() {
   					"<center><h2>Submitted successfully. </br>Thank You!</h2></center>" +
   					 " </div>");
   				jQuery('#app-popup').popup().popup('open');
-  				goHome(2000);
+  				goHome(4000);
   			});
   			
   	//Offline		
@@ -607,19 +610,21 @@ function submitStart() {
   					"<center><h2>No Internet. Form saved.</h2></center>" +
   					 " </div>");
   			jQuery('#app-popup').popup().popup('open');
-  			goHome(2000);
+  			goHome(4000);
   		} else {
   			jQuery.mobile.loading('hide');
   			makePopup("<div style='padding:10px 20px;'>" +
-  					" <center><h2>Error while saving the form.</h2></center>" +
+  					" <center><h2>Error.</h2></center>" +
+  					" <p>Full local storage. Please send the old forms first.</p>"+
   					" </div>");
   			jQuery('#app-popup').popup().popup('open');
   			setTimeout(function() {
   				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + 'form');
-  			}, 2000);
+  			}, 4000);
   		}
   	}
 	}
+	  }, 20);
 }
 
 /*
