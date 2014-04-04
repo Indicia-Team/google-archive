@@ -1,5 +1,3 @@
-
- 
 // jQuery(document).ready will only trigger on a full page load, 
 // not when Ajax loading a page
 // The recording form is never Ajax loaded as it contains multiple pages.
@@ -355,26 +353,35 @@ function submitForm(form_id, onSend, onSuccess){
 }
 
 function startGeolocation(timeout){
+  console.log("DEBUG: GPS - start");
+  
+  if(!navigator.geolocation) {
+  console.log("DEBUG: GPS - error, no gps support!");
+    // Early return if geolocation not supported.
+    makePopup('<div style="padding:10px 20px;"><center><h2>Geolocation is not supported by your browser.</h2></center></div>');   
+    jQuery('#app-popup').popup().popup('open');
+    return;
+  }
+    
+ //stop any other geolocation service started before
+  navigator.geolocation.clearWatch(indiciaData.gps_running_id);
+  
+ //check if the lock is acquired and the accuracy is good enough
+  var accuracy = jQuery('#sref_accuracy').val();
+  if ((accuracy > -1) && (accuracy < indiciaData.GPS_ACCURACY_LIMIT)){
+    console.log("DEBUG: GPS - Success! Accuracy of " + accuracy + " meters");
+    jQuery('#app-popup').popup('close');
+    submitStart();
+    return;
+  }
+  
 	var start_time = new Date().getTime();
-	
-	console.log("DEBUG: GPS - start");
   var tries = indiciaData.gps_try;
   if(tries == 0 || tries == null)
   	indiciaData.gps_try = 1;
   else
   	indiciaData.gps_try = tries +  1;
 	  	
-  //stop any other geolocation service started before
-  navigator.geolocation.clearWatch(indiciaData.gps_running_id);
-	
-  if(!navigator.geolocation) {
-  	console.log("DEBUG: GPS - error, no gps support!");
-      // Early return if geolocation not supported.
-      makePopup('<div style="padding:10px 20px;"><center><h2>Geolocation is not supported by your browser.</h2></center></div>');   
-      jQuery('#app-popup').popup().popup('open');
-      return;
-    }
-
     // Callback if geolocation succeeds.
     var counter = 0;
     function success(position) {
