@@ -27,14 +27,16 @@ label, form label {
 }
 
 /* Increase label width compared to standard jQM. */
-.ui-field-contain > label,
-.ui-field-contain .ui-controlgroup-label,
-.ui-field-contain > .ui-rangeslider > label {
-  width: 30%;
-}
-.ui-field-contain > label ~ [class*="ui-"],
-.ui-field-contain .ui-controlgroup-controls {
-  width: 68%;
+@media (min-width: 28em) {
+  .ui-field-contain > label,
+  .ui-field-contain .ui-controlgroup-label,
+  .ui-field-contain > .ui-rangeslider > label {
+    width: 30%;
+  }
+  .ui-field-contain > label ~ [class*="ui-"],
+  .ui-field-contain .ui-controlgroup-controls {
+    width: 68%;
+  }
 }
 
 
