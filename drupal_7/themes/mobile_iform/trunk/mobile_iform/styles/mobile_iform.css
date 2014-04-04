@@ -33,15 +33,17 @@ label, form label {
 }
 
 /* Increase label width compared to standard jQM. */
-/* line 30, ../sass/mobile_iform.scss */
-.ui-field-contain > label,
-.ui-field-contain .ui-controlgroup-label,
-.ui-field-contain > .ui-rangeslider > label {
-  width: 30%;
-}
+@media (min-width: 28em) {
+  /* line 31, ../sass/mobile_iform.scss */
+  .ui-field-contain > label,
+  .ui-field-contain .ui-controlgroup-label,
+  .ui-field-contain > .ui-rangeslider > label {
+    width: 30%;
+  }
 
-/* line 35, ../sass/mobile_iform.scss */
-.ui-field-contain > label ~ [class*="ui-"],
-.ui-field-contain .ui-controlgroup-controls {
-  width: 68%;
+  /* line 36, ../sass/mobile_iform.scss */
+  .ui-field-contain > label ~ [class*="ui-"],
+  .ui-field-contain .ui-controlgroup-controls {
+    width: 68%;
+  }
 }
