@@ -146,11 +146,16 @@ function sendAllSavedForms() {
 			jQuery.mobile.loading('hide');	
 		}
 	} else {
-		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-					" <div style='padding:10px 20px;'>" +
-					" <center><h2>Looks like you are offline!</h2></center>" +
-					 " </div>");
-		jQuery('#app-popup').popup().popup('open');
+	  jQuery.mobile.loading( 'show', {
+      text: "Looks like you are offline!",
+      theme: "b",
+      textVisible: true,
+      textonly: true
+      });
+      
+    setTimeout(function(){
+      jQuery.mobile.loading('hide');
+    }, 3000);
 	}
 }
 
@@ -213,6 +218,7 @@ function sendSavedForm() {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                       jQuery.mobile.loading('hide');
+                      
                       makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
                           " <div style='padding:10px 20px;'>" +
                           " <center><h2>Sorry!</h2></center><p> " + xhr.responseText + "</p>" +
@@ -244,7 +250,7 @@ function saveForm() {
 	console.log("DEBUG: FORM.");
 	var input_array = new Array();
 	var input_key = {};
-	var name, value, type, id;
+	var name, value, type, id, needed;
 
 	//INPUTS
 	var pic_count = 0;
@@ -254,16 +260,21 @@ function saveForm() {
 		value = jQuery(input).attr('value');
 		type = jQuery(input).attr('type');
 		id = jQuery(input).attr('id');
+		needed = true; //if the input is empty, no need to send it
 
 		//checkbox
 		if (jQuery(input).attr('type') == "checkbox") {
 			if(!jQuery(input).is(":checked"))
-					value = ""; 
+					needed = false;
 			//text
 		} else if (type == "text")
 			value = jQuery(input).val();
+		else if (type == "radio"){	
+		  if(!(jQuery(input).attr("data-cacheval") == "true")){
+		      needed = false;
+		  }
 		//file
-		else if (type == "file" && id != null) {
+		  } else if (type == "file" && id != null) {
 			var file = jQuery(input).prop("files")[0];
 			if (file != null) {
 				console.log("DEBUG: FORM - working with " + file.name);
@@ -315,12 +326,13 @@ function saveForm() {
 				reader.readAsDataURL(file);
 			}
 		}
-
-		input_array.push({
-			"name" : name,
-			"value" : value,
-			"type" : type
-		});
+    if (needed){
+  		input_array.push({
+  			"name" : name,
+  			"value" : value,
+  			"type" : type
+  		});
+  	}
 	});
 	
 	//return if unsaccessfull file saving
