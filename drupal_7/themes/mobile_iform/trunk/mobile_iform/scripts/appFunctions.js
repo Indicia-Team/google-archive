@@ -13,29 +13,11 @@ window.applicationCache.onobsolete = function(e) {
 	console.log("CACHE: Obsolete");
 };
 window.applicationCache.ondownloading = function(e) {
-jQuery.mobile.loading( 'show', {
-  text: "Downloading the app",
-  theme: "b",
-  textVisible: true,
-  textonly: true
-  });
-  
-setTimeout(function(){
-	jQuery.mobile.loading('hide');
-}, 3000);
+  makeLoader("<h1>Downloading the app</h1>", 3000);
 	console.log("CACHE: Downloading");
 };
 window.applicationCache.oncached = function(e) {
-	jQuery.mobile.loading( 'show', {
-	  text: "App is available offline",
-	  theme: "b",
-	  textVisible: true,
-	  textonly: true
-	  });
-	  
-	setTimeout(function(){
-		jQuery.mobile.loading('hide');
-	}, 3000);
+	makeLoader("<h1>App is available offline</h1>", 3000);
 	console.log("CACHE: Cached - available offline");
 };
 window.applicationCache.onerror = function(e) {
@@ -217,14 +199,8 @@ function sendSavedForm() {
               sendAllSavedForms();  
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                      jQuery.mobile.loading('hide');
-                      
-                      makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-                          " <div style='padding:10px 20px;'>" +
-                          " <center><h2>Sorry!</h2></center><p> " + xhr.responseText + "</p>" +
-                          " </div>");
-                      jQuery('#app-popup').popup().popup('open');
-                       console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError + " " + xhr.responseText +")");
+                      makeLoader("<center><h1>Sorry!</h1></center><p>" + xhr.responseText+ " " + thrownError + " " + xhr.responseText + "</p>", 3000);
+                      console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError + " " + xhr.responseText +")");
                     }
 		});
 	}
@@ -267,12 +243,13 @@ function saveForm() {
 			if(!jQuery(input).is(":checked"))
 					needed = false;
 			//text
-		} else if (type == "text")
+		} else if (type == "text"){
 			value = jQuery(input).val();
-		else if (type == "radio"){	
-		  if(!(jQuery(input).attr("data-cacheval") == "true")){
-		      needed = false;
-		  }
+			
+		//radio
+  	} else if (type == "radio"){	
+        if(!jQuery(input).is(":checked"))
+          needed = false; 		  
 		//file
 		  } else if (type == "file" && id != null) {
 			var file = jQuery(input).prop("files")[0];
@@ -390,6 +367,25 @@ function makePopup(text){
 	jQuery('#app-popup').empty().append(text);
 }
 
+/*
+ * Creates a loader
+ */
+function makeLoader(text, time){
+  //clear previous loader
+  jQuery.mobile.loading('hide');
+  
+  //display new one
+  jQuery.mobile.loading( 'show', {
+  theme: "b",
+  html: "<div style='padding:5px 5px;'>" + text + "</div>",
+  textVisible: true,
+  textonly: true
+  });
+  
+  setTimeout(function(){
+    jQuery.mobile.loading('hide');
+  }, time); 
+}
 
 /*
  * Submits the form.
@@ -412,12 +408,7 @@ function submitForm(form_id, onSend, onSuccess){
         onSuccess();
       },
        error: function (xhr, ajaxOptions, thrownError) {
-                jQuery.mobile.loading('hide');
-                makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-                    " <div style='padding:10px 20px;'>" +
-                    " <center><h2>Sorry!</h2></center><p> " + xhr.responseText + "</p>" +
-                    " </div>");
-                jQuery('#app-popup').popup().popup('open');
+                makeLoader("<center><h1>Sorry!</h1></center><p>" + xhr.responseText+ " " + thrownError + " " + xhr.responseText +"</p>", 3000);
                 console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError + " " + xhr.responseText + ")");
               },
       beforeSend: onSend
@@ -430,8 +421,7 @@ function startGeolocation(timeout){
   if(!navigator.geolocation) {
   console.log("DEBUG: GPS - error, no gps support!");
     // Early return if geolocation not supported.
-    makePopup('<div style="padding:10px 20px;"><center><h2>Geolocation is not supported by your browser.</h2></center></div>');   
-    jQuery('#app-popup').popup().popup('open');
+     makeLoader("<h1>Geolocation is not supported by your browser</h1>", 5000);
     return;
   }
     
@@ -656,7 +646,6 @@ function validateForm($){
  */
 function submitStart() {
 	 console.log("DEBUG: SUBMIT - start");
-	
 	jQuery.mobile.loading('show');
 	setTimeout(function(){
 	 if(validateForm(indiciaData.jQuery) && validateGeolocation()){
@@ -702,7 +691,7 @@ function submitStart() {
   			}, 4000);
   		}
   	}
-	}
+	 }
 	  }, 20);
 }
 
