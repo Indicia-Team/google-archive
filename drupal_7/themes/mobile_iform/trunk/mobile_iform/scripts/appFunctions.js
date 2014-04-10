@@ -175,33 +175,40 @@ function sendSavedForm() {
     data.append('appsecret', Drupal.settings.appSecret);
 
 		//AJAX POST
+    //TODO: reuse submitForm() function
 		console.log("DEBUG: SEND - form ajax");
 		jQuery.ajax({
-			url : Drupal.settings.basePath + 'mobile/submit',
-			type : 'POST',
-			data : data,
-			cache : false,
-			enctype : 'multipart/form-data',
-			processData : false, // Don't process the files
-			contentType : false, // Set content type to false as jQuery will tell the server its a query string request
-            success:function(data){
-               console.log("DEBUG: SEND - form ajax (success):");
-               console.log(data);
-               
-               //clean
-              console.log("DEBUG: SEND - cleaning up");
-              localStorage.removeItem(FORM_KEY + formsCount);
-              localStorage.setItem(FORM_COUNT_KEY, --formsCount);
-              for (var j = 0; j < files_clean.length; j++)
-                localStorage.removeItem(files_clean[j]);
-            
-              updateFormCounter();
-              sendAllSavedForms();  
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                      makeLoader("<center><h1>Sorry!</h1></center><p>" + xhr.responseText+ " " + thrownError + " " + xhr.responseText + "</p>", 3000);
-                      console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError + " " + xhr.responseText +")");
-                    }
+      url : Drupal.settings.basePath + 'mobile/submit',
+      type : 'POST',
+      data : data,
+      cache : false,
+      enctype : 'multipart/form-data',
+      processData : false,
+      contentType : false,
+      success:function(data){
+         console.log("DEBUG: SEND - form ajax (success):");
+         console.log(data);
+         
+         //clean
+        console.log("DEBUG: SEND - cleaning up");
+        localStorage.removeItem(FORM_KEY + formsCount);
+        localStorage.setItem(FORM_COUNT_KEY, --formsCount);
+        for (var j = 0; j < files_clean.length; j++)
+          localStorage.removeItem(files_clean[j]);
+      
+        updateFormCounter();
+        sendAllSavedForms();  
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+         console.log("DEBUG: SEND - form ajax (ERROR "  + xhr.status+ " " + thrownError +")");
+         console.log(xhr.responseText);
+  
+         jQuery.mobile.loading('hide');
+         var message = "<center><h3>Sorry!</h3></center" +
+                   "<p>" + xhr.status+ " " + thrownError + "</p><p>" + xhr.responseText + "</p>";
+         makePopup(message, true);
+         jQuery('#app-popup').popup().popup('open');
+      }
 		});
 	}
 }
@@ -229,6 +236,8 @@ function saveForm() {
 	var name, value, type, id, needed;
 
 	//INPUTS
+	//TODO: add support for all input cases; use switch
+	//TODO: do not hardcode the form's name
 	var pic_count = 0;
 	var file_storage_status = 1; //if localStorage has little space it becomes 0
 	jQuery('form').find('input').each(function(index, input) {
@@ -251,7 +260,7 @@ function saveForm() {
         if(!jQuery(input).is(":checked"))
           needed = false; 		  
 		//file
-		  } else if (type == "file" && id != null) {
+		} else if (type == "file" && id != null) {
 			var file = jQuery(input).prop("files")[0];
 			if (file != null) {
 				console.log("DEBUG: FORM - working with " + file.name);
@@ -315,6 +324,20 @@ function saveForm() {
 	//return if unsaccessfull file saving
 	if (file_storage_status == 0)
 		return 0;
+  
+  //TEXTAREAS
+  jQuery('form').find('textarea').each(function(index, textarea) {
+      name = jQuery(textarea).attr('name');
+      value = jQuery(textarea).val();
+      type = "textarea";
+      
+      input_array.push({
+        "name" : name,
+        "value" : value,
+        "type" : type
+      });          
+  });
+
 
 	//SELECTS
 	jQuery('form').find("select").each(function(index, select) {
@@ -363,7 +386,24 @@ function makeDialog(text) {
 /*
  * Updares the popup div appended to the page
  */
-function makePopup(text){
+function makePopup(text, addClose){
+  var PADDING_WIDTH = 10;
+  var PADDING_HEIGHT = 20;
+  var CLOSE_KEY = "<a href='#' data-rel='back' data-role='button '" +
+              "data-theme='b' data-icon='delete' data-iconpos='notext '" + 
+              "class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete " + 
+                     "ui-btn-icon-notext ui-shadow ui-corner-all '"+
+              "role='button'>Close</a>";
+
+  if (addClose){  
+    text = CLOSE_KEY + text;
+  }
+  
+  if (PADDING_WIDTH > 0 || PADDING_HEIGHT > 0){
+    text = "<div style='padding:" + PADDING_WIDTH +"px " + PADDING_HEIGHT + "px;'>" +
+            text + "<div>"; 
+  }
+  
 	jQuery('#app-popup').empty().append(text);
 }
 
@@ -395,22 +435,30 @@ function submitForm(form_id, onSend, onSuccess){
 	var data = new FormData(form);
   data.append('appsecret', Drupal.settings.appSecret);
 	jQuery.ajax({
-			url: Drupal.settings.basePath + 'mobile/submit',
-			type: 'POST',
-			data: data,
-			cache: false,
-			enctype: 'multipart/form-data',
-			processData: false, // Don't process the files
-			contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+			url : Drupal.settings.basePath + 'mobile/submit',
+			type : 'POST',
+			data : data,
+			cache : false,
+			enctype : 'multipart/form-data',
+			processData : false,
+			contentType : false,
       success: function(data){
         console.log("DEBUG: SEND - form ajax (success):");
         console.log(data);
         onSuccess();
       },
-       error: function (xhr, ajaxOptions, thrownError) {
-                makeLoader("<center><h1>Sorry!</h1></center><p>" + xhr.responseText+ " " + thrownError + " " + xhr.responseText +"</p>", 3000);
-                console.log("DEBUG: SEND - form ajax (ERROR " + xhr.status + " " + thrownError + " " + xhr.responseText + ")");
-              },
+      error: function (xhr, ajaxOptions, thrownError) {
+       console.log("DEBUG: SEND - form ajax (ERROR "  + xhr.status+ " " + thrownError +")");
+       console.log(xhr.responseText);
+
+       jQuery.mobile.loading('hide');
+       var message = "<center><h3>Sorry!</h3></center" +
+                 "<p>" + xhr.status+ " " + thrownError + "</p><p>" + xhr.responseText + "</p>";
+       makePopup(message, true);
+       jQuery('#app-popup').popup().popup('open');
+       
+       //TODO:might be a good idea to add a save option here
+      },
       beforeSend: onSend
 		});
 }
@@ -419,9 +467,14 @@ function startGeolocation(timeout){
   console.log("DEBUG: GPS - start");
   
   if(!navigator.geolocation) {
-  console.log("DEBUG: GPS - error, no gps support!");
-    // Early return if geolocation not supported.
-     makeLoader("<h1>Geolocation is not supported by your browser</h1>", 5000);
+    // Early return if geolocation not supported. 
+     console.log("DEBUG: GPS - error, no gps support!");
+     
+     var message = "<center><h3>Sorry!</h3></center>" +
+                   "<p>Geolocation is not supported by your browser</p>";
+     
+     makePopup(message, false);
+     jQuery('#app-popup').popup().popup('open');
     return;
   }
     
@@ -457,7 +510,6 @@ function startGeolocation(timeout){
         navigator.geolocation.clearWatch(indiciaData.gps_running_id);
         submitStart();
     	}
-    	console.log("TIME: left - " + (current_time - start_time));
     	
       var latitude  = position.coords.latitude;
       var longitude = position.coords.longitude;
@@ -514,26 +566,23 @@ function validateGeolocation(){
 		console.log("DEBUG: GPS Validation - accuracy -1");
 		var tries = indiciaData.gps_try;
 		if (tries == 0 || tries == null){
-			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-					 " <div style='padding:10px 20px;'>" +
-					 " <center><h3>GPS</h3></center" +
-					 " <p>Sorry, we couldn't get your location. Please make sure the GPS is on and try again.</p>"+
-					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
-					 " </div>");
+		  var message = " <center><h3>GPS</h3></center" +
+                     " <p>Sorry, we couldn't get your location. Please make sure the GPS is on and try again.</p>"+
+                     " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>";
+			makePopup(message, true);
+			
 		} else if (tries == 5){
-			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-					 " <div style='padding:10px 20px;'>" +
-					 " <center><h3>GPS</h3></center" +
-					 " <p>Hmm.. don't worry, some day you might just get lucky. </p>"+
-					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
-					 " </div>");
+			var message = " <center><h3>GPS</h3></center" +
+                   " <p>Hmm.. don't worry, some day you might just get lucky. </p>"+
+                   " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>";
+			makePopup(message, true);
+			
 		}else {
-			makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-					  " <div style='padding:10px 20px;'>" +
-					  " <center><h3>GPS</h3></center" +
-					 " <p>Still can't get your location. Make sure you are outside and move away from tall buildings, trees and try again.</p>"+
-					 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
-					 " </div>");
+			var message = " <center><h3>GPS</h3></center" +
+                     " <p>Still can't get your location. Make sure you are outside and move away from tall buildings, trees and try again.</p>"+
+                     " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>";
+			makePopup(message, true);
+			
 		}
 		jQuery('#app-popup').popup({
 			afterclose: function( event, ui ) {
@@ -549,13 +598,11 @@ function validateGeolocation(){
   //Geolocation bad accuracy
 	} else if (accuracy > indiciaData.GPS_ACCURACY_LIMIT){
 		console.log("DEBUG: GPS Validation - accuracy " );
-		makePopup("<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-				 " <div style='padding:10px 20px;'>" +
-				 " <center><h3>GPS</h3></center" + 
-				 " <p>Sorry, we haven't got your GPS location accurately yet.</p>"+
-				 " <p>Accuracy: " + accuracy + " meters (we need < " +  indiciaData.GPS_ACCURACY_LIMIT + ")</p>" +
-				 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>"+
-				 " </div>");
+		var message = " <center><h3>GPS</h3></center" + 
+        				 " <p>Sorry, we haven't got your GPS location accurately yet.</p>"+
+        				 " <p>Accuracy: " + accuracy + " meters (we need < " +  indiciaData.GPS_ACCURACY_LIMIT + ")</p>" +
+        				 " <button onclick='startGeolocation(60000)' data-theme='a' class=' ui-btn ui-btn-a ui-shadow ui-corner-all'>Try again</button>";
+    makePopup(message, true); 
 		jQuery('#app-popup').popup({
 			afterclose: function( event, ui ) {
 				console.log("DEBUG: POPUP - closed");
@@ -619,19 +666,17 @@ function validateForm($){
     
     //constructing a response about invalid fields to the user
     if (invalids.length > 0){
-      var popupString = "<a href='#' data-rel='back' data-role='button' data-theme='b' data-icon='delete' data-iconpos='notext' class='ui-btn-right ui-link ui-btn ui-btn-b ui-icon-delete ui-btn-icon-notext ui-shadow ui-corner-all' role='button'>Close</a>" +
-        " <div style='padding:10px 20px;'>" +
-        " <center><h3>Validation</h3></center" +
-        " <p>The following is still missing:</p><ul>";
+      var message = " <center><h3>Validation</h3></center" +
+                    " <p>The following is still missing:</p><ul>";
         
         for (var i=0; i < invalids.length; i++)
           if (invalids[i].name.indexOf(MULTIPLE_GROUP_KEY) != 0)
-            popupString += "<li>" + $("label[for='" + invalids[i].id + "']").text() + "</li>";
+            message += "<li>" + $("label[for='" + invalids[i].id + "']").text() + "</li>";
           else
-            popupString += "<li>" + $("label[data-for='" + invalids[i].id + "']").text() + "</li>";
+            message += "<li>" + $("label[data-for='" + invalids[i].id + "']").text() + "</li>";
         
-        popupString += "</ul></div>";
-        makePopup(popupString);
+        message += "</ul>";
+        makePopup(message, true);
         jQuery.mobile.loading('hide');
         jQuery('#app-popup').popup().popup('open');
       
@@ -661,9 +706,7 @@ function submitStart() {
   			function(){
   				//end load 
   				jQuery.mobile.loading('hide');
-  				makePopup("<div style='padding:10px 20px;'>" +
-  					"<center><h2>Submitted successfully. </br>Thank You!</h2></center>" +
-  					 " </div>");
+  				makePopup("<center><h2>Submitted successfully. </br>Thank You!</h2></center>", false);
   				jQuery('#app-popup').popup().popup('open');
   				goHome(4000);
   			});
@@ -674,17 +717,15 @@ function submitStart() {
   		jQuery.mobile.loading('show');
   		if (saveForm() == 1){
   			jQuery.mobile.loading('hide');
-  			makePopup("<div style='padding:10px 20px;'>" +
-  					"<center><h2>No Internet. Form saved.</h2></center>" +
-  					 " </div>");
+  			makePopup("<center><h2>No Internet. Form saved.</h2></center>", false);
   			jQuery('#app-popup').popup().popup('open');
   			goHome(4000);
   		} else {
   			jQuery.mobile.loading('hide');
-  			makePopup("<div style='padding:10px 20px;'>" +
-  					" <center><h2>Error.</h2></center>" +
-  					" <p>Full local storage. Please send the old forms first.</p>"+
-  					" </div>");
+  			var message = " <center><h2>Error.</h2></center>" +
+                      " <p>Full local storage. Please send the old forms first.</p>";
+            
+  			makePopup(message, false);
   			jQuery('#app-popup').popup().popup('open');
   			setTimeout(function() {
   				jQuery.mobile.changePage(Drupal.settings.mobileIformStartPath + '/form');
