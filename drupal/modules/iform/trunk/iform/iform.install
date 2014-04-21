@@ -36,7 +36,18 @@ function iform_schema() {
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0
-      )
+      ),
+      'available_for_groups' => array(
+        'description' => 'Can this page be linked to recording groups?',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0
+      ),
+      'limit_to_group_id' => array(
+        'description' => 'If available for recording groups, set the recording group ID here if this form is exclusive to one group.',
+        'type' => 'int'
+      ),
     ),
     'primary key' => array('nid')
   );
@@ -91,5 +102,19 @@ function iform_update_6110() {
   $schema = iform_schema();
   $spec = $schema['iform']['fields']['needs_review'];
   db_add_field($ret, 'iform', 'needs_review', $spec);
+  return $ret;
+}
+
+/**
+* Implementation of hook_update_N for version 6.x-2.0.
+* @return array Defines the results of the updates.
+*/
+function iform_update_6120() {
+  $ret = array();
+  $schema = iform_schema();
+  $spec = $schema['iform']['fields']['available_for_groups'];
+  db_add_field($ret, 'iform', 'available_for_groups', $spec);
+  $spec = $schema['iform']['fields']['limit_to_group_id'];
+  db_add_field($ret, 'iform', 'limit_to_group_id', $spec);
   return $ret;
 }

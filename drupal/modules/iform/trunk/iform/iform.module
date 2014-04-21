@@ -206,12 +206,15 @@ function iform_form(&$node, $form_state) {
     '#weight' => 6
   );
   $connection = iform_get_connection_details($node);
+  $readAuth = form_helper::get_read_auth($connection['website_id'], $connection['password']);
   $form['iform_forms']['picker'] = array(
-    '#value' => form_helper::prebuilt_form_picker(array(
+    '#value' => form_helper::prebuilt_form_picker($readAuth, array(
       'form' => $node->iform,
       'website_id' => $connection['website_id'],
       'password' => $connection['password'],
-      'needWebsiteInputs' => !$connection['using_drupal_vars'] || variable_get('indicia_allow_connection_override', FALSE)
+      'needWebsiteInputs' => !$connection['using_drupal_vars'] || variable_get('indicia_allow_connection_override', FALSE),
+      'available_for_groups' => $node->available_for_groups,
+      'limit_to_group_id' => $node->limit_to_group_id
     ))
   );
   if ($node->iform) {
@@ -219,7 +222,7 @@ function iform_form(&$node, $form_state) {
       '#value' => form_helper::prebuilt_form_params_form(array(
         'form' => $node->iform,
         'currentSettings' => $node->params,
-        'readAuth' => form_helper::get_read_auth($connection['website_id'], $connection['password'])
+        'readAuth' => $readAuth
       )),
       '#prefix' => '<div id="form-params">',
       '#suffix' => '</div>'
@@ -281,8 +284,10 @@ function iform_insert($node) {
   else
     $iform = $node->iform;
   $needs_review = isset($node->needs_review) ? $node->needs_review : 0;
-  db_query("INSERT INTO {iform} (nid, iform, params, needs_review) VALUES (%d, '%s', '%s', %d)",
-      $node->nid, $iform, $params, $needs_review);
+  $available_for_groups = isset($node->available_for_groups) ? $node->available_for_groups : 0;
+  $limit_to_group_id = isset($node->limit_to_group_id) ? $node->limit_to_group_id : 'null';
+  db_query("INSERT INTO {iform} (nid, iform, params, needs_review, available_for_groups, limit_to_group_id) VALUES (%d, '%s', '%s', %d, %d, %s)",
+      $node->nid, $iform, $params, $needs_review, $available_for_groups, $limit_to_group_id);
 }
 
 /**
@@ -296,6 +301,8 @@ function iform_update($node) {
   else
     $iform = $node->iform;
   $needs_review = isset($node->needs_review) ? $node->needs_review : 0;
+  $available_for_groups = isset($_POST['available_for_groups']) ? $_POST['available_for_groups'] : 0;
+  $limit_to_group_id = empty($_POST['limit_to_group_id']) ? 'null' : $_POST['limit_to_group_id'];
   // updating an iform, when needs_review=3, means that the features module has detected that a form in default state
   // has had its code changed so needs to be reflected in the database. In this case we actually need to merge the
   // params together so that user params are not lost.
@@ -306,8 +313,8 @@ function iform_update($node) {
   } 
   else
     $params=get_custom_param_values($node);
-  db_query("UPDATE {iform} SET iform='%s', params='%s', needs_review=%d WHERE nid=%d",
-      $iform, $params, $needs_review, $node->nid);
+  db_query("UPDATE {iform} SET iform='%s', params='%s', needs_review=%d, available_for_groups=%d, limit_to_group_id=%s WHERE nid=%d",
+      $iform, $params, $needs_review, $available_for_groups, $limit_to_group_id, $node->nid);
 }
 
 /**
@@ -325,7 +332,7 @@ function iform_delete($node) {
 * @return object with iform fields
 */
 function iform_load($node) {
-  $t = db_fetch_object(db_query('SELECT iform, params, needs_review FROM {iform} WHERE nid = %d', $node->nid));
+  $t = db_fetch_object(db_query('SELECT iform, params, needs_review, available_for_groups, limit_to_group_id FROM {iform} WHERE nid = %d', $node->nid));
   $params=json_decode($t->params, true);
   // null string is stored if the iform has no parameters to store
   if ($t->params!=='null') {
@@ -578,7 +585,7 @@ function iform_view($node, $teaser = FALSE, $page = FALSE) {
     ob_start();
     // also force the theme path to be local
     global $indicia_theme_path;
-    $indicia_theme_path = iform_media_folder_path() . 'themes/';    
+    $indicia_theme_path = iform_media_folder_path() . 'themes/';
     $connection = iform_get_connection_details($node);
     $args['website_id']=$connection['website_id'];
     $args['password']=$connection['password'];
