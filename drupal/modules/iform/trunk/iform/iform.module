@@ -955,6 +955,7 @@ function iform_load_helpers(array $files) {
   // we always need the helper_config file
   if (!class_exists('helper_config')) {
     require_once $path . 'helper_config.php';
+    require_once $path . 'helper_base.php';
     // now we have an opportunity to load settings into helper_config from the drupal variables.
     helper_config::$base_url = variable_get('indicia_base_url', helper_config::$base_url);
     helper_config::$geoserver_url = variable_get('indicia_geoserver_url', helper_config::$geoserver_url);
@@ -965,15 +966,15 @@ function iform_load_helpers(array $files) {
     // indicia_upload_path
     // max_upload_size
     helper_config::$geoplanet_api_key = variable_get('indicia_geoplanet_api_key', helper_config::$geoplanet_api_key);
+    helper_base::$google_api_key = variable_get('indicia_google_api_key', isset(helper_config::$google_api_key) ? helper_config::$google_api_key : '');
     // bing api key may be ommitted for backwards compatibility reasons
     if (isset(helper_config::$bing_api_key))
       helper_config::$bing_api_key = variable_get('indicia_bing_api_key', helper_config::$bing_api_key);
     helper_config::$flickr_api_key = variable_get('indicia_flickr_api_key', helper_config::$flickr_api_key);
     helper_config::$flickr_api_secret = variable_get('indicia_flickr_api_secret', helper_config::$flickr_api_secret);
   }
-  require_once "$path/helper_base.php";
   foreach ($files as $file)
-    require_once "$path/$file.php";
+    require_once "$path$file.php";
   // ensure css and js is loaded locally
   helper_base::$js_path = base_path() . iform_media_folder_path() . 'js/';
   helper_base::$css_path = base_path() . iform_media_folder_path() . 'css/';
