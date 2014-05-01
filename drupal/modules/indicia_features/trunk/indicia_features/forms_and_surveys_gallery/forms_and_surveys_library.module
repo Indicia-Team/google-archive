@@ -328,14 +328,11 @@ function forms_and_surveys_library_user($op, &$edit, &$account, $category = NULL
     case 'login':      
       // default
       if (empty($_REQUEST['destination'])) {
-        $_REQUEST['destination'] = '<front>';
         // Don't redirect if we are about to reset our password.
-        if (!isset($_GET['q']) || !preg_match('/^user\/reset\//', $_GET['q'])) {
+        if (!isset($_GET['q']) || !preg_match('/^user\/(reset|validate)\//', $_GET['q'])) {
           // If registration for a specific form then redirect
           profile_load_profile($account);
-          if (!empty($account->profile_home_page)) {
-            $_REQUEST['destination'] = $account->profile_home_page;
-          }
+          $_REQUEST['destination'] = (empty($account->profile_home_page) ? '<front>' : $account->profile_home_page);
         }
       }
       break;
