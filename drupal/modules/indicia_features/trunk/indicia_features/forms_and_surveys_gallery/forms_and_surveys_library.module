@@ -117,6 +117,7 @@ function forms_and_surveys_library_form_alter(&$form, $form_state, $form_id) {
     );
     $form['library_settings']['included']['locations'] = array(
       '#value' => data_entry_helper::sub_list(array(
+        'addToTable' => false,
         'label' => t('Locations'), 
         'fieldname'=>'locations',
         'table'=>'location',
@@ -129,6 +130,7 @@ function forms_and_surveys_library_form_alter(&$form, $form_state, $form_id) {
     );
     $form['library_settings']['included']['taxon_groups'] = array(
       '#value' => data_entry_helper::sub_list(array(
+        'addToTable' => false,
         'label' => t('Species groups'), 
         'fieldname'=>'taxon_groups',
         'table'=>'taxon_group',
