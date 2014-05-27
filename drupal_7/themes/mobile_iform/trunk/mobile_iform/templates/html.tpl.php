@@ -77,6 +77,8 @@
     });
   </script> 
   <script type="text/javascript" src="<?php print $theme_path;?>/scripts/appFunctions.js"></script>
+  <script type="text/javascript" src="<?php print $theme_path;?>/scripts/backButtonFix.js"></script>
+
 </head>
 
 <body class="<?php print $classes; ?>" <?php print $attributes; ?>>
