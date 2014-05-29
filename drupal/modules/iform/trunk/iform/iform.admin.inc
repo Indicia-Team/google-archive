@@ -265,6 +265,9 @@ function indicia_configuration_form_validate($form, &$form_state) {
     // test the connection to the warehouse
     $urls = indicia_get_warehouse_urls($form_state);
     data_entry_helper::$base_url = $urls['base_url'];
+    // clear the cache if the linked warehouse changes
+    if ($orig_warehouse_url !== $urls['base_url'])
+      data_entry_helper::clear_cache();
     $read_auth = data_entry_helper::get_read_auth($form_state['values']['indicia_website_id'], $form_state['values']['indicia_password']);
     // any spaces in the nonce indicate an error message
     if (strpos($read_auth['nonce'], ' ')!==FALSE) {
@@ -333,9 +336,6 @@ function indicia_configuration_form_submit($form, &$form_state) {
   $urls = indicia_get_warehouse_urls($form_state);
   variable_set('indicia_base_url', $urls['base_url']);
   variable_set('indicia_geoserver_url', $urls['geoserver_url']);
-  // clear the cache if the linked warehouse changes
-  if ($orig_warehouse_url !== $urls['base_url'])
-    data_entry_helper::clear_cache();
   variable_set('indicia_private_warehouse', $form_state['values']['indicia_private_warehouse']);
   variable_set('indicia_allow_connection_override', $form_state['values']['indicia_allow_connection_override']);
   variable_set('indicia_website_id', $form_state['values']['indicia_website_id']);
