@@ -96,6 +96,13 @@ function iform_mobile_auth_menu() {
     'access callback'   => true,
   );
   
+  // Mobile based report access
+  $items['mobile/report'] = array(
+    'title'             => 'Access a report',
+    'page callback'     => 'iform_mobile_auth_report',
+    'access callback'   => true,
+  );
+  
   // Configuration
   $items['admin/settings/iform/mobile'] = array(
     'title' => 'Mobile Auth Settings',
@@ -170,13 +177,10 @@ function iform_mobile_auth_user_register() {
     
     // setup the profile fields
     $shared_secret_field = 'profile_indicia_mobile_auth_shared_secret';
-    $firstname_field = 'profile_first_name';
-    $secondname_field = 'profile_last_name';
-    $indicia_id_field = 'profile_indicia_user_id';
     $confirmation_code_field = 'profile_confirmation_code';
     
     // shared secret which needs to match that provided by app
-    $shared_secret = variable_get('iform_mobile_auth_shared_secret',NULL);
+    $saved_appsecret = variable_get('iform_mobile_auth_shared_secret', NULL);
 
     iform_mobile_auth_log('iform_mobile_auth_user_register');
     iform_mobile_auth_log(print_r($_POST,1));
@@ -186,11 +190,11 @@ function iform_mobile_auth_user_register() {
     $secondname = $_POST['secondname'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $appsecret = $_POST['appsecret'];
+    $provided_appsecret = $_POST['appsecret'];
     
     // Step 1.
     // Check minimum valid parameters
-    if (empty($email) || empty($password) || empty($appsecret)) 
+    if (empty($email) || empty($password) || empty($provided_appsecret)) 
     {
         drupal_set_header('HTTP/1.1 400 Bad Request');
         print 'Bad request';
@@ -200,7 +204,7 @@ function iform_mobile_auth_user_register() {
     
     // Step 2.
     // Reject submissions with an incorrect secret (or instances where secret is not set)
-    if ($shared_secret == NULL || trim($shared_secret) != trim($appsecret))
+    if ($saved_appsecret == NULL || trim($saved_appsecret) != trim($provided_appsecret))
     {
         iform_mobile_auth_log('Missing or incorrect shared app secret');
         drupal_set_header('HTTP/1.1 400 Bad Request');
@@ -268,19 +272,19 @@ function iform_mobile_auth_user_register() {
                 $error = '';
                 
                 // Check for existing users that do not have indicia id in their profile field
-                if (!isset($existing_user->$indicia_id_field) || $existing_user->$indicia_id_field == -1)
+                if (!isset($existing_user->profile_indicia_user_id) || $existing_user->profile_indicia_user_id == -1)
                 {
                     iform_mobile_auth_log('Associating indicia user id');
                     // Look up indicia id...
                     $indicia_user_id = iform_mobile_auth_get_user_id($existing_user->mail, 
-                                                                     $existing_user->$firstname_field,
-                                                                     $existing_user->$secondname_field,
+                                                                     $existing_user->profile_first_name,
+                                                                     $existing_user->profile_last_name,
                                                                      $existing_user->uid);
                     
                     
                     if (is_int($indicia_user_id)) {
-                        $category = iform_mobile_auth_profile_fields()->$indicia_id_field->category;
-                        $existing_user->$indicia_id_field = $indicia_user_id;
+                        $category = iform_mobile_auth_profile_fields()->profile_indicia_user_id->category;
+                        $existing_user->profile_indicia_user_id = $indicia_user_id;
                         iform_mobile_auth_profile_save_fields($existing_user, $existing_user, $category);
                         profile_load_profile($existing_user);
                     }
@@ -292,9 +296,9 @@ function iform_mobile_auth_user_register() {
                 // return the user's secret and name to be stored by app
                 print $existing_user->$shared_secret_field;
                 print "\n";
-                print $existing_user->$firstname_field;
+                print $existing_user->profile_first_name;
                 print "\n";
-                print $existing_user->$secondname_field;
+                print $existing_user->profile_last_name;
                 print "\n";
                 print $error;
             }
@@ -350,13 +354,13 @@ function iform_mobile_auth_user_register() {
     // save all the profile fields
     profile_load_profile($new_user);
     
-    $category = iform_mobile_auth_profile_fields()->$firstname_field->category;
-    $new_user->$firstname_field = $firstname;
-    $new_user->$secondname_field = $secondname;
+    $category = iform_mobile_auth_profile_fields()->profile_first_name->category;
+    $new_user->profile_first_name = $firstname;
+    $new_user->profile_last_name = $secondname;
     iform_mobile_auth_profile_save_fields($new_user, $new_user, $category);
     
-    $category = iform_mobile_auth_profile_fields()->$indicia_id_field->category;
-    $new_user->$indicia_id_field = $indicia_user_id;
+    $category = iform_mobile_auth_profile_fields()->profile_indicia_user_id->category;
+    $new_user->profile_indicia_user_id = $indicia_user_id;
     iform_mobile_auth_profile_save_fields($new_user, $new_user, $category);
     
     $category = iform_mobile_auth_profile_fields()->$shared_secret_field->category;
@@ -395,9 +399,9 @@ function iform_mobile_auth_user_register() {
     // return the user's secret and name to be stored by app
     print $new_user->$shared_secret_field;
     print "\n";
-    print $new_user->$firstname_field;
+    print $new_user->profile_first_name;
     print "\n";
-    print $new_user->$secondname_field;
+    print $new_user->profile_last_name;
     print "\n";
     print $error;
 }
@@ -447,79 +451,13 @@ function iform_mobile_auth_client_submission() {
     iform_mobile_auth_log('iform_mobile_auth_client_submission');
     iform_mobile_auth_log('POST REQUEST');
     iform_mobile_auth_log(print_r($_POST,1));
-        
-    $shared_secret = variable_get('iform_mobile_auth_shared_secret',NULL);
     
-    // profile field names
-    $usersecret_field = 'profile_indicia_mobile_auth_shared_secret';
-    $firstname_field = 'profile_first_name';
-    $secondname_field = 'profile_last_name';
-    $indicia_id_field = 'profile_indicia_user_id';
-    $confirmation_code_field = 'profile_confirmation_code';
-        
-    // pull out expected parameters from POST request
-    $usersecret = $_POST['usersecret'];
-    $appsecret = $_POST['appsecret'];
-    $email = $_POST['email'];
+    // Steps 1 to 4 are covered in the request authorisation
+    if (!$existing_user = iform_mobile_auth_authorise_request())
+      return;
+    
     $safe_website_id = intval($_POST['website_id']);
-    $safe_survey_id = intval($_POST['survey_id']);
-    
-    // Step 1
-    // Verify APP shared secret
-    if (empty($appsecret) || $appsecret != $shared_secret)
-    {
-        drupal_set_header('HTTP/1.1 400 Bad Request');
-        print 'Bad request';
-        iform_mobile_auth_log('Missing or incorrect shared app secret');
-        return;
-    }
-    
-    // Step 2.
-    // Locate corresponding user
-    $existing_user = user_load(array('mail' => $email));
-
-    if (empty($email) || $existing_user == FALSE)
-    {
-        if (empty($email)) $email = "app@mobile.net";
-        iform_mobile_auth_log('No corresponding user found with email');
-        $existing_user = (object)array("uid" => 0,
-                                       $indicia_id_field => "1", 
-                                       "name" => $email,
-                                       "mail" => $email,
-                                       $firstname_field => "Anonymous",
-                                       $secondname_field => "Anonymous");
-    }
-    else
-    {
-        // load profile fields
-        profile_load_profile($existing_user);
-        
-        // Step 3.
-        // Verify USER shared secret...
-        if (empty($usersecret) || $usersecret != $existing_user->$usersecret_field)
-        {
-            drupal_set_header('HTTP/1.1 400 Bad Request');
-            print 'Bad request';
-            iform_mobile_auth_log('User secret incorrect');
-            return;
-        }
-        
-        // Step 4.
-        // Check user activation status
-        if ($existing_user->status != 1)
-        {
-            iform_mobile_auth_log('User not activated');
-            drupal_set_header('HTTP/1.1 407 Proxy Authentication Required');
-            print 'User not activated';
-            return;
-        }
-
-    }
-    
-    // assign this user to gobal user var so that it can be added to the indicia submission
-    iform_mobile_auth_log(print_r($existing_user,1));
-    
-    $GLOBALS['user'] = $existing_user;
+    $safe_survey_id = intval($_POST['survey_id']);    
 
     // Step 5.
     // Replace user parameters in submission
@@ -528,15 +466,15 @@ function iform_mobile_auth_client_submission() {
         if ($value == '[userid]') $_POST[$key] = $existing_user->uid;
         if ($value == '[username]') $_POST[$key] = $existing_user->name;
         if ($value == '[email]') $_POST[$key] = $existing_user->mail;
-        if ($value == '[firstname]') $_POST[$key] = $existing_user->$firstname_field;
-        if ($value == '[surname]') $_POST[$key] = $existing_user->$secondname_field;
+        if ($value == '[firstname]') $_POST[$key] = $existing_user->profile_first_name;
+        if ($value == '[surname]') $_POST[$key] = $existing_user->profile_last_name;
     }
     
     // Step 6.
     // Proceed to process the submission...
     
     // get connection/indicia website details
-    $connection = iform_get_connection_details(NULL);
+    $connection = iform_get_connection_details(NULL);    
 
     $postargs = array();
     $postargs['website_id'] = $safe_website_id;
@@ -684,6 +622,151 @@ function iform_mobile_auth_client_submission() {
         print_r($curl_check);
         iform_mobile_auth_log($curl_check);
     }
+}
+
+/**
+ * Menu function to retrieve the results of a report which responds to the mobile/report
+ * web service endpoint.
+ *
+ * Parameters can be provided as GET or POST data, since POST is required when supporting long parameter values for
+ * geometry filters. Requires the following query parameters:
+ * * report - the path to the report file to run on the warehouse, e.g. 'library/totals/filterable_species_occurrence_image_counts.xml'
+ * * email - the logged in user's email, used for authentication
+ * * usersecret - the user secret key, used for authentication
+ * * appsecret - the shared app secret key, used for authentication.
+ * * caching - optional setting to define the caching mode which defaults to false (no caching).
+ *   Set to global for a single global cache entry (which cannot be used for user-specific reports) 
+ *   or set to perUser to cache the report on a per user basis.
+ * * cacheTimeout - number of seconds before which the cache cannot expire. After this, there is a random
+ *   chance of expiry on each hit. Defaults to 3600.
+ * Additionally, provide a query parameter for each report parameter value, orderby, sortdir, limit or offset you wish to pass 
+ * to the report. 
+ * Prints out a JSON string for the report response.
+ * 
+ */
+function iform_mobile_auth_report() {
+  //drupal_set_header('Content-Type: application/json; charset=UTF-8');
+  // Don't use $_REQUEST as it escapes values in strange way
+  $request = $_POST + $_GET;
+  iform_mobile_auth_log('iform_mobile_auth_report');
+  iform_mobile_auth_log('REQUEST');
+  iform_mobile_auth_log(print_r($request,1));
+  if (empty($request['report'])) {
+    print 'Bad request';
+    iform_mobile_auth_log('Missing report parameter');
+    return;
+  }
+  
+  if (!$existing_user = iform_mobile_auth_authorise_request())    
+    return;
+  $connection = iform_get_connection_details(NULL);
+  $auth = data_entry_helper::get_read_auth($connection['website_id'], $connection['password']);
+  $url = helper_config::$base_url.'index.php/services/report/requestReport';
+  $caching = !empty($request['caching']) ? $request['caching'] : 'false';
+  $cacheTimeout = !empty($request['cacheTimeout']) ? $request['cacheTimeout'] : 3600;
+  unset($request['appsecret']);
+  unset($request['usersecret']);
+  unset($request['email']);
+  unset($request['cacheTimeout']);
+  $defaults = array(
+    'reportSource' => 'local'
+  );
+  if ($caching==='false' || $request['caching']==='perUser')
+    $request['user_id'] = $existing_user->profile_indicia_user_id;
+  $request = array_merge($defaults, $auth, $request);
+  $cacheLoaded = false;
+  if ($caching!=='false') {
+    $response = data_entry_helper::cache_get($request, $cacheTimeout);
+    if ($response!==false) {
+      $response = json_decode($response, true);
+      $cacheLoaded = true;
+      print "cache read $cacheTimeout<br/>";
+    }
+  }
+  if (!isset($response) || $response===false) {
+    $response = data_entry_helper::http_post($url . '?' . data_entry_helper::array_to_query_string($request));
+  }
+  if (isset($response['output'])) {
+    print ($response['output']);
+    if ($caching!=='false' && !$cacheLoaded ) { 
+      data_entry_helper::cache_set($request, json_encode($response), $cacheTimeout);
+      print ' Stored in cache.<br/> ';
+    }
+  }
+  else {
+    print 'Bad request';
+    iform_mobile_auth_log('Report returned '.print_r($response, true));
+  }
+  return;
+}
+
+/**
+ * Authorise a request to either submit or read records from an app.
+ *
+ * Uses the posted usersecret, appsecret and email to check that the app is authorised and
+ * that the user is valid and activated.
+ * @return object Drupal user object, or FALSE if not authorised.
+ */
+function iform_mobile_auth_authorise_request() {
+  $saved_appsecret = variable_get('iform_mobile_auth_shared_secret', NULL);
+    
+  // pull out expected parameters from POST request
+  $usersecret = $_POST['usersecret'];
+  $provided_appsecret = $_POST['appsecret'];
+  $email = $_POST['email'];
+  
+  // Step 1
+  // Verify APP shared secret
+  if (empty($provided_appsecret) || $provided_appsecret != $saved_appsecret)
+  {
+    drupal_set_header('HTTP/1.1 400 Bad Request');
+    print 'Bad request';
+    iform_mobile_auth_log('Missing or incorrect shared app secret');
+    return FALSE;
+  }
+  
+  // Step 2.
+  // Locate corresponding user
+  $existing_user = user_load(array('mail' => $email));
+
+  if (empty($email) || $existing_user == FALSE)
+  {
+    if (empty($email)) $email = "app@mobile.net";
+    iform_mobile_auth_log('No corresponding user found with email');
+    $existing_user = (object)array("uid" => 0,
+                                   profile_indicia_user_id => "1", 
+                                   "name" => $email,
+                                   "mail" => $email,
+                                   'profile_first_name' => "Anonymous",
+                                   'profile_last_name' => "Anonymous");
+  }
+  else
+  {
+    // load profile fields
+    profile_load_profile($existing_user);
+    // Step 3.
+    // Verify USER shared secret...
+    if (empty($usersecret) || $usersecret != $existing_user->profile_indicia_mobile_auth_shared_secret)
+    {
+      drupal_set_header('HTTP/1.1 400 Bad Request');
+      print 'Bad request';
+      iform_mobile_auth_log('User secret incorrect');
+      return FALSE;
+    }
+    // Step 4.
+    // Check user activation status
+    if ($existing_user->status != 1)
+    {
+      iform_mobile_auth_log('User not activated');
+      drupal_set_header('HTTP/1.1 407 Proxy Authentication Required');
+      print 'User not activated';
+      return FALSE;
+    }
+  }  
+  // assign this user to gobal user var so that it can be added to the indicia submission
+  iform_mobile_auth_log(print_r($existing_user,1));
+  $GLOBALS['user'] = $existing_user;
+  return $existing_user;
 }
 
 
