@@ -1,0 +1,156 @@
+<?php
+//An array to hold the ids of the existing user_email_notification_settings so we no when to update rather than add a new record
+$existingIds=array();
+function notification_emails_user($op, &$edit, &$account, $category = NULL) {
+  iform_load_helpers(array('data_entry_helper'));
+  $userId = hostsite_get_user_field('indicia_user_id');
+  $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
+  switch ($op) {
+    //When a user is created, then automatically create profile fields
+    //However as the user id is only created in the warehouse when the user first logs into drupal,
+    //we can only create the user email notification settings at that point
+    //So whenever a user logs in, if they don't have any settings for email notifications at all yet
+    //then create some
+    //We need to use a report rather than just the database view here as the view would return nothing if items had been deleted.
+    //We need to know when there are deleted items as it means the user previously had settings that they have removed themselves, so
+    //we don't want to create more defaults in that situation.
+    case 'login':
+      $freqSettingsData = data_entry_helper::get_report_data(array(
+        'dataSource'=>'library/user_email_notification_settings/user_email_notification_settings_inc_deleted',
+        'readAuth'=>$auth['read'],
+        'extraParams'=>array('user_id' => $userId)
+      ));
+
+      if (empty($freqSettingsData)) {
+        $submissionForNewUser['profile_species_alert_notification_email_frequency']='Hourly';
+        $submissionForNewUser['profile_comment_notification_email_frequency']='Daily';
+        $submissionForNewUser['profile_verification_notification_email_frequency']='Daily';
+        $submissionForNewUser['profile_verifier_task_notification_email_frequency']='Daily';
+        $submissionForNewUser['profile_milestone_notification_email_frequency']='Daily';
+        //Also update the warehouse when user created
+        create_notification_emails_settings_submission($submissionForNewUser);
+      }
+      break;
+    case 'submit':
+      //On save update the warehouse so the profile is synced with warehouse.
+      create_notification_emails_settings_submission($edit);
+      break;
+  }
+}
+
+/* 
+ * When the screen loads, always try to load the profile fields on the page from the warehouse where possible.
+ */
+function notification_emails_form_alter(&$form, &$form_state, $form_id) {
+  //We don't want to perform this code on every screen!
+  if (isset($form[t('Notification emails')])) {
+    global $existingIds;
+    $allDropDowns=array('C','V','S','VT','M');
+    $setDropDowns=array();
+    iform_load_helpers(array('data_entry_helper'));
+    $userId = hostsite_get_user_field('indicia_user_id');
+    $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
+    //Get existing data from the warehouse for the user
+    $freqSettingsData = data_entry_helper::get_population_data(array(
+      'table' => 'user_email_notification_setting',
+      'extraParams' => $auth['read'] + array('user_id' => $userId),
+      'nocache' => true
+    ));
+    //If we find existing data in the warehouse, then automatically set the drop-down to that value on the page.
+    //Also save the id to an array for use during submission
+    foreach ($freqSettingsData as $freqSettingsDataItem) {
+      if ($freqSettingsDataItem['notification_source_type']=='C') {
+        $form[t('Notification emails')]['profile_comment_notification_email_frequency']['#default_value']=$freqSettingsDataItem['notification_frequency'];
+        $existingIds[$freqSettingsDataItem['notification_source_type']]=$freqSettingsDataItem['id'];
+        $setDropDowns[]=$freqSettingsDataItem['notification_source_type'];
+      }
+      if ($freqSettingsDataItem['notification_source_type']=='V') {
+        $form[t('Notification emails')]['profile_verification_notification_email_frequency']['#default_value']=$freqSettingsDataItem['notification_frequency'];
+        $existingIds[$freqSettingsDataItem['notification_source_type']]=$freqSettingsDataItem['id'];  
+        $setDropDowns[]=$freqSettingsDataItem['notification_source_type'];
+      }
+      if ($freqSettingsDataItem['notification_source_type']=='S') {
+        $form[t('Notification emails')]['profile_species_alert_notification_email_frequency']['#default_value']=$freqSettingsDataItem['notification_frequency'];
+        $existingIds[$freqSettingsDataItem['notification_source_type']]=$freqSettingsDataItem['id'];
+        $setDropDowns[]=$freqSettingsDataItem['notification_source_type'];
+      }
+      if ($freqSettingsDataItem['notification_source_type']=='VT') {
+        $form[t('Notification emails')]['profile_verifier_task_notification_email_frequency']['#default_value']=$freqSettingsDataItem['notification_frequency'];
+        $existingIds[$freqSettingsDataItem['notification_source_type']]=$freqSettingsDataItem['id'];
+        $setDropDowns[]=$freqSettingsDataItem['notification_source_type'];
+      }
+      if ($freqSettingsDataItem['notification_source_type']=='M') {
+        $form[t('Notification emails')]['profile_milestone_notification_email_frequency']['#default_value']=$freqSettingsDataItem['notification_frequency'];
+        $existingIds[$freqSettingsDataItem['notification_source_type']]=$freqSettingsDataItem['id'];
+        $setDropDowns[]=$freqSettingsDataItem['notification_source_type'];
+      }
+    } 
+    //Any drop-downs that have not been set already should be set to empty
+    foreach ($allDropDowns as $dropDown) {
+      if (!in_array($dropDown,$setDropDowns)) {
+        if ($dropDown==='C') 
+          $form[t('Notification emails')]['profile_comment_notification_email_frequency']['#default_value']='0';
+        if ($dropDown==='V') 
+          $form[t('Notification emails')]['profile_verification_notification_email_frequency']['#default_value']='0';
+        if ($dropDown==='S') 
+          $form[t('Notification emails')]['profile_species_alert_notification_email_frequency']['#default_value']='0';
+        if ($dropDown==='VT') 
+          $form[t('Notification emails')]['profile_verifier_task_notification_email_frequency']['#default_value']='0';
+        if ($dropDown==='M') 
+          $form[t('Notification emails')]['profile_milestone_notification_email_frequency']['#default_value']='0';
+      }
+    }
+  }
+}
+
+/*
+ * Create data structure to submit to warehouse when user saves
+ */
+function create_notification_emails_settings_submission($edit) {
+  global $existingIds;
+  $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
+  $submission['id']='user_email_notification_setting';
+  $submission['submission_list']['entries'] = array();
+  foreach ($edit as $fieldname => $value) {
+    //Each drop-down is related to a notification source type
+    if ($fieldname==='profile_comment_notification_email_frequency')
+      $sourceType='C';
+    if ($fieldname==='profile_verification_notification_email_frequency')
+      $sourceType='V';
+    if ($fieldname==='profile_species_alert_notification_email_frequency')
+      $sourceType='S';
+    if ($fieldname==='profile_verifier_task_notification_email_frequency')
+      $sourceType='VT';
+    if ($fieldname==='profile_milestone_notification_email_frequency')
+      $sourceType='M';
+
+    //If the drop-down is set to blank, and it is a new item rather than a drop-down the user has changed to being being from an existing selection, then we can ignore this code as we don't need to take any action.
+    if (!($edit[$fieldname]==='0'&&empty($existingIds[$sourceType]))) {
+      //We are only interested in the drop-downs, nothing else in the $edit array
+      if ($edit[$fieldname]==='0'||$edit[$fieldname]==='IH'||$edit[$fieldname]==='D'||$edit[$fieldname]==='W') {
+        $data['id']='user_email_notification_setting';
+        if (!empty($existingIds[$sourceType]))
+          $data['fields']['id']['value'] = $existingIds[$sourceType];
+        //For existing records that are then set to blank, we can delete the user_email_notification_setting
+        if ($edit[$fieldname]==='0') {
+          $data['fields']['deleted']['value']='t';
+        } else {
+          $data['fields']['user_id']['value'] = hostsite_get_user_field('indicia_user_id');
+          $data['fields']['notification_source_type']['value'] = $sourceType;
+          //The source frequency to use is simply the value from the select drop-down, so grab from post for the fieldname
+          $data['fields']['notification_frequency']['value'] = $edit[$fieldname];
+        }
+        $submission['submission_list']['entries'][] = $data;
+        //Set the data holder to empty once we have given it to the submissions list so we can re-use it
+        $data=array();
+      }
+    }
+
+  }
+  //Submit the stucture for processing
+  $response = data_entry_helper::forward_post_to('save', $submission, $auth['write_tokens']);
+  if (!(is_array($response) && array_key_exists('success', $response)))
+    drupal_set_message(print_r($response,true));
+  return $response;
+}
+
