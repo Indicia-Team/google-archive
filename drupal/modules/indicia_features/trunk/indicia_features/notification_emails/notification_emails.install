@@ -1,0 +1,55 @@
+<?php
+
+require_once('notification_emails.setup.inc');
+
+/**
+ * Implementation of hook_install
+ * Adds a number of fields to the user profile for storing notification email settings.
+ */
+function notification_emails_install() {
+  module_load_include('module', 'notification_emails');
+  $fields = _notification_emails_profile_fields();
+  foreach($fields as $name => $fieldDef) {
+    //Go through each field and added them to the profile during installation
+    notification_emails_add_profile_field($name, $fieldDef);
+  }
+}
+
+/**
+ * Implementation of hook_uninstall
+ * Removes the installed profile fields
+ */
+function notification_emails_uninstall() {
+  $fields = _notification_emails_profile_fields();
+  foreach($fields as $name => $fieldDef) {
+    $field = db_fetch_object(db_query("select fid from {profile_fields} where name='%s'", $name));
+    db_query("delete from {profile_values} where fid=%d", $field->fid);
+    db_query("delete from {profile_fields} where fid=%d", $field->fid);
+  }
+}
+
+/**
+ * Add a field to the list of available user profile fields.
+ */
+
+function notification_emails_add_profile_field($name, $fieldDef) {
+  db_query("INSERT INTO {profile_fields} (title, name, explanation, category, type, weight, required, register, visibility, autocomplete, options, page) VALUES ('%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d, '%s', '%s')",
+      $fieldDef['title'],
+      $name,
+      $fieldDef['explanation'],
+      $fieldDef['category'],
+      $fieldDef['type'],
+      $fieldDef['weight'],
+      $fieldDef['required'],
+      $fieldDef['register'],
+      $fieldDef['visibility'],
+      $fieldDef['autocomplete'],
+      $fieldDef['options'],
+      $fieldDef['page']
+  );
+}
+
+function notification_emails_enable() {
+  drupal_set_message(t('You have enable to the Notification Emails module. You are now able to manage how often you will receive emails which alert you to new notifications that you have received.
+          For this to work the Notification Emails warehouse module must also be enabled.'));
+}
