@@ -1,4 +1,20 @@
 <?php
+
+/**
+ * @file
+ * Iform Mobile Authentication Module's Core functionality.
+ */
+
+/*
+ * Implements hook_perm().
+ */
+  function iform_mobile_auth_perm(){
+    return array(
+      'admin', 
+      'user'
+     ); 
+ }
+
 /*
  * Submit the relevant information to indicia
  */
@@ -56,7 +72,6 @@ function iform_mobile_auth_profile_save_fields(&$edit, &$user, $category){
       $name=$field->name;
       $edit->$name = serialize($edit->$name);
     }
-    
     $name = $field->name;
 
     db_query("DELETE FROM {profile_values} WHERE fid = %d AND uid = %d", $field->fid, $user->uid);
@@ -88,81 +103,57 @@ function iform_mobile_auth_menu() {
     'page arguments'    => array(3,4),
     'access callback'   => true,
   );
-  
   // Mobile based record submission
   $items['mobile/submit'] = array(
     'title'             => 'Submit a sample',
     'page callback'     => 'iform_mobile_auth_client_submission',
     'access callback'   => true,
   );
-  
   // Mobile based report access
   $items['mobile/report'] = array(
     'title'             => 'Access a report',
     'page callback'     => 'iform_mobile_auth_report',
     'access callback'   => true,
   );
-  
-  // Configuration
-  $items['admin/settings/iform/mobile'] = array(
-    'title' => 'Mobile Auth Settings',
+  //User Interface options
+  //Dashboard
+  $items['admin/settings/iform/mobile/dashboard'] = array(
+    'title' => 'Mobile Authentication',
     'description' =>  'Configure variables relating to the mobile authorisation module',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('iform_mobile_auth_configuration_form'),
-    'access arguments' => array('create iform'),
+    'page callback' => 'iform_mobile_auth_dashboard',
+    'access arguments' => array('user'),
+    'file' => 'iform_mobile_auth.admin.inc',
     'type' => MENU_LOCAL_TASK,
   );
-
+  //Add
+  $items['admin/settings/iform/mobile'] = array(
+    'title' => 'Mobile Authentication',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('iform_mobile_auth_app'),
+    'access arguments' => array('user'),
+    'file' => 'iform_mobile_auth.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+  //Edit
+  $items['admin/settings/iform/mobile/%iform_mobile_auth_app'] = array(
+    'title' => 'App settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('iform_mobile_auth_app', 4),
+    'access arguments' => array('user'),
+    'file' => 'iform_mobile_auth.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+  //Delete
+  $items['admin/settings/iform/mobile/delete/%iform_mobile_auth_app'] = array(
+    'title' => 'Delete App',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('iform_mobile_auth_delete', 5),
+    'access arguments' => array('user'),
+    'file' => 'iform_mobile_auth.admin.inc',
+    'type' => MENU_CALLBACK,
+  ); 
   return $items;
 }
-
-
-/** 
- * Handles the basic configuration settings for this module
- */
-function iform_mobile_auth_configuration_form() {
-  $form['iform_mobile_auth_debug'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('DEBUG mode'),
-    '#default_value' => variable_get('iform_mobile_auth_debug', 0),
-    '#description' => t('Check to enable debug mode. DO NOT ENABLE ON YOUR PRODUCTION SITE')
-  );
-  $form['iform_mobile_auth_shared_secret'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Shared secret'),
-    '#default_value' => variable_get('iform_mobile_auth_shared_secret', iform_mobile_auth_generate_random_string(8)),
-    '#description' => t('Set the shared secret for this module')
-  );
-  $form['iform_mobile_auth_registration_subject'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Subject'),
-    '#default_value' => variable_get('iform_mobile_auth_registration_subject', "Welcome to the !site"),
-    '#description' => t('User registration email subject heading. Note: Only !site is supported.')
-  );
-  $form['iform_mobile_auth_registration_body'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Body'),
-    '#default_value' => variable_get('iform_mobile_auth_registration_body', "Activate your account by clicking on the following link:<br/>!activation_url"),
-    '#description' => t('User registration email body. Note: only !activation_url is supported. Emails are sent in plain text <i>not</i> HMTL!')
-  );
-  
-  $form['iform_mobile_auth_registration_redirect'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Redirection link'),
-    '#default_value' => variable_get('iform_mobile_auth_registration_redirect', "<front>"),
-    '#description' => t('The url to redirect users to after clicking on the confirmation link. E.g. "&lt;front&gt;", "/node", "http://somewhere.com"')
-  );
-  
-  $form['iform_mobile_auth_registration_redirect_unsuccessful'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Invalid redirection link'),
-    '#default_value' => variable_get('iform_mobile_auth_registration_redirect_unsuccessful', "<front>"),
-    '#description' => t('The url to redirect anonymous users to if attempting to reactive an already expired or invalid link E.g. "&lt;front&gt;", "/node", "http://somewhere.com"')
-  );
-  
-  return system_settings_form($form);
-}
-
 
 /**
  * This function handles the register/login request from a mobile app.
@@ -191,6 +182,7 @@ function iform_mobile_auth_user_register() {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $provided_appsecret = $_POST['appsecret'];
+    $provided_appname = $_POST['appname'];
     
     // Step 1.
     // Check minimum valid parameters
@@ -204,7 +196,7 @@ function iform_mobile_auth_user_register() {
     
     // Step 2.
     // Reject submissions with an incorrect secret (or instances where secret is not set)
-    if ($saved_appsecret == NULL || trim($saved_appsecret) != trim($provided_appsecret))
+    if (!iform_mobile_auth_authorise_app($provided_appname, $provided_appsecret))
     {
         iform_mobile_auth_log('Missing or incorrect shared app secret');
         drupal_set_header('HTTP/1.1 400 Bad Request');
@@ -280,7 +272,6 @@ function iform_mobile_auth_user_register() {
                                                                      $existing_user->profile_first_name,
                                                                      $existing_user->profile_last_name,
                                                                      $existing_user->uid);
-                    
                     
                     if (is_int($indicia_user_id)) {
                         $category = iform_mobile_auth_profile_fields()->profile_indicia_user_id->category;
@@ -708,16 +699,16 @@ function iform_mobile_auth_report() {
  * @return object Drupal user object, or FALSE if not authorised.
  */
 function iform_mobile_auth_authorise_request() {
-  $saved_appsecret = variable_get('iform_mobile_auth_shared_secret', NULL);
     
   // pull out expected parameters from POST request
   $usersecret = $_POST['usersecret'];
   $provided_appsecret = $_POST['appsecret'];
+  $provided_appname = $_POST['appname'];
   $email = $_POST['email'];
   
   // Step 1
   // Verify APP shared secret
-  if (empty($provided_appsecret) || $provided_appsecret != $saved_appsecret)
+ if (!iform_mobile_auth_authorise_app($provided_appname, $provided_appsecret))
   {
     drupal_set_header('HTTP/1.1 400 Bad Request');
     print 'Bad request';
@@ -770,9 +761,63 @@ function iform_mobile_auth_authorise_request() {
 }
 
 
-/************************/
-/*** HELPER FUNCTIONS ***/
-/************************/
+##########################
+#### HELPER FUNCTIONS ####
+##########################
+
+/**
+ * Checks if the user is allowed to see a saved app account.
+ */  
+function userHasPermission($app = NULL){
+   global $user;
+   return user_access('admin') || (!is_null($app) && $app->created_by === $user->uid);
+ }
+
+/**
+ * Implements hook_load() to load the apps from the database.
+ */
+function iform_mobile_auth_app_load($id = NULL) {
+  if ($id){
+    //get specific app account
+    $apps = db_query("SELECT * FROM {iform_mobile_auth} WHERE id = %d ORDER BY title", $id);
+    return $apps;
+  } else{
+    //all accounts
+    $apps = db_query("SELECT * FROM {iform_mobile_auth} ORDER BY title");
+    return $apps;
+  }
+} 
+
+
+/**
+ * The core function that checks if the sent mobile application password and name 
+ * matches any in the database.
+ * 
+ * If no $name was provided then the account is assumed to be anonymous.
+ * 
+ * This function iterates through the list of app accounts from database table
+ * with the matching name. This means it is allowed for one appname to have more than one
+ * appsecret, and if any of the secrets match the provided secret than the authorisation is given.
+ */
+function iform_mobile_auth_authorise_app($name, $secret)
+{
+  if (empty($secret)){
+    return FALSE; 
+  }
+
+  //case for anonymous user
+  $name = empty($name) ? 'anonymous' : $name;
+  
+  $result = db_query("SELECT * FROM {iform_mobile_auth} WHERE name = '%s'", $name);
+  while ($app = db_fetch_object($result)) {
+      if ($secret === $app->secret){
+        return TRUE;
+        break;
+      }
+  }
+
+  return FALSE;
+}
 
 
 /**
