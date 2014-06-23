@@ -56,7 +56,7 @@ require_once('iform_mobile_auth.module');
         'secret'=> array(
           'description' => 'App secret.',
           'type' => 'varchar',
-          'length' => 32,
+          'length' => 60,
           'not null' => TRUE,
         ),
         'registration_subject'=> array(
