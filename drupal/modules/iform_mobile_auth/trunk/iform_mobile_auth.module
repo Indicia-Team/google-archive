@@ -5,6 +5,8 @@
  * Iform Mobile Authentication Module's Core functionality.
  */
 
+require 'phpass/PasswordHash.php';
+
 /*
  * Implements hook_perm().
  */
@@ -768,9 +770,9 @@ function iform_mobile_auth_authorise_request() {
 /**
  * Checks if the user is allowed to see a saved app account.
  */  
-function userHasPermission($app = NULL){
+function user_has_permission($app = NULL){
    global $user;
-   return user_access('admin') || (!is_null($app) && $app->created_by === $user->uid);
+   return user_access('admin') || (!is_null($app) && $app['created_by'] === $user->uid);
  }
 
 /**
@@ -779,13 +781,19 @@ function userHasPermission($app = NULL){
 function iform_mobile_auth_app_load($id = NULL) {
   if ($id){
     //get specific app account
-    $apps = db_query("SELECT * FROM {iform_mobile_auth} WHERE id = %d ORDER BY title", $id);
-    return $apps;
+    $results = db_query("SELECT * FROM {iform_mobile_auth} WHERE id = %d ORDER BY title", $id);
   } else{
     //all accounts
-    $apps = db_query("SELECT * FROM {iform_mobile_auth} ORDER BY title");
-    return $apps;
+    $results = db_query("SELECT * FROM {iform_mobile_auth} ORDER BY title");
   }
+  
+  //transform an array of apps
+  $apps = array();
+  while ($app = db_fetch_array($results)){
+      $apps[] = $app;
+  }
+  
+  return $apps;
 } 
 
 
@@ -809,8 +817,9 @@ function iform_mobile_auth_authorise_app($name, $secret)
   $name = empty($name) ? 'anonymous' : $name;
   
   $result = db_query("SELECT * FROM {iform_mobile_auth} WHERE name = '%s'", $name);
-  while ($app = db_fetch_object($result)) {
-      if ($secret === $app->secret){
+  while ($app = db_fetch_array($result)) {
+      $current_secret = $app['secret'];
+      if (verify_hash($secret, $current_secret)){
         return TRUE;
         break;
       }
@@ -819,6 +828,27 @@ function iform_mobile_auth_authorise_app($name, $secret)
   return FALSE;
 }
 
+/*
+ * Generates a hashed secret.
+ * Uses PHPASS library for pre PHP 5.3
+ */
+function generate_hash($secret) {
+    $t_hasher = new PasswordHash(8, FALSE);
+    $hashed_secret = $t_hasher->HashPassword($secret);
+    unset($t_hasher);
+    return $hashed_secret;
+}
+
+/*
+ * Verifies a hashed password.
+ * Uses PHPASS library for pre PHP 5.3
+ */
+function verify_hash($secret, $hashed_secret) {
+    $t_hasher = new PasswordHash(8, FALSE);
+    $check = $t_hasher->CheckPassword($secret, $hashed_secret);
+    unset($t_hasher);
+    return $check;
+}
 
 /**
  * A function to escape user input.
