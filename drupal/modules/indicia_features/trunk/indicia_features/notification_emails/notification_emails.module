@@ -6,7 +6,7 @@ $existingIds=array();
 function notification_emails_user($op, &$edit, &$account, $category = NULL) {
   iform_load_helpers(array('data_entry_helper'));
   $userId = hostsite_get_user_field('indicia_user_id');
-  $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
+  $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
   switch ($op) {
     //When a user is created, then automatically create profile fields
     //However as the user id is only created in the warehouse when the user first logs into drupal,
@@ -19,13 +19,13 @@ function notification_emails_user($op, &$edit, &$account, $category = NULL) {
     case 'login':
       $freqSettingsData = data_entry_helper::get_report_data(array(
         'dataSource'=>'library/user_email_notification_settings/user_email_notification_settings_inc_deleted',
-        'readAuth'=>$auth['read'],
+        'readAuth'=>$readAuth,
         'extraParams'=>array('user_id' => $userId)
       ));
-
       if (empty($freqSettingsData)) {
         $submissionForNewUser['email_species_alert_frequency']='Hourly';
         $submissionForNewUser['email_comment_frequency']='Daily';
+        $submissionForNewUser['email_record_cleaner_frequency']='Daily';
         $submissionForNewUser['email_verification_frequency']='Daily';
         $submissionForNewUser['email_milestone_frequency']='Daily';
         $submissionForNewUser['email_verifier_task_frequency']='Daily';
@@ -111,6 +111,7 @@ jQuery(document).ready(function($) {
     );
     $selects = array(
       array('comment', 'comments on your records', 'C'),
+      array('record_cleaner', 'automated Record Cleaner record checks', 'A'),
       array('verification', 'verification of your records', 'V'),
       array('milestone', "milestones and awards you've achieved", 'M',),
     );
@@ -174,6 +175,9 @@ function create_notification_emails_settings_submission($edit) {
         break;
       case 'email_comment_frequency' :
         $sourceType='C';
+        break;
+      case 'email_record_cleaner_frequency' :
+        $sourceType='A';
         break;
       case 'email_verification_frequency' :
         $sourceType='V';
