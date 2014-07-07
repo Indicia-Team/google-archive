@@ -23,12 +23,12 @@ function notification_emails_user($op, &$edit, &$account, $category = NULL) {
         'extraParams'=>array('user_id' => $userId)
       ));
       if (empty($freqSettingsData)) {
-        $submissionForNewUser['email_species_alert_frequency']='Hourly';
-        $submissionForNewUser['email_comment_frequency']='Daily';
-        $submissionForNewUser['email_record_cleaner_frequency']='Daily';
-        $submissionForNewUser['email_verification_frequency']='Daily';
-        $submissionForNewUser['email_milestone_frequency']='Daily';
-        $submissionForNewUser['email_verifier_task_frequency']='Daily';
+        $submissionForNewUser['email_species_alert_frequency']='IH';
+        $submissionForNewUser['email_comment_frequency']='D';
+        $submissionForNewUser['email_record_cleaner_frequency']='D';
+        $submissionForNewUser['email_verification_frequency']='D';
+        $submissionForNewUser['email_milestone_frequency']='D';
+        $submissionForNewUser['email_verifier_task_frequency']='D';
         //Also update the warehouse when user created
         create_notification_emails_settings_submission($submissionForNewUser);
       }
