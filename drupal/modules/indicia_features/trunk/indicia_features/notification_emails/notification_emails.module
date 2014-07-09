@@ -29,6 +29,7 @@ function notification_emails_user($op, &$edit, &$account, $category = NULL) {
         $submissionForNewUser['email_verification_frequency']='D';
         $submissionForNewUser['email_milestone_frequency']='D';
         $submissionForNewUser['email_verifier_task_frequency']='D';
+        $submissionForNewUser['email_pending_record_task_frequency']='D';
         //Also update the warehouse when user created
         create_notification_emails_settings_submission($submissionForNewUser);
         drupal_set_message(t('Your account has been configured so that you will receive email updates about your notifications, including ' .
@@ -69,11 +70,11 @@ function notification_emails_form_alter(&$form, &$form_state, $form_id) {
     drupal_add_js("
 jQuery(document).ready(function($) {
   $('#edit-email-frequency').change(function() {
-    $('#edit-email-comment-frequency,#edit-email-verification-frequency,#edit-email-milestone-frequency,#edit-email-verifier-task-frequency').val($('#edit-email-frequency').val());
+    $('#edit-email-comment-frequency,#edit-email-verification-frequency,#edit-email-milestone-frequency,#edit-email-verifier-task-frequency,#edit-email-pending-record-task-frequency').val($('#edit-email-frequency').val());
   });
-  $('#edit-email-comment-frequency,#edit-email-verification-frequency,#edit-email-milestone-frequency,#edit-email-verifier-task-frequency').change(function() {
+  $('#edit-email-comment-frequency,#edit-email-verification-frequency,#edit-email-milestone-frequency,#edit-email-verifier-task-frequency,#edit-email-pending-record-task-frequency').change(function() {
     var firstFound=false, mixFound = false;
-    $.each($('#edit-email-comment-frequency,#edit-email-verification-frequency,#edit-email-milestone-frequency,#edit-email-verifier-task-frequency'), function() {
+    $.each($('#edit-email-comment-frequency,#edit-email-verification-frequency,#edit-email-milestone-frequency,#edit-email-verifier-task-frequency,#edit-email-pending-record-task-frequency'), function() {
       if (!firstFound) {
         firstFound = $(this).val();
       }
@@ -120,6 +121,8 @@ jQuery(document).ready(function($) {
     );
     if (user_access('verification'))
       $selects[] = array('verifier_task', "records for you to verify", 'VT');
+    if (user_access('mentoring')||user_access('moderator'))
+      $selects[] = array('pending_record_task', "records for you to check", 'PT');
     $form['email_fieldset']['advanced_email_fieldset'] = array_merge(
         $form['email_fieldset']['advanced_email_fieldset'],
         notification_emails_advanced_selects($selects, $overallMode)
@@ -190,6 +193,9 @@ function create_notification_emails_settings_submission($edit) {
         break;
       case 'email_verifier_task_frequency' :
         $sourceType='VT';
+        break;
+      case 'email_pending_record_task_frequency' :
+        $sourceType='PT';
         break;
       default :
         $sourceType=false; // ignore any other submitted fields
