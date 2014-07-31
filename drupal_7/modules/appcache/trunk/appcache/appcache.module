@@ -114,3 +114,10 @@ function appcache_appcache_cache() {
   return variable_get('appcache_cache', "");
 }
 
+/**
+ * Implements hook_appcache_cache_query().
+ */
+function appcache_appcache_cache_query() {
+  return variable_get('appcache_cache_query', "");
+}
+

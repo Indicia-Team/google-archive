@@ -44,6 +44,20 @@ function appcache_settings_form($form_state) {
     '#description' => t('Enter the resources to store in the application cache. Do not include the leading %base_url.', array('%base_url' => $GLOBALS['base_url'])),
     '#default_value' => implode("\r\n", variable_get('appcache_cache', array())),
   );
+  
+  $form['appcache_custom']['appcache_cache_extra'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('CACHE section extra parameters'),
+    '#collapsible' => TRUE, 
+    '#collapsed' => TRUE,
+  );
+  
+  $form['appcache_custom']['appcache_cache_extra']['appcache_cache_query'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Query string added'),
+    '#description' => t('A query string will be appended to the clean ending of JavaScript and CSS files. Current string is: %query_string', array('%query_string' => variable_get('css_js_query_string', 0))),
+    '#default_value' => implode("\r\n", variable_get('appcache_cache_query', array())),
+  );
 
   $form['appcache_custom']['appcache_network'] = array(
     '#type' => 'textarea',
@@ -68,7 +82,7 @@ function appcache_settings_form($form_state) {
  * FAPI submit callback to save appcache sections as arrays.
  */
 function appcache_settings_submit($form, &$form_state) {
-  $sections = array('cache', 'network', 'fallback');
+  $sections = array('cache', 'cache_query', 'network', 'fallback');
 
   foreach ($sections as $section) {
     $form_state['values']['appcache_' . $section] = explode("\r\n", $form_state['values']['appcache_' . $section]);

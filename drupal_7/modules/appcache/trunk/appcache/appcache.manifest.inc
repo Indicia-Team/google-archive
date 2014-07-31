@@ -28,10 +28,12 @@ function appcache_manifest() {
     $fallback = module_invoke_all('appcache_fallback');
     $network = module_invoke_all('appcache_network');
     $cache = module_invoke_all('appcache_cache');
-
+    $cache_query = module_invoke_all('appcache_cache_query');
+    
     drupal_alter('appcache_fallback', $fallback);
     drupal_alter('appcache_network', $network);
     drupal_alter('appcache_cache', $cache);
+    drupal_alter('appcache_cache_query', $cache_query);
   }
 
   // If no fallback is set, create one.
@@ -46,6 +48,25 @@ function appcache_manifest() {
   }
   if (!empty($cache)) {
     $manifest['cache'] = "CACHE:\n" . implode("\n", $cache);
+    
+    if(!empty($cache_query)){
+
+      //automatic update to CSS and JS query string for cache management
+      //iterates through CACHE list until finds an empty line
+      $default_query_string = variable_get('css_js_query_string', 0);
+    
+      foreach ($cache_query as &$line){
+        if (!empty($line)){
+         //apply only to JS and CSS  
+         if(preg_match('/\.(js|JS|css|CSS)$/', $line)){
+          $line = trim($line) . '?' . $default_query_string;
+         }
+       } else {
+         break;
+       }
+      }
+      $manifest['cache'] .= "\n" . implode("\n", $cache_query);
+    }
   }
 
   return implode("\n", $manifest) . "\n";
