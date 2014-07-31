@@ -12,6 +12,7 @@ function appcache_uninstall() {
   variable_del("appcache_enabled");
   variable_del("appcache_automatic");
   variable_del("appcache_cache");
+  variable_del("appcache_cache_query");
   variable_del("appcache_network");
   variable_del("appcache_fallback");
   variable_del("appcache_validate_endpoint");
