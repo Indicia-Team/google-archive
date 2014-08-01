@@ -40,7 +40,13 @@
  * @see template_preprocess_html()
  * @see template_process()
  */
+ 
+	// Get settings to pass to JavaScript
+	$start_path = base_path() . mobile_jquery_theme_get_setting('app_home');
+	// Get path to JavaScript
+	$theme_path = base_path() . $GLOBALS['theme_path']; 
 ?>
+		
 <!DOCTYPE html>
 <html> 
 	<head>
@@ -60,12 +66,6 @@
 	  
 	  <!-- JavaScript -->
 	  <?php print $scripts; ?>
-	  <?php 
-		// Get settings to pass to JavaScript
-		$start_path = base_path() . mobile_jquery_theme_get_setting('app_home');
-		// Get path to JavaScript
-		$theme_path = base_path() . $GLOBALS['theme_path']; 
-		?>
 		
 	  <!-- APP libs-->
 	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/app.js"></script>
