@@ -42,48 +42,58 @@
  */
 ?>
 <!DOCTYPE html>
-<html lang="<?php print $language->language; ?>" manifest="<?php print base_path(); ?>manifest.appcache">
+<html> 
+	<head>
+	  <meta name="mobile-web-app-capable" content="yes">
+	  <meta name="apple-mobile-web-app-capable" content="yes">
+	  
+	  <!-- ICONS -->
+	  <link rel="shortcut icon" sizes="196x196" href="">
+	  <link rel="shortcut icon" sizes="196x196" href="">
+	  <link href="" sizes="57x57" rel="apple-touch-icon">
+	  <link href="" sizes="72x72" rel="apple-touch-icon">
+	  <link href="" sizes="114x114" rel="apple-touch-icon">
+	  <link href="" sizes="144x144" rel="apple-touch-icon">
 
-<head>
-  <!-- ICONS -->
-  <?php $file_path = variable_get('file_' . file_default_scheme() . '_path', conf_path() . '/files'); ?>
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android128.png">
-  <link rel="shortcut icon" sizes="196x196" href="<?php print $file_path; ?>/android196.png">
-  <link href="<?php print $file_path; ?>/ios57.png" sizes="57x57" rel="apple-touch-icon">
-  <link href="<?php print $file_path; ?>/ios72.png" sizes="72x72" rel="apple-touch-icon">
-  <link href="<?php print $file_path; ?>/ios114.png" sizes="114x114" rel="apple-touch-icon">
-  <link href="<?php print $file_path; ?>/ios144.png" sizes="144x144" rel="apple-touch-icon">
-  
-  <?php print $head; ?>
-  <?php if ($viewport): ?>
-  <meta name="viewport" content="<?php print $viewport; ?>" /> 
-  <?php endif; ?>
-  <title><?php print $head_title; ?></title>
-  <?php print $styles; ?>
-  <?php print $scripts; ?>
-  <?php 
-    // Get settings to pass to JavaScript
-    $start_path = base_path() . mobile_jquery_theme_get_setting('app_home');
-    $app_secret = variable_get('iform_mobile_auth_shared_secret', NULL);
-    // Get path to JavaScript
-    $theme_path = base_path() . $GLOBALS['theme_path']; 
-    ?>
-  <script>
-    jQuery.extend(Drupal.settings, {
-      "mobileIformStartPath": "<?php print $start_path; ?>",
-      "appSecret": "<?php print $app_secret; ?>"
-    });
-  </script> 
-  <script type="text/javascript" src="<?php print $theme_path;?>/scripts/appFunctions.js"></script>
-  <script type="text/javascript" src="<?php print $theme_path;?>/scripts/backButtonFix.js"></script>
+	  <!-- CSS -->
+	  <?php print $styles; ?>
+	  
+	  <!-- JavaScript -->
+	  <?php print $scripts; ?>
+	  <?php 
+		// Get settings to pass to JavaScript
+		$start_path = base_path() . mobile_jquery_theme_get_setting('app_home');
+		// Get path to JavaScript
+		$theme_path = base_path() . $GLOBALS['theme_path']; 
+		?>
+		
+	  <!-- APP libs-->
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/app.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/helper.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/appcache_back_button_fix.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/form.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/io.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/storage.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/geoloc.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/navigation.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/image.js"></script>
+	  
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/vector3d.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/geo.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/latlon-ellipsoid.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/osgridref.js"></script>
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/klass.min.js"></script> 
+	  <link href="/drupal/sites/all/libraries/photoswipe-1.0.11/photoswipe.css" type="text/css" rel="stylesheet" />	  
+	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/code.photoswipe.jquery-3.0.4.min.js"></script>  
+	  
+	  <!-- APP specific scripts -->
 
-</head>
+	 </head>
+	 
 
-<body class="<?php print $classes; ?>" <?php print $attributes; ?>>
-  <?php print $page_top; ?>
-  <?php print $page; ?>
-  <?php print $page_bottom; ?>
-</body>
+	<body class="<?php print $classes; ?>" <?php print $attributes; ?>>
+	  <?php print $page_top; ?>
+	  <?php print $page; ?>
+	  <?php print $page_bottom; ?>
+	</body>
 </html>

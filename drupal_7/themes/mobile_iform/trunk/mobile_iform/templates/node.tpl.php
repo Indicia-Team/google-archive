@@ -80,10 +80,8 @@
 ?>
 
 <?php if($type == 'iform') : ?>
-  <form method="post" enctype="multipart/form-data" id="entry_form" action="<?php print $node_url; ?>" data-ajax="false">
       <?php print render($content['iform']) ?>
 <?php else : ?>
-
     <div id="<?php print $pageid; ?>" data-role="page">
       <header data-role="header">
         <?php 
@@ -100,14 +98,10 @@
       </div>
 
     </div><!-- /page -->
-
 <?php endif; ?>
+
 <div id="app-dialog" data-role="dialog">
     <div id="app-dialog-content"data-role="content"></div>
 </div>
 
 <div data-role="popup" id="app-popup" data-theme="b" data-overlay-theme="b"></div>
-
-<?php if($type == 'iform') : ?>
-  </form>
-<?php endif; ?>
