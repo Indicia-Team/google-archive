@@ -54,12 +54,13 @@
 	  <meta name="apple-mobile-web-app-capable" content="yes">
 	  
 	  <!-- ICONS -->
-	  <link rel="shortcut icon" sizes="196x196" href="">
-	  <link rel="shortcut icon" sizes="196x196" href="">
-	  <link href="" sizes="57x57" rel="apple-touch-icon">
-	  <link href="" sizes="72x72" rel="apple-touch-icon">
-	  <link href="" sizes="114x114" rel="apple-touch-icon">
-	  <link href="" sizes="144x144" rel="apple-touch-icon">
+	  <link rel="shortcut icon" href="" type="image/vnd.microsoft.icon">
+	  <link rel="shortcut icon" href="" sizes="196x196">
+	  <link rel="shortcut icon" href="" sizes="196x196">
+	  <link rel="apple-touch-icon" href="" sizes="57x57">
+	  <link rel="apple-touch-icon" href="" sizes="72x72">
+	  <link rel="apple-touch-icon" href="" sizes="114x114">
+	  <link rel="apple-touch-icon" href="" sizes="144x144">
 
 	  <!-- CSS -->
 	  <?php print $styles; ?>
@@ -68,29 +69,30 @@
 	  <?php print $scripts; ?>
 		
 	  <!-- APP libs-->
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/app.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/helper.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/appcache_back_button_fix.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/form.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/io.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/storage.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/geoloc.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/navigation.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/image.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/app.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/helper.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/appcache_back_button_fix.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/form.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/io.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/storage.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/geoloc.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/navigation.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/image.js"></script>
 	  
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/vector3d.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/geo.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/latlon-ellipsoid.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/osgridref.js"></script>
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/klass.min.js"></script> 
-	  <link href="/drupal/sites/all/libraries/photoswipe-1.0.11/photoswipe.css" type="text/css" rel="stylesheet" />	  
-	  <script type="text/javascript" src="/drupal/sites/all/modules/iform/media/js/mobile/libs/code.photoswipe.jquery-3.0.4.min.js"></script>  
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/libs/latlon/vector3d.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/libs/latlon/geo.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/libs/latlon/latlon-ellipsoid.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/libs/latlon/osgridref.js"></script>
+	  <script type="text/javascript" src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/libs/photoswipe-3.0.4/klass.min.js"></script>  
+	  <link type="text/css" 
+	  href="<?=base_path()?>sites/all/modules/iform/media/js/mobile/libs/photoswipe-3.0.4/photoswipe.css" rel="stylesheet" />
+	  <script type="text/javascript" 
+	  src="<?=base_path()?>sites/all/modules/iform/media/js/mobile/libs/photoswipe-3.0.4/code.photoswipe.jquery-3.0.4.min.js"></script>    
 	  
 	  <!-- APP specific scripts -->
 
 	 </head>
 	 
-
 	<body class="<?php print $classes; ?>" <?php print $attributes; ?>>
 	  <?php print $page_top; ?>
 	  <?php print $page; ?>
