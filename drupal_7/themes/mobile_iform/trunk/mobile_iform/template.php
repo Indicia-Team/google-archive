@@ -25,7 +25,7 @@ function mobile_iform_preprocess_html(&$vars) {
     'preprocess' => FALSE, 
     'weight' => 102,
   );
-  $css_path = drupal_get_path('theme', 'mobile_iform') . '/styles/mobile_iform.css';
+  $css_path = drupal_get_path('theme', 'mobile_iform') . '/styles/theme.css';
   drupal_add_css($css_path, $css_options);
   $vars['styles'] = drupal_get_css();
   
