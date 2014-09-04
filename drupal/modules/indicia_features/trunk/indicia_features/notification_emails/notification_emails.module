@@ -50,7 +50,7 @@ function notification_emails_user($op, &$edit, &$account, $category = NULL) {
 function notification_emails_form_alter(&$form, &$form_state, $form_id) {
   global $notification_emails_existing_data;
   $notification_emails_existing_data = array();
-  if ($form_id==='user_profile_form') {
+  if ($form_id==='user_profile_form' && isset($form[t('account')])) {
     iform_load_helpers(array('data_entry_helper'));
     $userId = hostsite_get_user_field('indicia_user_id');
     $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
@@ -223,9 +223,11 @@ function create_notification_emails_settings_submission($edit) {
 
   }
   //Submit the stucture for processing
-  $response = data_entry_helper::forward_post_to('save', $submission, $auth['write_tokens']);
-  if (!(is_array($response) && array_key_exists('success', $response)))
-    drupal_set_message(print_r($response,true));
-  return $response;
+  if (count($submission['submission_list']['entries'])) {
+    $response = data_entry_helper::forward_post_to('save', $submission, $auth['write_tokens']);
+    if (!(is_array($response) && array_key_exists('success', $response)))
+      drupal_set_message(print_r($response,true));
+  }
+  
 }
 
