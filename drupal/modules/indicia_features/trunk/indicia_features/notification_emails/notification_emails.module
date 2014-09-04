@@ -50,7 +50,7 @@ function notification_emails_user($op, &$edit, &$account, $category = NULL) {
 function notification_emails_form_alter(&$form, &$form_state, $form_id) {
   global $notification_emails_existing_data;
   $notification_emails_existing_data = array();
-  if ($form_id==='user_profile_form' && isset($form[t('account')])) {
+  if ($form_id==='user_profile_form') {
     iform_load_helpers(array('data_entry_helper'));
     $userId = hostsite_get_user_field('indicia_user_id');
     $auth = data_entry_helper::get_read_write_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
