@@ -146,7 +146,8 @@ app.geoloc = (function(m, $){
     // Callback if geolocation fails.
     m.onError = function(error) {
         _log("GPS - error");
-        $(document).trigger('app.geoloc.lock.error');
+        var data = {'error': error};
+        $(document).trigger('app.geoloc.lock.error', [data]);
     };
 
     /**
