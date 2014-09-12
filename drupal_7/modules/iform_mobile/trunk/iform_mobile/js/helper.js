@@ -10,7 +10,7 @@ function getParameterByName(name) {
 }
 
 function _log(message){
-    if(app.DEBUG){
+    if(app.CONF.DEBUG){
        console.debug(message);
     }
 }
