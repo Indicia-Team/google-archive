@@ -1,5 +1,11 @@
 app = app || {};
 app.io = (function(m, $){
+    //module configuration should be setup in an app config file
+    m.CONF = {
+        APPNAME: "",
+        APPSECRET: ""
+    };
+
     /*
      * Sending all saved forms.
      * @returns {undefined}
@@ -42,7 +48,7 @@ app.io = (function(m, $){
      */
     m.sendSavedForm = function(formStorageId, onSuccess, onError, onSend) {
         _log("SEND - creating the form.");
-        var data = new app.form.getSavedData(formStorageId);
+        var data = app.form.getSavedData(formStorageId);
         var form = {
             'data': data,
             'formStorageId' : formStorageId
@@ -64,6 +70,10 @@ app.io = (function(m, $){
         } else {
             data = form.data;
         }
+
+        //app logins
+        data.append('appname', this.CONF.APPNAME);
+        data.append('appsecret', this.CONF.APPSECRET);
 
         $.ajax({
             url : m.getFormURL(),

@@ -1,10 +1,14 @@
 app = (function(m, $){
-        //GLOBALS
-    m.HOME = "";
-    m.DEBUG = false;
+    //configuration should be setup in app config file
+    m.CONF = {
+        HOME: "",
+        DEBUG: false
+    };
+
+    //GLOBALS
     m.$ = $;
 
-        //constants:
+    //CONSTANTS:
     m.TRUE = 1;
     m.FALSE = 0;
     m.ERROR = -1;
