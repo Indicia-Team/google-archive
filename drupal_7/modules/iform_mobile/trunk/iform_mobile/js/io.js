@@ -1,11 +1,5 @@
 app = app || {};
 app.io = (function(m, $){
-    //module configuration should be setup in an app config file
-    m.CONF = {
-        APPNAME: "",
-        APPSECRET: ""
-    };
-
     /*
      * Sending all saved forms.
      * @returns {undefined}
@@ -71,9 +65,8 @@ app.io = (function(m, $){
             data = form.data;
         }
 
-        //app logins
-        data.append('appname', this.CONF.APPNAME);
-        data.append('appsecret', this.CONF.APPSECRET);
+        //Add authentication
+        data = app.auth.append(data);
 
         $.ajax({
             url : m.getFormURL(),

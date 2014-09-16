@@ -23,14 +23,27 @@ function loadScript(src) {
 }
 
 function startManifestDownload(id, files_no, src){
-    src = Drupal.settings.basePath + src + '?base_path=' + Drupal.settings.basePath + '&files=' + files_no;
-    var appCacheFrame = jQuery('#' + id).get(0);
-    if (appCacheFrame) {
-        appCacheFrame.contentWindow.applicationCache.update();
+    /*todo: Add better offline handling:
+      If there is a network connection, but it cannot reach any
+      Internet, it will carry on loading the page, where it should stop it
+      at that point.
+      */
+    if (navigator.onLine) {
+        src = Drupal.settings.basePath + src + '?base_path=' + Drupal.settings.basePath + '&files=' + files_no;
+        var appCacheFrame = jQuery('#' + id).get(0);
+        if (appCacheFrame) {
+            appCacheFrame.contentWindow.applicationCache.update();
+        } else {
+            app.navigation.popup('<iframe id="' + id + '" src="' + src + '" width="215px" height="215px" scrolling="no" frameBorder="0"></iframe>', true);
+        }
     } else {
-        app.navigation.popup('<iframe id="' + id + '" src="' + src + '" width="215px" height="215px" scrolling="no" frameBorder="0"></iframe>', true);
+        $.mobile.loading( 'show', {
+            text: "Looks like you are offline!",
+            theme: "b",
+            textVisible: true,
+            textonly: true
+        });
     }
-
 }
 
 /**
