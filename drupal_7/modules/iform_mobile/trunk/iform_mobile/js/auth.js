@@ -3,7 +3,9 @@ app.auth = (function(m, $){
     //module configuration should be setup in an app config file
     m.CONF = {
         APPNAME: "",
-        APPSECRET: ""
+        APPSECRET: "",
+        WEBSITE_ID: 0,
+        SURVEY_ID: 0
     };
 
     /**
@@ -17,6 +19,8 @@ app.auth = (function(m, $){
         formData = m.appendUser(formData);
         //app logins
         formData = m.appendApp(formData);
+        //warehouse data
+        formData = m.appendWarehouse(formData);
 
         return formData;
     };
@@ -48,6 +52,23 @@ app.auth = (function(m, $){
     m.appendApp = function(formData){
         formData.append('appname', this.CONF.APPNAME);
         formData.append('appsecret', this.CONF.APPSECRET);
+
+        return formData;
+    };
+
+    /**
+     * Appends warehouse related information - website_id and survey_id to
+     * the passed FormData object.
+     *
+     * This is necessary because the data must be associated to some
+     * website and survey in the warehouse.
+     *
+     * @param formData A FormData object to modify
+     * @returns {*} A FormData object
+     */
+    m.appendWarehouse = function(formData){
+        formData.append('website_id', this.CONF.WEBSITE_ID);
+        formData.append('survey_id', this.CONF.SURVEY_ID);
 
         return formData;
     };
