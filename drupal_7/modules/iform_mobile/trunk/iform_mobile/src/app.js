@@ -13,7 +13,6 @@ app = (function(m, $){
     m.FALSE = 0;
     m.ERROR = -1;
 
-
     /*
         Events from.
         http://jqmtricks.wordpress.com/2014/03/26/jquery-mobile-page-events/
@@ -83,61 +82,6 @@ app = (function(m, $){
                     controller[event](e, data);
                 }
             });
-        };
-
-        /*
-         * Starts the submission process.
-         */
-    m.submitRecord = function() {
-            _log("DEBUG: SUBMIT - start");
-            var processed = false;
-            $(document).trigger('app.submitRecord.start');
-            setTimeout(function(){
-                //validate form
-                var invalids = app.form.validate(indiciaData.jQuery);
-                if(invalids.length == 0){
-                    //validate GPS lock
-                    var gps = app.geoloc.validate();
-                    switch(gps){
-                        case app.TRUE:
-                            _log("DEBUG: GPS Validation - accuracy Good Enough");
-                            processed = true;
-                            if (navigator.onLine) {
-                                //Online
-                                _log("DEBUG: SUBMIT - online");
-                                var onSaveSuccess = function(savedFormId){
-                                    //#2 Post the form
-                                    app.io.sendSavedForm(savedFormId);
-                                };
-                                //#1 Save the form first
-                                app.form.save('#entry_form', onSaveSuccess);
-                            } else {
-                                //Offline
-                                _log("DEBUG: SUBMIT - offline");
-                                $.mobile.loading('show');
-                                if (app.form.save('#entry_form') > 0){
-                                    $(document).trigger('app.submitRecord.save');
-                                } else {
-                                    $(document).trigger('app.submitRecord.error');
-                                }
-                            }
-                            break;
-                        case app.FALSE:
-                            _log("DEBUG: GPS Validation - accuracy " );
-                            $(document).trigger('app.geoloc.lock.bad');
-                            break;
-                        case app.ERROR:
-                            _log("DEBUG: GPS Validation - accuracy -1");
-                            $(document).trigger('app.geoloc.lock.no');
-                            break;
-                        default:
-                            _log('DEBUG: GPS validation unknown');
-                    }
-                } else {
-                    jQuery(document).trigger('app.form.invalid', [invalids]);
-                }
-                $(document).trigger('app.submitRecord.end', [processed]);
-            }, 20);
         };
 
     m.initSettings = function(){
