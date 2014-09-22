@@ -32,6 +32,13 @@ app.storage = (function(m, $){
     };
 
     /**
+     * Clears the storage.
+     */
+    m.clear = function(){
+        localStorage.clear();
+    };
+
+    /**
      *
      * @param item
      */
@@ -56,6 +63,13 @@ app.storage = (function(m, $){
      */
     m.tmpRemove = function(item){
         return sessionStorage.removeItem(item);
+    };
+
+    /**
+     * Clears the temporary storage.
+     */
+    m.tmpClear = function(){
+        sessionStorage.clear();
     };
 
     /*
