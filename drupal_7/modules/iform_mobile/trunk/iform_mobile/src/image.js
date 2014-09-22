@@ -156,10 +156,24 @@ app.image = (function(m, $){
     };
 
     /**
+     * Extracts all files from the page inputs having data-form attribute.
+     */
+    m.extractAll = function(){
+        var files = [];
+        $(document).find('input').each(function(index, input) {
+            if ($(input).attr('type') == "file" && input.files.length > 0) {
+                var file = app.image.extract(input);
+                files.push(file);
+            }
+        });
+        return files;
+    };
+
+    /**
      * Extracts all files from the form into a form array.
      * @param form
      */
-    m.extractAll =  function(form){
+    m.extractAllFromForm =  function(form){
         var files = [];
         form.find('input').each(function(index, input) {
             if ($(input).attr('type') == "file" && input.files.length > 0) {

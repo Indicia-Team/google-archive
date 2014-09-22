@@ -48,13 +48,13 @@ app.form = (function(m, $){
     /*
      * Starts the form submission process.
      */
-    m.submit = function() {
+    m.submit = function(formId) {
         _log("DEBUG: SUBMIT - start");
         var processed = false;
         $(document).trigger('app.submitRecord.start');
         setTimeout(function(){
             //validate form
-            var invalids = app.form.validate(indiciaData.jQuery);
+            var invalids = app.form.validate(formId);
             if(invalids.length == 0){
                 //validate GPS lock
                 var gps = app.geoloc.validate();
@@ -103,7 +103,8 @@ app.form = (function(m, $){
             app.io.sendSavedForm(savedFormId);
         };
         //#1 Save the form first
-        app.form.storage.saveUsingFormId('#entry_form', onSaveSuccess);
+        //app.form.storage.saveUsingFormId('#entry_form', onSaveSuccess);
+        app.form.storage.save(onSaveSuccess);
     };
 
     /**
@@ -112,22 +113,90 @@ app.form = (function(m, $){
     m.processOffline = function(){
         _log("DEBUG: SUBMIT - offline");
         $.mobile.loading('show');
-        if (app.form.storage.saveUsingFormId('#entry_form') > 0){
+       // if (app.form.storage.saveUsingFormId('#entry_form') > 0){
+        if (app.form.storage.save() > 0){
             $(document).trigger('app.submitRecord.save');
         } else {
             $(document).trigger('app.submitRecord.error');
         }
     };
 
+    /**
+     * TODO: this and validator() functions need refactoring.
+     * @param formId
+     */
+    m.addValidator = function(formId){
+        var validator = $(formId).validate({
+            ignore: ":hidden,.inactive",
+            errorClass: "inline-error",
+            errorElement: 'p',
+            highlight: function(element, errorClass) {
+                var jqElement = $(element);
+                if (jqElement.is(':radio') || jqElement.is(':checkbox')) {
+                    //if the element is a radio or checkbox group then highlight the group
+                    var jqBox = jqElement.parents('.control-box');
+                    if (jqBox.length !== 0) {
+                        jqBox.eq(0).addClass('ui-state-error');
+                    } else {
+                        jqElement.addClass('ui-state-error');
+                    }
+                } else {
+                    jqElement.addClass('ui-state-error');
+                }
+            },
+            unhighlight: function(element, errorClass) {
+                var jqElement = $(element);
+                if (jqElement.is(':radio') || jqElement.is(':checkbox')) {
+                    //if the element is a radio or checkbox group then highlight the group
+                    var jqBox = jqElement.parents('.control-box');
+                    if (jqBox.length !== 0) {
+                        jqBox.eq(0).removeClass('ui-state-error');
+                    } else {
+                        jqElement.removeClass('ui-state-error');
+                    }
+                } else {
+                    jqElement.removeClass('ui-state-error');
+                }
+            },
+            invalidHandler: function(form, validator) {
+                var tabselected=false;
+                jQuery.each(validator.errorMap, function(ctrlId, error) {
+                    // select the tab containing the first error control
+                    var ctrl = jQuery('[name=' + ctrlId.replace(/:/g, '\\:').replace(/\[/g, '\\[').replace(/\]/g, '\\]') + ']');
+                    if (!tabselected) {
+                        var tp=ctrl.filter('input,select,textarea').closest('.ui-tabs-panel');
+                        if (tp.length===1) {
+                            $(tp).parent().tabs('select',tp.id);
+                        }
+                        tabselected = true;
+                    }
+                    ctrl.parents('fieldset').removeClass('collapsed');
+                    ctrl.parents('.fieldset-wrapper').show();
+                });
+            },
+            messages: [],
+            errorPlacement: function(error, element) {
+                var jqBox, nexts;
+                if(element.is(':radio')||element.is(':checkbox')){
+                    jqBox = element.parents('.control-box');
+                    element=jqBox.length === 0 ? element : jqBox;
+                }
+                nexts=element.nextAll(':visible');
+                element = nexts && $(nexts[0]).hasClass('deh-required') ? nexts[0] : element;
+                error.insertAfter(element);
+            }
+        });
+        //Don't validate whilst user is still typing in field
+        //validator.settings.onkeyup = false;
+    };
+
     /*
      * Form validation.
-     * Note: uses old jQuery
      */
-    m.validate = function($){
+    m.validate = function(formId){
         var invalids = [];
 
-        var tabinputs = $('#entry_form').find('input,select,textarea').not(':disabled,[name=],.scTaxonCell,.inactive');
-        var tabtaxoninputs = $('#entry_form .scTaxonCell').find('input,select').not(':disabled');
+        var tabinputs = $('#' + formId).find('input,select,textarea').not(':disabled,[name=],.scTaxonCell,.inactive');
         if (tabinputs.length>0){
             tabinputs.each(function(index){
                 if (!$(this).valid()){
@@ -156,6 +225,7 @@ app.form = (function(m, $){
             });
         }
 
+        var tabtaxoninputs = $('#entry_form .scTaxonCell').find('input,select').not(':disabled');
         if (tabtaxoninputs.length>0) {
             tabtaxoninputs.each(function(index){
                 invalids.push({ "name" :this.name, "id" : this.id });
@@ -170,11 +240,36 @@ app.form = (function(m, $){
     };
 
     /**
+     * Returns a recording form array from stored inputs.
+     */
+    m.extract = function(){
+        //extract form data
+        var form_array = [];
+        var inputName, inputValue;
+
+        var record = app.form.inputs.getRecord();
+        if(record == null){
+            return form_array;
+        }
+        var inputs = Object.keys(record);
+        for (var inputNum = 0; inputNum < inputs.length; inputNum++) {
+            inputName = inputs[inputNum];
+            inputValue = record[inputName];
+            form_array.push({
+                "name": inputName,
+                "value": inputValue
+            });
+        }
+
+        return form_array;
+    };
+
+    /**
      * Extracts data (apart from files) from provided form into a form_array that it returns.
      * @param form
      * @returns {Array}
      */
-    m.extract = function(form) {
+    m.extractFromForm = function(form) {
         //extract form data
         var form_array = [];
         var name, value, type, id, needed;

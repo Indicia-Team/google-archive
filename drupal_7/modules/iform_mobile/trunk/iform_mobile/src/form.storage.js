@@ -90,8 +90,42 @@ app.form.storage = (function(m, $){
     /**
      * Saves a form using dynamic inputs.
      */
-    m.save = function(){
+    m.save = function(onSuccess){
+        _log("FORM.");
+        //get new form ID
+        var settings = app.form.getSettings();
+        var savedFormId = ++settings[app.form.LASTID];
 
+        //INPUTS
+        var onSaveAllFilesSuccess = function(files_array){
+            //Put
+            var form_array = app.form.extract();
+
+            //merge files and the rest of the inputs
+            form_array = form_array.concat(files_array);
+
+            _log("FORM - saving the form into storage");
+            try{
+                var forms = app.form.storage.getAll();
+                forms[savedFormId] = form_array;
+                m.setAll(forms);
+                app.form.setSettings(settings);
+            } catch (e){
+                _log("FORM - ERROR while saving the form");
+                _log(e);
+                return app.ERROR;
+            }
+
+            app.form.inputs.clearRecord();
+
+            if(typeof onSuccess != 'undefined'){
+                onSuccess(savedFormId);
+            }
+        };
+
+        var files = app.image.extractAll();
+        app.image.storage.saveAll(files, onSaveAllFilesSuccess);
+        return app.TRUE;
     };
 
     /*
@@ -110,7 +144,7 @@ app.form.storage = (function(m, $){
         var form = $(formId);
         var onSaveAllFilesSuccess = function(files_array){
             //get all the inputs/selects/textboxes into array
-            var form_array = app.form.extract(form);
+            var form_array = app.form.extractFromForm(form);
 
             //merge files and the rest of the inputs
             form_array = form_array.concat(files_array);
@@ -125,12 +159,12 @@ app.form.storage = (function(m, $){
                 _log(e);
                 return app.ERROR;
             }
-            if(onSuccess != null){
+            if(typeof onSuccess != 'undefined'){
                 onSuccess(savedFormId);
             }
         };
 
-        var files = app.image.extractAll(form);
+        var files = app.image.extractAllFromForm(form);
         app.image.storage.saveAll(files, onSaveAllFilesSuccess);
         return app.TRUE;
     };
