@@ -6,7 +6,7 @@ app.io = (function(m, $){
      */
     m.sendAllSavedForms = function() {
         if (navigator.onLine) {
-            var forms = app.form.getAllSaved();
+            var forms = app.form.storage.getAll();
             var key = Object.keys(forms)[0]; //getting the first one of the array
             if (key != null) {
                 $.mobile.loading('show');
@@ -15,7 +15,7 @@ app.io = (function(m, $){
                     var formStorageId = this.callback_data.formStorageId;
                     _log("SEND - form ajax (success): " + formStorageId);
 
-                    app.form.removeSaved(formStorageId);
+                    app.form.storage.remove(formStorageId);
                     $(document).trigger('app.form.sentall.success');
                     app.io.sendAllSavedForms();
                 };
@@ -42,7 +42,7 @@ app.io = (function(m, $){
      */
     m.sendSavedForm = function(formStorageId, onSuccess, onError, onSend) {
         _log("SEND - creating the form.");
-        var data = app.form.getSavedData(formStorageId);
+        var data = app.form.storage.getData(formStorageId);
         var form = {
             'data': data,
             'formStorageId' : formStorageId
@@ -91,7 +91,7 @@ app.io = (function(m, $){
         var formStorageId = this.callback_data.formStorageId;
         _log("SEND - form ajax (success): " + formStorageId);
 
-        app.form.removeSaved(formStorageId);
+        app.form.storage.remove(formStorageId);
         $(document).trigger('app.form.sent.success', [data]);
     };
 
