@@ -1,5 +1,5 @@
-/* ************ BACK BUTTON FIX *****************************************************
- * Since the back button does not work in current iOS 7.1.1 while in app mode, it is 
+/**
+ * Since the back button does not work in current iOS 7.1.1 while in app mode, it is
  * necessary to manually assign the back button urls.
  * 
  * Set up the URL replacements so that the id of the page is matched with the new URL 
@@ -10,7 +10,6 @@
   'app-examples':'home',
   'tab-location':'home' 
 };
-
 */
 
 /*
