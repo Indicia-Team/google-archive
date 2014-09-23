@@ -37,6 +37,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['karma', 'concat', 'uglify']);
+    grunt.registerTask('default', ['concat', 'uglify']);
 
 };

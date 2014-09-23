@@ -3,7 +3,11 @@ app = app || {};
 app.geoloc = (function(m, $){
     m.TIMEOUT = 120000;
     m.HIGH_ACCURACY = true;
-    m.GPS_ACCURACY_LIMIT = 26000;
+
+    //configuration should be setup in app config file
+    m.CONF = {
+        GPS_ACCURACY_LIMIT: 26000
+    };
 
     m.latitude = null;
     m.longitude = null;
@@ -50,7 +54,7 @@ app.geoloc = (function(m, $){
 
         //check if the lock is acquired and the accuracy is good enough
         var accuracy = app.geoloc.getAccuracy();
-        if ((accuracy > -1) && (accuracy < this.GPS_ACCURACY_LIMIT)){
+        if ((accuracy > -1) && (accuracy < this.CONF.GPS_ACCURACY_LIMIT)){
             return app.TRUE;
         }
 
@@ -72,7 +76,7 @@ app.geoloc = (function(m, $){
             //No GPS lock yet
             return app.ERROR;
 
-        } else if (accuracy > this.GPS_ACCURACY_LIMIT){
+        } else if (accuracy > this.CONF.GPS_ACCURACY_LIMIT){
             //Geolocated with bad accuracy
             return app.FALSE;
 
@@ -125,7 +129,7 @@ app.geoloc = (function(m, $){
         if (accuracy > -1 && accuracy < prev_accuracy){
             app.geoloc.set(latitude, longitude, accuracy);
             _log("GPS - setting accuracy of " + accuracy + " meters" );
-            if (accuracy < app.geoloc.GPS_ACCURACY_LIMIT){
+            if (accuracy < app.geoloc.CONF.GPS_ACCURACY_LIMIT){
                 _log("GPS - Success! Accuracy of " + accuracy + " meters");
                 navigator.geolocation.clearWatch(app.geoloc.id);
 
@@ -137,7 +141,6 @@ app.geoloc = (function(m, $){
                 };
 
                 app.settings('location', location);
-
                 $(document).trigger('app.geoloc.lock.ok');
             }
         }

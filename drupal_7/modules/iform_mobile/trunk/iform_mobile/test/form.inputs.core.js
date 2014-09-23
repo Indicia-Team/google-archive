@@ -44,32 +44,31 @@ describe("Core suite", function() {
      * Setting up, changing and removing an input.
      */
     it('set input', function() {
-        var randNum = Math.random();
-
         //general setting up a record with an input
-        var record = {'input': randNum};
-        app.form.inputs.setRecord(record);
+        var input = 'input';
+        var input_data = Math.random();
+        app.form.inputs.set(input, input_data);
         var finalRecord = app.form.inputs.getRecord();
         expect(finalRecord)
             .to.be.an('object')
             .that.has.property('input')
-                .that.to.be.equal(randNum);
+                .that.to.be.equal(input_data);
 
         //set another input
-        var input = 'input2';
-        var input_data = Math.random();
-        app.form.inputs.set(input, input_data);
-        app.form.inputs.get(input).should.equal(input_data);
+        var input2 = 'input2';
+        var input2_data = Math.random();
+        app.form.inputs.set(input2, input2_data);
+        app.form.inputs.get(input2).should.equal(input2_data);
 
         //changing input
         input_data = Math.random();
-        app.form.inputs.set(input, input_data);
-        app.form.inputs.get(input).should.equal(input_data);
+        app.form.inputs.set(input2, input2_data);
+        app.form.inputs.get(input2).should.equal(input2_data);
 
         //removing input
-        app.form.inputs.remove(input);
+        app.form.inputs.remove(input2);
         finalRecord = app.form.inputs.getRecord();
-        expect(finalRecord).to.not.have.property(input);
+        expect(finalRecord).to.not.have.property(input2);
 
     });
 

@@ -52,34 +52,32 @@ app.form = (function(m, $){
         _log("DEBUG: SUBMIT - start");
         var processed = false;
         $(document).trigger('app.submitRecord.start');
-        setTimeout(function(){
-            //validate form
-            var invalids = app.form.validate(formId);
-            if(invalids.length == 0){
-                //validate GPS lock
-                var gps = app.geoloc.validate();
-                switch(gps){
-                    case app.TRUE:
-                        _log("DEBUG: GPS Validation - accuracy Good Enough");
-                        processed = true;
-                        m.process();
-                        break;
-                    case app.FALSE:
-                        _log("DEBUG: GPS Validation - accuracy " );
-                        $(document).trigger('app.geoloc.lock.bad');
-                        break;
-                    case app.ERROR:
-                        _log("DEBUG: GPS Validation - accuracy -1");
-                        $(document).trigger('app.geoloc.lock.no');
-                        break;
-                    default:
-                        _log('DEBUG: GPS validation unknown');
-                }
-            } else {
-                jQuery(document).trigger('app.form.invalid', [invalids]);
+        //validate form
+        var invalids = app.form.validate(formId);
+        if(invalids.length == 0){
+            //validate GPS lock
+            var gps = app.geoloc.validate();
+            switch(gps){
+                case app.TRUE:
+                    _log("DEBUG: GPS Validation - accuracy Good Enough");
+                    processed = true;
+                    m.process();
+                    break;
+                case app.FALSE:
+                    _log("DEBUG: GPS Validation - accuracy " );
+                    $(document).trigger('app.geoloc.lock.bad');
+                    break;
+                case app.ERROR:
+                    _log("DEBUG: GPS Validation - accuracy -1");
+                    $(document).trigger('app.geoloc.lock.no');
+                    break;
+                default:
+                    _log('DEBUG: GPS validation unknown');
             }
-            $(document).trigger('app.submitRecord.end', [processed]);
-        }, 20);
+        } else {
+            jQuery(document).trigger('app.form.invalid', [invalids]);
+        }
+        $(document).trigger('app.submitRecord.end', [processed]);
     };
 
     /**
