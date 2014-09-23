@@ -10,9 +10,11 @@ app.form.inputs = (function(m, $){
     m.RECORD =  'record';
 
     m.KEYS = {
-        'SREF' : 'sample:entered_sref',
-        'TAXON' : 'occurrence:taxa_taxon_list_id',
-        'DATE' : 'sample:date'
+        'SREF': 'sample:entered_sref',
+        'SREF_SYSTEM': 'sample:entered_sref_system',
+        'SREF_ACCURACY': 'smpAttr:273',
+        'TAXON': 'occurrence:taxa_taxon_list_id',
+        'DATE': 'sample:date'
     };
 
     /**
@@ -20,7 +22,7 @@ app.form.inputs = (function(m, $){
      * @returns {*}
      */
     m.getRecord = function(){
-        return app.storage.tmpGet(m.RECORD);
+        return app.storage.tmpGet(m.RECORD) || {};
     };
 
     /**

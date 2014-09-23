@@ -1,5 +1,10 @@
 app = app || {};
 app.io = (function(m, $){
+    //configuration should be setup in app config file
+    m.CONF = {
+        RECORD_URL: ""
+    };
+
     /*
      * Sending all saved forms.
      * @returns {undefined}
@@ -121,9 +126,8 @@ app.io = (function(m, $){
      * @returns {*}
      */
     m.getFormURL = function(){
-        return Drupal.settings.basePath + app.settings('formPath');
+        return Drupal.settings.basePath + m.CONF.RECORD_URL;
     };
-
 
     /**
      * Services related functions.
