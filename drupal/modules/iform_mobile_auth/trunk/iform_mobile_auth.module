@@ -561,15 +561,19 @@ function iform_mobile_auth_client_submission() {
             {
                 $params[$key] = iform_mobile_auth_escape($value);
             }
-            if (strstr($key,'sample:') != FALSE)
+            elseif (strstr($key,'occAttr:') != FALSE)
             {
                 $params[$key] = iform_mobile_auth_escape($value);
             }
-            if (strstr($key,'occurrence:') != FALSE)
+            elseif (strstr($key,'sample:') != FALSE)
             {
                 $params[$key] = iform_mobile_auth_escape($value);
             }
-            if (strstr($key,'sc:') != FALSE)
+            elseif (strstr($key,'occurrence:') != FALSE)
+            {
+                $params[$key] = iform_mobile_auth_escape($value);
+            }
+            elseif (strstr($key,'sc:') != FALSE)
             {
                 // sc: params indicate a list submission
                 $isOccurrencesList = TRUE;
@@ -851,12 +855,22 @@ function verify_hash($secret, $hashed_secret) {
 }
 
 /**
- * A function to escape user input.
+ * A function to escape user input in the $_POST.
+ * $value will be a string or array of strings.
  * Currently simply a wrapper around drupal's check_plain function.
  */
-function iform_mobile_auth_escape($str)
+function iform_mobile_auth_escape($value)
 {
+  if (is_array($value)) {
+    $escaped_array = array(); 
+    foreach($value as $key => $nested_value){
+      $escaped_array[$key] = iform_mobile_auth_escape($nested_value);
+    }
+    return $escaped_array;
+  } 
+  else {
     return check_plain($str);
+  }
 }
 
 
