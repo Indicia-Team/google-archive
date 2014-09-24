@@ -76,14 +76,16 @@ function iform_mobile_auth_app($form_state, $apps = NULL) {
     '#type' => 'textfield',
     '#title' => t('App name'),
     '#default_value' => $app['name'],
-    '#description' => t('Set the app name to be used in forms.'),
+    '#description' => t('Set the app name to be used for authentication. '
+            . 'Enter "anonymous" for backwards compatibility with old apps '
+            . 'that do not send an app name.'),
     '#required' => TRUE,
   );
   $form['secret'] = array(
     '#type' => 'textfield',
     '#title' => t('Shared secret'),
     '#default_value' => '', 
-    '#description' => t('Set the shared secret to be used in forms.'),
+    '#description' => t('Set the shared secret to be used for authentication.'),
   );
   //extra
   $form['extra'] = array(
@@ -198,7 +200,7 @@ function iform_mobile_auth_dashboard() {
   $links = array(
     'link-add' => array(
       'title' => t('Add Mobile Application'),
-      'href' => 'admin/settings/iform/mobile',
+      'href' => 'admin/settings/iform/mobile/add',
     ),
   );
   
@@ -235,7 +237,7 @@ function iform_mobile_auth_app_submit($form, &$form_state) {
 
   //inform user and return to dashboard
     drupal_set_message(t($message, array('%app' => $form_state['values']['title'])));
-    $form_state['redirect'] = 'admin/settings/iform/mobile/dashboard';
+    $form_state['redirect'] = 'admin/settings/iform/mobile';
 } 
 
 /** 
@@ -269,7 +271,7 @@ function iform_mobile_auth_delete($form_state, $apps) {
   // check if the user has permission to delete an app
   if(user_has_permission($app)){
     return confirm_form($form, $message,
-      'admin/settings/iform/mobile/dashboard', //redirect if cancelled
+      'admin/settings/iform/mobile', //redirect if cancelled
       t('This action cannot be undone.'),
       t('Delete'),
       t('Cancel')
@@ -293,7 +295,7 @@ function iform_mobile_auth_delete_submit($form, &$form_state) {
     $message = 'Deleted %app.';
     drupal_set_message(t($message, array('%app' => $form_state['values']['title'])));
   }
-  $form_state['redirect'] = 'admin/settings/iform/mobile/dashboard';
+  $form_state['redirect'] = 'admin/settings/iform/mobile';
 } 
 
 

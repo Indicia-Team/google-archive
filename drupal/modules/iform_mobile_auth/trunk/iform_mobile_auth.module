@@ -119,7 +119,7 @@ function iform_mobile_auth_menu() {
   );
   //User Interface options
   //Dashboard
-  $items['admin/settings/iform/mobile/dashboard'] = array(
+  $items['admin/settings/iform/mobile'] = array(
     'title' => 'Mobile Authentication',
     'description' =>  'Configure variables relating to the mobile authorisation module',
     'page callback' => 'iform_mobile_auth_dashboard',
@@ -128,7 +128,7 @@ function iform_mobile_auth_menu() {
     'type' => MENU_LOCAL_TASK,
   );
   //Add
-  $items['admin/settings/iform/mobile'] = array(
+  $items['admin/settings/iform/mobile/add'] = array(
     'title' => 'Mobile Authentication',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('iform_mobile_auth_app'),
