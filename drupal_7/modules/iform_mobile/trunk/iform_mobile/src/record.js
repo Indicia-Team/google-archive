@@ -1,18 +1,19 @@
 app = app || {};
-app.form = (function(m, $){
+app.record = (function(m, $){
     m.MULTIPLE_GROUP_KEY = "multiple_"; //to separate a grouped input
-    m.COUNT = "form_count";
-    m.STORAGE = "form_";
+    m.COUNT = "record_count";
+    m.STORAGE = "record_";
     m.PIC = "_pic_";
 
     m.totalFiles = 0;
 
     m.DATA = "data";
     m.FILES = "files";
-    m.SETTINGS = "formSettings";
+    m.SETTINGS = "recordSettings";
     m.LASTID = "lastId";
 
-    m.FORM = "form"; //current form key for the tmp storage
+    //name under which the record is stored
+    m.RECORD = "record";
 
     /**
      *
@@ -29,6 +30,15 @@ app.form = (function(m, $){
         return null;
     };
 
+    /**
+     * Record settings. A separate DOM storage unit for storing
+     * recording specific data.
+     *
+     * Note: in the future, if appart of LastFormId no other uses arouse
+     * should be merged with default app.settings.
+     *
+     * @param settings
+     */
     m.setSettings = function(settings){
         app.storage.set(m.SETTINGS, settings);
     };
@@ -45,15 +55,38 @@ app.form = (function(m, $){
         return settings;
     };
 
-    /*
-     * Starts the form submission process.
+    /**
+     * Returns the current record.
+     * @returns {*}
      */
-    m.submit = function(formId) {
+    m.get = function(){
+        return app.storage.tmpGet(m.RECORD) || {};
+    };
+
+    /**
+     * Sets the current record.
+     * @param record The currenr record to be stored.
+     */
+    m.set = function(record){
+        app.storage.tmpSet(m.RECORD, record);
+    };
+
+    /**
+     * Clears the current record.
+     */
+    m.clear = function(){
+        app.storage.tmpRemove(m.RECORD);
+    };
+
+    /*
+     * Starts the record submission process.
+     */
+    m.submit = function(recordId) {
         _log("DEBUG: SUBMIT - start");
         var processed = false;
         $(document).trigger('app.submitRecord.start');
-        //validate form
-        var invalids = app.form.validate(formId);
+        //validate record
+        var invalids = app.record.validate(recordId);
         if(invalids.length == 0){
             //validate GPS lock
             var gps = app.geoloc.validate();
@@ -75,13 +108,13 @@ app.form = (function(m, $){
                     _log('DEBUG: GPS validation unknown');
             }
         } else {
-            jQuery(document).trigger('app.form.invalid', [invalids]);
+            jQuery(document).trigger('app.record.invalid', [invalids]);
         }
         $(document).trigger('app.submitRecord.end', [processed]);
     };
 
     /**
-     * Processes the form either by saving it and sending (online) or simply saving (offline).
+     * Processes the record either by saving it and sending (online) or simply saving (offline).
      */
     m.process = function(){
         if (navigator.onLine) {
@@ -92,27 +125,27 @@ app.form = (function(m, $){
     };
 
     /**
-     * Saves and submits the form.
+     * Saves and submits the record.
      */
     m.processOnline = function(){
         _log("DEBUG: SUBMIT - online");
-        var onSaveSuccess = function(savedFormId){
-            //#2 Post the form
-            app.io.sendSavedForm(savedFormId);
+        var onSaveSuccess = function(savedRecordId){
+            //#2 Post the record
+            app.io.sendSavedRecord(savedRecordId);
         };
-        //#1 Save the form first
-        //app.form.storage.saveUsingFormId('#entry_form', onSaveSuccess);
-        app.form.storage.save(onSaveSuccess);
+        //#1 Save the record first
+        //app.record.storage.saveUsingRecordId('#entry_record', onSaveSuccess);
+        app.record.storage.save(onSaveSuccess);
     };
 
     /**
-     * Saves the form.
+     * Saves the record.
      */
     m.processOffline = function(){
         _log("DEBUG: SUBMIT - offline");
         $.mobile.loading('show');
-       // if (app.form.storage.saveUsingFormId('#entry_form') > 0){
-        if (app.form.storage.save() > 0){
+       // if (app.record.storage.saveUsingRecordId('#entry_record') > 0){
+        if (app.record.storage.save() > 0){
             $(document).trigger('app.submitRecord.save');
         } else {
             $(document).trigger('app.submitRecord.error');
@@ -121,10 +154,10 @@ app.form = (function(m, $){
 
     /**
      * TODO: this and validator() functions need refactoring.
-     * @param formId
+     * @param recordId
      */
-    m.addValidator = function(formId){
-        var validator = $(formId).validate({
+    m.addValidator = function(recordId){
+        var validator = $(recordId).validate({
             ignore: ":hidden,.inactive",
             errorClass: "inline-error",
             errorElement: 'p',
@@ -156,7 +189,7 @@ app.form = (function(m, $){
                     jqElement.removeClass('ui-state-error');
                 }
             },
-            invalidHandler: function(form, validator) {
+            invalidHandler: function(record, validator) {
                 var tabselected=false;
                 jQuery.each(validator.errorMap, function(ctrlId, error) {
                     // select the tab containing the first error control
@@ -189,12 +222,12 @@ app.form = (function(m, $){
     };
 
     /*
-     * Form validation.
+     * Record validation.
      */
-    m.validate = function(formId){
+    m.validate = function(recordId){
         var invalids = [];
 
-        var tabinputs = $('#' + formId).find('input,select,textarea').not(':disabled,[name=],.scTaxonCell,.inactive');
+        var tabinputs = $('#' + recordId).find('input,select,textarea').not(':disabled,[name=],.scTaxonCell,.inactive');
         if (tabinputs.length>0){
             tabinputs.each(function(index){
                 if (!$(this).valid()){
@@ -205,12 +238,12 @@ app.form = (function(m, $){
                     //this new invalid input belongs to the same group and should
                     //be ignored.
                     for (var i = 0; i < invalids.length; i++){
-                        if (invalids[i].name == (app.form.MULTIPLE_GROUP_KEY + this.name)){
+                        if (invalids[i].name == (app.record.MULTIPLE_GROUP_KEY + this.name)){
                             found = true;
                             break;
                         } if (invalids[i].name == this.name) {
                             var new_id = (this.id).substr(0, this.id.lastIndexOf(':'));
-                            invalids[i].name = app.form.MULTIPLE_GROUP_KEY + this.name;
+                            invalids[i].name = app.record.MULTIPLE_GROUP_KEY + this.name;
                             invalids[i].id = new_id;
                             found = true;
                             break;
@@ -223,7 +256,7 @@ app.form = (function(m, $){
             });
         }
 
-        var tabtaxoninputs = $('#entry_form .scTaxonCell').find('input,select').not(':disabled');
+        var tabtaxoninputs = $('#entry_record .scTaxonCell').find('input,select').not(':disabled');
         if (tabtaxoninputs.length>0) {
             tabtaxoninputs.each(function(index){
                 invalids.push({ "name" :this.name, "id" : this.id });
@@ -238,41 +271,41 @@ app.form = (function(m, $){
     };
 
     /**
-     * Returns a recording form array from stored inputs.
+     * Returns a recording record array from stored inputs.
      */
     m.extract = function(){
-        //extract form data
-        var form_array = [];
+        //extract record data
+        var record_array = [];
         var inputName, inputValue;
 
-        var record = app.form.inputs.getRecord();
+        var record = app.record.get();
         if(record == null){
-            return form_array;
+            return record_array;
         }
         var inputs = Object.keys(record);
         for (var inputNum = 0; inputNum < inputs.length; inputNum++) {
             inputName = inputs[inputNum];
             inputValue = record[inputName];
-            form_array.push({
+            record_array.push({
                 "name": inputName,
                 "value": inputValue
             });
         }
 
-        return form_array;
+        return record_array;
     };
 
     /**
-     * Extracts data (apart from files) from provided form into a form_array that it returns.
-     * @param form
+     * Extracts data (apart from files) from provided record into a record_array that it returns.
+     * @param record
      * @returns {Array}
      */
-    m.extractFromForm = function(form) {
-        //extract form data
-        var form_array = [];
+    m.extractFromRecord = function(record) {
+        //extract record data
+        var record_array = [];
         var name, value, type, id, needed;
 
-        form.find('input').each(function(index, input) {
+        record.find('input').each(function(index, input) {
             name = $(input).attr("name");
             value = $(input).attr('value');
             type = $(input).attr('type');
@@ -303,7 +336,7 @@ app.form = (function(m, $){
 
             if (needed){
                 if(value != ""){
-                    form_array.push({
+                    record_array.push({
                         "name" : name,
                         "value" : value,
                         "type" : type
@@ -313,13 +346,13 @@ app.form = (function(m, $){
         });
 
         //TEXTAREAS
-        form.find('textarea').each(function(index, textarea) {
+        record.find('textarea').each(function(index, textarea) {
             name = $(textarea).attr('name');
             value = $(textarea).val();
             type = "textarea";
 
             if(value != ""){
-                form_array.push({
+                record_array.push({
                     "name" : name,
                     "value" : value,
                     "type" : type
@@ -328,13 +361,13 @@ app.form = (function(m, $){
         });
 
         //SELECTS
-        form.find("select").each(function(index, select) {
+        record.find("select").each(function(index, select) {
             name = $(select).attr('name');
             value = $(select).find(":selected").val();
             type = "select";
 
             if(value != ""){
-                form_array.push({
+                record_array.push({
                     "name" : name,
                     "value" : value,
                     "type" : type
@@ -342,8 +375,8 @@ app.form = (function(m, $){
             }
         });
 
-        return form_array;
+        return record_array;
     };
 
     return m;
-}(app.form || {}, app.$ || jQuery));
+}(app.record || {}, app.$ || jQuery));

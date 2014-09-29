@@ -1,14 +1,11 @@
 /**
- *  Object responsible for form input management.
+ *  Object responsible for record input management.
  */
 
 app = app || {};
-app.form = app.form || {};
+app.record = app.record || {};
 
-app.form.inputs = (function(m, $){
-    //name under which the record is stored
-    m.RECORD =  'record';
-
+app.record.inputs = (function(m, $){
     m.KEYS = {
         'SREF': 'sample:entered_sref',
         'SREF_SYSTEM': 'sample:entered_sref_system',
@@ -18,38 +15,15 @@ app.form.inputs = (function(m, $){
     };
 
     /**
-     * Returns the current record.
-     * @returns {*}
-     */
-    m.getRecord = function(){
-        return app.storage.tmpGet(m.RECORD) || {};
-    };
-
-    /**
-     * Sets the current record.
-     * @param record The currenr record to be stored.
-     */
-    m.setRecord = function(record){
-        app.storage.tmpSet(m.RECORD, record);
-    };
-
-    /**
-     * Clears the current record.
-     */
-    m.clearRecord = function(){
-        app.storage.tmpRemove(m.RECORD);
-    };
-
-    /**
      * Sets an input in the current record.
      *
      * @param item Input name
      * @param data Input value
      */
-    m.set =  function(item, data){
-        var record = m.getRecord();
+    m.set = function(item, data){
+        var record = app.record.get();
         record[item] = data;
-        m.setRecord(record);
+        app.record.set(record);
     };
 
     /**
@@ -58,7 +32,7 @@ app.form.inputs = (function(m, $){
      * @returns {*}
      */
     m.get = function(item){
-        var record = m.getRecord();
+        var record = app.record.get();
         return record[item];
     };
 
@@ -67,9 +41,9 @@ app.form.inputs = (function(m, $){
      * @param item Input name
      */
     m.remove = function(item){
-        var record = m.getRecord();
+        var record = app.record.get();
         delete record[item];
-        m.setRecord(record);
+        app.record.set(record);
     };
 
     /**
@@ -82,4 +56,4 @@ app.form.inputs = (function(m, $){
     };
 
     return m;
-}(app.form.inputs || {}, app.$ || jQuery));
+}(app.record.inputs || {}, app.$ || jQuery));

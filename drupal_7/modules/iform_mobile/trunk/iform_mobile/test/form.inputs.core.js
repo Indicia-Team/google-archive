@@ -1,6 +1,6 @@
 describe("Core suite", function() {
     beforeEach(function() {
-        app.form.inputs.clearRecord();
+        app.record.clear();
     });
     afterEach(function() { });
 
@@ -15,13 +15,13 @@ describe("Core suite", function() {
 
         //add record
         var record = {'recordinput': Math.random()};
-        app.form.inputs.setRecord(record);
+        app.record.set(record);
 
         //remove record
-        app.form.inputs.clearRecord();
+        app.record.clear();
 
         //check if the record is removed
-        var finalRecord = app.storage.tmpGet(app.form.inputs.RECORD);
+        var finalRecord = app.storage.tmpGet(app.record.RECORD);
         expect(finalRecord).to.be.null;
 
         //check if the input still exists
@@ -33,8 +33,8 @@ describe("Core suite", function() {
      */
     it('set record', function() {
         var record = {};
-        app.form.inputs.setRecord(record);
-        var finalRecord = app.form.inputs.getRecord();
+        app.record.set(record);
+        var finalRecord = app.record.get();
         expect(finalRecord)
             .to.be.an('object')
             .that.is.empty;
@@ -47,8 +47,8 @@ describe("Core suite", function() {
         //general setting up a record with an input
         var input = 'input';
         var input_data = Math.random();
-        app.form.inputs.set(input, input_data);
-        var finalRecord = app.form.inputs.getRecord();
+        app.record.inputs.set(input, input_data);
+        var finalRecord = app.record.get();
         expect(finalRecord)
             .to.be.an('object')
             .that.has.property('input')
@@ -57,17 +57,17 @@ describe("Core suite", function() {
         //set another input
         var input2 = 'input2';
         var input2_data = Math.random();
-        app.form.inputs.set(input2, input2_data);
-        app.form.inputs.get(input2).should.equal(input2_data);
+        app.record.inputs.set(input2, input2_data);
+        app.record.inputs.get(input2).should.equal(input2_data);
 
         //changing input
         input_data = Math.random();
-        app.form.inputs.set(input2, input2_data);
-        app.form.inputs.get(input2).should.equal(input2_data);
+        app.record.inputs.set(input2, input2_data);
+        app.record.inputs.get(input2).should.equal(input2_data);
 
         //removing input
-        app.form.inputs.remove(input2);
-        finalRecord = app.form.inputs.getRecord();
+        app.record.inputs.remove(input2);
+        finalRecord = app.record.get();
         expect(finalRecord).to.not.have.property(input2);
 
     });
