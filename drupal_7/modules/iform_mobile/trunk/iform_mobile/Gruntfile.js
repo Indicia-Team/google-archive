@@ -1,5 +1,15 @@
 module.exports = function(grunt) {
 
+    var  banner = "/*!\n" +
+        " * Indicia Iform Mobile module's core library \n" +
+        " * Version: <%= pkg.version %>\n" +
+        " *\n" +
+        " * <%= pkg.homepage %>\n" +
+        " *\n" +
+        " * Author <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>\n" +
+        " * Released under the <%= _.pluck(pkg.licenses, 'type').join(', ') %> license.\n" +
+        " */\n";
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         karma: {
@@ -13,6 +23,9 @@ module.exports = function(grunt) {
                 separator: '\n\n'
             },
             dist: {
+                options: {
+                    banner: banner
+                },
                 // the files to concatenate
                 src: ['src/*.js'],
                 // the location of the resulting JS file
@@ -22,7 +35,7 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 // the banner is inserted at the top of the output
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+                banner: banner
             },
             dist: {
                 files: {
