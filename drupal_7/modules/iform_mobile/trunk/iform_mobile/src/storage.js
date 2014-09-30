@@ -32,6 +32,20 @@ app.storage = (function(m, $){
     };
 
     /**
+     * Checks if the item exists
+     * @param item Input name
+     * @returns {boolean}
+     */
+    m.is = function(item){
+        var val = this.get(item);
+        if($.isPlainObject(val)) {
+            return !$.isEmptyObject(val);
+        } else {
+            return val != null;
+        }
+    };
+
+    /**
      * Clears the storage.
      */
     m.clear = function(){
@@ -63,6 +77,20 @@ app.storage = (function(m, $){
      */
     m.tmpRemove = function(item){
         return sessionStorage.removeItem(item);
+    };
+
+    /**
+     * Checks if the temporary item exists
+     * @param item Input name
+     * @returns {boolean}
+     */
+    m.tmpIs = function(item){
+        var val = this.tmpGet(item);
+        if($.isPlainObject(val)) {
+            return !$.isEmptyObject(val);
+        } else {
+            return val != null;
+        }
     };
 
     /**

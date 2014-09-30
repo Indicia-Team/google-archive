@@ -65,6 +65,18 @@ app.record.storage = (function(m, $){
     };
 
     /**
+     * Clears all the saved records.
+     */
+    m.clear = function(){
+        app.storage.set(m.RECORDS, {});
+
+        //reset the form counter
+        var settings = app.record.getSettings();
+        settings[app.record.LASTID] = 0;
+        app.record.setSettings(settings);
+    };
+
+    /**
      * Removes a saved record from the storage.
      * @param recordStorageId
      */

@@ -29,7 +29,7 @@ app.record.inputs = (function(m, $){
     /**
      * Reurns an input value from the current record.
      * @param item The Input name
-     * @returns {*}
+     * @returns {*} null if the item does not exist
      */
     m.get = function(item){
         var record = app.record.get();
@@ -52,7 +52,12 @@ app.record.inputs = (function(m, $){
      * @returns {boolean}
      */
     m.is = function(item){
-        return !$.isEmptyObject(this.get(item));
+        var val = this.get(item);
+        if($.isPlainObject(val)) {
+            return !$.isEmptyObject(val);
+        } else {
+            return val != null;
+        }
     };
 
     return m;

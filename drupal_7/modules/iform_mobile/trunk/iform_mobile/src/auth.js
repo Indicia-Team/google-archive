@@ -8,6 +8,9 @@ app.auth = (function(m, $){
         SURVEY_ID: 0
     };
 
+    //name under which the user details are stored
+    m.USER = 'user';
+
     /**
      * Appends user and app authentication to the passed FormData object.
      *
@@ -87,7 +90,7 @@ app.auth = (function(m, $){
      * @returns {Object|*}
      */
     m.getUser = function(){
-        return app.settings('user');
+        return app.settings(m.USER);
     };
 
     /**
@@ -95,14 +98,14 @@ app.auth = (function(m, $){
      * @param user A user object
      */
     m.setUser = function(user){
-        app.settings('user', user);
+        app.settings(m.USER, user);
     };
 
     /**
      * Removes the current user details from the storage.
      */
     m.removeUser = function(){
-        app.settings('user', {});
+        app.settings(m.USER, {});
     };
 
     return m;
