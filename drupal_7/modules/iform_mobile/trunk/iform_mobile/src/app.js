@@ -7,6 +7,7 @@ app = (function(m, $){
 
     //GLOBALS
     m.$ = $;
+    m.data = {};
 
     //CONSTANTS:
     m.TRUE = 1;

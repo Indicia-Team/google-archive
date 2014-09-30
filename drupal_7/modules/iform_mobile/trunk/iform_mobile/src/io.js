@@ -6,25 +6,25 @@ app.io = (function(m, $){
     };
 
     /*
-     * Sending all saved forms.
+     * Sending all saved records.
      * @returns {undefined}
      */
-    m.sendAllSavedForms = function() {
+    m.sendAllSavedRecords = function() {
         if (navigator.onLine) {
-            var forms = app.form.storage.getAll();
-            var key = Object.keys(forms)[0]; //getting the first one of the array
+            var records = app.record.storage.getAll();
+            var key = Object.keys(records)[0]; //getting the first one of the array
             if (key != null) {
                 $.mobile.loading('show');
-                _log("Sending form: " + key);
+                _log("Sending record: " + key);
                 var onSuccess = function(data){
-                    var formStorageId = this.callback_data.formStorageId;
-                    _log("SEND - form ajax (success): " + formStorageId);
+                    var recordStorageId = this.callback_data.recordStorageId;
+                    _log("SEND - record ajax (success): " + recordStorageId);
 
-                    app.form.storage.remove(formStorageId);
-                    $(document).trigger('app.form.sentall.success');
-                    app.io.sendAllSavedForms();
+                    app.record.storage.remove(recordStorageId);
+                    $(document).trigger('app.record.sentall.success');
+                    app.io.sendAllSavedRecords();
                 };
-                m.sendSavedForm(key, onSuccess);
+                m.sendSavedRecord(key, onSuccess);
             } else {
                 $.mobile.loading('hide');
             }
@@ -43,41 +43,41 @@ app.io = (function(m, $){
     };
 
     /*
-     * Sends the saved form
+     * Sends the saved record
      */
-    m.sendSavedForm = function(formStorageId, onSuccess, onError, onSend) {
-        _log("SEND - creating the form.");
-        var data = app.form.storage.getData(formStorageId);
-        var form = {
+    m.sendSavedRecord = function(recordStorageId, onSuccess, onError, onSend) {
+        _log("SEND - creating the record.");
+        var data = app.record.storage.getData(recordStorageId);
+        var record = {
             'data': data,
-            'formStorageId' : formStorageId
+            'recordStorageId' : recordStorageId
         };
 
-        this.postForm(form, onSuccess, onError, onSend)
+        this.postRecord(record, onSuccess, onError, onSend)
     };
 
     /*
-     * Submits the form.
+     * Submits the record.
      */
-    m.postForm = function(form, onSuccess, onError, onSend){
-        _log('SEND - Posting a form with AJAX.');
+    m.postRecord = function(record, onSuccess, onError, onSend){
+        _log('SEND - Posting a record with AJAX.');
         var data = {};
-        if(form.data == null){
-            //extract the form data
-            form = document.getElementById(form.id);
+        if(record.data == null){
+            //extract the record data
+            form = document.getElementById(record.id);
             data = new FormData(form);
         } else {
-            data = form.data;
+            data = record.data;
         }
 
         //Add authentication
         data = app.auth.append(data);
 
         $.ajax({
-            url : m.getFormURL(),
+            url : m.getRecordURL(),
             type : 'POST',
             data : data,
-            callback_data : form,
+            callback_data : record,
             cache : false,
             enctype : 'multipart/form-data',
             processData : false,
@@ -89,43 +89,43 @@ app.io = (function(m, $){
     };
 
     /**
-     * Function callback on Successful Ajax form post.
+     * Function callback on Successful Ajax record post.
      * @param data
      */
     m.onSuccess = function(data){
-        var formStorageId = this.callback_data.formStorageId;
-        _log("SEND - form ajax (success): " + formStorageId);
+        var recordStorageId = this.callback_data.recordStorageId;
+        _log("SEND - record ajax (success): " + recordStorageId);
 
-        app.form.storage.remove(formStorageId);
-        $(document).trigger('app.form.sent.success', [data]);
+        app.record.storage.remove(recordStorageId);
+        $(document).trigger('app.record.sent.success', [data]);
     };
 
     /**
-     * Function callback on Error Ajax form post.
+     * Function callback on Error Ajax record post.
      * @param xhr
      * @param ajaxOptions
      * @param thrownError
      */
     m.onError = function (xhr, ajaxOptions, thrownError) {
-        _log("SEND - form ajax (ERROR "  + xhr.status+ " " + thrownError +")");
+        _log("SEND - record ajax (ERROR "  + xhr.status+ " " + thrownError +")");
         _log(xhr.responseText);
 
-        $(document).trigger('app.form.sent.error', [xhr, thrownError]);
+        $(document).trigger('app.record.sent.error', [xhr, thrownError]);
         //TODO:might be a good idea to add a save option here
     };
 
     /**
-     * Function callback before sending the Ajax form post.
+     * Function callback before sending the Ajax record post.
      */
     m.onSend = function () {
         _log("SEND - onSend");
     };
 
     /**
-     * Returns App main form Path.
+     * Returns App main record Path.
      * @returns {*}
      */
-    m.getFormURL = function(){
+    m.getRecordURL = function(){
         return Drupal.settings.basePath + m.CONF.RECORD_URL;
     };
 

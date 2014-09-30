@@ -65,7 +65,7 @@ app.image = (function(m, $){
          */
         save: function(key, file, onSaveSuccess){
             if (file != null) {
-                _log("FORM - working with " + file.name);
+                _log("RECORD - working with " + file.name);
                 //todo: not to hardcode the size
                 if (!app.storage.hasSpace(file.size/4)){
                     return file_storage_status = app.ERROR;
@@ -74,7 +74,7 @@ app.image = (function(m, $){
                 var reader = new FileReader();
                 //#2
                 reader.onload = function() {
-                    _log("FORM - resizing file");
+                    _log("RECORD - resizing file");
                     var image = new Image();
                     //#4
                     image.onload = function(e){
@@ -101,14 +101,14 @@ app.image = (function(m, $){
 
                         var shrinked = canvas.toDataURL(file.type);
                         try {
-                            _log("FORM - saving file in storage ("
+                            _log("RECORD - saving file in storage ("
                                 + (shrinked.length / 1024) + "KB)" );
 
                             app.storage.set(key,  shrinked); //stores the image to localStorage
                             onSaveSuccess();
                         }
                         catch (e) {
-                            _log("FORM - saving file in storage failed: " + e);
+                            _log("RECORD - saving file in storage failed: " + e);
                         }
                     };
                     //#3
