@@ -869,7 +869,7 @@ function iform_mobile_auth_escape($value)
     return $escaped_array;
   } 
   else {
-    return check_plain($str);
+    return check_plain($value);
   }
 }
 
@@ -951,7 +951,20 @@ function iform_mobile_auth_validate_password($pass)
  */
 function iform_mobile_auth_debug_mode()
 {
-    return variable_get('iform_mobile_auth_debug', 0) == 1;
+	if (empty($_POST['appname'])){
+		return FALSE; 
+	}
+	
+	$name = $_POST['appname'];
+	  
+	$result = db_query("SELECT * FROM {iform_mobile_auth} WHERE name = '%s'", $name);
+	while ($app = db_fetch_array($result)) {
+		if ($app[debug] == 1){
+			return TRUE;
+			break;
+		  }
+    }
+	return FALSE;
 }
 
 
