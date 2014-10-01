@@ -293,6 +293,9 @@ function iform_ajaxproxy_proxy() {
       case "groups_user":
           $Model = data_entry_helper::wrap($_POST, 'groups_user');
         break;
+      case "groups_location":
+        $Model = data_entry_helper::wrap($_POST, 'groups_location');
+        break;
       default:
         echo "{error:\"iform_ajaxproxy Error: Current defined methods are: sample, location, loc-sample, loc-smp-occ, smp-occ, media, occurrence, occ-comment, smp-comment, determination, notification, user-trust\"}";
         // TODO invoke optional method in relevant iform prebuilt form to handle non standard indexes
