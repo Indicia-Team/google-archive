@@ -1,8 +1,4 @@
 <?php
-/*
- * Submit the relevant information to indicia
- */
-iform_load_helpers(array('report_helper', 'data_entry_helper'));
 
 /**
  * Implementation of hook_menu().
@@ -47,6 +43,7 @@ function iform_remote_download_perm() {
  * Returns the download privileges for this user, i.e. if they can download only their own records or have access to verification or collation data.
  */
 function iform_remote_download_privileges() {
+  iform_load_helpers(array('report_helper', 'data_entry_helper'));
   watchdog('iform rd', 'Authenticating');
   if (!iform_remote_download_authenticate())
     return;
@@ -77,6 +74,7 @@ function iform_remote_download_privileges() {
  * Perform the download of a chunk of records, by running a report against the warehouse.
  */
 function iform_remote_download_download() {
+  iform_load_helpers(array('report_helper', 'data_entry_helper'));
   if (!iform_remote_download_authenticate()) 
     return;
   global $user;
@@ -176,6 +174,7 @@ function iform_remote_download_authenticate() {
  * to restrict to a single filter.
  */
 function iform_remote_download_autogenerate() {
+  iform_load_helpers(array('report_helper', 'data_entry_helper'));
   $indicia_user_id=FALSE;
   if (!empty($_GET['indicia_user_id']))
     $indicia_user_id = $_GET['indicia_user_id'];
@@ -231,14 +230,15 @@ function iform_remote_download_autogenerate() {
         return;
       }
       $ext = ($options['mode']==='nbn' || $options['mode']==='tsv') ? 'txt' : $options['mode'];
-      $fp = fopen("$filepath/download-$filter[id].$ext", 'w');
+      $filename = 'download-'.preg_replace('/[^a-zA-Z0-9 \-_]/', '', $filter['title']);
+      $fp = fopen("$filepath/$filename.$ext", 'w');
       if (!$fp) {
-        print "Could not open file for writing at $filepath/download-$filter[id].$ext";
+        print "Could not open file for writing at $filepath/$filename.$ext";
         return;
       }
       fwrite($fp, $output['output']);
       fclose($fp);
-      print "Created $filepath/download-$filter[id].$ext<br/>";
+      print "Created $filepath/$filename.$ext<br/>";
     }
   }
   // clear the message queue from folder creation events
