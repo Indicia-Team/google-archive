@@ -36,7 +36,6 @@ app.record.db = (function(m, $){
             _log("Database is upgrading");
             var db = e.target.result;
 
-            db.deleteObjectStore(m.STORE_RECORDS);
             var store = db.createObjectStore(m.STORE_RECORDS, {'keyPath': 'id'});
             store.createIndex('id', 'id', {unique: true});
         };
