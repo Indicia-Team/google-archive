@@ -8,7 +8,7 @@ app.record = app.record || {};
 app.record.db = (function(m, $){
     m.RECORDS = "records";
 
-    m.DB_VERSION = 4;
+    m.DB_VERSION = 1;
     m.DB_MAIN = "app";
     m.STORE_RECORDS = "records";
 
