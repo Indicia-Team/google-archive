@@ -5,9 +5,9 @@
 app = app || {};
 app.db = (function(m, $){
 
-    m.DB_VERSION = 3;
+    m.DB_VERSION = 1;
     m.DB_MAIN = "app";
-    m.STORE_RECORDS = "records";
+    m.STORE_MAIN = "main";
 
     m.open = function(name, storeName, callback){
         var req = window.indexedDB.open(name, m.DB_VERSION);
@@ -27,8 +27,8 @@ app.db = (function(m, $){
             _log("Database is upgrading");
             var db = e.target.result;
 
-            db.deleteObjectStore(app.db.STORE_RECORDS);
-            db.createObjectStore(app.db.STORE_RECORDS);
+            db.deleteObjectStore(app.db.STORE_MAIN);
+            db.createObjectStore(app.db.STORE_MAIN);
         };
 
         req.onerror = function(e){
@@ -44,7 +44,7 @@ app.db = (function(m, $){
     };
 
     m.add = function(record, key, callback){
-        m.open(m.DB_MAIN, m.STORE_RECORDS, function(store){
+        m.open(m.DB_MAIN, m.STORE_MAIN, function(store){
             _log("Adding to the store.");
 
             store.add(record, key);
@@ -57,7 +57,7 @@ app.db = (function(m, $){
     };
 
     m.get = function(key, callback){
-        m.open(m.DB_MAIN, m.STORE_RECORDS, function(store){
+        m.open(m.DB_MAIN, m.STORE_MAIN, function(store){
             _log('Getting from the store.');
 
             var result = store.get(key);
@@ -69,7 +69,7 @@ app.db = (function(m, $){
     };
 
     m.getAll = function(callback){
-        m.open(m.DB_MAIN, m.STORE_RECORDS, function(store){
+        m.open(m.DB_MAIN, m.STORE_MAIN, function(store){
             _log('Getting all from the store.');
 
             // Get everything in the store

@@ -11,23 +11,26 @@ app.io = (function(m, $){
      */
     m.sendAllSavedRecords = function() {
         if (navigator.onLine) {
-            var records = app.record.storage.getAll();
-            var key = Object.keys(records)[0]; //getting the first one of the array
-            if (key != null) {
-                $.mobile.loading('show');
-                _log("Sending record: " + key);
-                var onSuccess = function(data){
-                    var recordStorageId = this.callback_data.recordStorageId;
-                    _log("SEND - record ajax (success): " + recordStorageId);
+            function onSuccess() {
+                //todo
+                var key = Object.keys(records)[0]; //getting the first one of the array
+                if (key != null) {
+                    $.mobile.loading('show');
+                    _log("Sending record: " + key);
+                    var onSendSavedSuccess = function (data) {
+                        var recordKey = this.callback_data.recordKey;
+                        _log("SEND - record ajax (success): " + recordKey);
 
-                    app.record.storage.remove(recordStorageId);
-                    $(document).trigger('app.record.sentall.success');
-                    app.io.sendAllSavedRecords();
-                };
-                m.sendSavedRecord(key, onSuccess);
-            } else {
-                $.mobile.loading('hide');
+                        app.record.db.remove(recordKey);
+                        $(document).trigger('app.record.sentall.success');
+                        app.io.sendAllSavedRecords();
+                    };
+                    m.sendSavedRecord(key, onSendSavedSuccess);
+                } else {
+                    $.mobile.loading('hide');
+                }
             }
+            app.record.db.getAll(onSuccess);
         } else {
             $.mobile.loading( 'show', {
                 text: "Looks like you are offline!",
@@ -45,15 +48,18 @@ app.io = (function(m, $){
     /*
      * Sends the saved record
      */
-    m.sendSavedRecord = function(recordStorageId, onSuccess, onError, onSend) {
+    m.sendSavedRecord = function(recordKey, callback, onError, onSend) {
         _log("SEND - creating the record.");
-        var data = app.record.storage.getData(recordStorageId);
-        var record = {
-            'data': data,
-            'recordStorageId' : recordStorageId
-        };
+        function onSuccess(data) {
+            var record = {
+                'data': data,
+                'recordKey': recordKey
+            };
 
-        this.postRecord(record, onSuccess, onError, onSend)
+            m.postRecord(record, callback, onError, onSend)
+        }
+        app.record.db.getData(recordKey, onSuccess);
+
     };
 
     /*
@@ -93,10 +99,10 @@ app.io = (function(m, $){
      * @param data
      */
     m.onSuccess = function(data){
-        var recordStorageId = this.callback_data.recordStorageId;
-        _log("SEND - record ajax (success): " + recordStorageId);
+        var recordKey = this.callback_data.recordKey;
+        _log("SEND - record ajax (success): " + recordKey);
 
-        app.record.storage.remove(recordStorageId);
+        app.record.db.remove(recordKey);
         $(document).trigger('app.record.sent.success', [data]);
     };
 
