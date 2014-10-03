@@ -8,7 +8,7 @@ app.record = app.record || {};
 app.record.db = (function(m, $){
     m.RECORDS = "records";
 
-    m.DB_VERSION = 1;
+    m.DB_VERSION = 5;
     m.DB_MAIN = "app";
     m.STORE_RECORDS = "records";
 
@@ -18,7 +18,7 @@ app.record.db = (function(m, $){
      * @param storeName
      * @param callback
      */
-    m.open = function(callback){
+    m.open = function(callback, onError){
         var req = window.indexedDB.open(m.DB_MAIN, m.DB_VERSION);
 
         req.onsuccess = function(e){
@@ -43,11 +43,18 @@ app.record.db = (function(m, $){
         req.onerror = function(e){
             _log("Database NOT opened successfully");
             _log(e);
+            e.message = "Database NOT opened successfully";
+            if (onError != null) {
+                onError(e);
+            }
         };
 
         req.onblocked = function(e){
             _log("Opening database blocked");
             _log(e);
+            if (onError != null) {
+                onError(e);
+            }
         }
 
     };
@@ -58,7 +65,7 @@ app.record.db = (function(m, $){
      * @param key
      * @param callback
      */
-    m.add = function(record, key, callback){
+    m.add = function(record, key, callback, onError){
         m.open(function(store){
             _log("Adding to the store.");
             record['id'] = key;
@@ -68,7 +75,7 @@ app.record.db = (function(m, $){
             if(callback != null){
                 callback();
             }
-        });
+        }, onError);
     };
 
     /**
@@ -76,7 +83,7 @@ app.record.db = (function(m, $){
      * @param recordKey The stored record Id.
      * @returns {*}
      */
-    m.get = function(key, callback){
+    m.get = function(key, callback, onError){
         m.open(function(store){
             _log('Getting from the store.');
 
@@ -89,14 +96,14 @@ app.record.db = (function(m, $){
                 }
             };
 
-        });
+        }, onError);
     };
 
     /**
      * Removes a saved record from the database.
      * @param recordKey
      */
-    m.remove =  function(key, callback){
+    m.remove =  function(key, callback, onError){
         m.open(function(store){
             _log('Removing from the store.');
 
@@ -113,14 +120,14 @@ app.record.db = (function(m, $){
                 }
             }
 
-        });
+        }, onError);
     };
 
     /**
      * Brings back all saved records from the database.
      * @returns {*|{lat: *, lon: *, acc: *}|{}}
      */
-    m.getAll = function(callback){
+    m.getAll = function(callback, onError){
         m.open(function(store){
             _log('Getting all from the store.');
 
@@ -145,10 +152,10 @@ app.record.db = (function(m, $){
                 }
             };
 
-        });
+        }, onError);
     };
 
-    m.is = function(key, callback){
+    m.is = function(key, callback, onError){
         function onSuccess(data) {
             if ($.isPlainObject(data)) {
                 if(callback != null) {
@@ -160,13 +167,13 @@ app.record.db = (function(m, $){
                 }
             }
         }
-        this.get(key, onSuccess);
+        this.get(key, onSuccess, onError);
     };
 
     /**
      * Clears all the saved records.
      */
-    m.clear = function(callback){
+    m.clear = function(callback, onError){
         m.open(function(store){
             _log('Clearing store');
             store.clear();
@@ -174,7 +181,7 @@ app.record.db = (function(m, $){
             if(callback != null) {
                 callback(data);
             }
-        });
+        }, onError);
     };
 
     /**
@@ -182,7 +189,7 @@ app.record.db = (function(m, $){
      * @param recordKey
      * @returns {FormData}
      */
-    m.getData =  function(recordKey, callback){
+    m.getData =  function(recordKey, callback, onError){
         function onSuccess(savedRecord) {
             var data = new FormData();
 
@@ -202,13 +209,13 @@ app.record.db = (function(m, $){
         }
 
         //Extract data from database
-        var savedRecord = this.get(recordKey, onSuccess);
+        var savedRecord = this.get(recordKey, onSuccess, onError);
     };
 
     /**
      * Saves a record using dynamic inputs.
      */
-    m.save = function(callback){
+    m.save = function(callback, onError){
         _log("Record.");
         //get new record ID
         var settings = app.record.getSettings();
@@ -225,15 +232,14 @@ app.record.db = (function(m, $){
                 //on record save success
                 app.record.setSettings(settings);
 
-                if(typeof callback != 'undefined'){
+                if (callback != null) {
                     callback(savedRecordId);
                 }
             }
-            m.add(record_array, savedRecordId, onSuccess);
-
+            m.add(record_array, savedRecordId, onSuccess, onError);
         };
 
-        app.image.extractAllToArray(null, onExtractFilesSuccess);
+        app.image.extractAllToArray(null, onExtractFilesSuccess, onError);
         return app.TRUE;
     };
 
@@ -268,7 +274,8 @@ app.record.db = (function(m, $){
                 _log(e);
                 return app.ERROR;
             }
-            if(typeof onSuccess != 'undefined'){
+
+            if(onSuccess != null){
                 onSuccess(savedRecordId);
             }
         };

@@ -8,10 +8,10 @@ app.image = (function(m, $){
      * @param elem DOM element to look for files
      * @param callback function with an array parameter
      */
-    m.extractAllToArray = function(elem, callback){
+    m.extractAllToArray = function(elem, callback, onError){
         var files = app.image.findAll(elem);
         if (files.length > 0) {
-            app.image.toStringAll(files, callback);
+            app.image.toStringAll(files, callback, onError);
         } else {
             callback(files);
         }
@@ -25,7 +25,7 @@ app.image = (function(m, $){
      * @param onSaveSuccess
      * @returns {number}
      */
-    m.toString =  function(file, onSaveSuccess){
+    m.toString =  function(file, onSaveSuccess, onError){
         if (file != null) {
             _log("RECORD - working with " + file.name);
 
@@ -65,6 +65,12 @@ app.image = (function(m, $){
                     onSaveSuccess(shrinked);
 
                 };
+                reader.onerror = function(e) {
+                    _log(e);
+                    e.message = e.getMessage();
+                    onError(e);
+                };
+
                 //#3
                 image.src = reader.result;
             };
@@ -78,7 +84,7 @@ app.image = (function(m, $){
      * @param files An array of files to be saved
      * @param onSaveAllFilesSuccess
      */
-    m.toStringAll = function(files, onSaveAllFilesSuccess){
+    m.toStringAll = function(files, onSaveAllFilesSuccess, onError){
         //recursive calling to save all the images
         saveAllFilesRecursive(files, null);
         function saveAllFilesRecursive(files, files_array){
@@ -100,7 +106,7 @@ app.image = (function(m, $){
                     });
                     saveAllFilesRecursive(files, files_array, onSaveSuccess);
                 };
-                app.image.toString(file, onSaveSuccess);
+                app.image.toString(file, onSaveSuccess, onError);
             } else {
                 onSaveAllFilesSuccess(files_array);
             }
