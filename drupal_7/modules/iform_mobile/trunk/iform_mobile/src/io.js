@@ -22,7 +22,6 @@ app.io = (function(m, $){
                         _log("SEND - record ajax (success): " + recordKey);
 
                         app.record.db.remove(recordKey);
-                        $(document).trigger('app.record.sentall.success');
                         app.io.sendAllSavedRecords();
                     };
                     m.sendSavedRecord(key, onSendSavedSuccess);
@@ -55,8 +54,16 @@ app.io = (function(m, $){
                 'data': data,
                 'recordKey': recordKey
             };
+            function onPostError (xhr, ajaxOptions, thrownError) {
+                _log("SEND - record ajax (ERROR "  + xhr.status+ " " + thrownError +")");
+                _log(xhr.responseText);
+                var err = {
+                    message:  xhr.status+ " " + thrownError + " " + xhr.responseText
+                };
 
-            m.postRecord(record, callback, onError, onSend)
+                onError(err);
+            }
+            m.postRecord(record, callback, onPostError, onSend)
         }
         app.record.db.getData(recordKey, onSuccess);
 
@@ -88,43 +95,18 @@ app.io = (function(m, $){
             enctype : 'multipart/form-data',
             processData : false,
             contentType : false,
-            success: onSuccess || m.onSuccess,
-            error: onError || m.onError,
-            beforeSend: onSend || m.onSend
+            success: onSuccess || function(data){
+                var recordKey = this.callback_data.recordKey;
+                _log("SEND - record ajax (success): " + recordKey);
+            },
+            error: onError || function (xhr, ajaxOptions, thrownError) {
+                _log("SEND - record ajax (ERROR "  + xhr.status+ " " + thrownError +")");
+                _log(xhr.responseText);
+            },
+            beforeSend: onSend ||function () {
+                _log("SEND - onSend");
+            }
         });
-    };
-
-    /**
-     * Function callback on Successful Ajax record post.
-     * @param data
-     */
-    m.onSuccess = function(data){
-        var recordKey = this.callback_data.recordKey;
-        _log("SEND - record ajax (success): " + recordKey);
-
-        app.record.db.remove(recordKey);
-        $(document).trigger('app.record.sent.success', [data]);
-    };
-
-    /**
-     * Function callback on Error Ajax record post.
-     * @param xhr
-     * @param ajaxOptions
-     * @param thrownError
-     */
-    m.onError = function (xhr, ajaxOptions, thrownError) {
-        _log("SEND - record ajax (ERROR "  + xhr.status+ " " + thrownError +")");
-        _log(xhr.responseText);
-
-        $(document).trigger('app.record.sent.error', [xhr, thrownError]);
-        //TODO:might be a good idea to add a save option here
-    };
-
-    /**
-     * Function callback before sending the Ajax record post.
-     */
-    m.onSend = function () {
-        _log("SEND - onSend");
     };
 
     /**
@@ -133,43 +115,6 @@ app.io = (function(m, $){
      */
     m.getRecordURL = function(){
         return Drupal.settings.basePath + m.CONF.RECORD_URL;
-    };
-
-    /**
-     * Services related functions.
-     */
-    m.services = {};
-
-    /**
-     * Main function to Send/Receive request
-     */
-    m.services.req = function(url, data, onSuccess, onError) {
-        var req = new XMLHttpRequest();
-        req.onreadystatechange = function() {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    if(onSuccess != null){
-                        onSuccess(JSON.parse(req.responseText));
-                    }
-                }
-                else {
-                    if (onError != null){
-                        onError(req);
-                    }
-                }
-            }
-        };
-
-        if (data != null){
-            //post
-            req.open('POST', url, true);
-            req.setRequestHeader("Content-type", "application/json");
-            req.send(JSON.stringify(this.data));
-        } else {
-            //get
-            req.open('GET', url, true);
-            req.send();
-        }
     };
 
     return m;
