@@ -11,7 +11,7 @@ app.navigation = (function(m, $){
     m.popup = function(text, addClose){
         this.makePopup(text, addClose);
         $('#app-popup').popup();
-        $('#app-popup').popup('open');
+        $('#app-popup').popup('open').trigger('create');
     };
 
     /*
