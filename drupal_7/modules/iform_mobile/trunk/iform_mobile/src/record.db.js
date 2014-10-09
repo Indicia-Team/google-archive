@@ -21,6 +21,10 @@ app.record.db = (function(m, $){
     m.open = function(callback, onError){
         var req = window.indexedDB.open(m.DB_MAIN, m.DB_VERSION);
 
+        /**
+         * On Database opening success, returns the Records object store.
+         * @param e
+         */
         req.onsuccess = function(e){
             _log("Database opened successfully");
             var db = e.target.result;
@@ -32,6 +36,10 @@ app.record.db = (function(m, $){
             }
         };
 
+        /**
+         * If the Database needs an upgrade or is initialising.
+         * @param e
+         */
         req.onupgradeneeded = function(e){
             _log("Database is upgrading");
             var db = e.target.result;
@@ -40,6 +48,10 @@ app.record.db = (function(m, $){
             store.createIndex('id', 'id', {unique: true});
         };
 
+        /**
+         * Error of opening the database.
+         * @param e
+         */
         req.onerror = function(e){
             _log("Database NOT opened successfully");
             _log(e);
@@ -49,6 +61,10 @@ app.record.db = (function(m, $){
             }
         };
 
+        /**
+         * Error on database being blocked.
+         * @param e
+         */
         req.onblocked = function(e){
             _log("Opening database blocked");
             _log(e);
@@ -60,10 +76,14 @@ app.record.db = (function(m, $){
     };
 
     /**
-     * Adds a record to the database.
+     * Adds a record under a specified key to the database.
+     *
+     * Note: might be a good idea to move the key assignment away from
+     * the function parameters and rather auto assign one and return on callback.
      * @param record
      * @param key
      * @param callback
+     * @param onError
      */
     m.add = function(record, key, callback, onError){
         m.open(function(store){
@@ -155,6 +175,12 @@ app.record.db = (function(m, $){
         }, onError);
     };
 
+    /**
+     * Checks whether the record under a provided key exists in the database.
+     * @param key
+     * @param callback
+     * @param onError
+     */
     m.is = function(key, callback, onError){
         function onSuccess(data) {
             if ($.isPlainObject(data)) {

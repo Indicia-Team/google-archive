@@ -130,7 +130,7 @@ app.geoloc = (function(m, $){
         onGeolocError = function(error) {
             _log("GPS - error");
             if (onError != null) {
-                onError({'message': error});
+                onError({'message': error.message});
             }
         };
 

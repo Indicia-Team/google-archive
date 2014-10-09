@@ -1,5 +1,6 @@
 /**
  *  Module responsible for large data management.
+ *  todo: add documentation.
  */
 
 app = app || {};
