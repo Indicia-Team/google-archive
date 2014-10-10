@@ -9,14 +9,14 @@ $FONT_SIZE = 20;
 ?>
 
 <!DOCTYPE HTML>
-<html manifest="<?=$base_path ?>manifest.appcache">
+<html manifest="<?php print $base_path ?>manifest.appcache">
 <head>
   <title>offline.html</title>
-  <script src="<?=$base_path ?>sites/all/modules/jquery_update/replace/jquery/1.10/jquery.min.js"></script>
+  <script src="<?php print $base_path ?>sites/all/modules/jquery_update/replace/jquery/1.10/jquery.min.js"></script>
   <script type="text/javascript">
     var lastUpdate = 0;
     var TIME_DIFF = 100; //ms
-    var files_total = <?=$FILES?>;
+    var files_total = <?php print $FILES?>;
     var max = 1.0;
 
     $(document).ready(function($) {
@@ -126,24 +126,24 @@ $FONT_SIZE = 20;
     }
   </style>
 </head>
-<body width="<?=$WIDTH?>" height="<?=$HEIGHT?>">
+<body width="<?php print $WIDTH?>" height="<?php print $HEIGHT?>">
 <center>
-  <svg class="progress-radial" width="<?=$WIDTH?>" height="<?=$HEIGHT?>" viewBox="0 0 <?=$WIDTH?> <?=$HEIGHT?>" shape-rendering="geometricPrecision">
+  <svg class="progress-radial" width="<?php print $WIDTH?>" height="<?php print $HEIGHT?>" viewBox="0 0 <?php print $WIDTH?> <?php print $HEIGHT?>" shape-rendering="geometricPrecision">
     <defs>
-      <mask id="circle_mask" x="0" y="0" width="<?=$WIDTH?>" height="<?=$HEIGHT?>" maskUnits="userSpaceOnUse">
-        <circle cx="<?=$WIDTH*0.5?>" cy="<?=$HEIGHT*0.5?>" r="<?=$HEIGHT*0.5?>" stroke-width="0" fill="black" opacity="1"/>
-        <circle cx="<?=$WIDTH*0.5?>" cy="<?=$HEIGHT*0.5?>" r="<?=$HEIGHT*0.5?>" stroke-width="0" fill="white" opacity="1"/>
-        <circle class="progress-radial-mask-inner" cx="<?=$WIDTH*0.5?>" cy="<?=$HEIGHT*0.5?>" r="<?=$HEIGHT*0.4?>" stroke-width="0" fill="black" opacity="1"/>
+      <mask id="circle_mask" x="0" y="0" width="<?php print $WIDTH?>" height="<?php print $HEIGHT?>" maskUnits="userSpaceOnUse">
+        <circle cx="<?php print $WIDTH*0.5?>" cy="<?php print $HEIGHT*0.5?>" r="<?php print $HEIGHT*0.5?>" stroke-width="0" fill="black" opacity="1"/>
+        <circle cx="<?php print $WIDTH*0.5?>" cy="<?php print $HEIGHT*0.5?>" r="<?php print $HEIGHT*0.5?>" stroke-width="0" fill="white" opacity="1"/>
+        <circle class="progress-radial-mask-inner" cx="<?php print $WIDTH*0.5?>" cy="<?php print $HEIGHT*0.5?>" r="<?php print $HEIGHT*0.4?>" stroke-width="0" fill="black" opacity="1"/>
       </mask>
     </defs>
     <g mask="url(#circle_mask)">
-      <circle class="progress-radial-track" cx="<?=$WIDTH*0.5?>" cy="<?=$HEIGHT*0.5?>" r="<?=$HEIGHT*0.5?>" stroke-width="0" opacity="1"/>
-      <path class="progress-radial-bar" transform="translate(<?=$WIDTH*0.5?>, <?=$HEIGHT*0.5?>)"
+      <circle class="progress-radial-track" cx="<?php print $WIDTH*0.5?>" cy="<?php print $HEIGHT*0.5?>" r="<?php print $HEIGHT*0.5?>" stroke-width="0" opacity="1"/>
+      <path class="progress-radial-bar" transform="translate(<?php print $WIDTH*0.5?>, <?php print $HEIGHT*0.5?>)"
             d="M 0 0">
       </path>
     </g>
-    <g style="font-family: Space Toaster;font-size:<?=$FONT_SIZE?>pt; fill:black;">
-      <text text-anchor="middle" id="mytext" x="<?=$WIDTH*0.5?>" y="<?=$HEIGHT*0.55?>" fill="white">  </text>
+    <g style="font-family: Space Toaster;font-size:<?php print $FONT_SIZE?>pt; fill:black;">
+      <text text-anchor="middle" id="mytext" x="<?php print $WIDTH*0.5?>" y="<?php print $HEIGHT*0.55?>" fill="white">  </text>
     </g>
   </svg>
 </center>
