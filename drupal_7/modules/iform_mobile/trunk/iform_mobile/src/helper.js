@@ -22,7 +22,7 @@ function loadScript(src) {
     document.body.appendChild(script);
 }
 
-function startManifestDownload(id, files_no, src){
+function startManifestDownload(id, files_no, src, callback, onError){
     /*todo: Add better offline handling:
       If there is a network connection, but it cannot reach any
       Internet, it will carry on loading the page, where it should stop it
@@ -30,11 +30,26 @@ function startManifestDownload(id, files_no, src){
       */
     if (navigator.onLine) {
         src = Drupal.settings.basePath + src + '?base_path=' + Drupal.settings.basePath + '&files=' + files_no;
-        var appCacheFrame = jQuery('#' + id).get(0);
-        if (appCacheFrame) {
-            appCacheFrame.contentWindow.applicationCache.update();
+        var frame = document.getElementById(id);
+        if (frame) {
+            //update
+            frame.contentWindow.applicationCache.update();
         } else {
+            //init
             app.navigation.popup('<iframe id="' + id + '" src="' + src + '" width="215px" height="215px" scrolling="no" frameBorder="0"></iframe>', true);
+            frame = document.getElementById(id);
+
+            //After frame loading set up its controllers/callbacks
+            frame.onload = function() {
+                _log('Manifest frame loaded');
+                if (callback != null) {
+                    frame.contentWindow.finished = callback;
+                }
+
+                if (onError != null) {
+                    frame.contentWindow.error = onError;
+                }
+            }
         }
     } else {
         $.mobile.loading( 'show', {

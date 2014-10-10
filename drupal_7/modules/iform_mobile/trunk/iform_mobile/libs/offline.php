@@ -44,10 +44,12 @@ $FONT_SIZE = 20;
               case 'error':
                 message = "Error";
                 jQuery('path').css('fill', 'red');
+                error();
                 break;
               case 'cached':
               case 'updateready':
                 message = "Finished";
+                finished();
                 break;
               case 'checking':
                 jQuery('path').css('fill', '#339933');
@@ -72,6 +74,23 @@ $FONT_SIZE = 20;
 
         });
     });
+
+    /*
+     Functions that act as hooks for the parent window.
+     Overwrite these with callbacks.
+     */
+    function started(){
+      console.log('Started');
+    }
+
+
+    function finished(){
+      console.log('Finished');
+    }
+
+    function error(){
+      console.log('Error');
+    }
 
     function drawProgress(percent){
       if(isNaN(percent)) {
