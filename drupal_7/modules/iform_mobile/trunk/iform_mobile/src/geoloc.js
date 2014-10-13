@@ -91,6 +91,7 @@ app.geoloc = (function(m, $){
                 if (onError != null) {
                     onError({message: "Geolocation timed out!"});
                 }
+                return;
             }
 
             var latitude  = position.coords.latitude;
