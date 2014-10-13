@@ -256,7 +256,7 @@ app.record = (function(m, $){
                 case "hidden":
                     break;
                 default:
-                    _log("Error, unknown input type: " + type);
+                    _log("RECORD: ERROR unknown input type: " + type + '.');
                     break;
             }
 

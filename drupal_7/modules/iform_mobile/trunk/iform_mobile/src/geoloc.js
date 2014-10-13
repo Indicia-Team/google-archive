@@ -23,9 +23,11 @@ app.geoloc = (function(m, $){
      * @returns {*}
      */
     m.run = function(onSuccess, onError){
+        _log('GEOLOC: run.');
+
         // Early return if geolocation not supported.
         if(!navigator.geolocation) {
-            _log("Geolocation is not supported!");
+            _log("GEOLOC: ERROR not supported!");
             if (onError != null) {
                 onError({message: "Geolocation is not supported!"});
             }
@@ -87,7 +89,7 @@ app.geoloc = (function(m, $){
             if ((current_time - app.geoloc.start_time) > app.geoloc.TIMEOUT){
                 //stop everything
                 navigator.geolocation.clearWatch(app.geoloc.id);
-                _log("GPS - timeout");
+                _log("GEOLOC: ERROR timeout.");
                 if (onError != null) {
                     onError({message: "Geolocation timed out!"});
                 }
@@ -107,9 +109,9 @@ app.geoloc = (function(m, $){
             //only set it up if the accuracy is increased
             if (accuracy > -1 && accuracy < prev_accuracy){
                 app.geoloc.set(latitude, longitude, accuracy);
-                _log("GPS - acc: " + accuracy + " meters" );
+                _log("GEOLOC: acc: " + accuracy + " meters." );
                 if (accuracy < app.geoloc.CONF.GPS_ACCURACY_LIMIT){
-                    _log("GPS - finished: " + accuracy + " meters");
+                    _log("GEOLOC: finished: " + accuracy + " meters.");
                     navigator.geolocation.clearWatch(app.geoloc.id);
 
                     //save in storage
@@ -129,7 +131,7 @@ app.geoloc = (function(m, $){
 
         // Callback if geolocation fails.
         onGeolocError = function(error) {
-            _log("GPS - error");
+            _log("GEOLOC: ERROR.");
             if (onError != null) {
                 onError({'message': error.message});
             }

@@ -27,12 +27,12 @@ app.image = (function(m, $){
      */
     m.toString =  function(file, onSaveSuccess, onError){
         if (file != null) {
-            _log("RECORD - working with " + file.name);
+            _log("IMAGE: working with " + file.name + ".");
 
             var reader = new FileReader();
             //#2
             reader.onload = function() {
-                _log("RECORD - resizing file");
+                _log("IMAGE: resizing file.");
                 var image = new Image();
                 //#4
                 image.onload = function(e){
@@ -59,14 +59,14 @@ app.image = (function(m, $){
 
                     var shrinked = canvas.toDataURL(file.type);
 
-                    _log("RECORD - done shrinking file ("
-                    + (shrinked.length / 1024) + "KB)" );
+                    _log("IMAGE: done shrinking file ("
+                    + (shrinked.length / 1024) + "KB)." );
 
                     onSaveSuccess(shrinked);
 
                 };
                 reader.onerror = function(e) {
-                    _log(e);
+                    _log("IMAGE: ERROR " + e + ".");
                     e.message = e.getMessage();
                     onError(e);
                 };

@@ -14,7 +14,7 @@ app.db = (function(m, $){
         var req = window.indexedDB.open(name, m.DB_VERSION);
 
         req.onsuccess = function(e){
-            _log("Database opened successfully");
+            _log("DB: opened successfully.");
             var db = e.target.result;
             var transaction = db.transaction([storeName], "readwrite");
             var store = transaction.objectStore(storeName);
@@ -25,7 +25,7 @@ app.db = (function(m, $){
         };
 
         req.onupgradeneeded = function(e){
-            _log("Database is upgrading");
+            _log("DB: upgrading.");
             var db = e.target.result;
 
             db.deleteObjectStore(app.db.STORE_MAIN);
@@ -33,12 +33,12 @@ app.db = (function(m, $){
         };
 
         req.onerror = function(e){
-            _log("Database NOT opened successfully");
+            _log("DB: NOT opened successfully.");
             _log(e);
         };
 
         req.onblocked = function(e){
-            _log("Opening database blocked");
+            _log("DB: ERROR database blocked.");
             _log(e);
         }
 
@@ -46,7 +46,7 @@ app.db = (function(m, $){
 
     m.add = function(record, key, callback){
         m.open(m.DB_MAIN, m.STORE_MAIN, function(store){
-            _log("Adding to the store.");
+            _log("DB: adding to the store.");
 
             store.add(record, key);
             store.transaction.db.close();
@@ -59,7 +59,7 @@ app.db = (function(m, $){
 
     m.get = function(key, callback){
         m.open(m.DB_MAIN, m.STORE_MAIN, function(store){
-            _log('Getting from the store.');
+            _log('DB: getting from the store.');
 
             var result = store.get(key);
             if(callback != null) {
@@ -71,7 +71,7 @@ app.db = (function(m, $){
 
     m.getAll = function(callback){
         m.open(m.DB_MAIN, m.STORE_MAIN, function(store){
-            _log('Getting all from the store.');
+            _log('DB: getting all from the store.');
 
             // Get everything in the store
             var keyRange = IDBKeyRange.lowerBound(0);
@@ -103,7 +103,7 @@ app.db = (function(m, $){
 
     m.clear = function(callback){
         m.open(m.DB_MAIN, m.STORE_RECORDS, function(store){
-            _log('Clearing store');
+            _log('DB: clearing store');
             store.clear();
 
             if(callback != null) {

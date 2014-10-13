@@ -16,10 +16,10 @@ app.io = (function(m, $){
                 var key = Object.keys(records)[0]; //getting the first one of the array
                 if (key != null) {
                     $.mobile.loading('show');
-                    _log("Sending record: " + key);
+                    _log("IO: sending record: " + key + ".");
                     var onSendSavedSuccess = function (data) {
                         var recordKey = this.callback_data.recordKey;
-                        _log("SEND - record ajax (success): " + recordKey);
+                        _log("IO: record ajax (success): " + recordKey + ".");
 
                         app.record.db.remove(recordKey);
                         app.io.sendAllSavedRecords();
@@ -48,14 +48,14 @@ app.io = (function(m, $){
      * Sends the saved record
      */
     m.sendSavedRecord = function(recordKey, callback, onError, onSend) {
-        _log("SEND - creating the record.");
+        _log("IO: creating the record.");
         function onSuccess(data) {
             var record = {
                 'data': data,
                 'recordKey': recordKey
             };
             function onPostError (xhr, ajaxOptions, thrownError) {
-                _log("SEND - record ajax (ERROR "  + xhr.status+ " " + thrownError +")");
+                _log("IO: ERROR record ajax ("  + xhr.status+ " " + thrownError +").");
                 _log(xhr.responseText);
                 var err = {
                     message:  xhr.status+ " " + thrownError + " " + xhr.responseText
@@ -73,7 +73,7 @@ app.io = (function(m, $){
      * Submits the record.
      */
     m.postRecord = function(record, onSuccess, onError, onSend){
-        _log('SEND - Posting a record with AJAX.');
+        _log('IO: posting a record with AJAX.');
         var data = {};
         if(record.data == null){
             //extract the record data
@@ -97,14 +97,14 @@ app.io = (function(m, $){
             contentType : false,
             success: onSuccess || function(data){
                 var recordKey = this.callback_data.recordKey;
-                _log("SEND - record ajax (success): " + recordKey);
+                _log("IO: record ajax (success): " + recordKey + ".");
             },
             error: onError || function (xhr, ajaxOptions, thrownError) {
-                _log("SEND - record ajax (ERROR "  + xhr.status+ " " + thrownError +")");
+                _log("IO: ERROR record ajax ("  + xhr.status+ " " + thrownError +").");
                 _log(xhr.responseText);
             },
             beforeSend: onSend ||function () {
-                _log("SEND - onSend");
+                _log("IO: onSend.");
             }
         });
     };
