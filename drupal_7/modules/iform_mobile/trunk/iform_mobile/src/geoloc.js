@@ -1,12 +1,12 @@
 app = app || {};
 
 app.geoloc = (function(m, $){
-    m.TIMEOUT = 120000;
-    m.HIGH_ACCURACY = true;
 
     //configuration should be setup in app config file
     m.CONF = {
-        GPS_ACCURACY_LIMIT: 26000
+        GPS_ACCURACY_LIMIT: 26000,
+        HIGH_ACCURACY: true,
+        TIMEOUT: 120000
     };
 
     m.latitude = null;
@@ -14,9 +14,39 @@ app.geoloc = (function(m, $){
     m.accuracy = -1;
 
     m.start_time = 0;
-    m.tries = 0;
     m.id = 0;
     m.map = null;
+
+    /**
+     * @param lat
+     * @param lon
+     * @param acc
+     */
+    m.set = function(lat, lon, acc){
+        this.latitude = lat;
+        this.longitude = lon;
+        this.accuracy = acc;
+    };
+
+    /**
+     *
+     * @returns {{lat: *, lon: *, acc: *}}
+     */
+    m.get = function(){
+        return {
+            'lat' : this.latitude,
+            'lon' : this.longitude,
+            'acc' : this.accuracy
+        }
+    };
+
+    /**
+     *
+     * @returns {*}
+     */
+    m.getAccuracy = function(){
+        return this.accuracy;
+    };
 
     /**
      *
@@ -40,50 +70,24 @@ app.geoloc = (function(m, $){
         //check if the lock is acquired and the accuracy is good enough
         var accuracy = app.geoloc.getAccuracy();
         if ((accuracy > -1) && (accuracy < this.CONF.GPS_ACCURACY_LIMIT)){
+            _log('GEOLOC: lock is good enough (acc: ' + accuracy + ' meters).');
             if (onSuccess != null) {
                 onSuccess(this.get());
             }
+            return;
         }
 
         this.start_time = new Date().getTime();
-        this.tries = (this.tries == 0) ? 1 : this.tries +  1;
 
         // Request geolocation.
         this.id = app.geoloc.watchPosition(onSuccess, onError);
-    };
-
-    /*
-     * Validates the current GPS lock quality
-     * @returns {*}
-     */
-    m.valid = function(){
-        var accuracy = this.getAccuracy();
-        if ( accuracy == -1 ){
-            //No GPS lock yet
-            return app.ERROR;
-
-        } else if (accuracy > this.CONF.GPS_ACCURACY_LIMIT){
-            //Geolocated with bad accuracy
-            return app.FALSE;
-
-        } else {
-            //Geolocation accuracy is good enough
-            return app.TRUE;
-        }
     };
 
     /**
      *
      */
     m.watchPosition = function(onSuccess, onError){
-        // Geolocation options.
-        var options = {
-            enableHighAccuracy: app.geoloc.HIGH_ACCURACY,
-            maximumAge: 0,
-            timeout: app.geoloc.TIMEOUT
-        };
-
-        onGeolocSuccess = function(position) {
+        var onGeolocSuccess = function(position) {
             //timeout
             var current_time = new Date().getTime();
             if ((current_time - app.geoloc.start_time) > app.geoloc.TIMEOUT){
@@ -130,48 +134,45 @@ app.geoloc = (function(m, $){
         };
 
         // Callback if geolocation fails.
-        onGeolocError = function(error) {
+        var onGeolocError = function(error) {
             _log("GEOLOC: ERROR.");
             if (onError != null) {
                 onError({'message': error.message});
             }
         };
 
+        // Geolocation options.
+        var options = {
+            enableHighAccuracy: m.CONF.HIGH_ACCURACY,
+            maximumAge: 0,
+            timeout: m.CONF.TIMEOUT
+        };
+
         navigator.geolocation.watchPosition(
             onGeolocSuccess,
             onGeolocError,
-            options);
+            options
+        );
     };
 
-    /**
-     * @param lat
-     * @param lon
-     * @param acc
-     */
-    m.set = function(lat, lon, acc){
-        this.latitude = lat;
-        this.longitude = lon;
-        this.accuracy = acc;
-    };
-
-    /**
-     *
-     * @returns {{lat: *, lon: *, acc: *}}
-     */
-    m.get = function(){
-        return {
-            'lat' : this.latitude,
-            'lon' : this.longitude,
-            'acc' : this.accuracy
-        }
-    };
-
-    /**
-     *
+    /*
+     * Validates the current GPS lock quality
      * @returns {*}
      */
-    m.getAccuracy = function(){
-        return this.accuracy;
+    m.valid = function(){
+        var accuracy = this.getAccuracy();
+        if ( accuracy == -1 ){
+            //No GPS lock yet
+            return app.ERROR;
+
+        } else if (accuracy > this.CONF.GPS_ACCURACY_LIMIT){
+            //Geolocated with bad accuracy
+            return app.FALSE;
+
+        } else {
+            //Geolocation accuracy is good enough
+            return app.TRUE;
+        }
     };
 
     return m;
