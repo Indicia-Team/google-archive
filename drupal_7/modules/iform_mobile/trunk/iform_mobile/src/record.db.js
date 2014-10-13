@@ -26,7 +26,7 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onsuccess = function(e){
-            _log("Database opened successfully");
+            _log("RECORD.DB: opened successfully.");
             var db = e.target.result;
             var transaction = db.transaction([m.STORE_RECORDS], "readwrite");
             var store = transaction.objectStore(m.STORE_RECORDS);
@@ -41,7 +41,7 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onupgradeneeded = function(e){
-            _log("Database is upgrading");
+            _log("RECORD.DB: upgrading");
             var db = e.target.result;
 
             var store = db.createObjectStore(m.STORE_RECORDS, {'keyPath': 'id'});
@@ -53,9 +53,9 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onerror = function(e){
-            _log("Database NOT opened successfully");
+            _log("RECORD.DB: ERROR not opened successfully.");
             _log(e);
-            e.message = "Database NOT opened successfully";
+            e.message = "Database NOT opened successfully.";
             if (onError != null) {
                 onError(e);
             }
@@ -66,7 +66,7 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onblocked = function(e){
-            _log("Opening database blocked");
+            _log("RECORD.DB: ERROR database blocked.");
             _log(e);
             if (onError != null) {
                 onError(e);
@@ -125,7 +125,7 @@ app.record.db = (function(m, $){
      */
     m.remove =  function(key, callback, onError){
         m.open(function(store){
-            _log('Removing from the store.');
+            _log('RECORD.DB: removing from the store.');
 
             var req = store.openCursor(IDBKeyRange.only(key));
             req.onsuccess = function(){
@@ -149,7 +149,7 @@ app.record.db = (function(m, $){
      */
     m.getAll = function(callback, onError){
         m.open(function(store){
-            _log('Getting all from the store.');
+            _log('RECORD.DB: getting all from the store.');
 
             // Get everything in the store
             var keyRange = IDBKeyRange.lowerBound(0);
@@ -253,7 +253,7 @@ app.record.db = (function(m, $){
             //merge files and the rest of the inputs
             record_array = record_array.concat(files_array);
 
-            _log("Record - saving the record into database");
+            _log("RECORD.DB: saving the record into database.");
             function onSuccess(){
                 //on record save success
                 app.record.setSettings(settings);
@@ -290,13 +290,13 @@ app.record.db = (function(m, $){
             //merge files and the rest of the inputs
             record_array = record_array.concat(files_array);
 
-            _log("Record - saving the record into database");
+            _log("RECORD.DB: saving the record into database.");
             try{
                 records[savedRecordId] = record_array;
                 m.setAll(records);
                 app.record.setSettings(settings);
             } catch (e){
-                _log("Record - ERROR while saving the record");
+                _log("RECORD.DB: ERROR while saving the record.");
                 _log(e);
                 return app.ERROR;
             }

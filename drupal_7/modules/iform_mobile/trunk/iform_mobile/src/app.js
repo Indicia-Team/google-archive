@@ -40,7 +40,7 @@ app = (function(m, $){
      * Init function
      */
     m.initialise = function(){
-        _log('App initialised.');
+        _log('APP: initialised.');
 
         //todo: needs tidying up
         //Bind JQM page events with page controller handlers
