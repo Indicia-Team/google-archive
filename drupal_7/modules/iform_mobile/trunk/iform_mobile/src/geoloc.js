@@ -41,6 +41,13 @@ app.geoloc = (function(m, $){
     };
 
     /**
+     * Clears the current lock.
+     */
+    m.clear = function(){
+        m.set (null, null, -1);
+    };
+
+    /**
      *
      * @returns {*}
      */
@@ -52,7 +59,7 @@ app.geoloc = (function(m, $){
      *
      * @returns {*}
      */
-    m.run = function(onSuccess, onError){
+    m.run = function(onUpdate, onSuccess, onError){
         _log('GEOLOC: run.');
 
         // Early return if geolocation not supported.
@@ -65,34 +72,42 @@ app.geoloc = (function(m, $){
         }
 
         //stop any other geolocation service started before
-        navigator.geolocation.clearWatch(this.id);
+        app.geoloc.stop();
+        app.geoloc.clear();
 
-        //check if the lock is acquired and the accuracy is good enough
-        var accuracy = app.geoloc.getAccuracy();
-        if ((accuracy > -1) && (accuracy < this.CONF.GPS_ACCURACY_LIMIT)){
-            _log('GEOLOC: lock is good enough (acc: ' + accuracy + ' meters).');
-            if (onSuccess != null) {
-                onSuccess(this.get());
-            }
-            return;
-        }
+        ////check if the lock is acquired and the accuracy is good enough
+        //var accuracy = app.geoloc.getAccuracy();
+        //if ((accuracy > -1) && (accuracy < this.CONF.GPS_ACCURACY_LIMIT)){
+        //    _log('GEOLOC: lock is good enough (acc: ' + accuracy + ' meters).');
+        //    if (onSuccess != null) {
+        //        onSuccess(this.get());
+        //    }
+        //    return;
+        //}
 
         this.start_time = new Date().getTime();
 
         // Request geolocation.
-        this.id = app.geoloc.watchPosition(onSuccess, onError);
+        this.id = app.geoloc.watchPosition(onUpdate, onSuccess, onError);
+    };
+
+    /**
+     * Stops any currently running geolocation service.
+     */
+    m.stop = function(){
+        navigator.geolocation.clearWatch(app.geoloc.id);
     };
 
     /**
      *
      */
-    m.watchPosition = function(onSuccess, onError){
+    m.watchPosition = function(onUpdate, onSuccess, onError){
         var onGeolocSuccess = function(position) {
             //timeout
             var current_time = new Date().getTime();
             if ((current_time - app.geoloc.start_time) > app.geoloc.TIMEOUT){
                 //stop everything
-                navigator.geolocation.clearWatch(app.geoloc.id);
+                app.geoloc.stop();
                 _log("GEOLOC: ERROR timeout.");
                 if (onError != null) {
                     onError({message: "Geolocation timed out!"});
@@ -113,10 +128,9 @@ app.geoloc = (function(m, $){
             //only set it up if the accuracy is increased
             if (accuracy > -1 && accuracy < prev_accuracy){
                 app.geoloc.set(latitude, longitude, accuracy);
-                _log("GEOLOC: acc: " + accuracy + " meters." );
                 if (accuracy < app.geoloc.CONF.GPS_ACCURACY_LIMIT){
                     _log("GEOLOC: finished: " + accuracy + " meters.");
-                    navigator.geolocation.clearWatch(app.geoloc.id);
+                    app.geoloc.stop();
 
                     //save in storage
                     var location = {
@@ -128,6 +142,11 @@ app.geoloc = (function(m, $){
                     app.settings('location', location);
                     if (onSuccess != null) {
                         onSuccess(location);
+                    }
+                } else {
+                    _log("GEOLOC: updated acc: " + accuracy + " meters." );
+                    if (onUpdate != null) {
+                        onUpdate(location);
                     }
                 }
             }
