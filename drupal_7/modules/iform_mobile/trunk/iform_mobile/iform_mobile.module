@@ -25,7 +25,6 @@ function iform_mobile_library() {
       $path . '/libs/photoswipe-3.0.4/klass.min.js' => array(),
       $path . '/libs/photoswipe-3.0.4/code.photoswipe.jquery-3.0.4.min.js' => array(),
       $path . '/libs/handlebars.js' => array(),
-      $path . '/libs/jquery.validate.js' => array(),
       $path . '/dist/iform-mobile.js' => array(),
     ),
     'css' => array(
