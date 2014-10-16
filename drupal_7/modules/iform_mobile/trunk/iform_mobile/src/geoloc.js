@@ -100,6 +100,10 @@ app.geoloc = (function(m, $){
 
     /**
      *
+     * @param onUpdate
+     * @param onSuccess
+     * @param onError
+     * @returns {Number} id of running GPS
      */
     m.watchPosition = function(onUpdate, onSuccess, onError){
         var onGeolocSuccess = function(position) {
@@ -167,7 +171,7 @@ app.geoloc = (function(m, $){
             timeout: m.CONF.TIMEOUT
         };
 
-        navigator.geolocation.watchPosition(
+        return navigator.geolocation.watchPosition(
             onGeolocSuccess,
             onGeolocError,
             options

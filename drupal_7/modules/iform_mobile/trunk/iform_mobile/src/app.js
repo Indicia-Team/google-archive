@@ -1,4 +1,6 @@
 app = (function(m, $){
+    m.version = '0'; //library version, generated/replaced by grunt
+
     //configuration should be setup in app config file
     m.CONF = {
         HOME: "",
