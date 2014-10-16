@@ -119,36 +119,32 @@ app.geoloc = (function(m, $){
                 return;
             }
 
-            var latitude  = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var accuracy = position.coords.accuracy;
+            var location = {
+                'lat' : position.coords.latitude,
+                'lon' : position.coords.longitude,
+                'acc' : position.coords.accuracy
+            };
 
             //set for the first time
             var prev_accuracy = app.geoloc.getAccuracy();
             if (prev_accuracy == -1){
-                prev_accuracy = accuracy + 1;
+                prev_accuracy = location.acc + 1;
             }
 
             //only set it up if the accuracy is increased
-            if (accuracy > -1 && accuracy < prev_accuracy){
-                app.geoloc.set(latitude, longitude, accuracy);
-                if (accuracy < app.geoloc.CONF.GPS_ACCURACY_LIMIT){
-                    _log("GEOLOC: finished: " + accuracy + " meters.");
+            if (location.acc > -1 && location.acc < prev_accuracy){
+                app.geoloc.set(location.lat, location.lon, location.acc);
+                if (location.acc < app.geoloc.CONF.GPS_ACCURACY_LIMIT){
+                    _log("GEOLOC: finished: " + location.acc + " meters.");
                     app.geoloc.stop();
 
                     //save in storage
-                    var location = {
-                        'lat' : latitude,
-                        'lon' : longitude,
-                        'acc' : accuracy
-                    };
-
                     app.settings('location', location);
                     if (onSuccess != null) {
                         onSuccess(location);
                     }
                 } else {
-                    _log("GEOLOC: updated acc: " + accuracy + " meters." );
+                    _log("GEOLOC: updated acc: " + location.acc + " meters." );
                     if (onUpdate != null) {
                         onUpdate(location);
                     }
