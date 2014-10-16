@@ -32,6 +32,18 @@ module.exports = function(grunt) {
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
+        replace: {
+            main: {
+                src: [
+                    'dist/<%= pkg.name %>.js'
+                ],
+                overwrite: true,                 // overwrite matched source files
+                replacements: [{
+                    from: /(m\.version =) \'0\';/g,                   // string replacement
+                    to: '$1 \'<%= pkg.version %>\';'
+                }]
+            }
+        },
         uglify: {
             options: {
                 // the banner is inserted at the top of the output
@@ -43,13 +55,14 @@ module.exports = function(grunt) {
                 }
             }
         }
+
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-karma');
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['concat', 'replace', 'uglify']);
 
 };
