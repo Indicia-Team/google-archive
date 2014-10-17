@@ -38,6 +38,10 @@ app.navigation = (function(m, $){
         $('#app-popup').empty().append(text);
     };
 
+    m.closePopup = function(){
+        $('#app-popup').popup( "close" );
+    };
+
     /*
      * Creates a loader
      */

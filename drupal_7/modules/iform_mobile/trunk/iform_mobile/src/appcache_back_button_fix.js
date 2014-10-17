@@ -15,30 +15,19 @@
 /*
  * Fixes back buttons for specific page
  */
-function fixPageBackButtons(page_id, backButtonUrls){
-  console.log('FIXING: back buttons ( ' + page_id + ')');
+function fixPageBackButtons(currentPageURL, nextPageId){
+    console.log('FIXING: back buttons ( ' + nextPageId + ')');
 
-  var url = "";
-  //check if in array
-  for (var regex in backButtonUrls){
-    var re = new RegExp(regex, "i");
-    if(re.test(page_id)){
-      url = backButtonUrls[regex];
-      break;
-    } 
-  }
-  
-  //return if no match
-  if (url == ""){
-   return; 
-  }
-  
-  var buttons = jQuery("div[id='" + page_id + "'] a[data-rel='back']");
-  buttons.each( function(index, button){
-    //assign new url to the button
-    jQuery(button).attr('href', url);
-    jQuery(button).removeAttr('data-rel');
-  });
+    var buttons = jQuery("div[id='" + nextPageId + "'] a[data-rel='back']");
+    buttons.each( function(index, button){
+        jQuery(button).removeAttr('data-rel');
+
+        //skip external pages
+        if (currentPageURL != null) {
+            //assign new url to the button
+            jQuery(button).attr('href', currentPageURL);
+        }
+    });
 }
 
 /************ END BACK BUTTON FIX ****************************************************/
