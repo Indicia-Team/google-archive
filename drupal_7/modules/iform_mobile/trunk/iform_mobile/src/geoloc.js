@@ -174,7 +174,7 @@ app.geoloc = (function(m, $){
         );
     };
 
-    /*
+    /**
      * Validates the current GPS lock quality
      * @returns {*}
      */

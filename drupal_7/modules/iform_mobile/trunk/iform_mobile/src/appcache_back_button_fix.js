@@ -36,7 +36,8 @@ function fixPageBackButtons(page_id, backButtonUrls){
   var buttons = jQuery("div[id='" + page_id + "'] a[data-rel='back']");
   buttons.each( function(index, button){
     //assign new url to the button
-    jQuery(button).attr('href', url);   
+    jQuery(button).attr('href', url);
+    jQuery(button).removeAttr('data-rel');
   });
 }
 
@@ -53,6 +54,7 @@ function browserDetect(browser){
     if (browser == 'Chrome' || browser == 'Safari'){
         var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
         var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+        var is_mobile = navigator.userAgent.indexOf("Mobile") > -1;
 
         if (is_safari){
           if (browser == 'Chrome'){
@@ -62,7 +64,10 @@ function browserDetect(browser){
             //Safari
             return (!is_chrome) ? true : false;
           }
-        } 
+        } else if (is_mobile){
+            //Safari homescreen Agent has only 'Mobile'
+            return true;
+        }
         return false;
     }
     return (navigator.userAgent.indexOf(browser) > -1);
