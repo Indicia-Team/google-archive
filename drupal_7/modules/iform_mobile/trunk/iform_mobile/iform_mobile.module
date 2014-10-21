@@ -50,7 +50,6 @@ function iform_mobile_library() {
   $libraries = array();
   $libraries['main'] = array(
     'title' => 'iForm Mobile',
-    'version' => '1.0',
     'js' => array(
       $path . '/libs/IndexedDBShim.js' => array(),
       $path . '/libs/fastclick.js' => array(),
