@@ -140,7 +140,7 @@ tr.even {
   background: #fcfcfc;
   border: solid 1px #e9e9e9;
 }
-.block-title, th.ui-widget-header, th.ui-widget-header a, thead.ui-widget-header, thead.ui-widget-header th, thead.ui-widget-header a {
+.block-title {
   color: #fffffc;
   background: #444445;
 }
