@@ -94,7 +94,7 @@ header#header div.region nav .block-content {
 /** Buttons **/
 /* Sassify the buttons */
 /* line 80, sass/indiciatheme.scss */
-input[type=submit], input[type=button], button, .indicia-button, a.indicia-button {
+input[type=submit], input[type=button], button, .indicia-button, a.indicia-button, a.button {
   color: white;
   *zoom: 1;
   filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF00679A', endColorstr='#FF002334');
@@ -109,13 +109,14 @@ input[type=submit], input[type=button], button, .indicia-button, a.indicia-butto
   border: 1px solid #004771;
   color: white;
   text-shadow: #001119 0 -1px 0;
+  margin-right: 10px;
 }
 /* line 15, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
-input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
+input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover, a.button:hover {
   text-decoration: none;
 }
 /* line 18, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
-input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover {
+input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-button:hover, a.indicia-button:hover, a.button:hover {
   background-color: #004771;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(3%, #005681), color-stop(75%, #004771));
   background: -webkit-linear-gradient(#005681 3%, #004771 75%);
@@ -124,13 +125,13 @@ input[type=submit]:hover, input[type=button]:hover, button:hover, .indicia-butto
   background: linear-gradient(#005681 3%, #004771 75%);
 }
 /* line 21, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
-input[type=submit]:active, input[type=button]:active, button:active, .indicia-button:active, a.indicia-button:active {
+input[type=submit]:active, input[type=button]:active, button:active, .indicia-button:active, a.indicia-button:active, a.button:active {
   -webkit-box-shadow: #003d61 0 1px 2px inset;
   -moz-box-shadow: #003d61 0 1px 2px inset;
   box-shadow: #003d61 0 1px 2px inset;
 }
 /* line 6, ../../../../../../../../Ruby193/lib/ruby/gems/1.9.1/gems/sassy-buttons-0.2.6/stylesheets/sassy-buttons/_sassy-button-pseudo-states.sass */
-input[type=submit].disabled, input[type=submit][disabled], input[type=button].disabled, input[type=button][disabled], button.disabled, button[disabled], .indicia-button.disabled, .indicia-button[disabled], a.indicia-button.disabled, a.indicia-button[disabled] {
+input[type=submit].disabled, input[type=submit][disabled], input[type=button].disabled, input[type=button][disabled], button.disabled, button[disabled], .indicia-button.disabled, .indicia-button[disabled], a.indicia-button.disabled, a.indicia-button[disabled], a.button.disabled, a.button[disabled] {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
   opacity: 0.6;
   background: #00578a;
@@ -140,8 +141,8 @@ input[type=submit].disabled, input[type=submit][disabled], input[type=button].di
   box-shadow: none;
 }
 
-/* line 84, sass/indiciatheme.scss */
-input[type=button], button, .indicia-button {
+/* line 85, sass/indiciatheme.scss */
+input[type=button], button, .indicia-button, a.indicia-button, a.button {
   font-size: 12px;
   padding: 0.25em;
   display: inline-block;
@@ -154,7 +155,7 @@ input[type=button], button, .indicia-button {
 }
 
 /* Submit button a bit bigger */
-/* line 88, sass/indiciatheme.scss */
+/* line 89, sass/indiciatheme.scss */
 input[type=submit], button[type=submit], .fb-close {
   font-size: 14px;
   padding: 0.25em;
@@ -165,7 +166,6 @@ input[type=submit], button[type=submit], .fb-close {
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
   border-radius: 4px;
-  margin-right: 10px;
 }
 
 /* line 92, sass/indiciatheme.scss */

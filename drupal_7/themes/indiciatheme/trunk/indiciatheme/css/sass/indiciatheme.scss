@@ -77,17 +77,17 @@ header#header {
 /** Buttons **/
 
 /* Sassify the buttons */
-input[type=submit], input[type=button], button, .indicia-button, a.indicia-button {
+input[type=submit], input[type=button], button, .indicia-button, a.indicia-button, a.button {
   color: $colour-ctrl-text;
   @include sassy-button-gradient('matte', $colour-ctrl-background, $colour-ctrl-background-light, $colour-ctrl-text, 'inset', true);
+  margin-right: $spacing;
 }
-input[type=button], button, .indicia-button {
+input[type=button], button, .indicia-button, a.indicia-button, a.button {
   @include sassy-button-structure(4px, 12px, 0.25em);
 }
 /* Submit button a bit bigger */
 input[type=submit], button[type=submit], .fb-close {
   @include sassy-button-structure(4px, 14px, 0.25em);
-  margin-right: $spacing;
 }
 .form-submit:hover {
   color: $colour-ctrl-text;
