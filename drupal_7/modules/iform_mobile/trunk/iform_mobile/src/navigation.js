@@ -62,6 +62,27 @@ app.navigation = (function(m, $){
         }, time);
     };
 
+    /**
+     * Displays a self disappearing lightweight message.
+     */
+    m.message = function(text, time){
+        if (text == null){
+            _log('NAVIGATION: ERROR no text provided to message.');
+            return;
+        }
+
+        $.mobile.loading( 'show', {
+            text: text,
+            theme: "b",
+            textVisible: true,
+            textonly: true
+        });
+
+        setTimeout(function(){
+            $.mobile.loading('hide');
+        }, time || 3000);
+    };
+
     /*
      * Goes to the some app page.
      *
