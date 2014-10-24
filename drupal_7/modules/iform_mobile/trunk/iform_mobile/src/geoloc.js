@@ -60,11 +60,11 @@ app.geoloc = (function(m, $){
      * @returns {*}
      */
     m.run = function(onUpdate, onSuccess, onError){
-        _log('GEOLOC: run.');
+        _log('GEOLOC: run.', app.LOG_DEBUG);
 
         // Early return if geolocation not supported.
         if(!navigator.geolocation) {
-            _log("GEOLOC: ERROR not supported!");
+            _log("GEOLOC: not supported!", app.LOG_ERROR);
             if (onError != null) {
                 onError({message: "Geolocation is not supported!"});
             }
@@ -112,7 +112,7 @@ app.geoloc = (function(m, $){
             if ((current_time - app.geoloc.start_time) > app.geoloc.TIMEOUT){
                 //stop everything
                 app.geoloc.stop();
-                _log("GEOLOC: ERROR timeout.");
+                _log("GEOLOC: timeout.", app.LOG_ERROR);
                 if (onError != null) {
                     onError({message: "Geolocation timed out!"});
                 }
@@ -135,7 +135,7 @@ app.geoloc = (function(m, $){
             if (location.acc > -1 && location.acc < prev_accuracy){
                 app.geoloc.set(location.lat, location.lon, location.acc);
                 if (location.acc < app.geoloc.CONF.GPS_ACCURACY_LIMIT){
-                    _log("GEOLOC: finished: " + location.acc + " meters.");
+                    _log("GEOLOC: finished: " + location.acc + " meters.", app.LOG_INFO);
                     app.geoloc.stop();
 
                     //save in storage
@@ -144,7 +144,7 @@ app.geoloc = (function(m, $){
                         onSuccess(location);
                     }
                 } else {
-                    _log("GEOLOC: updated acc: " + location.acc + " meters." );
+                    _log("GEOLOC: updated acc: " + location.acc + " meters.", app.LOG_INFO);
                     if (onUpdate != null) {
                         onUpdate(location);
                     }
@@ -154,7 +154,7 @@ app.geoloc = (function(m, $){
 
         // Callback if geolocation fails.
         var onGeolocError = function(error) {
-            _log("GEOLOC: ERROR.");
+            _log("GEOLOC: ERROR.", app.LOG_ERROR);
             if (onError != null) {
                 onError({'message': error.message});
             }

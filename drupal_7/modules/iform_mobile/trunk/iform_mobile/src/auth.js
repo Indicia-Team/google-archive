@@ -12,68 +12,76 @@ app.auth = (function(m, $){
     m.USER = 'user';
 
     /**
-     * Appends user and app authentication to the passed FormData object.
+     * Appends user and app authentication to the passed data object.
      *
-     * @param formData A FormData object to modify
-     * @returns {*} A FormData object
+     * Object has to implement 'append' method.
+     *
+     * @param data An object to modify
+     * @returns {*} A data object
      */
-    m.append = function(formData){
+    m.append = function(data){
         //user logins
-        formData = m.appendUser(formData);
+        m.appendUser(data);
         //app logins
-        formData = m.appendApp(formData);
+        m.appendApp(data);
         //warehouse data
-        formData = m.appendWarehouse(formData);
+        m.appendWarehouse(data);
 
-        return formData;
+        return data;
     };
 
     /**
      * Appends user authentication - Email and Password to
-     * the passed FormData object.
+     * the passed data object.
      *
-     * @param formData A FormData object to modify
-     * @returns {*} A FormData object
+     * Object has to implement 'append' method.
+     *
+     * @param data An object to modify
+     * @returns {*} A data object
      */
-    m.appendUser = function(formData){
+    m.appendUser = function(data){
         var user = m.getUser();
         if (m.isUser()){
-            formData.append('email', user.email);
-            formData.append('password', user.password)
+            data.append('email', user.email);
+            data.append('password', user.password)
         }
 
-        return formData;
+        return data;
     };
 
     /**
      * Appends app authentication - Appname and Appsecret to
-     * the passed FormData object.
+     * the passed object.
      *
-     * @param formData A FormData object to modify
-     * @returns {*} A FormData object
+     * Object has to implement 'append' method.
+     *
+     * @param data An object to modify
+     * @returns {*} A data object
      */
-    m.appendApp = function(formData){
-        formData.append('appname', this.CONF.APPNAME);
-        formData.append('appsecret', this.CONF.APPSECRET);
+    m.appendApp = function(data){
+        data.append('appname', this.CONF.APPNAME);
+        data.append('appsecret', this.CONF.APPSECRET);
 
-        return formData;
+        return data;
     };
 
     /**
      * Appends warehouse related information - website_id and survey_id to
-     * the passed FormData object.
+     * the passed data object.
+     *
+     * Object has to implement 'append' method.
      *
      * This is necessary because the data must be associated to some
      * website and survey in the warehouse.
      *
-     * @param formData A FormData object to modify
-     * @returns {*} A FormData object
+     * @param data An object to modify
+     * @returns {*} An data object
      */
-    m.appendWarehouse = function(formData){
-        formData.append('website_id', this.CONF.WEBSITE_ID);
-        formData.append('survey_id', this.CONF.SURVEY_ID);
+    m.appendWarehouse = function(data){
+        data.append('website_id', this.CONF.WEBSITE_ID);
+        data.append('survey_id', this.CONF.SURVEY_ID);
 
-        return formData;
+        return data;
     };
 
     /**

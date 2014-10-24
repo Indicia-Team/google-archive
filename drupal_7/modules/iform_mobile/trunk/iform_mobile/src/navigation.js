@@ -67,7 +67,7 @@ app.navigation = (function(m, $){
      */
     m.message = function(text, time){
         if (text == null){
-            _log('NAVIGATION: ERROR no text provided to message.');
+            _log('NAVIGATION: no text provided to message.', app.LOG_ERROR);
             return;
         }
 
