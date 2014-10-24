@@ -9,10 +9,117 @@ function getParameterByName(name) {
     return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-function _log(message){
-    if(app.CONF.DEBUG){
-       console.debug(message);
+/**
+ * Takes care of application execution logging.
+ *
+ * Uses 5 levels of logging:
+ *  0: none
+ *  1: errors
+ *  2: warnings
+ *  3: information
+ *  4: debug
+ *
+ * Levels defined in core app module.
+ *
+ * @param message
+ * @param level
+ * @private
+ */
+function _log(message, level){
+
+    //do nothing if logging turned off
+    if (app.CONF.LOG == app.LOG_NONE){
+        return;
     }
+
+    if(app.CONF.LOG >= level || level == null){
+        switch(level){
+            case app.LOG_ERROR:
+                _logError(message);
+                break;
+            case app.LOG_WARNING:
+                console.warn(message);
+                break;
+            case app.LOG_INFO:
+                console.log(message);
+                break;
+            case app.LOG_DEBUG:
+            default:
+                console.debug(message);
+        }
+    }
+}
+
+/**
+ * Prints and posts an error to the mobile authentication log.
+ * @param error object holding a 'message', and optionally 'url' and 'line' fields.
+ * @private
+ */
+function _logError(error){
+    //print error
+    console.error(error['message'], error['url'], error['line']);
+
+    //prepare the message
+    var message = error['message'];
+    message += '</br> app.name = "' + app.name +'"';
+    message += '</br> app.version = "' + app.version +'"';
+    message += '</br> app.controller.version = "' + app.controller.version + '"';
+    message += '</br>' + navigator.appName;
+    message += '</br>' + navigator.appVersion;
+
+    var url = error['url'] + ' (' + error['line'] + ')';
+
+    if (navigator.onLine){
+        //send to server
+
+        var data = {};
+        data.append = function(name, value) {this[name] = value;};
+        data.append('message', message);
+        data.append('url', url);
+        app.auth.appendApp(data);
+
+        //removing unnecessary information
+        delete data.append;
+
+        jQuery.ajax({
+            url: '/mobile/log',
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            },
+            data: data
+        });
+    } else {
+        //save
+
+    }
+
+
+}
+
+/**
+ * Hook into window.error function.
+ *
+ * @param message
+ * @param url
+ * @param line
+ * @returns {boolean}
+ * @private
+ */
+function _onerror(message, url, line){
+    window.onerror = null;
+
+    var error = {
+        'message': message,
+        'url' : url || '',
+        'line' : line || -1
+    };
+
+    _log(error, app.LOG_ERROR);
+
+    window.onerror = this; // turn on error handling again
+    return true; // suppress normal error reporting
 }
 
 function loadScript(src) {
@@ -41,7 +148,7 @@ function startManifestDownload(id, files_no, src, callback, onError){
 
             //After frame loading set up its controllers/callbacks
             frame.onload = function() {
-                _log('Manifest frame loaded');
+                _log('Manifest frame loaded', app.LOG_INFO);
                 if (callback != null) {
                     frame.contentWindow.finished = callback;
                 }

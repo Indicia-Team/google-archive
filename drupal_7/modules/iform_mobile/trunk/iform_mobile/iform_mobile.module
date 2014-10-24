@@ -6,42 +6,6 @@
  */
 
 /**
- *  Implements hook_menu().
- */
-function iform_mobile_menu()
-{
-    $items = array();
-
-    // Mobile registration-based actions
-    $items['mobile/log'] = array(
-        'title'             => 'Accepts an app request to log data.',
-        'page callback'     => 'iform_mobile_log',
-        'access callback'   => true,
-    );
-
-    return $items;
-}
-
-/**
- * Logs app send data. Uses JSON format.
- * todo: add authentication option.
- */
-function iform_mobile_log(){
-    //get json
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    //if crawler visit exit
-    if (empty($data)){
-        drupal_add_http_header('Status', '400 Bad Request');
-        print 'Bad request';
-    }
-
-    iform_mobile_auth_log(file_get_contents('php://input'));
-
-    return print_r($data);
-}
-
-/**
  * Implements hook_library().
  */
 function iform_mobile_library() {

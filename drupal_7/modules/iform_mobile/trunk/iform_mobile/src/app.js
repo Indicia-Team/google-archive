@@ -4,7 +4,7 @@ app = (function(m, $){
     //configuration should be setup in app config file
     m.CONF = {
         HOME: "",
-        DEBUG: false
+        LOG: m.LOG_ERROR
     };
 
     //GLOBALS
@@ -15,6 +15,12 @@ app = (function(m, $){
     m.TRUE = 1;
     m.FALSE = 0;
     m.ERROR = -1;
+
+    m.LOG_NONE = 0;
+    m.LOG_ERROR = 1;
+    m.LOG_WARNING = 2;
+    m.LOG_INFO = 3;
+    m.LOG_DEBUG = 4;
 
     /*
         Events from.
@@ -42,7 +48,7 @@ app = (function(m, $){
      * Init function
      */
     m.initialise = function(){
-        _log('APP: initialised.');
+        _log('APP: initialised.', app.LOG_INFO);
 
         //todo: needs tidying up
         //Bind JQM page events with page controller handlers

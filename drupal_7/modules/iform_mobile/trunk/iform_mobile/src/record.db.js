@@ -26,7 +26,7 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onsuccess = function(e){
-            _log("RECORD.DB: opened successfully.");
+            _log("RECORD.DB: opened successfully.", app.LOG_DEBUG);
             var db = e.target.result;
             var transaction = db.transaction([m.STORE_RECORDS], "readwrite");
             var store = transaction.objectStore(m.STORE_RECORDS);
@@ -41,7 +41,7 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onupgradeneeded = function(e){
-            _log("RECORD.DB: upgrading");
+            _log("RECORD.DB: upgrading", app.LOG_INFO);
             var db = e.target.result;
 
             var store = db.createObjectStore(m.STORE_RECORDS, {'keyPath': 'id'});
@@ -53,8 +53,8 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onerror = function(e){
-            _log("RECORD.DB: ERROR not opened successfully.");
-            _log(e);
+            _log("RECORD.DB: not opened successfully.", app.LOG_ERROR);
+           // _log(e);
             e.message = "Database NOT opened successfully.";
             if (onError != null) {
                 onError(e);
@@ -66,8 +66,8 @@ app.record.db = (function(m, $){
          * @param e
          */
         req.onblocked = function(e){
-            _log("RECORD.DB: ERROR database blocked.");
-            _log(e);
+            _log("RECORD.DB: database blocked.", app.LOG_ERROR);
+           // _log(e);
             if (onError != null) {
                 onError(e);
             }
@@ -87,7 +87,7 @@ app.record.db = (function(m, $){
      */
     m.add = function(record, key, callback, onError){
         m.open(function(store){
-            _log("Adding to the store.");
+            _log("RECORD.DB: adding to the store.", app.LOG_DEBUG);
             record['id'] = key;
             store.add(record);
             store.transaction.db.close();
@@ -105,7 +105,7 @@ app.record.db = (function(m, $){
      */
     m.get = function(key, callback, onError){
         m.open(function(store){
-            _log('Getting from the store.');
+            _log('RECORD.DB: getting from the store.', app.LOG_DEBUG);
 
             var req = store.index('id').get(key);
             req.onsuccess = function(e) {
@@ -125,7 +125,7 @@ app.record.db = (function(m, $){
      */
     m.remove =  function(key, callback, onError){
         m.open(function(store){
-            _log('RECORD.DB: removing from the store.');
+            _log('RECORD.DB: removing from the store.', app.LOG_DEBUG);
 
             var req = store.openCursor(IDBKeyRange.only(key));
             req.onsuccess = function(){
@@ -149,7 +149,7 @@ app.record.db = (function(m, $){
      */
     m.getAll = function(callback, onError){
         m.open(function(store){
-            _log('RECORD.DB: getting all from the store.');
+            _log('RECORD.DB: getting all from the store.', app.LOG_DEBUG);
 
             // Get everything in the store
             var keyRange = IDBKeyRange.lowerBound(0);
@@ -201,7 +201,7 @@ app.record.db = (function(m, $){
      */
     m.clear = function(callback, onError){
         m.open(function(store){
-            _log('Clearing store');
+            _log('RECORD.DB: clearing store.', app.LOG_DEBUG);
             store.clear();
 
             if(callback != null) {
@@ -242,7 +242,7 @@ app.record.db = (function(m, $){
      * Saves a record using dynamic inputs.
      */
     m.save = function(callback, onError){
-        _log("Record.");
+        _log("RECORD.DB: saving dynamic record.", app.LOG_INFO);
         //get new record ID
         var settings = app.record.getSettings();
         var savedRecordId = ++settings[app.record.LASTID];
@@ -253,7 +253,7 @@ app.record.db = (function(m, $){
             //merge files and the rest of the inputs
             record_array = record_array.concat(files_array);
 
-            _log("RECORD.DB: saving the record into database.");
+            _log("RECORD.DB: saving the record into database.", app.LOG_DEBUG);
             function onSuccess(){
                 //on record save success
                 app.record.setSettings(settings);
@@ -274,7 +274,7 @@ app.record.db = (function(m, $){
      * Returns the savedRecordId of the saved record, otherwise an app.ERROR.
      */
     m.saveForm =  function(formId, onSuccess){
-        _log("Record.");
+        _log("RECORD.DB: saving a DOM record.", app.LOG_INFO);
         var records = this.getAll();
 
         //get new record ID
@@ -290,14 +290,14 @@ app.record.db = (function(m, $){
             //merge files and the rest of the inputs
             record_array = record_array.concat(files_array);
 
-            _log("RECORD.DB: saving the record into database.");
+            _log("RECORD.DB: saving the record into database.", app.LOG_DEBUG);
             try{
                 records[savedRecordId] = record_array;
                 m.setAll(records);
                 app.record.setSettings(settings);
             } catch (e){
-                _log("RECORD.DB: ERROR while saving the record.");
-                _log(e);
+                _log("RECORD.DB: while saving the record.", app.LOG_ERROR);
+                //_log(e);
                 return app.ERROR;
             }
 
