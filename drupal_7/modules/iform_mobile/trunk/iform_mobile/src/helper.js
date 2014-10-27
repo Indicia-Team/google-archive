@@ -60,10 +60,11 @@ function _logError(error){
     console.error(error['message'], error['url'], error['line']);
 
     //prepare the message
-    var message = error['message'];
-    message += '</br> app.name = "' + app.name +'"';
-    message += '</br> app.version = "' + app.version +'"';
-    message += '</br> app.controller.version = "' + app.controller.version + '"';
+    var message = '<b style="color: red">' + error['message'] + '</b>';
+    message += '</br><b> app.name = </b><i>"' + app.name +'"</i>';
+    message += '</br><b> app.version = </b><i>"' + app.version +'"</i>';
+    message += '</br><b> app.controller.version = </b><i>"' + app.controller.version + '"</i></br>';
+
     message += '</br>' + navigator.appName;
     message += '</br>' + navigator.appVersion;
 

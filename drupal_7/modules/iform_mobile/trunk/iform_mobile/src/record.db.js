@@ -89,12 +89,13 @@ app.record.db = (function(m, $){
         m.open(function(store){
             _log("RECORD.DB: adding to the store.", app.LOG_DEBUG);
             record['id'] = key;
-            store.add(record);
+            var req = store.add(record);
+            req.onsuccess = function(event) {
+                if(callback != null){
+                    callback();
+                }
+            };
             store.transaction.db.close();
-
-            if(callback != null){
-                callback();
-            }
         }, onError);
     };
 
@@ -145,7 +146,6 @@ app.record.db = (function(m, $){
 
     /**
      * Brings back all saved records from the database.
-     * @returns {*|{lat: *, lon: *, acc: *}|{}}
      */
     m.getAll = function(callback, onError){
         m.open(function(store){
