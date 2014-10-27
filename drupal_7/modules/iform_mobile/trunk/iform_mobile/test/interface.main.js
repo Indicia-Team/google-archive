@@ -13,6 +13,7 @@ describe('app interface', function(){
      app.CONF
      app.TRUE
      app.ERROR
+     app.LOG_*
 
      app.data
      app.settings
@@ -22,6 +23,11 @@ describe('app interface', function(){
         expect(app.CONF).to.exist;
         expect(app.TRUE).to.exist;
         expect(app.ERROR).to.exist;
+        expect(app.LOG_NONE).to.exist;
+        expect(app.LOG_ERROR).to.exist;
+        expect(app.LOG_WARNING).to.exist;
+        expect(app.LOG_INFO).to.exist;
+        expect(app.LOG_DEBUG).to.exist;
         expect(app.data).to.exist;
         expect(app.settings).to.exist;
     })
@@ -29,47 +35,72 @@ describe('app interface', function(){
 
 describe('record interface', function(){
     beforeEach(function(){
+        app.storage.clear();
         app.record.clear();
-        app.record.storage.clear();
     });
-    afterEach(function(){});
+    afterEach(function(){
+
+    });
 
     /**
      * Testing:
-     app.record.validate()
+     -app.record.validate()
      app.record.clear()
      */
     it('main', function(){
+        //CLEAR
+        var input = 'input';
+        var input_data = Math.random();
+        app.record.inputs.set(input, input_data);
+
+        var record = app.record.get();
+        expect(record).to.be.an.object;
+        var record_keys = Object.keys(record);
+        expect(record_keys.length).to.be.equal(1);
+
+        app.record.clear();
+
+        record = app.record.get();
+        expect(record).to.be.an.object;
+        record_keys = Object.keys(record);
+        expect(record_keys.length).to.be.equal(0);
 
     });
 
     /**
      * Testing:
-     app.record.storage.remove(savedRecordId)
-     app.record.storage.save(onSaveSuccess);
-     app.record.storage.getAll()
+     app.record.db.remove(savedRecordId)
+     app.record.db.save(onSaveSuccess);
+     +app.record.db.getAll()
      */
     it('storage', function(){
         //SAVE
-        app.record.storage.save(function(savedRecordId){
+        var input = 'input';
+        var input_data = Math.random();
+        app.record.inputs.set(input, input_data);
+
+        app.record.db.save(function(savedRecordId){
             //GETALL
-            var records = app.record.storage.getAll();
-            expect(records).to.be.an.object;
-            var keys = Object.keys(records);
-            expect(keys.length).to.be.equal(1);
+            app.record.db.getAll(function(records){
+                expect(records).to.be.an.array;
+                expect(records.length).to.be.equal(1);
+                expect(records[0][0].value).to.be.equal(input_data);
 
-            expect(savedRecordId).to.be.equal(1);
+                expect(savedRecordId).to.be.equal(1);
 
-            //REMOVE
-            app.record.storage.remove(savedRecordId);
-            var records = app.record.storage.getAll();
-            expect(records).to.be.an.object;
-            var keys = Object.keys(records);
-            expect(keys.length).to.be.equal(0);
+                //REMOVE
+                app.record.db.remove(savedRecordId);
+                app.record.db.getAll(function(records){
+                    expect(records).to.be.an.array;
+                    expect(records.length).to.be.equal(0);
+                });
+
+            });
+
         });
     });
 
-    /* Testing:
+    /** Testing:
      app.record.inputs.KEYS.*
      app.record.inputs.set(input, data)
      app.record.inputs.is(input)
@@ -92,19 +123,20 @@ describe('record interface', function(){
     });
 });
 
-/**
- * Testing:
- app.auth.CONF
- app.auth.removeUser();
- app.auth.setUser(user);
- app.auth.isUser();
- */
+
 describe('authentication interface', function(){
     beforeEach(function(){
         app.auth.removeUser()
     });
     afterEach(function(){});
 
+    /**
+     * Testing:
+     app.auth.CONF
+     app.auth.removeUser();
+     app.auth.setUser(user);
+     app.auth.isUser();
+     */
     it('main', function(){
         //CONF
         expect(app.auth.CONF).to.be.object;
@@ -140,10 +172,78 @@ describe('authentication interface', function(){
     });
 });
 
+
 describe('navigation interface', function(){
     beforeEach(function(){});
     afterEach(function(){});
 
+    /**
+     * Testing
+     -app.navigation.makePopup()
+     -app.navigation.popup()
+     -app.navigation.message()
+     -app.navigation.go()
+     */
+    it('main', function(){
+
+    });
+});
+
+describe('geoloc interface', function(){
+    beforeEach(function(){
+        app.geoloc.clear();
+    });
+    afterEach(function(){});
+
+    /**
+     * Testing
+     app.geoloc.set()
+     app.geoloc.get()
+     -app.geoloc.start()
+     -app.geoloc.validate()
+     */
+    it('main', function(){
+        //SET
+        var location = {
+            'lat' : Math.random(),
+            'lon' : Math.random(),
+            'acc' : Math.random()
+        };
+        app.geoloc.set(location.lat, location.lon, location.acc);
+
+        //GET
+        var f_location = app.geoloc.get();
+
+        expect(f_location).to.be.an.object;
+        expect(f_location.lat).to.be.equal(location.lat);
+        expect(f_location.lon).to.be.equal(location.lon);
+        expect(f_location.acc).to.be.equal(location.acc);
+
+        //VALIDATE
+        app.geoloc.CONF.GPS_ACCURACY_LIMIT = 0;
+        var valid = app.geoloc.valid();
+        expect(valid).to.be.equal(app.FALSE);
+
+        var acc = Math.random();
+        app.geoloc.set(location.lat, location.lon, acc);
+
+        app.geoloc.CONF.GPS_ACCURACY_LIMIT = acc + 1;
+        valid = app.geoloc.valid();
+        expect(valid).to.be.equal(app.TRUE);
+
+    });
+});
+
+describe('io interface', function(){
+    beforeEach(function(){});
+    afterEach(function(){});
+
+    /**
+     * Testing
+     -app.io.sendSavedForm()
+     -app.io.sendAllSavedRecords()
+     -app.io.sendSavedRecord(savedRecordId)
+     */
     it('main', function(){
 
     });
@@ -173,48 +273,5 @@ describe('storage interface', function(){
         var f_item_data = app.storage.tmpGet(item);
         expect(f_item_data).to.exist;
         expect(f_item_data).to.be.equal(item_data);
-
     });
 });
-
-/**
- * ...................
- * To Cover in tests
- * ...................
- *
- app.record.validate(recordId)
-
- app.geoloc.set
- app.geoloc.get()
- app.geoloc.start()
- app.geoloc.validate()
-
- app.io.sendSavedForm()
- app.io.sendAllSavedRecords()
- app.io.sendSavedRecord(savedRecordId)
-
- app.navigation.makePopup()
- app.navigation.popup()
- app.navigation.go()
-
- ###########
- Events:
- app.submitRecord.start
- app.record.sent.success
- app.record.sent.error
- app.record.invalid
- app.submitRecord.save
- app.submitRecord.end
- app.geoloc.lock.timeout
- app.geoloc.lock.error
- app.geoloc.lock.start
- app.geoloc.lock.no
- app.geoloc.lock.bad
- app.geoloc.lock.ok
- app.geoloc.noGPS
- app.record.sentall.success
-
-
-
-
- */

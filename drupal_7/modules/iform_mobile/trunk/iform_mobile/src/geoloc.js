@@ -60,7 +60,7 @@ app.geoloc = (function(m, $){
      * @returns {*}
      */
     m.run = function(onUpdate, onSuccess, onError){
-        _log('GEOLOC: run.', app.LOG_DEBUG);
+        _log('GEOLOC: run.', app.LOG_INFO);
 
         // Early return if geolocation not supported.
         if(!navigator.geolocation) {
