@@ -1,4 +1,4 @@
-name = 'Mobile Dragonfly Theme'
+name = 'Mobile iForm Theme'
 description = 'A sub-theme of the <a href="https://drupal.org/project/mobile_jquery">
 Mobile Jquery</a> theme which outputs node content wrapped up in a JQuery Mobile
 page. In the particular case of a node of type IForm it also gets a <form>
