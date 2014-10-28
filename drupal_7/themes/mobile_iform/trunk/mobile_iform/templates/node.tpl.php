@@ -82,24 +82,8 @@
 <?php if($type == 'iform') : ?>
       <?php print render($content['iform']) ?>
 <?php else : ?>
-    <div id="<?php print $pageid; ?>" data-role="page">
-      <header data-role="header">
-        <?php 
-          $start_path = base_path() . mobile_jquery_theme_get_setting('app_home');
-        ?>
-       	<?php if($node_url != $start_path) : ?>
-            <a href="#" data-rel="back" data-icon="arrow-l" data-iconpos="left">Back</a>
-        <?php endif; ?>
-	    <h1><?php print $title; ?></h1>       
-      </header><!-- /header -->
-
-      <div role="main" class="ui-content">
         <?php print render($content['body']) ?>
-      </div>
-
-    </div><!-- /page -->
 <?php endif; ?>
-
 <div id="app-dialog" data-role="dialog">
     <div id="app-dialog-content"data-role="content"></div>
 </div>

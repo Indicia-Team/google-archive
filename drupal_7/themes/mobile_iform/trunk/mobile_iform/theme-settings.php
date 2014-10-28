@@ -7,14 +7,14 @@
  * @param $form_state
  *   A keyed array containing the current state of the form.
  */
-function mobile_iform_form_system_theme_settings_alter(&$form, &$form_state)  {
+function mobile_dragonfly_form_system_theme_settings_alter(&$form, &$form_state)  {
 
-  $form['mobile_iform_settings'] = array(
+  $form['mobile_dragonfly_settings'] = array(
     '#type' => 'fieldset',
     '#weight' => -20,
     '#title' => t('Mobile IForm Configuration'),
   );
-  $form['mobile_iform_settings']['app_home'] = array(
+  $form['mobile_dragonfly_settings']['app_home'] = array(
     '#type' => 'textfield',
     '#title' => t('Path to start page.'),
     '#description' => t(<<<EOD

@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains theme override functions and preprocess functions for the  mobile_iform theme.
+ * Contains theme override functions and preprocess functions for the  mobile_dragonfly theme.
  *
  */
  
@@ -15,7 +15,13 @@
  * @see system_elements()
  * @see html.tpl.php
  */
-function mobile_iform_preprocess_html(&$vars) {
+function mobile_dragonfly_preprocess_html(&$vars) {
+
+  // Add iForm Mobile module's library
+  if (module_exists('iform_mobile')) {
+    drupal_add_library('iform_mobile', 'main');
+  }
+
   // Add local css with weight greater than jquery-mobile.css so it can override.
   $css_options = array(
     'type' => 'file', 
@@ -25,7 +31,7 @@ function mobile_iform_preprocess_html(&$vars) {
     'preprocess' => FALSE, 
     'weight' => 102,
   );
-  $css_path = drupal_get_path('theme', 'mobile_iform') . '/styles/theme.css';
+  $css_path = drupal_get_path('theme', 'mobile_dragonfly') . '/styles/theme.css';
   drupal_add_css($css_path, $css_options);
   $vars['styles'] = drupal_get_css();
   
@@ -34,6 +40,7 @@ function mobile_iform_preprocess_html(&$vars) {
   // every_page defaulting to false. For plugins to come afterwards then
   // every_page must also be false and the weight greater than 102.
 }
+
 
 /**
  * Preprocess variables for page.tpl.php
@@ -53,7 +60,7 @@ function mobile_iform_preprocess_html(&$vars) {
  * @see page.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_page(&$vars) {
+function mobile_dragonfly_preprocess_page(&$vars) {
 }
 // */
 
@@ -72,7 +79,7 @@ function mobile_iform_preprocess_page(&$vars) {
  *
  * @see node.tpl.php
  */
-function mobile_iform_preprocess_node(&$vars) {
+function mobile_dragonfly_preprocess_node(&$vars) {
   $vars['pageid'] = str_replace('/', '-', drupal_get_path_alias());
 }
 // */
@@ -92,7 +99,7 @@ function mobile_iform_preprocess_node(&$vars) {
  * @see maintenance-page.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_maintenance_page(&$vars) {
+function mobile_dragonfly_preprocess_maintenance_page(&$vars) {
 }
 // */
 
@@ -114,7 +121,7 @@ function mobile_iform_preprocess_maintenance_page(&$vars) {
  * @see block.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_block(&$vars) {
+function mobile_dragonfly_preprocess_block(&$vars) {
 }
 // */
 
@@ -129,7 +136,7 @@ function mobile_iform_preprocess_block(&$vars) {
  * @see theme_block_admin_display()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_block_admin_display_form(&$vars) {
+function mobile_dragonfly_preprocess_block_admin_display_form(&$vars) {
 }
 // */
 
@@ -144,7 +151,7 @@ function mobile_iform_preprocess_block_admin_display_form(&$vars) {
  * @see region.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_region(&$vars) {
+function mobile_dragonfly_preprocess_region(&$vars) {
 
 }
 
@@ -158,7 +165,7 @@ function mobile_iform_preprocess_region(&$vars) {
  * @see template_process_username()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_username(&$vars) {
+function mobile_dragonfly_preprocess_username(&$vars) {
 
 }
 
@@ -169,7 +176,7 @@ function mobile_iform_preprocess_username(&$vars) {
  * @see aggregator-wrapper.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_aggregator_wrapper(&$vars) {
+function mobile_dragonfly_preprocess_aggregator_wrapper(&$vars) {
 
 }
 
@@ -179,7 +186,7 @@ function mobile_iform_preprocess_aggregator_wrapper(&$vars) {
  * @see aggregator-item.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_aggregator_item(&$vars) {
+function mobile_dragonfly_preprocess_aggregator_item(&$vars) {
 
 }
 
@@ -189,7 +196,7 @@ function mobile_iform_preprocess_aggregator_item(&$vars) {
  * @see aggregator-summary-item.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_aggregator_summary_item(&$vars) {
+function mobile_dragonfly_preprocess_aggregator_summary_item(&$vars) {
  
 }
 
@@ -199,7 +206,7 @@ function mobile_iform_preprocess_aggregator_summary_item(&$vars) {
  * @see aggregator-feed-source.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_aggregator_feed_source(&$vars) {
+function mobile_dragonfly_preprocess_aggregator_feed_source(&$vars) {
 
 }
 
@@ -217,7 +224,7 @@ function mobile_iform_preprocess_aggregator_feed_source(&$vars) {
  * @see book-navigation.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_book_all_books_block(&$vars) {
+function mobile_dragonfly_preprocess_book_all_books_block(&$vars) {
 
 }
 
@@ -230,7 +237,7 @@ function mobile_iform_preprocess_book_all_books_block(&$vars) {
  * @see book-navigation.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_book_navigation(&$vars) {
+function mobile_dragonfly_preprocess_book_navigation(&$vars) {
 
 }
 
@@ -241,7 +248,7 @@ function mobile_iform_preprocess_book_navigation(&$vars) {
  * @see comment.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_comment(&$vars) {
+function mobile_dragonfly_preprocess_comment(&$vars) {
 }
 // */
 
@@ -252,7 +259,7 @@ function mobile_iform_preprocess_comment(&$vars) {
  * @see theme_comment_wrapper()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_comment_wrapper(&$vars) {
+function mobile_dragonfly_preprocess_comment_wrapper(&$vars) {
    
 }
 
@@ -261,7 +268,7 @@ function mobile_iform_preprocess_comment_wrapper(&$vars) {
  * Preprocesses variables for block-admin-display-form.tpl.php.
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_dashboard_admin_display_form(&$vars) {
+function mobile_dragonfly_preprocess_dashboard_admin_display_form(&$vars) {
 }
 // */
 
@@ -273,7 +280,7 @@ function mobile_iform_preprocess_dashboard_admin_display_form(&$vars) {
  * @see field.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_field(&$vars, $hook) {
+function mobile_dragonfly_preprocess_field(&$vars, $hook) {
 }
 // */
 
@@ -291,7 +298,7 @@ function mobile_iform_preprocess_field(&$vars, $hook) {
  * @see forums.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_forums(&$vars) {
+function mobile_dragonfly_preprocess_forums(&$vars) {
 }
 // */
 
@@ -307,7 +314,7 @@ function mobile_iform_preprocess_forums(&$vars) {
  * @see theme_forum_list()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_forum_list(&$vars) {
+function mobile_dragonfly_preprocess_forum_list(&$vars) {
 }
 // */
 
@@ -324,7 +331,7 @@ function mobile_iform_preprocess_forum_list(&$vars) {
  * @see theme_forum_topic_list()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_forum_topic_list(&$vars) {
+function mobile_dragonfly_preprocess_forum_topic_list(&$vars) {
 }
 // */
 
@@ -342,7 +349,7 @@ function mobile_iform_preprocess_forum_topic_list(&$vars) {
  * @see theme_forum_icon()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_forum_icon(&$vars) {
+function mobile_dragonfly_preprocess_forum_icon(&$vars) {
 }
 // */
 
@@ -355,7 +362,7 @@ function mobile_iform_preprocess_forum_icon(&$vars) {
  * @see theme_forum_submitted()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_forum_submitted(&$vars) {
+function mobile_dragonfly_preprocess_forum_submitted(&$vars) {
 }
 // */
 
@@ -363,7 +370,7 @@ function mobile_iform_preprocess_forum_submitted(&$vars) {
  * Preprocesses the rendered tree for theme_menu_tree().
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_menu_tree(&$vars) {
+function mobile_dragonfly_preprocess_menu_tree(&$vars) {
 }
 // */
 
@@ -374,7 +381,7 @@ function mobile_iform_preprocess_menu_tree(&$vars) {
  * @see overlay.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_overlay(&$vars) {
+function mobile_dragonfly_preprocess_overlay(&$vars) {
 }
 // */
 
@@ -384,7 +391,7 @@ function mobile_iform_preprocess_overlay(&$vars) {
  * Inputs: $form
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_poll_vote(&$vars) {
+function mobile_dragonfly_preprocess_poll_vote(&$vars) {
 }
 // */
 
@@ -401,7 +408,7 @@ function mobile_iform_preprocess_poll_vote(&$vars) {
  * @see poll-results--block.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_poll_results(&$vars) {
+function mobile_dragonfly_preprocess_poll_results(&$vars) {
 }
 // */
 
@@ -415,7 +422,7 @@ function mobile_iform_preprocess_poll_results(&$vars) {
  * @see theme_poll_bar()
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_poll_bar(&$vars) {
+function mobile_dragonfly_preprocess_poll_bar(&$vars) {
 }
 // */
 
@@ -430,7 +437,7 @@ function mobile_iform_preprocess_poll_bar(&$vars) {
  * @see search-results.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_search_results(&$vars) {
+function mobile_dragonfly_preprocess_search_results(&$vars) {
 }
 // */
 
@@ -444,7 +451,7 @@ function mobile_iform_preprocess_search_results(&$vars) {
  * @see search-result.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_search_result(&$vars) {
+function mobile_dragonfly_preprocess_search_result(&$vars) {
 }
 // */
 
@@ -452,7 +459,7 @@ function mobile_iform_preprocess_search_result(&$vars) {
  * Process variables for taxonomy-term.tpl.php.
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_taxonomy_term(&$vars) {
+function mobile_dragonfly_preprocess_taxonomy_term(&$vars) {
 }
 // */
 
@@ -467,7 +474,7 @@ function mobile_iform_preprocess_taxonomy_term(&$vars) {
  * @see user-picture.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_user_picture(&$vars) {
+function mobile_dragonfly_preprocess_user_picture(&$vars) {
 }
 // */
 
@@ -480,7 +487,7 @@ function mobile_iform_preprocess_user_picture(&$vars) {
  * @see user-profile.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_user_profile(&$vars) {
+function mobile_dragonfly_preprocess_user_profile(&$vars) {
 }
 // */
 
@@ -493,7 +500,7 @@ function mobile_iform_preprocess_user_profile(&$vars) {
  * @see user-profile-item.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_user_profile_item(&$vars) {
+function mobile_dragonfly_preprocess_user_profile_item(&$vars) {
 }
 // */
 
@@ -506,7 +513,7 @@ function mobile_iform_preprocess_user_profile_item(&$vars) {
  * @see user-profile-category.tpl.php
  */
 /* -- Delete this line if you want to use this function
-function mobile_iform_preprocess_user_profile_category(&$vars) {
+function mobile_dragonfly_preprocess_user_profile_category(&$vars) {
 }
 // */
 
