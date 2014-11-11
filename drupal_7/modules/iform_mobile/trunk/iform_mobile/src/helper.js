@@ -144,7 +144,8 @@ function startManifestDownload(id, files_no, src, callback, onError){
             frame.contentWindow.applicationCache.update();
         } else {
             //init
-            app.navigation.popup('<iframe id="' + id + '" src="' + src + '" width="215px" height="215px" scrolling="no" frameBorder="0"></iframe>', true);
+            //app.navigation.popup('<iframe id="' + id + '" src="' + src + '" width="215px" height="215px" scrolling="no" frameBorder="0"></iframe>', true);
+            app.navigation.message('<iframe id="' + id + '" src="' + src + '" width="215px" height="215px" scrolling="no" frameBorder="0"></iframe>', 0);
             frame = document.getElementById(id);
 
             //After frame loading set up its controllers/callbacks
