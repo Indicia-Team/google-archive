@@ -64,6 +64,9 @@ app.navigation = (function(m, $){
 
     /**
      * Displays a self disappearing lightweight message.
+     *
+     * @param text
+     * @param time 0 if no hiding, null gives default 3000ms delay
      */
     m.message = function(text, time){
         if (text == null){
@@ -71,16 +74,26 @@ app.navigation = (function(m, $){
             return;
         }
 
+        var messageId = 'appLoaderMessage';
+
+        text = '<div id="' + messageId + '">' + text + '</div>';
+
         $.mobile.loading( 'show', {
-            text: text,
             theme: "b",
             textVisible: true,
-            textonly: true
+            textonly: true,
+            html: text
         });
 
-        setTimeout(function(){
-            $.mobile.loading('hide');
-        }, time || 3000);
+        //trigger JQM beauty
+        $('#' + messageId).trigger('create');
+
+        if (time != 0) {
+            setTimeout(function ()
+            {
+                $.mobile.loading('hide');
+            }, time || 3000);
+        }
     };
 
     /*

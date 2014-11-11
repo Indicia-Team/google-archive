@@ -9,6 +9,8 @@ app.storage = (function(m, $){
      * @param item
      */
     m.get = function(item){
+        item = app.name + '_' + item;
+
         var data = localStorage.getItem(item);
         data = JSON.parse(data);
         return data;
@@ -19,6 +21,8 @@ app.storage = (function(m, $){
      * @param item
      */
     m.set = function(item, data){
+        item = app.name + '_' + item;
+
         data = JSON.stringify(data);
         return localStorage.setItem(item, data);
     };
@@ -28,6 +32,8 @@ app.storage = (function(m, $){
      * @param item
      */
     m.remove = function(item){
+        item = app.name + '_' + item;
+
         return localStorage.removeItem(item);
     };
 
@@ -57,6 +63,8 @@ app.storage = (function(m, $){
      * @param item
      */
     m.tmpGet = function(item){
+        item = app.name + '_' + item;
+
         var data = sessionStorage.getItem(item);
         data = JSON.parse(data);
         return data;
@@ -67,6 +75,8 @@ app.storage = (function(m, $){
      * @param item
      */
     m.tmpSet = function(item, data){
+        item = app.name + '_' + item;
+
         data = JSON.stringify(data);
         return sessionStorage.setItem(item, data);
     };
