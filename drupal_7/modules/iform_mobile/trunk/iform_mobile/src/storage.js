@@ -9,7 +9,7 @@ app.storage = (function(m, $){
      * @param item
      */
     m.get = function(item){
-        item = app.name + '_' + item;
+        item = app.CONF.NAME + '_' + item;
 
         var data = localStorage.getItem(item);
         data = JSON.parse(data);
@@ -21,7 +21,7 @@ app.storage = (function(m, $){
      * @param item
      */
     m.set = function(item, data){
-        item = app.name + '_' + item;
+        item = app.CONF.NAME + '_' + item;
 
         data = JSON.stringify(data);
         return localStorage.setItem(item, data);
@@ -32,7 +32,7 @@ app.storage = (function(m, $){
      * @param item
      */
     m.remove = function(item){
-        item = app.name + '_' + item;
+        item = app.CONF.NAME + '_' + item;
 
         return localStorage.removeItem(item);
     };
@@ -55,6 +55,8 @@ app.storage = (function(m, $){
      * Clears the storage.
      */
     m.clear = function(){
+        _log('STORAGE: clearing', app.LOG_DEBUG);
+
         localStorage.clear();
     };
 
@@ -63,7 +65,7 @@ app.storage = (function(m, $){
      * @param item
      */
     m.tmpGet = function(item){
-        item = app.name + '_' + item;
+        item = app.CONF.NAME + '_' + item;
 
         var data = sessionStorage.getItem(item);
         data = JSON.parse(data);
@@ -75,7 +77,7 @@ app.storage = (function(m, $){
      * @param item
      */
     m.tmpSet = function(item, data){
-        item = app.name + '_' + item;
+        item = app.CONF.NAME + '_' + item;
 
         data = JSON.stringify(data);
         return sessionStorage.setItem(item, data);
@@ -107,6 +109,8 @@ app.storage = (function(m, $){
      * Clears the temporary storage.
      */
     m.tmpClear = function(){
+        _log('STORAGE: clearing temporary', app.LOG_DEBUG);
+
         sessionStorage.clear();
     };
 

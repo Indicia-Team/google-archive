@@ -62,8 +62,8 @@ function _logError(error){
     //prepare the message
     var message = '<b style="color: red">' + error['message'] + '</b>';
     message += '</br><b> app.name = </b><i>"' + app.name +'"</i>';
-    message += '</br><b> app.version = </b><i>"' + app.version +'"</i>';
-    message += '</br><b> app.controller.version = </b><i>"' + app.controller.version + '"</i></br>';
+    message += '</br><b> app.VERSION = </b><i>"' + app.version +'"</i>';
+    message += '</br><b> app.version = </b><i>"' + app.version + '"</i></br>';
 
     message += '</br>' + navigator.appName;
     message += '</br>' + navigator.appVersion;
