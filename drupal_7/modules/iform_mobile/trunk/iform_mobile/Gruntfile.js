@@ -26,22 +26,54 @@ module.exports = function(grunt) {
                 options: {
                     banner: banner
                 },
+
                 // the files to concatenate
-                src: ['src/*.js'],
+                src: [
+                    'src/*.js'
+                ],
                 // the location of the resulting JS file
                 dest: 'dist/<%= pkg.name %>.js'
+            },
+
+            dist2: {
+                // the files to concatenate
+                src: [
+                    'libs/IndexedDBShim.js',
+                    'libs/fastclick.js',
+                    'libs/latlon/vector3d.js',
+                    'libs/latlon/geo.js',
+                    'libs/latlon/latlon-ellipsoid.js',
+                    'libs/latlon/osgridref.js',
+                    'libs/handlebars.js',
+                    'libs/photoswipe-3.0.4/klass.min.js',
+                    'libs/photoswipe-3.0.4/code.photoswipe.jquery-3.0.4.min.js'
+                ],
+                // the location of the resulting JS file
+                dest: 'dist/<%= pkg.name %>.libs.js'
             }
         },
         replace: {
-            main: {
+            version: {
                 src: [
                     'dist/<%= pkg.name %>.js'
                 ],
                 overwrite: true,                 // overwrite matched source files
                 replacements: [{
-                    from: /(m\.VERSION =) \'0\';/g,                   // string replacement
-                    to: '$1 \'<%= pkg.version %>\';'
-                }]
+                        from: /(m\.VERSION =) \'0\';/g,                   // string replacement
+                        to: '$1 \'<%= pkg.version %>\';'
+                    }
+                ]
+            },
+            use_strict: {
+                src: [
+                    'dist/<%= pkg.name %>.libs.js'
+                ],
+                overwrite: true,                 // overwrite matched source files
+                replacements: [{
+                        from: /[\'"]use strict[\'"];/g,                   // string replacement
+                        to: ''
+                    }
+                ]
             }
         },
         uglify: {
