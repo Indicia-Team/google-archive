@@ -1,10 +1,10 @@
 app = (function(m, $){
-    m.version = '0'; //library version, generated/replaced by grunt
-    m.name = ''; //app name
+    m.VERSION = '0'; //library version, generated/replaced by grunt
 
     //configuration should be setup in app config file
     m.CONF = {
         HOME: "",
+        NAME: "", //application name
         LOG: m.LOG_ERROR
     };
 
@@ -23,9 +23,9 @@ app = (function(m, $){
     m.LOG_INFO = 3;
     m.LOG_DEBUG = 4;
 
-    /*
-        Events from.
-        http://jqmtricks.wordpress.com/2014/03/26/jquery-mobile-page-events/
+    /**
+     * Events from.
+     * http://jqmtricks.wordpress.com/2014/03/26/jquery-mobile-page-events/
      */
     m.pageEvents = [
         'pagebeforecreate',
@@ -111,6 +111,21 @@ app = (function(m, $){
         } else {
             return (item != undefined) ? settings[item] : settings;
         }
+    };
+
+    /**
+     * Resets the app to the initial state.
+     *
+     * Clears localStorage.
+     * Clears sessionStorage.
+     * Clears databases.
+     */
+    m.reset = function(){
+        app.storage.clear();
+        app.storage.tmpClear();
+
+        //app.db.clear();
+        app.record.db.clear();
     };
 
     return m;
