@@ -15,15 +15,7 @@ function iform_mobile_library() {
   $libraries['main'] = array(
     'title' => 'iForm Mobile',
     'js' => array(
-      $path . '/libs/IndexedDBShim.js' => array(),
-      $path . '/libs/fastclick.js' => array(),
-      $path . '/libs/latlon/vector3d.js' => array(),
-      $path . '/libs/latlon/geo.js' => array(),
-      $path . '/libs/latlon/latlon-ellipsoid.js' => array(),
-      $path . '/libs/latlon/osgridref.js' => array(),
-      $path . '/libs/photoswipe-3.0.4/klass.min.js' => array(),
-      $path . '/libs/photoswipe-3.0.4/code.photoswipe.jquery-3.0.4.min.js' => array(),
-      $path . '/libs/handlebars.js' => array(),
+      $path . '/dist/iform-mobile.libs.js' => array(),
       $path . '/dist/iform-mobile.js' => array(),
     ),
     'css' => array(
