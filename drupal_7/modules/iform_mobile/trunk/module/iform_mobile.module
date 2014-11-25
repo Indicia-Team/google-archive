@@ -15,11 +15,11 @@ function iform_mobile_library() {
   $libraries['main'] = array(
     'title' => 'iForm Mobile',
     'js' => array(
-      $path . '/dist/iform-mobile.libs.js' => array(),
-      $path . '/dist/iform-mobile.js' => array(),
+      $path . '/js/dist/iform-mobile.libs.js' => array(),
+      $path . '/js/dist/iform-mobile.js' => array(),
     ),
     'css' => array(
-      $path . '/libs/photoswipe-3.0.4/photoswipe.css' => array(),
+      $path . '/js/libs/photoswipe-3.0.4/photoswipe.css' => array(),
     ),
   );
 
