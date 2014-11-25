@@ -88,6 +88,8 @@ app.storage = (function(m, $){
      * @param item
      */
     m.tmpRemove = function(item){
+        item = app.CONF.NAME + '_' + item;
+
         return sessionStorage.removeItem(item);
     };
 
