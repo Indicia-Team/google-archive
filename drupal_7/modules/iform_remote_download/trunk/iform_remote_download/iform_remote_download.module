@@ -47,11 +47,12 @@ function iform_remote_download_privileges() {
   $readAuth = data_entry_helper::get_read_auth(variable_get('indicia_website_id', ''), variable_get('indicia_password', ''));
   $data = data_entry_helper::get_population_data(array(
     'table' => 'survey',
-    'extraParams' => $readAuth + array('sharing' => 'data_flow', 'orderby'=>'title')
+    'extraParams' => $readAuth + array('sharing' => 'data_flow', 'orderby'=>'website,title', 'view'=>'detail')
   ));
   $surveys=array();
   foreach ($data as $survey) {
-    $surveys[$survey['id']] = $survey['title'];
+    $surveyTitle = strcasecmp(substr($survey['website'], 0, strlen($survey['title'])), $survey['title'])===0 ? $survey['title'] : "$survey[website] $survey[title]";
+    $surveys[$survey['id']] = $surveyTitle;
   }
   drupal_add_http_header('Content-type', 'application/json; charset=UTF-8');
   print json_encode(array('types' => $types, 'surveys' => $surveys));
