@@ -66,11 +66,6 @@ h2 {
   }
 }
 
-#navigation {
-  background-color: $menu-background-color;
-  padding: 0 0.5em;
-}
-
 .gallery-item, .gallery li, .summary-report {
   text-align: center;
   padding: 0.5em;
@@ -80,6 +75,10 @@ h2 {
   background: none;
   @include box-shadow(silver 3px 3px 6px);
   border: solid silver 1px;
+}
+
+.gallery li button {
+  overflow: hidden;
 }
 
 .summary-report {
@@ -145,11 +144,14 @@ ul.nice-menu-down {
 }
 
 @mixin table-cell-icon {
-  background: no-repeat right;
+  background: no-repeat;
   padding-right: 16px;
-  min-height: 16px;
 }
-
+/* only the explore grids have both certainty and status icons. Allow icons to overlap in vertical space.
+#tab-records table.report-grid .record-id {
+  padding-right: 16px;
+  margin-right: -16px;
+}
 table {
   /* Full width species checklist input grid */
   &.species-grid {
@@ -157,29 +159,43 @@ table {
   }
   /* anything inside a table (td, tr) can have styles to reflect verification and certainty. Prioritise verification status by making report-grid class specific. */
   &.report-grid {
+    .record-id {
+      box-sizing: border-box;
+      height: 32px;
+      padding-top: 8px;
+    }
+    .status-C {
+      padding-right: 16px;
+    }
     .status-V {
       @include table-cell-icon;
+      background-position: right bottom;
       background-image: url(images/nuvola/ok-16px.png);
     }
     .status-D {
       @include table-cell-icon;
+      background-position: right bottom;
       background-image: url(images/nuvola/dubious-16px.png);
     }  
     .status-R {
       @include table-cell-icon;
+      background-position: right bottom;
       background-image: url(images/nuvola/cancel-16px.png);
     }
   }
   .certainty-C {
     @include table-cell-icon;
+    background-position: right top;
     background-image: url(images/star3.png);
   }
   .certainty-L {
     @include table-cell-icon;
+    background-position: right top;
     background-image: url(images/star2.png);
   }
   .certainty-U {
     @include table-cell-icon;
+    background-position: right top;
     background-image: url(images/star1.png);
   }
   .zero-t {
