@@ -45,6 +45,11 @@ function _log(message, level){
                 break;
             case app.LOG_DEBUG:
             default:
+                //IE does not support console.debug
+                if (console.debug == null){
+                    console.log(message);
+                    break;
+                }
                 console.debug(message);
         }
     }
