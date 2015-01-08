@@ -88,7 +88,7 @@ function _logError(error){
         delete data.append;
 
         jQuery.ajax({
-            url: '/mobile/log',
+            url: Drupal.settings.basePath + 'mobile/log',
             type: 'post',
             dataType: 'json',
             success: function (data) {
