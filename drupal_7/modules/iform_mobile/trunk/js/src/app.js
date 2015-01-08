@@ -1,5 +1,5 @@
 app = (function(m, $){
-    m.VERSION = '0'; //library version, generated/replaced by grunt
+    m.version = '0'; //library version, generated/replaced by grunt
 
     //configuration should be setup in app config file
     m.CONF = {
