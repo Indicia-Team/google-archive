@@ -2,7 +2,7 @@
 	"name": "iform-mobile",
 	"title": "IForm Mobile",
 	"description": "Biological recording mobile application functionality",
-	"version": "0.1.0",
+	"version": "0.1.5",
 	"homepage": "http://www.indicia.org.uk/",
 	"author": {
 		"name": "Karols Kazlauskis",
@@ -27,7 +27,9 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
+	  	"bower": "1.3.12",
 		"grunt": "0.4.4",
+	  	"grunt-bower-task": "0.4.0",
 		"grunt-contrib-compress": "0.7.0",
 		"grunt-contrib-concat": "0.3.0",
 		"grunt-contrib-uglify": "0.4.0",

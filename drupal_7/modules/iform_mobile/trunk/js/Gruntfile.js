@@ -12,6 +12,15 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        bower: {
+          install:{
+              options:{
+                  targetDir: './src/lib',
+                  install: true,
+                  cleanBowerDir: true
+              }
+          }
+        },
         karma: {
             unit: {
                 configFile: 'test/karma.conf.js'
@@ -22,7 +31,7 @@ module.exports = function(grunt) {
                 // define a string to put between each file in the concatenated output
                 separator: '\n\n'
             },
-            dist: {
+            src: {
                 options: {
                     banner: banner
                 },
@@ -35,18 +44,17 @@ module.exports = function(grunt) {
                 dest: 'dist/<%= pkg.name %>.js'
             },
 
-            dist2: {
+            src_lib: {
                 // the files to concatenate
                 src: [
-                    'libs/IndexedDBShim.js',
-                    'libs/fastclick.js',
-                    'libs/latlon/vector3d.js',
-                    'libs/latlon/geo.js',
-                    'libs/latlon/latlon-ellipsoid.js',
-                    'libs/latlon/osgridref.js',
-                    'libs/handlebars.js',
-                    'libs/photoswipe-3.0.4/klass.min.js',
-                    'libs/photoswipe-3.0.4/code.photoswipe.jquery-3.0.4.min.js'
+                    'src/lib/IndexedDBShim/IndexedDBShim.js',
+                    'src/lib/latlon/vector3d.js',
+                    'src/lib/latlon/geo.js',
+                    'src/lib/latlon/latlon-ellipsoid.js',
+                    'src/lib/latlon/osgridref.js',
+                    'src/lib/handlebars/handlebars.js',
+                    'src/lib/photoswipe/lib/klass.min.js',
+                    'src/lib/photoswipe/code.photoswipe.jquery-3.0.5.min.js'
                 ],
                 // the location of the resulting JS file
                 dest: 'dist/<%= pkg.name %>.libs.js'
@@ -83,18 +91,21 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+                    'dist/<%= pkg.name %>.min.js': ['<%= concat.src.dest %>']
                 }
             }
         }
 
     });
 
+    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['concat', 'replace', 'uglify']);
+    grunt.registerTask('init', ['bower']);
+    grunt.registerTask('build', ['concat', 'replace', 'uglify']);
+    grunt.registerTask('default', ['init', 'build']);
 
 };
