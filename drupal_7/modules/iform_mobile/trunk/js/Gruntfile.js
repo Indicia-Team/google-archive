@@ -16,7 +16,6 @@ module.exports = function(grunt) {
           install:{
               options:{
                   targetDir: './src/lib',
-                  install: true,
                   cleanBowerDir: true
               }
           }
@@ -55,6 +54,7 @@ module.exports = function(grunt) {
                     'src/lib/handlebars/handlebars.js',
                     'src/lib/photoswipe/lib/klass.min.js',
                     'src/lib/photoswipe/code.photoswipe.jquery-3.0.5.min.js'
+
                 ],
                 // the location of the resulting JS file
                 dest: 'dist/<%= pkg.name %>.libs.js'
