@@ -19,7 +19,7 @@ function iform_mobile_library() {
       $path . '/js/dist/iform-mobile.js' => array(),
     ),
     'css' => array(
-      $path . '/js/libs/photoswipe-3.0.4/photoswipe.css' => array(),
+      $path . '/js/src/lib/photoswipe/photoswipe.css' => array(),
     ),
   );
 
