@@ -1,11 +1,14 @@
-/**
- *  Object responsible for record input management.
- */
+/***********************************************************************
+ * RECORD.INPUTS MODULE
+ *
+ * Object responsible for record input management.
+ **********************************************************************/
 
 app = app || {};
 app.record = app.record || {};
 
 app.record.inputs = (function (m, $) {
+  //todo: move KEYS to CONF.
   m.KEYS = {
     'SREF': 'sample:entered_sref',
     'SREF_SYSTEM': 'sample:entered_sref_system',
@@ -27,7 +30,8 @@ app.record.inputs = (function (m, $) {
   };
 
   /**
-   * Reurns an input value from the current record.
+   * Returns an input value from the current record.
+   *
    * @param item The Input name
    * @returns {*} null if the item does not exist
    */
@@ -38,6 +42,7 @@ app.record.inputs = (function (m, $) {
 
   /**
    * Removes an input from the current record.
+   *
    * @param item Input name
    */
   m.remove = function (item) {
@@ -47,7 +52,8 @@ app.record.inputs = (function (m, $) {
   };
 
   /**
-   * Checks if the input is setup
+   * Checks if the input is setup.
+   *
    * @param item Input name
    * @returns {boolean}
    */

@@ -1,15 +1,24 @@
+/***********************************************************************
+ * APP MODULE
+ *
+ * Things to work on:
+ *  - Decouple the modules as much as possible
+ *  - Add better data management - app.data - should be strictly managed
+ *  - Close as many global variables
+ **********************************************************************/
+
 app = (function (m, $) {
   m.version = '0'; //library version, generated/replaced by grunt
 
   //configuration should be setup in app config file
   m.CONF = {
     HOME: "",
-    NAME: "", //application name
+    NAME: "", //todo: set to null to force an application name
     LOG: m.LOG_ERROR
   };
 
   //GLOBALS
-  m.$ = $;
+  m.$ = $; //todo: remove if not used
   m.data = {};
 
   //CONSTANTS:
@@ -17,6 +26,7 @@ app = (function (m, $) {
   m.FALSE = 0;
   m.ERROR = -1;
 
+  //levels of app logging
   m.LOG_NONE = 0;
   m.LOG_ERROR = 1;
   m.LOG_WARNING = 2;
@@ -46,7 +56,7 @@ app = (function (m, $) {
   ];
 
   /**
-   * Init function
+   * Init function.
    */
   m.initialise = function () {
     _log('APP: initialised.', app.LOG_INFO);
@@ -94,10 +104,20 @@ app = (function (m, $) {
     });
   };
 
+  /**
+   * Initialises the application settings.
+   */
   m.initSettings = function () {
     app.storage.set('settings', {});
   };
 
+  /**
+   * Sets an app setting.
+   *
+   * @param item
+   * @param data
+   * @returns {*}
+   */
   m.settings = function (item, data) {
     var settings = app.storage.get('settings');
     if (settings == null) {

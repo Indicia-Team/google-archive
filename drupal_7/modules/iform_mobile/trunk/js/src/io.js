@@ -1,12 +1,17 @@
+/***********************************************************************
+ * IO MODULE
+ **********************************************************************/
+
 app = app || {};
 app.io = (function (m, $) {
   //configuration should be setup in app config file
   m.CONF = {
-    RECORD_URL: ""
+    RECORD_URL: "" //todo: set to null and throw error if undefined
   };
 
-  /*
+  /**
    * Sending all saved records.
+   *
    * @returns {undefined}
    */
   m.sendAllSavedRecords = function () {
@@ -45,7 +50,7 @@ app.io = (function (m, $) {
     }
   };
 
-  /*
+  /**
    * Sends the saved record
    */
   m.sendSavedRecord = function (recordKey, callback, onError, onSend) {
@@ -73,7 +78,7 @@ app.io = (function (m, $) {
 
   };
 
-  /*
+  /**
    * Submits the record.
    */
   m.postRecord = function (record, onSuccess, onError, onSend) {
@@ -115,6 +120,7 @@ app.io = (function (m, $) {
 
   /**
    * Returns App main record Path.
+   *
    * @returns {*}
    */
   m.getRecordURL = function () {

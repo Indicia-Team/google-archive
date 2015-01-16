@@ -1,21 +1,30 @@
+/***********************************************************************
+ * RECORD MODULE
+ *
+ * Things to work on:
+ *  - Validation should be moved to the app controllers level.
+ **********************************************************************/
+
 app = app || {};
 app.record = (function (m, $) {
+
+  //CONSTANTS
+  //todo: add _KEY to each constant name to distinguish all KEYS
+  m.RECORD = "record"; //name under which the record is stored
   m.MULTIPLE_GROUP_KEY = "multiple_"; //to separate a grouped input
   m.COUNT = "record_count";
   m.STORAGE = "record_";
   m.PIC = "_pic_";
-
-  m.totalFiles = 0;
-
   m.DATA = "data";
   m.FILES = "files";
   m.SETTINGS = "recordSettings";
   m.LASTID = "lastId";
 
-  //name under which the record is stored
-  m.RECORD = "record";
+  //GLOBALS
+  m.totalFiles = 0;
 
   /**
+   * Initialises the recording environment.
    *
    * @returns {*}
    */
@@ -33,8 +42,7 @@ app.record = (function (m, $) {
   /**
    * Record settings. A separate DOM storage unit for storing
    * recording specific data.
-   *
-   * Note: in the future, if appart of LastFormId no other uses arouse
+   * Note: in the future, if apart of LastFormId no other uses arises
    * should be merged with default app.settings.
    *
    * @param settings
@@ -43,6 +51,11 @@ app.record = (function (m, $) {
     app.storage.set(m.SETTINGS, settings);
   };
 
+  /**
+   * Initializes and returns the settings.
+   *
+   * @returns {{}}
+   */
   m.initSettings = function () {
     var settings = {};
     settings[m.LASTID] = 0;
@@ -50,6 +63,11 @@ app.record = (function (m, $) {
     return settings;
   };
 
+  /**
+   * Returns the settings.
+   *
+   * @returns {*|{}}
+   */
   m.getSettings = function () {
     var settings = app.storage.get(m.SETTINGS) || m.initSettings();
     return settings;
@@ -57,6 +75,7 @@ app.record = (function (m, $) {
 
   /**
    * Returns the current record.
+   *
    * @returns {*}
    */
   m.get = function () {
@@ -65,6 +84,7 @@ app.record = (function (m, $) {
 
   /**
    * Sets the current record.
+   *
    * @param record The currenr record to be stored.
    */
   m.set = function (record) {
@@ -80,6 +100,7 @@ app.record = (function (m, $) {
 
   /**
    * TODO: this and validator() functions need refactoring.
+   *
    * @param recordId
    */
   m.addValidator = function (recordId) {
@@ -150,7 +171,7 @@ app.record = (function (m, $) {
     //validator.settings.onkeyup = false;
   };
 
-  /*
+  /**
    * Record validation.
    */
   m.validate = function (recordId) {
@@ -229,6 +250,7 @@ app.record = (function (m, $) {
 
   /**
    * Extracts data (apart from files) from provided record into a record_array that it returns.
+   *
    * @param record
    * @returns {Array}
    */

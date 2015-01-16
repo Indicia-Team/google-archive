@@ -1,20 +1,32 @@
+/***********************************************************************
+ * NAVIGATION MODULE
+ **********************************************************************/
+
 app = app || {};
 app.navigation = (function (m, $) {
 
-  /*
+  /**
    * Updates the dialog box appended to the page
+   * todo: remove hardcoded dialog ID
    */
   m.makeDialog = function (text) {
     $('#app-dialog-content').empty().append(text);
   };
 
+  /**
+   * Created a popup.
+   * todo: remove hardcoded popup ID
+   *
+   * @param text
+   * @param addClose
+   */
   m.popup = function (text, addClose) {
     this.makePopup(text, addClose);
     $('#app-popup').popup();
     $('#app-popup').popup('open').trigger('create');
   };
 
-  /*
+  /**
    * Updates the popup div appended to the page
    */
   m.makePopup = function (text, addClose) {
@@ -38,11 +50,15 @@ app.navigation = (function (m, $) {
     $('#app-popup').empty().append(text);
   };
 
+  /**
+   * Closes a popup.
+   * todo: remove hardcoded popup ID
+   */
   m.closePopup = function () {
     $('#app-popup').popup("close");
   };
 
-  /*
+  /**
    * Creates a loader
    */
   m.makeLoader = function (text, time) {
@@ -95,8 +111,8 @@ app.navigation = (function (m, $) {
     }
   };
 
-  /*
-   * Goes to the some app page.
+  /**
+   * Opens particular app page-path.
    *
    * @param delay
    * @param path If no path supplied goes to app.PATH
@@ -108,16 +124,15 @@ app.navigation = (function (m, $) {
     }, delay);
   };
 
-  /*
-   * Goes to the app home page
+  /**
+   * Opens the app home page.
    */
-  //todo: clean
+  //todo: clean setting of the timeout and hardcoded '/form'
   m.goRecord = function (delay) {
     setTimeout(function () {
       $.mobile.changePage(Drupal.settings.mobileIformStartPath + '/form');
     }, delay);
   };
-
 
   return m;
 }(app.navigation || {}, app.$ || jQuery));

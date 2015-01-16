@@ -1,15 +1,24 @@
-/**
- *  Module responsible for large data management.
- *  todo: add documentation.
- */
+/***********************************************************************
+ * DB MODULE
+ *
+ * Module responsible for large data management.
+ **********************************************************************/
 
 app = app || {};
 app.db = (function (m, $) {
 
+  //todo: move to CONF.
   m.DB_VERSION = 1;
   m.DB_MAIN = "app";
   m.STORE_MAIN = "main";
 
+  /**
+   * Opens a database.
+   *
+   * @param name
+   * @param storeName
+   * @param callback
+   */
   m.open = function (name, storeName, callback) {
     var req = window.indexedDB.open(name, m.DB_VERSION);
 
@@ -44,6 +53,13 @@ app.db = (function (m, $) {
 
   };
 
+  /**
+   * Adds a record to the database store.
+   *
+   * @param record
+   * @param key
+   * @param callback
+   */
   m.add = function (record, key, callback) {
     m.open(m.DB_MAIN, m.STORE_MAIN, function (store) {
       _log("DB: adding to the store.", app.LOG_DEBUG);
@@ -57,6 +73,12 @@ app.db = (function (m, $) {
     });
   };
 
+  /**
+   * Gets a specific record from the database store.
+   *
+   * @param key
+   * @param callback
+   */
   m.get = function (key, callback) {
     m.open(m.DB_MAIN, m.STORE_MAIN, function (store) {
       _log('DB: getting from the store.', app.LOG_DEBUG);
@@ -69,6 +91,11 @@ app.db = (function (m, $) {
     });
   };
 
+  /**
+   * Gets all the records from the database store.
+   *
+   * @param callback
+   */
   m.getAll = function (callback) {
     m.open(m.DB_MAIN, m.STORE_MAIN, function (store) {
       _log('DB: getting all from the store.', app.LOG_DEBUG);
@@ -97,10 +124,21 @@ app.db = (function (m, $) {
     });
   };
 
+  /**
+   * Checks if the record exists in the database store.
+   *
+   * @param key
+   * @param callback
+   */
   m.is = function (key, callback) {
-
+    //todo: implement
   };
 
+  /**
+   * Clears the database store.
+   *
+   * @param callback
+   */
   m.clear = function (callback) {
     m.open(m.DB_MAIN, m.STORE_RECORDS, function (store) {
       _log('DB: clearing store', app.LOG_DEBUG);
@@ -111,7 +149,6 @@ app.db = (function (m, $) {
       }
     });
   };
-
 
   return m;
 }(app.db || {}, app.$ || jQuery));
