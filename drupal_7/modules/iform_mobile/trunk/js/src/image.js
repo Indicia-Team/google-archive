@@ -1,10 +1,17 @@
+/***********************************************************************
+ * IMAGE MODULE
+ **********************************************************************/
+
 app = app || {};
 app.image = (function (m, $) {
+
+  //todo: move to CONF.
   m.MAX_IMG_HEIGHT = 800;
   m.MAX_IMG_WIDTH = 800;
 
   /**
    * Returns all the images resized and stingified from an element.
+   *
    * @param elem DOM element to look for files
    * @param callback function with an array parameter
    */
@@ -18,8 +25,8 @@ app.image = (function (m, $) {
   };
 
   /**
-   * Transforms and resizes an image file into a string and saves it in the
-   * storage.
+   * Transforms and resizes an image file into a string and saves it in the storage.
+   *
    * @param key
    * @param file
    * @param onSaveSuccess
@@ -81,6 +88,7 @@ app.image = (function (m, $) {
 
   /**
    * Saves all the files. Uses recursion.
+   *
    * @param files An array of files to be saved
    * @param onSaveAllFilesSuccess
    */
@@ -133,6 +141,7 @@ app.image = (function (m, $) {
 
   /**
    * Returns a file object with its name.
+   *
    * @param inputId The file input Id
    * @returns {{file: *, input_field_name: *}}
    */

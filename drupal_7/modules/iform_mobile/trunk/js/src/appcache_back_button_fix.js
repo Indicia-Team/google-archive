@@ -12,7 +12,7 @@
 };
  */
 
-/*
+/**
  * Fixes back buttons for specific page
  */
 function fixPageBackButtons(currentPageURL, nextPageId) {
@@ -30,10 +30,7 @@ function fixPageBackButtons(currentPageURL, nextPageId) {
   });
 }
 
-/************ END BACK BUTTON FIX ****************************************************/
-
-
-/*
+/**
  * Generic function to detect the browser
  * 
  * Chrome has to have and ID of both Chrome and Safari therefore

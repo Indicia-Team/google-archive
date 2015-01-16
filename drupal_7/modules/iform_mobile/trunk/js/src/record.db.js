@@ -1,11 +1,14 @@
-/**
+/***********************************************************************
+ * RECORD.DB MODULE
+ *
  * Takes care of the record database functionality.
- */
+ **********************************************************************/
 
 app = app || {};
 app.record = app.record || {};
 
 app.record.db = (function (m, $) {
+  //todo: move to CONF.
   m.RECORDS = "records";
 
   m.DB_VERSION = 5;
@@ -14,6 +17,7 @@ app.record.db = (function (m, $) {
 
   /**
    * Opens a database connection and returns a records store.
+   *
    * @param name
    * @param storeName
    * @param callback
@@ -23,6 +27,7 @@ app.record.db = (function (m, $) {
 
     /**
      * On Database opening success, returns the Records object store.
+     *
      * @param e
      */
     req.onsuccess = function (e) {
@@ -38,6 +43,7 @@ app.record.db = (function (m, $) {
 
     /**
      * If the Database needs an upgrade or is initialising.
+     *
      * @param e
      */
     req.onupgradeneeded = function (e) {
@@ -50,6 +56,7 @@ app.record.db = (function (m, $) {
 
     /**
      * Error of opening the database.
+     *
      * @param e
      */
     req.onerror = function (e) {
@@ -63,6 +70,7 @@ app.record.db = (function (m, $) {
 
     /**
      * Error on database being blocked.
+     *
      * @param e
      */
     req.onblocked = function (e) {
@@ -77,9 +85,9 @@ app.record.db = (function (m, $) {
 
   /**
    * Adds a record under a specified key to the database.
-   *
    * Note: might be a good idea to move the key assignment away from
    * the function parameters and rather auto assign one and return on callback.
+   *
    * @param record
    * @param key
    * @param callback
@@ -122,6 +130,7 @@ app.record.db = (function (m, $) {
 
   /**
    * Removes a saved record from the database.
+   *
    * @param recordKey
    */
   m.remove = function (key, callback, onError) {
@@ -177,6 +186,7 @@ app.record.db = (function (m, $) {
 
   /**
    * Checks whether the record under a provided key exists in the database.
+   *
    * @param key
    * @param callback
    * @param onError
@@ -213,6 +223,7 @@ app.record.db = (function (m, $) {
 
   /**
    * Returns a specific saved record in FormData format.
+   *
    * @param recordKey
    * @returns {FormData}
    */

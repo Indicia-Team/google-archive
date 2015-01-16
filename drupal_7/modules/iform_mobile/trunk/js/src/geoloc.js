@@ -1,5 +1,8 @@
-app = app || {};
+/***********************************************************************
+ * GEOLOC MODULE
+ **********************************************************************/
 
+app = app || {};
 app.geoloc = (function (m, $) {
 
   //configuration should be setup in app config file
@@ -9,6 +12,7 @@ app.geoloc = (function (m, $) {
     TIMEOUT: 120000
   };
 
+  //todo: limit the scope of the variables to this module's functions.
   m.latitude = null;
   m.longitude = null;
   m.accuracy = -1;
@@ -18,6 +22,8 @@ app.geoloc = (function (m, $) {
   m.map = null;
 
   /**
+   * Sets the Latitude, Longitude and the Accuracy of the GPS lock.
+   *
    * @param lat
    * @param lon
    * @param acc
@@ -29,6 +35,7 @@ app.geoloc = (function (m, $) {
   };
 
   /**
+   * Gets the the Latitude, Longitude and the Accuracy of the GPS lock.
    *
    * @returns {{lat: *, lon: *, acc: *}}
    */
@@ -41,13 +48,14 @@ app.geoloc = (function (m, $) {
   };
 
   /**
-   * Clears the current lock.
+   * Clears the current GPS lock.
    */
   m.clear = function () {
     m.set(null, null, -1);
   };
 
   /**
+   * Gets the accuracy of the current GPS lock.
    *
    * @returns {*}
    */
@@ -56,6 +64,7 @@ app.geoloc = (function (m, $) {
   };
 
   /**
+   * Runs the GPS.
    *
    * @returns {*}
    */
@@ -99,6 +108,7 @@ app.geoloc = (function (m, $) {
   };
 
   /**
+   * Watches the GPS position.
    *
    * @param onUpdate
    * @param onSuccess
@@ -175,7 +185,8 @@ app.geoloc = (function (m, $) {
   };
 
   /**
-   * Validates the current GPS lock quality
+   * Validates the current GPS lock quality.
+   *
    * @returns {*}
    */
   m.valid = function () {

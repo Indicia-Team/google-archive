@@ -1,3 +1,7 @@
+/***********************************************************************
+ * AUTH MODULE
+ **********************************************************************/
+
 app = app || {};
 app.auth = (function (m, $) {
   //module configuration should be setup in an app config file
@@ -13,8 +17,7 @@ app.auth = (function (m, $) {
 
   /**
    * Appends user and app authentication to the passed data object.
-   *
-   * Object has to implement 'append' method.
+   * Note: object has to implement 'append' method.
    *
    * @param data An object to modify
    * @returns {*} A data object
@@ -33,8 +36,7 @@ app.auth = (function (m, $) {
   /**
    * Appends user authentication - Email and Password to
    * the passed data object.
-   *
-   * Object has to implement 'append' method.
+   * Note: object has to implement 'append' method.
    *
    * @param data An object to modify
    * @returns {*} A data object
@@ -52,8 +54,7 @@ app.auth = (function (m, $) {
   /**
    * Appends app authentication - Appname and Appsecret to
    * the passed object.
-   *
-   * Object has to implement 'append' method.
+   * Note: object has to implement 'append' method.
    *
    * @param data An object to modify
    * @returns {*} A data object
@@ -68,8 +69,7 @@ app.auth = (function (m, $) {
   /**
    * Appends warehouse related information - website_id and survey_id to
    * the passed data object.
-   *
-   * Object has to implement 'append' method.
+   * Note: object has to implement 'append' method.
    *
    * This is necessary because the data must be associated to some
    * website and survey in the warehouse.
@@ -86,6 +86,7 @@ app.auth = (function (m, $) {
 
   /**
    * Checks if the user has authenticated with the app.
+   *
    * @returns {boolean} True if the user exists, else False
    */
   m.isUser = function () {
@@ -95,6 +96,7 @@ app.auth = (function (m, $) {
 
   /**
    * Brings the user details from the storage.
+   *
    * @returns {Object|*}
    */
   m.getUser = function () {
@@ -103,6 +105,7 @@ app.auth = (function (m, $) {
 
   /**
    * Saves the authenticated user details to the storage.
+   *
    * @param user A user object
    */
   m.setUser = function (user) {

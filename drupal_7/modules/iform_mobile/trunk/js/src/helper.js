@@ -1,4 +1,10 @@
-/*
+/***********************************************************************
+ * HELPER MODULE
+ *
+ * Functions that were to ambiguous to be placed in one module.
+ **********************************************************************/
+
+/**
  * Gets a query parameter from the URL.
  */
 function getParameterByName(name) {
@@ -18,7 +24,7 @@ function getParameterByName(name) {
  *  3: information
  *  4: debug
  *
- * Levels defined in core app module.
+ * Levels values defined in core app module.
  *
  * @param message
  * @param level
@@ -56,6 +62,7 @@ function _log(message, level) {
 
 /**
  * Prints and posts an error to the mobile authentication log.
+ *
  * @param error object holding a 'message', and optionally 'url' and 'line' fields.
  * @private
  */
@@ -130,6 +137,7 @@ function _onerror(message, url, line) {
   return true; // suppress normal error reporting
 }
 
+//todo: remove if not used.
 function loadScript(src) {
   var script = document.createElement('script');
   script.type = 'text/javascript';
@@ -137,6 +145,15 @@ function loadScript(src) {
   document.body.appendChild(script);
 }
 
+/**
+ * Starts an Appcache Manifest Downloading.
+ *
+ * @param id
+ * @param files_no
+ * @param src
+ * @param callback
+ * @param onError
+ */
 function startManifestDownload(id, files_no, src, callback, onError) {
   /*todo: Add better offline handling:
    If there is a network connection, but it cannot reach any
@@ -179,6 +196,7 @@ function startManifestDownload(id, files_no, src, callback, onError) {
 
 /**
  * Initialises and returns a variable.
+ *
  * @param name
  * @returns {*}
  */
@@ -198,6 +216,12 @@ function varInit(name) {
   return variable;
 }
 
+/**
+ * Clones an object.
+ *
+ * @param obj
+ * @returns {*}
+ */
 function objClone(obj) {
   if (null == obj || "object" != typeof obj) return obj;
   var copy = obj.constructor();
@@ -208,6 +232,7 @@ function objClone(obj) {
 }
 
 /**
+ * Adds Enable/Disable JQM Tab functionality
  * FROM: http://kylestechnobabble.blogspot.co.uk/2013/08/easy-way-to-enable-disable-hide-jquery.html
  * USAGE:
  * $('MyTabSelector').disableTab(0);        // Disables the first tab

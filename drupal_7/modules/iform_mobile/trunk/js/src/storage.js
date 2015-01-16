@@ -1,10 +1,21 @@
+/***********************************************************************
+ * STORAGE MODULE
+ **********************************************************************/
+
 app = app || {};
 app.storage = (function (m, $) {
+  /**
+   * Checks if there is enough space in the storage.
+   *
+   * @param size
+   * @returns {*}
+   */
   m.hasSpace = function (size) {
     return localStorageHasSpace(size);
   };
 
   /**
+   * Gets an item from the storage.
    *
    * @param item
    */
@@ -17,6 +28,8 @@ app.storage = (function (m, $) {
   };
 
   /**
+   * Sets an item in the storage.
+   * Note: it overrides any existing item with the same name.
    *
    * @param item
    */
@@ -28,6 +41,7 @@ app.storage = (function (m, $) {
   };
 
   /**
+   * Removes the item from the storage.
    *
    * @param item
    */
@@ -38,7 +52,8 @@ app.storage = (function (m, $) {
   };
 
   /**
-   * Checks if the item exists
+   * Checks if the item exists.
+   *
    * @param item Input name
    * @returns {boolean}
    */
@@ -61,6 +76,7 @@ app.storage = (function (m, $) {
   };
 
   /**
+   * Returns the item from the temporary storage.
    *
    * @param item
    */
@@ -73,6 +89,7 @@ app.storage = (function (m, $) {
   };
 
   /**
+   * Sets an item in temporary storage.
    *
    * @param item
    */
@@ -84,6 +101,7 @@ app.storage = (function (m, $) {
   };
 
   /**
+   * Removes an item in temporary storage.
    *
    * @param item
    */
@@ -94,7 +112,8 @@ app.storage = (function (m, $) {
   };
 
   /**
-   * Checks if the temporary item exists
+   * Checks if the temporary item exists.
+   *
    * @param item Input name
    * @returns {boolean}
    */
@@ -116,7 +135,7 @@ app.storage = (function (m, $) {
     sessionStorage.clear();
   };
 
-  /*
+  /**
    * Checks if it is possible to store some sized data in localStorage.
    */
   function localStorageHasSpace(size) {
@@ -131,12 +150,16 @@ app.storage = (function (m, $) {
   return m;
 }(app.storage || {}, jQuery));
 
+
+
 /*##############
  ## HELPER  ####
+  //todo: should find a better place for this.
  ##############*/
 
-/*
- * Converts DataURI object to a Blob
+/**
+ * Converts DataURI object to a Blob.
+ *
  * @param {type} form_count
  * @param {type} pic_count
  * @param {type} file
