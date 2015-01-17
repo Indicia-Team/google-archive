@@ -1,5 +1,0 @@
-name = Indicia mobile
-description = Provides general use Indicia recording mobile apps libraries.
-package = "Indicia"
-core = 7.x
-version = "7.x-0.1"
