@@ -1,1 +1,0 @@
-Provides general use Indicia recording mobile apps libraries.
