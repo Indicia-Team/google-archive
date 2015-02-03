@@ -25,12 +25,14 @@ function indiciatheme_process_html(&$vars) {
 /**
  * Override or insert variables for the page templates.
  */
-/* -- Delete this line if you want to use these functions
 function indiciatheme_preprocess_page(&$vars) {
+  // Check path to determine widget pages
+  $pathargs = explode('/',drupal_get_path_alias($_GET['q']));
+  if ($pathargs[0] == 'external' || (!empty($_GET['external']) && $_GET['external']==='t')) {
+     // Switch template to remove extraneous stuff for iframes.
+     array_unshift($vars['theme_hook_suggestions'], 'page__iframe');
+  }
 }
-function indiciatheme_process_page(&$vars) {
-}
-// */
 
 
 /**
