@@ -2,6 +2,15 @@
 //An array to hold the ids of the existing user_email_notification_settings so we know when to update rather than add a new record
 $existingIds=array();
 
+/**
+ * Internal function to set one of the email notification frequency fields in the submission to it's 
+ * default value.
+ */
+function _notification_emails_set_default_frequency(&$submission, $name, $code, $default) {
+  $f = variable_get("indicia_email_frequency_$code", $default);
+  if ($f) 
+    $submission["email_{$name}_frequency"]=$f;
+}
 
 function notification_emails_user($op, &$edit, &$account, $category = NULL) {
   iform_load_helpers(array('data_entry_helper'));
@@ -23,13 +32,13 @@ function notification_emails_user($op, &$edit, &$account, $category = NULL) {
         'extraParams'=>array('user_id' => $userId)
       ));
       if (empty($freqSettingsData)) {
-        $submissionForNewUser['email_species_alert_frequency']='IH';
-        $submissionForNewUser['email_comment_frequency']='D';
-        $submissionForNewUser['email_record_cleaner_frequency']='D';
-        $submissionForNewUser['email_verification_frequency']='D';
-        $submissionForNewUser['email_milestone_frequency']='D';
-        $submissionForNewUser['email_verifier_task_frequency']='D';
-        $submissionForNewUser['email_pending_record_task_frequency']='D';
+        _notification_emails_set_default_frequency($submissionForNewUser, 'species_alert', 'S', 'IH');
+        _notification_emails_set_default_frequency($submissionForNewUser, 'comment', 'C', 'D');
+        _notification_emails_set_default_frequency($submissionForNewUser, 'record_cleaner', 'A', 'D');
+        _notification_emails_set_default_frequency($submissionForNewUser, 'verification', 'V', 'D');
+        _notification_emails_set_default_frequency($submissionForNewUser, 'milestone', 'M', 'D');
+        _notification_emails_set_default_frequency($submissionForNewUser, 'verifier_task', 'VT', 'D');
+        _notification_emails_set_default_frequency($submissionForNewUser, 'pending_record_task', 'PT', 'D');
         //Also update the warehouse when user created
         create_notification_emails_settings_submission($submissionForNewUser);
         drupal_set_message(t('Your account has been configured so that you will receive email updates about your notifications, including ' .
