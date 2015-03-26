@@ -234,7 +234,7 @@ fieldset legend {
 /* line 143, sass/indiciatheme.scss */
 div#ui-datepicker-div {
   display: none;
-  z-index: 100 !important;
+  z-index: 2000 !important;
 }
 
 /* Remove pixture reloaded margin on report tables */
