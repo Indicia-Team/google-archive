@@ -80,14 +80,13 @@ header#header {
 input[type=submit], input[type=button], button, .indicia-button, a.indicia-button, a.button {
   color: $colour-ctrl-text;
   @include sassy-button-gradient('matte', $colour-ctrl-background, $colour-ctrl-background-light, $colour-ctrl-text, 'inset', true);
+  @include sassy-button-structure(4px, 1em, 0 0.25em);
   margin-right: $spacing;
 }
-input[type=button], button, .indicia-button, a.indicia-button, a.button {
-  @include sassy-button-structure(4px, 12px, 0.25em);
-}
-/* Submit button a bit bigger */
-input[type=submit], button[type=submit], .fb-close {
-  @include sassy-button-structure(4px, 14px, 0.25em);
+.buttons {
+  input[type=submit], input[type=button], button {
+    @include sassy-button-structure(4px, 1.1em, 0.25em);
+  }
 }
 .form-submit:hover {
   color: $colour-ctrl-text;
@@ -142,7 +141,7 @@ fieldset legend {
 /* Fix potential for datepicker div to appear as blob at bottom of screen, and to go under the menu when it pops up */
 div#ui-datepicker-div {
   display: none;
-  z-index: 100 !important;
+  z-index: 2000 !important;
 }
 
 /* Remove pixture reloaded margin on report tables */
@@ -212,6 +211,10 @@ table.report-grid {
 /* Fix an issue in Chrome / Adaptive theme where the grid action buttons overflow the grid */
 .action-button img {
   max-width: inherit;
+}
+
+#map-footer {
+  font-size: 12px;
 }
 
 
