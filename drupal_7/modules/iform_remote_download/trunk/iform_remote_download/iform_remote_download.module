@@ -226,14 +226,15 @@ function iform_remote_download_autogenerate() {
         return;
       }
       $ext = ($options['mode']==='nbn' || $options['mode']==='tsv') ? 'txt' : $options['mode'];
-      $fp = fopen("$filepath/download-$filter[id].$ext", 'w');
+      $filename = 'download-'.preg_replace('/[^a-zA-Z0-9 \-_]/', '', $filter['title']);
+      $fp = fopen("$filepath/$filename.$ext", 'w');
       if (!$fp) {
-        print "Could not open file for writing at $filepath/download-$filter[id].$ext";
+        print "Could not open file for writing at $filepath/$filename.$ext";
         return;
       }
       fwrite($fp, $output['output']);
       fclose($fp);
-      print "Created $filepath/download-$filter[id].$ext<br/>";
+      print "Created $filepath/$filename.$ext<br/>";
     }
   }
   // clear the message queue from folder creation events
