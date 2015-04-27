@@ -34,6 +34,7 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
     $settings = array_merge(array(
       'width' => 270,
       'height' => 390,
+      'cache_life' => 7,
     ), $settings);
     $form = array();
     // @todo validate width and height.
@@ -57,6 +58,13 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
       '#description' => t('Cache images locally in the Drupal files folder for better performance.'),
       '#default_value' => $settings['caching'],
     );
+    // @todo validate cache_life.
+    $form['cache_life'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Cache lifetime (days)'),
+      '#description' => t('Number of days to keep cached maps. A clear cache command will also cause maps to be requested anew.'),
+      '#default_value' => $settings['cache_life'],
+    );
     $form['datasets'] = array(
       '#type' => 'textarea',
       '#title' => t('Datasets'),
@@ -70,7 +78,7 @@ function nbn_map_taxon_formatter_settings_form($settings, $type, $args) {
       '#title' => t('Display Bands'),
       '#description' => t('List display bands one per line to define the fill and border colour of the output by date range, or leave blank for just the default band. '.
           'Each band line consists of a comma separated list of the settings (from, to, fill and border). The from and to values are 4 digit years, the fill and border '.
-          'values are RGB colour codes. For example "from=1980,to=1990,fill=FF0000,border=000000".'),
+          'values are RGB colour codes. For example "from=1980,to=1990,fill=FF0000,border=000000". The first in the list is the bottom layer.'),
       '#required' => FALSE,
       '#default_value' => $settings['bands'],
       '#wysiwyg' => FALSE,
@@ -143,10 +151,13 @@ function theme_nbn_map_taxon_formatter_output($element, $preset) {
     $file_path = $dir . "/" . $file_name;
     // Get preferred tvk from cache.
     $ptvk = cache_get("nbn_map:$tvk");
+    // Calculate life span of files.
+    $cache_life = isset($preset['settings']['caching']) ? $preset['settings']['caching'] : 7;
+    $cache_life = $cache_life * 24 * 60 * 60;
 
-    if (!file_exists($file_path) || !$ptvk) {
-      // Cached information is not available so get it.
-      
+    if (!file_exists($file_path) || !$ptvk || 
+            (filemtime($file_path) < time() - $cache_life)) {
+      // Cached information is not available so get it.    
       try {
         // Get the preferred tvk as a non-preferred one may return an empty map.
         $ptvk = nbn_map_get_ptvk($tvk);
@@ -277,7 +288,11 @@ function nbn_map_build_query($tvk, $preset) {
 
   // Datasets.
   if (!empty($preset['settings']['datasets'])) {    
-    $datasets = explode("\n", $preset['settings']['datasets']);
+    // split the dataset definitions up by line, allowing for different line
+    // endings.
+    $datasets = str_replace("\r\n", "\n", $preset['settings']['datasets']);
+    $datasets = str_replace("\r", "\n", $datasets);
+    $datasets = explode("\n", $datasets);
     if (count($datasets) > 0) {      
       // clean the dataset keys
       foreach($datasets as &$dataset) {     
