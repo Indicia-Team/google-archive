@@ -1,0 +1,182 @@
+# The prebuilt IForm library #
+
+Indicia includes a prebuilt library of data entry forms, known as IForms. These are general purpose forms which are great for getting started with Indicia when you don't have the resources to build your own form in PHP. IForms can also be integrated into Content Management Systems such as Drupal, so when you select an IForm to add to a page you will be asked to enter parameters appropriate to the form, such as the species checklist ID you want to allow species entry for.
+
+## Structure ##
+
+IForms are held in the `client_helpers/prebuilt_forms` folder. Each IForm is represented by a single PHP file with a unique name. To help explain it we can imagine a file called myform.php. Within the PHP file there is a single class, called `iform_formname`, for example `iform_myform`.
+
+This class needs to do a few things by implementing a number of methods as follows.
+
+### get\_form\_name\_definition ###
+
+This method returns an array which defines the form's title, category, description and an optional link to a help URL page. The form\_name part of the method name must be replaced with the name of the form's class. For example:
+```
+public static function get_mnhnl_dynamic_1_definition() {
+  return array(
+      'title'=>'MNHNL Dynamic 1 - dynamically generated data entry form',
+      'category' => 'General Purpose Data Entry Forms',
+      'helpLink'=>'http://code.google.com/p/indicia/wiki/TutorialDynamicForm',
+      'description'=>'A data entry form with an optional grid listing the user\'s records so forms can be reloaded for editing. Can be used for '.
+          'entry of a single occurrence, ticking species off a checklist, or entering species into a grid. The attributes on the form are dynamically '.
+          'generated from the survey setup on the Indicia Warehouse.'
+  );
+}
+```
+
+### get\_title ###
+
+This method allows a form to declare a title, but is kept for backwards compatibility as the title can now be returned by get\_form\_name\_definition.
+```
+  /** 
+   * Return the form title.
+   * @return string The title of the form.
+   */
+  public static function get_title() {
+    return 'My data entry form';  
+  }
+```
+
+### get\_parameters ###
+
+Next, we need a method to declare the parameters for the data entry form. Parameters are things you want the editor of the website to set up when they add your data entry form to their website. Typically this will include the website id and password as a very minimum, but often it will also include other options such as the species list ID to use, or whether to use a tabbed interface or not. So, we can add a method like:
+
+```
+  /**
+   * Get the list of parameters for this form.
+   * @return array List of parameters that this form requires.
+   */
+  public static function get_parameters() {   
+    return array(      
+      array(
+      	'name'=>'species_ctrl',
+        'caption'=>'Species Control Type',
+        'description'=>'The type of control that will be available to select a species.',
+        'type'=>'select',
+        'options' => array(
+          'autocomplete' => 'Autocomplete',
+          'select' => 'Select',
+          'listbox' => 'List box',
+          'radio_group' => 'Radio group',
+          'species_checklist' => 'Checkbox grid',
+          'group' => 'Species'
+        )
+      ),
+      array(
+      	'name'=>'list_id',
+        'caption'=>'Species List ID',
+        'description'=>'The Indicia ID for the species list that species can be selected from.',
+        'type'=>'string',
+        'group' => 'Species',
+        'siteSpecific'=>true
+      )
+    );
+  }
+```
+
+The list of parameters is returned as an array, with each parameter being an _associative_ array describing the name, caption, description, group and type (data type) of the parameter. The name is the internal name for the parameter, which will be used by your code later, as opposed to the caption which is the display label for the caption that the website editor will see.
+
+The type can be one of int, string, boolean or select, or alternatively can specify one of the control names from the data\_entry\_helper or report\_helper class to use that control in the configuration form.  If using a report\_helper control then the control name must be prefixed with 'report\_helper::'. For example, the following array specifies the use of the report\_helper class' report\_picker control:
+
+```
+array(
+      'name'=>'report_name',
+      'caption'=>'Report Name',
+      'description'=>'The name of the report file to load into the verification grid, excluding the .xml suffix.',
+      'type'=>'report_helper::report_picker',
+      'group'=>'Report Settings'
+    )
+```
+
+When using a data\_entry\_helper or report\_helper control, additional parameters for the control can be supplied in the array. If select is used then the options that will appear in the select list should be defined in an array called options as illustrated above.
+
+The group option allows you to group the controls together into logical sets. How this actually gets interpreted depends on the system you are using the prebuilt forms within, but as an example the Drupal IForm module places controls together into fieldsets within the form administrators use to set up the recording forms.
+
+Finally, there is a siteSpecific option which must be set to true for parameters that would need re-configuring when migrating a form between 2 sites. For example any IDs referring to the database such as the list ID in this example might change and therefore should be re-configured when a copy of a form is moved from one site to another.
+
+Note that there will automatically be parameters for the website\_id and passsword and you don't need to declare these, since they are required by all prebuilt forms.
+
+### get\_form ###
+
+Next we need to return the actual form content. This is achieved using a method called get\_form which will receive the actual values for each parameter in the $args parameter as an associative array. The following example illustrates a typical template which can be adapted to your own form content:
+
+```
+  /**
+   * Return the generated form output.
+   * @return Form HTML.
+   */
+  public static function get_form($args) {
+    $r = "<form method=\"post\">\n";
+    // Get authorisation tokens to update and read from the Warehouse.
+    $r .= data_entry_helper::get_auth($args['website_id'], $args['password']);
+    $readAuth = data_entry_helper::get_read_auth($args['website_id'], $args['password']);
+    $r .= "<input type=\"hidden\" id=\"website_id\" name=\"website_id\" value=\"".$args['website_id']."\" />\n";
+
+    /* Your form content must be added to the $r variable here */
+
+    $r .= "<input type=\"submit\" class=\"ui-state-default ui-corner-all\" value=\"Save\" />\n";    
+    $r .= "</form>";
+        
+    return $r;
+  }
+```
+
+### get\_submission ###
+
+For forms which submit data via a normal form post, there needs to be a method which tells Indicia how to construct a "submission" from the content of the form when the user presses Save. Here is an example which can be used for any form that creates a single occurrence within a single sample:
+
+```
+  /**
+   * Handles the construction of a submission array from a set of form values.
+   * @param array $values Associative array of form data values. 
+   * @param array $args iform parameters. 
+   * @return array Submission structure.
+   */
+  public static function get_submission($values, $args) {
+    return data_entry_helper::build_sample_occurrence_submission($values);     
+  }  
+```
+
+### get\_redirect\_on\_success ###
+
+When a form needs to dynamically redirect after submission, this method can be implemented to select the URL which is redirected to depending on the form post data. When the URL is static there is no need to implement this method as the redirect URL can be specified as part of the form's configuration. For example:
+
+```
+  /** 
+   * Dynamically redirect after a successful save. This lets us redirect back to the parent transect.
+   */
+  public static function get_redirect_on_success($values, $args) {
+    if (!empty($values['from']) && $values['from']=='transect' && !empty($args['transect_edit_path']))
+      return $args['transect_edit_path'] . '?site='.$values['location:parent_id'];
+  }
+
+```
+
+### get\_validation\_errors ###
+
+Implementing the **get\_validation\_errors** function is optional and allows a prebuilt form to intercept the form's post data and perform additional checks. It also receives the form options in the second parameter which allows it to make the validation behave appropriately to the form settings.
+
+Return an associative array which contains a list of the error messages keyed by the fieldnames from the data array. For example:
+
+```
+public static function get_validation_errors($data, $args) {
+  $errors=array();
+  if (strpos($data['sample:date'],'2004')!==false)
+    $errors['sample:date']='Records from 2004 are not allowed';
+  return $errors;
+}
+```
+
+## Custom CSS ##
+
+If the form requires its own custom css file, then place the file in the css sub-folder of the prebuilt\_forms directory. The css file should have the same filename as your form's PHP file, but with the extension css instead of php.
+
+## Custom Language Files ##
+
+If the form requires its own language file, then copy the file from client\_helpers/lang/custom\_example.php into the client\_helpers/prebuilt\_forms/lang directory, and rename it to have the same file name as your form's PHP file, with the extension .en.php. For example `myform.en.php`. You can create multiple copies of this file, changing `en` to the language code for each language you want to support. Inside this file, create the list of language strings your form needs, and then access them using the code `lang::get('key')` where key is the array key for the required entry.
+
+## Custom JavaScript ##
+
+Each prebuilt form can automatically include a custom JavaScript file by creating a file with the same file name as the form PHP file, replacing the php extension with .js. The file should then be placed in the folder iform/client\_helpers/prebuilt\_forms/js.
+
+Also it is possible to create a custom JavaScript file for a single Drupal iform node, by calling the file node._node-id_.js and placing it in the same folder.

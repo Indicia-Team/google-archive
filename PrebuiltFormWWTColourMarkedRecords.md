@@ -1,0 +1,235 @@
+# ﻿ Introduction. #
+
+This page details the configuration process for the WWT Colour-marked Wildfowl form. It assumes a level of experience in setting forms up.
+
+Prerequisites: install the latest code from SVN on warehouse and drupal, then upgrade the warehouse. This document is written using [revision 4336](https://code.google.com/p/indicia/source/detail?r=4336) (3rd July 2012).
+
+You will also need to have set up a website, survey and species list on the warehouse.
+
+## Attributes ##
+
+The following custom attributes are used by this form. These need to be set up. The term lists currently exist but can be edited.
+
+### Subject Observation Attributes ###
+
+| **Caption** | **Type** | **System Function** | **Comments** |
+|:------------|:---------|:--------------------|:-------------|
+| Attached Devices | Lookup List | Attached Device     | Use the Attachment Type term list. Tick 'Allow multiple values'. |
+| Age/plumage | Lookup List | Age/Stage Classification | Use the Stage/Age Group Status term list. |
+| Sex         | Lookup List | Sex/Gender          | Use the Gender term list. |
+| Life Status | Lookup List | Alive or Dead       | Use the Life Status term list. |
+
+## Identifier Attributes ##
+
+| **Caption** | **Type** | **System Function** | **Comments** |
+|:------------|:---------|:--------------------|:-------------|
+| Base Colour | Lookup List | Base/Background Colour | Use the Ring Colour term list. |
+| Text Colour | Lookup List | Text/Code Colour    | Use the Ring Colour term list. |
+| Sequence    | Text     | Unique Sequence/Code | Validate as standard text |
+| Position    | Lookup List | Position on the organism | Use the Identifier Position term list. Allow multiple values. |
+
+## Identifier Subject Observation Attributes ##
+
+| **Caption** | **Type** | **System Function** | **Comments** |
+|:------------|:---------|:--------------------|:-------------|
+| Condition   | Lookup List | Identifier Condition | Use the Identifier Condition term list. Allow multiple values. |
+
+## Sample Attributes ##
+
+**These should already exist, but create them if they don't**
+
+| **Caption** | **Type** | **System Function** | **Comments** |
+|:------------|:---------|:--------------------|:-------------|
+| First name  | Text     | First name          |              |
+| Last name   | Text     | Last name           |              |
+| Email       | Text     | Email               |              |
+
+These 3 attributes need to be associated with the survey being used for this form. To do this,
+
+  1. Go to the indicia warehouse home page and log in as a user with administrative rights.
+  1. Click the 'Custom Attributes' menu item and on the drop-down, pick 'Sample attributes' to open the sample attributes page.
+  1. Find the 3 attributes in the list above and check if the entries have the survey name you are using next to them in the survey column as in this screen-shot.
+![http://indicia.googlecode.com/svn/wiki/screenshots/sample_attributes.png](http://indicia.googlecode.com/svn/wiki/screenshots/sample_attributes.png)
+
+If your survey isn't shown next to all three attributes, you must add it;
+  1. Click the 'Edit' action in the action column for each of the above attributes.
+  1. Tick the required website/survey tick box near the bottom of the form.
+  1. Click save.
+![http://indicia.googlecode.com/svn/wiki/screenshots/edit_first_name.png](http://indicia.googlecode.com/svn/wiki/screenshots/edit_first_name.png)
+
+You now need to create a block containing these sample attributes.
+  1. On the warehouse, choose Surveys from the Lookup lists menu.
+  1. Find your survey in the table and click the 'Setup attributes' action in the final column.
+  1. As the First name, Last name and Email attributes are linked to this survey, they should already show on the page.
+![http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block_1.png](http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block_1.png)
+
+  1. Enter 'Enter data by proxy' into the Block name input box.
+  1. click 'Create new block'.
+  1. A new block should appear at the top of the page.
+  1. Now create a second block called 'Recorder details' in a similar way.
+![http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block_2.png](http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block_2.png)
+
+> You can now use the drag handles (blue box with out-pointing arrows) to the left of each attribute name to drag each of your 3 attributes into the Recorder details block.
+  1. click on the attribute's 'drag handle'
+  1. drag the attribute over the 'Recorder details' block until the middle of that block turns yellow.
+  1. drop the attribute into the block by releasing the mouse button.
+  1. Repeat this for each attribute until all 3 are in the block
+  1. Order them with First name at the top of the block, Last name in the middle and Email at the bottom of the 'Recorder details' block.
+  1. Now drag the whole of the 'Recorder details' block into the 'Enter data by proxy' block.
+  1. Click the save button.
+The resulting structure should look like the following picture.
+
+![http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block.png](http://indicia.googlecode.com/svn/wiki/screenshots/recorder_details_block.png)
+
+You have now successfully set up the sample attributes on the warehouse and can now progress to setting up the prebuilt form on drupal.
+
+# Drupal #
+
+  1. Create a new IForm Content Node. Fill in the details as follows then save it.
+
+  * Set menu options as required.
+  * Choose a 'Title of Page'.
+  * Enter text for the 'Page introductory text'.
+  * Select Form Category 'General purpose data entry forms'.
+  * Choose Form 'WWT Colour-marked Wildfowl'.
+  * Load the settings form.
+
+## Other Iform Parameters ##
+
+  * View Access Control: unticked.
+  * Permission name for view access control: blank.
+  * Survey: Choose the survey created on the warehouse for this form from drop down list.
+  * Sample Method: Choose 'Field observation'.
+  * Subject Type: Choose 'Individual'.
+  * Default Values: Leave as 'occurrence:record\_status=C'.
+  * Redirect to page after successful data entry: blank.
+  * Display notification after save: tick.
+
+## Initial Map View ##
+
+  * Set as desired or allow it to default to your general drupal settings.
+
+## Base Map Layers ##
+
+  * Preset Base Layers: Tick 'Google Hybrid' only.
+  * All other fields: blank
+
+## Advanced Base Map Layers ##
+
+  * All fields: blank
+
+## Other Map Settings ##
+
+  * WMS layers from Geoserver: blank
+  * Controls to add to map: leave as - layerSwitcher panZoom (each value on its own line)
+  * Allowed Spatial Ref Systems: OSGB,4326 (comma separated)
+
+## Georeferencing ##
+
+  * Leave all fields as default.
+
+## User Interface ##
+
+  * Interface Style Option: select preferred style
+  * Show Progress through Wizard/Tabs: Ticked if wizard chosen above
+  * Client Side Validation: Ticked.
+  * Form structure: leave as default or optionally add lockable options as as follows:-
+
+```
+=Who When and Where=
+?Recorder details for this information?
+[recorder details]
+@lockable=true
+?Please tell us when you saw the colour-marked bird.?
+[date]
+@allowVagueDates=true
+@lockable=true
+?Please tell us where you saw the marked bird. You can do this in any of the following ways:-<ol><li>enter GPS co-ordinates or an OS grid reference directly,</li><li>enter a place name and search for it,</li><li>search for the place on the map and then click to set it.</li></ol>?
+[spatial reference]
+@lockable=true
+[place search]
+[map]
+@scroll_wheel_zoom=false
+?What name do you know this location by?
+[location name]
+@lockable=true
+[*]
+=Colour Marks=
+?Please pick the species from the following list and enter the details for the colour identifiers.?
+[species identifier]
+@lockable=true
+[*]
+=Added Comments=
+?Please add any comments for review or editing of this report.?
+[show added sample comments]
+[add sample comment]
+[*]
+=*=
+```
+
+  * Attribute Termlist Language Filter: unticked.
+  * Skip initial grid of Data: ticked if you wish to show a grid of exiting records to allow editing, otherwise unticked
+  * Grid Report: 'reports\_for\_prebuilt\_forms/simple\_subject\_observation\_identifier\_list\_1'.
+  * Number of rows displayed in grid: 10.
+  * Save button below all pages?: unticked.
+
+## Species ##
+
+  * Species List: Choose the species list you have created.
+  * Cache lookups: Ticked (but may need unticking after updates during development).
+  * Single Species Selection Control Type: recommend 'select' for small lists, otherwise autocomplete.
+  * Include both names in species controls and added rows. Suggest unticked but chose as preferred.
+  * Include taxon group name in species autocomplete and added rows: Unticked.
+  * Field used to filter taxa: leave as default.
+  * Taxon filter items: leave black..
+  * Species Names Filter: All names are available.
+
+## Identifiers ##
+
+  * Neck Collar Type: Choose the identifier type which indicates a neck collar.
+  * Neck Collar Position: Choose the appropriate position for a neck collar (e.g. 'Neck').
+  * Neck collar maximum length: enter the maximum character length for a neck collar sequence e.g. 3.
+  * Neck collar validation pattern: if you wish to restrict the allowed format, enter a 'regular expression' for the neck collar validation pattern. If you are not familiar with regular expressions, please seek advice.
+  * Repeat the above 3 steps for the colour ring and the metal ring
+  * Base Colours: Select the colours which you want to be recordable for the background of the identifiers.
+  * Text Colours: Select the colours which you want to be recordable for the text/sequence of the identifiers.
+  * Identifier Position: Select the body positions which you want to be recordable for the identifiers which have a choice of positions. Recommend 'Left leg', 'Right leg' and 'Unknown'.
+  * Default Position on Leg: If for identifier position, you select  'Left leg' and 'Right leg' rather than the positions which include above/below the 'knee', you can default the leg vertical position here. Recommend “Below the 'Knee'”.
+  * Neck Collar Conditions: Tick condition terms that you want to be applicable to the neck collar. Repeat for Coloured Ring and Metal Ring.
+
+## Subject observation ##
+
+  * Other Devices: Choose the attachment device types you wish to record. Leave all unticked to hide this feature
+  * Allow Comment For Colour-marked Individual: recommend ticked
+  * Request Gender Values: Choose the gender values you wish to record. Leave all unticked to hide this feature. Suggest ticking Male, Female, Unknown.
+  * Default Gender: Allows a gender to be chosen as initially selected when the form is displayed.
+  * Request Age Values: Choose the gender values you wish to record. Leave all unticked to hide this feature. Suggest ticking 1st winter, 1st summer, 2nd winter, Adult, Unknown but choose as appropriate.
+  * Default Age: Allows an age/stage to be chosen as initially selected when the form is displayed.
+  * Request Subject Status Values: Choose the 'life status' values you wish to record. Leave all unticked to hide this feature.
+  * Default Subject Status: Allows a subject status to be chosen as initially selected when the form is displayed.
+
+## Debug ##
+
+  * Provide debug information: unticked. This section will be removed for production.
+
+# Drupal roles and permissions #
+
+## Create a drupal role for WWT staff ##
+
+If you have not already done so, create a drupal role for staff who will be able to enter data for other users. You can do this from the drupal admin menu User management > Roles.
+
+Once you have created this role, you can allocate it to appropriate drupal users.
+
+## Allocate the enter data by proxy permission ##
+
+Use the drupal admin menu User management > Permissions to show a grid of permissions by roles and tick the 'IForm n99 enter data by proxy' permission for the staff role you created above. ('99' in the permission name will actually be the drupal node id for your colour-marked form.)
+
+Users with the staff role will now be able to edit the recorder details block on the colour-marked form in order to enter data for other people.
+
+## Screen shots ##
+
+The following screenshots give an impression of the configured form (using the wizard style).
+
+![http://indicia.googlecode.com/svn/wiki/screenshots/wwt_colour-marked_form_page_1.png](http://indicia.googlecode.com/svn/wiki/screenshots/wwt_colour-marked_form_page_1.png)
+
+![http://indicia.googlecode.com/svn/wiki/screenshots/wwt_colour-marked_form_page_2.png](http://indicia.googlecode.com/svn/wiki/screenshots/wwt_colour-marked_form_page_2.png)

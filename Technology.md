@@ -1,0 +1,20 @@
+# Technology #
+
+## PostgreSQL and PostGIS ##
+
+[PostgreSQL](http://www.postgresql.org/) is a true Open Source database widely acknowledged as a rival to other well known commercial options, both in terms of speed and power. It is the ideal choice for Indicia because of the free [PostGIS](http://postgis.refractions.net/) extension which converts PostgreSQL into a powerful spatially enabled database. This optimises the data for storing spatial data such as location boundaries and species records and also provides in-built support for questions such as "tell me which records are within the boundary of this location".
+
+## PHP ##
+
+The language used for the Core Module development is PHP, selected mainly for its ubiquitous nature and therefore ease of finding developers, getting support and hosting.
+
+## Kohana ##
+
+[Kohana](http://kohanaphp.com/home) is a framework which effectively provides a ready made layout for a PHP web application. It structures the application using a pattern known as [Model View Controller](http://en.wikipedia.org/wiki/Model-view-controller) and also provides lots of built in libraries and extensions to make day to day development tasks easier.
+
+## JQuery ##
+
+[JQuery](http://jquery.com/) is a powerful JavaScript library that simplifies the task of writing powerful client side code which runs within the web browser, for example to provide animations and facilitate [AJAX](http://en.wikipedia.org/wiki/AJAX) interactions.
+
+## OpenLayers ##
+[OpenLayers](http://openlayers.org/) is an open source tool for adding dynamic maps to web pages. For example, these maps are used to allow input of a grid reference, to draw the boundary of a site, or to output a distribution map of a species. OpenLayers has the advantage of being agnostic about the layers you choose to load onto the map, so you can easily use Google or Bing base layers, or can even load your own.

@@ -1,0 +1,5 @@
+# My Images #
+
+My Images is identical to the [Browse Images](InstantIndiciaBrowseImages.md) feature, except that the images shown are filtered to those submitted by the current user.
+
+> To use the My Images feature, ensure that the survey you are saving records into has the CMS User ID attribute linked to the samples, otherwise the data does not contain a link to the logged in user.

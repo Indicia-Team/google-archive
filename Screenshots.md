@@ -1,0 +1,9 @@
+# Screenshots #
+
+This page shows you some screenshots of Indicia.
+
+**Screenshot of a simple data entry page**
+![http://indicia.googlecode.com/svn/wiki/simple_data_entry.jpg](http://indicia.googlecode.com/svn/wiki/simple_data_entry.jpg)
+
+**Screenshot of a data entry page running in Drupal using the Drupal Iform module**
+![http://indicia.googlecode.com/svn/wiki/drupal_module_screenshot_1.jpg](http://indicia.googlecode.com/svn/wiki/drupal_module_screenshot_1.jpg)

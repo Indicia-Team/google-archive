@@ -1,0 +1,33 @@
+# Introduction #
+
+Welcome to the Indicia Wiki, where you will find information, documentation and tutorials on this project. Indicia is the online biological recording toolkit conceived as part of the [Open Air Laboratories](http://www.OPALexplorenature.org) Network (OPAL).
+
+## Online Recording ##
+
+So, what do we mean by online biological recording? At least for our purposes, we are talking about a website that lets users contribute their wildlife observations, or _records_, to a database. The project is focused on data capture rather than subsequent analysis. For example, the mapping and reporting facilities in Indicia are primarily targeted at making the websites more interesting for people submitting records, so they come back and contribute more records.
+
+## Who will use Indicia? ##
+
+There are 3 types of user predicted for Indicia. Firstly, the people who contribute wildlife observations. This includes anyone from members of the general public or schoolchildren through to professional surveyors and  recording scheme members.
+
+The next set of users are the people who provide the websites used for data capture. These include national recording schemes, local record centres and wildlife charities. Fundamentally, these are organisations that want to build up their store of biodiversity information by making it simpler to contribute wildlife observations.
+
+Finally there is the team of people who provide the core services required by an online recording website. Things like managing the lists of species that are available to record, storing the actual data that is captured and so forth.
+
+## What is Indicia? ##
+
+Firstly, what it is not. Indicia is not an off the shelf solution for online recording. Rather, it is a toolkit that makes the development of online recording websites simpler. A bit like Google Maps, in that there is a programmer’s interface which makes it simple to drop rich mapping functionality into your website, Indicia provides a set of services, tools and examples that can be added to almost any website to provide rich online recording functionality. Or if you are starting from scratch we provide Instant Indicia which gives you a ready to configure website installation which can be set up without any coding. Of course there will be example sites developed using Indicia which can be used to build new sites, but Indicia ultimately gives website designers the power to do what they want, just quicker and more reliably than if they started from scratch.
+
+You can consider Indicia as coming in two parts; a user interface and a data store.
+  * The data store, known as the Indicia Warehouse, can support many surveys on many websites. You can host your own Warehouse or use one provided by another organisation, such as the [Biological Records Centre](http://www.brc.ac.uk/).
+  * The user interface is built in to a website and sends records to the Warehouse. Tools are provided to make this as easy as pasting a few lines of PHP in to a web page or configuring a content management system.
+
+## Who is developing Indicia? ##
+
+Indicia’s development is being led by Biodiverse IT, is funded by the [OPAL](http://www.OPALexplorenature.org) Network and managed by the [Centre for Ecology and Hydrology](http://www.ceh.ac.uk/) (CEH). The project is open source, which means you can have the code for free, and it has a high level of community involvement.
+
+## Is Indicia ready to use? ##
+
+Yes, definitely. Although still considered a beta version because there are lots of features we still want to add, Indicia has been successfully used for online recording on a number of websites in the UK, Luxembourg and France.
+
+[Get involved on the online development tool discussions on the NBN Forum.](http://forums.nbn.org.uk/)

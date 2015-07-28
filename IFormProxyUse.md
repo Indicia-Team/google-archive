@@ -1,0 +1,27 @@
+# Indicia Proxy Module #
+
+The Indicia Proxy module is included as a sub-module of the IForm module. The Indicia Proxy module has 2 purposes:
+  1. To allow AJAX access to a webservice on a different web server, without cross-domain authentication problems. The proxy sits on the Drupal server so the client thinks it is on the same server the web page was requested from, but acts as a conduit to the remote server.
+  1. Where the web-service requires HTTP basic authentication, it may not be appropriate to embed the username and password in the JavaScript. So the proxy allows the authentication details to be added to the request only when it reaches the server.
+
+In particular, the Indicia Proxy module is used to allow access to mapping data on different web servers including when this mapping data is secured with username and password authentication.
+
+## Configuration ##
+
+1) The module must be enabled in the Drupal modules list.
+
+2) On the Drupal Permissions page, grant access to the IForm Proxy Passthrough to the user roles you want to be allowed to use the proxy.
+
+3) You can attach a username and password to the requests sent through the proxy on the Site configuration > Indicia Proxy > Settings page.
+
+## Technical details ##
+
+The Indicia Proxy module takes a GET request of the form:
+`www.mydrupalsite.com/proxy?url=http://www.somewhere.com&param=x`
+
+Note this URL would actually have characters such as : converted to URL safe equivalents (%3A etc) but I left it as it is for readability.
+
+It then forwards the request to the url parameter, and attaches any other GET parameters to the request:
+`http://www.somewhere.com&param=x`
+
+It also attaches the configured username and password to the request, using HTTP basic authentication.

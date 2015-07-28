@@ -1,0 +1,14 @@
+# Indicia Quickstart #
+
+Indicia Quickstart is a feature provided with Instant Indicia that is enabled by default and should normally be left enabled. This feature is designed to provide a set of 'baseline' facilities that are available on all Instant Indicia sites.
+
+It performs the following tasks:
+
+  1. Creates menu links for user authentication, including **Register**, **Login**, **Logout** and **My Account**. When logged out, the Login and Register links are visible. When logged in, the Logout and My Account links are visible.
+  1. Creates roles called **admin user**, **verifier** and **site editor** and grants appropriate permissions to each.
+  1. Declares permissions called **online recording** and **indicia data admin** which other features can associate with tasks that have controlled access. For example, any features that provide an online recording facility should restrict access to the online recording permission.
+  1. Disables Drupal 'add comment' links from appearing in abbreviated lists of content such as lists of stories on the home page.
+
+The other features provided with Instant Indicia all make use of these items, for example the [Verification feature](InstantIndiciaVerification.md) restricts access to the verification pages unless the user has been added to the verifier role. Of course, any forms that you create yourself using Indicia can have be restricted in a similar way by using the same named permissions to control access.
+
+The My Account link takes you to a fairly basic page for editing your account profile with fields only for the user name, password and email address. If you enable the Profile module for Drupal, which is supplied with the installation but not enabled by default, you can extend the fields available in the profile to include any fields you require. You can enable the module on the Modules page, found under Site building > Modules on the admin menu. Once you have enabled the Profile module, there is a menu item under User management called Profiles which lets you add new fields to the profile pages.

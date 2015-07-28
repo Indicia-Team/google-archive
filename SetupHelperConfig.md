@@ -1,0 +1,79 @@
+# Setting up the Helper Configuration File #
+
+Developing data entry forms using Indicia normally requires you to write PHP code which calls the ready made library of controls supplied with Indicia. In order to use the full feature set of this library of controls (called the client helpers) there is a small amount of configuration required.
+
+If you are using Drupal and the IForm module as a basis for your Indicia development, then you can simply visit Site Configuration > IForm > Settings on the administration menu to configure the IForm module. The rest of this page only applies to you if you are using the client\_helpers library as a standalone part of your website.
+
+# Details #
+
+If you haven't already got a copy of the client helpers, you can download a copy from http://indicia.googlecode.com/files/client_helpers.zip or through the Downloads link at the top of this page. Select to save the zip file to a temporary folder on your PC, then unzip it into the folder which you are intending to develop your data entry form in (e.g. a subfolder in your webserver's document root folder). As an example, if you are using Apache your folder structure might look like this:
+```
+apache\htdocs\my_indicia_test\client_helpers 
+```
+In this case, you are going to create a web page in the my\_indicia\_test folder to build your data entry form in, but don't worry about that for now as we are just concerned with configuring the client helpers.
+
+The downloaded copy of the client\_helpers folder contains a helper\_config.php file. Open this in your text editor and skip down past the header comment to the main part of the file, which looks like:
+```
+class helper_config {
+  static $base_url='http://testwarehouse.indicia.org.uk/';
+  static $interim_image_folder = './upload/';
+  static $final_image_folder = 'warehouse';
+  static $cache_folder = './upload/';
+  static $geoserver_url = '';
+  static $geoplanet_api_key='PvEFj2rV34FRB4EdRJ8P9WCVq6RgzcRF.xovJZ3fGLGQYwj2ntLoqVB0t5FdPVPvA_wY2w--';
+  static $google_search_api_key='ABQIAAAA7HA6ddfArSVixiSlTHrS1RT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRGj3r9a4qCJPaGOYXIsi8AfXFPzQ';
+  static $bing_api_key='';
+  static $multimap_api_key='OA09030216927391041';
+  static $flickr_api_key='';
+  static $flickr_api_secret='';
+}
+```
+
+This content is already pre-configured to some extent, so if you are developing on your local machine (i.e. the URL you access in your web browser to access your web pages is http://localhost) and you are testing your development code against the testwarehouse.indicia.org.uk server, this file is sufficient to follow the [Building a basic PHP data entry page](TutorialBuildingBasicPage.md) tutorial. However, to get any further with your development you will need to know how to configure this file. Here is a list of the 'keys' in this configuration file and what they mean.
+
+## $base\_url ##
+This setting is for the URL of the Indicia warehouse you are connecting to, including the trailing slash.
+
+## $interim\_image\_folder ##
+This setting is the path of the upload folder, required by the Indicia client helpers as a temporary location for image files being uploaded (e.g. photos of occurrence records).
+
+## $final\_image\_folder ##
+Defaults to warehouse, in which case images uploaded to the interim image folder are uploaded to the Warehouse on final record submission. If set to a folder path, then images are moved to this folder on the local server.
+
+## $final\_image\_folder\_thumbs ##
+If using an image store outside Indicia, then the thumbnail images may be stored in a different folder or with a different prefix to the fullsize images. Note that the creation of thumbnails is then the responsibility of the image store you are using rather than Indicia. This optional configuration allows the folder to be set and any characters following the trailing slash are used as a file name prefix.
+
+## $cache\_folder ##
+This folder acts as a storage location for cached data. If the folder does not exist, then the client helpers will not be able to cache the data used to populate controls such as select boxes, so the form will load more slowly. You can normally leave this setting as it is.
+
+## $geoserver\_url ##
+GeoServer is an open source application which allows you to expose your data using several standard web services. It's not a requirement of Indicia to install GeoServer, but if you want to present distribution maps, link your data to Google Maps, Google Earth or even desktop GIS systems then this is a really useful tool to achieve that. By installing GeoServer and specifying the root URL in this setting you can then take advantage of the ability to add your GeoServer feature types (datasets and layers) to your Indicia maps.
+
+Note, if you have GeoServer running on a local development server (localhost), make sure that you include the http protocol in this setting or some parts of mapping functionality may not work.
+
+## $geoplanet\_api\_key ##
+The Yahoo! GeoPlanet API is used to lookup place names when you use the place search control. It references a global database of places and returns the list of possibilities with their spatial references to Indicia. To obtain your own API key for GeoPlanet, please visit http://developer.yahoo.com/geo/geoplanet/ and follow the link to get an Application ID.
+
+## $bing\_api\_key ##
+
+_**This key is supported from Indicia 0.7 onwards.**_
+
+The Bing API key is required to allow use of Bing map layers but can be left blank if you do not intend to use Bing maps. To obtain your own key, please visit the [Bing Maps Account Center](http://www.bingmapsportal.com).
+
+## $google\_search\_api\_key ##
+The Google AJAX Search API is used by the postcode textbox in Indicia to lookup the central spatial reference of an entered postcode. To obtain your own Google AJAX Search API Key, please visit http://code.google.com/apis/ajaxsearch/signup.html.
+
+## $google\_api\_key ##
+
+_**Note from Indicia 0.7 onwards, the $google\_api\_key setting is no longer required. This is because Indicia now uses the Google Maps v3 API which does not require an API key.**_
+
+The Google Maps API is used to allow the Google map data (e.g. Google Satellite layer) to be displayed on an Indicia map. Note, Indicia does not use the Google Maps API to render the actual map control as we use the open source OpenLayers mapping library instead. But you still need an API key to load the map data into an OpenLayers map. You can get a Google Maps API key at http://code.google.com/apis/maps/signup.html.
+
+## $multimap\_api\_key ##
+
+_**The Multimap API is no longer supported and it is now not possible to obtain a new API key to our knowledge. This setting is still maintained in Indicia for backwards compatibility as existing keys still work for the moment.**_
+
+The MultiMap API is used, like the Google Maps API, to access the background maps provided by MultiMap. Of particular interest in the UK is the ability to enable the Ordnance Survey 1:50,000 map layer when the map is zoomed to an appropriate resolution. You can obtain a MultiMap API Key at https://www.multimap.com/my/register/?openapi_create=1.
+
+## $flickr\_api\_key and $flickr\_api\_secret ##
+In order to enable support for linking images from a user's Flickr account to records in Indicia, your application will need to register with the Flickr API. When you do this you will be given an API key and also a secret which need to be entered in the config file. The other requirement of configuring Flickr integration is to register your "callback" with Flickr - this is the web page that Flickr will call when a user successfully authenticates onto their Flickr account. There is one provided ready-made for you in the client\_helpers\flickr\_auth.php file, so if you are developing in the apache\htdocs\my\_indicia\_test\ folder on your local machine, your Flickr callback will need to be set to http://localhost/my_indicia_test/client_helpers/flickr_auth.php.

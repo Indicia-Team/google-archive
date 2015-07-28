@@ -1,0 +1,46 @@
+# Remembering field values #
+
+A common requirement is to remember certain field values between data entry sessions or simply after entering a single record. Examples include controls for personal details which are unlikely to change, as well as data entry done in a fashion where certain fields are unlikely to change between records, so using the previous value as a default makes sense.
+
+To do this, you need to write a method called indicia\_define\_remembered\_fields, which itself calls the data\_entry\_helper::set\_remembered\_fields method, passing an array of the fieldnames of each field to remember. This method should then be included on your PHP page for the form. Here's an example:
+
+```
+  function indicia_define_remembered_fields() {
+    data_entry_helper::set_remembered_fields(array(
+      'smpAttr:4',
+      'smpAttr:5',
+      'smpAttr:6',
+      'smpAttr:7'
+    ));
+  }
+```
+
+If you are writing a form in the prebuilt form library, there is a slight difference in that the method should be a public static member of your form class, and takes the form's settings as an $args array. This allows you to get hold of attribute IDs, as an example.
+
+```
+class iform_myform {
+
+  ...
+
+  public static function indicia_define_remembered_fields($args) {
+    data_entry_helper::set_remembered_fields(array(
+      'smpAttr:'.$args['first_name_attr_id'],
+      'smpAttr:'.$args['surname_attr_id'],
+      'smpAttr:'.$args['email_attr_id'],
+      'smpAttr:'.$args['phone_attr_id'],
+    ));
+  }
+}
+```
+
+## Privacy ##
+Remember that, while it can be helpful, users may not wish their personal information to be stored in a cookie, especially if they are working on a shared computer. For this reason, the use of a cookie should be enabled by an optin checkbox. A standard control has been added in to the client helpers in version 0.7.0 for this purpose. You can include it in your form as shown in the example below.
+
+```
+<?php
+  echo data_entry_helper::remembered_fields_optin(array(
+    'label' => 'Remember me',
+    'helpText' => 'Tick this box to store your details for next time.',
+  ));
+?>
+```

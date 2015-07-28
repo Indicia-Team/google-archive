@@ -1,0 +1,1 @@
+Documentation on installing the Indicia warehouse is now at http://indicia-docs.readthedocs.org/en/latest/administrating/warehouse/warehouse-installation.html.

@@ -1,0 +1,101 @@
+# Introduction #
+You may be performing regular backups of your server but you can't be sure that you are getting a consistent snapshot of database contents if the database is active, with files open and being modified during the backup.
+To overcome this, both PostgreSQL and MySql can perform scheduled dumps to file which are guaranteed to be consistent. These files can then be copied as part of your routine backup, ensuring your data is kept safe.
+This article gives guidance on what I did to set this up on a Windows server.
+
+# Details #
+
+## PostgreSQL ##
+
+### Update 10 October 2012 ###
+Following an upgrade to PostgreSQL I tried to recreate the backup according to the original documentation below. I found that PgAgent is now released as source code which you have to compile for yourself. That seemed like a complete waste of time when I could use the Windows Task Scheduler. Easy, I thought... simply create a batch file containing the commands to dump my database and create a scheduled task to run as my Windows user, postgres, that executes the batch file.
+
+Here are the steps that eventually got it working.
+
+1. Create the file pgpass.conf in the folder C:\Documents and Settings\postgres\Application Data\postgresql. It contains the following line
+
+`localhost:*:*:postgres:password`
+
+where you need to replace the word password with your actual password for the PostgreSQL user called postgres. (Yes, the job is going to be run as a Windows user called postgres with one password and it will connect to the database as the PostgreSQL user, also called postgres, which may have a different password.)
+
+2. Create a file called backup.bat containing something like the following
+
+```
+set APPDATA=C:\Documents and Settings\postgres\Application Data
+set PGPASSFILE=%APPDATA%\postgresql\pgpass.conf
+"C:\Program Files\PostgreSQL\9.2\bin\pg_dump.exe" -h localhost -p 5432 -U postgres -F c -b -v -w -f "D:\Indicia Backup\Scheduled\warehouse1.backup" warehouse1
+```
+
+Note that
+  * The envirionment variables set at the command prompt are not preserved so they have to be set each time.
+  * Setting APPDATA alone seems insufficient for the password file to be found.
+  * When setting PGPASSFILE, the direction of the slashes mattered.
+  * You will need to locate where pg\_dump is installed on your server.
+  * You will need to set the options, the backup file path, and the database name to match your own needs.
+
+3. Create a scheduled task (which I assume needs no explanation to a Windows server administrator) that runs as Windows user postgres and executes the batch file.
+
+4. Ensure the Windows user, postgres, has permissions to
+  * write to the destination folder,
+  * execute the batch file
+  * execute C:\Windows\System32\cmd.exe
+
+### Original documentation ###
+
+First of all, [read the following article](http://www.postgresonline.com/journal/index.php?/archives/19-Setting-up-PgAgent-and-Doing-Scheduled-Backups.html)! I installed [PgAgent](http://www.pgadmin.org/docs/1.8/pgagent-install.html), following the three steps in the article. (Although, after setting up MySQL backups, I guess I would have been just as happy using Windows task scheduler.)
+
+Step 1, installing plpgsql, can be carried out by starting pgAdmin, selecting the postgres database, and selecting the Tools > Query tool menu item to open a window in which the sql command can be copied and run.
+
+Step 2, running pgagent.sql can be carried out in the same query window used in step 1 by using File > Open on the script. I found it in C:\Program Files\PostgreSQL\8.3\pgAdmin III\scripts.
+
+**Update**.
+pgAgent is no longer bundled with pgAdmin and has to be [downloaded](http://www.postgresql.org/ftp/pgadmin3/release/pgagent/) separately. Having unzipped the download I had to put pgagent.exe and pgaevent.dll in to the postgresql bin directory in order for it to find a compatible version of ssleay32.dll.
+
+Step 3, installing the pgAgent service, is executed at the operating system command prompt. Check the path of your postgreSQL installation first. Check also for the existance of an operating system user called postgres. Add an extra option on the command line, -l2, (minus el two) to enable some error logging which may come in handy.
+
+While pg\_agent is running as operating system user, postgres, it connects to the database as database user, postgres. That's right two different users, in two different contexts but with the same name. Try not to get confused!
+
+When creating the backup job, mine was so simple that I didn't use a batch file. You can probably improve on this. The crux of the matter is that we use pgAgent to schedule a call to [pg\_dump](http://www.postgresql.org/docs/8.0/interactive/app-pgdump.html) which is what actually does the backup. The definition of my job-step reads `"C:\Program Files\PostgreSQL\8.3\bin\pg_dump.exe" -h localhost -p 5432 -U postgres -F c -b -v -f "D:\Indicia Backup\Scheduled\warehouse1.backup" warehouse1`
+
+This will dump my database, called warehouse1, into the warehouse1.backup file. For this to work I had to give the operating system user, postgres, write privileges to the folder I had created for the purpose.
+
+Both pgAgnet and pg\_dump are connecting to the database as user postgres and so require the corresponding database password. For security, this password is not given on the command line but is stored in a [file](http://www.postgresql.org/docs/current/static/libpq-pgpass.html). The article we are following does not make this clear.
+
+I created the file, pgpass.conf in the folder C:\Documents and Settings\postgres\Application Data\postgresql. It contained the following line
+
+`localhost:*:*:postgres:password`
+
+where you need to replace the word password with your actual password
+
+I also had to define the APPDATA environment variable for user postgres.
+
+To define this environment variable I went to Start>Run… and entered `runas /user:postgres cmd` to open a command prompt, then executed `set APPDATA=C:\Documents and Settings\postgres\Application Data`
+
+
+## MySql ##
+
+When I wanted to create scheduled backups for MySql I made use of what was offered in MySql Administrator. This is effectively just an interface to Windows Task Scheduler. I complicated matters because I decided I didn't want the task to run as Windows administrator, logging in as root to the database. Instead I created users with limited privileges. The steps I took went as follows.
+
+Login to server as administrator
+
+Create a new user. We will give them the name `mysql` in this example, but use what you like. If you administer your server remotely, add the user to the group, Remote Desktop Users.
+
+Create a folder to store your backup files. Give user `mysql` read, write and modify permissions to the folder.
+
+In a command prompt execute the following command to give `mysql` rights to create scheduled tasks. `cacls c:\windows\tasks /e /g mysql:c`
+
+Login to MySql Administrator as `root`. Create a new user which we will call `backup` in this example. Give `backup` select, show view and lock\_tables privileges on each schemata you want to backup.
+
+Log in to the server as `mysql`.
+
+Start MySql Administrator and create a stored connection, enabling password storage in the general options category first. The connection is for user `backup`.
+
+Restart MySql Administrator, connecting with this stored connection.
+
+If you don't want backups to accumulate, go to Tools > Options and, in the administrator category, deselect Add Date/Time to Backup Files. Successive backups will overwrite previous ones if you do this. Apply and close the dialog.
+
+Select the backup view. All the schemata you granted permissions to will be in the list. You can either create one backup project for everything or a number of smaller projects. If you create one big backup you can still select to restore individual tables within schemata but it just takes longer to analyse the file.
+
+Create a new backup project, select backup content and define a schedule. When you save the project you will have to give the credentials of the user `mysyl` under whose login the backup will run.
+
+If you want to test your configuration, you can go to Control Panel > Scheduled Tasks and run your task.

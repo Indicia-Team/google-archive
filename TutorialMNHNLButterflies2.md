@@ -1,0 +1,137 @@
+# Introduction #
+This page details the configuration process for the MNHNL Butterflies 2 form (Papillon de Jours). It assumes a level of experience in setting forms up.
+
+Prerequisites: the Attributes and Species for the MNHNL Butterflies and MNHNL Bats forms should have been loaded in.
+
+## Attributes ##
+The following custom attributes are used by this form.
+### Occurrence Attributes ###
+<table border='1'>
+<tr><th>Caption</th><th>Type</th><th>Comments</th></tr>
+<tr><td>Count</td><td>Integer</td><td>May already be defined if COBIMO form has been deployed, as it is used in the COBIMO form.</td></tr>
+</table>
+### Location Attributes ###
+None
+### Sample Attributes ###
+<table border='1'>
+<tr><th>Caption</th><th>Type</th><th>Comments</th></tr>
+<tr><td>Temperature (Celsius)</td><td>Float</td><td>Standard Attribute provided by default Indicia installation.</td></tr>
+<tr><td>CMS User ID</td><td>Integer</td><td>Standard Attribute provided by default Indicia installation.</td></tr>
+<tr><td>CMS Username</td><td>Text</td><td>Standard Attribute provided by default Indicia installation.</td></tr>
+<tr><td>Reliability</td><td>Lookup List</td><td>May already be defined if Bats Winter Monitoring form has been deployed, as it is used in the Bats Winter Monitoring form. Defined in support file bat_attributes_winter.sql</td></tr>
+<tr><td>Duration</td><td>Integer</td><td>Defined in support file butterfly_de_jour_attributes.sql deployed as part of this form's deployment.</td></tr>
+<tr><td>Rain Checkbox</td><td>Boolean</td><td>Defined in support file butterfly_de_jour_attributes.sql deployed as part of this form's deployment.</td></tr>
+<tr><td>No observation</td><td>Boolean</td><td>May already be defined if Butterfly Monitoring form has been deployed, as it is used in the Butterfly Monitoring form. Defined in support file butterfly_attributes.sql</td></tr>
+<tr><td>Cloud Cover</td><td>Lookup List</td><td>May already be defined if Butterfly Monitoring form has been deployed, as it is used in the Butterfly Monitoring form. Defined in support file butterfly_attributes.sql </td></tr>
+<tr><td>MNHNL Butterfly de Jour Passage</td><td>Lookup List</td><td>Defined in support file butterfly_de_jour_attributes.sql deployed as part of this form's deployment.</td></tr>
+<tr><td>Start Time</td><td>Text</td><td>May already be defined if COBIMO form has been deployed, as it is used in the COBIMO form.</td></tr>
+<tr><td>Numeric Windspeed</td><td>Integer</td><td>Defined in file butterfly_de_jour_attributes.sql deployed as part of this form's deployment.</td></tr>
+</table>
+
+# Warehouse #
+  1. Open up a browser window to the warehouse.
+  1. Make note of Website ID and password to be used - create a new one if needed.
+
+# Database #
+  1. Open up pgAdmin on the server.
+  1. Run support file butterfly\_de\_jour\_attributes.sql. This will load in the required termlists and custom attributes.
+  1. If you do not have access to this file, create the following Term Lists
+| Term List |
+|:----------|
+
+
+If the 5x5km Grid locations have not already been loaded in, do the following steps:
+  1. _Make a note of the ids for the **Lux5KSquare** term and the **LizardLocation** term in the **ReptileLocation** termlist. If the locations are to be separated between the surveys, separate term IDs must be used for the different surveys._
+  1. Take a copy of the support file 5kgrid\_locations.sql.
+  1. Edit this copy and replace all occurrences of **`<locType>`** with the **Lux5KSquare** term id noted above, and replace all occurrences of **`<website_id>`** with the website ID noted above.
+  1. Run this modified file against the database.
+
+# Warehouse #
+  1. Make a note of the list ID for the butterfly species list used for the first MNHNL Butterflies form.
+  1. Create a survey, and attach it to the Website above. Make a note of its name and ID.
+  1. Bring up the surveys, and choose the '**setup attributes**' link for the survey created above.
+  1. Within samples attribute set, create the following blocks: '**General**', '**Passage**', '**Conditions**', and '**Species**'.
+  1. Put the '**Passage**' block into the '**General**' block.
+  1. Add the following existing attributes, and place them into the '**Passage**' block: '**MNHNL Butterfly de Jour Passage**'.
+  1. Add the following existing attributes, and place them into the '**Conditions**' block: '**Start Time**', '**Duration**', '**Temperature (Celcius)**', '**Numeric Windspeed**', '**Rain Checkbox**', '**Cloud Cover Edit Delete**', '**Reliability**'.
+  1. Add the following existing attribute, and place it into the '**Species**' block: '**No observation**'.
+  1. Add the following existing attributes, but leave them outside the blocks: '**CMS User ID**', '**CMS Username**', '**Email**'.
+  1. Save the layout.
+  1. Within the occurrences attribute set, add the following existing attributes, but leave them outside any blocks: '**Count**'.
+  1. Save the layout.
+
+# Drupal #
+  1. Create a new IForm Content Node. Fill in the details as follows then save it.
+  * Choose a 'Title of Page'.
+  * Enter Website ID and its password, noted at start.
+  * Select Form Category 'MNHNL forms'.
+  * Choose Form 'MNHNL Butterflies de Jours'.
+  * Load the settings form.
+### Other Iform Parameters ###
+  * View Access Control: unchecked.
+  * Permission name for view access control: blank.
+  * Survey: Choose the survey created in step 3 from drop down list.
+  * Sample Method: Leave as '<please select>'.
+  * Default Values: Leave as 'occurrence:record\_status=C'.
+  * Max number of species to be returned by search: leave as 25.
+  * Redirect to page after successful data entry: blank.
+  * Display notification after save: unchecked.
+### Initial Map View ###
+  * Centre of Map Latitude: 49.75
+  * Centre of Map Longitude: 6.16
+  * Map Zoom Level: 9
+  * Map Width: 100%
+  * Map Height: 600
+  * Remember position: unchecked.
+### Base Map Layers ###
+  * Preset Base Layers: Check 'Google Hybrid' only.
+  * All other fields: blank
+### Advanced Base Map Layers ###
+  * All fields: blank
+### Other Map Settings ###
+  * WMS layers from Geoserver: blank
+  * Controls to add to map: leave as - layerSwitcher panZoom
+  * Allowed Spatial Ref Systems: 2169
+### Georeferencing ###
+  * Leave all fields as default.
+### User Interface ###
+  * Interface Style Option: Wizard
+  * Show Progress through Wizard/Tabs: Checked
+  * Show email field even if logged in: unchecked
+  * Show user profile fields even if logged in: unchecked
+  * Client Side Validation: Checked.
+  * Form structure: leave as default.
+  * Attribute Termlist Language Filter: checked.
+  * Skip initial grid of Data: unchecked.
+  * Grid Report: leave as 'reports\_for\_prebuilt\_forms/MNHNL/mnhnl\_butterflies2'.
+  * Save button below all pages?: unchecked.
+  * Include Location Tools: checked.
+  * Location Tools Location Type ID Filter: set to term id for 'Lux5KSquare' noted above.
+  * Attribute Validation Rules: set to **`smpAttr:<X>,required`**, where **`<X>`** is the sample attribute id for '**Passage**' noted above.
+  * Site Location Type ID Filter: set to term id for LizardLocation noted above.
+### Species ###
+  * Single or Multiple occurrences per sample: leave as default.
+  * Single Species Selection Control Type: Autocomplete.
+  * Occurrence Comment: Unchecked.
+  * Occurrence Confidential: Unchecked.
+  * Occurrence Images: Unchecked.
+  * Grid Column Widths: blank.
+  * Initial Species List: leave as default.
+  * Extra Species List: set to the _main_ Butterfly taxon list ID above..
+  * Species Names Filter: All names are available.
+# NOTES #
+After the node has been created, users must be given permissions to do access the node.
+The bare minimum user must be given a role which has the following Drupal permissions (where **`<node>`** is the node number for this form):
+  * IForm n**`<node>`** user
+  * access iform
+  * IForm loctools node **`<node>`** user
+
+A manager should be given a role which has the following Drupal permissions (again where **`<node>`** is the node number for this form):
+  * IForm n**`<node>`** admin
+  * IForm n**`<node>`** user
+  * IForm loctools node **`<node>`** admin
+  * IForm loctools node **`<node>`** superuser
+  * IForm loctools node **`<node>`** user
+  * access iform
+
+The manager will need to assign the locations to the users in order for the user to be able to access them.

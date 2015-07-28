@@ -1,0 +1,64 @@
+# Introduction #
+
+The report calendar grid form is used to output a calendar, showing the results of a report. It is possible to define the start day of the week (ie the first column) and to output a week number column in the grid (with a configurable start point). It is also possible to restrict the weeks displayed to a defined range of week numbers.
+
+The report used is assumed to be a date based report, with each day on the calendar populated with a link to either
+  * a data entry form to allow editing of an existing sample, or
+  * a (possibly different) data entry form to allow creation of a new sample, depending on whether an record is returned for that day by the report.
+Future days are greyed out and have no link.
+
+# Using the report calendar grid prebuilt form #
+To use this prebuilt form from Drupal, select Create Content then Indicia Forms from the menu as for any other prebuilt form. Specify a title for the page then a little down the page enter your website ID and password. The Report Calendar Grid form is available from the Select Form drop-down after choosing the Reporting category first.
+
+Once you have selected the Report Grid form click the Load Settings Form button. Drupal will load the settings form for the report grid which contains a number of options, each with help text explaining what they are for. Here are a list of the important ones:
+
+**Report Name**: Enter the name of the report you want to load. These are the report file names from the reports directory in the Indicia installation directory, with forward slashes used to separate directory names. Don’t include the .xml file extension at the end of the filename. A good starting point is the Library->Samples->"Samples list for a CMS User" report.
+
+**Preset Parameter Values**: If you want to provide a parameter value for a report, you can specify them in this box. For example you might specify survey\_id=4 to restrict the data to survey 4.
+
+**Include user specific location filter**: Choose whether to include a filter on the locations assigned to this user using the CMS User ID location attribute.
+
+**Restrict locations to type**: Choose whether to restrict the locations in the filter above to a particular location type. This may be important if the CMS User ID attribute is only available to a particular location type.
+
+**New Sample URL**: This is the URL to be called when selecting a date which does not have a previous sample associated with it. To the end of this will be appended the appropriate "&date=DD/MM/YYYY", and if a location filter is set, this too will be appended (see next item).
+
+**New Sample Location Parameter**: When a new sample is invoked and a location filter is set, this is the name of the URL parameter used to pass on the Indicia location ID. For example, if this is set to "site", and a location with ID 4 is selected, then "&site=4" will be appended to the _New Sample URL_.
+
+**Existing Sample URL**: This is the URL to be called when selecting  a date which already has a previously report record associated with it. To the end of this will be appended "&sample\_id=N".
+
+When you have finished with the settings save your page and test the report. It should show the calendar.
+
+# Example Setup #
+If we want
+  * a calendar grid based on the "Top level samples list for a CMS user" report for survey number 3,
+  * where the week starts on the day of the week on which the 1st of April occurs,
+  * week numbers where week one is also based on the 1st April,
+  * restrict the display to week numbers -3 to 30
+  * to invoke a node based on the sectioned\_transects\_input\_sample form, defined by url "/drupal/node/20" for both creating new and editing existing samples.
+  * to include a filter on the sites, which would also set the default site in the data entry form when creating a new sample, and whose drop down list entries display Transects names and their associated coordinates (Sref)
+
+then we'd set up the parameters as follows:
+
+  * Report Name: Top level samples list for a CMS user
+  * Preset Parameter Values:
+```
+survey_id=3
+sample_method_id=
+```
+  * Include user specific location filter: Yes
+  * Restrict locations to type: Transect
+  * Include Sref in location filter name: Yes
+  * Start of week definition:"Apr-01"
+  * Include Week Number column in calendar grid: Yes
+  * Week One Contains:"Apr-01"
+  * Restrict displayed weeks: "-3:30"
+  * New Sample URL: "/drupal/node/20?newSample"
+  * New Sample Location Parameter: "site"
+  * Existing Sample URL: "/drupal/node/20"
+
+# Restrictions #
+It is assumed that there is generally only one record per day returned by the report. Whilst this is not essential, the formatting of the cells becomes more fussy as two links must be generated.<br />The report used must return the fields "date", "sample\_id" and "location\_id".<br />The report should take the parameter "user\_id" to filter the returned results by those samples generated by that particular CMS User.<br />The report may optionally take parameters "date\_from" and "date\_to", which are used by the form to filter the results returned to the year currently being queried. This is advisable but not essential, as any records outside this range will be ignored.<br />
+In order to use the location filter, there must be
+  1. a "CMS User ID" location attribute associated with the locations, which is set to the CMS user id by the appropriate site generation method (eg form). If this attribute is restricted to a particular location\_type, then this must be set in the "Restrict locations to type" field.
+  1. a field "location\_id" returned by the report
+This form does not support an auto-generated parameters input form for missing parameters.

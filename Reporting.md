@@ -1,0 +1,422 @@
+# Introduction #
+
+Indicia uses an XML file which declares a query and metadata about how the query is to be used to allow custom defined reporting. This document outlines how to define a report and how to use the Indicia reporting services to run it, either from the warehouse or from a client website.
+
+# Details #
+
+## Report Format ##
+
+Reports must be defined in an XML document. No formal schema exists, but the structure is sufficiently simple that an example should suffice to allow you to write reports easily. If you wish to expand the capability to support other formats, you may do so by implementing the ReportReader interface and defining a report format in the ReportEngine class. Details of this are however beyond the scope of this document.
+
+An XML defined report might look something like this:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+<report title="Recent Activity" description="Lists recent activity broken down by survey.">
+      <query>
+      SELECT su.title as survey, w.title as website, COUNT(*) as count FROM websites w 
+      JOIN occurrences o ON o.website_id = w.id
+      JOIN samples s ON o.sample_id = s.id
+      JOIN surveys su ON s.survey_id = su.id
+      WHERE o.created_on > '#date#'::date
+      GROUP BY survey, website
+      </query>
+      <order_bys>
+            <order_by>website ASC</order_by>
+	    <order_by>survey ASC</order_by>
+      </order_bys>
+      <params>
+	    <param name='date' display='Since: ' description='Show activity since:' datatype='date' />
+      </params>
+      <columns>
+            <column name="survey" display="Survey Name" style="color: #ff0000;"/>
+            <column name="website" display="Website Name" />
+            <column name="count" display="Total no. of Occurrences" />
+      </columns>
+</report>
+```
+
+This report will return details on recent observation activity, broken down by website and survey. It takes one parameter, `date`, which sets the point after which activity should be considered - for example, setting `date` one month ago would give a report on activity within the past month.
+
+We briefly run through the various elements within this report and provide guides as to their usage:
+
+```
+<report title="Recent Activity" description="Lists recent activity broken down by survey."> 
+```
+
+The report element is the root of the document, and accepts two attributes, title and description, both self-explanatory.
+
+```
+<query>
+      SELECT su.title as survey, w.title as website, COUNT(*) as count FROM websites w 
+      JOIN occurrences o ON o.website_id = w.id
+      JOIN samples s ON o.sample_id = s.id
+      JOIN surveys su ON s.survey_id = su.id
+      WHERE o.created_on > '#date#'::date
+      GROUP BY survey, website
+</query>
+```
+
+The query element is again self-explanatory for the most part, with only the note that report parameters (see below) are specified in the format `/#([a-z0-9_]+)#/i` (where /i denotes that we are using case-insensitive patterns - thus, `Date` would equally be a valid parameter name).
+
+```
+      <order_bys>
+            <order_by>website ASC</order_by>
+	    <order_by>survey ASC</order_by>
+      </order_bys>
+```
+
+The order\_bys are appended to the end of the query in the obvious way, and can be permuted to change the ordering. If you need the order\_by to appear in the middle of the query rather than at the end, you can place a marker in your query as in the following example. This is useful when you need something in the query after the ORDER BY, such as a LIMIT.
+
+```
+<query>
+      SELECT su.title as survey, w.title as website, COUNT(*) as count FROM websites w 
+      JOIN occurrences o ON o.website_id = w.id
+      JOIN samples s ON o.sample_id = s.id
+      JOIN surveys su ON s.survey_id = su.id
+      WHERE o.created_on > '#date#'::date
+      GROUP BY survey, website
+      #order_by#
+      LIMIT 10
+</query>
+```
+
+### Parameters ###
+
+```
+      <params>
+	    <param name='date' display='Since: ' description='Show activity since:' datatype='date' />
+      </params>
+```
+
+Parameters may be specified to allow the report requester to specify information at compile-time. In the example above, the report requester will receive a prompt to enter a date, which will then be used in the query. Parameters take four attributes:
+
+  * `name` should match the name given in the query, excluding the # and # terminators. Thus, in the example above, the parameter name 'date' matches the pattern '#date#' in the query.
+  * `display` is the text used to label the parameter in the parameter request screen.
+  * `description` gives a further description, and may be used in describing reports/parameters.
+  * `datatype` is used in determining the type of control to show when requesting the parameter. Currently, the core module report interface supports datatypes 'text', 'lookup', 'date', 'geometry', 'polygon', 'line', 'point', 'idlist', 'smpattrs', 'occattrs', 'locattrs'. All other values default to text. Date will show a datepicker control. Lookup will show a select box. Geometry, Polygon, Line and Point all require a map for the user to draw the input parameter shape onto. Finally, idlist, smpattrs, occattrs and locattrs are special datatypes that are described below. When viewing the parameters form in the Warehouse interface, the contents of the lookup are populated using the query in the query attribute. When using the report\_grid control in the data\_entry\_helper class, the contents of the lookup are populated using the population\_call attribute. Alternatively a fixed set of values can be specified by using the lookup\_values attribute.  Those implementing reporting on a site module may of course extend this to support whatever datatypes they wish to allow, and further types such as geometry and lookup lists are likely to be implemented within the core module - obviously lookup lists may require an extension of the report format, which will be documented as and when.
+  * `query` is used to provide an SQL query used to populate the select box for lookup parameters. The query should return 2 fields, the key and display value. This only works on the warehouse and does not work for reports run from client websites, since they cannot directly issue SQL queries, so it is recommended that you use the population\_call attribute instead.
+  * `population_call` allows report parameter forms on client websites to populate the select boxes when the datatype is lookup, for example when using the report\_grid control. The format is either direct:_table name_:_id field_:_caption field_, e.g. "direct:survey:id:title" or report:_report name_:_id field_:_caption field_, e.g. "report:myreport:id:title" where myreport must return fields named id and title. At the moment additional parameters cannot be provided.
+  * `lookup_values` allows specification of a fixed list of values for a lookup rather than one populated from the database. Specify each entry as key:value with commas between them, for example  'all:All,C:Complete,S:Sent for verification,V:Verified'.
+  * `linked_to` is available only for select parameters and allows another select to be specified as the parent. In this case, the values in this select are filtered using the value in the parent select. For example, a select for survey might be linked to a select for website, meaning that selecting a website repopulates the list of available surveys.
+  * `linked_filter_field` applies when using linked\_to, and allows the filtered field in the entity accessed by the population\_call to be specified. In the above example of a survey lookup linked to a website lookup, the survey lookup would specify this as website\_id.
+  * `emptyvalue` allows a special value to be used when the parameter is left blank by the user. As an example, take an integer parameter, with SQL syntax `WHERE id=#id#`. If the user leaves this parameter blank, then invalid SQL is generated (`WHERE id=`). But, if `emptyvalue='0'` is specified in the parameter definition, then the SQL generated will be WHERE id=0, which is valid and in most cases will return no records. Consider replacing the SQL with `WHERE (id=#id# OR #id#=0)` to create a filter that will return all records when left blank.
+
+The _idlist_ is a special datatype that will not add a control to the input form. Instead it provides a hidden input in the form which other code on the page can use to filter the report. An example of the use of this field is when using the report\_map control linked with a report\_grid so that clicking on the map passes a comma separated list of occurrence IDs into the hidden input, then reloads the report grid. In order for this to work it is necessary to provide 2 additional attributes of the parameter alongside the datatype="idlist". These are _fieldname_ which defines the name of the field in the SQL (including table alias if necessary) and _alias_ which is the aliased fieldname that is output by the query. The former is used when constructing the SQL report query, the latter is used when retrieving the ids to filter against from the report output. So, in a simplified report example which includes this SQL:
+```
+SELECT o.id as occurrence_id FROM occurrences
+WHERE o.deleted=false
+#idlist#
+```
+you would expect a parameter defined like:
+```
+<param name='idlist' display='List of IDs' description='Comma separated list of occurrence IDs to filter to.' datatype='idlist' fieldname='o.id' alias='occurrence_id' />
+```
+
+```
+      <columns>
+            <column name="survey" display="Survey Name" style="color: #ff0000;"/>
+            <column name="website" display="Website Name" />
+            <column name="count" display="Total no. of Occurrences" />
+      </columns>
+```
+
+Sometimes, a query join is required in a report only when a parameter has a value, or has a certain value. Including the join in the report at all times would normally reduce performance of the report even when the join was not necessary. For example, a parameter filtering on the record's survey title might require a join to the `surveys` table which would not otherwise be required. In this case, specify a child element of the parameter called `<join>` which contains the join SQL, and ensure that the query contains the `#joins#` tag so that the pre-processor knows where to insert the join. The following example is from a verification report which only includes a join to the locations table if the expert's region of expertise is specified:
+```
+<param name='expertise_location' display='Location of Expertise' description='Provide the location in which your expertise applies' datatype='lookup' population_call='direct:location:id:name'>
+        <join>JOIN locations lexpert ON st_intersects(lexpert.boundary_geom, s.geom) AND lexpert.id=#expertise_location#</join>  
+</param>
+```
+
+It is also possible to qualify the join, by specifying attributes **operator** and **value**. The **operator** must be set to `equal` or `notequal` and the **value** should also be set to define a filter on when this join is applied to the report SQL.
+
+### Custom Attributes ###
+
+The parameter datatypes _smpattrs_, _occattrs_ and _locattrs_ are special types used to allow the input of a comma separated list of custom attributes to be added to the report output. Attributes can be sample attributes, occurrence attributes and location attributes respectively and can be provided either by specifying the attribute caption or ID in the comma separated list. To use parameters of these types it is necessary to fulfill several requirements in the way your report is specified:
+  1. The report must use the _field\_sql_ element to separate the field list from the SQL statement, so that additional fields can be added to the list as required.
+  1. The report query must contain a tag _#joins#_ in the SQL in a position where additional joins can be inserted.
+  1. The query must include a table which contains the ID attribute that the attribute values are linked to, for example the sample ID, occurrence ID or location ID.
+  1. If the ID fields can be referred to in the SQL using _s.id_, _o.id_ and _l.id_ then no further changes are required. You can override these defaults, for example if you have a query listing occurrences which does not join in the samples table but need to be able to add sample attribute values. In this case, the _query_ element needs an attribute _samples\_id\_field_ which identifies the field reference that can be used in the SQL to join to the sample, in this case _o.sample\_id_.
+
+You can also use the output column as if it were a normally declared column in your report. This lets you specify the column details in the report\_grid options to show or hide a column, set the caption etc, or to specify the column in the extraParams in order to filter for a specific column value. To do this you need to work out the name of the custom attribute's report column. This will be of the pattern attr_(location|sample|occurrence)_(ref), where ref is the attribute's ID or caption depending on how you requested the attribute originally, with the caption being converted to lowercase and all non-alphanumeric characters converted to underscores. There is also a second hidden column added called attr\_id_(location|sample|occurrence)_(ref) which contains the attribute value table's ID useful if you need to identify which record to update to change the data underlying the report. For example, if a sample attribute has ID 4 and caption "CMS User ID" then you can request this in either of the following ways:
+| **Parameter request for smpattrs** | **Output column name** | **sample\_attribute\_value.id column name** |
+|:-----------------------------------|:-----------------------|:--------------------------------------------|
+| 4                                  | attr\_location\_4      | attr\_id\_location\_4                       |
+| CMS User ID                        | attr\_sample\_cms\_user\_id | attr\_id\_location\_cms\_user\_id           |
+
+If the custom attribute is a lookup, then the output column (e.g. attr\_sample\_surroundings for an attribute called surroundings) will contain the ID of the selected term. An additional column is inserted in the report in this case, attr\_sample\_term\_surroundings, which contains the text of the chosen term.
+
+For an example of writing reports that are extensible by custom attributes, refer to library/occurrences/occurrences\_list\_for\_cms\_user.xml.
+
+### Columns ###
+
+Columns are used to give further specification to how particular fields should be displayed. They take these attributes and have no child elements:
+
+  * `name` should match the name used in the query - SELECT foo FROM websites should have name `foo`, SELECT bar AS baz FROM websites should have name `baz` (not `bar`). SELECT w.foo FROM websites should have name `foo`, not `w.foo`, though where there is ambiguity here renaming your columns with 'AS' is the recommended solution. Failing to match this correctly may leave phantom columns in the report.
+  * `display` will be displayed as the column header.
+  * `style` will be applied to the column (though not the header - obviously implementers of the reporting in a site module may alter this behaviour if they wish).
+  * `class` defines a css class that will be applied to the cells in the column (though not the header). For example, in a species column you can specify "sci binomial" to define that this is the name part of the row. This can then be detected as a Species Microformat.
+  * `visible` can be set to false to hide a column, or to force a vague date column to appear that is being replaced by a standard date column.
+  * `img` can be set to true for a field that contains the filename of an image uploaded to the Warehouse. This will then be replaced by a thumbnail of the image, with support for FancyBox image popups to show the full image size.
+  * `mappable` can be set to true to declare a column which can then be output using the report\_helper::report\_map method available from Indicia version 0.6. The column must output a WKT definition of the geometry to be mapped, e.g. the column definition in the SQL might be `st_astext(geom)`.
+  * `orderby` can be set to the name of another column in the report (including hidden columns) when a column that is logically selected for sorting physically uses another column to provide the sort order. For example a report column containing a term from a termlist might use a hidden column to define the sort order of the terms in the list as the underlying sort when the user clicks on the term column title.
+  * `datatype` can be used to declare the datatype of a column to enable column filtering. Set to one of text, date, integer or float.
+  * `aggregate` is described in the section **Declaring SQL for each column** below.
+  * `distincton` is described in the section **Declaring SQL for each column** below.
+  * `in_count` is described in the section **Declaring SQL for each column** below.
+  * `feature_style` can be used when there is a mappable column on the report, to define a column which provides the value for one of the map styling parameters supported in OpenLayers. Supported options include _strokeColor_ (a CSS colour specification, e.g. '#00FF00'), _strokeOpacity_ (a number from 0 to 1), _strokeWidth_ (number of pixels wide to draw the perimeter line), _strokeDashStyle_ (dot, dash, dashdot, longdash, longdashdot or solid), _fillColor_ (as strokeColor), _fillOpacity_ (as strokeOpacity). For example, a report could vary the opacity of output grid references on the map according to size by including this column in the SQL:
+```
+length(s.entered_sref) / 24.0 as fillopacity,
+```
+This column then has a definition:
+```
+<column name='fillopacity' visible='false' feature_style="fillOpacity"  />
+```
+
+Note that both columns and parameters will be inferred from the query if they are not provided, but providing them explicitly is recommended as it allows a much greater degree of control over how they are displayed.
+
+## Other Settings ##
+
+### Vague Date ###
+
+By default, reports will automatically process their output columns to hide date\_start, date\_end and date\_type columns whilst adding an extra date column containing the processed vague date string. For example your query might output the following table:
+
+| **sample\_date\_start** | **sample\_date\_end** | **sample\_date\_type** |
+|:------------------------|:----------------------|:-----------------------|
+| 2011-12-14              | 2011-12-14            | D                      |
+| 2010-01-01              | 2011-12-31            | Y                      |
+
+This would be output as:
+
+| **_sample\_date\_start_** | **_sample\_date\_end_** | **_sample\_date\_type_** | **sample\_date** |
+|:--------------------------|:------------------------|:-------------------------|:-----------------|
+| _2011-12-14_              | _2011-12-14_            | _D_                      | 14/12/2011       |
+| _2010-01-01_              | _2010-12-31_            | _Y_                      | 2010             |
+
+Note that the columns in italics are not visible in the output grid (though the data is returned in the dataset so is accessible). It is possible to override this behaviour and leave the original columns in place, by adding the following element to the _report_ element in the xml:
+```
+<vagueDate enableProcessing="false" />
+```
+
+## Supporting advanced pagination ##
+
+By default report files only support a very simple paginator in the grid with next and previous links. This is because to do a full paginator requires a count of the records and although this is possible with a standard query (by running the query with no limit then counting the records in the response) it is quite inefficient. To support counting more efficiently, you need to markup your query so that the field list can be swapped for a count() statement. To do this, replace the list of fields in the SELECT statement with #field\_sql# and add an additional XML element field\_sql containing the field list. Here is an example:
+
+```
+<report
+    title="Recent Observations in Survey"
+    description="Lists the most recent recordings in a specified survey."
+    row_class="biota"
+>
+  <query>
+  SELECT #field_sql#
+  FROM samples s
+  JOIN occurrences o ON o.sample_id=s.id
+  LEFT JOIN occurrence_images oi ON oi.occurrence_id=o.id
+  JOIN surveys su ON s.survey_id = su.id
+  JOIN list_taxa_taxon_lists lttl ON lttl.id=o.taxa_taxon_list_id
+  LEFT JOIN locations l ON l.id=s.location_id
+  LEFT JOIN users u ON u.id=o.verified_by_id
+  WHERE su.id=#survey#
+  AND o.record_status NOT IN ('I','T')
+  #order_by#
+  </query>
+  <field_sql>
+  su.title, su.website_id, o.id as occurrence_id, s.date_start, s.date_end, s.date_type, lttl.taxon, 
+  s.entered_sref, l.name as location_name, oi.path, 
+  CASE o.record_status 
+    WHEN 'C' THEN 'Data Entry Complete' 
+    WHEN 'V' THEN 'Verified'
+    WHEN 'R' THEN 'Rejected'
+    WHEN 'I' THEN 'In Progress'
+    WHEN 'T' THEN 'Test'
+    WHEN 'S' THEN 'Sent for verification'
+    ELSE ''
+  END AS record_status,
+  u.username as verified_by
+  </field_sql>
+  <order_bys>
+    <order_by>date_start DESC</order_by>
+  </order_bys>
+  <params>
+    <param name='survey' display='Survey' description='Select the survey to return data for' datatype='lookup'
+        query='SELECT id, title as caption FROM surveys' population_call='direct:survey:id:title' />
+  </params>
+  <columns>
+    <column name='title' display='Survey' />
+    <column name='website_id' visible='false' />
+    <column name='occurrence_id' visible='false' />
+    <column name='date' display='Date' orderby='date_start' />
+    <column name='taxon' display='Taxon' class='sci binomial' />
+    <column name='entered_sref' display='Spatial Ref.' />
+    <column name='location_name' display='Location' />
+    <column name='path' display='Photo' img='true' />
+    <column name='record_status' display='Record Status' />
+    <column name='verified_by' display='Verified By' />
+  </columns>
+</report>
+```
+
+## Declaring SQL for each column ##
+
+There are certain limitations to what the Indicia reporting engine can do with the columns SQL all defined in a single block, either in the query or using the `<field_sql>` element. For example, any query with aggregate functions in it cannot return an accurate record count for the grid paginator. Consider the following query:
+
+```
+select l.id, l.name, count(s.id) as sample_count
+from locations l
+join samples s on s.location_id=l.id
+group by l.id, l.name
+```
+
+This returns a list of locations with their sample counts. If we use the `<field_sql>` approach, then Indicia will run a `select count(*)` query to get the count of records for the paginator, since this will return the count of sample records not the count of locations. To get round these restrictions, you can define the SQL for each field in the `<column>` definition using an attribute called `sql` then specify a replacement in the SQL statement #columns#. You don’t need to define each field’s alias as the column name will be used for that (since they must be the same). You can also define attributes `aggregate` (set to true for columns that define an aggregate function so they can be skipped in the count query), `distincton` (set to true for any columns that you don’t want to duplicate ever) and `in_count` (set to true if the column should be included in the count query, which defaults to true for distincton columns but false otherwise). To illustrate these points, here is the SQL and column list for the above query:
+
+```
+<sql>
+select #columns#
+from locations l
+join samples s on s.location_id=l.id
+group by l.id, l.name
+</sql>
+<columns>
+<column name="id" sql="l.id" />
+<column name="name" sql="l.name " />
+<column name="sample_count" sql="count(s.id)" aggregate="true" />
+</columns>
+```
+
+By marking the aggregate column, then Indicia is able to correctly count the distinct non-aggregate values enabling the pager for a report grid to know the correct number of pages. To illustrate the use of `distincton`, consider writing a query which returns a list of locations plus a sample date, where you don’t actually care which sample date is returned (you just want to know that it has been sampled). Here's the query to do this:
+
+```
+select distinct on (l.id) l.id, l.name, s.date_start
+from locations l
+join samples s on s.location_id=l.id
+```
+
+Here's how you could represent that in report XML:
+
+```
+<sql>
+select #columns#
+from locations l
+join samples s on s.location_id=l.id
+</sql>
+<columns>
+<column name="id" sql="l.id" distincton="true" />
+<column name="name" sql="l.name " />
+<column name="date" sql="s.date_start" />
+</columns>
+```
+
+Note that the distincton support was added for Indicia 0.8 and is not available in earlier versions.
+
+## Reporting Engine Configuration ##
+
+The reporting engine is included by default in the Indicia core install. Certain configuration settings must be made to allow it to work. Many of these should happen automatically with a fresh install, but users working with existing installations may have to complete them manually.
+
+  1. Local Report Directory. A directory for storage of local reports must be defined in the indicia.php config file. A default setting is stored in config/indicia.php and will default to 'reports'.
+  1. Read-only database user. It is strongly recommended that a second database user is configured for the reporting services with read-only permissions (ability to execute only SELECT statements). This will prevent any use of the open SQL query functions in the reporting services to make changes to your database. Further, the report user should not have access to the websites, users, people, users\_websites or user\_tokens tables. Access to specific information in these tables where it is required should be done with the report\_users, report\_people, report\_users\_websites and report\_websites views (there should be no need to access anything in user\_tokens). Hopefully a future install procedure will configure this automatically.
+  1. Reporting database configuration. Because we want to access the database using a read-only user for security purposes, we need to define a second database connection in Kohana using our new user. In database.php there should be an entry for $config['report'] - if it does not exist, copy the default entry and change the name. You should configure the username and password properties here to use your new, read-only user. The report services will automatically use this connection.
+
+## Core Module Reporting ##
+
+Currently, the only concrete implementation of the reporting is on the core module, and can be accessed through the 'Entered Data' menu. Provided things have been configured correctly, you should see a list of sample reports provided with the system. To test a report, go to 'my report title' and enter the species name '%'. This should return a list of all taxa defined on your core installation.
+
+### Adding new reports ###
+
+To add new reports as defined in the format above, simply drop them (with extension .xml) into the folder configured as your localReportDir - in most installations this will be $INDICIA\_HOME/reports/. They should appear automatically in the report browser screen.
+
+### Remote reports ###
+
+Whilst support for remotely defined and stored reports is available, an interface to it waits on some security concerns. When these have been resolved, an option should become available below the report browser to specify your own reports or link them from elsewhere.
+
+## Site Module reporting ##
+
+Provided the data services module is enabled within the Indicia core, you should be able to access the reporting services through the url http://localhost/indicia/index.php/services/report. You can test whether this is working by going to http://localhost/indicia/index.php/services/report/listLocalReports. This should return a list of all reports local to the Indicia Core.
+
+### Functions available through the report service interface ###
+
+The following functions are available through this url:
+
+  * listLocalReports($descriptionLevel) - provides a list of the reports available locally. By changing the $descriptionLevel you can alter the level of detail given on each report, from 0 (just names) to 3 (full detail).
+  * requestReport - requestReport is the principal method used to access reports. This will be covered in detail later.
+  * resumeReport($uid) - resume a report suspended in order to request further parameter details. The $uid will have been provided along with the parameter request.
+
+#### requestReport ####
+
+The requestReport function should be provided with a GET or POST array containing the following keys:
+
+  * `report`
+  * `reportSource`
+  * `mode`
+  * `params`
+  * `auth_token`
+  * `nonce`
+
+POST will be required if you need to support long report parameter values such as complex polygons due to the limitations of URL length on browsers and web-servers.
+
+`report` can be one of three things:
+  1. The filename of a report in localReportDir
+  1. The URI of a remote report
+  1. The text of a report
+
+`reportSource` identifies the source, so should be one of
+  1. 'local' - for local reports
+  1. 'remote' - for when a URI is provided
+  1. 'provided' - for when the report is provided in the 'report' value.
+
+`mode` dictates the format of the response in the same fashion as the data service. Select from:
+  1. 'xml'
+  1. 'json'
+  1. 'csv' (comma separated value)
+  1. 'tsv' (tab separated value, version 0.9 onwards)
+  1. 'kml'
+  1. 'gpx' (for GPS exchange format compatibility, version 0.9 onwards)
+  1. 'nbn' (for NBN exchange format compatibility, version 0.9 onwards)
+
+`params` may be used when you wish to autocomplete certain parameters rather than being prompted for them. If used, it should be a JSON-encoded array of parameter name pointing to parameter value.
+
+`auth_token` and `nonce` are the constituent parts of the response from a call to data\_entry\_helper::getReadAuth which authenticates your web service call onto the Indicia Warehouse.
+
+For an example of how to call the service, see the <your warehouse URL>/modules/demo/index.php page and look at the Report Service example.
+
+#### resumeReport ####
+
+The resumeReport function takes a POST array which should contain the following keys:
+
+  * `params`
+  * `uid` (optional)
+
+`params` should point to a JSON-encoded array of parameter name to value.
+`uid` should point to the uid given in the parameterRequest. You may omit this key and instead provide it as an argument to the resumeReport function in a RESTful manner, that is: report/resumeReport/6074a1fb2cf7435d6563bba53a8d11b5.
+
+
+### parameterRequest ###
+
+If there are unprovided parameters in the report request, the service will respond with a parameter request. This will look like
+
+```
+{"parameterRequest":{"searchstring":{"datatype":"text","display":"Species Name","description":"Taxon name (any language) to search for."}},"uid":"6074a1fb2cf7435d6563bba53a8d11b5"}
+```
+
+The uid is provided to resume processing the report. When you have captured parameter data from the user, this should be send to the `resumeReport` function as described above.
+
+### Response ###
+
+The final response provided will look like
+
+```
+{"formattedReport":"<table class='report'><thead><th>ID<\/th><th>Species Name<\/th><\/thead><tbody><tr><td style=''>4<\/td><td style='color: #ff0000;'>Adonis Blue<\/td><\/tr><tr><td style=''>3<\/td><td style='color: #ff0000;'>Common Blue<\/td><\/tr><tr><td style=''>6<\/td><td style='color: #ff0000;'>Green Hairstreak<\/td><\/tr><tr><td style=''>2<\/td><td style='color: #ff0000;'>Red Admiral<\/td><\/tr><tr><td style=''>1<\/td><td style='color: #ff0000;'>Ringlet<\/td><\/tr><tr><td style=''>5<\/td><td style='color: #ff0000;'>Speckled Wood<\/td><\/tr><\/tbody><\/table>"}
+```
+
+and may be dealt with as you please.
+
+### Error ###
+
+Should an error occur during the processing, a reponse looking like the following shall be given:
+
+```
+{"error":"Trying to resume a report but one or more of params or uid is null","uid":"6074a1fb2cf7435d6563bba53a8d11b5","params":null}
+```
+
+The error key will always be given in the error response, along with other keys specific to the error.

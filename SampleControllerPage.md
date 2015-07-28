@@ -1,0 +1,68 @@
+# Introduction #
+
+This page sets out the structure of an Indicia controller, and outlines how one should be set up.
+
+# Details #
+
+## Structure ##
+
+Controllers should generally be named **Entity\_Controller**, where **Entity\_Model** is the model name and **entities** is the name of the database table.
+
+Controllers wishing to implement a gridview should extend the Gridview\_Base\_Controller class. All others should extend the Indicia\_Controller class.
+
+```
+class Survey_Controller extends Gridview_Base_Controller {}
+```
+
+## Class Methods ##
+
+### Constructor ###
+
+```
+	public function __construct() {	}
+```
+
+The constructor declaration depends on whether or not this controller is subclassing Gridview\_Base\_Controller. If not, the constructor should call its parent and set `$this->model` to be the relevant model. A constructor for a subclass of Gridview\_Base should call the parent constructor with three parameters:
+
+```
+		parent::__construct('survey', 'gv_survey', 'survey/index');
+```
+
+The parameters given are the model name, the name for the model used by the grid view, the name of the view containing the grid, and optionally the path to the controller.
+
+Optional things which may be set in the constructor:
+
+  * `$this->base_filter` Array of columns to filter the gridview on, in the form `'column_name' => 'filter_value'`. Filtering done through the base\_filter property is done using the WHERE SQL clause, and so requires an exact match. This filter will never be affected by the gridview filter controls.
+
+  * `$this->columns` Array of columns to display in the gridview. List the columns as keys to null values: `'column_name' => ''`.
+
+  * `$this->pagetitle` Page title to use with the `getEditPageTitle()` method.
+
+  * `$this->pageNoUriSegment` Segment of the URI to use for the page number of the gridview control. Defaults to 3 (e.g. /controller/method/page).
+
+```
+	public function __construct() {
+		parent::__construct('survey', 'gv_survey', 'survey/index');
+		$this->columns = array(
+			'title'=>'',
+			'description'=>'',
+			'website'=>'');
+		$this->pagetitle = "Surveys";
+	}
+```
+
+### setView ###
+
+The setView method should not be overwritten but should be called from methods wishing to change the view.
+
+```
+
+$this->setView('survey/survey_edit', 'Survey');
+
+```
+
+The two parameters given are the view to set and the pagetitle.
+
+### page and page\_gv ###
+
+Normally it should not be necessary to modify these as they are served by Gridview\_Base.
